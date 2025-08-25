@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="Item" load_steps=4 format=3 uid="uid://djjjm1m8qr2pm"]
+
+[ext_resource type="Texture2D" uid="uid://bwo3qldtbc8u6" path="res://Assets/Items/Items.png" id="1_5c7tm"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_5c7tm"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_862d0"]
+atlas = ExtResource("1_5c7tm")
+region = Rect2(0, 300, 150, 150)
+
+[resource]
+script = ExtResource("2_5c7tm")
+item_name = "Boots of Testing"
+item_type = 4
+item_desc = "On hit: Give the enemy 1 acid, if they have no shield give 1 poison instead.
+
+Exposed: Gain 1 burn.
+Wounded: Gain 1 regeneration."
+item_icon = SubResource("AtlasTexture_862d0")
+item_color = Color(0.72549, 0.113725, 0.541176, 1)
+rarity = 2
+categories = Array[String](["Testing"])
+rng_weight = 1.0
+unlocked = true
+damage_bonus = 2
+shield_bonus = 3
+agility_bonus = 5
+hit_points_bonus = 2
+strikes_bonus = 0
+metadata/_custom_type_script = "uid://dthg27pchm1fm"

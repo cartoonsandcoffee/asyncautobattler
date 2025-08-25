@@ -1,0 +1,252 @@
+[gd_scene load_steps=19 format=3 uid="uid://cqhyru53o5wfx"]
+
+[ext_resource type="Script" uid="uid://c60g0xugsdgdl" path="res://Scripts/Components/item_slot.gd" id="1_tnst4"]
+[ext_resource type="FontFile" uid="uid://dgwg8mvobk57a" path="res://Assets/UI/Fonts/ImperatorSmallCaps Bold.ttf" id="3_66iod"]
+[ext_resource type="Texture2D" uid="uid://1p2fhdhgi3x4" path="res://Assets/UI/Select.png" id="4_btogu"]
+[ext_resource type="Texture2D" uid="uid://7h1qtewfvmnq" path="res://Assets/Items/Blank.png" id="4_tnst4"]
+[ext_resource type="PackedScene" uid="uid://7ygdm4ameglb" path="res://Scenes/Elements/item_tooltip.tscn" id="6_renmp"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tnst4"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jmixh"]
+bg_color = Color(0.118581, 0.118581, 0.118581, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_btogu"]
+atlas = ExtResource("4_tnst4")
+region = Rect2(528, 0, 16, 16)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fif6b"]
+bg_color = Color(0.199101, 0.198613, 0.189857, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_renmp"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jmixh"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fif6b"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5r5i4"]
+
+[sub_resource type="Animation" id="Animation_jmixh"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel/Selector:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Panel/Selector:pivot_offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Panel/Selector:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_66iod"]
+resource_name = "hover"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel/Selector:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Panel/Selector:pivot_offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(58, 53)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Panel/Selector:scale")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.6, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.95, 0.95), Vector2(1.05, 1.05), Vector2(0.95, 0.95)]
+}
+
+[sub_resource type="Animation" id="Animation_tnst4"]
+resource_name = "stop"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel/Selector:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fif6b"]
+_data = {
+&"RESET": SubResource("Animation_jmixh"),
+&"hover": SubResource("Animation_66iod"),
+&"stop": SubResource("Animation_tnst4")
+}
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_66iod"]
+
+[node name="Item" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_tnst4")
+
+[node name="Panel" type="Panel" parent="."]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 105.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_tnst4")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="itemContainer" type="PanelContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_jmixh")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/VBoxContainer/itemContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="item_icon" type="TextureRect" parent="Panel/VBoxContainer/itemContainer/MarginContainer"]
+custom_minimum_size = Vector2(75, 75)
+layout_mode = 2
+texture = SubResource("AtlasTexture_btogu")
+expand_mode = 1
+
+[node name="orderContainer" type="PanelContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_styles/panel = SubResource("StyleBoxFlat_fif6b")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/VBoxContainer/orderContainer"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 3
+
+[node name="lblOrder" type="Label" parent="Panel/VBoxContainer/orderContainer/MarginContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.894922, 0.894922, 0.894922, 1)
+theme_override_fonts/font = ExtResource("3_66iod")
+theme_override_font_sizes/font_size = 12
+text = "weapon"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Selector" type="NinePatchRect" parent="Panel"]
+visible = false
+z_index = 50
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -7.0
+offset_top = -7.0
+offset_right = 9.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_btogu")
+region_rect = Rect2(0, 0, 75, 75)
+patch_margin_left = 25
+patch_margin_top = 25
+patch_margin_right = 25
+patch_margin_bottom = 25
+
+[node name="Button" type="Button" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_renmp")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_jmixh")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_fif6b")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_5r5i4")
+
+[node name="animSelect" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_fif6b")
+}
+
+[node name="ToolTip" type="Panel" parent="."]
+visible = false
+layout_mode = 0
+offset_left = -124.0
+offset_top = -196.0
+offset_right = 260.0
+offset_bottom = -27.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_66iod")
+
+[node name="ItemTooltip" parent="ToolTip" instance=ExtResource("6_renmp")]
+layout_mode = 1
+offset_left = 124.0
+offset_top = -2.0
+offset_right = 124.0
+offset_bottom = -2.0
+
+[connection signal="mouse_entered" from="Panel/Button" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/Button" to="." method="_on_button_mouse_exited"]

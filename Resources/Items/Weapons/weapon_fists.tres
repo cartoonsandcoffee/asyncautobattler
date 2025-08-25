@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="Item" load_steps=4 format=3 uid="uid://edcvwfpkmmj7"]
+
+[ext_resource type="Texture2D" uid="uid://bwo3qldtbc8u6" path="res://Assets/Items/Items.png" id="1_igke1"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_igke1"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ylggq"]
+atlas = ExtResource("1_igke1")
+region = Rect2(0, 0, 150, 150)
+
+[resource]
+script = ExtResource("2_igke1")
+item_name = "Bare Fists"
+item_type = 0
+item_desc = "Attacks every other turn."
+item_icon = SubResource("AtlasTexture_ylggq")
+item_color = Color(0.86, 0.49278, 0.3354, 1)
+rarity = 0
+categories = Array[String]([])
+rng_weight = 1.0
+unlocked = true
+damage_bonus = 1
+shield_bonus = 0
+agility_bonus = 0
+hit_points_bonus = 0
+strikes_bonus = 0
+metadata/_custom_type_script = "uid://dthg27pchm1fm"

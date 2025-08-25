@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="EnemyAbility" load_steps=2 format=3 uid="uid://dk6ysuq8w1mxs"]
+
+[ext_resource type="Script" uid="uid://3iymyv7ft3xw" path="res://Scripts/Resources/EnemyAbility.gd" id="1_6how0"]
+
+[resource]
+script = ExtResource("1_6how0")
+ability_name = "Rage"
+description = "When wounded, gain +2 damage"
+trigger = 5
+effect_type = 0
+target = 0
+value = 2
+turn_interval = 0
+countdown_start = 0
+metadata/_custom_type_script = "uid://3iymyv7ft3xw"

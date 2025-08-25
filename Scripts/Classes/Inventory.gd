@@ -13,36 +13,53 @@ signal inventory_full(item: Item)
 
 var weapon_slot: Item = null
 var item_slots: Array[Item] = []
-var max_item_slots: int = 12
+var max_item_slots: int = 10
 
 func _init():
 	# Initialize empty item slots
 	item_slots.resize(max_item_slots)
 
 func add_item(new_item: Item) -> bool:
+	var item_instance = new_item.create_instance()
+
 	# Special handling for weapons
-	if new_item.item_type == Item.ItemType.WEAPON:
-		return set_weapon(new_item)
+	if item_instance.item_type == Item.ItemType.WEAPON:
+		return set_weapon(item_instance)
 	
 	# Find first empty slot
 	var empty_index = get_empty_slot_index()
 	if empty_index != -1:
-		new_item.set_position(empty_index)
-		print("adding item: ", str(empty_index))
-		item_slots[empty_index] = new_item
-		item_added.emit(new_item, empty_index)
+		item_instance.set_position(empty_index)
+		item_slots[empty_index] = item_instance
+		item_added.emit(item_instance, empty_index)
 		return true
 	
 	# Inventory full
-	inventory_full.emit(new_item)
+	inventory_full.emit(item_instance)
 	return false
+
+func get_item_by_instance_id(id: int) -> Item:
+	for item in item_slots:
+		if item and item.instance_id == id:
+			return item
+	
+	# Also check weapon slot
+	if weapon_slot and weapon_slot.instance_id == id:
+		return weapon_slot
+	
+	return null
+
+func get_slot_by_instance_id(id: int) -> int:
+	for i in range(item_slots.size()):
+		if item_slots[i] and item_slots[i].instance_id == id:
+			return i
+	return -1
 
 func add_item_at_slot(new_item: Item, slot_index: int) -> bool:
 	if slot_index < 0 or slot_index >= item_slots.size():
 		return false
 	
 	if item_slots[slot_index] == null:
-		new_item.current_position = slot_index
 		item_slots[slot_index] = new_item
 		item_added.emit(new_item, slot_index)
 		return true
@@ -54,7 +71,6 @@ func replace_item(new_item: Item, slot_index: int) -> Item:
 		return null
 	
 	var old_item = item_slots[slot_index]
-	new_item.current_position = slot_index
 	item_slots[slot_index] = new_item
 	
 	if old_item != null:
@@ -86,8 +102,11 @@ func swap_items(index_a: int, index_b: int) -> void:
 	item_slots[index_a] = item_slots[index_b]
 	item_slots[index_b] = temp
 
-	item_slots[index_a].current_position = index_b
-	item_slots[index_b].current_position = index_a
+	# UPDATE POSITIONS
+	if item_slots[index_a]:
+		item_slots[index_a].slot_index = index_a
+	if item_slots[index_b]:
+		item_slots[index_b].slot_index = index_b
 
 func remove_item(index: int) -> Item:
 	if index < 0 or index >= item_slots.size():
@@ -97,6 +116,7 @@ func remove_item(index: int) -> Item:
 	if item != null:
 		item_slots[index] = null
 		item_removed.emit(item, index)
+		compact_items()
 	
 	return item
 
@@ -116,6 +136,11 @@ func get_empty_slot_index() -> int:
 func has_empty_slot() -> bool:
 	return get_empty_slot_index() != -1
 
+func is_slot_empty(index: int) -> bool:
+	if index < 0 or index >= item_slots.size():
+		return true
+	return item_slots[index] == null
+
 func is_full() -> bool:
 	for slot in item_slots:
 		if slot == null:
@@ -132,6 +157,49 @@ func get_item_count() -> int:
 func expand_inventory(additional_slots: int) -> void:
 	max_item_slots += additional_slots
 	item_slots.resize(max_item_slots)
+
+func compact_items():
+	"""Removes all null gaps in the inventory by shifting items left"""
+	var compacted: Array[Item] = []
+	
+	# Collect all non-null items
+	for item in item_slots:
+		if item != null:
+			compacted.append(item)
+	
+	# Clear the array
+	item_slots.clear()
+	item_slots.resize(max_item_slots)
+	
+	# Re-add items from the beginning
+	for i in range(compacted.size()):
+		item_slots[i] = compacted[i]
+		compacted[i].slot_index = i
+
+func move_item_to_slot(from_index: int, to_index: int):
+	if from_index < 0 or from_index >= item_slots.size():
+		return
+	if to_index < 0 or to_index >= item_slots.size():
+		return
+	
+	var item = item_slots[from_index]
+	if not item:
+		return
+	
+	# Clear source slot
+	item_slots[from_index] = null
+	
+	# Place in target slot (overwriting if needed)
+	item_slots[to_index] = item
+	item.slot_index = to_index
+
+func shift_items_left(start_index: int):
+	for i in range(start_index, item_slots.size() - 1):
+		if item_slots[i] == null and item_slots[i + 1] != null:
+			item_slots[i] = item_slots[i + 1]
+			item_slots[i + 1] = null
+			if item_slots[i]:
+				item_slots[i].slot_index = i
 
 # For saving/loading
 func get_save_data() -> Dictionary:
@@ -170,4 +238,4 @@ func print_inventory():
 	print(" ------ CURRENT INVENTORY ITEMS (SLOTS) ------")
 	for i in range(item_slots.size()):
 		if item_slots[i]:
-			print(str(i) + ": " + item_slots[i].item_name + " (position: " + str(item_slots[i].current_position) + ")")
+			print(str(i) + ": " + item_slots[i].item_name + " (slot: " + str(item_slots[i].slot_index) + " - id #" + str(item_slots[i].instance_id) + ")")

@@ -1,0 +1,356 @@
+[gd_scene load_steps=19 format=3 uid="uid://yfx4f0fwf4vi"]
+
+[ext_resource type="Texture2D" uid="uid://vtf7yfl2710m" path="res://Assets/UI/panel-border-030.png" id="1_0e3vx"]
+[ext_resource type="Script" uid="uid://c6hur1hg25jx" path="res://Scripts/main_game.gd" id="1_73nn6"]
+[ext_resource type="FontFile" uid="uid://cif7u8lvaqla2" path="res://Assets/UI/Enchanted Land.otf" id="2_6j5ir"]
+[ext_resource type="Texture2D" uid="uid://w21umqcnpemn" path="res://Assets/Art/Room_02_Background.png" id="2_73nn6"]
+[ext_resource type="Texture2D" uid="uid://bffx10anckips" path="res://Assets/monochrome-transparent_packed.png" id="4_6j5ir"]
+[ext_resource type="PackedScene" uid="uid://cqhyru53o5wfx" path="res://Scenes/item.tscn" id="4_mgc0q"]
+[ext_resource type="PackedScene" uid="uid://dm35l5es4kole" path="res://Scenes/Elements/stat_box.tscn" id="8_6y7pd"]
+[ext_resource type="Texture2D" uid="uid://brkvaqqc37hpf" path="res://Assets/UI/icons.png" id="10_r0mdn"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6y7pd"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mgc0q"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bb2iq"]
+atlas = ExtResource("4_6j5ir")
+region = Rect2(656, 224, 16, 16)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_18r40"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0xqxu"]
+atlas = ExtResource("10_r0mdn")
+region = Rect2(0, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tpqse"]
+atlas = ExtResource("10_r0mdn")
+region = Rect2(150, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c78sm"]
+atlas = ExtResource("10_r0mdn")
+region = Rect2(300, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i47ox"]
+atlas = ExtResource("10_r0mdn")
+region = Rect2(450, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sftma"]
+atlas = ExtResource("10_r0mdn")
+region = Rect2(600, 0, 150, 150)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_73nn6"]
+
+[node name="MainGame" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_73nn6")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="RoomPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_6y7pd")
+
+[node name="roomPic" type="TextureRect" parent="RoomPanel"]
+modulate = Color(0.304735, 0.170234, 0.306399, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_73nn6")
+expand_mode = 3
+
+[node name="TopPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -183.0
+offset_top = 10.0
+offset_right = 181.0
+offset_bottom = 128.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_mgc0q")
+
+[node name="ColorRect" type="ColorRect" parent="TopPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Background" type="NinePatchRect" parent="TopPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_0e3vx")
+patch_margin_left = 24
+patch_margin_top = 24
+patch_margin_right = 24
+patch_margin_bottom = 24
+
+[node name="MarginContainer" type="MarginContainer" parent="TopPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TopPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="lblRank" type="Label" parent="TopPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_6j5ir")
+theme_override_font_sizes/font_size = 28
+text = "Dungeon Map Rank : 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RoomGrid" type="GridContainer" parent="TopPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+columns = 6
+
+[node name="RoomIcon_1" type="TextureButton" parent="TopPanel/MarginContainer/VBoxContainer/RoomGrid"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture_normal = SubResource("AtlasTexture_bb2iq")
+stretch_mode = 0
+
+[node name="RoomIcon_2" type="TextureButton" parent="TopPanel/MarginContainer/VBoxContainer/RoomGrid"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture_normal = SubResource("AtlasTexture_bb2iq")
+stretch_mode = 0
+
+[node name="RoomIcon_3" type="TextureButton" parent="TopPanel/MarginContainer/VBoxContainer/RoomGrid"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture_normal = SubResource("AtlasTexture_bb2iq")
+stretch_mode = 0
+
+[node name="RoomIcon_4" type="TextureButton" parent="TopPanel/MarginContainer/VBoxContainer/RoomGrid"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture_normal = SubResource("AtlasTexture_bb2iq")
+stretch_mode = 0
+
+[node name="RoomIcon_5" type="TextureButton" parent="TopPanel/MarginContainer/VBoxContainer/RoomGrid"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture_normal = SubResource("AtlasTexture_bb2iq")
+stretch_mode = 0
+
+[node name="RoomIcon_6" type="TextureButton" parent="TopPanel/MarginContainer/VBoxContainer/RoomGrid"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture_normal = SubResource("AtlasTexture_bb2iq")
+stretch_mode = 0
+
+[node name="BottomPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -688.0
+offset_top = -230.0
+offset_right = 701.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="ColorRect" type="ColorRect" parent="BottomPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="NinePatchRect" type="NinePatchRect" parent="BottomPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_0e3vx")
+patch_margin_left = 25
+patch_margin_top = 25
+patch_margin_right = 21
+patch_margin_bottom = 21
+
+[node name="MarginContainer" type="MarginContainer" parent="BottomPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BottomPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="BottomPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 105)
+layout_mode = 2
+
+[node name="Weapon" parent="BottomPanel/MarginContainer/VBoxContainer/HBoxContainer" instance=ExtResource("4_mgc0q")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+item_type = 0
+
+[node name="InventorySlots" type="PanelContainer" parent="BottomPanel/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_18r40")
+
+[node name="ItemSlots" type="GridContainer" parent="BottomPanel/MarginContainer/VBoxContainer/HBoxContainer/InventorySlots"]
+layout_direction = 2
+layout_mode = 2
+columns = 12
+
+[node name="Item1" parent="BottomPanel/MarginContainer/VBoxContainer/HBoxContainer/InventorySlots/ItemSlots" instance=ExtResource("4_mgc0q")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item3" parent="BottomPanel/MarginContainer/VBoxContainer/HBoxContainer/InventorySlots/ItemSlots" instance=ExtResource("4_mgc0q")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item2" parent="BottomPanel/MarginContainer/VBoxContainer/HBoxContainer/InventorySlots/ItemSlots" instance=ExtResource("4_mgc0q")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item4" parent="BottomPanel/MarginContainer/VBoxContainer/HBoxContainer/InventorySlots/ItemSlots" instance=ExtResource("4_mgc0q")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item5" parent="BottomPanel/MarginContainer/VBoxContainer/HBoxContainer/InventorySlots/ItemSlots" instance=ExtResource("4_mgc0q")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item6" parent="BottomPanel/MarginContainer/VBoxContainer/HBoxContainer/InventorySlots/ItemSlots" instance=ExtResource("4_mgc0q")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item7" parent="BottomPanel/MarginContainer/VBoxContainer/HBoxContainer/InventorySlots/ItemSlots" instance=ExtResource("4_mgc0q")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item8" parent="BottomPanel/MarginContainer/VBoxContainer/HBoxContainer/InventorySlots/ItemSlots" instance=ExtResource("4_mgc0q")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item9" parent="BottomPanel/MarginContainer/VBoxContainer/HBoxContainer/InventorySlots/ItemSlots" instance=ExtResource("4_mgc0q")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item10" parent="BottomPanel/MarginContainer/VBoxContainer/HBoxContainer/InventorySlots/ItemSlots" instance=ExtResource("4_mgc0q")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item11" parent="BottomPanel/MarginContainer/VBoxContainer/HBoxContainer/InventorySlots/ItemSlots" instance=ExtResource("4_mgc0q")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item12" parent="BottomPanel/MarginContainer/VBoxContainer/HBoxContainer/InventorySlots/ItemSlots" instance=ExtResource("4_mgc0q")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="hboxStats" type="HBoxContainer" parent="BottomPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="statHealth" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats" instance=ExtResource("8_6y7pd")]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+stat_color = Color(0, 0.91, 0.0758333, 1)
+stat_icon = SubResource("AtlasTexture_0xqxu")
+
+[node name="statDamage" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats" instance=ExtResource("8_6y7pd")]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+stat = 0
+stat_color = Color(0.85, 0.0765, 0.0893915, 1)
+stat_icon = SubResource("AtlasTexture_tpqse")
+
+[node name="statShield" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats" instance=ExtResource("8_6y7pd")]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+stat = 3
+stat_color = Color(0, 0.533333, 1, 1)
+stat_icon = SubResource("AtlasTexture_c78sm")
+
+[node name="statAgility" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats" instance=ExtResource("8_6y7pd")]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+stat = 2
+stat_color = Color(0.94, 0.94, 0.3008, 1)
+stat_icon = SubResource("AtlasTexture_i47ox")
+
+[node name="statGold" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats" instance=ExtResource("8_6y7pd")]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+stat = 4
+stat_color = Color(0.88, 0.572, 0.1408, 1)
+stat_icon = SubResource("AtlasTexture_sftma")
+
+[node name="MarginContainer" type="MarginContainer" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="StatPanel" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -688.0
+offset_top = -305.0
+offset_right = 702.0
+offset_bottom = -187.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_73nn6")

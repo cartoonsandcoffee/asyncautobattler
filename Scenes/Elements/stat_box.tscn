@@ -1,0 +1,151 @@
+[gd_scene load_steps=13 format=3 uid="uid://dm35l5es4kole"]
+
+[ext_resource type="Script" uid="uid://rblvleb51v0e" path="res://Scripts/Components/stat_box.gd" id="1_8ja2n"]
+[ext_resource type="Texture2D" uid="uid://bf5l3mn4r31le" path="res://Assets/UI/Item_Border_Small_Test.png" id="2_8ja2n"]
+[ext_resource type="Texture2D" uid="uid://brkvaqqc37hpf" path="res://Assets/UI/icons.png" id="3_jgaej"]
+[ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="4_xyjii"]
+[ext_resource type="Texture2D" uid="uid://072s2rxwk6m8" path="res://Assets/UI/panel-border-004.png" id="5_8ja2n"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rtndc"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lw8oi"]
+atlas = ExtResource("3_jgaej")
+region = Rect2(0, 0, 150, 150)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jgaej"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xyjii"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lw8oi"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8ja2n"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jgaej"]
+bg_color = Color(0, 0, 0, 1)
+
+[node name="StatBox" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_8ja2n")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_right = 125.0
+offset_bottom = 75.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_rtndc")
+
+[node name="stat_holder" type="NinePatchRect" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_8ja2n")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 25
+patch_margin_bottom = 25
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/stat_holder"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/stat_holder/MarginContainer"]
+layout_mode = 2
+
+[node name="icon" type="TextureRect" parent="Panel/stat_holder/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture = SubResource("AtlasTexture_lw8oi")
+expand_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/stat_holder/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="lbl_stat" type="Label" parent="Panel/stat_holder/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("4_xyjii")
+theme_override_font_sizes/font_size = 28
+text = "55/55"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="Panel/stat_holder"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_jgaej")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_xyjii")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_lw8oi")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_8ja2n")
+
+[node name="Tooltip" type="Panel" parent="."]
+visible = false
+z_index = 100
+layout_mode = 0
+offset_left = 3.0
+offset_top = -259.0
+offset_right = 348.0
+offset_bottom = -146.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_jgaej")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="Tooltip"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_8ja2n")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 18
+patch_margin_bottom = 18
+
+[node name="MarginContainer" type="MarginContainer" parent="Tooltip/NinePatchRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Tooltip/NinePatchRect/MarginContainer"]
+layout_mode = 2
+
+[node name="lbl_name" type="Label" parent="Tooltip/NinePatchRect/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_xyjii")
+theme_override_font_sizes/font_size = 28
+text = "- Name -"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="lbl_tooltip" type="RichTextLabel" parent="Tooltip/NinePatchRect/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("4_xyjii")
+theme_override_font_sizes/normal_font_size = 16
+text = "Tooltip description goes here. fasdfasdsdfasffasfsdfsdff fsdfsd sfsdf sdf sdf "
+fit_content = true
+
+[connection signal="mouse_entered" from="Panel/stat_holder/Button" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/stat_holder/Button" to="." method="_on_button_mouse_exited"]

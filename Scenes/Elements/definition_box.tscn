@@ -1,0 +1,62 @@
+[gd_scene load_steps=5 format=3 uid="uid://l0o14aof4ys6"]
+
+[ext_resource type="FontFile" uid="uid://d236qu1nwukxr" path="res://Assets/UI/Fonts/Imperator Bold.ttf" id="1_aet7y"]
+[ext_resource type="Script" uid="uid://bg0ehb4h0xatv" path="res://Scripts/Components/definition_box.gd" id="1_oswnd"]
+[ext_resource type="FontFile" uid="uid://dbt53hulxegh2" path="res://Assets/UI/Fonts/Imperator.ttf" id="2_oswnd"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qk71c"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.662452, 0.662452, 0.662452, 1)
+
+[node name="DefinitionBox" type="Control"]
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+grow_vertical = 0
+script = ExtResource("1_oswnd")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(400, 80)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -80.0
+offset_right = 400.0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qk71c")
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="lblKeyword" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.925353, 0.925353, 0.925353, 1)
+theme_override_fonts/font = ExtResource("1_aet7y")
+theme_override_font_sizes/font_size = 18
+text = "key"
+vertical_alignment = 1
+
+[node name="lblDefinition" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/default_color = Color(0.699653, 0.699653, 0.699653, 1)
+theme_override_constants/line_separation = 5
+theme_override_fonts/normal_font = ExtResource("2_oswnd")
+theme_override_fonts/mono_font = ExtResource("2_oswnd")
+theme_override_font_sizes/normal_font_size = 15
+text = "When attacked, deals damage equal to thorns"
+fit_content = true
+scroll_active = false
+vertical_alignment = 1

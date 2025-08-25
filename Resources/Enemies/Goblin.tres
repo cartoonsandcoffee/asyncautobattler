@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="Enemy" load_steps=7 format=3 uid="uid://dg2wcy0kx620y"]
+
+[ext_resource type="Script" uid="uid://3iymyv7ft3xw" path="res://Scripts/Resources/EnemyAbility.gd" id="1_sm1jo"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="2_aiy86"]
+[ext_resource type="Resource" uid="uid://dk6ysuq8w1mxs" path="res://Resources/Enemies/EnemyAbilities/Rage.tres" id="2_hkn3j"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="3_hkn3j"]
+[ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="4_xr38p"]
+[ext_resource type="Texture2D" uid="uid://dbqqhnh3sx2ey" path="res://Assets/Art/Blob.png" id="6_xr38p"]
+
+[resource]
+script = ExtResource("4_xr38p")
+enemy_name = "Goblin"
+enemy_type = 0
+description = "A small, mischievous creature that inhabits hallways."
+is_elite = false
+sprite = ExtResource("6_xr38p")
+sprite_color = Color(0.179728, 0.69687, 0.123502, 1)
+damage = 2
+shield = 0
+agility = 3
+hit_points = 5
+strikes = 1
+gold = 3
+item_drop_chance = 0.1
+possible_item_drops = Array[ExtResource("3_hkn3j")]([])
+combat_rules = Array[ExtResource("2_aiy86")]([])
+abilities = Array[ExtResource("1_sm1jo")]([ExtResource("2_hkn3j")])
+metadata/_custom_type_script = "uid://relhyqi21ar8"

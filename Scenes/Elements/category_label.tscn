@@ -1,0 +1,40 @@
+[gd_scene load_steps=3 format=3 uid="uid://veyfqa2b4ijn"]
+
+[ext_resource type="FontFile" uid="uid://dgwg8mvobk57a" path="res://Assets/UI/Fonts/ImperatorSmallCaps Bold.ttf" id="1_0l88l"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_21afa"]
+bg_color = Color(0.281187, 0.281187, 0.281187, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[node name="CategoryLabel" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_right = 76.0
+offset_bottom = 34.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_21afa")
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 0
+
+[node name="lblCategory" type="Label" parent="PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.703808, 0.703808, 0.703808, 1)
+theme_override_fonts/font = ExtResource("1_0l88l")
+theme_override_font_sizes/font_size = 18
+text = "Ww"
+horizontal_alignment = 1
+vertical_alignment = 1

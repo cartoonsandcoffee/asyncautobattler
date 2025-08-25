@@ -1,0 +1,81 @@
+[gd_scene load_steps=8 format=3 uid="uid://bj1txoqo06q6n"]
+
+[ext_resource type="Texture2D" uid="uid://brkvaqqc37hpf" path="res://Assets/UI/icons.png" id="1_bwtb8"]
+[ext_resource type="Script" uid="uid://d3wcbgh5le10k" path="res://Scripts/Classes/stat_item.gd" id="1_r0lyc"]
+[ext_resource type="FontFile" uid="uid://cif7u8lvaqla2" path="res://Assets/UI/Enchanted Land.otf" id="2_r0lyc"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n0s73"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_llt2p"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oynv4"]
+bg_color = Color(0.0728426, 0.0728426, 0.0728426, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5561c"]
+atlas = ExtResource("1_bwtb8")
+region = Rect2(150, 0, 150, 150)
+
+[node name="StatItem" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_r0lyc")
+
+[node name="Panel" type="Panel" parent="."]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 0
+offset_right = 69.0
+offset_bottom = 44.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_n0s73")
+
+[node name="BorderPanel" type="PanelContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_llt2p")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/BorderPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="FillerPanel" type="PanelContainer" parent="Panel/BorderPanel/MarginContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_oynv4")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/BorderPanel/MarginContainer/FillerPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/BorderPanel/MarginContainer/FillerPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="picIcon" type="TextureRect" parent="Panel/BorderPanel/MarginContainer/FillerPanel/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+texture = SubResource("AtlasTexture_5561c")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="lblStat" type="Label" parent="Panel/BorderPanel/MarginContainer/FillerPanel/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("2_r0lyc")
+theme_override_font_sizes/font_size = 28
+text = "55"
+horizontal_alignment = 1
+vertical_alignment = 1
