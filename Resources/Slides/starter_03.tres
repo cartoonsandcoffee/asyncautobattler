@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="SlideData" load_steps=2 format=3 uid="uid://bybny32uxxi21"]
+
+[ext_resource type="Script" uid="uid://byilpungwqefa" path="res://Scripts/Resources/SlideData.gd" id="1_asafy"]
+
+[resource]
+script = ExtResource("1_asafy")
+header = "Back  down  you  go..."
+body_text = "But don't be too proud to accept help when it is given.  For the other heroes you fight will show you no mercy."
+metadata/_custom_type_script = "uid://byilpungwqefa"

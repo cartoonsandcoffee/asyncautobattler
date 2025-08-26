@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://yfx4f0fwf4vi"]
+[gd_scene load_steps=20 format=3 uid="uid://yfx4f0fwf4vi"]
 
 [ext_resource type="Texture2D" uid="uid://vtf7yfl2710m" path="res://Assets/UI/panel-border-030.png" id="1_0e3vx"]
 [ext_resource type="Script" uid="uid://c6hur1hg25jx" path="res://Scripts/main_game.gd" id="1_73nn6"]
@@ -8,8 +8,6 @@
 [ext_resource type="PackedScene" uid="uid://cqhyru53o5wfx" path="res://Scenes/item.tscn" id="4_mgc0q"]
 [ext_resource type="PackedScene" uid="uid://dm35l5es4kole" path="res://Scenes/Elements/stat_box.tscn" id="8_6y7pd"]
 [ext_resource type="Texture2D" uid="uid://brkvaqqc37hpf" path="res://Assets/UI/icons.png" id="10_r0mdn"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6y7pd"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mgc0q"]
 
@@ -39,7 +37,67 @@ region = Rect2(450, 0, 150, 150)
 atlas = ExtResource("10_r0mdn")
 region = Rect2(600, 0, 150, 150)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_73nn6"]
+[sub_resource type="Animation" id="Animation_73nn6"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BottomPanel:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(80, 885)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("TopPanel:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(585, -136)]
+}
+
+[sub_resource type="Animation" id="Animation_6y7pd"]
+resource_name = "setup_toolbars"
+length = 0.6
+step = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BottomPanel:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(80, 896), Vector2(80, 599), Vector2(80, 634)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("TopPanel:position")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.3, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(585, -133), Vector2(585, 39), Vector2(585, 10)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_r0mdn"]
+_data = {
+&"RESET": SubResource("Animation_73nn6"),
+&"setup_toolbars": SubResource("Animation_6y7pd")
+}
 
 [node name="MainGame" type="Control"]
 layout_mode = 3
@@ -59,16 +117,15 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="RoomPanel" type="Panel" parent="."]
+[node name="RoomContainer" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxEmpty_6y7pd")
 
-[node name="roomPic" type="TextureRect" parent="RoomPanel"]
+[node name="roomPic" type="TextureRect" parent="RoomContainer"]
 modulate = Color(0.304735, 0.170234, 0.306399, 1)
 layout_mode = 1
 anchors_preset = 15
@@ -79,15 +136,31 @@ grow_vertical = 2
 texture = ExtResource("2_73nn6")
 expand_mode = 3
 
+[node name="DoorContainer" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="EventContainer" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [node name="TopPanel" type="Panel" parent="."]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -183.0
-offset_top = 10.0
+offset_top = -133.0
 offset_right = 181.0
-offset_bottom = 128.0
+offset_bottom = -15.0
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_mgc0q")
 
@@ -113,11 +186,13 @@ patch_margin_top = 24
 patch_margin_right = 24
 patch_margin_bottom = 24
 
-[node name="MarginContainer" type="MarginContainer" parent="TopPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="TopPanel/Background"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = -5.0
+offset_bottom = 5.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 20
@@ -125,10 +200,10 @@ theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="VBoxContainer" type="VBoxContainer" parent="TopPanel/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="TopPanel/Background/MarginContainer"]
 layout_mode = 2
 
-[node name="lblRank" type="Label" parent="TopPanel/MarginContainer/VBoxContainer"]
+[node name="lblRank" type="Label" parent="TopPanel/Background/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_6j5ir")
 theme_override_font_sizes/font_size = 28
@@ -136,41 +211,41 @@ text = "Dungeon Map Rank : 1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="RoomGrid" type="GridContainer" parent="TopPanel/MarginContainer/VBoxContainer"]
+[node name="RoomGrid" type="GridContainer" parent="TopPanel/Background/MarginContainer/VBoxContainer"]
 layout_mode = 2
 columns = 6
 
-[node name="RoomIcon_1" type="TextureButton" parent="TopPanel/MarginContainer/VBoxContainer/RoomGrid"]
+[node name="RoomIcon_1" type="TextureButton" parent="TopPanel/Background/MarginContainer/VBoxContainer/RoomGrid"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 texture_normal = SubResource("AtlasTexture_bb2iq")
 stretch_mode = 0
 
-[node name="RoomIcon_2" type="TextureButton" parent="TopPanel/MarginContainer/VBoxContainer/RoomGrid"]
+[node name="RoomIcon_2" type="TextureButton" parent="TopPanel/Background/MarginContainer/VBoxContainer/RoomGrid"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 texture_normal = SubResource("AtlasTexture_bb2iq")
 stretch_mode = 0
 
-[node name="RoomIcon_3" type="TextureButton" parent="TopPanel/MarginContainer/VBoxContainer/RoomGrid"]
+[node name="RoomIcon_3" type="TextureButton" parent="TopPanel/Background/MarginContainer/VBoxContainer/RoomGrid"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 texture_normal = SubResource("AtlasTexture_bb2iq")
 stretch_mode = 0
 
-[node name="RoomIcon_4" type="TextureButton" parent="TopPanel/MarginContainer/VBoxContainer/RoomGrid"]
+[node name="RoomIcon_4" type="TextureButton" parent="TopPanel/Background/MarginContainer/VBoxContainer/RoomGrid"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 texture_normal = SubResource("AtlasTexture_bb2iq")
 stretch_mode = 0
 
-[node name="RoomIcon_5" type="TextureButton" parent="TopPanel/MarginContainer/VBoxContainer/RoomGrid"]
+[node name="RoomIcon_5" type="TextureButton" parent="TopPanel/Background/MarginContainer/VBoxContainer/RoomGrid"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 texture_normal = SubResource("AtlasTexture_bb2iq")
 stretch_mode = 0
 
-[node name="RoomIcon_6" type="TextureButton" parent="TopPanel/MarginContainer/VBoxContainer/RoomGrid"]
+[node name="RoomIcon_6" type="TextureButton" parent="TopPanel/Background/MarginContainer/VBoxContainer/RoomGrid"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 texture_normal = SubResource("AtlasTexture_bb2iq")
@@ -184,8 +259,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -688.0
-offset_top = -230.0
+offset_top = 32.0
 offset_right = 701.0
+offset_bottom = 262.0
 grow_horizontal = 2
 grow_vertical = 0
 
@@ -339,18 +415,7 @@ stat_icon = SubResource("AtlasTexture_sftma")
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="StatPanel" type="Panel" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -688.0
-offset_top = -305.0
-offset_right = 702.0
-offset_bottom = -187.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_styles/panel = SubResource("StyleBoxEmpty_73nn6")
+[node name="animToolbars" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_r0mdn")
+}

@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="SlideData" load_steps=2 format=3 uid="uid://dxk0b6dyonqjv"]
+
+[ext_resource type="Script" uid="uid://byilpungwqefa" path="res://Scripts/Resources/SlideData.gd" id="1_xbrcr"]
+
+[resource]
+script = ExtResource("1_xbrcr")
+header = "Back  down  you  go..."
+body_text = "Onward into darkness, young friend..."
+metadata/_custom_type_script = "uid://byilpungwqefa"

@@ -96,11 +96,15 @@ theme_override_styles/normal = SubResource("StyleBoxEmpty_8ja2n")
 [node name="Tooltip" type="Panel" parent="."]
 visible = false
 z_index = 100
-layout_mode = 0
-offset_left = 3.0
-offset_top = -259.0
-offset_right = 348.0
-offset_bottom = -146.0
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -146.0
+offset_top = -124.0
+offset_right = 247.0
+offset_bottom = -11.0
+grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_jgaej")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="Tooltip"]
