@@ -7,8 +7,10 @@ extends Control
 # UI Components
 @onready var dungeon_map_panel: Panel = $TopPanel
 @onready var inventory_panel: Panel = $BottomPanel
-@onready var stat_panel: Panel = $StatPanel
-@onready var room_container_panel: Panel = $RoomPanel
+
+@onready var room_background: TextureRect = $RoomContainer/roomPic
+@onready var event_container: Node = $EventContainer
+@onready var door_container: Node = $DoorContainer
 
 @onready var stat_health: Control = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/statHealth
 @onready var stat_damage: Control = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/statDamage
@@ -19,7 +21,10 @@ extends Control
 @onready var item_grid: GridContainer = $BottomPanel/MarginContainer/VBoxContainer/HBoxContainer/InventorySlots/ItemSlots
 @onready var weapon_slot: ItemSlot = $BottomPanel/MarginContainer/VBoxContainer/HBoxContainer/Weapon
 
-var current_room_scene: Node
+@onready var anim_tools: AnimationPlayer = $animToolbars
+
+var current_event: RoomEvent
+
 var item_slot = preload("res://Scenes/item.tscn")
 
 var item_slots: Array[ItemSlot] = []
@@ -30,9 +35,13 @@ var dragging_slot: ItemSlot = null
 var drag_preview: Control = null
 
 func _ready():
-	print("Main Game Scene initialized")
 	Player.stats_updated.connect(_on_stats_updated)
+	Player.inventory_updated.connect(_on_inventory_updated)
+	DungeonManager.show_minimap.connect(_show_panels)
+
 	create_test_player()
+	load_starting_room()
+
 	set_process_input(true) # for drag preview
 	
 func _input(event: InputEvent):
@@ -44,10 +53,48 @@ func _input(event: InputEvent):
 
 func create_test_player():
 	setup_inventory()
-	setup_weapon()
 	Player.update_stats_from_items()
 
+
+func load_starting_room():
+	var starter_room_data = RoomData.new(DungeonManager.RoomType.STARTER, "mysterious_old_man")
+	load_room(starter_room_data)
+
+func load_room(room_data: RoomData):
+	# Update background
+	room_background.texture = DungeonManager.get_background_for_room_type(room_data.room_type)
 	
+	# Clear previous event
+	clear_current_event()
+	
+	# Load new event
+	load_room_event(room_data)
+
+func clear_current_event():
+	if current_event:
+		current_event.queue_free()
+		current_event = null
+	
+	# Clear any remaining children
+	for child in event_container.get_children():
+		child.queue_free()
+
+func load_room_event(room_data: RoomData):
+	var event_scene = EventManager.get_event_scene(room_data.event_type)
+	if event_scene:
+		current_event = event_scene.instantiate()
+		event_container.add_child(current_event)
+		current_event.setup(room_data)
+		current_event.event_completed.connect(_on_event_completed)
+	else:
+		push_error("Could not load event: " + room_data.event_type)
+
+func _on_event_completed():
+	print("Event completed! Time to show door choices...")
+	# For now, just show a simple message
+	# Later we'll implement door generation here
+
+
 func set_player_stats():
 	stat_health.update_stuff()
 	stat_damage.update_stuff()
@@ -59,6 +106,7 @@ func setup_inventory():
 	item_slots.clear()
 	item_slots.resize(Player.inventory.max_item_slots)
 	item_grid.columns = Player.inventory.max_item_slots
+	setup_weapon()
 
 	for child in item_grid.get_children():
 		item_grid.remove_child(child)
@@ -85,6 +133,9 @@ func setup_weapon():
 
 func _on_stats_updated():
 	set_player_stats()
+
+func _on_inventory_updated(item: Item, slot: int):
+	setup_inventory()
 
 func _on_drag_started(slot: ItemSlot):
 	if not slot.current_item:
@@ -162,3 +213,6 @@ func create_drag_preview(item: Item):
 	
 	drag_preview.add_child(icon)
 	get_tree().root.add_child(drag_preview)
+
+func _show_panels():
+	anim_tools.play("setup_toolbars")

@@ -1,8 +1,8 @@
 extends Node
 
 signal player_died()
-signal player_leveled_up()
 signal stats_updated()
+signal inventory_updated(item: Item, slot_index: int)
 
 var player_name: String = ""
 var stats: GameStats
@@ -33,7 +33,8 @@ func new_run(nm: String):
 	player_name = nm
 	stats = GameStats.new()
 	inventory = Inventory.new()
-
+	inventory.item_added.connect(_on_inventory_item_added)
+	
 	if stats:
 		stats.agility = 0
 		stats.damage = 0
@@ -87,3 +88,7 @@ func reset_stats():
 		stats.shield = 0
 		stats.strikes = 1
 		stats.hit_points = 10
+
+func _on_inventory_item_added(item: Item, slot_index: int):
+	print(item.item_name + " - slot: " + str(slot_index))
+	inventory_updated.emit(item, slot_index)

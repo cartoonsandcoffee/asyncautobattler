@@ -41,6 +41,26 @@ func get_all_items() -> Array[Item]:
 	items.sort_custom(func(a, b): return a.rarity < b.rarity)
 	return items
 
+func get_random_common_items(count: int) -> Array[Item]:
+	var common_items: Array[Item] = []
+	var all_items = get_all_items()
+	
+	# Filter for common rarity only
+	for item in all_items:
+		if item.rarity == Item.Rarity.COMMON and item.unlocked:
+			item.slot_index = 100 #set a larger slot number so tooltips generate right-side
+			common_items.append(item)
+	
+	# Pick random items (without duplicates)
+	var selected: Array[Item] = []
+	for i in count:
+		if common_items.size() > 0:
+			var random_item = common_items.pick_random()
+			selected.append(random_item)
+			common_items.erase(random_item)  # Remove to avoid duplicates
+	
+	return selected
+
 func reset_items():
 	available_items.clear()
 	setup_items()

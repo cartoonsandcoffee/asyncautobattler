@@ -1,14 +1,11 @@
 extends Control
-class_name ItemSlot
+class_name ItemChoice
 
-signal drag_started(slot: ItemSlot)
-signal drag_ended(slot: ItemSlot)
-signal slot_dropped_on(slot: ItemSlot, dragged_item: Item)
+signal item_selected(slot: ItemChoice)
 
-
-enum ItemType {
-	WEAPON,
-	OTHER
+enum ChoiceType {
+	REWARD,
+	PURCHASE
 }
 
 
@@ -21,12 +18,11 @@ enum ItemType {
 @onready var tooltip_panel: Panel
 @onready var button: Button
 
-@export var item_type: ItemType = ItemType.OTHER
+@export var choice_type: ChoiceType = ChoiceType.REWARD
 @export var current_item: Item = null
 
 var item_instance_id: int = -1  # Track the specific instance
-var slot_index: int = -1  # to track position
-var is_dragging: bool = false  
+var slot_index: int = 10  # to track position
 
 var gamecolors: GameColors
 
@@ -43,10 +39,6 @@ func set_references():
 	tooltip = $ToolTip/ItemTooltip
 	tooltip_panel = $ToolTip
 	button = $Panel/Button
-
-	button.button_down.connect(_on_button_down)
-	button.button_up.connect(_on_button_up)
-	button.gui_input.connect(_on_button_gui_input)
 
 func set_item(item: Item):
 	set_references()
@@ -73,8 +65,30 @@ func update_visuals():
 		item_icon.self_modulate = current_item.item_color
 		if (current_item.item_type == Item.ItemType.WEAPON):
 			set_weapon_text_color()
+		else:
+			set_item_type_desc()
 		item_icon.texture = current_item.item_icon
 		set_rarity_color()
+
+func set_item_type_desc():
+	if current_item:
+		item_icon.self_modulate = current_item.item_color
+		match current_item.item_type:
+			Item.ItemType.BODY_ARMOR:
+				lbl_order.text = "armor"
+			Item.ItemType.BOOTS:
+				lbl_order.text = "boots"
+			Item.ItemType.GLOVES:
+				lbl_order.text = "gloves"
+			Item.ItemType.SHIELD:
+				lbl_order.text = "shield"
+			Item.ItemType.POTION:
+				lbl_order.text = "potion"
+			Item.ItemType.JEWELRY:
+				lbl_order.text = "jewelry"
+			_:
+				lbl_order.text = "Tool"
+
 
 func set_rarity_color():
 	if current_item.rarity == Item.Rarity.COMMON:
@@ -85,11 +99,6 @@ func set_rarity_color():
 		panel_border.self_modulate = gamecolors.rarity.rare
 	elif current_item.rarity == Item.Rarity.LEGENDARY:
 		panel_border.self_modulate = gamecolors.rarity.legendary	
-
-func set_order(order: int):
-	set_references()
-	lbl_order.text = str(order)
-	slot_index = order - 1 
 
 func set_weapon_text_color():
 	lbl_order.text = "weapon"
@@ -113,31 +122,5 @@ func _on_button_mouse_entered() -> void:
 		anim_hover.play("hover")
 		tooltip_panel.visible = true
 
-	if get_parent().get_parent().has_method("is_dragging"):
-		if get_parent().get_parent().is_dragging():
-			panel_border.modulate = Color(1.2, 1.2, 1.2)		
-
-func _on_button_down():
-	if current_item:
-		is_dragging = true
-		drag_started.emit(self)
-		modulate.a = 0.5  # Make semi-transparent while dragging
-
-func _on_button_up():
-	if is_dragging:
-		is_dragging = false
-		drag_ended.emit(self)
-		modulate.a = 1.0
-
-func _on_button_gui_input(event: InputEvent):
-	if event is InputEventMouseMotion and is_dragging:
-		# Update drag preview position if needed
-		pass
-
-func _can_drop_data(position: Vector2, data) -> bool:
-	# Allow dropping if we're an empty slot or swapping
-	return data is Dictionary and data.has("item")
-
-func _drop_data(position: Vector2, data):
-	if data.has("from_slot"):
-		slot_dropped_on.emit(self, data.item)
+func _on_button_pressed() -> void:
+	item_selected.emit(current_item)
