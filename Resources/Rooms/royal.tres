@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="RoomDefinition" load_steps=6 format=3 uid="uid://46o3jwpawqpt"]
+
+[ext_resource type="Script" uid="uid://b8gvpcv3v7mib" path="res://Scripts/Resources/RoomDefinition.gd" id="1_8g68x"]
+[ext_resource type="Texture2D" uid="uid://w21umqcnpemn" path="res://Assets/Art/Room_02_Background.png" id="1_u6v4f"]
+[ext_resource type="Texture2D" uid="uid://cto702ujeclyt" path="res://Assets/Art/Doors/chamber.png" id="2_bjy2w"]
+[ext_resource type="Texture2D" uid="uid://bffx10anckips" path="res://Assets/monochrome-transparent_packed.png" id="2_yeyq6"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bjy2w"]
+atlas = ExtResource("2_yeyq6")
+region = Rect2(688, 32, 16, 16)
+
+[resource]
+script = ExtResource("1_8g68x")
+room_type = 3
+rarity = 1
+room_name = "Royal Chamber"
+room_desc = "An opulent stretch of hallway."
+background_texture = ExtResource("1_u6v4f")
+door_texture = ExtResource("2_bjy2w")
+room_icon = SubResource("AtlasTexture_bjy2w")
+room_color = Color(0.65, 0.4641, 0.143, 1)
+possible_events = Array[PackedScene]([])
+spawn_weight = 1
+min_rank = 1
+max_rank = 5
+metadata/_custom_type_script = "uid://b8gvpcv3v7mib"

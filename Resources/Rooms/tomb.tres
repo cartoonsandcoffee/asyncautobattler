@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="RoomDefinition" load_steps=6 format=3 uid="uid://ck3v4b8abxvka"]
+
+[ext_resource type="Texture2D" uid="uid://w21umqcnpemn" path="res://Assets/Art/Room_02_Background.png" id="1_jy3jk"]
+[ext_resource type="Script" uid="uid://b8gvpcv3v7mib" path="res://Scripts/Resources/RoomDefinition.gd" id="1_pcqxa"]
+[ext_resource type="Texture2D" uid="uid://by3aww4863ulx" path="res://Assets/Art/Doors/tomb.png" id="2_eq2f0"]
+[ext_resource type="Texture2D" uid="uid://bffx10anckips" path="res://Assets/monochrome-transparent_packed.png" id="2_rxaaa"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eq2f0"]
+atlas = ExtResource("2_rxaaa")
+region = Rect2(32, 224, 16, 16)
+
+[resource]
+script = ExtResource("1_pcqxa")
+room_type = 2
+rarity = 0
+room_name = "A Crypt"
+room_desc = "Narrow passageways that store the dead."
+background_texture = ExtResource("1_jy3jk")
+door_texture = ExtResource("2_eq2f0")
+room_icon = SubResource("AtlasTexture_eq2f0")
+room_color = Color(0.401505, 0.184087, 0.497639, 1)
+possible_events = Array[PackedScene]([])
+spawn_weight = 1
+min_rank = 1
+max_rank = 5
+metadata/_custom_type_script = "uid://b8gvpcv3v7mib"

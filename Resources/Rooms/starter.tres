@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="RoomDefinition" load_steps=6 format=3 uid="uid://cqy15fmdy31by"]
+
+[ext_resource type="Script" uid="uid://b8gvpcv3v7mib" path="res://Scripts/Resources/RoomDefinition.gd" id="1_ituav"]
+[ext_resource type="Texture2D" uid="uid://w21umqcnpemn" path="res://Assets/Art/Room_02_Background.png" id="1_wi5bu"]
+[ext_resource type="PackedScene" uid="uid://ccn7le6eky01v" path="res://Scenes/Rooms/room_old_man.tscn" id="2_pmv54"]
+[ext_resource type="Texture2D" uid="uid://bffx10anckips" path="res://Assets/monochrome-transparent_packed.png" id="3_spj34"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pnpm5"]
+atlas = ExtResource("3_spj34")
+region = Rect2(48, 96, 16, 16)
+
+[resource]
+script = ExtResource("1_ituav")
+room_type = 0
+rarity = 0
+room_name = "Dungeon Entrance"
+room_desc = "The first room in the dungeon."
+background_texture = ExtResource("1_wi5bu")
+room_icon = SubResource("AtlasTexture_pnpm5")
+room_color = Color(0.37275, 0.189, 0.63, 1)
+possible_events = Array[PackedScene]([ExtResource("2_pmv54")])
+spawn_weight = 1
+min_rank = 0
+max_rank = 0
+metadata/_custom_type_script = "uid://b8gvpcv3v7mib"
