@@ -1,0 +1,24 @@
+extends Node
+
+enum Rarity {
+	COMMON,
+	UNCOMMON,
+	RARE,
+	UNIQUE,
+	LEGENDARY,
+	MYSTERIOUS
+}
+
+enum RoomType {
+	STARTER,
+	HALLWAY,
+	TOMB,
+	CHAMBERS,
+	FORGE, 
+	LIBRARY,
+	COVEN,
+	LARDER,
+	GALLERY,
+	BOSS,
+	SPECIAL
+}

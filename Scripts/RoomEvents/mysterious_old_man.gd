@@ -59,5 +59,7 @@ func _on_item_selected(item: Item):
 	anim_box.play("hide_box")
 	anim_old_man.play("walk_out")
 
+	await DungeonManager.slide_in_menus()
+
 	# Complete the event
 	complete_event()

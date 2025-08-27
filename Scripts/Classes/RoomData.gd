@@ -1,30 +1,27 @@
 class_name RoomData
 extends Resource
 
-## Base item class with rule-based mechanics system
-## All items, weapons, armor, etc. inherit from this
 
-enum Rarity {
-	COMMON,
-	UNCOMMON,
-	RARE,
-	LEGENDARY,
-	MYSTERIOUS
-}
+var room_definition: RoomDefinition     # Reference to the template
+var chosen_event_scene: PackedScene     # Which specific event was chosen
+var room_state: Dictionary = {}         # Runtime state (visited, completed, etc.)
 
-@export var room_type: DungeonManager.RoomType = DungeonManager.RoomType.STARTER
-@export var event_name: String = "Unknown Event"
-@export var event_type: String = ""
-@export_multiline var room_desc: String = ""
-@export var room_pic: Texture2D
-@export var room_color: Color
+func _init(def: RoomDefinition = null, event: PackedScene = null):
+	room_definition = def
+	chosen_event_scene = event
 
-@export var rarity: Rarity = Rarity.COMMON
-@export var rng_weight: float = 1.0
-@export var unlocked: bool = false
+# Delegate methods to RoomDefinition
+func get_room_name() -> String:
+	return room_definition.room_name if room_definition else "Unknown Room"
 
-func _init(type: DungeonManager.RoomType = DungeonManager.RoomType.STARTER, event: String = "mysterious_old_man"):
-	room_type = type
-	event_name = event
-	event_type = event
-	room_pic = DungeonManager.get_background_for_room_type(type)
+func get_background_texture() -> Texture2D:
+	return room_definition.background_texture if room_definition else null
+
+func get_door_icon() -> Texture2D:
+	return room_definition.door_icon if room_definition else null
+
+func get_rarity() -> Enums.Rarity:
+	return room_definition.rarity if room_definition else Enums.Rarity.COMMON
+
+func get_room_type() -> Enums.RoomType:
+	return room_definition.room_type if room_definition else Enums.RoomType.HALLWAY

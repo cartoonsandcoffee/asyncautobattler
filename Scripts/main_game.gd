@@ -10,7 +10,7 @@ extends Control
 
 @onready var room_background: TextureRect = $RoomContainer/roomPic
 @onready var event_container: Node = $EventContainer
-@onready var door_container: Node = $DoorContainer
+@onready var door_container: HBoxContainer = $DoorContainer/HBoxContainer
 
 @onready var stat_health: Control = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/statHealth
 @onready var stat_damage: Control = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/statDamage
@@ -57,43 +57,114 @@ func create_test_player():
 
 
 func load_starting_room():
-	var starter_room_data = RoomData.new(DungeonManager.RoomType.STARTER, "mysterious_old_man")
-	load_room(starter_room_data)
+#	var starter_room_data = RoomData.new(DungeonManager.RoomType.STARTER, "mysterious_old_man")
+#	load_room(starter_room_data)
+	var starter_room_data = DungeonManager.generate_starter_room()
+	if starter_room_data:
+		load_room(starter_room_data)
+	else:
+		push_error("Failed to generate starter room!")
 
 func load_room(room_data: RoomData):
 	# Update background
-	room_background.texture = DungeonManager.get_background_for_room_type(room_data.room_type)
-	
+	room_background.texture = room_data.room_definition.background_texture
+	set_background_tint(room_data.room_definition.room_type)
+
 	# Clear previous event
+	clear_current_doors()
 	clear_current_event()
 	
 	# Load new event
 	load_room_event(room_data)
+	show_door_choices()
+
 
 func clear_current_event():
 	if current_event:
 		current_event.queue_free()
 		current_event = null
 	
-	# Clear any remaining children
+	# Clear any remaining children6
 	for child in event_container.get_children():
 		child.queue_free()
 
+func clear_current_doors():
+	# Clear all door choice children
+	for child in door_container.get_children():
+		child.queue_free()
+
+
 func load_room_event(room_data: RoomData):
-	var event_scene = EventManager.get_event_scene(room_data.event_type)
+	var event_scene = room_data.chosen_event_scene
 	if event_scene:
 		current_event = event_scene.instantiate()
 		event_container.add_child(current_event)
 		current_event.setup(room_data)
 		current_event.event_completed.connect(_on_event_completed)
 	else:
-		push_error("Could not load event: " + room_data.event_type)
+		push_error("Could not load event.")
 
 func _on_event_completed():
-	print("Event completed! Time to show door choices...")
-	# For now, just show a simple message
-	# Later we'll implement door generation here
+	await get_tree().process_frame
+	
+	clear_current_event()
+	for child in door_container.get_children():
+		if child.has_method("on_room_completed"):
+			child.on_room_completed()
 
+
+func show_door_choices():
+	# Clear any existing doors
+	clear_doors()
+	
+	# Generate 3 door choices from DungeonManager
+	var door_options = DungeonManager.generate_door_choices()
+	
+	# Create door choice buttons
+	var door_choice_scene = preload("res://Scenes/door_choice.tscn")
+	
+	for room_data in door_options:
+		var door_choice = door_choice_scene.instantiate()
+		door_choice.custom_minimum_size.x = 180
+
+		door_container.add_child(door_choice)
+		door_choice.setup_door(room_data)
+		door_choice.door_selected.connect(_on_door_selected)
+
+func clear_doors():
+	for child in door_container.get_children():
+		child.queue_free()
+
+func _on_door_selected(room_data: RoomData):
+	print("Player selected: ", DungeonManager.get_room_type_display_name(room_data))
+	print("Event will be: ", room_data.chosen_event_scene)
+	
+	# Advance room counter
+	DungeonManager.advance_room()
+	
+	# Load the selected room
+	load_room(room_data)
+
+func set_background_tint(room_type: Enums.RoomType):
+	var gamecolors = GameColors.new()
+	
+	match room_type:
+		Enums.RoomType.STARTER:
+			room_background.modulate = gamecolors.room.starter
+		Enums.RoomType.HALLWAY:
+			room_background.modulate = gamecolors.room.hallway
+		Enums.RoomType.TOMB:
+			room_background.modulate = gamecolors.room.tomb
+		Enums.RoomType.CHAMBERS:
+			room_background.modulate = gamecolors.room.royal
+		Enums.RoomType.FORGE:
+			room_background.modulate = gamecolors.room.forge
+		Enums.RoomType.COVEN:
+			room_background.modulate = gamecolors.room.coven
+		Enums.RoomType.BOSS:
+			room_background.modulate = gamecolors.room.boss
+		_:
+			room_background.modulate = Color.WHITE  # Default no tint
 
 func set_player_stats():
 	stat_health.update_stuff()
