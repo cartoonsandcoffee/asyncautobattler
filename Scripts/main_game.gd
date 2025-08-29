@@ -22,6 +22,8 @@ extends Control
 @onready var weapon_slot: ItemSlot = $BottomPanel/MarginContainer/VBoxContainer/HBoxContainer/Weapon
 
 @onready var anim_tools: AnimationPlayer = $animToolbars
+@onready var anim_fade: AnimationPlayer = $animFade
+@onready var fade_overlay: ColorRect = $FadeOverlay
 
 var current_event: RoomEvent
 
@@ -57,11 +59,9 @@ func create_test_player():
 
 
 func load_starting_room():
-#	var starter_room_data = RoomData.new(DungeonManager.RoomType.STARTER, "mysterious_old_man")
-#	load_room(starter_room_data)
 	var starter_room_data = DungeonManager.generate_starter_room()
 	if starter_room_data:
-		load_room(starter_room_data)
+		await load_room(starter_room_data)
 	else:
 		push_error("Failed to generate starter room!")
 
@@ -142,8 +142,12 @@ func _on_door_selected(room_data: RoomData):
 	# Advance room counter
 	DungeonManager.advance_room()
 	
+	anim_fade.play("fade_out")
+	await anim_fade.animation_finished
+
 	# Load the selected room
 	load_room(room_data)
+	fade_overlay.visible = false
 
 func set_background_tint(room_type: Enums.RoomType):
 	var gamecolors = GameColors.new()
