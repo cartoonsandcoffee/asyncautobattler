@@ -90,5 +90,5 @@ func reset_stats():
 		stats.hit_points = 10
 
 func _on_inventory_item_added(item: Item, slot_index: int):
-	print(item.item_name + " - slot: " + str(slot_index))
+	#print(item.item_name + " - slot: " + str(slot_index))
 	inventory_updated.emit(item, slot_index)

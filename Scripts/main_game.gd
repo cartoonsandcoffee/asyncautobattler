@@ -137,7 +137,7 @@ func clear_doors():
 
 func _on_door_selected(room_data: RoomData):
 	print("Player selected: ", DungeonManager.get_room_type_display_name(room_data))
-	print("Event will be: ", room_data.chosen_event_scene)
+	print("Event will be: ", room_data.chosen_event_scene.event_description)
 	
 	# Advance room counter
 	DungeonManager.advance_room()
