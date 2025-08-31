@@ -92,3 +92,13 @@ func reset_stats():
 func _on_inventory_item_added(item: Item, slot_index: int):
 	#print(item.item_name + " - slot: " + str(slot_index))
 	inventory_updated.emit(item, slot_index)
+
+func add_gold(value: int):
+	Player.stats.gold += value
+	Player.max_gold_this_run += value
+
+func subtract_gold(value: int):
+	if Player.stats.gold >= value:
+		Player.stats.gold -= value
+	else:	
+		return false

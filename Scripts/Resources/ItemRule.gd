@@ -25,6 +25,7 @@ const EFFECT_TRIGGER_ITEM = "trigger_item"
 
 @export var trigger_type: String = ""
 @export var effect_type: String = ""
+@export var trigger: Enums.TriggerType 
 
 # Trigger conditions
 @export var countdown_value: int = 0  # For countdown triggers

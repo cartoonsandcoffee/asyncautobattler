@@ -7,6 +7,11 @@ extends RoomEvent
 @onready var button: Button = $picTreasure/Button
 @onready var items_offering: ItemOffering = $FreeItemOffering
 
+@onready var particles: CPUParticles2D = $jar_particles
+
+
+func _ready():
+	super._ready()  # Call parent's _ready
 
 func initialize_event():
 	items_offering.item_selected.connect(_on_item_selected)
@@ -32,6 +37,7 @@ func disable_button():
 
 func _on_button_pressed() -> void:
 	disable_button()
+	particles.emitting = false
 	anim_open.play("hide_text")
 	anim_box.play("openBox")
 

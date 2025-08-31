@@ -5,13 +5,6 @@ class_name StatItem
 @onready var pic_icon: TextureRect 
 @onready var panel_color: Panel
 
-enum Stat {
-	DAMAGE,
-	HITPOINTS,
-	AGILITY,
-	SHIELD,
-	GOLD
-}
 
 var gamecolors: GameColors
 
@@ -45,3 +38,6 @@ func update_stat(stat_name: String, stat_value: String):
 	elif stat_name == "speed" || stat_name == "agility":
 		pic_icon.texture = stat_speed
 		panel_color.modulate = gamecolors.stats.agility
+
+func update_value(value: String):
+	lbl_stat.text = value

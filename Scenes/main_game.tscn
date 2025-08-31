@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://yfx4f0fwf4vi"]
+[gd_scene load_steps=42 format=3 uid="uid://yfx4f0fwf4vi"]
 
 [ext_resource type="Texture2D" uid="uid://vtf7yfl2710m" path="res://Assets/UI/panel-border-030.png" id="1_0e3vx"]
 [ext_resource type="Script" uid="uid://c6hur1hg25jx" path="res://Scripts/main_game.gd" id="1_73nn6"]
@@ -6,8 +6,15 @@
 [ext_resource type="Texture2D" uid="uid://w21umqcnpemn" path="res://Assets/Art/Room_02_Background.png" id="2_73nn6"]
 [ext_resource type="Texture2D" uid="uid://bffx10anckips" path="res://Assets/monochrome-transparent_packed.png" id="4_6j5ir"]
 [ext_resource type="PackedScene" uid="uid://cqhyru53o5wfx" path="res://Scenes/item.tscn" id="4_mgc0q"]
+[ext_resource type="Script" uid="uid://tcnxdmjth1da" path="res://Scripts/combat_panel.gd" id="6_tpqse"]
 [ext_resource type="PackedScene" uid="uid://dm35l5es4kole" path="res://Scenes/Elements/stat_box.tscn" id="8_6y7pd"]
+[ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="9_r0mdn"]
+[ext_resource type="Texture2D" uid="uid://ccbcslnsifj3o" path="res://Assets/UI/divider-fade-002.png" id="10_0xqxu"]
 [ext_resource type="Texture2D" uid="uid://brkvaqqc37hpf" path="res://Assets/UI/icons.png" id="10_r0mdn"]
+[ext_resource type="Texture2D" uid="uid://do0cbbubxlxq6" path="res://Assets/Art/Enemies/Klorg.png" id="11_0xqxu"]
+[ext_resource type="Texture2D" uid="uid://derrdt27xagod" path="res://Assets/UI/panel-border-007.png" id="13_sftma"]
+[ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="14_erobn"]
+[ext_resource type="Texture2D" uid="uid://2wdcqaowp0fe" path="res://Assets/UI/Buttons/sheet_white1x.png" id="15_vc13p"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mgc0q"]
 
@@ -15,7 +22,17 @@
 atlas = ExtResource("4_6j5ir")
 region = Rect2(656, 224, 16, 16)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_18r40"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c78sm"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sftma"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_erobn"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(1, 1, 1, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0xqxu"]
 atlas = ExtResource("10_r0mdn")
@@ -36,6 +53,143 @@ region = Rect2(450, 0, 150, 150)
 [sub_resource type="AtlasTexture" id="AtlasTexture_sftma"]
 atlas = ExtResource("10_r0mdn")
 region = Rect2(600, 0, 150, 150)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_18r40"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gpk8t"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hm1wn"]
+atlas = ExtResource("13_sftma")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ry2jr"]
+texture = SubResource("AtlasTexture_hm1wn")
+texture_margin_left = 32.0
+texture_margin_top = 32.0
+texture_margin_right = 32.0
+texture_margin_bottom = 32.0
+region_rect = Rect2(0, 0, 96, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qnvbm"]
+atlas = ExtResource("15_vc13p")
+region = Rect2(200, 350, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vvhy6"]
+atlas = ExtResource("15_vc13p")
+region = Rect2(200, 450, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ns551"]
+atlas = ExtResource("15_vc13p")
+region = Rect2(350, 350, 50, 50)
+
+[sub_resource type="Animation" id="Animation_gpk8t"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("picEnemy:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("picEnemy:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(157, 901)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CombatPanelTop:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(80, -248)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("LogPanel:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1556, 251)]
+}
+
+[sub_resource type="Animation" id="Animation_sftma"]
+resource_name = "open_Combat"
+step = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("picEnemy:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.9, 0.9), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("picEnemy:position")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(157, 901), Vector2(154, -3), Vector2(111, 53)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CombatPanelTop:position")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.6, 0.84, 0.9),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(80, -248), Vector2(80, -248), Vector2(80, 34), Vector2(80, 4)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("LogPanel:position")
+tracks/3/interp = 2
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.7, 0.92, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1556, 251), Vector2(1041, 251), Vector2(1107, 251)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_erobn"]
+_data = {
+&"RESET": SubResource("Animation_gpk8t"),
+&"open_Combat": SubResource("Animation_sftma")
+}
 
 [sub_resource type="Animation" id="Animation_73nn6"]
 length = 0.001
@@ -99,6 +253,68 @@ _data = {
 &"setup_toolbars": SubResource("Animation_6y7pd")
 }
 
+[sub_resource type="Animation" id="Animation_0xqxu"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FadeOverlay:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("FadeOverlay:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_r0mdn"]
+resource_name = "fade_out"
+length = 0.4
+step = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FadeOverlay:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("FadeOverlay:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_tpqse"]
+_data = {
+&"RESET": SubResource("Animation_0xqxu"),
+&"fade_out": SubResource("Animation_r0mdn")
+}
+
 [node name="MainGame" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -107,15 +323,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_73nn6")
-
-[node name="ColorRect" type="ColorRect" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 1)
 
 [node name="RoomContainer" type="Control" parent="."]
 layout_mode = 1
@@ -265,6 +472,363 @@ layout_mode = 2
 texture_normal = SubResource("AtlasTexture_bb2iq")
 stretch_mode = 0
 
+[node name="CombatPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_c78sm")
+script = ExtResource("6_tpqse")
+
+[node name="CombatPanelTop" type="Panel" parent="CombatPanel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -688.0
+offset_top = -248.0
+offset_right = 701.0
+offset_bottom = -18.0
+grow_horizontal = 2
+theme = ExtResource("9_r0mdn")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_sftma")
+
+[node name="PanelContainer" type="PanelContainer" parent="CombatPanel/CombatPanelTop"]
+custom_minimum_size = Vector2(0, 110)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -693.5
+offset_right = 696.5
+offset_bottom = 120.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_erobn")
+
+[node name="MarginContainer" type="MarginContainer" parent="CombatPanel/CombatPanelTop/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/separation = 8
+
+[node name="enemyStats" type="HBoxContainer" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/VBoxContainer"]
+layout_mode = 2
+
+[node name="boxEnemyName" type="HBoxContainer" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer3" type="MarginContainer" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/VBoxContainer/HBoxContainer/boxEnemyName"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect2" type="TextureRect" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/VBoxContainer/HBoxContainer/boxEnemyName"]
+custom_minimum_size = Vector2(96, 10)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("10_0xqxu")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="lblEnemy" type="Label" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/VBoxContainer/HBoxContainer/boxEnemyName"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("9_r0mdn")
+theme_override_font_sizes/font_size = 32
+text = "Enemy Name"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/VBoxContainer/HBoxContainer/boxEnemyName"]
+custom_minimum_size = Vector2(96, 10)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("10_0xqxu")
+expand_mode = 1
+stretch_mode = 5
+flip_h = true
+
+[node name="MarginContainer2" type="MarginContainer" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/VBoxContainer/HBoxContainer/boxEnemyName"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="lblEnemyDesc" type="RichTextLabel" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/VBoxContainer"]
+layout_mode = 2
+bbcode_enabled = true
+text = "This is where the description of the enemy's abilities go."
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="statsContainer" type="HBoxContainer" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats"]
+layout_mode = 2
+
+[node name="statHealth" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/statsContainer" instance=ExtResource("8_6y7pd")]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+stat_color = Color(0, 0.91, 0.0758333, 1)
+stat_icon = SubResource("AtlasTexture_0xqxu")
+
+[node name="statDamage" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/statsContainer" instance=ExtResource("8_6y7pd")]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+stat_color = Color(0.85, 0.0765, 0.0893915, 1)
+stat_icon = SubResource("AtlasTexture_tpqse")
+
+[node name="statShield" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/statsContainer" instance=ExtResource("8_6y7pd")]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+stat = 3
+stat_color = Color(0, 0.533333, 1, 1)
+stat_icon = SubResource("AtlasTexture_c78sm")
+
+[node name="statAgility" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/statsContainer" instance=ExtResource("8_6y7pd")]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+stat = 2
+stat_color = Color(0.94, 0.94, 0.3008, 1)
+stat_icon = SubResource("AtlasTexture_i47ox")
+
+[node name="statStrikes" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/statsContainer" instance=ExtResource("8_6y7pd")]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+stat = 4
+stat_color = Color(0.88, 0.572, 0.1408, 1)
+stat_icon = SubResource("AtlasTexture_sftma")
+
+[node name="MarginContainer" type="MarginContainer" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="enemyInventory" type="HBoxContainer" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(0, 105)
+layout_mode = 2
+
+[node name="Weapon" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyInventory" instance=ExtResource("4_mgc0q")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+item_type = 0
+
+[node name="InventorySlots" type="PanelContainer" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyInventory"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_18r40")
+
+[node name="ItemSlots" type="GridContainer" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyInventory/InventorySlots"]
+layout_direction = 2
+layout_mode = 2
+columns = 12
+
+[node name="Item1" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyInventory/InventorySlots/ItemSlots" instance=ExtResource("4_mgc0q")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item3" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyInventory/InventorySlots/ItemSlots" instance=ExtResource("4_mgc0q")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item2" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyInventory/InventorySlots/ItemSlots" instance=ExtResource("4_mgc0q")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item4" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyInventory/InventorySlots/ItemSlots" instance=ExtResource("4_mgc0q")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item5" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyInventory/InventorySlots/ItemSlots" instance=ExtResource("4_mgc0q")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item6" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyInventory/InventorySlots/ItemSlots" instance=ExtResource("4_mgc0q")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item7" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyInventory/InventorySlots/ItemSlots" instance=ExtResource("4_mgc0q")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item8" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyInventory/InventorySlots/ItemSlots" instance=ExtResource("4_mgc0q")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item9" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyInventory/InventorySlots/ItemSlots" instance=ExtResource("4_mgc0q")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item10" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyInventory/InventorySlots/ItemSlots" instance=ExtResource("4_mgc0q")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item11" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyInventory/InventorySlots/ItemSlots" instance=ExtResource("4_mgc0q")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item12" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyInventory/InventorySlots/ItemSlots" instance=ExtResource("4_mgc0q")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="NinePatchRect" type="NinePatchRect" parent="CombatPanel/CombatPanelTop/PanelContainer"]
+visible = false
+layout_mode = 2
+texture = ExtResource("1_0e3vx")
+patch_margin_left = 32
+patch_margin_top = 32
+patch_margin_right = 32
+patch_margin_bottom = 32
+
+[node name="picEnemy" type="TextureRect" parent="CombatPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -611.0
+offset_top = 469.0
+offset_right = 573.0
+offset_bottom = 1135.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(657, 369.5)
+texture = ExtResource("11_0xqxu")
+expand_mode = 1
+
+[node name="LogPanel" type="Panel" parent="CombatPanel"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = 20.0
+offset_top = 251.0
+offset_right = 420.0
+offset_bottom = 621.0
+grow_horizontal = 0
+pivot_offset = Vector2(200, 185)
+theme = ExtResource("9_r0mdn")
+theme_override_styles/panel = SubResource("StyleBoxFlat_gpk8t")
+
+[node name="RightSidePanel" type="MarginContainer" parent="CombatPanel/LogPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="PanelContainer" type="PanelContainer" parent="CombatPanel/LogPanel/RightSidePanel"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_ry2jr")
+
+[node name="FightRunBox" type="VBoxContainer" parent="CombatPanel/LogPanel/RightSidePanel/PanelContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CombatPanel/LogPanel/RightSidePanel/PanelContainer/FightRunBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="Label" type="Label" parent="CombatPanel/LogPanel/RightSidePanel/PanelContainer/FightRunBox/MarginContainer"]
+layout_mode = 2
+text = "An enemy approaches!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="btnFight" type="Button" parent="CombatPanel/LogPanel/RightSidePanel/PanelContainer/FightRunBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Fight"
+
+[node name="btnRun" type="Button" parent="CombatPanel/LogPanel/RightSidePanel/PanelContainer/FightRunBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Run"
+
+[node name="MarginContainer2" type="MarginContainer" parent="CombatPanel/LogPanel/RightSidePanel/PanelContainer/FightRunBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CombatLogBox" type="VBoxContainer" parent="CombatPanel/LogPanel/RightSidePanel/PanelContainer"]
+visible = false
+layout_mode = 2
+
+[node name="txtCombatLog" type="RichTextLabel" parent="CombatPanel/LogPanel/RightSidePanel/PanelContainer/CombatLogBox"]
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "This is where all the combat info goes."
+fit_content = true
+
+[node name="lblTurn" type="Label" parent="CombatPanel/LogPanel/RightSidePanel/PanelContainer/CombatLogBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("14_erobn")
+theme_override_font_sizes/font_size = 22
+text = "Turn: 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="speedControls" type="HBoxContainer" parent="CombatPanel/LogPanel/RightSidePanel/PanelContainer/CombatLogBox"]
+layout_mode = 2
+
+[node name="btnPause" type="Button" parent="CombatPanel/LogPanel/RightSidePanel/PanelContainer/CombatLogBox/speedControls"]
+layout_mode = 2
+icon = SubResource("AtlasTexture_qnvbm")
+
+[node name="btnNext" type="Button" parent="CombatPanel/LogPanel/RightSidePanel/PanelContainer/CombatLogBox/speedControls"]
+layout_mode = 2
+icon = SubResource("AtlasTexture_vvhy6")
+
+[node name="btnPlay" type="Button" parent="CombatPanel/LogPanel/RightSidePanel/PanelContainer/CombatLogBox/speedControls"]
+layout_mode = 2
+icon = SubResource("AtlasTexture_ns551")
+
+[node name="speedSlider" type="HSlider" parent="CombatPanel/LogPanel/RightSidePanel/PanelContainer/CombatLogBox/speedControls"]
+custom_minimum_size = Vector2(50, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 4.0
+step = 0.5
+value = 1.0
+scrollable = false
+tick_count = 7
+ticks_on_borders = true
+
+[node name="lblSpeed" type="Label" parent="CombatPanel/LogPanel/RightSidePanel/PanelContainer/CombatLogBox/speedControls"]
+layout_mode = 2
+text = "1.5x"
+
+[node name="combatPanelAnim" type="AnimationPlayer" parent="CombatPanel"]
+libraries = {
+&"": SubResource("AnimationLibrary_erobn")
+}
+
 [node name="BottomPanel" type="Panel" parent="."]
 layout_mode = 1
 anchors_preset = 7
@@ -400,7 +964,6 @@ stat_icon = SubResource("AtlasTexture_0xqxu")
 [node name="statDamage" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats" instance=ExtResource("8_6y7pd")]
 custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
-stat = 0
 stat_color = Color(0.85, 0.0765, 0.0893915, 1)
 stat_icon = SubResource("AtlasTexture_tpqse")
 
@@ -429,7 +992,28 @@ stat_icon = SubResource("AtlasTexture_sftma")
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="FadeOverlay" type="ColorRect" parent="."]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
 [node name="animToolbars" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_r0mdn")
 }
+
+[node name="animFade" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_tpqse")
+}
+
+[connection signal="pressed" from="CombatPanel/LogPanel/RightSidePanel/PanelContainer/FightRunBox/btnFight" to="CombatPanel" method="_on_btn_fight_pressed"]
+[connection signal="pressed" from="CombatPanel/LogPanel/RightSidePanel/PanelContainer/FightRunBox/btnRun" to="CombatPanel" method="_on_btn_run_pressed"]
+[connection signal="pressed" from="CombatPanel/LogPanel/RightSidePanel/PanelContainer/CombatLogBox/speedControls/btnPause" to="CombatPanel" method="_on_btn_pause_pressed"]
+[connection signal="value_changed" from="CombatPanel/LogPanel/RightSidePanel/PanelContainer/CombatLogBox/speedControls/speedSlider" to="CombatPanel" method="_on_speed_slider_value_changed"]

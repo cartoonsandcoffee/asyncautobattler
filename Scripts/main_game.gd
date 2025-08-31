@@ -7,6 +7,7 @@ extends Control
 # UI Components
 @onready var dungeon_map_panel: Panel = $TopPanel
 @onready var inventory_panel: Panel = $BottomPanel
+@onready var combat_panel: CombatPanel = $CombatPanel
 
 @onready var room_background: TextureRect = $RoomContainer/roomPic
 @onready var event_container: Node = $EventContainer
@@ -36,10 +37,20 @@ var dragging_from_slot: int = -1
 var dragging_slot: ItemSlot = null
 var drag_preview: Control = null
 
+var awaiting_combat_result: bool = false
+var combat_result_callback: Callable
+
+func get_combat_panel() -> CombatPanel:
+	# Get reference to the combat panel for room events to use
+	return combat_panel
+
 func _ready():
 	Player.stats_updated.connect(_on_stats_updated)
 	Player.inventory_updated.connect(_on_inventory_updated)
 	DungeonManager.show_minimap.connect(_show_panels)
+
+	combat_panel.combat_completed.connect(_on_combat_completed)
+	combat_panel.player_chose_run.connect(_on_player_ran)
 
 	create_test_player()
 	load_starting_room()
@@ -71,7 +82,7 @@ func load_room(room_data: RoomData):
 	set_background_tint(room_data.room_definition.room_type)
 
 	# Clear previous event
-	clear_current_doors()
+	clear_doors()
 	clear_current_event()
 	
 	# Load new event
@@ -88,12 +99,6 @@ func clear_current_event():
 	for child in event_container.get_children():
 		child.queue_free()
 
-func clear_current_doors():
-	# Clear all door choice children
-	for child in door_container.get_children():
-		child.queue_free()
-
-
 func load_room_event(room_data: RoomData):
 	var event_scene = room_data.chosen_event_scene
 	if event_scene:
@@ -101,6 +106,10 @@ func load_room_event(room_data: RoomData):
 		event_container.add_child(current_event)
 		current_event.setup(room_data)
 		current_event.event_completed.connect(_on_event_completed)
+
+		# Connect to combat request if the event needs it
+		if current_event.has_signal("combat_requested"):
+			current_event.combat_requested.connect(request_combat)
 	else:
 		push_error("Could not load event.")
 
@@ -137,7 +146,7 @@ func clear_doors():
 
 func _on_door_selected(room_data: RoomData):
 	print("Player selected: ", DungeonManager.get_room_type_display_name(room_data))
-	print("Event will be: ", room_data.chosen_event_scene.event_description)
+	#print("Event will be: ", room_data.chosen_event_scene.event_description)
 	
 	# Advance room counter
 	DungeonManager.advance_room()
@@ -171,11 +180,11 @@ func set_background_tint(room_type: Enums.RoomType):
 			room_background.modulate = Color.WHITE  # Default no tint
 
 func set_player_stats():
-	stat_health.update_stuff()
-	stat_damage.update_stuff()
-	stat_shield.update_stuff()
-	stat_agility.update_stuff()
-	stat_gold.update_stuff()
+	stat_health.update_stat(Enums.Stats.HITPOINTS, Player.stats.hit_points_current, Player.stats.hit_points)
+	stat_damage.update_stat(Enums.Stats.DAMAGE, Player.stats.damage, -1)
+	stat_shield.update_stat(Enums.Stats.SHIELD, Player.stats.shield, -1)
+	stat_agility.update_stat(Enums.Stats.AGILITY, Player.stats.agility, -1)
+	stat_gold.update_stat(Enums.Stats.GOLD, Player.stats.gold, -1)
 
 func setup_inventory():
 	item_slots.clear()
@@ -291,3 +300,36 @@ func create_drag_preview(item: Item):
 
 func _show_panels():
 	anim_tools.play("setup_toolbars")
+
+
+func request_combat(enemy: Enemy) -> bool:
+	# Called by room events to initiate combat. Returns true if player won, false if lost or ran
+	
+	if not combat_panel:
+		push_error("No combat panel found!")
+		return false
+	
+	if not enemy:
+		push_error("No enemy provided for combat!")
+		return false
+	
+	# Show combat encounter
+	combat_panel.setup_for_combat(enemy, item_slots, weapon_slot)
+	
+	# Wait for combat to complete
+	awaiting_combat_result = true
+	var result = await combat_panel.combat_completed
+	awaiting_combat_result = false
+	
+	return result  # Returns true if player won, false otherwise
+
+func _on_combat_completed(player_won: bool):
+	# Update player stats display
+	set_player_stats()
+	
+	# The combat panel has already slid out at this point
+	print("Combat completed. Player won: ", player_won)
+
+func _on_player_ran():
+	print("Player ran from combat")
+	# The combat panel will emit combat_completed(false) after sliding out

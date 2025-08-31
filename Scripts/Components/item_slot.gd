@@ -17,6 +17,7 @@ enum ItemType {
 @onready var lbl_order: Label 
 @onready var item_icon: TextureRect 
 @onready var anim_hover: AnimationPlayer
+@onready var anim_highlight: AnimationPlayer
 @onready var tooltip: Control
 @onready var tooltip_panel: Panel
 @onready var button: Button
@@ -27,6 +28,7 @@ enum ItemType {
 var item_instance_id: int = -1  # Track the specific instance
 var slot_index: int = -1  # to track position
 var is_dragging: bool = false  
+var is_combat_highlighted: bool = false
 
 var gamecolors: GameColors
 
@@ -60,7 +62,12 @@ func set_item(item: Item):
 	else:
 		set_empty()
 	
+func start_combat_highlight():
+	anim_highlight.play("combat_highlight")
 
+func stop_combat_highlight():
+	anim_highlight.play("RESET")
+	
 func set_empty():
 	current_item = null
 	item_instance_id = -1 

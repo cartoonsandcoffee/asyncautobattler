@@ -242,7 +242,7 @@ func process_turn_start_rules(entity):
 	else:
 		# Enemy turn start abilities
 		for ability in entity.abilities:
-			if ability.trigger == EnemyAbility.TriggerType.TURN_START:
+			if ability.trigger == Enums.TriggerType.TURN_START:
 				await process_enemy_ability(ability, entity)
 
 func process_on_hit_rules(attacker):
@@ -262,17 +262,32 @@ func process_on_hit_rules(attacker):
 	else:
 		# Enemy on-hit abilities
 		for ability in attacker.abilities:
-			if ability.trigger == EnemyAbility.TriggerType.ON_HIT:
+			if ability.trigger == Enums.TriggerType.ON_HIT:
 				await process_enemy_ability(ability, attacker)
 
 func process_item_rules(item: Item, entity, trigger_type: String):
 	"""Process all rules for an item that match the trigger type"""
 	if not item or not item.rules:
 		return
-		
+
 	for rule in item.rules:
 		if rule.trigger_type == trigger_type:
 			await execute_item_rule(item, rule, entity)
+		
+		# Emit signal BEFORE executing so UI can highlight
+		item_rule_triggered.emit(item, rule, entity)
+
+		# Wait for highlight duration
+		await wait_for_highlight()
+		
+		# Now execute the rule
+		await execute_item_rule(item, rule, entity)
+		
+		# Small pause between rules
+		await wait_for_speed()
+
+
+
 
 func process_enemy_ability(ability: EnemyAbility, entity):
 	"""Process a single enemy ability"""
@@ -328,7 +343,7 @@ func process_enemy_ability(ability: EnemyAbility, entity):
 func execute_item_rule(item: Item, rule: ItemRule, entity):
 	"""Execute a specific item rule and show visual feedback"""
 	print("  -> ", item.item_name, ": ", rule.trigger_type, " effect")
-	
+
 	# Emit rule triggered signal
 	item_rule_triggered.emit(item, rule, entity)
 	
@@ -348,6 +363,26 @@ func execute_item_rule(item: Item, rule: ItemRule, entity):
 	
 	# Wait for visual feedback
 	await wait_for_speed()
+
+
+func _matches_trigger(rule: ItemRule, trigger_type: String) -> bool:
+	"""Check if a rule matches the current trigger type"""
+	match trigger_type:
+		"battle_start":
+			return rule.trigger == Enums.TriggerType.BATTLE_START
+		"turn_start":
+			return rule.trigger == Enums.TriggerType.TURN_START
+		"on_hit":
+			return rule.trigger == Enums.TriggerType.ON_HIT
+		"exposed":
+			return rule.trigger == Enums.TriggerType.EXPOSED
+		"wounded":
+			return rule.trigger == Enums.TriggerType.WOUNDED
+		"countdown":
+			return rule.trigger == Enums.TriggerType.COUNTDOWN
+		_:
+			return false
+
 
 func modify_entity_stat(entity, stat_name: String, amount: int):
 	"""Modify an entity's stat and emit appropriate signals"""
@@ -537,7 +572,7 @@ func process_exposed_rules(entity):
 	else:
 		# Enemy exposed abilities  
 		for ability in entity.abilities:
-			if ability.trigger == EnemyAbility.TriggerType.EXPOSED:
+			if ability.trigger == Enums.TriggerType.EXPOSED:
 				await process_enemy_ability(ability, entity)
 
 func process_wounded_rules(entity):
@@ -556,7 +591,7 @@ func process_wounded_rules(entity):
 	else:
 		# Enemy wounded abilities
 		for ability in entity.abilities:
-			if ability.trigger == EnemyAbility.TriggerType.WOUNDED:
+			if ability.trigger == Enums.TriggerType.WOUNDED:
 				await process_enemy_ability(ability, entity)
 
 func handle_entity_death(dead_entity):

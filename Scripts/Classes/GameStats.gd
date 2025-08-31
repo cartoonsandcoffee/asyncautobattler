@@ -20,6 +20,9 @@ var shield_current: int = 0
 var agility_current: int = 0
 var hit_points_current: int = 10
 
+var burn_damage: int = 3
+var burn_damage_current: int = 3
+
 func _init():
 	# Initialize current values to base values
 	reset_to_base_values()
