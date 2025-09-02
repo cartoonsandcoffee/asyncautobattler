@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://cqhyru53o5wfx"]
+[gd_scene load_steps=25 format=3 uid="uid://cqhyru53o5wfx"]
 
 [ext_resource type="Script" uid="uid://c60g0xugsdgdl" path="res://Scripts/Components/item_slot.gd" id="1_tnst4"]
 [ext_resource type="FontFile" uid="uid://dgwg8mvobk57a" path="res://Assets/UI/Fonts/ImperatorSmallCaps Bold.ttf" id="3_66iod"]
@@ -195,10 +195,27 @@ tracks/1/keys = {
 "values": [Vector2(28, -42), Vector2(28, -58), Vector2(28, -40), Vector2(28, -47), Vector2(28, -40)]
 }
 
+[sub_resource type="Animation" id="Animation_renmp"]
+resource_name = "stop_highlight"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("combat_highlight:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_hnyqs"]
 _data = {
 &"RESET": SubResource("Animation_5r5i4"),
-&"combat_highlight": SubResource("Animation_fif6b")
+&"combat_highlight": SubResource("Animation_fif6b"),
+&"stop_highlight": SubResource("Animation_renmp")
 }
 
 [node name="Item" type="Control"]

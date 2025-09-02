@@ -20,22 +20,15 @@ enum ItemType {
 	JEWELRY
 }
 
-enum Rarity {
-	COMMON,
-	UNCOMMON,
-	RARE,
-	UNIQUE,
-	LEGENDARY,
-	MYSTERIOUS
-}
 
 @export var item_name: String = ""
 @export var item_type: ItemType = ItemType.WEAPON
 @export_multiline var item_desc: String = ""
 @export var item_icon: Texture2D
 @export var item_color: Color
+@export var rules: Array[ItemRule]
 
-@export var rarity: Rarity = Rarity.COMMON
+@export var rarity: Enums.Rarity = Enums.Rarity.COMMON
 @export var categories: Array[String] = []  # Tags like "Sword", "Metal", "Fire"
 @export var rng_weight: float = 1.0
 @export var unlocked: bool = false

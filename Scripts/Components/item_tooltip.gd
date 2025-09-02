@@ -241,13 +241,13 @@ func clear_definition_boxes():
 	found_keywords.clear()
 
 func set_rarity_color() -> Color:
-	if current_item.rarity == Item.Rarity.COMMON:
+	if current_item.rarity == Enums.Rarity.COMMON:
 		return gamecolors.rarity.common
-	elif current_item.rarity == Item.Rarity.UNCOMMON:
+	elif current_item.rarity == Enums.Rarity.UNCOMMON:
 		return gamecolors.rarity.uncommon
-	elif current_item.rarity == Item.Rarity.RARE:
+	elif current_item.rarity == Enums.Rarity.RARE:
 		return gamecolors.rarity.rare
-	elif current_item.rarity == Item.Rarity.LEGENDARY:
+	elif current_item.rarity == Enums.Rarity.LEGENDARY:
 		return gamecolors.rarity.legendary	
 	else:
 		return Color.WHITE

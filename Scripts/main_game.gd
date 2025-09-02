@@ -304,6 +304,7 @@ func _show_panels():
 
 func request_combat(enemy: Enemy) -> bool:
 	# Called by room events to initiate combat. Returns true if player won, false if lost or ran
+	print("main_game -> request combat")
 	
 	if not combat_panel:
 		push_error("No combat panel found!")

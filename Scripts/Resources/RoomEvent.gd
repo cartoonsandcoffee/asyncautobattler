@@ -18,6 +18,7 @@ var player_won_combat: bool = false
 
 func _ready():
 	# Get reference to main game
+	print("room_event -> ready")
 	main_game_ref = get_tree().get_root().get_node_or_null("MainGame")
 	if not main_game_ref:
 		push_error("RoomEvent: Could not find MainGame node!")
@@ -29,11 +30,10 @@ func setup(data: RoomData):
 	room_data = data
 	
 func start_event():
-	# Override in child classes for event-specific startup
-	pass
+	print("room_event -> start_event")
 
 func initialize_event():
-	pass
+	print("room_event -> initialize_event")
 
 func _begin_event_sequence():
 	"""Handle the two-phase sequence: combat (if any) then event"""

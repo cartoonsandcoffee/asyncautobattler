@@ -45,6 +45,7 @@ func set_references():
 	tooltip = $ToolTip/ItemTooltip
 	tooltip_panel = $ToolTip
 	button = $Panel/Button
+	anim_highlight = $animHighlight
 
 	button.button_down.connect(_on_button_down)
 	button.button_up.connect(_on_button_up)
@@ -66,7 +67,7 @@ func start_combat_highlight():
 	anim_highlight.play("combat_highlight")
 
 func stop_combat_highlight():
-	anim_highlight.play("RESET")
+	anim_highlight.play("stop_highlight")
 	
 func set_empty():
 	current_item = null
@@ -84,13 +85,13 @@ func update_visuals():
 		set_rarity_color()
 
 func set_rarity_color():
-	if current_item.rarity == Item.Rarity.COMMON:
+	if current_item.rarity == Enums.Rarity.COMMON:
 		panel_border.self_modulate = gamecolors.rarity.common
-	elif current_item.rarity == Item.Rarity.UNCOMMON:
+	elif current_item.rarity == Enums.Rarity.UNCOMMON:
 		panel_border.self_modulate = gamecolors.rarity.uncommon
-	elif current_item.rarity == Item.Rarity.RARE:
+	elif current_item.rarity == Enums.Rarity.RARE:
 		panel_border.self_modulate = gamecolors.rarity.rare
-	elif current_item.rarity == Item.Rarity.LEGENDARY:
+	elif current_item.rarity == Enums.Rarity.LEGENDARY:
 		panel_border.self_modulate = gamecolors.rarity.legendary	
 
 func set_order(order: int):

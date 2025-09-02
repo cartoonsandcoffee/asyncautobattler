@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://yfx4f0fwf4vi"]
+[gd_scene load_steps=47 format=3 uid="uid://yfx4f0fwf4vi"]
 
 [ext_resource type="Texture2D" uid="uid://vtf7yfl2710m" path="res://Assets/UI/panel-border-030.png" id="1_0e3vx"]
 [ext_resource type="Script" uid="uid://c6hur1hg25jx" path="res://Scripts/main_game.gd" id="1_73nn6"]
@@ -70,6 +70,9 @@ texture_margin_right = 32.0
 texture_margin_bottom = 32.0
 region_rect = Rect2(0, 0, 96, 96)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sftma"]
+bg_color = Color(0.114897, 0.114897, 0.114897, 1)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_qnvbm"]
 atlas = ExtResource("15_vc13p")
 region = Rect2(200, 350, 50, 50)
@@ -81,6 +84,14 @@ region = Rect2(200, 450, 50, 50)
 [sub_resource type="AtlasTexture" id="AtlasTexture_ns551"]
 atlas = ExtResource("15_vc13p")
 region = Rect2(350, 350, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_erobn"]
+atlas = ExtResource("15_vc13p")
+region = Rect2(350, 450, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vc13p"]
+atlas = ExtResource("15_vc13p")
+region = Rect2(0, 450, 50, 50)
 
 [sub_resource type="Animation" id="Animation_gpk8t"]
 length = 0.001
@@ -131,6 +142,30 @@ tracks/3/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector2(1556, 251)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("picEnemy:self_modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("picEnemy:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_sftma"]
@@ -184,10 +219,128 @@ tracks/3/keys = {
 "update": 0,
 "values": [Vector2(1556, 251), Vector2(1041, 251), Vector2(1107, 251)]
 }
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("picEnemy:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("picEnemy:self_modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_erobn"]
+resource_name = "enemy_die"
+step = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("picEnemy:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(111, 53)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("picEnemy:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.81, 0.91, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 0, 0, 1), Color(1, 1, 1, 1), Color(1, 0, 0, 1), Color(1, 1, 1, 1), Color(1, 0, 0, 1), Color(1, 1, 1, 1), Color(1, 0, 0, 1), Color(1, 1, 1, 1), Color(1, 0, 0, 1), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("picEnemy:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_vc13p"]
+resource_name = "close_combat"
+step = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("picEnemy:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.9, 0.9), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("picEnemy:position")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(111, 53), Vector2(154, -3), Vector2(157, 901)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CombatPanelTop:position")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(80, 4), Vector2(80, 34), Vector2(80, -248)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("LogPanel:position")
+tracks/3/interp = 2
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.2, 0.3, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1107, 251), Vector2(1041, 251), Vector2(1556, 251)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_erobn"]
 _data = {
 &"RESET": SubResource("Animation_gpk8t"),
+&"close_combat": SubResource("Animation_vc13p"),
+&"enemy_die": SubResource("Animation_erobn"),
 &"open_Combat": SubResource("Animation_sftma")
 }
 
@@ -379,9 +532,9 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -183.0
-offset_top = -133.0
+offset_top = -136.0
 offset_right = 181.0
-offset_bottom = -15.0
+offset_bottom = -18.0
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_mgc0q")
 
@@ -607,6 +760,7 @@ stat_color = Color(0.94, 0.94, 0.3008, 1)
 stat_icon = SubResource("AtlasTexture_i47ox")
 
 [node name="statStrikes" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/statsContainer" instance=ExtResource("8_6y7pd")]
+visible = false
 custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 stat = 4
@@ -781,9 +935,14 @@ layout_mode = 2
 [node name="txtCombatLog" type="RichTextLabel" parent="CombatPanel/LogPanel/RightSidePanel/PanelContainer/CombatLogBox"]
 layout_mode = 2
 size_flags_vertical = 3
+theme = ExtResource("9_r0mdn")
+theme_override_font_sizes/italics_font_size = 15
+theme_override_font_sizes/normal_font_size = 15
+theme_override_font_sizes/bold_font_size = 15
+theme_override_styles/normal = SubResource("StyleBoxFlat_sftma")
 bbcode_enabled = true
 text = "This is where all the combat info goes."
-fit_content = true
+scroll_following = true
 
 [node name="lblTurn" type="Label" parent="CombatPanel/LogPanel/RightSidePanel/PanelContainer/CombatLogBox"]
 layout_mode = 2
@@ -795,6 +954,7 @@ vertical_alignment = 1
 
 [node name="speedControls" type="HBoxContainer" parent="CombatPanel/LogPanel/RightSidePanel/PanelContainer/CombatLogBox"]
 layout_mode = 2
+size_flags_horizontal = 4
 
 [node name="btnPause" type="Button" parent="CombatPanel/LogPanel/RightSidePanel/PanelContainer/CombatLogBox/speedControls"]
 layout_mode = 2
@@ -808,7 +968,16 @@ icon = SubResource("AtlasTexture_vvhy6")
 layout_mode = 2
 icon = SubResource("AtlasTexture_ns551")
 
+[node name="btnFast" type="Button" parent="CombatPanel/LogPanel/RightSidePanel/PanelContainer/CombatLogBox/speedControls"]
+layout_mode = 2
+icon = SubResource("AtlasTexture_erobn")
+
+[node name="btnVeryFast" type="Button" parent="CombatPanel/LogPanel/RightSidePanel/PanelContainer/CombatLogBox/speedControls"]
+layout_mode = 2
+icon = SubResource("AtlasTexture_vc13p")
+
 [node name="speedSlider" type="HSlider" parent="CombatPanel/LogPanel/RightSidePanel/PanelContainer/CombatLogBox/speedControls"]
+visible = false
 custom_minimum_size = Vector2(50, 40)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -821,6 +990,7 @@ tick_count = 7
 ticks_on_borders = true
 
 [node name="lblSpeed" type="Label" parent="CombatPanel/LogPanel/RightSidePanel/PanelContainer/CombatLogBox/speedControls"]
+visible = false
 layout_mode = 2
 text = "1.5x"
 
@@ -837,9 +1007,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -688.0
-offset_top = 32.0
+offset_top = 21.0
 offset_right = 701.0
-offset_bottom = 262.0
+offset_bottom = 251.0
 grow_horizontal = 2
 grow_vertical = 0
 

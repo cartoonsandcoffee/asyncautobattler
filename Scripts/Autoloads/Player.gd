@@ -33,6 +33,8 @@ func new_run(nm: String):
 	player_name = nm
 	stats = GameStats.new()
 	inventory = Inventory.new()
+	status_effects = StatusEffects.new()
+	
 	inventory.item_added.connect(_on_inventory_item_added)
 	
 	if stats:

@@ -91,13 +91,13 @@ func set_item_type_desc():
 
 
 func set_rarity_color():
-	if current_item.rarity == Item.Rarity.COMMON:
+	if current_item.rarity == Enums.Rarity.COMMON:
 		panel_border.self_modulate = gamecolors.rarity.common
-	elif current_item.rarity == Item.Rarity.UNCOMMON:
+	elif current_item.rarity == Enums.Rarity.UNCOMMON:
 		panel_border.self_modulate = gamecolors.rarity.uncommon
-	elif current_item.rarity == Item.Rarity.RARE:
+	elif current_item.rarity == Enums.Rarity.RARE:
 		panel_border.self_modulate = gamecolors.rarity.rare
-	elif current_item.rarity == Item.Rarity.LEGENDARY:
+	elif current_item.rarity == Enums.Rarity.LEGENDARY:
 		panel_border.self_modulate = gamecolors.rarity.legendary	
 
 func set_weapon_text_color():

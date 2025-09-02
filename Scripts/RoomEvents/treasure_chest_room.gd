@@ -11,9 +11,11 @@ extends RoomEvent
 
 
 func _ready():
+	print("treasure_room_event -> ready")
 	super._ready()  # Call parent's _ready
 
 func initialize_event():
+	print("treasure_room_event -> initialize_event")
 	items_offering.item_selected.connect(_on_item_selected)
 	show_jars()
 

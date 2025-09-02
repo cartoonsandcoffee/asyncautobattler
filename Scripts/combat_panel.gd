@@ -1,5 +1,5 @@
 class_name CombatPanel
-extends Panel
+extends Control
 
 ## Combat overlay panel that slides in from the right side of the screen
 ## Manages combat UI, displays enemy/player stats, and highlights inventory items
@@ -18,36 +18,41 @@ enum PanelState {
 }
 
 # UI References
-@onready var enemy_name_label: Label = $CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/VBoxContainer/HBoxContainer/boxEnemyName/lblEnemy
-@onready var enemy_desc_label: Label = $CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/VBoxContainer/lblEnemyDesc
-@onready var enemy_sprite: TextureRect = $CombatPanel/picEnemy
+@onready var enemy_name_label: Label = $CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/VBoxContainer/HBoxContainer/boxEnemyName/lblEnemy
+@onready var enemy_desc_label: RichTextLabel = $CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/VBoxContainer/lblEnemyDesc
+@onready var enemy_sprite: TextureRect = $picEnemy
 
-@onready var box_fight_run: VBoxContainer = $CombatPanel/LogPanel/RightSidePanel/PanelContainer/FightRunBox
-@onready var box_combat_log: VBoxContainer = $CombatPanel/LogPanel/RightSidePanel/PanelContainer/CombatLogBox
+@onready var box_fight_run: VBoxContainer = $LogPanel/RightSidePanel/PanelContainer/FightRunBox
+@onready var box_combat_log: VBoxContainer = $LogPanel/RightSidePanel/PanelContainer/CombatLogBox
 
-@onready var btn_run: Button = $CombatPanel/LogPanel/RightSidePanel/PanelContainer/FightRunBox/btnRun
+@onready var btn_run: Button = $LogPanel/RightSidePanel/PanelContainer/FightRunBox/btnRun
 
 # Enemy stat displays
-@onready var enemy_health_stat: StatBoxDisplay = $CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/statsContainer/statHealth
-@onready var enemy_shield_stat: StatBoxDisplay = $CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/statsContainer/statShield
-@onready var enemy_damage_stat: StatBoxDisplay = $CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/statsContainer/statDamage
-@onready var enemy_agility_stat: StatBoxDisplay = $CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/statsContainer/statAgility
+@onready var enemy_health_stat: StatBoxDisplay = $CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/statsContainer/statHealth
+@onready var enemy_shield_stat: StatBoxDisplay = $CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/statsContainer/statShield
+@onready var enemy_damage_stat: StatBoxDisplay = $CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/statsContainer/statDamage
+@onready var enemy_agility_stat: StatBoxDisplay = $CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/statsContainer/statAgility
+@onready var stat_container: PanelContainer = $CombatPanelTop/PanelContainer
 
 # Combat controls
-@onready var speed_slider: HSlider = $CombatPanel/LogPanel/RightSidePanel/PanelContainer/CombatLogBox/speedControls/speedSlider
-@onready var speed_label: Label = $CombatPanel/LogPanel/RightSidePanel/PanelContainer/CombatLogBox/speedControls/lblSpeed
-@onready var pause_button: Button = $CombatPanel/LogPanel/RightSidePanel/PanelContainer/CombatLogBox/speedControls/btnPause
+@onready var speed_slider: HSlider = $LogPanel/RightSidePanel/PanelContainer/CombatLogBox/speedControls/speedSlider
+@onready var speed_label: Label = $LogPanel/RightSidePanel/PanelContainer/CombatLogBox/speedControls/lblSpeed
+@onready var pause_button: Button = $LogPanel/RightSidePanel/PanelContainer/CombatLogBox/speedControls/btnPause
 
 # Combat log
-@onready var combat_log: RichTextLabel = $CombatPanel/LogPanel/RightSidePanel/PanelContainer/CombatLogBox/txtCombatLog
-@onready var turn_label: Label = $CombatPanel/LogPanel/RightSidePanel/PanelContainer/CombatLogBox/lblTurn
+@onready var combat_log: RichTextLabel = $LogPanel/RightSidePanel/PanelContainer/CombatLogBox/txtCombatLog
+@onready var turn_label: Label = $LogPanel/RightSidePanel/PanelContainer/CombatLogBox/lblTurn
 
 # Animation
-@onready var slide_animation: AnimationPlayer = $CombatPanel/combatPanelAnim
+@onready var slide_animation: AnimationPlayer = $combatPanelAnim
 
 # State management
 var current_state: PanelState = PanelState.HIDDEN
 var is_animating: bool = false
+
+var item_proc = preload("res://Scenes/Elements/combat_item_proc.tscn")
+var turn_sign = preload("res://Scenes/Elements/combat_turn_sign.tscn")
+var turn_box: CombatTurnSign
 
 # Combat state
 var is_visible: bool = false
@@ -69,16 +74,16 @@ var color_trigger = Color.MAGENTA
 
 var gamecolors: GameColors
 
+
 func _ready():
 	# Start off-screen
 	visible = false
 	_set_state(PanelState.HIDDEN)
 	connect_combat_signals()
 
-	
 	# Set initial speed
-	#speed_slider.value =  1.0 #CombatManager.CombatSpeed.NORMAL
-	#_update_speed_label(CombatManager.CombatSpeed.NORMAL)
+	speed_slider.value =  1.0 #CombatManager.CombatSpeed.NORMAL
+	_update_speed_label(CombatManager.CombatSpeed.NORMAL)
 
 func connect_combat_signals():
 	# Connect to CombatManager signals
@@ -133,10 +138,13 @@ func setup_for_combat(enemy_entity, inventory_slots: Array[ItemSlot], weapon_slo
 	#current_turn_indicator.text = ""
 
 	# Update the RUN button stuff
-	var can_run = Player.stats.agility > current_enemy_entity.agility
+	var can_run = Player.stats.agility > current_enemy_entity.stats.agility
 	btn_run.disabled = !can_run
 	if not can_run:
 		btn_run.tooltip_text = "Enemy is too fast to escape!"
+	
+	# lets see.. i don't know
+	show_panel()
 
 func show_panel():
 	"""Slide the combat panel in from the right"""
@@ -156,10 +164,13 @@ func hide_panel():
 		return
 	
 	is_visible = false
-	slide_animation.play("slide_out")
+	slide_animation.play("close_combat")
 	await slide_animation.animation_finished
 	visible = false
 	
+	box_fight_run.visible = true
+	box_combat_log.visible = false
+
 	# Clear highlighted items
 	_clear_all_highlights()
 
@@ -169,16 +180,16 @@ func _update_enemy_stats():
 		return
 	
 	# HP
-	enemy_health_stat.update_stat(Enums.Stats.HITPOINTS, current_enemy_entity.hit_points_current, current_enemy_entity.hit_points)
+	enemy_health_stat.update_stat(Enums.Stats.HITPOINTS, current_enemy_entity.stats.hit_points_current, current_enemy_entity.stats.hit_points)
 
 	# Shield stat
-	enemy_shield_stat.update_stat(Enums.Stats.SHIELD, current_enemy_entity.shield_current, -1)
+	enemy_shield_stat.update_stat(Enums.Stats.SHIELD, current_enemy_entity.stats.shield_current, -1)
 	
 	# Damage stat
-	enemy_damage_stat.update_stat(Enums.Stats.DAMAGE, current_enemy_entity.damage_current, -1)
+	enemy_damage_stat.update_stat(Enums.Stats.DAMAGE, current_enemy_entity.stats.damage_current, -1)
 	
 	# Agility stat
-	enemy_agility_stat.update_stat(Enums.Stats.AGILITY, current_enemy_entity.agility_current, -1)
+	enemy_agility_stat.update_stat(Enums.Stats.AGILITY, current_enemy_entity.stats.agility_current, -1)
 
 func highlight_item_slot(slot_index: int, is_weapon: bool = false):
 	"""Highlight a specific inventory slot during combat"""
@@ -232,6 +243,10 @@ func _on_combat_ended(winner, loser):
 		var gold_earned = loser.gold if loser is Enemy else 0
 		if gold_earned > 0:
 			add_combat_message("Gained %d gold!" % gold_earned, color_status)
+			Player.add_gold(gold_earned)
+		
+		slide_animation.play("enemy_die")
+		await slide_animation.animation_finished
 	else:
 		add_combat_message(loser_name + " has been defeated!", Color.RED)
 	
@@ -243,24 +258,51 @@ func _on_combat_ended(winner, loser):
 
 	combat_completed.emit(winner == current_player_entity)
 
+func create_timed_message(msg: String) -> CombatTurnSign:
+
+	var box_label = turn_sign.instantiate()
+	
+	box_label.set_label(msg)		
+	box_label.fade_in()
+	add_child(box_label)
+
+	return box_label
+
 func _on_turn_started(entity):
 	"""Handle turn start"""
 	var entity_name = CombatManager.get_entity_name(entity)
 	turn_label.text = "Turn: " + str(CombatManager.turn_number) + " (" + entity_name + "'s turn)"
 	add_combat_message("\n--- %s's Turn ---" % entity_name, Color.CYAN)
+	
+	turn_box = create_timed_message("Turn: " + str(CombatManager.turn_number) + " (" + entity_name + "'s turn)")
 
 func _on_turn_ended(entity):
 	"""Handle turn end"""
 	_clear_all_highlights()
+	turn_box.fade_out()
 
 func _on_damage_dealt(target, amount):
 	"""Handle damage being dealt"""
 	var target_name = CombatManager.get_entity_name(target)
 	add_combat_message("%s takes %d damage!" % [target_name, amount], color_damage)
 	
+
+	var combat_item_proc = item_proc.instantiate()
+	
+	combat_item_proc.set_references()
+	combat_item_proc.set_stat_visuals(Enums.Stats.HITPOINTS)
+	combat_item_proc.set_label(amount)		
+	add_child(combat_item_proc)
+
 	# Update enemy stats if they were damaged
 	if target == current_enemy_entity:
+		combat_item_proc.run_animation(Enums.Party.ENEMY)
+		combat_item_proc.set_item_visuals(Player.inventory.weapon_slot.item_icon, Player.inventory.weapon_slot.item_color)
 		_update_enemy_stats()
+	else:
+		combat_item_proc.run_animation(Enums.Party.PLAYER)
+		combat_item_proc.set_item_visuals(current_enemy_entity.weapon_sprite,current_enemy_entity.sprite_color)
+		Player.stats_updated.emit()
 
 func _on_healing_applied(target, amount):
 	"""Handle healing"""
@@ -324,20 +366,19 @@ func _on_entity_wounded(entity):
 	add_combat_message("💔 %s is WOUNDED!" % entity_name, Color.ORANGE)
 
 func _update_speed_label(speed: CombatManager.CombatSpeed):
-	"""Update the speed label text"""
 	match speed:
 		CombatManager.CombatSpeed.PAUSE:
 			speed_label.text = "Paused"
-			pause_button.text = "▶ Resume"
+			#pause_button.text = "▶ Resume"
 		CombatManager.CombatSpeed.NORMAL:
 			speed_label.text = "Normal"
-			pause_button.text = "⏸ Pause"
+			#pause_button.text = "⏸ Pause"
 		CombatManager.CombatSpeed.FAST:
 			speed_label.text = "Fast"
-			pause_button.text = "⏸ Pause"
+			#pause_button.text = "⏸ Pause"
 		CombatManager.CombatSpeed.VERY_FAST:
 			speed_label.text = "Very Fast"
-			pause_button.text = "⏸ Pause"
+			#pause_button.text = "⏸ Pause"
 
 
 func _on_speed_slider_value_changed(value: float) -> void:
@@ -353,11 +394,11 @@ func _on_btn_pause_pressed() -> void:
 	if CombatManager.combat_speed == 0:
 		# Unpause - return to normal speed
 		speed_slider.value = CombatManager.CombatSpeed.NORMAL
-		pause_button.text = "⏸ Pause"
+		#ause_button.text = "⏸ Pause"
 	else:
 		# Pause
 		speed_slider.value = CombatManager.CombatSpeed.PAUSE
-		pause_button.text = "▶ Resume"
+		#pause_button.text = "▶ Resume"
 
 
 
@@ -373,7 +414,7 @@ func _on_btn_run_pressed() -> void:
 
 func _on_btn_fight_pressed() -> void:
 	box_fight_run.visible = false
-	box_combat_log.visibile = true
+	box_combat_log.visible = true
 
 	# Transition to combat state
 	_set_state(PanelState.IN_COMBAT)

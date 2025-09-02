@@ -13,6 +13,7 @@ enum EnemyType {
 @export_multiline var description: String = ""
 @export var sprite: Texture2D
 @export var sprite_color: Color = Color.WHITE
+@export var weapon_sprite: Texture2D
 
 @export_group("Stats")
 @export var stats: GameStats

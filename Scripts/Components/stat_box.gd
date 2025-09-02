@@ -34,6 +34,7 @@ func set_visuals(_stat: Enums.Stats):
 	var stat_shield: Texture2D = load("res://Resources/StatIcons/icon_shield.tres")
 	var stat_speed: Texture2D = load("res://Resources/StatIcons/icon_speed.tres")
 	var stat_gold: Texture2D = load("res://Resources/StatIcons/stat_gold.tres")
+	var stat_strikes: Texture2D = load("res://Resources/StatIcons/stat_strikes.tres")
 
 	match _stat:
 		Enums.Stats.DAMAGE:
@@ -64,6 +65,7 @@ func set_visuals(_stat: Enums.Stats):
 		Enums.Stats.STRIKES:
 			stat_name = "Strikes"
 			stat_color = gamecolors.stats.strikes
+			icon.texture = stat_strikes
 			stat_tooltip = "How many strikes a weapon makes each turn."
 
 func _set_labels() -> void:
