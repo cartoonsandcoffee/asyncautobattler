@@ -56,3 +56,16 @@ func create_instance() -> Item:
 
 func set_position(pos: int):
 	slot_index = pos
+
+func get_description() -> String:
+	var desc: String = ""
+
+	if item_desc != "":
+		return item_desc
+
+	for rule in rules:
+		if desc != "":
+			desc += "\n\n"
+		desc += rule.get_description()
+	
+	return desc

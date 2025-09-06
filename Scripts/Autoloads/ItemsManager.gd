@@ -15,6 +15,10 @@ func setup_items():
 	available_items["Liferoot Gauntlets"] = preload("res://Resources/Items/Armor/liferoot_gauntlets.tres")
 	available_items["Rusted Plate"] = preload("res://Resources/Items/Armor/rusted_plate.tres")
 	available_items["Testing Boots"] = preload("res://Resources/Items/Armor/testing_boots.tres")
+	available_items["Testing Shield"] = preload("res://Resources/Items/Armor/testing_shield.tres")
+	available_items["Testing Robes"] = preload("res://Resources/Items/Armor/testing_robes.tres")
+	available_items["Thorn Shield"] = preload("res://Resources/Items/Armor/thorn_shield.tres")
+	available_items["Shield Tap"] = preload("res://Resources/Items/Armor/armor_tap.tres")
 
 func get_item(item_name: String) -> Item:
 	# Get a specific item by name

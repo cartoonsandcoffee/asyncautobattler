@@ -51,7 +51,7 @@ func _begin_event_sequence():
 	await _run_room_event()
 	
 	# Complete
-	complete_event()
+	#complete_event()
 
 
 

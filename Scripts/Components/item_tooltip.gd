@@ -121,8 +121,10 @@ func get_stat_bonuses():
 		stats_grid.show()
 
 func show_description(this_item: Item):
-	if this_item.item_desc and this_item.item_desc.length() > 0:
-		lbl_desc.text = process_description(this_item.item_desc)
+	var desc: String = this_item.get_description()
+
+	if desc and desc.length() > 0:
+		lbl_desc.text = process_description(desc)
 		create_stacked_definitions()
 		lbl_desc.show()
 	else:

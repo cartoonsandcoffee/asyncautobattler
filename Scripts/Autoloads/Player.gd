@@ -1,8 +1,9 @@
 extends Node
 
 signal player_died()
-signal stats_updated()
+
 signal inventory_updated(item: Item, slot_index: int)
+signal status_updated(status: Enums.StatusEffects, amount: int)
 
 var player_name: String = ""
 var stats: GameStats
@@ -36,7 +37,8 @@ func new_run(nm: String):
 	status_effects = StatusEffects.new()
 	
 	inventory.item_added.connect(_on_inventory_item_added)
-	
+	status_effects.status_updated.connect(_on_status_effect_updated)
+
 	if stats:
 		stats.agility = 0
 		stats.damage = 0
@@ -47,60 +49,55 @@ func new_run(nm: String):
 		stats.reset_to_base_values()
 	
 	if inventory:
-		inventory.add_item(ItemsManager.available_items["Holy Shield"])
+		inventory.add_item(ItemsManager.available_items["Testing Shield"])
 		inventory.add_item(ItemsManager.available_items["Fists"])
 		inventory.add_item(ItemsManager.available_items["Liferoot Gauntlets"])
-		inventory.add_item(ItemsManager.available_items["Rusted Plate"])
-		inventory.add_item(ItemsManager.available_items["Testing Boots"])
-		inventory.add_item(ItemsManager.available_items["Testing Boots"])
-		inventory.add_item(ItemsManager.available_items["Testing Boots"])
-		inventory.add_item(ItemsManager.available_items["Testing Boots"])
-		inventory.add_item(ItemsManager.available_items["Testing Boots"])
+		inventory.add_item(ItemsManager.available_items["Testing Robes"])
+		inventory.add_item(ItemsManager.available_items["Thorn Shield"])
+
 
 func update_stats_from_items():
-	reset_stats()
+	stats.reset_base_stats()
 
 	for item in Player.inventory.item_slots:
 		if item:
 			if item.damage_bonus != 0:
-				stats.damage += item.damage_bonus
+				stats.increase_base_stat(Enums.Stats.DAMAGE, item.damage_bonus)
 			if item.shield_bonus != 0:
-				stats.shield += item.shield_bonus
+				stats.increase_base_stat(Enums.Stats.SHIELD, item.shield_bonus)
 			if item.hit_points_bonus != 0:
-				stats.hit_points += item.hit_points_bonus
+				stats.increase_base_stat(Enums.Stats.HITPOINTS, item.hit_points_bonus)
 			if item.agility_bonus != 0:
-				stats.agility += item.agility_bonus
+				stats.increase_base_stat(Enums.Stats.AGILITY, item.agility_bonus)
 
 	if Player.inventory.weapon_slot:
 		if Player.inventory.weapon_slot.damage_bonus != 0:
-			stats.damage += Player.inventory.weapon_slot.damage_bonus
+			stats.increase_base_stat(Enums.Stats.DAMAGE, Player.inventory.weapon_slot.damage_bonus)
 		if Player.inventory.weapon_slot.shield_bonus != 0:
-			stats.shield += Player.inventory.weapon_slot.shield_bonus
+			stats.increase_base_stat(Enums.Stats.SHIELD, Player.inventory.weapon_slot.shield_bonus)
 		if Player.inventory.weapon_slot.hit_points_bonus != 0:
-			stats.hit_points += Player.inventory.weapon_slot.hit_points_bonus
+			stats.increase_base_stat(Enums.Stats.HITPOINTS, Player.inventory.weapon_slot.hit_points_bonus)
 		if Player.inventory.weapon_slot.agility_bonus != 0:
-			stats.agility += Player.inventory.weapon_slot.agility_bonus
+			stats.increase_base_stat(Enums.Stats.AGILITY, Player.inventory.weapon_slot.agility_bonus)
 
-	stats_updated.emit()
-
-func reset_stats():
-	if stats:
-		stats.agility = 0
-		stats.damage = 0
-		stats.shield = 0
-		stats.strikes = 1
-		stats.hit_points = 10
+	stats.reset_to_base_values()
 
 func _on_inventory_item_added(item: Item, slot_index: int):
 	#print(item.item_name + " - slot: " + str(slot_index))
 	inventory_updated.emit(item, slot_index)
 
+func _on_status_effect_updated(_status: Enums.StatusEffects, amount: int):
+	#print(item.item_name + " - slot: " + str(slot_index))
+	status_updated.emit(_status, amount)
+
 func add_gold(value: int):
 	Player.stats.gold += value
 	Player.max_gold_this_run += value
+	stats.stats_updated.emit()
 
 func subtract_gold(value: int):
 	if Player.stats.gold >= value:
 		Player.stats.gold -= value
+		stats.stats_updated.emit()
 	else:	
 		return false

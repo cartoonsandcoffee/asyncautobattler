@@ -22,6 +22,8 @@ extends Control
 @onready var item_grid: GridContainer = $BottomPanel/MarginContainer/VBoxContainer/HBoxContainer/InventorySlots/ItemSlots
 @onready var weapon_slot: ItemSlot = $BottomPanel/MarginContainer/VBoxContainer/HBoxContainer/Weapon
 
+@onready var status_box_container: HBoxContainer = $BottomPanel/panelStatus/statusBox
+
 @onready var anim_tools: AnimationPlayer = $animToolbars
 @onready var anim_fade: AnimationPlayer = $animFade
 @onready var fade_overlay: ColorRect = $FadeOverlay
@@ -29,8 +31,11 @@ extends Control
 var current_event: RoomEvent
 
 var item_slot = preload("res://Scenes/item.tscn")
+var status_box = preload("res://Scenes/Elements/status_box.tscn")
+var item_proc = preload("res://Scenes/Elements/combat_item_proc.tscn")
 
 var item_slots: Array[ItemSlot] = []
+var status_effects: Array[StatusBox] = []
 
 var dragging_instance_id: int = -1
 var dragging_from_slot: int = -1
@@ -45,10 +50,13 @@ func get_combat_panel() -> CombatPanel:
 	return combat_panel
 
 func _ready():
-	Player.stats_updated.connect(_on_stats_updated)
-	Player.inventory_updated.connect(_on_inventory_updated)
+	Player.stats.stats_updated.connect(_on_stats_updated)
+	Player.inventory.item_added.connect(_on_inventory_updated)
+	Player.status_updated.connect(_on_status_effects_updated)
 	DungeonManager.show_minimap.connect(_show_panels)
 
+	combat_panel.item_proc_occurred.connect(spawn_item_proc_indicator)
+	combat_panel.status_proc_occurred.connect(spawn_status_proc_indicator)
 	combat_panel.combat_completed.connect(_on_combat_completed)
 	combat_panel.player_chose_run.connect(_on_player_ran)
 
@@ -181,9 +189,9 @@ func set_background_tint(room_type: Enums.RoomType):
 
 func set_player_stats():
 	stat_health.update_stat(Enums.Stats.HITPOINTS, Player.stats.hit_points_current, Player.stats.hit_points)
-	stat_damage.update_stat(Enums.Stats.DAMAGE, Player.stats.damage, -1)
-	stat_shield.update_stat(Enums.Stats.SHIELD, Player.stats.shield, -1)
-	stat_agility.update_stat(Enums.Stats.AGILITY, Player.stats.agility, -1)
+	stat_damage.update_stat(Enums.Stats.DAMAGE, Player.stats.damage_current, Player.stats.damage)
+	stat_shield.update_stat(Enums.Stats.SHIELD, Player.stats.shield_current, Player.stats.shield)
+	stat_agility.update_stat(Enums.Stats.AGILITY, Player.stats.agility_current, Player.stats.agility)
 	stat_gold.update_stat(Enums.Stats.GOLD, Player.stats.gold, -1)
 
 func setup_inventory():
@@ -212,6 +220,35 @@ func setup_inventory():
 		item_slots.append(item_container)
 		item_grid.add_child(item_container)
 
+
+func loop_through_player_items_for_position(item: Item) -> Vector2:
+	var offset: Vector2 = Vector2(45,-50)
+
+	if !item:
+		return Vector2(0,0)
+
+	if item == Player.inventory.weapon_slot:
+		return weapon_slot.global_position + offset
+
+	for i in range(Player.inventory.item_slots.size()):
+		if item == Player.inventory.item_slots[i]:
+			return item_grid.get_child(i).global_position + offset
+	
+	return Vector2(0,0)
+
+func loop_through_player_statuses_for_position(_status: Enums.StatusEffects) -> Vector2:
+	var offset: Vector2 = Vector2(45,-50)
+
+	if !_status:
+		return Vector2(0,0)
+
+	for child in status_box_container.get_children():
+		if child:
+			if child.status == _status:
+				return child.global_position + offset
+
+	return Vector2(0,0)
+
 func setup_weapon():
 	weapon_slot.set_item(Player.inventory.weapon_slot)
 
@@ -220,6 +257,39 @@ func _on_stats_updated():
 
 func _on_inventory_updated(item: Item, slot: int):
 	setup_inventory()
+
+func _on_status_effects_updated(_status: Enums.StatusEffects, amount: int):
+	status_effects.clear()
+
+	for child in status_box_container.get_children():
+		status_box_container.remove_child(child)
+		child.queue_free()
+
+	if Player.status_effects.poison > 0:
+		create_new_status_box(Enums.StatusEffects.POISON, Player.status_effects.poison)
+	if Player.status_effects.acid > 0:
+		create_new_status_box(Enums.StatusEffects.ACID, Player.status_effects.acid)
+	if Player.status_effects.thorns > 0:
+		create_new_status_box(Enums.StatusEffects.THORNS, Player.status_effects.thorns)
+	if Player.status_effects.burn > 0:
+		create_new_status_box(Enums.StatusEffects.BURN, Player.status_effects.burn)
+	if Player.status_effects.regeneration > 0:
+		create_new_status_box(Enums.StatusEffects.REGENERATION, Player.status_effects.regeneration)
+	if Player.status_effects.blind > 0:
+		create_new_status_box(Enums.StatusEffects.BLIND, Player.status_effects.blind)
+	if Player.status_effects.blessing > 0:
+		create_new_status_box(Enums.StatusEffects.BLESSING, Player.status_effects.blessing)
+	if Player.status_effects.stun > 0:
+		create_new_status_box(Enums.StatusEffects.STUN, Player.status_effects.stun)						
+
+func create_new_status_box(_status: Enums.StatusEffects, amount: int):
+		var item_container = status_box.instantiate()
+
+		item_container.set_status(_status, amount)
+		item_container.custom_minimum_size = Vector2(120, 78)
+
+		status_effects.append(item_container)
+		status_box_container.add_child(item_container)
 
 func _on_drag_started(slot: ItemSlot):
 	if not slot.current_item:
@@ -326,6 +396,7 @@ func request_combat(enemy: Enemy) -> bool:
 
 func _on_combat_completed(player_won: bool):
 	# Update player stats display
+	Player.stats.reset_stats_after_combat()
 	set_player_stats()
 	
 	# The combat panel has already slid out at this point
@@ -334,3 +405,60 @@ func _on_combat_completed(player_won: bool):
 func _on_player_ran():
 	print("Player ran from combat")
 	# The combat panel will emit combat_completed(false) after sliding out
+
+func spawn_item_proc_indicator(item: Item, rule: ItemRule, entity):
+	var combat_item_proc = item_proc.instantiate()
+	
+	combat_item_proc.set_references()
+	combat_item_proc.set_label(rule.effect_amount)		
+	combat_item_proc.set_info(Enums.get_trigger_type_string(rule.trigger_type))
+	combat_item_proc.set_item_visuals(item.item_icon, item.item_color)
+	
+	if rule.effect_type == Enums.EffectType.MODIFY_STAT:
+		combat_item_proc.set_stat_visuals(rule.target_stat)
+	elif rule.effect_type == Enums.EffectType.APPLY_STATUS:
+		combat_item_proc.set_status_visuals(rule.target_status)
+
+	add_child(combat_item_proc)
+	combat_item_proc.position = loop_through_player_items_for_position(item)
+
+	# Update enemy stats if they were damaged
+	if entity == Player:
+		combat_item_proc.run_animation(Enums.Party.PLAYER)
+	else:
+		combat_item_proc.run_animation(Enums.Party.ENEMY)
+
+func spawn_status_proc_indicator(_status: Enums.StatusEffects, _stat: Enums.Stats, value: int, entity):
+	var combat_item_proc = item_proc.instantiate()
+	
+	combat_item_proc.set_references()
+	combat_item_proc.set_label(value)	
+	combat_item_proc.set_info("Status Effect")	
+	combat_item_proc.set_status_as_item_visuals(_status)
+	combat_item_proc.set_stat_visuals(_stat)
+
+	add_child(combat_item_proc)
+	combat_item_proc.position = loop_through_player_statuses_for_position(_status)
+
+	# Update enemy stats if they were damaged
+	if entity == Player:
+		combat_item_proc.run_animation(Enums.Party.PLAYER)
+	else:
+		combat_item_proc.run_animation(Enums.Party.ENEMY)
+
+func spawn_damage_indicator(item: Item, entity):
+	var combat_item_proc = item_proc.instantiate()
+	
+	combat_item_proc.set_references()
+	combat_item_proc.set_label(entity.stats.damage_current)		
+	combat_item_proc.set_stat_visuals(Enums.Stats.HITPOINTS)
+	combat_item_proc.set_item_visuals(item.item_icon, item.item_color)
+	
+	add_child(combat_item_proc)
+	combat_item_proc.position = loop_through_player_items_for_position(item)
+
+	# Update enemy stats if they were damaged
+	if entity == Player:
+		combat_item_proc.run_animation(Enums.Party.PLAYER)
+	else:
+		combat_item_proc.run_animation(Enums.Party.ENEMY)

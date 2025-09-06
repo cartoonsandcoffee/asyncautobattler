@@ -17,6 +17,7 @@ signal healing_applied(target, amount)
 # State change signals
 signal stat_changed(entity, stat_name: String, old_value: int, new_value: int)
 signal status_applied(entity, status_name: String, stacks: int)
+signal status_proc(entity, _status: Enums.StatusEffects, _stat: Enums.Stats, value: int) 
 signal status_removed(entity, status_name: String)
 signal entity_exposed(entity)
 signal entity_wounded(entity)
@@ -42,8 +43,8 @@ var player_wounded_triggered: bool = false
 var enemy_wounded_triggered: bool = false
 
 # Combat timing
-var base_highlight_duration: float = 2.0
-var base_message_duration: float = 1.5
+var base_highlight_duration: float = 0.5
+var base_message_duration: float = 2
 
 enum CombatSpeed {
 	PAUSE = 0,
@@ -158,14 +159,27 @@ func execute_attack(attacker, target):
 	
 	# Apply damage to target
 	await apply_damage(target, damage)
-	
+
+	# Apply thorns as needed
+	await proc_thorns(attacker, target)
+
 	# Emit attack signal
 	attack_executed.emit(attacker, target, damage)
 	
 	await wait_for_speed()
 
+func proc_thorns(attacker, target):
+	# thorns - all stacks removed
+	if target.status_effects.thorns > 0:
+		await apply_damage_from_status(attacker, target.status_effects.thorns, Enums.StatusEffects.THORNS)
+		target.status_effects.remove_status(Enums.StatusEffects.THORNS)
+		if target.status_effects.thorns == 0:
+			status_removed.emit(target, "thorns")
+		await wait_for_speed()
+
+
 func apply_damage(target, damage_amount: int):
-	"""Apply damage to target, handling shield/armor first"""
+	# Apply damage to target, handling shield/armor first
 	var remaining_damage = damage_amount
 	
 	# Apply to shield first
@@ -199,6 +213,52 @@ func apply_damage(target, damage_amount: int):
 	if target.stats.hit_points_current <= 0:
 		await handle_entity_death(target)
 
+
+func apply_damage_from_status(target, damage_amount: int, _status: Enums.StatusEffects):
+	# Apply damage to target, handling shield/armor first
+	var remaining_damage = damage_amount
+	
+	# Apply to shield first
+	if target.stats.shield_current > 0:
+		var shield_damage = min(remaining_damage, target.stats.shield_current)
+		target.stats.shield_current -= shield_damage
+		remaining_damage -= shield_damage
+		
+		print(get_entity_name(target), " shield reduced by ", shield_damage, " (", target.stats.shield_current, " remaining)")
+		stat_changed.emit(target, "shield", target.stats.shield_current + shield_damage, target.stats.shield_current)
+		
+		if target.stats.shield_current == 0:
+			status_proc.emit(target, _status, Enums.Stats.HP_AND_SHIELD, shield_damage *-1)
+
+			# Check for first time exposed
+			if !is_entity_exposed_triggered(target):
+				await trigger_exposed(target)
+		else:
+			status_proc.emit(target, _status, Enums.Stats.SHIELD, shield_damage *-1)
+				
+	
+	# Apply remaining damage to hit points
+	if remaining_damage > 0 && _status != Enums.StatusEffects.ACID:
+		target.stats.hit_points_current -= remaining_damage
+		print(get_entity_name(target), " takes ", remaining_damage, " damage (", target.stats.hit_points_current, " HP remaining)")
+		stat_changed.emit(target, "hit_points", target.stats.hit_points_current + remaining_damage, target.stats.hit_points_current)
+		
+		status_proc.emit(target, _status, Enums.Stats.HITPOINTS, remaining_damage *-1)
+		
+		# Check for first time wounded (50% HP)
+		var wounded_threshold = target.stats.hit_points / 2
+		if target.stats.hit_points_current <= wounded_threshold and not is_entity_wounded_triggered(target):
+			await trigger_wounded(target)
+	
+	# Emit damage dealt signal
+	damage_dealt.emit(target, damage_amount)
+	
+	# Check for death
+	if target.stats.hit_points_current <= 0:
+		await handle_entity_death(target)
+
+
+
 func process_battle_start_events(first_entity, second_entity):
 	"""Process all battle start item rules in turn order"""
 	print("\n-- BATTLE START EVENTS --")
@@ -215,14 +275,14 @@ func process_entity_battle_start_rules(entity):
 	
 	# Process weapon rules first if it exists
 	if entity == player_entity and entity.inventory.weapon_slot:
-		await process_item_rules(entity.inventory.weapon_slot, entity, "battle_start")
+		await process_item_rules(entity.inventory.weapon_slot, entity, Enums.TriggerType.BATTLE_START)
 	
 	# Process inventory items in order
 	if entity == player_entity:
 		for i in range(entity.inventory.item_slots.size()):
 			var item = entity.inventory.item_slots[i]
 			if item:
-				await process_item_rules(item, entity, "battle_start")
+				await process_item_rules(item, entity, Enums.TriggerType.BATTLE_START)
 
 
 func process_turn_start_rules(entity):
@@ -231,14 +291,14 @@ func process_turn_start_rules(entity):
 	
 	# Process weapon rules first if it exists
 	if entity == player_entity and entity.inventory.weapon_slot:
-		await process_item_rules(entity.inventory.weapon_slot, entity, "turn_start")
+		await process_item_rules(entity.inventory.weapon_slot, entity, Enums.TriggerType.TURN_START)
 	
 	# Process inventory items in order
 	if entity == player_entity:
 		for i in range(entity.inventory.item_slots.size()):
 			var item = entity.inventory.item_slots[i]
 			if item:
-				await process_item_rules(item, entity, "turn_start")
+				await process_item_rules(item, entity, Enums.TriggerType.TURN_START)
 	else:
 		# Enemy turn start abilities
 		for ability in entity.abilities:
@@ -251,40 +311,42 @@ func process_on_hit_rules(attacker):
 	
 	# Process weapon rules first if it exists
 	if attacker == player_entity and attacker.inventory.weapon_slot:
-		await process_item_rules(attacker.inventory.weapon_slot, attacker, "on_hit")
+		await process_item_rules(attacker.inventory.weapon_slot, attacker, Enums.TriggerType.ON_HIT)
 	
 	# Process inventory items in order
 	if attacker == player_entity:
 		for i in range(attacker.inventory.item_slots.size()):
 			var item = attacker.inventory.item_slots[i]
 			if item:
-				await process_item_rules(item, attacker, "on_hit")
+				await process_item_rules(item, attacker, Enums.TriggerType.ON_HIT)
 	else:
 		# Enemy on-hit abilities
 		for ability in attacker.abilities:
 			if ability.trigger == Enums.TriggerType.ON_HIT:
 				await process_enemy_ability(ability, attacker)
 
-func process_item_rules(item: Item, entity, trigger_type: String):
+func process_item_rules(item: Item, entity, trigger_type: Enums.TriggerType):
 	"""Process all rules for an item that match the trigger type"""
 	if not item or not item.rules:
 		return
 
 	for rule in item.rules:
 		if rule.trigger_type == trigger_type:
-			await execute_item_rule(item, rule, entity)
+			#await execute_item_rule(item, rule, entity)
 		
-		# Emit signal BEFORE executing so UI can highlight
-		item_rule_triggered.emit(item, rule, entity)
+			# - JDM: I indented these to be part of the for loop so they only execute on trigger type.
 
-		# Wait for highlight duration
-		await wait_for_highlight()
-		
-		# Now execute the rule
-		await execute_item_rule(item, rule, entity)
-		
-		# Small pause between rules
-		await wait_for_speed()
+			# Emit signal BEFORE executing so UI can highlight
+			item_rule_triggered.emit(item, rule, entity)
+
+			# Wait for highlight duration
+			await wait_for_highlight()
+			
+			# Now execute the rule
+			await execute_item_rule(item, rule, entity)
+			
+			# Small pause between rules
+			await wait_for_speed()
 
 
 
@@ -299,34 +361,34 @@ func process_enemy_ability(ability: EnemyAbility, entity):
 	# Execute the ability effect
 	match ability.effect_type:
 		EnemyAbility.EffectType.DAMAGE_BOOST:
-			await modify_entity_stat(entity, "damage", ability.value)
+			await modify_entity_stat(entity, Enums.Stats.DAMAGE, ability.value)
 		EnemyAbility.EffectType.SHIELD_GAIN:
-			await modify_entity_stat(entity, "shield", ability.value)
+			await modify_entity_stat(entity, Enums.Stats.SHIELD, ability.value)
 		EnemyAbility.EffectType.HEAL:
 			await heal_entity(entity, ability.value)
 		EnemyAbility.EffectType.APPLY_POISON:
 			# Apply to opponent
-			await apply_status_effect(get_opponent(entity), "poison", ability.value)
+			await apply_status_effect(get_opponent(entity), Enums.StatusEffects.POISON, ability.value)
 		EnemyAbility.EffectType.APPLY_BURN:
 			# Apply to opponent
-			await apply_status_effect(get_opponent(entity), "burn", ability.value)
+			await apply_status_effect(get_opponent(entity), Enums.StatusEffects.BURN, ability.value)
 		EnemyAbility.EffectType.APPLY_THORNS:
-			await apply_status_effect(entity, "thorns", ability.value)
+			await apply_status_effect(entity, Enums.StatusEffects.THORNS, ability.value)
 		EnemyAbility.EffectType.APPLY_ACID:
 			# Apply to opponent
-			await apply_status_effect(get_opponent(entity), "acid", ability.value)
+			await apply_status_effect(get_opponent(entity), Enums.StatusEffects.ACID, ability.value)
 		EnemyAbility.EffectType.APPLY_STUN:
 			# Apply to opponent
-			await apply_status_effect(get_opponent(entity), "stun", ability.value)
+			await apply_status_effect(get_opponent(entity), Enums.StatusEffects.STUN, ability.value)
 		EnemyAbility.EffectType.DIRECT_DAMAGE:
 			# Deal direct damage to opponent
 			await apply_damage(get_opponent(entity), ability.value)
 		EnemyAbility.EffectType.REDUCE_PLAYER_DAMAGE:
 			# Reduce opponent's damage
-			await modify_entity_stat(get_opponent(entity), "damage", -ability.value)
+			await modify_entity_stat(get_opponent(entity), Enums.Stats.DAMAGE, -ability.value)
 		EnemyAbility.EffectType.DOUBLE_STRIKE:
 			# Give entity extra strike this turn
-			await modify_entity_stat(entity, "strikes", ability.value)
+			await modify_entity_stat(entity, Enums.Stats.STRIKES, ability.value)
 		EnemyAbility.EffectType.STEAL_GOLD:
 			# Only works if opponent is player
 			if get_opponent(entity) == player_entity:
@@ -342,23 +404,23 @@ func process_enemy_ability(ability: EnemyAbility, entity):
 
 func execute_item_rule(item: Item, rule: ItemRule, entity):
 	"""Execute a specific item rule and show visual feedback"""
-	print("  -> ", item.item_name, ": ", rule.trigger_type, " effect")
+	print("  -> ", item.item_name, ": ", Enums.get_trigger_type_string(rule.trigger_type), " effect")
 
 	# Emit rule triggered signal
-	item_rule_triggered.emit(item, rule, entity)
+	#item_rule_triggered.emit(item, rule, entity) #- JDM: Commented this out because it's run before function is called
 	
 	# Show visual highlight (implement in UI)
 	# TODO: Highlight item in inventory for highlight duration
 	
 	# Execute the rule effect based on type
 	match rule.effect_type:
-		ItemRule.EFFECT_MODIFY_STAT:
+		Enums.EffectType.MODIFY_STAT:
 			await modify_entity_stat(entity, rule.target_stat, rule.effect_amount)
-		ItemRule.EFFECT_APPLY_STATUS:
+		Enums.EffectType.APPLY_STATUS:
 			await apply_status_effect(entity, rule.target_status, rule.effect_amount)
-		ItemRule.EFFECT_DEAL_DAMAGE:
+		Enums.EffectType.DEAL_DAMAGE:
 			await apply_damage(get_opponent(entity), rule.effect_amount)
-		ItemRule.EFFECT_HEAL:
+		Enums.EffectType.HEAL:
 			await heal_entity(entity, rule.effect_amount)
 	
 	# Wait for visual feedback
@@ -384,27 +446,27 @@ func _matches_trigger(rule: ItemRule, trigger_type: String) -> bool:
 			return false
 
 
-func modify_entity_stat(entity, stat_name: String, amount: int):
+func modify_entity_stat(entity, stat_name: Enums.Stats, amount: int):
 	"""Modify an entity's stat and emit appropriate signals"""
 	var old_value: int
 	var new_value: int
 	
 	match stat_name:
-		"damage":
+		Enums.Stats.DAMAGE:
 			old_value = entity.stats.damage_current
-			entity.stats.damage_current += amount
+			entity.stats.increase_stat(Enums.Stats.DAMAGE, amount)
 			new_value = entity.stats.damage_current
-		"shield", "armor":
+		Enums.Stats.SHIELD:
 			old_value = entity.stats.shield_current  
-			entity.stats.shield_current += amount
+			entity.stats.increase_stat(Enums.Stats.SHIELD, amount)
 			new_value = entity.stats.shield_current
-		"agility":
+		Enums.Stats.AGILITY:
 			old_value = entity.stats.agility_current
-			entity.stats.agility_current += amount  
+			entity.stats.increase_stat(Enums.Stats.AGILITY, amount)
 			new_value = entity.stats.agility_current
-		"hit_points", "hitpoints", "health":
+		Enums.Stats.HITPOINTS:
 			old_value = entity.stats.hit_points_current
-			entity.stats.hit_points_current += amount
+			entity.stats.increase_stat(Enums.Stats.HITPOINTS, amount)
 			new_value = entity.stats.hit_points_current
 			
 			# Check for overheal
@@ -414,15 +476,15 @@ func modify_entity_stat(entity, stat_name: String, amount: int):
 				new_value = entity.stats.hit_points_current
 				if entity.status_effects:
 					entity.status_effects.overheal_triggered.emit(overheal_amount)
-		"strikes":
+		Enums.Stats.STRIKES:
 			old_value = entity.stats.strikes
-			entity.stats.strikes += amount
+			entity.stats.increase_stat(Enums.Stats.STRIKES, amount)
 			new_value = entity.stats.strikes
 	
-	print("    ", get_entity_name(entity), " ", stat_name, ": ", old_value, " -> ", new_value)
+	print("    ", get_entity_name(entity), " ", Enums.get_stat_string(stat_name), ": ", old_value, " -> ", new_value)
 	stat_changed.emit(entity, stat_name, old_value, new_value)
 
-func apply_status_effect(entity, status_name: String, stacks: int):
+func apply_status_effect(entity, status_name: Enums.StatusEffects, stacks: int):
 	"""Apply status effect stacks to entity"""
 	if not entity.status_effects:
 		return
@@ -431,32 +493,32 @@ func apply_status_effect(entity, status_name: String, stacks: int):
 	var new_value: int
 	
 	match status_name:
-		"poison":
+		Enums.StatusEffects.POISON:
 			old_value = entity.status_effects.poison
-			entity.status_effects.poison += stacks
+			entity.status_effects.increment_status(Enums.StatusEffects.POISON, stacks)
 			new_value = entity.status_effects.poison
-		"thorns":
+		Enums.StatusEffects.THORNS:
 			old_value = entity.status_effects.thorns
-			entity.status_effects.thorns += stacks
+			entity.status_effects.increment_status(Enums.StatusEffects.THORNS, stacks)
 			new_value = entity.status_effects.thorns
-		"acid":
+		Enums.StatusEffects.ACID:
 			old_value = entity.status_effects.acid
-			entity.status_effects.acid += stacks
+			entity.status_effects.increment_status(Enums.StatusEffects.ACID, stacks)
 			new_value = entity.status_effects.acid
-		"regeneration":
+		Enums.StatusEffects.REGENERATION:
 			old_value = entity.status_effects.regeneration
-			entity.status_effects.regeneration += stacks
+			entity.status_effects.increment_status(Enums.StatusEffects.REGENERATION, stacks)
 			new_value = entity.status_effects.regeneration
-		"stun":
+		Enums.StatusEffects.STUN:
 			old_value = entity.status_effects.stun
-			entity.status_effects.stun += stacks
+			entity.status_effects.increment_status(Enums.StatusEffects.STUN, stacks)
 			new_value = entity.status_effects.stun
-		"burn":
+		Enums.StatusEffects.BURN:
 			old_value = entity.status_effects.burn
-			entity.status_effects.burn += stacks
+			entity.status_effects.increment_status(Enums.StatusEffects.BURN, stacks)
 			new_value = entity.status_effects.burn
 	
-	print("    ", get_entity_name(entity), " gains ", stacks, " ", status_name, " (", new_value, " total)")
+	print("    ", get_entity_name(entity), " gains ", stacks, " ", Enums.get_status_string(status_name), " (", new_value, " total)")
 	status_applied.emit(entity, status_name, stacks)
 
 func heal_entity(entity, amount: int):
@@ -489,8 +551,8 @@ func process_turn_start_status_effects(entity):
 		if entity.stats.shield_current > 0:
 			print("    Poison blocked by shield")
 		else:
-			await apply_damage(entity, entity.status_effects.poison)
-		entity.status_effects.poison = max(0, entity.status_effects.poison - 1)
+			await apply_damage_from_status(entity, entity.status_effects.poison, Enums.StatusEffects.POISON)
+		entity.status_effects.decrement_status(Enums.StatusEffects.POISON)
 		if entity.status_effects.poison == 0:
 			status_removed.emit(entity, "poison")
 		await wait_for_speed()
@@ -498,8 +560,8 @@ func process_turn_start_status_effects(entity):
 	# Burn damage  
 	if entity.status_effects.burn > 0:
 		var burn_damage = entity.status_effects.burn * get_base_burn_damage(entity)
-		await apply_damage(entity, burn_damage)
-		entity.status_effects.burn = max(0, entity.status_effects.burn - 1)
+		await apply_damage_from_status(entity, burn_damage, Enums.StatusEffects.BURN)
+		entity.status_effects.decrement_status(Enums.StatusEffects.BURN)
 		if entity.status_effects.burn == 0:
 			status_removed.emit(entity, "burn")
 		await wait_for_speed()
@@ -508,20 +570,29 @@ func process_turn_start_status_effects(entity):
 	if entity.status_effects.acid > 0:
 		if entity.stats.shield_current > 0:
 			var acid_damage = min(entity.status_effects.acid, entity.stats.shield_current)
-			entity.stats.shield_current -= acid_damage
+			await apply_damage_from_status(entity, acid_damage, Enums.StatusEffects.ACID)
 			print("    Acid reduces shield by ", acid_damage)
 			stat_changed.emit(entity, "shield", entity.stats.shield_current + acid_damage, entity.stats.shield_current)
-		entity.status_effects.acid = max(0, entity.status_effects.acid - 1)
-		if entity.status_effects.acid == 0:
-			status_removed.emit(entity, "acid")
+		# - JDM: Acid doesn't naturally deteriorate
+		#entity.status_effects.acid = max(0, entity.status_effects.acid - 1)
+		#if entity.status_effects.acid == 0:
+		#	status_removed.emit(entity, "acid")
 		await wait_for_speed()
 	
 	# Regeneration healing
 	if entity.status_effects.regeneration > 0:
 		await heal_entity(entity, entity.status_effects.regeneration)
-		entity.status_effects.regeneration = max(0, entity.status_effects.regeneration - 1)
+		entity.status_effects.decrement_status(Enums.StatusEffects.REGENERATION)
 		if entity.status_effects.regeneration == 0:
 			status_removed.emit(entity, "regeneration")
+		await wait_for_speed()
+
+	# blind healing
+	if entity.status_effects.blind > 0:
+		# this is where I add the functionality for blind
+		entity.status_effects.decrement_status(Enums.StatusEffects.BLIND)
+		if entity.status_effects.blind == 0:
+			status_removed.emit(entity, "blind")
 		await wait_for_speed()
 
 func trigger_exposed(entity):
@@ -563,12 +634,12 @@ func process_exposed_rules(entity):
 	if entity == player_entity:
 		# Process weapon
 		if entity.inventory.weapon_slot:
-			await process_item_rules(entity.inventory.weapon_slot, entity, "exposed")
+			await process_item_rules(entity.inventory.weapon_slot, entity, Enums.TriggerType.EXPOSED)
 		
 		# Process inventory items
 		for item in entity.inventory.item_slots:
 			if item:
-				await process_item_rules(item, entity, "exposed")
+				await process_item_rules(item, entity, Enums.TriggerType.EXPOSED)
 	else:
 		# Enemy exposed abilities  
 		for ability in entity.abilities:
@@ -582,12 +653,12 @@ func process_wounded_rules(entity):
 	if entity == player_entity:
 		# Process weapon
 		if entity.inventory.weapon_slot:
-			await process_item_rules(entity.inventory.weapon_slot, entity, "wounded")
+			await process_item_rules(entity.inventory.weapon_slot, entity, Enums.TriggerType.WOUNDED)
 		
 		# Process inventory items
 		for item in entity.inventory.item_slots:
 			if item:
-				await process_item_rules(item, entity, "wounded")
+				await process_item_rules(item, entity, Enums.TriggerType.WOUNDED)
 	else:
 		# Enemy wounded abilities
 		for ability in entity.abilities:
@@ -606,6 +677,9 @@ func handle_entity_death(dead_entity):
 		var gold_reward = calculate_gold_reward(dead_entity)
 		player_entity.stats.gold += gold_reward
 		print("Player gains ", gold_reward, " gold!")
+	
+	winner.stats.reset_stats_after_combat()
+	winner.status_effects.reset_statuses()
 	
 	combat_ended.emit(winner, dead_entity)
 

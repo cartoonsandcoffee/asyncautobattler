@@ -9,6 +9,8 @@ signal player_chose_fight()
 signal player_chose_run()
 signal combat_completed(player_won: bool)
 signal speed_changed(new_speed: CombatManager.CombatSpeed)
+signal item_proc_occurred(item: Item, rule: ItemRule, entity)
+signal status_proc_occurred(_status: Enums.StatusEffects, _stat: Enums.Stats, value: int, entity)
 
 enum PanelState {
 	HIDDEN,
@@ -98,7 +100,8 @@ func connect_combat_signals():
 	CombatManager.stat_changed.connect(_on_stat_changed)
 	CombatManager.status_applied.connect(_on_status_applied)
 	CombatManager.status_removed.connect(_on_status_removed)
-	
+	CombatManager.status_proc.connect(spawn_status_proc_indicator)
+
 	# Item/ability triggers
 	CombatManager.item_rule_triggered.connect(_on_item_rule_triggered)
 	CombatManager.enemy_ability_triggered.connect(_on_enemy_ability_triggered)
@@ -177,6 +180,7 @@ func hide_panel():
 func _update_enemy_stats():
 	"""Update the enemy stat displays"""
 	if not current_enemy_entity:
+		print("THERE IS NO ENEMY!!!!!!!!!!")
 		return
 	
 	# HP
@@ -227,10 +231,11 @@ func add_combat_message(message: String, color: Color = Color.WHITE):
 	combat_log.scroll_to_line(combat_log.get_line_count() - 1)
 
 # Signal handlers
-func _on_combat_started(enemy_entity):
+func _on_combat_started(player_entity, enemy_entity):
 	print("IS THIS FUNCTION CALL UNNECESSARY????")
-	setup_for_combat(enemy_entity, inventory_item_slots, weapon_slot_ref)
-	show_panel()
+	create_timed_message("Battle  Start!")
+	#setup_for_combat(enemy_entity, inventory_item_slots, weapon_slot_ref)
+	#show_panel()
 
 func _on_combat_ended(winner, loser):
 	var winner_name = CombatManager.get_entity_name(winner)
@@ -263,7 +268,6 @@ func create_timed_message(msg: String) -> CombatTurnSign:
 	var box_label = turn_sign.instantiate()
 	
 	box_label.set_label(msg)		
-	box_label.fade_in()
 	add_child(box_label)
 
 	return box_label
@@ -274,35 +278,44 @@ func _on_turn_started(entity):
 	turn_label.text = "Turn: " + str(CombatManager.turn_number) + " (" + entity_name + "'s turn)"
 	add_combat_message("\n--- %s's Turn ---" % entity_name, Color.CYAN)
 	
-	turn_box = create_timed_message("Turn: " + str(CombatManager.turn_number) + " (" + entity_name + "'s turn)")
+	# turn_box = create_timed_message("Turn: " + str(CombatManager.turn_number) + " (" + entity_name + "'s turn)")
 
 func _on_turn_ended(entity):
 	"""Handle turn end"""
 	_clear_all_highlights()
-	turn_box.fade_out()
+	#turn_box.fade_out()
 
 func _on_damage_dealt(target, amount):
 	"""Handle damage being dealt"""
 	var target_name = CombatManager.get_entity_name(target)
 	add_combat_message("%s takes %d damage!" % [target_name, amount], color_damage)
 	
-
 	var combat_item_proc = item_proc.instantiate()
 	
 	combat_item_proc.set_references()
 	combat_item_proc.set_stat_visuals(Enums.Stats.HITPOINTS)
-	combat_item_proc.set_label(amount)		
-	add_child(combat_item_proc)
+	combat_item_proc.set_label(amount * -1) # - JDM: multiply negative so damage says minus		
 
 	# Update enemy stats if they were damaged
 	if target == current_enemy_entity:
-		combat_item_proc.run_animation(Enums.Party.ENEMY)
+		slide_animation.play("player_attack")
+		await slide_animation.animation_finished
+		combat_item_proc.set_info("You hit the Enemy!")
+		combat_item_proc.run_animation(Enums.Party.PLAYER)
 		combat_item_proc.set_item_visuals(Player.inventory.weapon_slot.item_icon, Player.inventory.weapon_slot.item_color)
+		add_child(combat_item_proc)
+		#spawn_item_proc_indicator(Player.inventory.weapon_slot, null, Player)
 		_update_enemy_stats()
 	else:
-		combat_item_proc.run_animation(Enums.Party.PLAYER)
+		slide_animation.play("enemy_attack")
+		await slide_animation.animation_finished
+		combat_item_proc.set_info("The Enemy hits You!")
+		combat_item_proc.run_animation(Enums.Party.ENEMY)
 		combat_item_proc.set_item_visuals(current_enemy_entity.weapon_sprite,current_enemy_entity.sprite_color)
-		Player.stats_updated.emit()
+		add_child(combat_item_proc)
+		Player.stats.stats_updated.emit()
+
+
 
 func _on_healing_applied(target, amount):
 	"""Handle healing"""
@@ -317,6 +330,8 @@ func _on_stat_changed(entity, stat_name: String, old_value: int, new_value: int)
 	"""Handle stat changes"""
 	if entity == current_enemy_entity:
 		_update_enemy_stats()
+	else:
+		Player.stats.stats_updated.emit()
 	
 	# Log significant stat changes
 	var change = new_value - old_value
@@ -329,11 +344,15 @@ func _on_status_applied(entity, status_name: String, stacks: int):
 	"""Handle status effect application"""
 	var entity_name = CombatManager.get_entity_name(entity)
 	add_combat_message("%s gains %d %s!" % [entity_name, stacks, status_name], color_status)
+	if entity == Player:
+		Player.status_updated.emit(null, 0)
 
 func _on_status_removed(entity, status_name: String):
 	"""Handle status effect removal"""
 	var entity_name = CombatManager.get_entity_name(entity)
 	add_combat_message("%s's %s expired" % [entity_name, status_name], Color.GRAY)
+	if entity == Player:
+		Player.status_updated.emit(null, 0)	
 
 func _on_item_rule_triggered(item: Item, rule: ItemRule, entity):
 	"""Handle item rule triggers - highlight the item"""
@@ -341,15 +360,23 @@ func _on_item_rule_triggered(item: Item, rule: ItemRule, entity):
 	if entity == current_player_entity:
 		# Check weapon slot
 		if weapon_slot_ref and weapon_slot_ref.current_item == item:
+			spawn_item_proc_indicator(item, rule, entity)
 			highlight_item_slot(0, true)
-			add_combat_message("⚔ %s: %s" % [item.item_name, rule.description], color_trigger)
+			add_combat_message("⚔ %s: %s" % [item.item_name, rule.get_description()], color_trigger)
 		else:
 			# Check inventory slots
 			for i in range(inventory_item_slots.size()):
 				if inventory_item_slots[i] and inventory_item_slots[i].current_item == item:
+					spawn_item_proc_indicator(item, rule, entity)
 					highlight_item_slot(i, false)
-					add_combat_message("📦 [%d] %s: %s" % [i+1, item.item_name, rule.description], color_trigger)
+					add_combat_message("📦 [%d] %s: %s" % [i+1, item.item_name, rule.get_description()], color_trigger)
 					break
+
+func spawn_item_proc_indicator(item: Item, rule: ItemRule, entity):
+	item_proc_occurred.emit(item, rule, entity)
+
+func spawn_status_proc_indicator(entity, _status: Enums.StatusEffects, _stat: Enums.Stats, value: int):
+	status_proc_occurred.emit(_status, _stat, value, entity)
 
 func _on_enemy_ability_triggered(ability: EnemyAbility, entity):
 	"""Handle enemy ability triggers"""
@@ -398,6 +425,7 @@ func _on_btn_pause_pressed() -> void:
 	else:
 		# Pause
 		speed_slider.value = CombatManager.CombatSpeed.PAUSE
+		speed_changed.emit(0)
 		#pause_button.text = "▶ Resume"
 
 
@@ -428,3 +456,18 @@ func _on_btn_fight_pressed() -> void:
 func _set_state(new_state: PanelState):
 	current_state = new_state
 	
+
+
+func _on_btn_play_pressed() -> void:
+	speed_slider.value = CombatManager.CombatSpeed.NORMAL
+	speed_changed.emit(1)
+
+
+func _on_btn_fast_pressed() -> void:
+	speed_slider.value = CombatManager.CombatSpeed.FAST
+	speed_changed.emit(2)
+
+
+func _on_btn_very_fast_pressed() -> void:
+	speed_slider.value = CombatManager.CombatSpeed.VERY_FAST
+	speed_changed.emit(3)

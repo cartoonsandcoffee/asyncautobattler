@@ -1,7 +1,9 @@
-[gd_resource type="Resource" script_class="Item" load_steps=4 format=3 uid="uid://dmk4wlven2t6h"]
+[gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://dmk4wlven2t6h"]
 
 [ext_resource type="Texture2D" uid="uid://bwo3qldtbc8u6" path="res://Assets/Items/Items.png" id="1_u4o0a"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="2_fcatk"]
 [ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_u4o0a"]
+[ext_resource type="Resource" uid="uid://eqpnbwb8vw0d" path="res://Resources/Items/Weapons/Rules/battle_start_regen_1.tres" id="3_fcatk"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fcatk"]
 atlas = ExtResource("1_u4o0a")
@@ -14,6 +16,7 @@ item_type = 3
 item_desc = "Battle Start: Gain 1 regeneration."
 item_icon = SubResource("AtlasTexture_fcatk")
 item_color = Color(0.282353, 0.501961, 0, 1)
+rules = Array[ExtResource("2_fcatk")]([ExtResource("3_fcatk")])
 rarity = 0
 categories = Array[String](["Wood"])
 rng_weight = 1.0

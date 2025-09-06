@@ -5,8 +5,8 @@
 [resource]
 script = ExtResource("1_6how0")
 ability_name = "Rage"
-description = "When wounded, gain +2 damage"
-trigger = 5
+description = "When exposed, gain +2 damage"
+trigger = 4
 effect_type = 0
 target = 0
 value = 2

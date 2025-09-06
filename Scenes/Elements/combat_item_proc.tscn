@@ -1,7 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://3ttnwedsu7a5"]
+[gd_scene load_steps=11 format=3 uid="uid://3ttnwedsu7a5"]
 
 [ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="1_44336"]
 [ext_resource type="Script" uid="uid://d378yrq2kaiwc" path="res://Scripts/Components/combat_item_proc.gd" id="1_os0cl"]
+[ext_resource type="FontFile" uid="uid://dcuypk4h1r4ff" path="res://Assets/UI/Fonts/ImperatorSmallCaps.ttf" id="3_5qekv"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_os0cl"]
 
@@ -207,6 +208,7 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_os0cl")
 
 [node name="Panel" type="Panel" parent="."]
@@ -223,6 +225,7 @@ offset_right = 60.0
 offset_bottom = 29.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_os0cl")
 
 [node name="mainPanel" type="PanelContainer" parent="Panel"]
@@ -231,11 +234,12 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -29.5
-offset_top = -150.0
-offset_right = 29.5
-offset_bottom = -136.0
+offset_top = -7.0
+offset_right = 49.5
+offset_bottom = 29.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_os0cl")
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel/mainPanel"]
@@ -246,24 +250,45 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 5
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/mainPanel/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/mainPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="lblInfo" type="Label" parent="Panel/mainPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_5qekv")
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/mainPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="picItem" type="TextureRect" parent="Panel/mainPanel/MarginContainer/HBoxContainer"]
+[node name="picItem" type="TextureRect" parent="Panel/mainPanel/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(60, 50)
+layout_mode = 2
+expand_mode = 3
+
+[node name="panelStat" type="PanelContainer" parent="Panel/mainPanel/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/mainPanel/MarginContainer/VBoxContainer/HBoxContainer/panelStat"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/mainPanel/MarginContainer/VBoxContainer/HBoxContainer/panelStat/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="picStat" type="TextureRect" parent="Panel/mainPanel/MarginContainer/VBoxContainer/HBoxContainer/panelStat/MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 expand_mode = 1
 
-[node name="panelStat" type="PanelContainer" parent="Panel/mainPanel/MarginContainer/HBoxContainer"]
-layout_mode = 2
-
-[node name="picStat" type="TextureRect" parent="Panel/mainPanel/MarginContainer/HBoxContainer/panelStat"]
-custom_minimum_size = Vector2(50, 50)
-layout_mode = 2
-expand_mode = 1
-
-[node name="lblAmount" type="Label" parent="Panel/mainPanel/MarginContainer/HBoxContainer"]
+[node name="lblAmount" type="Label" parent="Panel/mainPanel/MarginContainer/VBoxContainer/HBoxContainer/panelStat/MarginContainer/HBoxContainer"]
 layout_mode = 2
 text = "+50"
 

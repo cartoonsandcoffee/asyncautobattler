@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="Item" load_steps=4 format=3 uid="uid://d4m487yugghgc"]
+[gd_resource type="Resource" script_class="Item" load_steps=5 format=3 uid="uid://d4m487yugghgc"]
 
 [ext_resource type="Texture2D" uid="uid://bwo3qldtbc8u6" path="res://Assets/Items/Items.png" id="1_gmo8w"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="2_8h3kw"]
 [ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_gmo8w"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8h3kw"]
@@ -14,6 +15,7 @@ item_type = 1
 item_desc = "Exposed: Whenever the enemy loses shield to acid, gain that shield."
 item_icon = SubResource("AtlasTexture_8h3kw")
 item_color = Color(0.33287, 0.593084, 0.339722, 1)
+rules = Array[ExtResource("2_8h3kw")]([])
 rarity = 2
 categories = Array[String](["Plate", "Acidic"])
 rng_weight = 1.0

@@ -12,11 +12,18 @@ extends RoomEvent
 
 func _ready():
 	print("treasure_room_event -> ready")
+	button.disabled = true
 	super._ready()  # Call parent's _ready
 
 func initialize_event():
 	print("treasure_room_event -> initialize_event")
 	items_offering.item_selected.connect(_on_item_selected)
+
+
+func _run_room_event():
+	print("treasure_room_event -> _run_room_event (post-combat)")
+	items_offering.item_selected.connect(_on_item_selected)
+	button.disabled = false
 	show_jars()
 
 func show_jars():
@@ -53,4 +60,5 @@ func _on_button_mouse_entered() -> void:
 		anim_open.play("show_text")
 
 func _on_item_selected(item: Item):
+	hide_jars()
 	complete_event()
