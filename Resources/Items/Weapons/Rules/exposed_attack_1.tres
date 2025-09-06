@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="ItemRule" load_steps=2 format=3 uid="uid://cj5is1o78r56i"]
+
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_3xcuo"]
+
+[resource]
+script = ExtResource("1_3xcuo")
+trigger_type = 4
+countdown_value = 0
+countdown_recurs = false
+turn_frequency = 2
+has_condition = false
+condition_stat = ""
+condition_category = ""
+condition_comparison = ">"
+condition_value = 0
+effect_type = 0
+target_type = 0
+target_stat = 1
+target_status = 8
+effect_amount = 1
+custom_description = ""
+metadata/_custom_type_script = "uid://dahay7fvi7bik"

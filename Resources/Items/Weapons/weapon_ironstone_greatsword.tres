@@ -1,7 +1,8 @@
-[gd_resource type="Resource" script_class="Item" load_steps=4 format=3 uid="uid://dhs0n0owejjma"]
+[gd_resource type="Resource" script_class="Item" load_steps=5 format=3 uid="uid://dhs0n0owejjma"]
 
 [ext_resource type="Texture2D" uid="uid://bwo3qldtbc8u6" path="res://Assets/Items/Items.png" id="1_ccie0"]
 [ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_ccie0"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="2_jak37"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jak37"]
 atlas = ExtResource("1_ccie0")
@@ -14,6 +15,7 @@ item_type = 0
 item_desc = ""
 item_icon = SubResource("AtlasTexture_jak37")
 item_color = Color(0.384143, 0.434351, 0.519212, 1)
+rules = Array[ExtResource("2_jak37")]([])
 rarity = 0
 categories = Array[String]([])
 rng_weight = 1.0
