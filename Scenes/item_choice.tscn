@@ -1,12 +1,17 @@
-[gd_scene load_steps=19 format=3 uid="uid://bhutmb7ud57lk"]
+[gd_scene load_steps=23 format=3 uid="uid://bhutmb7ud57lk"]
 
 [ext_resource type="Script" uid="uid://d0pbs8dnvje5l" path="res://Scripts/Components/item_choice.gd" id="1_4pu7h"]
 [ext_resource type="Texture2D" uid="uid://7h1qtewfvmnq" path="res://Assets/Items/Blank.png" id="2_32j57"]
 [ext_resource type="FontFile" uid="uid://dgwg8mvobk57a" path="res://Assets/UI/Fonts/ImperatorSmallCaps Bold.ttf" id="3_5por3"]
+[ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="4_5por3"]
 [ext_resource type="Texture2D" uid="uid://1p2fhdhgi3x4" path="res://Assets/UI/Select.png" id="4_50rcf"]
 [ext_resource type="PackedScene" uid="uid://7ygdm4ameglb" path="res://Scenes/Elements/item_tooltip.tscn" id="5_5jpqp"]
+[ext_resource type="Texture2D" uid="uid://7gybg0pei0fk" path="res://Resources/StatIcons/stat_gold.tres" id="5_50rcf"]
+[ext_resource type="Theme" uid="uid://od14ccps1daj" path="res://Themes/descriptive_label.tres" id="8_50rcf"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tnst4"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5jpqp"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jmixh"]
 bg_color = Color(0.118581, 0.118581, 0.118581, 1)
@@ -150,6 +155,55 @@ offset_right = 100.0
 offset_bottom = 105.0
 theme_override_styles/panel = SubResource("StyleBoxEmpty_tnst4")
 
+[node name="priceContainer" type="PanelContainer" parent="Panel"]
+layout_mode = 2
+offset_top = 105.0
+offset_right = 100.0
+offset_bottom = 135.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_5jpqp")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/priceContainer"]
+layout_mode = 2
+
+[node name="hboxCost" type="HBoxContainer" parent="Panel/priceContainer/MarginContainer"]
+modulate = Color(1, 0.733333, 0, 1)
+layout_mode = 2
+theme = ExtResource("4_5por3")
+theme_override_constants/separation = 5
+
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/priceContainer/MarginContainer/hboxCost"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="picGoldIcon" type="TextureRect" parent="Panel/priceContainer/MarginContainer/hboxCost"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture = ExtResource("5_50rcf")
+expand_mode = 3
+
+[node name="lblPrice" type="Label" parent="Panel/priceContainer/MarginContainer/hboxCost"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "10"
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/priceContainer/MarginContainer/hboxCost"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="hboxPoor" type="HBoxContainer" parent="Panel/priceContainer/MarginContainer"]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/priceContainer/MarginContainer/hboxPoor"]
+modulate = Color(1, 0.38, 0.38, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("4_5por3")
+theme_override_font_sizes/font_size = 26
+text = "Too  Poor!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
 layout_mode = 1
 anchors_preset = 15
@@ -248,6 +302,27 @@ anchor_top = 1.0
 anchor_right = 0.0
 grow_horizontal = 1
 grow_vertical = 0
+
+[node name="pnlExpensive" type="Panel" parent="."]
+visible = false
+layout_mode = 0
+offset_top = 35.0
+offset_right = 100.0
+offset_bottom = 139.0
+
+[node name="Label" type="Label" parent="pnlExpensive"]
+layout_mode = 2
+offset_left = -6.0
+offset_top = 54.0
+offset_right = 94.0
+offset_bottom = 91.0
+rotation = -0.537561
+theme = ExtResource("8_50rcf")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "Too 
+Expensive"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="mouse_entered" from="Panel/Button" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="Panel/Button" to="." method="_on_button_mouse_exited"]

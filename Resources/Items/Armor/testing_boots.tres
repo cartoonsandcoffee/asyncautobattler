@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Item" load_steps=5 format=3 uid="uid://djjjm1m8qr2pm"]
+[gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://djjjm1m8qr2pm"]
 
 [ext_resource type="Texture2D" uid="uid://bwo3qldtbc8u6" path="res://Assets/Items/Items.png" id="1_5c7tm"]
 [ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_5c7tm"]
@@ -8,24 +8,41 @@
 atlas = ExtResource("1_5c7tm")
 region = Rect2(0, 300, 150, 150)
 
+[sub_resource type="Resource" id="Resource_5c7tm"]
+script = ExtResource("2_862d0")
+trigger_type = 1
+trigger_stat = 7
+countdown_value = 0
+countdown_recurs = false
+turn_frequency = 2
+has_condition = false
+condition_stat = ""
+condition_category = ""
+condition_comparison = ">"
+condition_value = 0
+effect_type = 1
+target_type = 1
+target_stat = 7
+target_status = 1
+effect_amount = 1
+custom_description = ""
+metadata/_custom_type_script = "uid://dahay7fvi7bik"
+
 [resource]
 script = ExtResource("2_5c7tm")
 item_name = "Boots of Testing"
 item_type = 4
-item_desc = "On hit: Give the enemy 1 acid, if they have no shield give 1 poison instead.
-
-Exposed: Gain 1 burn.
-Wounded: Gain 1 regeneration."
+item_desc = ""
 item_icon = SubResource("AtlasTexture_862d0")
 item_color = Color(0.72549, 0.113725, 0.541176, 1)
-rules = Array[ExtResource("2_862d0")]([])
-rarity = 2
+rules = Array[ExtResource("2_862d0")]([SubResource("Resource_5c7tm")])
+rarity = 0
 categories = Array[String](["Testing"])
 rng_weight = 1.0
 unlocked = true
-damage_bonus = 2
-shield_bonus = 3
-agility_bonus = 5
-hit_points_bonus = 2
+damage_bonus = 0
+shield_bonus = 0
+agility_bonus = 1
+hit_points_bonus = 0
 strikes_bonus = 0
 metadata/_custom_type_script = "uid://dthg27pchm1fm"

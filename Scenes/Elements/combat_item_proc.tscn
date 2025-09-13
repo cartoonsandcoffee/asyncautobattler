@@ -85,7 +85,7 @@ tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/path = NodePath("Panel/mainPanel:position")
-tracks/2/interp = 1
+tracks/2/interp = 2
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0, 2),
@@ -212,7 +212,7 @@ mouse_filter = 2
 script = ExtResource("1_os0cl")
 
 [node name="Panel" type="Panel" parent="."]
-z_index = 100
+z_index = 150
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

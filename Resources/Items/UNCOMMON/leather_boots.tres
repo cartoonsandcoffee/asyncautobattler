@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="Item" load_steps=5 format=3 uid="uid://dbcuw51hbph1u"]
+
+[ext_resource type="Texture2D" uid="uid://bwo3qldtbc8u6" path="res://Assets/Items/Items.png" id="1_3ff8b"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_8adik"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_3ff8b"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5p27t"]
+atlas = ExtResource("1_3ff8b")
+region = Rect2(0, 300, 150, 150)
+
+[resource]
+script = ExtResource("2_3ff8b")
+item_name = "Leather Boots"
+item_type = 4
+item_desc = "Battle Start: If you have more agility than the enemy, gain 2 attack"
+item_icon = SubResource("AtlasTexture_5p27t")
+item_color = Color(0.56, 0.37968, 0.1736, 1)
+rules = Array[ExtResource("1_8adik")]([])
+rarity = 1
+categories = Array[String](["Leather"])
+rng_weight = 1.0
+unlocked = true
+damage_bonus = 0
+shield_bonus = 0
+agility_bonus = 1
+hit_points_bonus = 0
+strikes_bonus = 0
+metadata/_custom_type_script = "uid://dthg27pchm1fm"

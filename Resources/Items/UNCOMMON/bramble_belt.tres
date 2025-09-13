@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="Item" load_steps=5 format=3 uid="uid://cgn17rtm0oaxt"]
+
+[ext_resource type="Texture2D" uid="uid://bwo3qldtbc8u6" path="res://Assets/Items/Items.png" id="1_mscfe"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_w14v7"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_mscfe"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cx7oj"]
+atlas = ExtResource("1_mscfe")
+region = Rect2(150, 600, 150, 150)
+
+[resource]
+script = ExtResource("2_mscfe")
+item_name = "Bramble Belt"
+item_type = 1
+item_desc = "Battle Start: Gain 1 thorns and give the enemy 1 additional strike"
+item_icon = SubResource("AtlasTexture_cx7oj")
+item_color = Color(0.363, 0.75, 0.21, 1)
+rules = Array[ExtResource("1_w14v7")]([])
+rarity = 1
+categories = Array[String]([])
+rng_weight = 1.0
+unlocked = true
+damage_bonus = 0
+shield_bonus = 0
+agility_bonus = 0
+hit_points_bonus = 0
+strikes_bonus = 0
+metadata/_custom_type_script = "uid://dthg27pchm1fm"

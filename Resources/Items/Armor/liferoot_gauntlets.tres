@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://bwo3qldtbc8u6" path="res://Assets/Items/Items.png" id="1_u4o0a"]
 [ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="2_fcatk"]
 [ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_u4o0a"]
-[ext_resource type="Resource" uid="uid://eqpnbwb8vw0d" path="res://Resources/Items/Weapons/Rules/battle_start_regen_1.tres" id="3_fcatk"]
+[ext_resource type="Resource" uid="uid://eqpnbwb8vw0d" path="res://Resources/Items/Rules/battle_start_regen_1.tres" id="3_fcatk"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fcatk"]
 atlas = ExtResource("1_u4o0a")

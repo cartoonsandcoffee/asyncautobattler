@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=3 uid="uid://yfx4f0fwf4vi"]
+[gd_scene load_steps=58 format=3 uid="uid://yfx4f0fwf4vi"]
 
 [ext_resource type="Texture2D" uid="uid://vtf7yfl2710m" path="res://Assets/UI/panel-border-030.png" id="1_0e3vx"]
 [ext_resource type="Script" uid="uid://c6hur1hg25jx" path="res://Scripts/main_game.gd" id="1_73nn6"]
@@ -18,6 +18,8 @@
 [ext_resource type="Theme" uid="uid://dyxvw81amvesc" path="res://Themes/speed_buttons.tres" id="15_erobn"]
 [ext_resource type="Texture2D" uid="uid://2wdcqaowp0fe" path="res://Assets/UI/Buttons/sheet_white1x.png" id="15_vc13p"]
 [ext_resource type="Texture2D" uid="uid://c6h47p0pfo6om" path="res://Assets/UI/Buttons/sheet_white1.2x.png" id="17_vc13p"]
+[ext_resource type="FontFile" uid="uid://d236qu1nwukxr" path="res://Assets/UI/Fonts/Imperator Bold.ttf" id="19_hm1wn"]
+[ext_resource type="Texture2D" uid="uid://7gybg0pei0fk" path="res://Resources/StatIcons/stat_gold.tres" id="20_ry2jr"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mgc0q"]
 
@@ -59,6 +61,8 @@ region = Rect2(600, 0, 150, 150)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_18r40"]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gpk8t"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gpk8t"]
 bg_color = Color(0, 0, 0, 1)
 
@@ -95,6 +99,17 @@ region = Rect2(350, 450, 50, 50)
 [sub_resource type="AtlasTexture" id="AtlasTexture_vc13p"]
 atlas = ExtResource("17_vc13p")
 region = Rect2(500, 250, 50, 50)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ry2jr"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qnvbm"]
+bg_color = Color(0.0728427, 0.0728426, 0.0728425, 1)
 
 [sub_resource type="Animation" id="Animation_gpk8t"]
 length = 0.001
@@ -1068,6 +1083,23 @@ patch_margin_top = 32
 patch_margin_right = 32
 patch_margin_bottom = 32
 
+[node name="panelStatus" type="PanelContainer" parent="CombatPanel/CombatPanelTop"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = -98.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxEmpty_gpk8t")
+
+[node name="statusBox" type="HBoxContainer" parent="CombatPanel/CombatPanelTop/panelStatus"]
+layout_mode = 2
+
 [node name="picEnemy" type="TextureRect" parent="CombatPanel"]
 layout_mode = 1
 anchors_preset = 8
@@ -1195,7 +1227,6 @@ tick_count = 7
 ticks_on_borders = true
 
 [node name="lblSpeed" type="Label" parent="CombatPanel/LogPanel/RightSidePanel/PanelContainer/CombatLogBox/speedControls"]
-visible = false
 layout_mode = 2
 text = "1.5x"
 
@@ -1233,6 +1264,312 @@ layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
 
+[node name="VictoryPanel" type="Panel" parent="CombatPanel"]
+visible = false
+z_index = 50
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CombatPanel/VictoryPanel"]
+custom_minimum_size = Vector2(400, 100)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ry2jr")
+
+[node name="MarginContainer" type="MarginContainer" parent="CombatPanel/VictoryPanel/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CombatPanel/VictoryPanel/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme = ExtResource("9_r0mdn")
+theme_override_constants/separation = 10
+
+[node name="boxTitle" type="HBoxContainer" parent="CombatPanel/VictoryPanel/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer3" type="MarginContainer" parent="CombatPanel/VictoryPanel/PanelContainer/MarginContainer/VBoxContainer/boxTitle"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect2" type="TextureRect" parent="CombatPanel/VictoryPanel/PanelContainer/MarginContainer/VBoxContainer/boxTitle"]
+custom_minimum_size = Vector2(96, 10)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("10_0xqxu")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="lblVic" type="Label" parent="CombatPanel/VictoryPanel/PanelContainer/MarginContainer/VBoxContainer/boxTitle"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("9_r0mdn")
+theme_override_font_sizes/font_size = 32
+text = "  Victory !  "
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="CombatPanel/VictoryPanel/PanelContainer/MarginContainer/VBoxContainer/boxTitle"]
+custom_minimum_size = Vector2(96, 10)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("10_0xqxu")
+expand_mode = 1
+stretch_mode = 5
+flip_h = true
+
+[node name="MarginContainer2" type="MarginContainer" parent="CombatPanel/VictoryPanel/PanelContainer/MarginContainer/VBoxContainer/boxTitle"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="boxHistory" type="VBoxContainer" parent="CombatPanel/VictoryPanel/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CombatPanel/VictoryPanel/PanelContainer/MarginContainer/VBoxContainer/boxHistory"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CombatPanel/VictoryPanel/PanelContainer/MarginContainer/VBoxContainer/boxHistory/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="btnHistory" type="LinkButton" parent="CombatPanel/VictoryPanel/PanelContainer/MarginContainer/VBoxContainer/boxHistory/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.89, 0.3738, 0.821173, 1)
+theme_override_fonts/font = ExtResource("19_hm1wn")
+theme_override_font_sizes/font_size = 12
+text = "Show/Hide Combat History"
+underline = 1
+
+[node name="MarginContainer2" type="MarginContainer" parent="CombatPanel/VictoryPanel/PanelContainer/MarginContainer/VBoxContainer/boxHistory/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="txtHistory" type="RichTextLabel" parent="CombatPanel/VictoryPanel/PanelContainer/MarginContainer/VBoxContainer/boxHistory"]
+visible = false
+custom_minimum_size = Vector2(0, 250)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/normal_font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_qnvbm")
+bbcode_enabled = true
+text = "Complete combat history goes here..."
+scroll_following = true
+
+[node name="boxReward" type="HBoxContainer" parent="CombatPanel/VictoryPanel/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CombatPanel/VictoryPanel/PanelContainer/MarginContainer/VBoxContainer/boxReward"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="panelReward" type="PanelContainer" parent="CombatPanel/VictoryPanel/PanelContainer/MarginContainer/VBoxContainer/boxReward"]
+modulate = Color(1, 0.7, 0, 1)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CombatPanel/VictoryPanel/PanelContainer/MarginContainer/VBoxContainer/boxReward/panelReward"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CombatPanel/VictoryPanel/PanelContainer/MarginContainer/VBoxContainer/boxReward/panelReward/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="picReward" type="TextureRect" parent="CombatPanel/VictoryPanel/PanelContainer/MarginContainer/VBoxContainer/boxReward/panelReward/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture = ExtResource("20_ry2jr")
+expand_mode = 1
+
+[node name="lblRewardAmt" type="Label" parent="CombatPanel/VictoryPanel/PanelContainer/MarginContainer/VBoxContainer/boxReward/panelReward/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "+50"
+
+[node name="MarginContainer2" type="MarginContainer" parent="CombatPanel/VictoryPanel/PanelContainer/MarginContainer/VBoxContainer/boxReward"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="btnContinue" type="Button" parent="CombatPanel/VictoryPanel/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+text = "Continue"
+
+[node name="DeathPanel" type="Panel" parent="CombatPanel"]
+visible = false
+z_index = 50
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CombatPanel/DeathPanel"]
+self_modulate = Color(1, 0, 0, 1)
+custom_minimum_size = Vector2(600, 100)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ry2jr")
+
+[node name="MarginContainer" type="MarginContainer" parent="CombatPanel/DeathPanel/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CombatPanel/DeathPanel/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme = ExtResource("9_r0mdn")
+theme_override_constants/separation = 10
+
+[node name="boxTitle" type="HBoxContainer" parent="CombatPanel/DeathPanel/PanelContainer/MarginContainer/VBoxContainer"]
+modulate = Color(1, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer3" type="MarginContainer" parent="CombatPanel/DeathPanel/PanelContainer/MarginContainer/VBoxContainer/boxTitle"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect2" type="TextureRect" parent="CombatPanel/DeathPanel/PanelContainer/MarginContainer/VBoxContainer/boxTitle"]
+custom_minimum_size = Vector2(96, 10)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("10_0xqxu")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="lblVic" type="Label" parent="CombatPanel/DeathPanel/PanelContainer/MarginContainer/VBoxContainer/boxTitle"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("9_r0mdn")
+theme_override_font_sizes/font_size = 32
+text = "  You  Have  Died !  "
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="CombatPanel/DeathPanel/PanelContainer/MarginContainer/VBoxContainer/boxTitle"]
+custom_minimum_size = Vector2(96, 10)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("10_0xqxu")
+expand_mode = 1
+stretch_mode = 5
+flip_h = true
+
+[node name="MarginContainer2" type="MarginContainer" parent="CombatPanel/DeathPanel/PanelContainer/MarginContainer/VBoxContainer/boxTitle"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="boxHistory" type="VBoxContainer" parent="CombatPanel/DeathPanel/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CombatPanel/DeathPanel/PanelContainer/MarginContainer/VBoxContainer/boxHistory"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CombatPanel/DeathPanel/PanelContainer/MarginContainer/VBoxContainer/boxHistory/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="btnHistory" type="LinkButton" parent="CombatPanel/DeathPanel/PanelContainer/MarginContainer/VBoxContainer/boxHistory/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.89, 0.3738, 0.821173, 1)
+theme_override_fonts/font = ExtResource("19_hm1wn")
+theme_override_font_sizes/font_size = 12
+text = "Show/Hide Combat History"
+underline = 1
+
+[node name="MarginContainer2" type="MarginContainer" parent="CombatPanel/DeathPanel/PanelContainer/MarginContainer/VBoxContainer/boxHistory/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="txtHistoryDead" type="RichTextLabel" parent="CombatPanel/DeathPanel/PanelContainer/MarginContainer/VBoxContainer/boxHistory"]
+visible = false
+custom_minimum_size = Vector2(0, 250)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/normal_font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_qnvbm")
+bbcode_enabled = true
+text = "Complete combat history goes here..."
+scroll_following = true
+
+[node name="boxUnlocks" type="HBoxContainer" parent="CombatPanel/DeathPanel/PanelContainer/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CombatPanel/DeathPanel/PanelContainer/MarginContainer/VBoxContainer/boxUnlocks"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="panelUnlocks" type="PanelContainer" parent="CombatPanel/DeathPanel/PanelContainer/MarginContainer/VBoxContainer/boxUnlocks"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CombatPanel/DeathPanel/PanelContainer/MarginContainer/VBoxContainer/boxUnlocks/panelUnlocks"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CombatPanel/DeathPanel/PanelContainer/MarginContainer/VBoxContainer/boxUnlocks/panelUnlocks/MarginContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="MarginContainer2" type="MarginContainer" parent="CombatPanel/DeathPanel/PanelContainer/MarginContainer/VBoxContainer/boxUnlocks"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="boxStatistics" type="VBoxContainer" parent="CombatPanel/DeathPanel/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="CombatPanel/DeathPanel/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+text = "Share"
+
+[node name="btnNewRun" type="Button" parent="CombatPanel/DeathPanel/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+text = "New Run"
+
+[node name="btnQuit" type="Button" parent="CombatPanel/DeathPanel/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+text = "Quit"
+
 [node name="combatPanelAnim" type="AnimationPlayer" parent="CombatPanel"]
 libraries = {
 &"": SubResource("AnimationLibrary_erobn")
@@ -1251,6 +1588,7 @@ offset_right = 701.0
 offset_bottom = 251.0
 grow_horizontal = 2
 grow_vertical = 0
+mouse_filter = 2
 
 [node name="ColorRect" type="ColorRect" parent="BottomPanel"]
 layout_mode = 1
@@ -1259,6 +1597,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
 [node name="NinePatchRect" type="NinePatchRect" parent="BottomPanel"]
@@ -1281,6 +1620,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
@@ -1406,6 +1746,7 @@ layout_mode = 0
 offset_top = -87.0
 offset_right = 1393.0
 offset_bottom = -3.0
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_erobn")
 
 [node name="statusBox" type="HBoxContainer" parent="BottomPanel/panelStatus"]
@@ -1415,6 +1756,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="FadeOverlay" type="ColorRect" parent="."]
 modulate = Color(1, 1, 1, 0)
@@ -1444,3 +1786,7 @@ libraries = {
 [connection signal="value_changed" from="CombatPanel/LogPanel/RightSidePanel/PanelContainer/CombatLogBox/speedControls/speedSlider" to="CombatPanel" method="_on_speed_slider_value_changed"]
 [connection signal="pressed" from="CombatPanel/LogPanel/RightSidePanel/PanelContainer/FightRunBox/btnFight" to="CombatPanel" method="_on_btn_fight_pressed"]
 [connection signal="pressed" from="CombatPanel/LogPanel/RightSidePanel/PanelContainer/FightRunBox/btnRun" to="CombatPanel" method="_on_btn_run_pressed"]
+[connection signal="pressed" from="CombatPanel/VictoryPanel/PanelContainer/MarginContainer/VBoxContainer/boxHistory/HBoxContainer/btnHistory" to="CombatPanel" method="_on_btn_history_pressed"]
+[connection signal="pressed" from="CombatPanel/VictoryPanel/PanelContainer/MarginContainer/VBoxContainer/btnContinue" to="CombatPanel" method="_on_btn_continue_pressed"]
+[connection signal="pressed" from="CombatPanel/DeathPanel/PanelContainer/MarginContainer/VBoxContainer/boxHistory/HBoxContainer/btnHistory" to="CombatPanel" method="_on_btn_history_pressed"]
+[connection signal="pressed" from="CombatPanel/DeathPanel/PanelContainer/MarginContainer/VBoxContainer/btnNewRun" to="CombatPanel" method="_on_btn_continue_pressed"]

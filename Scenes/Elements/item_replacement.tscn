@@ -1,0 +1,169 @@
+[gd_scene load_steps=10 format=3 uid="uid://bcf6nqakvaxeu"]
+
+[ext_resource type="Texture2D" uid="uid://vtf7yfl2710m" path="res://Assets/UI/panel-border-030.png" id="1_jpcsp"]
+[ext_resource type="Script" uid="uid://dciswwq1fvynk" path="res://Scripts/Components/item_replacement.gd" id="1_vjvc4"]
+[ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="2_vjvc4"]
+[ext_resource type="PackedScene" uid="uid://cqhyru53o5wfx" path="res://Scenes/item.tscn" id="3_adnqu"]
+[ext_resource type="Theme" uid="uid://od14ccps1daj" path="res://Themes/descriptive_label.tres" id="4_hhke8"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cu81t"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u8kpc"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2lyog"]
+atlas = ExtResource("1_jpcsp")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_jnrh3"]
+texture = SubResource("AtlasTexture_2lyog")
+texture_margin_left = 25.0
+texture_margin_top = 25.0
+texture_margin_right = 26.0
+texture_margin_bottom = 26.0
+
+[node name="ItemReplacement" type="Control"]
+z_index = 150
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_vjvc4")
+
+[node name="replacementPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -372.5
+offset_top = -175.0
+offset_right = 372.5
+offset_bottom = 175.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_cu81t")
+
+[node name="panelBlack" type="PanelContainer" parent="replacementPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_u8kpc")
+
+[node name="MarginContainer" type="MarginContainer" parent="replacementPanel/panelBlack"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="panelBorder" type="PanelContainer" parent="replacementPanel/panelBlack/MarginContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_jnrh3")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="replacementPanel/panelBlack/MarginContainer/panelBorder"]
+layout_mode = 2
+theme = ExtResource("2_vjvc4")
+theme_override_constants/separation = 10
+
+[node name="lblTitle" type="Label" parent="replacementPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "Make  room  for  your  new  item..."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="replacementPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="replacementPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="newItem" parent="replacementPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/HBoxContainer" instance=ExtResource("3_adnqu")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="replacementPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="lblDesc" type="Label" parent="replacementPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_hhke8")
+text = "Select an item from your inventory to replace..."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="inventoryGrid" type="GridContainer" parent="replacementPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+columns = 6
+
+[node name="Item" parent="replacementPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/inventoryGrid" instance=ExtResource("3_adnqu")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item2" parent="replacementPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/inventoryGrid" instance=ExtResource("3_adnqu")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item3" parent="replacementPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/inventoryGrid" instance=ExtResource("3_adnqu")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item4" parent="replacementPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/inventoryGrid" instance=ExtResource("3_adnqu")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item5" parent="replacementPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/inventoryGrid" instance=ExtResource("3_adnqu")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item6" parent="replacementPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/inventoryGrid" instance=ExtResource("3_adnqu")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item7" parent="replacementPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/inventoryGrid" instance=ExtResource("3_adnqu")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item8" parent="replacementPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/inventoryGrid" instance=ExtResource("3_adnqu")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item9" parent="replacementPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/inventoryGrid" instance=ExtResource("3_adnqu")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item10" parent="replacementPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/inventoryGrid" instance=ExtResource("3_adnqu")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item11" parent="replacementPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/inventoryGrid" instance=ExtResource("3_adnqu")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item12" parent="replacementPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/inventoryGrid" instance=ExtResource("3_adnqu")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="boxButtons" type="HBoxContainer" parent="replacementPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer"]
+layout_mode = 2
+
+[node name="btnCancel" type="Button" parent="replacementPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/boxButtons"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Skip"
+
+[node name="btnConfirm" type="Button" parent="replacementPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/boxButtons"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Replace Item"

@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://cqhyru53o5wfx"]
+[gd_scene load_steps=26 format=3 uid="uid://cqhyru53o5wfx"]
 
 [ext_resource type="Script" uid="uid://c60g0xugsdgdl" path="res://Scripts/Components/item_slot.gd" id="1_tnst4"]
 [ext_resource type="FontFile" uid="uid://dgwg8mvobk57a" path="res://Assets/UI/Fonts/ImperatorSmallCaps Bold.ttf" id="3_66iod"]
@@ -25,6 +25,8 @@ region = Rect2(528, 0, 16, 16)
 bg_color = Color(0.199101, 0.198613, 0.189857, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_renmp"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hnyqs"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jmixh"]
 
@@ -307,6 +309,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_renmp")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hnyqs")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_jmixh")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_fif6b")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_5r5i4")
