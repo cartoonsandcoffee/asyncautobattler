@@ -16,7 +16,8 @@ enum Stats {
 	AGILITY,
 	GOLD,
 	STRIKES,
-	HP_AND_SHIELD,
+	EXPOSED,
+	WOUNDED,
 	NONE
 }
 
@@ -78,6 +79,7 @@ enum StatusEffects {
 	BLIND,			# halves damage
 	BLESSING,		# on remove: heal 3 and gain 1 damage
 	BURN,			# deal BURN_BASE damage for each stack
+	BLEED,			# prefer this be 'damages health not shield' instead of poison
 	NONE
 }
 

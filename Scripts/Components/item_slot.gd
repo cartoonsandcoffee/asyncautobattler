@@ -4,7 +4,7 @@ class_name ItemSlot
 signal drag_started(slot: ItemSlot)
 signal drag_ended(slot: ItemSlot)
 signal slot_dropped_on(slot: ItemSlot, dragged_item: Item)
-
+signal slot_clicked(slot: ItemSlot)
 
 enum ItemType {
 	WEAPON,
@@ -49,6 +49,7 @@ func set_references():
 
 	button.button_down.connect(_on_button_down)
 	button.button_up.connect(_on_button_up)
+	button.pressed.connect(_on_button_pressed)
 	button.gui_input.connect(_on_button_gui_input)
 
 func set_item(item: Item):
@@ -137,10 +138,17 @@ func _on_button_up():
 		drag_ended.emit(self)
 		modulate.a = 1.0
 
+func _on_button_pressed():
+	if current_item:
+		slot_clicked.emit(current_item)
+
 func _on_button_gui_input(event: InputEvent):
 	if event is InputEventMouseMotion and is_dragging:
 		# Update drag preview position if needed
 		pass
+
+func set_selectable(_set: bool):
+	button.disabled = !_set
 
 func _can_drop_data(position: Vector2, data) -> bool:
 	# Allow dropping if we're an empty slot or swapping

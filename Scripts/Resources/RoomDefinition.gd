@@ -2,7 +2,7 @@ class_name RoomDefinition
 extends Resource
 
 @export var room_type: Enums.RoomType
-@export var rarity: Enums.Rarity  # Reuse your existing rarity system
+@export var rarity: Enums.Rarity  
 @export var room_name: String = "Unknown Room"
 @export_multiline var room_desc: String = "Unknown Room"
 

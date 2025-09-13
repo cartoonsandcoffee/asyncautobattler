@@ -12,7 +12,8 @@ func load_room_definitions():
 	# Manually register room definitions (for now)
 	# Later you can scan a folder for .tres files automatically
 	register_room_definition("starter", preload("res://Resources/Rooms/starter.tres"))
-	register_room_definition("hallway", preload("res://Resources/Rooms/hallway.tres"))
+	register_room_definition("basic_tresure", preload("res://Resources/Rooms/basic_treasure.tres"))
+	register_room_definition("basic_merchant", preload("res://Resources/Rooms/basic_merchant.tres"))
 	register_room_definition("tomb", preload("res://Resources/Rooms/tomb.tres"))
 	register_room_definition("royal", preload("res://Resources/Rooms/royal.tres"))
 	

@@ -11,7 +11,7 @@ signal combat_ended(winner, loser)
 
 # Action signals  
 signal attack_executed(attacker, target, damage_dealt)
-signal damage_dealt(target, amount)
+signal damage_dealt(target, amount, taken_by)
 signal healing_applied(target, amount)
 
 # State change signals
@@ -46,6 +46,8 @@ var enemy_wounded_triggered: bool = false
 var base_highlight_duration: float = 0.5
 var base_message_duration: float = 2
 
+var combat_log: String = ""
+
 enum CombatSpeed {
 	PAUSE = 0,
 	NORMAL = 1,
@@ -59,7 +61,8 @@ func _ready():
 
 func start_combat(player, enemy):
 	"""Initialize and begin combat between player and enemy"""
-	print("=== COMBAT STARTED ===")
+	combat_log = ""
+	add_to_combat_log_string("=== COMBAT STARTED ===\n")
 	
 	# Store combat entities
 	player_entity = player
@@ -84,7 +87,7 @@ func start_combat(player, enemy):
 	var first_entity = player_entity if player_entity.stats.agility >= enemy_entity.stats.agility else enemy_entity
 	var second_entity = enemy_entity if first_entity == player_entity else player_entity
 	
-	print("Turn order: ", get_entity_name(first_entity), " goes first")
+	add_to_combat_log_string("Turn order: " + get_entity_name(first_entity) + " goes first.")
 	
 	# Trigger battle start events
 	await process_battle_start_events(first_entity, second_entity)
@@ -92,12 +95,16 @@ func start_combat(player, enemy):
 	# Begin turn loop
 	await combat_loop(first_entity, second_entity)
 
+func add_to_combat_log_string(_string: String):
+	combat_log += _string + "\n"
+	print(_string)
+
 func combat_loop(first_entity, second_entity):
 	"""Main combat loop - alternates turns until one entity dies"""
 	
 	while combat_active:
 		turn_number += 1
-		print("\n--- Turn ", turn_number, " ---")
+		add_to_combat_log_string("\n--- Turn " + str(turn_number) + " ---")
 		
 		# First entity's turn
 		if combat_active and not is_entity_dead(first_entity):
@@ -118,7 +125,7 @@ func combat_loop(first_entity, second_entity):
 func execute_turn(entity):
 	"""Execute a complete turn for the given entity"""
 	current_turn_entity = entity
-	print(get_entity_name(entity), "'s turn")
+	add_to_combat_log_string(get_entity_name(entity) + "'s turn")
 	
 	# Emit turn started signal
 	turn_started.emit(entity)
@@ -131,7 +138,7 @@ func execute_turn(entity):
 	
 	# Check if entity is stunned (skip attacks if stunned)
 	if entity.status_effects.stun > 0:
-		print(get_entity_name(entity), " is stunned! Turn skipped.")
+		add_to_combat_log_string(get_entity_name(entity) + " is stunned! Turn skipped.")
 		entity.status_effects.stun = max(0, entity.status_effects.stun - 1)
 		if entity.status_effects.stun == 0:
 			status_removed.emit(entity, "stun")
@@ -152,8 +159,11 @@ func execute_attack(attacker, target):
 	"""Execute a single attack from attacker to target"""
 	var damage = attacker.stats.damage_current
 	
-	print(get_entity_name(attacker), " attacks for ", damage, " damage")
+	add_to_combat_log_string(get_entity_name(attacker) + " attacks for " + str(damage) + " damage")
 	
+	# Emit attack signal
+	attack_executed.emit(attacker, target, damage)
+
 	# Process on-hit item rules for attacker
 	await process_on_hit_rules(attacker)
 	
@@ -163,9 +173,6 @@ func execute_attack(attacker, target):
 	# Apply thorns as needed
 	await proc_thorns(attacker, target)
 
-	# Emit attack signal
-	attack_executed.emit(attacker, target, damage)
-	
 	await wait_for_speed()
 
 func proc_thorns(attacker, target):
@@ -188,26 +195,33 @@ func apply_damage(target, damage_amount: int):
 		target.stats.shield_current -= shield_damage
 		remaining_damage -= shield_damage
 		
-		print(get_entity_name(target), " shield reduced by ", shield_damage, " (", target.stats.shield_current, " remaining)")
+		add_to_combat_log_string(get_entity_name(target) + " shield reduced by " + str(shield_damage) + " (" + str(target.stats.shield_current) + " remaining)")
 		stat_changed.emit(target, "shield", target.stats.shield_current + shield_damage, target.stats.shield_current)
-		
-		# Check for first time exposed
-		if target.stats.shield_current == 0 and not is_entity_exposed_triggered(target):
-			await trigger_exposed(target)
-	
+
+		if target.stats.shield_current == 0:
+			damage_dealt.emit(target, shield_damage, Enums.Stats.EXPOSED)
+
+			# Check for first time exposed
+			if !is_entity_exposed_triggered(target):
+				await trigger_exposed(target)
+		else:
+			damage_dealt.emit(target, shield_damage, Enums.Stats.SHIELD)
+
 	# Apply remaining damage to hit points
 	if remaining_damage > 0:
 		target.stats.hit_points_current -= remaining_damage
-		print(get_entity_name(target), " takes ", remaining_damage, " damage (", target.stats.hit_points_current, " HP remaining)")
+		add_to_combat_log_string(get_entity_name(target) + " takes " + str(remaining_damage) + " damage (" + str(target.stats.hit_points_current) + " HP remaining)")
 		stat_changed.emit(target, "hit_points", target.stats.hit_points_current + remaining_damage, target.stats.hit_points_current)
 		
 		# Check for first time wounded (50% HP)
 		var wounded_threshold = target.stats.hit_points / 2
-		if target.stats.hit_points_current <= wounded_threshold and not is_entity_wounded_triggered(target):
-			await trigger_wounded(target)
-	
-	# Emit damage dealt signal
-	damage_dealt.emit(target, damage_amount)
+		if target.stats.hit_points_current <= wounded_threshold:
+			damage_dealt.emit(target, remaining_damage, Enums.Stats.WOUNDED)
+
+			if !is_entity_wounded_triggered(target):
+				await trigger_wounded(target)
+		else:
+			damage_dealt.emit(target, remaining_damage, Enums.Stats.HITPOINTS)
 	
 	# Check for death
 	if target.stats.hit_points_current <= 0:
@@ -217,18 +231,18 @@ func apply_damage(target, damage_amount: int):
 func apply_damage_from_status(target, damage_amount: int, _status: Enums.StatusEffects):
 	# Apply damage to target, handling shield/armor first
 	var remaining_damage = damage_amount
-	
+
 	# Apply to shield first
 	if target.stats.shield_current > 0:
 		var shield_damage = min(remaining_damage, target.stats.shield_current)
 		target.stats.shield_current -= shield_damage
 		remaining_damage -= shield_damage
-		
-		print(get_entity_name(target), " shield reduced by ", shield_damage, " (", target.stats.shield_current, " remaining)")
+
+		add_to_combat_log_string(get_entity_name(target) + " shield reduced by " + str(shield_damage) + " from " + Enums.get_status_string(_status) + " (" + str(target.stats.shield_current) + " remaining)")
 		stat_changed.emit(target, "shield", target.stats.shield_current + shield_damage, target.stats.shield_current)
 		
 		if target.stats.shield_current == 0:
-			status_proc.emit(target, _status, Enums.Stats.HP_AND_SHIELD, shield_damage *-1)
+			status_proc.emit(target, _status, Enums.Stats.EXPOSED, shield_damage *-1)
 
 			# Check for first time exposed
 			if !is_entity_exposed_triggered(target):
@@ -240,19 +254,17 @@ func apply_damage_from_status(target, damage_amount: int, _status: Enums.StatusE
 	# Apply remaining damage to hit points
 	if remaining_damage > 0 && _status != Enums.StatusEffects.ACID:
 		target.stats.hit_points_current -= remaining_damage
-		print(get_entity_name(target), " takes ", remaining_damage, " damage (", target.stats.hit_points_current, " HP remaining)")
+		add_to_combat_log_string(get_entity_name(target) + " takes " + str(remaining_damage) + " damage from " + Enums.get_status_string(_status) + " (" + str(target.stats.hit_points_current) + " HP remaining)")
 		stat_changed.emit(target, "hit_points", target.stats.hit_points_current + remaining_damage, target.stats.hit_points_current)
-		
-		status_proc.emit(target, _status, Enums.Stats.HITPOINTS, remaining_damage *-1)
-		
+
 		# Check for first time wounded (50% HP)
 		var wounded_threshold = target.stats.hit_points / 2
 		if target.stats.hit_points_current <= wounded_threshold and not is_entity_wounded_triggered(target):
+			status_proc.emit(target, _status, Enums.Stats.WOUNDED, remaining_damage *-1)
 			await trigger_wounded(target)
-	
-	# Emit damage dealt signal
-	damage_dealt.emit(target, damage_amount)
-	
+		else:
+			status_proc.emit(target, _status, Enums.Stats.HITPOINTS, remaining_damage *-1)
+
 	# Check for death
 	if target.stats.hit_points_current <= 0:
 		await handle_entity_death(target)
@@ -260,8 +272,7 @@ func apply_damage_from_status(target, damage_amount: int, _status: Enums.StatusE
 
 
 func process_battle_start_events(first_entity, second_entity):
-	"""Process all battle start item rules in turn order"""
-	print("\n-- BATTLE START EVENTS --")
+	add_to_combat_log_string("\n-- BATTLE START EVENTS --")
 	
 	# First entity's battle start rules
 	await process_entity_battle_start_rules(first_entity)
@@ -270,8 +281,7 @@ func process_battle_start_events(first_entity, second_entity):
 	await process_entity_battle_start_rules(second_entity)
 
 func process_entity_battle_start_rules(entity):
-	"""Process battle start rules for a specific entity"""
-	print(get_entity_name(entity), " battle start rules:")
+	add_to_combat_log_string(get_entity_name(entity) + " battle start rules:")
 	
 	# Process weapon rules first if it exists
 	if entity == player_entity and entity.inventory.weapon_slot:
@@ -287,7 +297,7 @@ func process_entity_battle_start_rules(entity):
 
 func process_turn_start_rules(entity):
 	"""Process turn start item rules for entity"""
-	print(get_entity_name(entity), " turn start rules:")
+	add_to_combat_log_string(get_entity_name(entity) + " turn start rules:")
 	
 	# Process weapon rules first if it exists
 	if entity == player_entity and entity.inventory.weapon_slot:
@@ -307,7 +317,7 @@ func process_turn_start_rules(entity):
 
 func process_on_hit_rules(attacker):
 	"""Process on-hit rules for attacking entity"""
-	print(get_entity_name(attacker), " on-hit rules:")
+	add_to_combat_log_string(get_entity_name(attacker) + " on-hit rules:")
 	
 	# Process weapon rules first if it exists
 	if attacker == player_entity and attacker.inventory.weapon_slot:
@@ -334,7 +344,11 @@ func process_item_rules(item: Item, entity, trigger_type: Enums.TriggerType):
 		if rule.trigger_type == trigger_type:
 			#await execute_item_rule(item, rule, entity)
 		
-			# - JDM: I indented these to be part of the for loop so they only execute on trigger type.
+			# - JDM: this should set the entity to ENEMY if they are the target of the rule
+			if rule.target_type == Enums.TargetType.ENEMY:
+				entity = get_opponent(entity)
+			elif rule.target_type == Enums.TargetType.RANDOM:
+				entity = entity if randf() < 0.5 else get_opponent(entity)
 
 			# Emit signal BEFORE executing so UI can highlight
 			item_rule_triggered.emit(item, rule, entity)
@@ -353,7 +367,7 @@ func process_item_rules(item: Item, entity, trigger_type: Enums.TriggerType):
 
 func process_enemy_ability(ability: EnemyAbility, entity):
 	"""Process a single enemy ability"""
-	print("  -> ", ability.ability_name, ": ", ability.trigger, " effect")
+	add_to_combat_log_string("  -> " + ability.ability_name + ": " + Enums.get_trigger_type_string(ability.trigger) + " effect")
 	
 	# Emit ability triggered signal
 	enemy_ability_triggered.emit(ability, entity)
@@ -394,7 +408,7 @@ func process_enemy_ability(ability: EnemyAbility, entity):
 			if get_opponent(entity) == player_entity:
 				var stolen = min(ability.value, get_opponent(entity).stats.gold)
 				get_opponent(entity).stats.gold -= stolen
-				print("    Enemy steals ", stolen, " gold from player")
+				add_to_combat_log_string("    Enemy steals " + str(stolen) + " gold from player.")
 	
 	# Update ability's runtime state
 	ability.times_triggered += 1
@@ -403,8 +417,7 @@ func process_enemy_ability(ability: EnemyAbility, entity):
 	await wait_for_speed()
 
 func execute_item_rule(item: Item, rule: ItemRule, entity):
-	"""Execute a specific item rule and show visual feedback"""
-	print("  -> ", item.item_name, ": ", Enums.get_trigger_type_string(rule.trigger_type), " effect")
+	add_to_combat_log_string("  -> " + item.item_name + ": " + Enums.get_trigger_type_string(rule.trigger_type) + " effect.")
 
 	# Emit rule triggered signal
 	#item_rule_triggered.emit(item, rule, entity) #- JDM: Commented this out because it's run before function is called
@@ -428,7 +441,7 @@ func execute_item_rule(item: Item, rule: ItemRule, entity):
 
 
 func _matches_trigger(rule: ItemRule, trigger_type: String) -> bool:
-	"""Check if a rule matches the current trigger type"""
+	# JDM: I think I can delete this now?
 	match trigger_type:
 		"battle_start":
 			return rule.trigger == Enums.TriggerType.BATTLE_START
@@ -481,7 +494,7 @@ func modify_entity_stat(entity, stat_name: Enums.Stats, amount: int):
 			entity.stats.increase_stat(Enums.Stats.STRIKES, amount)
 			new_value = entity.stats.strikes
 	
-	print("    ", get_entity_name(entity), " ", Enums.get_stat_string(stat_name), ": ", old_value, " -> ", new_value)
+	add_to_combat_log_string("    " + get_entity_name(entity) + " " + Enums.get_stat_string(stat_name) + ": " + str(old_value) + " -> " + str(new_value))
 	stat_changed.emit(entity, stat_name, old_value, new_value)
 
 func apply_status_effect(entity, status_name: Enums.StatusEffects, stacks: int):
@@ -518,11 +531,10 @@ func apply_status_effect(entity, status_name: Enums.StatusEffects, stacks: int):
 			entity.status_effects.increment_status(Enums.StatusEffects.BURN, stacks)
 			new_value = entity.status_effects.burn
 	
-	print("    ", get_entity_name(entity), " gains ", stacks, " ", Enums.get_status_string(status_name), " (", new_value, " total)")
+	add_to_combat_log_string("    " + get_entity_name(entity) + " gains " + str(stacks) + " " + Enums.get_status_string(status_name) + " (" + str(new_value) + " total)")
 	status_applied.emit(entity, status_name, stacks)
 
 func heal_entity(entity, amount: int):
-	"""Heal entity and handle overheal"""
 	var old_hp = entity.stats.hit_points_current
 	entity.stats.hit_points_current += amount
 	
@@ -532,24 +544,23 @@ func heal_entity(entity, amount: int):
 		entity.stats.hit_points_current = entity.stats.hit_points
 		if entity.status_effects:
 			entity.status_effects.overheal_triggered.emit(overheal)
-		print("    ", get_entity_name(entity), " healed ", amount - overheal, " HP (", overheal, " overheal)")
+		add_to_combat_log_string("    " + get_entity_name(entity) + " healed " + str(amount - overheal) + " HP (" + str(overheal) + " overheal)")
 	else:
-		print("    ", get_entity_name(entity), " healed ", amount, " HP")
+		add_to_combat_log_string("    " + get_entity_name(entity) + " healed " + str(amount) + " HP")
 	
 	healing_applied.emit(entity, amount)
 	stat_changed.emit(entity, "hit_points", old_hp, entity.stats.hit_points_current)
 
 func process_turn_start_status_effects(entity):
-	"""Process all status effects that trigger at turn start"""
 	if not entity.status_effects:
 		return
 		
-	print(get_entity_name(entity), " status effects at turn start:")
+	add_to_combat_log_string(get_entity_name(entity) + " status effects at turn start:")
 	
 	# Poison damage
 	if entity.status_effects.poison > 0:
 		if entity.stats.shield_current > 0:
-			print("    Poison blocked by shield")
+			add_to_combat_log_string("    Poison blocked by shield")
 		else:
 			await apply_damage_from_status(entity, entity.status_effects.poison, Enums.StatusEffects.POISON)
 		entity.status_effects.decrement_status(Enums.StatusEffects.POISON)
@@ -571,7 +582,7 @@ func process_turn_start_status_effects(entity):
 		if entity.stats.shield_current > 0:
 			var acid_damage = min(entity.status_effects.acid, entity.stats.shield_current)
 			await apply_damage_from_status(entity, acid_damage, Enums.StatusEffects.ACID)
-			print("    Acid reduces shield by ", acid_damage)
+			add_to_combat_log_string("    Acid reduces shield by " + str(acid_damage))
 			stat_changed.emit(entity, "shield", entity.stats.shield_current + acid_damage, entity.stats.shield_current)
 		# - JDM: Acid doesn't naturally deteriorate
 		#entity.status_effects.acid = max(0, entity.status_effects.acid - 1)
@@ -596,8 +607,7 @@ func process_turn_start_status_effects(entity):
 		await wait_for_speed()
 
 func trigger_exposed(entity):
-	"""Trigger exposed event for entity (first time shield reaches 0)"""
-	print(get_entity_name(entity), " is EXPOSED!")
+	add_to_combat_log_string(get_entity_name(entity) + " is EXPOSED!")
 	
 	# Mark as triggered for this combat
 	if entity == player_entity:
@@ -612,8 +622,7 @@ func trigger_exposed(entity):
 	await process_exposed_rules(entity)
 
 func trigger_wounded(entity):
-	"""Trigger wounded event for entity (first time at 50% HP)"""
-	print(get_entity_name(entity), " is WOUNDED!")
+	add_to_combat_log_string(get_entity_name(entity) + " is WOUNDED!")
 	
 	# Mark as triggered for this combat
 	if entity == player_entity:
@@ -628,8 +637,7 @@ func trigger_wounded(entity):
 	await process_wounded_rules(entity)
 
 func process_exposed_rules(entity):
-	"""Process all exposed-trigger item rules for entity"""
-	print(get_entity_name(entity), " exposed rules:")
+	add_to_combat_log_string(get_entity_name(entity) + " exposed rules:")
 	
 	if entity == player_entity:
 		# Process weapon
@@ -647,8 +655,7 @@ func process_exposed_rules(entity):
 				await process_enemy_ability(ability, entity)
 
 func process_wounded_rules(entity):
-	"""Process all wounded-trigger item rules for entity"""
-	print(get_entity_name(entity), " wounded rules:")
+	add_to_combat_log_string(get_entity_name(entity) + " wounded rules:")
 	
 	if entity == player_entity:
 		# Process weapon
@@ -666,8 +673,7 @@ func process_wounded_rules(entity):
 				await process_enemy_ability(ability, entity)
 
 func handle_entity_death(dead_entity):
-	"""Handle when an entity dies and end combat"""
-	print(get_entity_name(dead_entity), " has died!")
+	add_to_combat_log_string(get_entity_name(dead_entity) + " has died!")
 	
 	combat_active = false
 	var winner = get_opponent(dead_entity)
@@ -675,8 +681,8 @@ func handle_entity_death(dead_entity):
 	# Award gold to winner if it's the player
 	if winner == player_entity:
 		var gold_reward = calculate_gold_reward(dead_entity)
-		player_entity.stats.gold += gold_reward
-		print("Player gains ", gold_reward, " gold!")
+		#player_entity.stats.gold += gold_reward
+		add_to_combat_log_string("Player gains " + str(gold_reward) + " gold!")
 	
 	winner.stats.reset_stats_after_combat()
 	winner.status_effects.reset_statuses()
@@ -684,17 +690,15 @@ func handle_entity_death(dead_entity):
 	combat_ended.emit(winner, dead_entity)
 
 func calculate_gold_reward(defeated_enemy) -> int:
-	"""Calculate gold reward based on enemy type/difficulty"""
 	# TODO: Implement based on enemy types (Goblins, Ghouls, etc.)
-	return 5  # Default reward
+	return defeated_enemy.stats.gold + Player.current_rank  # Default reward
 
 func get_base_burn_damage(entity) -> int:
-	"""Get base burn damage for entity (default 3, can be modified by items)"""
+	# Get base burn damage for entity (default 3, can be modified by items)
 	# TODO: Check for items that modify base burn damage
 	return 3
 
 func set_combat_speed(speed: CombatSpeed):
-	"""Set combat speed for animations and waits"""
 	match speed:
 		CombatSpeed.PAUSE:
 			combat_speed = 0.0

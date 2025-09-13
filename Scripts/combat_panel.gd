@@ -9,8 +9,6 @@ signal player_chose_fight()
 signal player_chose_run()
 signal combat_completed(player_won: bool)
 signal speed_changed(new_speed: CombatManager.CombatSpeed)
-signal item_proc_occurred(item: Item, rule: ItemRule, entity)
-signal status_proc_occurred(_status: Enums.StatusEffects, _stat: Enums.Stats, value: int, entity)
 
 enum PanelState {
 	HIDDEN,
@@ -35,6 +33,7 @@ enum PanelState {
 @onready var enemy_damage_stat: StatBoxDisplay = $CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/statsContainer/statDamage
 @onready var enemy_agility_stat: StatBoxDisplay = $CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/statsContainer/statAgility
 @onready var stat_container: PanelContainer = $CombatPanelTop/PanelContainer
+@onready var enemy_status_box_container: HBoxContainer = $CombatPanelTop/panelStatus/statusBox
 
 # Combat controls
 @onready var speed_slider: HSlider = $LogPanel/RightSidePanel/PanelContainer/CombatLogBox/speedControls/speedSlider
@@ -45,8 +44,18 @@ enum PanelState {
 @onready var combat_log: RichTextLabel = $LogPanel/RightSidePanel/PanelContainer/CombatLogBox/txtCombatLog
 @onready var turn_label: Label = $LogPanel/RightSidePanel/PanelContainer/CombatLogBox/lblTurn
 
+# Victory Panel
+@onready var victory_panel: Panel = $VictoryPanel
+@onready var death_panel: Panel = $DeathPanel
+@onready var reward_label: Label = $VictoryPanel/PanelContainer/MarginContainer/VBoxContainer/boxReward/panelReward/MarginContainer/HBoxContainer/lblRewardAmt
+@onready var txt_history: RichTextLabel = $VictoryPanel/PanelContainer/MarginContainer/VBoxContainer/boxHistory/txtHistory
+@onready var txt_history_dead: RichTextLabel =$DeathPanel/PanelContainer/MarginContainer/VBoxContainer/boxHistory/txtHistoryDead
+
 # Animation
 @onready var slide_animation: AnimationPlayer = $combatPanelAnim
+
+# Main Game Controller
+var main_game: MainGameController 
 
 # State management
 var current_state: PanelState = PanelState.HIDDEN
@@ -54,6 +63,7 @@ var is_animating: bool = false
 
 var item_proc = preload("res://Scenes/Elements/combat_item_proc.tscn")
 var turn_sign = preload("res://Scenes/Elements/combat_turn_sign.tscn")
+var status_box = preload("res://Scenes/Elements/status_box.tscn")
 var turn_box: CombatTurnSign
 
 # Combat state
@@ -95,6 +105,7 @@ func connect_combat_signals():
 	CombatManager.turn_ended.connect(_on_turn_ended)
 	
 	# Combat event signals
+	CombatManager.attack_executed.connect(_on_attack_executed)
 	CombatManager.damage_dealt.connect(_on_damage_dealt)
 	CombatManager.healing_applied.connect(_on_healing_applied)
 	CombatManager.stat_changed.connect(_on_stat_changed)
@@ -178,7 +189,6 @@ func hide_panel():
 	_clear_all_highlights()
 
 func _update_enemy_stats():
-	"""Update the enemy stat displays"""
 	if not current_enemy_entity:
 		print("THERE IS NO ENEMY!!!!!!!!!!")
 		return
@@ -194,6 +204,50 @@ func _update_enemy_stats():
 	
 	# Agility stat
 	enemy_agility_stat.update_stat(Enums.Stats.AGILITY, current_enemy_entity.stats.agility_current, -1)
+
+func _update_enemy_status_effects():
+
+	for child in enemy_status_box_container.get_children():
+		enemy_status_box_container.remove_child(child)
+		child.queue_free()
+
+	if current_enemy_entity.status_effects.poison > 0:
+		create_new_status_box(Enums.StatusEffects.POISON, current_enemy_entity.status_effects.poison)
+	if current_enemy_entity.status_effects.acid > 0:
+		create_new_status_box(Enums.StatusEffects.ACID, current_enemy_entity.status_effects.acid)
+	if current_enemy_entity.status_effects.thorns > 0:
+		create_new_status_box(Enums.StatusEffects.THORNS, current_enemy_entity.status_effects.thorns)
+	if current_enemy_entity.status_effects.burn > 0:
+		create_new_status_box(Enums.StatusEffects.BURN, current_enemy_entity.status_effects.burn)
+	if current_enemy_entity.status_effects.regeneration > 0:
+		create_new_status_box(Enums.StatusEffects.REGENERATION, current_enemy_entity.status_effects.regeneration)
+	if current_enemy_entity.status_effects.blind > 0:
+		create_new_status_box(Enums.StatusEffects.BLIND, current_enemy_entity.status_effects.blind)
+	if current_enemy_entity.status_effects.blessing > 0:
+		create_new_status_box(Enums.StatusEffects.BLESSING, current_enemy_entity.status_effects.blessing)
+	if current_enemy_entity.status_effects.stun > 0:
+		create_new_status_box(Enums.StatusEffects.STUN, current_enemy_entity.status_effects.stun)						
+
+func create_new_status_box(_status: Enums.StatusEffects, amount: int):
+		var item_container = status_box.instantiate()
+
+		item_container.set_status(_status, amount)
+		item_container.custom_minimum_size = Vector2(120, 78)
+
+		enemy_status_box_container.add_child(item_container)
+
+func loop_through_enemy_statuses_for_position(_status: Enums.StatusEffects) -> Vector2:
+	var offset: Vector2 = Vector2(45,50)
+
+	if !_status:
+		return Vector2(400,200)
+
+	for child in enemy_status_box_container.get_children():
+		if child:
+			if child.status == _status:
+				return child.global_position + offset
+
+	return Vector2(400,200)
 
 func highlight_item_slot(slot_index: int, is_weapon: bool = false):
 	"""Highlight a specific inventory slot during combat"""
@@ -245,9 +299,10 @@ func _on_combat_ended(winner, loser):
 	
 	if winner == current_player_entity:
 		add_combat_message(winner_name + " WINS!", Color.GREEN)
-		var gold_earned = loser.gold if loser is Enemy else 0
+		var gold_earned = CombatManager.calculate_gold_reward(loser) if loser is Enemy else 0
 		if gold_earned > 0:
 			add_combat_message("Gained %d gold!" % gold_earned, color_status)
+			reward_label.text = str(gold_earned)
 			Player.add_gold(gold_earned)
 		
 		slide_animation.play("enemy_die")
@@ -256,12 +311,25 @@ func _on_combat_ended(winner, loser):
 		add_combat_message(loser_name + " has been defeated!", Color.RED)
 	
 	# Wait a moment before hiding
+	create_timed_message("Battle  Over!")
 	await get_tree().create_timer(2.0).timeout
 	_set_state(PanelState.POST_COMBAT)
+	Player.status_effects.reset_statuses()
+	
+	#await hide_panel()
+	#clear_enemy_status_panel()
 
-	await hide_panel()
+	if winner == current_player_entity:
+		victory_panel.visible = true
+	else:
+		death_panel.visible = true
 
-	combat_completed.emit(winner == current_player_entity)
+	#combat_completed.emit(winner == current_player_entity)
+
+func clear_enemy_status_panel():
+	for child in enemy_status_box_container.get_children():
+		enemy_status_box_container.remove_child(child)
+		child.queue_free()
 
 func create_timed_message(msg: String) -> CombatTurnSign:
 
@@ -285,34 +353,49 @@ func _on_turn_ended(entity):
 	_clear_all_highlights()
 	#turn_box.fade_out()
 
-func _on_damage_dealt(target, amount):
-	"""Handle damage being dealt"""
+func _on_attack_executed(attacker, target, damage):
+	if target == current_enemy_entity:
+		slide_animation.play("player_attack")
+		await slide_animation.animation_finished
+	elif target == current_player_entity:
+		slide_animation.play("enemy_attack")
+		await slide_animation.animation_finished
+
+func _on_damage_dealt(target, amount, taken_by):
 	var target_name = CombatManager.get_entity_name(target)
 	add_combat_message("%s takes %d damage!" % [target_name, amount], color_damage)
 	
 	var combat_item_proc = item_proc.instantiate()
 	
 	combat_item_proc.set_references()
-	combat_item_proc.set_stat_visuals(Enums.Stats.HITPOINTS)
+	combat_item_proc.set_stat_visuals(taken_by)
 	combat_item_proc.set_label(amount * -1) # - JDM: multiply negative so damage says minus		
 
 	# Update enemy stats if they were damaged
 	if target == current_enemy_entity:
-		slide_animation.play("player_attack")
-		await slide_animation.animation_finished
 		combat_item_proc.set_info("You hit the Enemy!")
-		combat_item_proc.run_animation(Enums.Party.PLAYER)
 		combat_item_proc.set_item_visuals(Player.inventory.weapon_slot.item_icon, Player.inventory.weapon_slot.item_color)
 		add_child(combat_item_proc)
-		#spawn_item_proc_indicator(Player.inventory.weapon_slot, null, Player)
+
+		if taken_by == Enums.Stats.SHIELD || taken_by == Enums.Stats.EXPOSED:
+			combat_item_proc.global_position = enemy_shield_stat.global_position + Vector2(45,50)
+		else:
+			combat_item_proc.global_position = enemy_health_stat.global_position + Vector2(45,50)
+
+		combat_item_proc.run_animation(Enums.Party.ENEMY)
+
 		_update_enemy_stats()
 	else:
-		slide_animation.play("enemy_attack")
-		await slide_animation.animation_finished
 		combat_item_proc.set_info("The Enemy hits You!")
-		combat_item_proc.run_animation(Enums.Party.ENEMY)
 		combat_item_proc.set_item_visuals(current_enemy_entity.weapon_sprite,current_enemy_entity.sprite_color)
 		add_child(combat_item_proc)
+		
+		if taken_by == Enums.Stats.SHIELD || taken_by == Enums.Stats.EXPOSED:
+			combat_item_proc.position = main_game.stat_shield.global_position + Vector2(45, -50)
+		else:
+			combat_item_proc.position = main_game.stat_health.global_position + Vector2(45, -50)
+
+		combat_item_proc.run_animation(Enums.Party.PLAYER)
 		Player.stats.stats_updated.emit()
 
 
@@ -340,24 +423,28 @@ func _on_stat_changed(entity, stat_name: String, old_value: int, new_value: int)
 		var change_text = "+%d" % change if change > 0 else str(change)
 		add_combat_message("%s: %s %s (%d → %d)" % [entity_name, stat_name, change_text, old_value, new_value], color_status)
 
-func _on_status_applied(entity, status_name: String, stacks: int):
+func _on_status_applied(entity, status_name: Enums.StatusEffects, stacks: int):
 	"""Handle status effect application"""
 	var entity_name = CombatManager.get_entity_name(entity)
-	add_combat_message("%s gains %d %s!" % [entity_name, stacks, status_name], color_status)
+	add_combat_message("%s gains %d %s!" % [entity_name, stacks, Enums.get_status_string(status_name)], color_status)
 	if entity == Player:
 		Player.status_updated.emit(null, 0)
+	else:
+		_update_enemy_status_effects()
 
-func _on_status_removed(entity, status_name: String):
+func _on_status_removed(entity, status_name: Enums.StatusEffects):
 	"""Handle status effect removal"""
 	var entity_name = CombatManager.get_entity_name(entity)
-	add_combat_message("%s's %s expired" % [entity_name, status_name], Color.GRAY)
+	add_combat_message("%s's %s expired" % [entity_name, Enums.get_status_string(status_name)], Color.GRAY)
 	if entity == Player:
 		Player.status_updated.emit(null, 0)	
 
 func _on_item_rule_triggered(item: Item, rule: ItemRule, entity):
-	"""Handle item rule triggers - highlight the item"""
+	# JDM: For multiplayer I will have to have the entity for the attacker always proc the visual cue regardless of
+	# ---- which entity is the recipient.
+
+	if entity == current_player_entity || entity == current_enemy_entity:
 	# Find which slot this item is in
-	if entity == current_player_entity:
 		# Check weapon slot
 		if weapon_slot_ref and weapon_slot_ref.current_item == item:
 			spawn_item_proc_indicator(item, rule, entity)
@@ -373,10 +460,64 @@ func _on_item_rule_triggered(item: Item, rule: ItemRule, entity):
 					break
 
 func spawn_item_proc_indicator(item: Item, rule: ItemRule, entity):
-	item_proc_occurred.emit(item, rule, entity)
+	var combat_item_proc = item_proc.instantiate()
+	var _pos = Vector2(0,0)
+	var offset = Vector2(45, -50)
+	
+	combat_item_proc.set_references()
+	combat_item_proc.set_label(rule.effect_amount)		
+	combat_item_proc.set_info(Enums.get_trigger_type_string(rule.trigger_type))
+	combat_item_proc.set_item_visuals(item.item_icon, item.item_color)
+
+	if rule.effect_type == Enums.EffectType.MODIFY_STAT:
+		combat_item_proc.set_stat_visuals(rule.target_stat)
+		if rule.target_stat == Enums.Stats.HITPOINTS:
+			_pos = main_game.stat_health.global_position + offset
+		if rule.target_stat == Enums.Stats.DAMAGE:
+			_pos = main_game.stat_damage.global_position + offset
+		if rule.target_stat == Enums.Stats.SHIELD:
+			_pos = main_game.stat_shield.global_position + offset
+		if rule.target_stat == Enums.Stats.AGILITY:
+			_pos = main_game.stat_agility.global_position + offset	
+		if rule.target_stat == Enums.Stats.GOLD:
+			_pos = main_game.stat_gold.global_position + offset
+	elif rule.effect_type == Enums.EffectType.APPLY_STATUS:
+		combat_item_proc.set_status_visuals(rule.target_status)
+		_pos = main_game.loop_through_player_items_for_position(item)
+
+	add_child(combat_item_proc)
+	combat_item_proc.position = _pos
+
+	# Update enemy stats if they were damaged
+	if entity == Player:
+		combat_item_proc.run_animation(Enums.Party.PLAYER)
+	else:
+		combat_item_proc.run_animation(Enums.Party.ENEMY)
+
 
 func spawn_status_proc_indicator(entity, _status: Enums.StatusEffects, _stat: Enums.Stats, value: int):
-	status_proc_occurred.emit(_status, _stat, value, entity)
+	var combat_item_proc = item_proc.instantiate()
+	
+	combat_item_proc.set_references()
+	combat_item_proc.set_label(value)	
+	combat_item_proc.set_info("Status Effect")	
+	combat_item_proc.set_status_as_item_visuals(_status)
+	combat_item_proc.set_stat_visuals(_stat)
+
+	add_child(combat_item_proc)
+
+	if entity == current_player_entity:
+		combat_item_proc.run_animation(Enums.Party.PLAYER)
+		if _stat == Enums.Stats.SHIELD || _stat == Enums.Stats.EXPOSED:
+			combat_item_proc.global_position = main_game.stat_shield.global_position + Vector2(45,-50)
+		else:
+			combat_item_proc.global_position = main_game.stat_health.global_position + Vector2(45,-50)		
+	else:
+		combat_item_proc.run_animation(Enums.Party.ENEMY)
+		if _stat == Enums.Stats.SHIELD || _stat == Enums.Stats.EXPOSED:
+			combat_item_proc.global_position = enemy_shield_stat.global_position + Vector2(45,50)
+		else:
+			combat_item_proc.global_position = enemy_health_stat.global_position + Vector2(45,50)
 
 func _on_enemy_ability_triggered(ability: EnemyAbility, entity):
 	"""Handle enemy ability triggers"""
@@ -395,16 +536,16 @@ func _on_entity_wounded(entity):
 func _update_speed_label(speed: CombatManager.CombatSpeed):
 	match speed:
 		CombatManager.CombatSpeed.PAUSE:
-			speed_label.text = "Paused"
+			speed_label.text = "0x"
 			#pause_button.text = "▶ Resume"
 		CombatManager.CombatSpeed.NORMAL:
-			speed_label.text = "Normal"
+			speed_label.text = "1x"
 			#pause_button.text = "⏸ Pause"
 		CombatManager.CombatSpeed.FAST:
-			speed_label.text = "Fast"
+			speed_label.text = "1.5x"
 			#pause_button.text = "⏸ Pause"
 		CombatManager.CombatSpeed.VERY_FAST:
-			speed_label.text = "Very Fast"
+			speed_label.text = "2x"
 			#pause_button.text = "⏸ Pause"
 
 
@@ -471,3 +612,15 @@ func _on_btn_fast_pressed() -> void:
 func _on_btn_very_fast_pressed() -> void:
 	speed_slider.value = CombatManager.CombatSpeed.VERY_FAST
 	speed_changed.emit(3)
+
+
+func _on_btn_continue_pressed() -> void:
+	victory_panel.visible = false
+	await hide_panel()
+	clear_enemy_status_panel()
+	combat_completed.emit(true)
+
+
+func _on_btn_history_pressed() -> void:
+	txt_history.visible = !txt_history.visible
+	txt_history.text = CombatManager.combat_log

@@ -2,6 +2,7 @@ extends Control
 class_name ItemChoice
 
 signal item_selected(slot: ItemChoice)
+signal item_purchased(item: ItemChoice)
 
 enum ChoiceType {
 	REWARD,
@@ -17,9 +18,15 @@ enum ChoiceType {
 @onready var tooltip: Control
 @onready var tooltip_panel: Panel
 @onready var button: Button
+@onready var box_cost: HBoxContainer
+@onready var box_poor: HBoxContainer
+
+@onready var lbl_price: Label
+@onready var price_container: PanelContainer
 
 @export var choice_type: ChoiceType = ChoiceType.REWARD
 @export var current_item: Item = null
+@export var item_cost: int = 0
 
 var item_instance_id: int = -1  # Track the specific instance
 var slot_index: int = 10  # to track position
@@ -39,6 +46,15 @@ func set_references():
 	tooltip = $ToolTip/ItemTooltip
 	tooltip_panel = $ToolTip
 	button = $Panel/Button
+	lbl_price = $Panel/priceContainer/MarginContainer/hboxCost/lblPrice
+	price_container = $Panel/priceContainer
+	box_poor = $Panel/priceContainer/MarginContainer/hboxPoor
+	box_cost = $Panel/priceContainer/MarginContainer/hboxCost
+
+	if choice_type == ChoiceType.REWARD:
+		price_container.visible = false
+	elif  choice_type == ChoiceType.PURCHASE:
+		price_container.visible = true
 
 func set_item(item: Item):
 	set_references()
@@ -52,6 +68,10 @@ func set_item(item: Item):
 	else:
 		set_empty()
 	
+func setup_for_store():
+	choice_type = ChoiceType.PURCHASE
+	price_container.visible = true
+	set_price()
 
 func set_empty():
 	current_item = null
@@ -59,6 +79,20 @@ func set_empty():
 	panel_border.self_modulate = Color.WHITE
 	button.disabled = true
 
+func set_price():
+	if current_item:
+		match current_item.rarity:
+			Enums.Rarity.COMMON:
+				item_cost = 3
+			Enums.Rarity.UNCOMMON:
+				item_cost = 5
+			Enums.Rarity.RARE:
+				item_cost = 10
+			Enums.Rarity.LEGENDARY:
+				item_cost = 15
+			_:
+				item_cost = (randi_range(3,15))
+	lbl_price.text = str(item_cost)
 
 func update_visuals():
 	if current_item:
@@ -69,6 +103,9 @@ func update_visuals():
 			set_item_type_desc()
 		item_icon.texture = current_item.item_icon
 		set_rarity_color()
+
+func get_current_item() -> Item:
+	return current_item
 
 func set_item_type_desc():
 	if current_item:
@@ -111,6 +148,17 @@ func get_item_instance() -> Item:
 		return current_item
 	return null
 
+func cannot_afford():
+	box_cost.visible = false
+	box_poor.visible = true
+	$Panel/VBoxContainer.modulate.a = 0.75
+	#button.disabled = true
+
+func can_afford():
+	#button.disabled = false
+	box_cost.visible = true
+	box_poor.visible = false
+	$Panel/VBoxContainer.modulate.a = 1
 
 func _on_button_mouse_exited() -> void:
 	anim_hover.play("stop")
@@ -123,4 +171,7 @@ func _on_button_mouse_entered() -> void:
 		tooltip_panel.visible = true
 
 func _on_button_pressed() -> void:
-	item_selected.emit(current_item)
+	if choice_type == ChoiceType.REWARD:
+		item_selected.emit(current_item)
+	elif choice_type == ChoiceType.PURCHASE:
+		item_purchased.emit(self)

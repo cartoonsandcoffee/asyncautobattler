@@ -43,17 +43,17 @@ func _init():
 	stats = GameStats.new()
 	inventory = Inventory.new()
 	status_effects = StatusEffects.new()
+
 	reset_to_base_values()
 
 func reset_to_base_values():
-	"""Reset current values to base values for new combat"""
 	stats.damage_current = stats.damage
 	stats.shield_current = stats.shield
 	stats.agility_current = stats.agility
 	stats.hit_points_current = stats.hit_points
 	
 	# Reset status effects
-	status_effects = StatusEffects.new()
+	status_effects.reset_statuses()
 	
 	# Reset combat flags
 	exposed_triggered = false

@@ -23,6 +23,7 @@ extends Control
 @onready var weapon_slot: ItemSlot = $BottomPanel/MarginContainer/VBoxContainer/HBoxContainer/Weapon
 
 @onready var status_box_container: HBoxContainer = $BottomPanel/panelStatus/statusBox
+@onready var enemy_status_box_container: HBoxContainer = $CombatPanel/CombatPanelTop/panelStatus/statusBox
 
 @onready var anim_tools: AnimationPlayer = $animToolbars
 @onready var anim_fade: AnimationPlayer = $animFade
@@ -55,8 +56,7 @@ func _ready():
 	Player.status_updated.connect(_on_status_effects_updated)
 	DungeonManager.show_minimap.connect(_show_panels)
 
-	combat_panel.item_proc_occurred.connect(spawn_item_proc_indicator)
-	combat_panel.status_proc_occurred.connect(spawn_status_proc_indicator)
+	combat_panel.main_game = self
 	combat_panel.combat_completed.connect(_on_combat_completed)
 	combat_panel.player_chose_run.connect(_on_player_ran)
 
@@ -247,7 +247,7 @@ func loop_through_player_statuses_for_position(_status: Enums.StatusEffects) -> 
 			if child.status == _status:
 				return child.global_position + offset
 
-	return Vector2(0,0)
+	return Vector2(0,-0)
 
 func setup_weapon():
 	weapon_slot.set_item(Player.inventory.weapon_slot)
@@ -405,60 +405,3 @@ func _on_combat_completed(player_won: bool):
 func _on_player_ran():
 	print("Player ran from combat")
 	# The combat panel will emit combat_completed(false) after sliding out
-
-func spawn_item_proc_indicator(item: Item, rule: ItemRule, entity):
-	var combat_item_proc = item_proc.instantiate()
-	
-	combat_item_proc.set_references()
-	combat_item_proc.set_label(rule.effect_amount)		
-	combat_item_proc.set_info(Enums.get_trigger_type_string(rule.trigger_type))
-	combat_item_proc.set_item_visuals(item.item_icon, item.item_color)
-	
-	if rule.effect_type == Enums.EffectType.MODIFY_STAT:
-		combat_item_proc.set_stat_visuals(rule.target_stat)
-	elif rule.effect_type == Enums.EffectType.APPLY_STATUS:
-		combat_item_proc.set_status_visuals(rule.target_status)
-
-	add_child(combat_item_proc)
-	combat_item_proc.position = loop_through_player_items_for_position(item)
-
-	# Update enemy stats if they were damaged
-	if entity == Player:
-		combat_item_proc.run_animation(Enums.Party.PLAYER)
-	else:
-		combat_item_proc.run_animation(Enums.Party.ENEMY)
-
-func spawn_status_proc_indicator(_status: Enums.StatusEffects, _stat: Enums.Stats, value: int, entity):
-	var combat_item_proc = item_proc.instantiate()
-	
-	combat_item_proc.set_references()
-	combat_item_proc.set_label(value)	
-	combat_item_proc.set_info("Status Effect")	
-	combat_item_proc.set_status_as_item_visuals(_status)
-	combat_item_proc.set_stat_visuals(_stat)
-
-	add_child(combat_item_proc)
-	combat_item_proc.position = loop_through_player_statuses_for_position(_status)
-
-	# Update enemy stats if they were damaged
-	if entity == Player:
-		combat_item_proc.run_animation(Enums.Party.PLAYER)
-	else:
-		combat_item_proc.run_animation(Enums.Party.ENEMY)
-
-func spawn_damage_indicator(item: Item, entity):
-	var combat_item_proc = item_proc.instantiate()
-	
-	combat_item_proc.set_references()
-	combat_item_proc.set_label(entity.stats.damage_current)		
-	combat_item_proc.set_stat_visuals(Enums.Stats.HITPOINTS)
-	combat_item_proc.set_item_visuals(item.item_icon, item.item_color)
-	
-	add_child(combat_item_proc)
-	combat_item_proc.position = loop_through_player_items_for_position(item)
-
-	# Update enemy stats if they were damaged
-	if entity == Player:
-		combat_item_proc.run_animation(Enums.Party.PLAYER)
-	else:
-		combat_item_proc.run_animation(Enums.Party.ENEMY)

@@ -117,6 +117,7 @@ func set_stat_visuals(_stat: Enums.Stats):
 	var stat_gold: Texture2D = load("res://Resources/StatIcons/stat_gold.tres")
 	var stat_strikes: Texture2D = load("res://Resources/StatIcons/stat_strikes.tres")
 	var stat_brokenshield: Texture2D = load("res://Resources/StatIcons/icon_broken_shield.tres")
+	var stat_wounded: Texture2D = load("res://Resources/StatIcons/stat_wounded.tres")
 
 	match _stat:
 		Enums.Stats.DAMAGE:
@@ -137,9 +138,12 @@ func set_stat_visuals(_stat: Enums.Stats):
 		Enums.Stats.STRIKES:
 			stat_color = gamecolors.stats.strikes
 			pic_stat.texture = stat_strikes
-		Enums.Stats.HP_AND_SHIELD:
+		Enums.Stats.EXPOSED:
 			stat_color = gamecolors.stats.shield
 			pic_stat.texture = stat_brokenshield
+		Enums.Stats.WOUNDED:
+			stat_color = gamecolors.stats.hit_points
+			pic_stat.texture = stat_wounded
 
 	panel_stat.self_modulate = stat_color
 	pic_stat.self_modulate = stat_color

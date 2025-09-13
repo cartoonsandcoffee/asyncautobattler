@@ -8,6 +8,7 @@ func _ready():
 
 func setup_items():
 	# Store them in our dictionary 
+	# --- COMMON
 	available_items["Fists"] = preload("res://Resources/Items/Weapons/weapon_fists.tres")
 	available_items["Ironstone Greatsword"] = preload("res://Resources/Items/Weapons/weapon_ironstone_greatsword.tres")
 	available_items["Holy Shield"] = preload("res://Resources/Items/Armor/holy_shield.tres")
@@ -19,6 +20,15 @@ func setup_items():
 	available_items["Testing Robes"] = preload("res://Resources/Items/Armor/testing_robes.tres")
 	available_items["Thorn Shield"] = preload("res://Resources/Items/Armor/thorn_shield.tres")
 	available_items["Shield Tap"] = preload("res://Resources/Items/Armor/armor_tap.tres")
+
+	# --- UNCOMMON
+	available_items["Bramble Belt"] = preload("res://Resources/Items/UNCOMMON/bramble_belt.tres")
+	available_items["Bramble Buckler"] = preload("res://Resources/Items/UNCOMMON/bramble_buckler.tres")	
+	available_items["Ironstone Spear"] = preload("res://Resources/Items/UNCOMMON/ironstone_spear.tres")
+	available_items["Leather Boots"] = preload("res://Resources/Items/UNCOMMON/leather_boots.tres")
+	available_items["Swiftstrike Rapier"] = preload("res://Resources/Items/UNCOMMON/swiftstrike_rapier.tres")
+	available_items["Weird Axe"] = preload("res://Resources/Items/UNCOMMON/weird_axe.tres")
+
 
 func get_item(item_name: String) -> Item:
 	# Get a specific item by name

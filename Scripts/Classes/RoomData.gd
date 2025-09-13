@@ -12,7 +12,10 @@ func _init(def: RoomDefinition = null, event: PackedScene = null):
 
 # Delegate methods to RoomDefinition
 func get_room_name() -> String:
-	return room_definition.room_name if room_definition else "Unknown Room"
+	return room_definition.room_name if room_definition else "Unknown Door"
+
+func get_room_desc() -> String:
+	return room_definition.room_desc if room_definition else "Nothing is known about what lies beyond."
 
 func get_background_texture() -> Texture2D:
 	return room_definition.background_texture if room_definition else null

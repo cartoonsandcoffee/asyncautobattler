@@ -13,7 +13,7 @@ signal inventory_full(item: Item)
 
 var weapon_slot: Item = null
 var item_slots: Array[Item] = []
-var max_item_slots: int = 10
+var max_item_slots: int = 8
 
 func _init():
 	# Initialize empty item slots
@@ -239,3 +239,6 @@ func print_inventory():
 	for i in range(item_slots.size()):
 		if item_slots[i]:
 			print(str(i) + ": " + item_slots[i].item_name + " (slot: " + str(item_slots[i].slot_index) + " - id #" + str(item_slots[i].instance_id) + ")")
+
+func trigger_replace_item(_item: Item):
+	pass

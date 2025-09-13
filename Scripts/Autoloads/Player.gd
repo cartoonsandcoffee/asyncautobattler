@@ -43,7 +43,7 @@ func new_run(nm: String):
 		stats.agility = 0
 		stats.damage = 0
 		stats.shield = 0
-		stats.gold = 5
+		stats.gold = 50
 		stats.strikes = 1
 		stats.hit_points = 10
 		stats.reset_to_base_values()
@@ -54,7 +54,7 @@ func new_run(nm: String):
 		inventory.add_item(ItemsManager.available_items["Liferoot Gauntlets"])
 		inventory.add_item(ItemsManager.available_items["Testing Robes"])
 		inventory.add_item(ItemsManager.available_items["Thorn Shield"])
-
+		inventory.add_item(ItemsManager.available_items["Testing Boots"])
 
 func update_stats_from_items():
 	stats.reset_base_stats()

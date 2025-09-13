@@ -2,10 +2,12 @@ class_name ItemOffering
 extends Control
 
 signal item_selected(Item)
+signal item_skipped()
 
 @onready var item_choice_container: GridContainer = $Panel/PanelContainer/VBoxContainer/itemsContainer
 @onready var name_label: Label = $Panel/PanelContainer/VBoxContainer/lblName
 @onready var dialogue_label: RichTextLabel = $Panel/PanelContainer/VBoxContainer/MarginContainer/txtDesc
+@onready var btn_skip: Button = $Panel/PanelContainer/VBoxContainer/btnSkip
 
 @export var item_rarity: Enums.Rarity = Enums.Rarity.COMMON
 @export var items_offered: int = 3
@@ -45,3 +47,7 @@ func _on_item_selected(item: Item):
 	Player.update_stats_from_items()
 	
 	item_selected.emit(item)
+
+
+func _on_btn_skip_pressed() -> void:
+	item_skipped.emit()

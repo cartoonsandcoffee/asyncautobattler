@@ -24,6 +24,8 @@ var strikes_current: int = 1
 var burn_damage: int = 3
 var burn_damage_current: int = 3
 
+var refresh_cost: int = 1
+
 func _init():
 	# Initialize current values to base values
 	reset_to_base_values()

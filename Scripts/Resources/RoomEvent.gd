@@ -8,7 +8,7 @@ signal event_completed()
 signal combat_requested(enemy: Enemy)
 
 @export var room_data: RoomData
-@export_multiline var event_description: String
+@export_multiline var event_description: String  # I dont think this is used/displayed anywhere yet... Maybe delete
 @export var enemy_resource: Enemy = null  # Direct enemy resource reference
 
 var main_game_ref: Control
@@ -37,6 +37,9 @@ func initialize_event():
 
 func _begin_event_sequence():
 	"""Handle the two-phase sequence: combat (if any) then event"""
+
+	# JDM: If you want to add a call to a FADE_IN function on the individual roomevent scenes, here is where I think.
+
 	if enemy_resource:
 		# Phase 1: Combat
 		await _initiate_combat()
@@ -50,11 +53,6 @@ func _begin_event_sequence():
 	# Phase 2: Actual event
 	await _run_room_event()
 	
-	# Complete
-	#complete_event()
-
-
-
 func complete_event():
 	event_completed.emit()
 
