@@ -97,7 +97,7 @@ func start_combat(player, enemy):
 
 func add_to_combat_log_string(_string: String):
 	combat_log += _string + "\n"
-	print(_string)
+	# print(_string) # JDM: don't need to print text now that we can review it later.
 
 func combat_loop(first_entity, second_entity):
 	"""Main combat loop - alternates turns until one entity dies"""

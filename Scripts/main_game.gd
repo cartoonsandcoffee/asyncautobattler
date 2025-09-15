@@ -25,6 +25,11 @@ extends Control
 @onready var status_box_container: HBoxContainer = $BottomPanel/panelStatus/statusBox
 @onready var enemy_status_box_container: HBoxContainer = $CombatPanel/CombatPanelTop/panelStatus/statusBox
 
+@onready var replacement_panel: Panel = $ReplaceItemPanel
+@onready var replacement_item: ItemSlot = $ReplaceItemPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/itemBox/ItemReplace
+@onready var drop_panel: Panel = $DropItemPanel
+@onready var drop_item: ItemSlot = $DropItemPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/itemBox/ItemDrop
+
 @onready var anim_tools: AnimationPlayer = $animToolbars
 @onready var anim_fade: AnimationPlayer = $animFade
 @onready var fade_overlay: ColorRect = $FadeOverlay
@@ -38,19 +43,29 @@ var item_proc = preload("res://Scenes/Elements/combat_item_proc.tscn")
 var item_slots: Array[ItemSlot] = []
 var status_effects: Array[StatusBox] = []
 
+# for reordering your inventory
 var dragging_instance_id: int = -1
 var dragging_from_slot: int = -1
 var dragging_slot: ItemSlot = null
 var drag_preview: Control = null
 
+# for combat
 var awaiting_combat_result: bool = false
 var combat_result_callback: Callable
+
+# for overwriting items when your inventory is full
+var pending_reward_item: Item = null
+var inventory_replacement_mode: bool = false
+
+var pending_drop_item: Item = null
+var pending_drop_slot_index: int = -1
 
 func get_combat_panel() -> CombatPanel:
 	# Get reference to the combat panel for room events to use
 	return combat_panel
 
 func _ready():
+	add_to_group("main_game")
 	Player.stats.stats_updated.connect(_on_stats_updated)
 	Player.inventory.item_added.connect(_on_inventory_updated)
 	Player.status_updated.connect(_on_status_effects_updated)
@@ -95,8 +110,18 @@ func load_room(room_data: RoomData):
 	
 	# Load new event
 	load_room_event(room_data)
+
+	if get_tree().has_group("item_selection_events"):
+		for room_event in get_tree().get_nodes_in_group("item_selection_events"):
+			if room_event.has_signal("need_item_replace"):
+				room_event.need_item_replace.connect(show_inventory_replacement_mode)
+
 	show_door_choices()
 
+func show_inventory_replacement_mode(new_item: Item):
+	pending_reward_item = new_item
+	replacement_item.set_item(new_item)
+	show_item_replacement_overlay()
 
 func clear_current_event():
 	if current_event:
@@ -216,10 +241,32 @@ func setup_inventory():
 		item_container.drag_started.connect(_on_drag_started)
 		item_container.drag_ended.connect(_on_drag_ended)
 		item_container.slot_dropped_on.connect(_on_slot_dropped_on)
+		item_container.slot_clicked.connect(_on_slot_clicked)
+		item_container.slot_double_clicked.connect(_on_slot_double_clicked.bind(i))
 
 		item_slots.append(item_container)
 		item_grid.add_child(item_container)
 
+func show_item_replacement_overlay():
+	anim_tools.play("show_replace_item")
+	inventory_replacement_mode = true
+	replacement_panel.mouse_filter = Control.MOUSE_FILTER_STOP
+
+func hide_item_replacement_overlay():
+	pending_reward_item = null
+	anim_tools.play("hide_replace_item")
+	inventory_replacement_mode = false
+	replacement_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+func show_item_drop_overlay():
+	anim_tools.play("show_drop_item")
+	drop_panel.mouse_filter = Control.MOUSE_FILTER_STOP
+
+func hide_item_drop_overlay():
+	pending_drop_item = null
+	pending_drop_slot_index = -1
+	anim_tools.play("hide_drop_item")
+	drop_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 func loop_through_player_items_for_position(item: Item) -> Vector2:
 	var offset: Vector2 = Vector2(45,-50)
@@ -324,6 +371,36 @@ func _on_slot_dropped_on(target_slot: ItemSlot, dragged_item: Item):
 	if dragging_slot and dragging_slot != target_slot:
 		perform_item_move(dragging_slot, target_slot)
 
+func _on_slot_clicked(_item: ItemSlot):
+	if not inventory_replacement_mode or not pending_reward_item:
+		return
+
+	# Get the item being replaced
+	#var old_item = Player.inventory.item_slots[_item.slot_index]
+	
+	# Replace the item
+	var success = Player.inventory.replace_item_at_slot(pending_reward_item, _item.slot_index)
+
+	setup_inventory()
+	Player.update_stats_from_items()
+	hide_item_replacement_overlay()
+
+func _on_slot_double_clicked(slot_index: int):
+	if inventory_replacement_mode:
+		return
+
+	# Check if slot has an item
+	var item = Player.inventory.item_slots[slot_index]
+	if item == null:
+		return  # Can't drop empty slots
+
+	pending_drop_item = item
+	pending_drop_slot_index = slot_index
+	drop_item.set_item(pending_drop_item)
+	drop_item.set_item_type_desc()
+
+	show_item_drop_overlay()
+	
 func perform_item_move(from_slot: ItemSlot, to_slot: ItemSlot):
 	var from_index = from_slot.slot_index
 	var to_index = to_slot.slot_index
@@ -405,3 +482,30 @@ func _on_combat_completed(player_won: bool):
 func _on_player_ran():
 	print("Player ran from combat")
 	# The combat panel will emit combat_completed(false) after sliding out
+
+
+func _on_btn_cancel_replace_pressed() -> void:
+	hide_item_replacement_overlay()
+
+
+func _on_btn_drop_pressed() -> void:
+	if pending_drop_item and pending_drop_slot_index >= 0:
+		# Remove item from inventory
+		Player.inventory.remove_item(pending_drop_slot_index)
+		
+		# Shift inventory to remove gaps
+		Player.inventory.compact_items()
+		
+		# Refresh inventory display
+		setup_inventory()
+		
+		# Update player stats
+		Player.update_stats_from_items()
+		
+		hide_item_drop_overlay()
+
+func _on_btn_cancel_drop_pressed() -> void:
+	hide_item_drop_overlay()
+
+func is_in_replacement_mode() -> bool:
+	return inventory_replacement_mode

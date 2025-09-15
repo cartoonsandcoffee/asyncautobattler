@@ -3,6 +3,7 @@ extends Control
 
 signal item_selected(Item)
 signal store_closed()
+signal need_item_replace(Item)
 
 @onready var item_choice_container: GridContainer = $Panel/BlackBack/PanelContainer/VBoxContainer/itemsContainer
 @onready var name_label: Label = $Panel/BlackBack/PanelContainer/VBoxContainer/lblName
@@ -11,7 +12,7 @@ signal store_closed()
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 @onready var refresh_panel: PanelContainer = $Panel/sidePanelBlack
 @onready var refresh_cost: Label = $Panel/sidePanelBlack/PanelContainer/HBoxContainer/HBoxContainer2/lblRerollCost
-@onready var replacement_popup: RewardReplacementPopup = $OverwritePanel/ItemReplacement
+@onready var btn_refresh: Button = $Panel/sidePanelBlack/btnReroll
 
 @export var item_rarity: Enums.Rarity = Enums.Rarity.UNCOMMON
 @export var items_offered: int = 6
@@ -31,6 +32,7 @@ var is_store_open: bool = false
 func _ready() -> void:
 	item_choice_container.columns = item_columns
 	refresh_panel.visible = allow_refresh
+	add_to_group("item_selection_events") 
 	generate_item_choices()
 	setup_labels()
 
@@ -41,6 +43,10 @@ func setup_labels():
 		dialogue_label.visible = false
 
 func generate_item_choices():
+	#clear old items
+	for child in item_choice_container.get_children():
+		child.queue_free()
+		
 	# Get 3 random common items
 	offered_items = ItemsManager.get_random_items(items_offered, item_rarity)
 	
@@ -117,10 +123,8 @@ func purchase_item_from_store(purchased_item: ItemChoice):
 			item_selected.emit(purchased_item.current_item)	
 			replace_item_with_empty(purchased_item.current_item)
 		else:
-			replacement_popup.show_replacement_popup(purchased_item.current_item)
-			anim_player.play("show_replace")
-			await anim_player.animation_finished
-
+			need_item_replace.emit(purchased_item.current_item)
+			replace_item_with_empty(purchased_item.current_item)
 
 		check_affordability()
 
@@ -131,9 +135,10 @@ func refresh_store_display():
 		Player.stats.gold -= Player.stats.refresh_cost
 		Player.stats.refresh_cost += 1
 		refresh_cost.text = str(Player.stats.refresh_cost)
-
-		for child in item_choice_container.get_children():
-			child.queue_free()
-		
+	
 		# Add items back (including empty slots for null items)
 		generate_item_choices()		
+
+
+func _on_btn_reroll_pressed() -> void:
+	refresh_store_display()

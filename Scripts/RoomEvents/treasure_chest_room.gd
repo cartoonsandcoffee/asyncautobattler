@@ -19,11 +19,13 @@ func initialize_event():
 	print("treasure_room_event -> initialize_event")
 	items_offering.item_selected.connect(_on_item_selected)
 	items_offering.item_skipped.connect(_on_item_skipped)
+	items_offering.need_item_replace.connect(_on_need_item_replace)
 
 func _run_room_event():
 	print("treasure_room_event -> _run_room_event (post-combat)")
 	items_offering.item_selected.connect(_on_item_selected)
 	items_offering.item_skipped.connect(_on_item_skipped)
+	items_offering.need_item_replace.connect(_on_need_item_replace)
 	button.disabled = false
 	show_jars()
 
@@ -71,6 +73,11 @@ func _on_item_selected(item: Item):
 	complete_event()
 
 func _on_item_skipped():
+	close_box()
+	hide_jars()
+	complete_event()
+
+func _on_need_item_replace(item: Item):
 	close_box()
 	hide_jars()
 	complete_event()

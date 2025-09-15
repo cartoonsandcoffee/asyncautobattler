@@ -3,6 +3,7 @@ extends Control
 
 signal item_selected(Item)
 signal item_skipped()
+signal need_item_replace(Item)
 
 @onready var item_choice_container: GridContainer = $Panel/PanelContainer/VBoxContainer/itemsContainer
 @onready var name_label: Label = $Panel/PanelContainer/VBoxContainer/lblName
@@ -19,6 +20,7 @@ var item_choice_scene = preload("res://Scenes/item_choice.tscn")
 var offered_items: Array[Item] = []
 
 func _ready() -> void:
+	add_to_group("item_selection_events") 
 	item_choice_container.columns = items_offered
 	generate_item_choices()
 	setup_labels()
@@ -42,12 +44,12 @@ func generate_item_choices():
 		choice_button.item_selected.connect(_on_item_selected)
 
 func _on_item_selected(item: Item):
-	# Add chosen item to player inventory
-	Player.inventory.add_item(item)
-	Player.update_stats_from_items()
-	
-	item_selected.emit(item)
-
+	if Player.inventory.has_empty_slot():
+		Player.inventory.add_item(item)
+		Player.update_stats_from_items()
+		item_selected.emit(item)	
+	else:
+		need_item_replace.emit(item)
 
 func _on_btn_skip_pressed() -> void:
 	item_skipped.emit()

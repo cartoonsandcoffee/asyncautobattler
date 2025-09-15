@@ -311,11 +311,12 @@ func _on_combat_ended(winner, loser):
 		add_combat_message(loser_name + " has been defeated!", Color.RED)
 	
 	# Wait a moment before hiding
+	Player.status_effects.reset_statuses()
+
 	create_timed_message("Battle  Over!")
 	await get_tree().create_timer(2.0).timeout
 	_set_state(PanelState.POST_COMBAT)
-	Player.status_effects.reset_statuses()
-	
+
 	#await hide_panel()
 	#clear_enemy_status_panel()
 

@@ -5,6 +5,7 @@ signal drag_started(slot: ItemSlot)
 signal drag_ended(slot: ItemSlot)
 signal slot_dropped_on(slot: ItemSlot, dragged_item: Item)
 signal slot_clicked(slot: ItemSlot)
+signal slot_double_clicked()
 
 enum ItemType {
 	WEAPON,
@@ -29,6 +30,11 @@ var item_instance_id: int = -1  # Track the specific instance
 var slot_index: int = -1  # to track position
 var is_dragging: bool = false  
 var is_combat_highlighted: bool = false
+
+# stuff for double click
+var click_count: int = 0
+var click_timer: float = 0.0
+var double_click_time: float = 0.3  # Time window for double-click
 
 var gamecolors: GameColors
 
@@ -64,6 +70,24 @@ func set_item(item: Item):
 	else:
 		set_empty()
 	
+func set_item_type_desc():
+	if current_item:
+		match current_item.item_type:
+			Item.ItemType.BODY_ARMOR:
+				lbl_order.text = "armor"
+			Item.ItemType.BOOTS:
+				lbl_order.text = "boots"
+			Item.ItemType.GLOVES:
+				lbl_order.text = "gloves"
+			Item.ItemType.SHIELD:
+				lbl_order.text = "shield"
+			Item.ItemType.POTION:
+				lbl_order.text = "potion"
+			Item.ItemType.JEWELRY:
+				lbl_order.text = "jewelry"
+			_:
+				lbl_order.text = "tool"
+
 func start_combat_highlight():
 	anim_highlight.play("combat_highlight")
 
@@ -139,8 +163,20 @@ func _on_button_up():
 		modulate.a = 1.0
 
 func _on_button_pressed():
-	if current_item:
-		slot_clicked.emit(current_item)
+#	if current_item:
+#		slot_clicked.emit(self)
+	click_count += 1
+	click_timer = 0.0
+	
+	if click_count == 1:
+		# Start timer for potential double-click
+		pass
+	elif click_count == 2:
+		# Double-click detected
+		slot_double_clicked.emit()
+		click_count = 0
+
+
 
 func _on_button_gui_input(event: InputEvent):
 	if event is InputEventMouseMotion and is_dragging:
@@ -148,7 +184,7 @@ func _on_button_gui_input(event: InputEvent):
 		pass
 
 func set_selectable(_set: bool):
-	button.disabled = !_set
+	pass #button.disabled = !_set
 
 func _can_drop_data(position: Vector2, data) -> bool:
 	# Allow dropping if we're an empty slot or swapping
@@ -157,3 +193,15 @@ func _can_drop_data(position: Vector2, data) -> bool:
 func _drop_data(position: Vector2, data):
 	if data.has("from_slot"):
 		slot_dropped_on.emit(self, data.item)
+
+func _on_click_timeout():
+	if click_count == 1:
+		# Single click - emit normal click signal
+		slot_clicked.emit(self)
+
+func _process(delta):
+	if click_count > 0:
+		click_timer += delta
+		if click_timer >= double_click_time:
+			_on_click_timeout()
+			click_count = 0

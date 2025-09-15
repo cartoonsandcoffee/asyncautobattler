@@ -66,6 +66,13 @@ func add_item_at_slot(new_item: Item, slot_index: int) -> bool:
 	
 	return false
 
+func replace_item_at_slot(new_item: Item, slot_index: int) -> bool:
+	if slot_index < 0 or slot_index >= item_slots.size():
+		return false
+
+	item_slots[slot_index] = new_item.duplicate()
+	return true
+
 func replace_item(new_item: Item, slot_index: int) -> Item:
 	if slot_index < 0 or slot_index >= item_slots.size():
 		return null
@@ -239,6 +246,3 @@ func print_inventory():
 	for i in range(item_slots.size()):
 		if item_slots[i]:
 			print(str(i) + ": " + item_slots[i].item_name + " (slot: " + str(item_slots[i].slot_index) + " - id #" + str(item_slots[i].instance_id) + ")")
-
-func trigger_replace_item(_item: Item):
-	pass
