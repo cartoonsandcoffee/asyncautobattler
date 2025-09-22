@@ -17,12 +17,12 @@ class Stats:
 	const stun = Color("#ffff99")           # Light yellow
 
 class Rarity:
-	const common = Color("#B3B3B3")         # Gray
-	const uncommon = Color("#44ff44")       # Green
-	const rare = Color("#4466ff")           # Blue
-	const unique = Color("#ff8800")         # Orange
-	const legendary = Color("#ff44ff")      # Magenta
-	const mysterious = Color("#aa44ff")     # Purple
+	const common = Color("#49AFD1")         # Gray
+	const uncommon = Color("#60D149")       # Green
+	const rare = Color("#D1C849")           # Blue
+	const unique = Color("#D16249")         # Orange
+	const legendary = Color("#9F49D1")      # Magenta
+	const mysterious = Color("#6649D1")     # Purple
 
 class Room:
 	const starter = Color("#4d4663ff")        # Brown

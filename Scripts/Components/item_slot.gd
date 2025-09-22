@@ -22,6 +22,8 @@ enum ItemType {
 @onready var tooltip: Control
 @onready var tooltip_panel: Panel
 @onready var button: Button
+@onready var pic_rarity: TextureRect
+@onready var pnl_rarity: Panel
 
 @export var item_type: ItemType = ItemType.OTHER
 @export var current_item: Item = null
@@ -52,6 +54,8 @@ func set_references():
 	tooltip_panel = $ToolTip
 	button = $Panel/Button
 	anim_highlight = $animHighlight
+	pic_rarity = $Panel/pnlRare/picRarity
+	pnl_rarity = $Panel/pnlRare
 
 	button.button_down.connect(_on_button_down)
 	button.button_up.connect(_on_button_up)
@@ -67,6 +71,7 @@ func set_item(item: Item):
 		update_visuals()
 		tooltip.set_item(item)
 		button.disabled = false
+		pnl_rarity.visible = false
 	else:
 		set_empty()
 	
@@ -89,9 +94,11 @@ func set_item_type_desc():
 				lbl_order.text = "tool"
 
 func start_combat_highlight():
+	anim_hover.play("hover")
 	anim_highlight.play("combat_highlight")
 
 func stop_combat_highlight():
+	anim_hover.play("stop")
 	anim_highlight.play("stop_highlight")
 	
 func set_empty():
@@ -99,7 +106,7 @@ func set_empty():
 	item_instance_id = -1 
 	panel_border.self_modulate = Color.WHITE
 	button.disabled = true
-
+	pnl_rarity.visible = false
 
 func update_visuals():
 	if current_item:
@@ -110,13 +117,28 @@ func update_visuals():
 		set_rarity_color()
 
 func set_rarity_color():
+	var rarity_common: Texture2D = load("res://Resources/Rarity/common.tres")
+	var rarity_uncommon: Texture2D = load("res://Resources/Rarity/uncommon.tres")
+	var rarity_rare: Texture2D = load("res://Resources/Rarity/rare.tres")
+	var rarity_legendary: Texture2D = load("res://Resources/Rarity/legendary.tres")
+	var rarity_mystic: Texture2D = load("res://Resources/Rarity/mystic.tres")
+
+
 	if current_item.rarity == Enums.Rarity.COMMON:
+		pic_rarity.texture = rarity_common
+		pic_rarity.self_modulate = gamecolors.rarity.common
 		panel_border.self_modulate = gamecolors.rarity.common
 	elif current_item.rarity == Enums.Rarity.UNCOMMON:
+		pic_rarity.texture = rarity_uncommon
+		pic_rarity.self_modulate = gamecolors.rarity.uncommon
 		panel_border.self_modulate = gamecolors.rarity.uncommon
 	elif current_item.rarity == Enums.Rarity.RARE:
+		pic_rarity.texture = rarity_rare
+		pic_rarity.self_modulate = gamecolors.rarity.rare
 		panel_border.self_modulate = gamecolors.rarity.rare
 	elif current_item.rarity == Enums.Rarity.LEGENDARY:
+		pic_rarity.texture = rarity_legendary
+		pic_rarity.self_modulate = gamecolors.rarity.legendary
 		panel_border.self_modulate = gamecolors.rarity.legendary	
 
 func set_order(order: int):

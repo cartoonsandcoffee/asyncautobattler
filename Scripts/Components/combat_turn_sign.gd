@@ -41,7 +41,6 @@ func start_timer():
 	time_elapsed = 0.0
 
 func _done():
-	await anim_player.animation_finished
 	is_showing = false
 
 	anim_player.play("hide")
@@ -55,6 +54,7 @@ func fade_in():
 
 func fade_out():
 	anim_player.play("fade_out")
+	await anim_player.animation_finished
 
 
 func _on_timer_timeout() -> void:

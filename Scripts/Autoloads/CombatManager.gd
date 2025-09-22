@@ -44,9 +44,12 @@ var enemy_wounded_triggered: bool = false
 
 # Combat timing
 var base_highlight_duration: float = 0.5
-var base_message_duration: float = 2
+var base_message_duration: float = 1
 
 var combat_log: String = ""
+
+# Add animation manager
+var animation_manager: AnimationManager
 
 enum CombatSpeed {
 	PAUSE = 0,
@@ -56,8 +59,9 @@ enum CombatSpeed {
 }
 
 func _ready():
-	# Connect to player signals if needed
-	pass
+	animation_manager = AnimationManager.new()
+	add_child(animation_manager)
+
 
 func start_combat(player, enemy):
 	"""Initialize and begin combat between player and enemy"""
@@ -80,9 +84,18 @@ func start_combat(player, enemy):
 	player_entity.stats.reset_to_base_values()
 	enemy_entity.stats.reset_to_base_values()
 	
+	# Initialize animation manager with combat panel reference
+	var combat_panel = get_tree().get_first_node_in_group("combat_panel")
+	if combat_panel:
+		animation_manager.initialize(combat_panel)
+	
 	# Emit combat started signal
 	combat_started.emit(player_entity, enemy_entity)
-	
+
+	# MILESTONE: Battle Start
+	animation_manager.play_milestone("Battle Start")
+	await animation_manager.milestone_complete
+		
 	# Determine turn order based on agility
 	var first_entity = player_entity if player_entity.stats.agility >= enemy_entity.stats.agility else enemy_entity
 	var second_entity = enemy_entity if first_entity == player_entity else player_entity
@@ -127,6 +140,13 @@ func execute_turn(entity):
 	current_turn_entity = entity
 	add_to_combat_log_string(get_entity_name(entity) + "'s turn")
 	
+	# MILESTONE: Turn Start
+	animation_manager.play_milestone("Turn Start", {
+		"entity": entity,
+		"turn_number": turn_number
+	})
+	await animation_manager.milestone_complete
+
 	# Emit turn started signal
 	turn_started.emit(entity)
 	
@@ -274,25 +294,56 @@ func apply_damage_from_status(target, damage_amount: int, _status: Enums.StatusE
 func process_battle_start_events(first_entity, second_entity):
 	add_to_combat_log_string("\n-- BATTLE START EVENTS --")
 	
+	# MILESTONE: Item Effects (if any battle start items exist)
+	if _entities_have_battle_start_items(first_entity, second_entity):
+		animation_manager.play_milestone("Item Effects")
+		await animation_manager.milestone_complete
+
 	# First entity's battle start rules
 	await process_entity_battle_start_rules(first_entity)
 	
 	# Second entity's battle start rules  
 	await process_entity_battle_start_rules(second_entity)
 
+func _entities_have_battle_start_items(entity1, entity2) -> bool:
+	# Check if either entity has battle start items
+	return _entity_has_battle_start_items(entity1) or _entity_has_battle_start_items(entity2)
+
+func _entity_has_battle_start_items(entity) -> bool:
+	if entity == player_entity:
+		# Check weapon
+		if entity.inventory.weapon_slot:
+			for rule in entity.inventory.weapon_slot.rules:
+				if rule.trigger_type == Enums.TriggerType.BATTLE_START:
+					return true
+		
+		# Check inventory items
+		for item in entity.inventory.item_slots:
+			if item:
+				for rule in item.rules:
+					if rule.trigger_type == Enums.TriggerType.BATTLE_START:
+						return true
+	else:
+		# Check enemy abilities
+		for ability in entity.abilities:
+			if ability.trigger == Enums.TriggerType.BATTLE_START:
+				return true
+	
+	return false
+
 func process_entity_battle_start_rules(entity):
 	add_to_combat_log_string(get_entity_name(entity) + " battle start rules:")
 	
 	# Process weapon rules first if it exists
 	if entity == player_entity and entity.inventory.weapon_slot:
-		await process_item_rules(entity.inventory.weapon_slot, entity, Enums.TriggerType.BATTLE_START)
+		await process_item_rules(entity.inventory.weapon_slot, entity, Enums.TriggerType.BATTLE_START, -1)
 	
 	# Process inventory items in order
 	if entity == player_entity:
 		for i in range(entity.inventory.item_slots.size()):
 			var item = entity.inventory.item_slots[i]
 			if item:
-				await process_item_rules(item, entity, Enums.TriggerType.BATTLE_START)
+				await process_item_rules(item, entity, Enums.TriggerType.BATTLE_START, i)
 
 
 func process_turn_start_rules(entity):
@@ -301,14 +352,14 @@ func process_turn_start_rules(entity):
 	
 	# Process weapon rules first if it exists
 	if entity == player_entity and entity.inventory.weapon_slot:
-		await process_item_rules(entity.inventory.weapon_slot, entity, Enums.TriggerType.TURN_START)
+		await process_item_rules(entity.inventory.weapon_slot, entity, Enums.TriggerType.TURN_START, -1)
 	
 	# Process inventory items in order
 	if entity == player_entity:
 		for i in range(entity.inventory.item_slots.size()):
 			var item = entity.inventory.item_slots[i]
 			if item:
-				await process_item_rules(item, entity, Enums.TriggerType.TURN_START)
+				await process_item_rules(item, entity, Enums.TriggerType.TURN_START, i)
 	else:
 		# Enemy turn start abilities
 		for ability in entity.abilities:
@@ -321,21 +372,21 @@ func process_on_hit_rules(attacker):
 	
 	# Process weapon rules first if it exists
 	if attacker == player_entity and attacker.inventory.weapon_slot:
-		await process_item_rules(attacker.inventory.weapon_slot, attacker, Enums.TriggerType.ON_HIT)
+		await process_item_rules(attacker.inventory.weapon_slot, attacker, Enums.TriggerType.ON_HIT, -1)
 	
 	# Process inventory items in order
 	if attacker == player_entity:
 		for i in range(attacker.inventory.item_slots.size()):
 			var item = attacker.inventory.item_slots[i]
 			if item:
-				await process_item_rules(item, attacker, Enums.TriggerType.ON_HIT)
+				await process_item_rules(item, attacker, Enums.TriggerType.ON_HIT, i)
 	else:
 		# Enemy on-hit abilities
 		for ability in attacker.abilities:
 			if ability.trigger == Enums.TriggerType.ON_HIT:
 				await process_enemy_ability(ability, attacker)
 
-func process_item_rules(item: Item, entity, trigger_type: Enums.TriggerType):
+func process_item_rules(item: Item, entity, trigger_type: Enums.TriggerType, slot_index: int):
 	"""Process all rules for an item that match the trigger type"""
 	if not item or not item.rules:
 		return
@@ -354,7 +405,7 @@ func process_item_rules(item: Item, entity, trigger_type: Enums.TriggerType):
 			item_rule_triggered.emit(item, rule, entity)
 
 			# Wait for highlight duration
-			await wait_for_highlight()
+			#await wait_for_highlight()
 			
 			# Now execute the rule
 			await execute_item_rule(item, rule, entity)
@@ -419,12 +470,6 @@ func process_enemy_ability(ability: EnemyAbility, entity):
 func execute_item_rule(item: Item, rule: ItemRule, entity):
 	add_to_combat_log_string("  -> " + item.item_name + ": " + Enums.get_trigger_type_string(rule.trigger_type) + " effect.")
 
-	# Emit rule triggered signal
-	#item_rule_triggered.emit(item, rule, entity) #- JDM: Commented this out because it's run before function is called
-	
-	# Show visual highlight (implement in UI)
-	# TODO: Highlight item in inventory for highlight duration
-	
 	# Execute the rule effect based on type
 	match rule.effect_type:
 		Enums.EffectType.MODIFY_STAT:
@@ -642,12 +687,12 @@ func process_exposed_rules(entity):
 	if entity == player_entity:
 		# Process weapon
 		if entity.inventory.weapon_slot:
-			await process_item_rules(entity.inventory.weapon_slot, entity, Enums.TriggerType.EXPOSED)
+			await process_item_rules(entity.inventory.weapon_slot, entity, Enums.TriggerType.EXPOSED, -1)
 		
 		# Process inventory items
 		for item in entity.inventory.item_slots:
 			if item:
-				await process_item_rules(item, entity, Enums.TriggerType.EXPOSED)
+				await process_item_rules(item, entity, Enums.TriggerType.EXPOSED, item.slot_index)
 	else:
 		# Enemy exposed abilities  
 		for ability in entity.abilities:
@@ -660,12 +705,12 @@ func process_wounded_rules(entity):
 	if entity == player_entity:
 		# Process weapon
 		if entity.inventory.weapon_slot:
-			await process_item_rules(entity.inventory.weapon_slot, entity, Enums.TriggerType.WOUNDED)
+			await process_item_rules(entity.inventory.weapon_slot, entity, Enums.TriggerType.WOUNDED, -1)
 		
 		# Process inventory items
 		for item in entity.inventory.item_slots:
 			if item:
-				await process_item_rules(item, entity, Enums.TriggerType.WOUNDED)
+				await process_item_rules(item, entity, Enums.TriggerType.WOUNDED, item.slot_index)
 	else:
 		# Enemy wounded abilities
 		for ability in entity.abilities:
@@ -708,6 +753,9 @@ func set_combat_speed(speed: CombatSpeed):
 			combat_speed = 2.0
 		CombatSpeed.VERY_FAST:
 			combat_speed = 3.0
+
+	# Update animation manager
+	animation_manager.set_combat_speed(combat_speed)			
 
 func wait_for_speed():
 	"""Wait based on current combat speed setting"""

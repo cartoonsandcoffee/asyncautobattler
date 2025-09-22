@@ -4,8 +4,8 @@ extends Control
 @onready var desc_label: RichTextLabel = $PanelContainer/MarginContainer/VBoxContainer/lblDefinition
 
 func set_references():
-	keyword_label = $PanelContainer/MarginContainer/VBoxContainer/lblKeyword
-	desc_label = $PanelContainer/MarginContainer/VBoxContainer/lblDefinition
+	keyword_label = $PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/lblKeyword
+	desc_label = $PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/lblDefinition
 
 func setup(keyword: String, description: String, color: Color):
 	set_references()

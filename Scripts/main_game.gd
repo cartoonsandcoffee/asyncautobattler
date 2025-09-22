@@ -34,6 +34,10 @@ extends Control
 @onready var anim_fade: AnimationPlayer = $animFade
 @onready var fade_overlay: ColorRect = $FadeOverlay
 
+@onready var box_minimap: VBoxContainer = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap
+@onready var box_combatcontrols: VBoxContainer = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls
+
+
 var current_event: RoomEvent
 
 var item_slot = preload("res://Scenes/item.tscn")
@@ -98,6 +102,10 @@ func load_starting_room():
 		await load_room(starter_room_data)
 	else:
 		push_error("Failed to generate starter room!")
+
+func flip_minimap_combat_controls():
+	box_minimap.visible = !box_minimap.visible
+	box_combatcontrols.visible = !box_combatcontrols.visible
 
 func load_room(room_data: RoomData):
 	# Update background

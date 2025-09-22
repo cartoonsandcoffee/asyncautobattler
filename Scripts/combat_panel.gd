@@ -90,6 +90,7 @@ var gamecolors: GameColors
 func _ready():
 	# Start off-screen
 	visible = false
+	add_to_group("combat_panel")
 	_set_state(PanelState.HIDDEN)
 	connect_combat_signals()
 
@@ -287,7 +288,8 @@ func add_combat_message(message: String, color: Color = Color.WHITE):
 # Signal handlers
 func _on_combat_started(player_entity, enemy_entity):
 	print("IS THIS FUNCTION CALL UNNECESSARY????")
-	create_timed_message("Battle  Start!")
+	#create_timed_message("Battle  Start!")
+	main_game.flip_minimap_combat_controls()
 	#setup_for_combat(enemy_entity, inventory_item_slots, weapon_slot_ref)
 	#show_panel()
 
@@ -313,10 +315,13 @@ func _on_combat_ended(winner, loser):
 	# Wait a moment before hiding
 	Player.status_effects.reset_statuses()
 
+	main_game.flip_minimap_combat_controls()
+
 	create_timed_message("Battle  Over!")
 	await get_tree().create_timer(2.0).timeout
 	_set_state(PanelState.POST_COMBAT)
-
+	_clear_all_highlights()
+	
 	#await hide_panel()
 	#clear_enemy_status_panel()
 
@@ -571,8 +576,12 @@ func _on_btn_pause_pressed() -> void:
 		#pause_button.text = "▶ Resume"
 
 
+func _hide_fight_run_box() -> void:
+	slide_animation.play("close_fightrun")
+	await slide_animation.animation_finished
 
 func _on_btn_run_pressed() -> void:
+	_hide_fight_run_box()
 	# Emit signal for room event
 	player_chose_run.emit()
 	
@@ -583,6 +592,7 @@ func _on_btn_run_pressed() -> void:
 	combat_completed.emit(false)
 
 func _on_btn_fight_pressed() -> void:
+	_hide_fight_run_box()
 	box_fight_run.visible = false
 	box_combat_log.visible = true
 

@@ -4,7 +4,8 @@ extends Control
 @onready var panel_container: PanelContainer = $Panel/PanelContainer
 @onready var vbox: VBoxContainer = $Panel/PanelContainer/MarginContainer/VBoxContainer
 
-@onready var lbl_name: Label = $Panel/PanelContainer/MarginContainer/VBoxContainer/lblName
+@onready var lbl_name: Label = $Panel/PanelContainer/MarginContainer/VBoxContainer/VBoxContainer/lblName
+@onready var lbl_rarity: Label = $Panel/PanelContainer/MarginContainer/VBoxContainer/VBoxContainer/lblRarity
 @onready var lbl_desc: RichTextLabel = $Panel/PanelContainer/MarginContainer/VBoxContainer/lblDesc
 @onready var stats_grid: GridContainer = $Panel/PanelContainer/MarginContainer/VBoxContainer/statsGrid
 @onready var category_grid: GridContainer = $Panel/PanelContainer/MarginContainer/VBoxContainer/categoryGrid
@@ -75,7 +76,8 @@ var found_keywords = []
 func set_references():
 	panel = $Panel
 	panel_container = $Panel/PanelContainer
-	lbl_name = $Panel/PanelContainer/MarginContainer/VBoxContainer/lblName
+	lbl_name = $Panel/PanelContainer/MarginContainer/VBoxContainer/VBoxContainer/lblName
+	lbl_rarity = $Panel/PanelContainer/MarginContainer/VBoxContainer/VBoxContainer/lblRarity	
 	lbl_desc = $Panel/PanelContainer/MarginContainer/VBoxContainer/lblDesc
 	stats_grid = $Panel/PanelContainer/MarginContainer/VBoxContainer/statsGrid
 	category_grid = $Panel/PanelContainer/MarginContainer/VBoxContainer/categoryGrid
@@ -88,7 +90,7 @@ func set_item(this_item: Item):
 
 	current_item = this_item
 	lbl_name.text = this_item.item_name
-	lbl_name.modulate = set_rarity_color()
+	set_rarity()
 	get_stat_bonuses()
 
 	show_description(this_item)
@@ -253,3 +255,19 @@ func set_rarity_color() -> Color:
 		return gamecolors.rarity.legendary	
 	else:
 		return Color.WHITE
+
+func set_rarity():
+	if current_item.rarity == Enums.Rarity.COMMON:
+		lbl_rarity.modulate = gamecolors.rarity.common
+		lbl_rarity.text = " - Common -"
+	elif current_item.rarity == Enums.Rarity.UNCOMMON:
+		lbl_rarity.modulate =  gamecolors.rarity.uncommon
+		lbl_rarity.text = " - Uncommon -"
+	elif current_item.rarity == Enums.Rarity.RARE:
+		lbl_rarity.modulate =  gamecolors.rarity.rare
+		lbl_rarity.text = " - Rare -"
+	elif current_item.rarity == Enums.Rarity.LEGENDARY:
+		lbl_rarity.modulate =  gamecolors.rarity.legendary	
+		lbl_rarity.text = " - Legendary -"
+	else:
+		lbl_rarity.modulate =  Color.WHITE
