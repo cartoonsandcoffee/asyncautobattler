@@ -163,6 +163,7 @@ func set_label(value: int):
 
 
 func _done():
+	anim_player.speed_scale = CombatSpeed.get_multiplier()
 	anim_player.play("hide")
 	stat_animation_done.emit()
 
@@ -170,6 +171,7 @@ func _done():
 	queue_free()
 
 func run_animation(_party: Enums.Party):
+	anim_player.speed_scale = CombatSpeed.get_multiplier()
 	if _party == Enums.Party.PLAYER:
 		anim_player.play("fade_upwards")
 	else:

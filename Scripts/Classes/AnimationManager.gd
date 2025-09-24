@@ -2,15 +2,10 @@ extends Node
 class_name AnimationManager
 
 ## Centralized animation coordination system
-## Manages timing, sequencing, and speed scaling for all combat visuals
 
 signal animation_sequence_complete()
 signal milestone_complete(milestone_name: String)
 signal item_animation_complete(item: Item)
-
-# Combat speed integration
-var combat_speed_multiplier: float = 1.0
-var is_paused: bool = false
 
 # Animation queue and state
 var animation_queue: Array[AnimationRequest] = []
@@ -24,6 +19,7 @@ var item_proc_scene = preload("res://Scenes/Elements/combat_item_proc.tscn")
 
 enum AnimationType {
 	MILESTONE,      # "Battle Start", "Turn Start", etc.
+	ITEM_SEQUENCE,  # Sequential item processing
 	ITEM_HIGHLIGHT, # Individual item highlighting
 	ITEM_EFFECT,    # Item effect animations (damage numbers, etc.)
 	ATTACK,         # Attack slide animations
@@ -49,11 +45,6 @@ func _ready():
 func initialize(panel: CombatPanel):
 	"""Initialize with references to UI components"""
 	combat_panel = panel
-
-func set_combat_speed(speed: float):
-	"""Update combat speed - affects all animation timing"""
-	combat_speed_multiplier = speed
-	is_paused = (speed == 0.0)
 
 # ===== MILESTONE SYSTEM =====
 
@@ -90,49 +81,99 @@ func _execute_milestone(milestone_name: String, data: Dictionary):
 	milestone_complete.emit(milestone_name)
 
 func _play_battle_start():
-	"""Play battle start milestone"""
 	var turn_sign = _create_turn_sign("Battle Start!")
-	var duration = 1.5 / combat_speed_multiplier
+	var duration = CombatSpeed.get_duration("milestone_sign")
 	turn_sign.set_timer(duration)
 	await turn_sign.turn_animation_done
 
 func _play_turn_start(entity, turn_number: int):
-	"""Play turn start milestone"""
 	var entity_name = CombatManager.get_entity_name(entity)
 	var message = "Turn %d\n%s's Turn" % [turn_number, entity_name]
 	
 	var turn_sign = _create_turn_sign(message)
-	var duration = 1.2 / combat_speed_multiplier
+	var duration = CombatSpeed.get_duration("milestone_sign")
 	turn_sign.set_timer(duration)
 	await turn_sign.turn_animation_done
 
 func _play_status_effects_milestone():
-	"""Brief pause before status effects"""
-	await _wait_scaled(0.3)
+	await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap"))
 
 func _play_item_effects_milestone():
-	"""Brief pause before item effects"""
-	await _wait_scaled(0.2)
+	await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap"))
 
 func _play_attacks_milestone():
-	"""Brief pause before attacks"""
-	await _wait_scaled(0.3)
+	await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap"))
 
 func _play_turn_end():
-	"""Turn end cleanup"""
+	# Turn end cleanup
 	if combat_panel:
 		combat_panel._clear_all_highlights()
-	await _wait_scaled(0.2)
+	await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap"))
 
 func _play_battle_end(winner, loser):
-	"""Play battle end milestone"""
 	var winner_name = CombatManager.get_entity_name(winner)
 	var message = "Battle Over!\n%s Wins!" % winner_name
 	
 	var turn_sign = _create_turn_sign(message)
-	var duration = 2.0 / combat_speed_multiplier
+	var duration = CombatSpeed.get_duration("milestone_sign")
 	turn_sign.set_timer(duration)
 	await turn_sign.turn_animation_done
+
+# ===== SEQUENTIAL ITEM PROCESSING =====
+
+func play_item_sequence(items_to_proc: Array, entity, trigger_type: String):
+	"""Play a sequence of item animations in order with proper timing"""
+	var request = AnimationRequest.new(AnimationType.ITEM_SEQUENCE, {
+		"items": items_to_proc,
+		"entity": entity,
+		"trigger_type": trigger_type
+	})
+	
+	_queue_animation(request)
+
+func _execute_item_sequence(items: Array, entity, trigger_type: String):
+	"""Execute sequential item animations with proper timing"""
+	if items.is_empty():
+		return
+	
+	print("Starting %s sequence for %d items" % [trigger_type, items.size()])
+	
+	for i in range(items.size()):
+		var item_data = items[i]
+		var item = item_data["item"]
+		var rule = item_data["rule"]
+		var slot_index = item_data.get("slot_index", -1)
+		
+		# Wait if paused
+		await CombatSpeed.wait_if_paused()
+		
+		print("  -> Processing: ", item.item_name)
+		
+		# Highlight the item slot
+		if combat_panel and entity == CombatManager.player_entity:
+			combat_panel.highlight_item_slot(slot_index, slot_index == -1)
+		
+		# Brief moment for highlight to be visible
+		await CombatSpeed.create_timer(CombatSpeed.get_duration("item_highlight") * 0.3)
+		
+		# The combat_panel will spawn the proc indicator when it receives the signal
+		# We just need to wait for the animation duration
+		await CombatSpeed.create_timer(CombatSpeed.get_overlap_duration())
+		
+		# Clear highlight
+		if combat_panel:
+			if slot_index == -1 and combat_panel.highlighted_item_slot == combat_panel.weapon_slot_ref:
+				combat_panel._clear_all_highlights()
+			elif slot_index >= 0 and slot_index < combat_panel.inventory_item_slots.size():
+				if combat_panel.highlighted_item_slot == combat_panel.inventory_item_slots[slot_index]:
+					combat_panel._clear_all_highlights()
+		
+		item_animation_complete.emit(item)
+	
+	# Brief pause after all items complete
+	await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap"))
+	print("Completed %s sequence" % trigger_type)
+
 
 # ===== ITEM ANIMATION SYSTEM =====
 
@@ -158,8 +199,7 @@ func _execute_item_highlight(item: Item, entity, slot_index: int):
 			combat_panel.highlight_item_slot(slot_index, false)
 	
 	# Wait for highlight to be visible
-	var highlight_duration = 1.0 / combat_speed_multiplier
-	await _wait_scaled(highlight_duration)
+	await CombatSpeed.create_timer(CombatSpeed.get_duration("item_highlight"))
 	
 	item_animation_complete.emit(item)
 
@@ -181,8 +221,7 @@ func _execute_item_effect(item: Item, rule: ItemRule, entity):
 	var item_proc = _create_item_proc(item, rule, entity)
 	
 	# Wait for item proc animation
-	var effect_duration = 1.0 / combat_speed_multiplier
-	await get_tree().create_timer(effect_duration).timeout
+	await CombatSpeed.create_timer(CombatSpeed.get_duration("item_proc"))
 	
 	item_animation_complete.emit(item)
 
@@ -203,7 +242,7 @@ func _execute_attack_animation(attacker, target):
 	var is_player_attacking = (attacker == CombatManager.player_entity)
 	
 	# Set animation speed based on combat speed
-	combat_panel.slide_animation.speed_scale = combat_speed_multiplier
+	combat_panel.slide_animation.speed_scale = CombatSpeed.get_multiplier()
 	
 	# Play appropriate attack animation
 	if is_player_attacking:
@@ -234,13 +273,13 @@ func _process_animation_queue():
 		var request = animation_queue.pop_front()
 		
 		# Wait if paused
-		await _wait_for_unpause()
+		await CombatSpeed.wait_if_paused()
 		
 		# Execute the animation
 		await _execute_animation_request(request)
 		
 		# Brief gap between animations for clarity
-		await _wait_scaled(0.1)
+		await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap"))
 	
 	is_processing = false
 	animation_sequence_complete.emit()
@@ -250,7 +289,14 @@ func _execute_animation_request(request: AnimationRequest):
 	match request.type:
 		AnimationType.MILESTONE:
 			await _execute_milestone(request.data.name, request.data.get("data", {}))
-		
+
+		AnimationType.ITEM_SEQUENCE:  # This calls your new function
+			await _execute_item_sequence(
+				request.data.items,
+				request.data.entity,
+				request.data.trigger_type
+			)	
+
 		AnimationType.ITEM_HIGHLIGHT:
 			await _execute_item_highlight(
 				request.data.item,
@@ -279,34 +325,18 @@ func _execute_animation_request(request: AnimationRequest):
 		request.completion_callback.call()
 
 func _execute_status_effect(data: Dictionary):
-	"""Execute status effect animation"""
 	# TODO: Implement status effect visuals
-	await _wait_scaled(0.5)
+	await CombatSpeed.create_timer(CombatSpeed.get_duration("status_effect"))
 
 # ===== UTILITY FUNCTIONS =====
 
-func _wait_scaled(base_duration: float):
-	"""Wait for duration scaled by combat speed"""
-	await _wait_for_unpause()
-	
-	if combat_speed_multiplier > 0:
-		var actual_duration = base_duration / combat_speed_multiplier
-		await get_tree().create_timer(actual_duration).timeout
-
-func _wait_for_unpause():
-	"""Wait while game is paused"""
-	while is_paused:
-		await get_tree().process_frame
-
 func _create_turn_sign(message: String) -> CombatTurnSign:
-	"""Create and display a turn sign"""
 	var turn_sign = turn_sign_scene.instantiate()
 	combat_panel.add_child(turn_sign)
 	turn_sign.set_label(message)
 	return turn_sign
 
 func _create_item_proc(item: Item, rule: ItemRule, entity) -> Control:
-	"""Create and display item proc animation"""
 	var item_proc = item_proc_scene.instantiate()
 	combat_panel.add_child(item_proc)
 	
@@ -332,36 +362,32 @@ func _create_item_proc(item: Item, rule: ItemRule, entity) -> Control:
 # ===== EVENT HANDLERS =====
 
 func _on_combat_started(player, enemy):
-	"""Reset animation manager for new combat"""
+	# Reset animation manager for new combat
 	clear_queue()
 	is_processing = false
 	current_milestone = ""
 
 func _on_combat_ended(winner, loser):
-	"""Clean up when combat ends"""
 	clear_queue()
 	is_processing = false
 
 func clear_queue():
-	"""Clear all pending animations"""
 	animation_queue.clear()
 
 # ===== PUBLIC INTERFACE =====
 
 func wait_for_current_sequence():
-	"""Wait for current animation sequence to complete"""
 	if is_processing:
 		await animation_sequence_complete
 
 func wait_for_milestone(milestone_name: String):
-	"""Wait for specific milestone to complete"""
 	if current_milestone != milestone_name:
 		await milestone_complete
 
 func is_busy() -> bool:
-	"""Check if animation manager is currently processing"""
 	return is_processing
 
 func get_current_milestone() -> String:
-	"""Get current milestone name"""
 	return current_milestone		
+
+

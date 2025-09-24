@@ -8,7 +8,6 @@ signal combat_ui_ready()
 signal player_chose_fight()
 signal player_chose_run()
 signal combat_completed(player_won: bool)
-signal speed_changed(new_speed: CombatManager.CombatSpeed)
 
 enum PanelState {
 	HIDDEN,
@@ -36,7 +35,6 @@ enum PanelState {
 @onready var enemy_status_box_container: HBoxContainer = $CombatPanelTop/panelStatus/statusBox
 
 # Combat controls
-@onready var speed_slider: HSlider = $LogPanel/RightSidePanel/PanelContainer/CombatLogBox/speedControls/speedSlider
 @onready var speed_label: Label = $LogPanel/RightSidePanel/PanelContainer/CombatLogBox/speedControls/lblSpeed
 @onready var pause_button: Button = $LogPanel/RightSidePanel/PanelContainer/CombatLogBox/speedControls/btnPause
 
@@ -95,8 +93,7 @@ func _ready():
 	connect_combat_signals()
 
 	# Set initial speed
-	speed_slider.value =  1.0 #CombatManager.CombatSpeed.NORMAL
-	_update_speed_label(CombatManager.CombatSpeed.NORMAL)
+	_update_speed_label(CombatSpeed.CombatSpeedMode.NORMAL)
 
 func connect_combat_signals():
 	# Connect to CombatManager signals
@@ -317,8 +314,9 @@ func _on_combat_ended(winner, loser):
 
 	main_game.flip_minimap_combat_controls()
 
-	create_timed_message("Battle  Over!")
-	await get_tree().create_timer(2.0).timeout
+	#create_timed_message("Battle  Over!")
+	#await get_tree().create_timer(2.0).timeout
+
 	_set_state(PanelState.POST_COMBAT)
 	_clear_all_highlights()
 	
@@ -539,41 +537,19 @@ func _on_entity_wounded(entity):
 	var entity_name = CombatManager.get_entity_name(entity)
 	add_combat_message("💔 %s is WOUNDED!" % entity_name, Color.ORANGE)
 
-func _update_speed_label(speed: CombatManager.CombatSpeed):
+func _update_speed_label(speed: CombatSpeed.CombatSpeedMode):
 	match speed:
-		CombatManager.CombatSpeed.PAUSE:
+		CombatSpeed.CombatSpeedMode.PAUSE:
 			speed_label.text = "0x"
-			#pause_button.text = "▶ Resume"
-		CombatManager.CombatSpeed.NORMAL:
+		CombatSpeed.CombatSpeedMode.NORMAL:
 			speed_label.text = "1x"
-			#pause_button.text = "⏸ Pause"
-		CombatManager.CombatSpeed.FAST:
+		CombatSpeed.CombatSpeedMode.FAST:
 			speed_label.text = "1.5x"
-			#pause_button.text = "⏸ Pause"
-		CombatManager.CombatSpeed.VERY_FAST:
+		CombatSpeed.CombatSpeedMode.VERY_FAST:
 			speed_label.text = "2x"
-			#pause_button.text = "⏸ Pause"
-
-
-func _on_speed_slider_value_changed(value: float) -> void:
-	"""Handle speed slider change"""
-	var speed = int(value) as CombatManager.CombatSpeed
-	CombatManager.set_combat_speed(speed)
-	_update_speed_label(speed)
-	speed_changed.emit(speed)
-
 
 func _on_btn_pause_pressed() -> void:
-	"""Handle pause button"""
-	if CombatManager.combat_speed == 0:
-		# Unpause - return to normal speed
-		speed_slider.value = CombatManager.CombatSpeed.NORMAL
-		#ause_button.text = "⏸ Pause"
-	else:
-		# Pause
-		speed_slider.value = CombatManager.CombatSpeed.PAUSE
-		speed_changed.emit(0)
-		#pause_button.text = "▶ Resume"
+	CombatSpeed.pause_combat()
 
 
 func _hide_fight_run_box() -> void:
@@ -611,19 +587,13 @@ func _set_state(new_state: PanelState):
 
 
 func _on_btn_play_pressed() -> void:
-	speed_slider.value = CombatManager.CombatSpeed.NORMAL
-	speed_changed.emit(1)
-
+	CombatSpeed.set_speed(CombatSpeed.CombatSpeedMode.NORMAL)
 
 func _on_btn_fast_pressed() -> void:
-	speed_slider.value = CombatManager.CombatSpeed.FAST
-	speed_changed.emit(2)
-
+	CombatSpeed.set_speed(CombatSpeed.CombatSpeedMode.FAST)
 
 func _on_btn_very_fast_pressed() -> void:
-	speed_slider.value = CombatManager.CombatSpeed.VERY_FAST
-	speed_changed.emit(3)
-
+	CombatSpeed.set_speed(CombatSpeed.CombatSpeedMode.VERY_FAST)
 
 func _on_btn_continue_pressed() -> void:
 	victory_panel.visible = false

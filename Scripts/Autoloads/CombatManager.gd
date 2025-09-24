@@ -34,7 +34,7 @@ var current_turn_entity
 # Combat state
 var combat_active: bool = false
 var turn_number: int = 0
-var combat_speed: float = 1.0  # Multiplier for animation/wait times
+var combat_log: String = ""
 
 # Combat state tracking per combat
 var player_exposed_triggered: bool = false
@@ -42,21 +42,8 @@ var enemy_exposed_triggered: bool = false
 var player_wounded_triggered: bool = false
 var enemy_wounded_triggered: bool = false
 
-# Combat timing
-var base_highlight_duration: float = 0.5
-var base_message_duration: float = 1
-
-var combat_log: String = ""
-
 # Add animation manager
 var animation_manager: AnimationManager
-
-enum CombatSpeed {
-	PAUSE = 0,
-	NORMAL = 1,
-	FAST = 2,
-	VERY_FAST = 3
-}
 
 func _ready():
 	animation_manager = AnimationManager.new()
@@ -162,7 +149,7 @@ func execute_turn(entity):
 		entity.status_effects.stun = max(0, entity.status_effects.stun - 1)
 		if entity.status_effects.stun == 0:
 			status_removed.emit(entity, "stun")
-		await wait_for_speed()
+		await CombatSpeed.create_timer(CombatSpeed.get_duration("status_effect"))
 		turn_ended.emit(entity)
 		return
 	
@@ -193,7 +180,7 @@ func execute_attack(attacker, target):
 	# Apply thorns as needed
 	await proc_thorns(attacker, target)
 
-	await wait_for_speed()
+	await CombatSpeed.create_timer(CombatSpeed.get_duration("attack_slide"))
 
 func proc_thorns(attacker, target):
 	# thorns - all stacks removed
@@ -202,7 +189,7 @@ func proc_thorns(attacker, target):
 		target.status_effects.remove_status(Enums.StatusEffects.THORNS)
 		if target.status_effects.thorns == 0:
 			status_removed.emit(target, "thorns")
-		await wait_for_speed()
+		await CombatSpeed.create_timer(CombatSpeed.get_duration("status_effect"))
 
 
 func apply_damage(target, damage_amount: int):
@@ -411,7 +398,7 @@ func process_item_rules(item: Item, entity, trigger_type: Enums.TriggerType, slo
 			await execute_item_rule(item, rule, entity)
 			
 			# Small pause between rules
-			await wait_for_speed()
+			await  CombatSpeed.create_timer(CombatSpeed.get_duration("proc_overlap"))
 
 
 
@@ -465,7 +452,7 @@ func process_enemy_ability(ability: EnemyAbility, entity):
 	ability.times_triggered += 1
 	
 	# Wait for visual feedback
-	await wait_for_speed()
+	await CombatSpeed.create_timer(CombatSpeed.get_duration("item_proc"))
 
 func execute_item_rule(item: Item, rule: ItemRule, entity):
 	add_to_combat_log_string("  -> " + item.item_name + ": " + Enums.get_trigger_type_string(rule.trigger_type) + " effect.")
@@ -482,7 +469,7 @@ func execute_item_rule(item: Item, rule: ItemRule, entity):
 			await heal_entity(entity, rule.effect_amount)
 	
 	# Wait for visual feedback
-	await wait_for_speed()
+	await CombatSpeed.create_timer(CombatSpeed.get_duration("item_proc"))
 
 
 func _matches_trigger(rule: ItemRule, trigger_type: String) -> bool:
@@ -611,7 +598,7 @@ func process_turn_start_status_effects(entity):
 		entity.status_effects.decrement_status(Enums.StatusEffects.POISON)
 		if entity.status_effects.poison == 0:
 			status_removed.emit(entity, "poison")
-		await wait_for_speed()
+		await CombatSpeed.create_timer(CombatSpeed.get_duration("status_effect"))
 	
 	# Burn damage  
 	if entity.status_effects.burn > 0:
@@ -620,7 +607,7 @@ func process_turn_start_status_effects(entity):
 		entity.status_effects.decrement_status(Enums.StatusEffects.BURN)
 		if entity.status_effects.burn == 0:
 			status_removed.emit(entity, "burn")
-		await wait_for_speed()
+		await CombatSpeed.create_timer(CombatSpeed.get_duration("status_effect"))
 	
 	# Acid armor reduction
 	if entity.status_effects.acid > 0:
@@ -633,7 +620,7 @@ func process_turn_start_status_effects(entity):
 		#entity.status_effects.acid = max(0, entity.status_effects.acid - 1)
 		#if entity.status_effects.acid == 0:
 		#	status_removed.emit(entity, "acid")
-		await wait_for_speed()
+		await CombatSpeed.create_timer(CombatSpeed.get_duration("status_effect"))
 	
 	# Regeneration healing
 	if entity.status_effects.regeneration > 0:
@@ -641,7 +628,7 @@ func process_turn_start_status_effects(entity):
 		entity.status_effects.decrement_status(Enums.StatusEffects.REGENERATION)
 		if entity.status_effects.regeneration == 0:
 			status_removed.emit(entity, "regeneration")
-		await wait_for_speed()
+		await CombatSpeed.create_timer(CombatSpeed.get_duration("status_effect"))
 
 	# blind healing
 	if entity.status_effects.blind > 0:
@@ -649,7 +636,7 @@ func process_turn_start_status_effects(entity):
 		entity.status_effects.decrement_status(Enums.StatusEffects.BLIND)
 		if entity.status_effects.blind == 0:
 			status_removed.emit(entity, "blind")
-		await wait_for_speed()
+		await CombatSpeed.create_timer(CombatSpeed.get_duration("status_effect"))
 
 func trigger_exposed(entity):
 	add_to_combat_log_string(get_entity_name(entity) + " is EXPOSED!")
@@ -742,32 +729,6 @@ func get_base_burn_damage(entity) -> int:
 	# Get base burn damage for entity (default 3, can be modified by items)
 	# TODO: Check for items that modify base burn damage
 	return 3
-
-func set_combat_speed(speed: CombatSpeed):
-	match speed:
-		CombatSpeed.PAUSE:
-			combat_speed = 0.0
-		CombatSpeed.NORMAL:
-			combat_speed = 1.0
-		CombatSpeed.FAST:
-			combat_speed = 2.0
-		CombatSpeed.VERY_FAST:
-			combat_speed = 3.0
-
-	# Update animation manager
-	animation_manager.set_combat_speed(combat_speed)			
-
-func wait_for_speed():
-	"""Wait based on current combat speed setting"""
-	if combat_speed > 0:
-		var wait_time = base_message_duration / combat_speed
-		await get_tree().create_timer(wait_time).timeout
-
-func wait_for_highlight():
-	"""Wait for item highlight duration"""
-	if combat_speed > 0:
-		var wait_time = base_highlight_duration / combat_speed
-		await get_tree().create_timer(wait_time).timeout
 
 # Helper functions
 func get_opponent(entity):

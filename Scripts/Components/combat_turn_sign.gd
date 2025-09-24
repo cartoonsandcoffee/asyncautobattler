@@ -21,8 +21,8 @@ func set_references():
 	anim_player = $AnimationPlayer
 
 func _process(delta: float) -> void:
-	if is_showing:
-		time_elapsed += delta
+	if is_showing and CombatSpeed.get_multiplier() > 0:
+		time_elapsed += delta * CombatSpeed.get_multiplier()
 		progress_bar.value = (time_elapsed/timer_duration)
 		if time_elapsed >= timer_duration:
 			_on_timer_timeout()
@@ -37,12 +37,13 @@ func set_timer(_sec: float):
 
 func start_timer():
 	is_showing = true
+	anim_player.speed_scale = CombatSpeed.get_multiplier()
 	anim_player.play("fade_in")
 	time_elapsed = 0.0
 
 func _done():
 	is_showing = false
-
+	anim_player.speed_scale = CombatSpeed.get_multiplier()
 	anim_player.play("hide")
 	turn_animation_done.emit()
 
@@ -50,9 +51,11 @@ func _done():
 	queue_free()
 
 func fade_in():
+	anim_player.speed_scale = CombatSpeed.get_multiplier()
 	anim_player.play("fade_in")
 
 func fade_out():
+	anim_player.speed_scale = CombatSpeed.get_multiplier()
 	anim_player.play("fade_out")
 	await anim_player.animation_finished
 
