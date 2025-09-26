@@ -97,6 +97,36 @@ enum Party {
 	RANDOM
 }
 
+func get_target_string(_target: Enums.TargetType) -> String:
+	match _target:
+		Enums.TargetType.SELF:
+			return "YOU"
+		Enums.TargetType.ENEMY:
+			return "Your Enemy"
+		Enums.TargetType.BOTH:
+			return "Both Parties"
+		Enums.TargetType.RANDOM:
+			return "a Random Target"
+		_:
+			return "<unknown target>"
+
+func get_effect_type_string(_type: Enums.EffectType) -> String:
+	match _type:
+		Enums.EffectType.APPLY_STATUS:
+			return "Apply Status"
+		Enums.EffectType.MODIFY_STAT:
+			return "Modify Stat"
+		Enums.EffectType.DEAL_DAMAGE:
+			return "Deal Damage"
+		Enums.EffectType.HEAL:
+			return "Heal"
+		Enums.EffectType.CONVERT_STAT:
+			return "Convert Stat"
+		Enums.EffectType.SKIP_ATTACK:
+			return "Skip Attack"
+		_:
+			return "<unknown effect>"
+
 func get_trigger_type_string(_trigger: Enums.TriggerType) -> String:
 	match _trigger:
 		Enums.TriggerType.PERSISTENT:

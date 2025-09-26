@@ -18,7 +18,7 @@ enum EnemyType {
 @export_group("Stats")
 @export var stats: GameStats
 @export var status_effects: StatusEffects
-@export var inventory: Inventory
+
 
 # Rewards
 @export_group("Rewards")
@@ -26,13 +26,10 @@ enum EnemyType {
 @export var item_drop_chance: float = 0.1  # 10% chance
 @export var possible_item_drops: Array[Item] = []
 
-# Combat behavior
-@export_group("Combat Rules")
-@export var combat_rules: Array[ItemRule] = []
 
 # Special abilities (using same rule system as items)
 @export_group("Special Abilities")
-@export var abilities: Array[EnemyAbility] = []
+@export var abilities: Array[Item] = []
 
 # Combat state tracking
 var exposed_triggered: bool = false
@@ -41,7 +38,6 @@ var turn_count: int = 0
 
 func _init():
 	stats = GameStats.new()
-	inventory = Inventory.new()
 	status_effects = StatusEffects.new()
 
 	reset_to_base_values()
@@ -60,7 +56,7 @@ func reset_to_base_values():
 	wounded_triggered = false
 	turn_count = 0
 
-func take_damage(amount: int) -> int:
+func take_damage_OLD(amount: int) -> int:
 	"""Take damage, affecting shield first then HP"""
 	var remaining_damage = amount
 	
@@ -73,7 +69,6 @@ func take_damage(amount: int) -> int:
 		# Check for exposed trigger
 		if stats.shield_current == 0 and not exposed_triggered:
 			exposed_triggered = true
-			trigger_exposed_abilities()
 	
 	# Apply remaining damage to HP
 	if remaining_damage > 0:
@@ -82,7 +77,6 @@ func take_damage(amount: int) -> int:
 		# Check for wounded trigger
 		if stats.hit_points_current <= stats.hit_points / 2 and not wounded_triggered:
 			wounded_triggered = true
-			trigger_wounded_abilities()
 	
 	return amount  # Return actual damage dealt
 
@@ -98,61 +92,6 @@ func get_item_drop() -> Item:
 		return possible_item_drops[randi() % possible_item_drops.size()]
 	return null
 
-func trigger_battle_start_abilities():
-	"""Trigger all battle start abilities"""
-	for ability in abilities:
-		if ability.trigger == Enums.TriggerType.BATTLE_START:
-			apply_ability(ability)
-
-func trigger_turn_start_abilities():
-	"""Trigger all turn start abilities"""
-	turn_count += 1
-	
-	for ability in abilities:
-		if ability.trigger == Enums.TriggerType.TURN_START:
-			apply_ability(ability)
-		elif ability.trigger == Enums.TriggerType.EVERY_OTHER_TURN:
-			if turn_count % 2 == 0:
-				apply_ability(ability)
-		elif ability.trigger == Enums.TriggerType.EVERY_X_TURNS:
-			if turn_count % ability.turn_interval == 0:
-				apply_ability(ability)
-
-func trigger_on_hit_abilities():
-	"""Trigger abilities when enemy hits player"""
-	for ability in abilities:
-		if ability.trigger == Enums.TriggerType.ON_HIT:
-			apply_ability(ability)
-
-func trigger_exposed_abilities():
-	"""Trigger abilities when shield breaks"""
-	for ability in abilities:
-		if ability.trigger == Enums.TriggerType.EXPOSED:
-			apply_ability(ability)
-
-func trigger_wounded_abilities():
-	"""Trigger abilities when HP drops below 50%"""
-	for ability in abilities:
-		if ability.trigger == Enums.TriggerType.WOUNDED:
-			apply_ability(ability)
-
-func apply_ability(ability: EnemyAbility):
-	"""Apply an ability effect"""
-	match ability.effect_type:
-		EnemyAbility.EffectType.DAMAGE_BOOST:
-			stats.damage_current += ability.value
-		EnemyAbility.EffectType.SHIELD_GAIN:
-			stats.shield_current += ability.value
-		EnemyAbility.EffectType.HEAL:
-			stats.hit_points_current = min(stats.hit_points_current + ability.value, stats.hit_points)
-		EnemyAbility.EffectType.APPLY_POISON:
-			# This would apply to player
-			pass
-		EnemyAbility.EffectType.APPLY_BURN:
-			# This would apply to player
-			pass
-		# Add more effect types as needed
-
 func process_status_effects():
 	"""Process status effects at turn start"""
 	# Poison
@@ -164,7 +103,7 @@ func process_status_effects():
 	# Burn
 	if status_effects.burn > 0:
 		var burn_damage = status_effects.burn * stats.burn_damage_current  # Base burn damage
-		take_damage(burn_damage)
+		take_damage_OLD(burn_damage)
 		status_effects.burn -= 1
 	
 	# Regeneration

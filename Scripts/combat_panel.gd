@@ -124,7 +124,18 @@ func setup_for_combat(enemy_entity, inventory_slots: Array[ItemSlot], weapon_slo
 	current_player_entity = Player
 	inventory_item_slots = inventory_slots
 	weapon_slot_ref = weapon_slot
-	
+
+	# --- Verify the slots match player inventory
+	print("Combat Panel Setup - Slots: ", inventory_item_slots.size())
+	for i in range(inventory_item_slots.size()):
+		var slot = inventory_item_slots[i]
+		var player_item = Player.inventory.item_slots[i] if i < Player.inventory.item_slots.size() else null
+		if slot and slot.current_item:
+			print("  Slot %d: %s" % [i, slot.current_item.item_name])
+		if player_item:
+			print("  Player inv %d: %s" % [i, player_item.item_name])
+	# -----------
+
 	current_enemy_entity = enemy_entity.duplicate()  # Work with a copy
 	current_enemy_entity.reset_to_base_values()
 
@@ -255,9 +266,13 @@ func highlight_item_slot(slot_index: int, is_weapon: bool = false):
 		highlighted_item_slot = weapon_slot_ref
 		weapon_slot_ref.start_combat_highlight()
 	elif slot_index >= 0 and slot_index < inventory_item_slots.size():
-		highlighted_item_slot = inventory_item_slots[slot_index]
-		if highlighted_item_slot:
-			highlighted_item_slot.start_combat_highlight()
+		# Inventory slot - VALIDATE the index
+		var slot = inventory_item_slots[slot_index]
+		if slot and slot.current_item:  # Make sure slot exists and has an item
+			highlighted_item_slot = slot
+			slot.start_combat_highlight()
+		else:
+			push_warning("Trying to highlight empty slot %d" % slot_index)
 
 func _clear_all_highlights():
 	"""Clear all inventory highlights"""
@@ -303,9 +318,6 @@ func _on_combat_ended(winner, loser):
 			add_combat_message("Gained %d gold!" % gold_earned, color_status)
 			reward_label.text = str(gold_earned)
 			Player.add_gold(gold_earned)
-		
-		slide_animation.play("enemy_die")
-		await slide_animation.animation_finished
 	else:
 		add_combat_message(loser_name + " has been defeated!", Color.RED)
 	
@@ -314,21 +326,25 @@ func _on_combat_ended(winner, loser):
 
 	main_game.flip_minimap_combat_controls()
 
-	#create_timed_message("Battle  Over!")
-	#await get_tree().create_timer(2.0).timeout
+	# Wait before showing victory/death panel
+	await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap") * 2)
 
 	_set_state(PanelState.POST_COMBAT)
 	_clear_all_highlights()
-	
-	#await hide_panel()
-	#clear_enemy_status_panel()
+	clear_all_proc_indicators()
 
 	if winner == current_player_entity:
 		victory_panel.visible = true
 	else:
 		death_panel.visible = true
 
-	#combat_completed.emit(winner == current_player_entity)
+
+func clear_all_proc_indicators():
+	for child in get_children():
+		if child is CombatItemProc:
+			child.queue_free()
+		if child is StatusBox:
+			child.queue_free()
 
 func clear_enemy_status_panel():
 	for child in enemy_status_box_container.get_children():
@@ -358,51 +374,71 @@ func _on_turn_ended(entity):
 	#turn_box.fade_out()
 
 func _on_attack_executed(attacker, target, damage):
-	if target == current_enemy_entity:
-		slide_animation.play("player_attack")
-		await slide_animation.animation_finished
-	elif target == current_player_entity:
-		slide_animation.play("enemy_attack")
-		await slide_animation.animation_finished
-
-func _on_damage_dealt(target, amount, taken_by):
+	var attacker_name = CombatManager.get_entity_name(attacker)
 	var target_name = CombatManager.get_entity_name(target)
-	add_combat_message("%s takes %d damage!" % [target_name, amount], color_damage)
-	
+	add_combat_message("%s attacks %s!" % [attacker_name, target_name], Color.RED)
+
+func _get_status_enum(status_name: String) -> Enums.StatusEffects:
+	match status_name:
+		"poison": return Enums.StatusEffects.POISON
+		"burn": return Enums.StatusEffects.BURN
+		"acid": return Enums.StatusEffects.ACID
+		"thorns": return Enums.StatusEffects.THORNS
+		_: return Enums.StatusEffects.NONE
+
+func create_damage_indicator(target, amount: int, damage_stat: Enums.Stats, visual_info: Dictionary) -> void:
+	"""Create a damage indicator at the appropriate position - called by AnimationManager"""
 	var combat_item_proc = item_proc.instantiate()
 	
 	combat_item_proc.set_references()
-	combat_item_proc.set_stat_visuals(taken_by)
-	combat_item_proc.set_label(amount * -1) # - JDM: multiply negative so damage says minus		
-
-	# Update enemy stats if they were damaged
+	combat_item_proc.set_label(amount * -1)  # Negative for damage
+	combat_item_proc.set_info(visual_info.get("info", "Damage!"))
+	
+	# Set visuals based on damage type
+	if visual_info.has("status"):
+		# Status effect damage - use status icon
+		combat_item_proc.set_status_as_item_visuals(_get_status_enum(visual_info.status))
+	elif visual_info.has("icon") and visual_info.icon:
+		# Attack damage - use weapon icon
+		combat_item_proc.set_item_visuals(visual_info.icon, visual_info.get("color", Color.WHITE))
+	else:
+		# Generic damage
+		combat_item_proc.set_item_visuals(null, visual_info.get("color", Color.RED))
+	
+	# Set stat visual (shield or HP)
+	combat_item_proc.set_stat_visuals(damage_stat)
+	
+	# Position based on target and stat
+	add_child(combat_item_proc)
+	var position_offset = Vector2(45, 50) if target == current_enemy_entity else Vector2(45, -50)
+	
 	if target == current_enemy_entity:
-		combat_item_proc.set_info("You hit the Enemy!")
-		combat_item_proc.set_item_visuals(Player.inventory.weapon_slot.item_icon, Player.inventory.weapon_slot.item_color)
-		add_child(combat_item_proc)
-
-		if taken_by == Enums.Stats.SHIELD || taken_by == Enums.Stats.EXPOSED:
-			combat_item_proc.global_position = enemy_shield_stat.global_position + Vector2(45,50)
+		# Enemy takes damage
+		if damage_stat == Enums.Stats.SHIELD or damage_stat == Enums.Stats.EXPOSED:
+			combat_item_proc.global_position = enemy_shield_stat.global_position + position_offset
 		else:
-			combat_item_proc.global_position = enemy_health_stat.global_position + Vector2(45,50)
-
+			combat_item_proc.global_position = enemy_health_stat.global_position + position_offset
+		
 		combat_item_proc.run_animation(Enums.Party.ENEMY)
-
 		_update_enemy_stats()
 	else:
-		combat_item_proc.set_info("The Enemy hits You!")
-		combat_item_proc.set_item_visuals(current_enemy_entity.weapon_sprite,current_enemy_entity.sprite_color)
-		add_child(combat_item_proc)
-		
-		if taken_by == Enums.Stats.SHIELD || taken_by == Enums.Stats.EXPOSED:
-			combat_item_proc.position = main_game.stat_shield.global_position + Vector2(45, -50)
+		# Player takes damage
+		if damage_stat == Enums.Stats.SHIELD or damage_stat == Enums.Stats.EXPOSED:
+			combat_item_proc.position = main_game.stat_shield.global_position + position_offset
 		else:
-			combat_item_proc.position = main_game.stat_health.global_position + Vector2(45, -50)
-
+			combat_item_proc.position = main_game.stat_health.global_position + position_offset
+		
 		combat_item_proc.run_animation(Enums.Party.PLAYER)
 		Player.stats.stats_updated.emit()
 
 
+
+
+func _on_damage_dealt(target, amount, taken_by):
+	# JDM: ----- UNUSED?!?!?!
+	var target_name = CombatManager.get_entity_name(target)
+	add_combat_message("%s takes %d damage!" % [target_name, amount], color_damage)
+	
 
 func _on_healing_applied(target, amount):
 	"""Handle healing"""
@@ -451,15 +487,15 @@ func _on_item_rule_triggered(item: Item, rule: ItemRule, entity):
 	# Find which slot this item is in
 		# Check weapon slot
 		if weapon_slot_ref and weapon_slot_ref.current_item == item:
-			spawn_item_proc_indicator(item, rule, entity)
-			highlight_item_slot(0, true)
+			#spawn_item_proc_indicator(item, rule, entity)
+			#highlight_item_slot(0, true)
 			add_combat_message("⚔ %s: %s" % [item.item_name, rule.get_description()], color_trigger)
 		else:
 			# Check inventory slots
 			for i in range(inventory_item_slots.size()):
 				if inventory_item_slots[i] and inventory_item_slots[i].current_item == item:
-					spawn_item_proc_indicator(item, rule, entity)
-					highlight_item_slot(i, false)
+					#spawn_item_proc_indicator(item, rule, entity)
+					#highlight_item_slot(i, false)
 					add_combat_message("📦 [%d] %s: %s" % [i+1, item.item_name, rule.get_description()], color_trigger)
 					break
 

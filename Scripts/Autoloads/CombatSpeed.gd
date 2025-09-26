@@ -16,8 +16,8 @@ var is_paused: bool = false
 const SPEED_MULTIPLIERS = {
 	CombatSpeedMode.PAUSE: 0.0,
 	CombatSpeedMode.NORMAL: 1.0,
-	CombatSpeedMode.FAST: 2.0,
-	CombatSpeedMode.VERY_FAST: 3.0
+	CombatSpeedMode.FAST: 1.5,
+	CombatSpeedMode.VERY_FAST: 2.0
 }
 
 # Duration settings for different animation types (in seconds at NORMAL speed)
@@ -105,4 +105,5 @@ func create_timer(duration: float) -> SceneTreeTimer:
 	if is_paused:
 		await wait_if_paused()
 	
-	return get_tree().create_timer(duration)
+	await get_tree().create_timer(duration).timeout
+	return null #get_tree().create_timer(duration)
