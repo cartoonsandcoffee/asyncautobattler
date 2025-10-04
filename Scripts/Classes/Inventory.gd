@@ -127,6 +127,25 @@ func remove_item(index: int) -> Item:
 	
 	return item
 
+func remove_multiple_items(indices: Array[int]) -> Array[Item]:
+	# Remove multiple items by index, returns removed items
+	var removed_items: Array[Item] = []
+	
+	# Sort indices in descending order to avoid shifting issues
+	var sorted_indices = indices.duplicate()
+	sorted_indices.sort()
+	sorted_indices.reverse()
+	
+	for index in sorted_indices:
+		var item = remove_item(index)
+		if item:
+			removed_items.append(item)
+	
+	# Compact to remove gaps
+	compact_items()
+	
+	return removed_items
+
 func clear_slot(index: int) -> void:
 	if index >= 0 and index < item_slots.size():
 		var item = item_slots[index]

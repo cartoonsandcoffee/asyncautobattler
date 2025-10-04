@@ -19,6 +19,7 @@ var player_won_combat: bool = false
 func _ready():
 	# Get reference to main game
 	print("room_event -> ready")
+	reset_all_animations()
 	main_game_ref = get_tree().get_root().get_node_or_null("MainGame")
 	if not main_game_ref:
 		push_error("RoomEvent: Could not find MainGame node!")
@@ -34,6 +35,14 @@ func start_event():
 
 func initialize_event():
 	print("room_event -> initialize_event")
+
+func reset_all_animations():
+	# Find and reset all AnimationPlayers in this room 
+	for child in get_children():
+		if child is AnimationPlayer:
+			if child.has_animation("RESET"):
+				child.play("RESET")
+				child.stop()  # Stop after setting to RESET state
 
 func _begin_event_sequence():
 	"""Handle the two-phase sequence: combat (if any) then event"""

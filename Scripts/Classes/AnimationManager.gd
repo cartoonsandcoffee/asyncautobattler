@@ -163,7 +163,6 @@ func _execute_item_sequence(items: Array, entity, trigger_type: String):
 		# Highlight the item slot
 		if combat_panel and entity == CombatManager.player_entity:
 			combat_panel.highlight_item_slot(slot_index, slot_index == -1)
-			_execute_item_highlight(item, entity, slot_index)
 
 		# Brief moment for highlight to be visible
 		await CombatSpeed.create_timer(CombatSpeed.get_duration("item_highlight") * 0.5)
@@ -188,51 +187,6 @@ func _execute_item_sequence(items: Array, entity, trigger_type: String):
 
 
 # ===== ITEM ANIMATION SYSTEM =====
-
-func play_item_highlight(item: Item, entity, slot_index: int = -1):
-	"""Play item highlight animation"""
-	var request = AnimationRequest.new(AnimationType.ITEM_HIGHLIGHT, {
-		"item": item,
-		"entity": entity,
-		"slot_index": slot_index
-	})
-	
-	_queue_animation(request)
-
-func _execute_item_highlight(item: Item, entity, slot_index: int):
-	# Trigger highlight in combat panel
-	if combat_panel and entity == CombatManager.player_entity:
-		if slot_index == -1:  # Weapon slot
-			combat_panel.highlight_item_slot(-1, true)
-		else:  # Inventory slot
-			combat_panel.highlight_item_slot(slot_index, false)
-	
-	# Wait for highlight to be visible
-	await CombatSpeed.create_timer(CombatSpeed.get_duration("item_highlight"))
-	
-	item_animation_complete.emit(item)
-
-func play_item_effect(item: Item, rule: ItemRule, entity):
-	"""Play item effect animation"""
-	var request = AnimationRequest.new(AnimationType.ITEM_EFFECT, {
-		"item": item,
-		"rule": rule,
-		"entity": entity
-	})
-	
-	_queue_animation(request)
-
-func _execute_item_effect(item: Item, rule: ItemRule, entity):
-	"""Execute item effect animation"""
-	print("    -> Effect: ", rule.get_description())
-	
-	# Create and show item proc visual
-	var item_proc = _create_item_proc(item, rule, entity)
-	
-	# Wait for item proc animation
-	await CombatSpeed.create_timer(CombatSpeed.get_duration("item_proc"))
-	
-	item_animation_complete.emit(item)
 
 func play_attack_animation(attacker, target):
 	"""Play attack slide animation"""
@@ -334,19 +288,11 @@ func _execute_animation_request(request: AnimationRequest):
 			)	
 
 		AnimationType.ITEM_HIGHLIGHT:
-			await _execute_item_highlight(
-				request.data.item,
-				request.data.entity,
-				request.data.slot_index
-			)
+			pass #handled in item sequencer now
 		
 		AnimationType.ITEM_EFFECT:
-			await _execute_item_effect(
-				request.data.item,
-				request.data.rule,
-				request.data.entity
-			)
-		
+			pass #handled in item sequencer now
+
 		AnimationType.ATTACK:
 			await _execute_attack_animation(
 				request.data.attacker,
@@ -354,7 +300,7 @@ func _execute_animation_request(request: AnimationRequest):
 			)
 		
 		AnimationType.STATUS_EFFECT:
-			await _execute_status_effect(request.data)
+			pass #handled in item sequencer now
 
 		AnimationType.DAMAGE_INDICATOR:
 			# Damage indicators execute immediately, not queued
@@ -364,10 +310,6 @@ func _execute_animation_request(request: AnimationRequest):
 	if request.completion_callback.is_valid():
 		request.completion_callback.call()
 
-func _execute_status_effect(data: Dictionary):
-	# TODO: Implement status effect visuals
-	await CombatSpeed.create_timer(CombatSpeed.get_duration("status_effect"))
-
 # ===== UTILITY FUNCTIONS =====
 
 func _create_turn_sign(message: String) -> CombatTurnSign:
@@ -376,28 +318,6 @@ func _create_turn_sign(message: String) -> CombatTurnSign:
 	turn_sign.set_label(message)
 	return turn_sign
 
-func _create_item_proc(item: Item, rule: ItemRule, entity) -> Control:
-	var item_proc = item_proc_scene.instantiate()
-	combat_panel.add_child(item_proc)
-	
-	# Configure the item proc based on rule
-	item_proc.set_references()
-	item_proc.set_label(rule.effect_amount)
-	item_proc.set_info(rule.get_description())
-	item_proc.set_item_visuals(item.item_icon, item.item_color)
-	
-	if rule.effect_type == Enums.EffectType.MODIFY_STAT:
-		item_proc.set_stat_visuals(rule.target_stat)
-	elif rule.effect_type == Enums.EffectType.APPLY_STATUS:
-		item_proc.set_status_visuals(rule.target_status)
-	
-	# Set animation party
-	if entity == CombatManager.player_entity:
-		item_proc.run_animation(Enums.Party.PLAYER)
-	else:
-		item_proc.run_animation(Enums.Party.ENEMY)
-	
-	return item_proc
 
 # ===== EVENT HANDLERS =====
 
@@ -424,8 +344,8 @@ func clear_all_animations():
 	clear_queue()
 	
 	# Stop attack animation
-	if combat_panel and combat_panel.slide_animation:
-		combat_panel.slide_animation.stop()
+	#if combat_panel and combat_panel.slide_animation:
+	#	combat_panel.slide_animation.stop()
 	
 	# Clear all proc indicators
 	if combat_panel:

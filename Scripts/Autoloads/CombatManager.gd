@@ -53,7 +53,7 @@ func _ready():
 func start_combat(player, enemy):
 	"""Initialize and begin combat between player and enemy"""
 	combat_log = ""
-	add_to_combat_log_string("=== COMBAT STARTED ===\n")
+	add_to_combat_log_string("=== COMBAT STARTED ===\n", Color.WHITE, true)
 	
 	# Store combat entities
 	player_entity = player
@@ -95,16 +95,21 @@ func start_combat(player, enemy):
 	# Begin turn loop
 	await combat_loop(first_entity, second_entity)
 
-func add_to_combat_log_string(_string: String):
-	combat_log += _string + "\n"
-	# print(_string) # JDM: don't need to print text now that we can review it later.
+func add_to_combat_log_string(_string: String, _color: Color = Color.GRAY, is_bold: bool = false):
+	var color_str:String = _color.to_html()
+	var final_string:String = "[color=#" + color_str + "]" + _string + "[/color]"
+
+	if is_bold:
+		final_string = "[b]" + final_string + "[/b]"
+
+	combat_log += final_string + "\n"
 
 func combat_loop(first_entity, second_entity):
 	# Main combat loop - alternates turns until one entity dies
 	
 	while combat_active:
 		turn_number += 1
-		add_to_combat_log_string("\n--- Turn " + str(turn_number) + " ---")
+		add_to_combat_log_string("\n--- Turn " + str(turn_number) + " ---", Color.WHITE)
 		
 		# First entity's turn
 		if combat_active and not is_entity_dead(first_entity):
@@ -128,7 +133,7 @@ func combat_loop(first_entity, second_entity):
 func execute_turn(entity):
 	# -- Execute a complete turn for the given entity
 	current_turn_entity = entity
-	add_to_combat_log_string(get_entity_name(entity) + "'s turn")
+	add_to_combat_log_string(get_entity_name(entity) + "'s turn", Color.ANTIQUE_WHITE)
 	
 	# MILESTONE: Turn Start
 	animation_manager.play_milestone("Turn Start", {
@@ -249,7 +254,7 @@ func apply_damage_unified(target, amount: int, source, damage_type: String = "at
 		# Create shield damage visual
 		if shield_damage > 0:
 			await _create_damage_visual(target, shield_damage, dmg_destination_enum, source, damage_type)
-			add_to_combat_log_string(get_entity_name(target) + " shield reduced by " + str(shield_damage) + " (" + str(target.stats.shield_current) + " remaining)")
+			add_to_combat_log_string("    -> " + get_entity_name(target) + " shield reduced by " + str(shield_damage) + " (" + str(target.stats.shield_current) + " remaining)", Color.CYAN)
 			stat_changed.emit(target, "shield", target.stats.shield_current + shield_damage, target.stats.shield_current)
 		
 		# Check for exposed trigger
@@ -270,7 +275,7 @@ func apply_damage_unified(target, amount: int, source, damage_type: String = "at
 			
 		# Create HP damage visual
 		await _create_damage_visual(target, hp_damage, dmg_destination_enum, source, damage_type)
-		add_to_combat_log_string(get_entity_name(target) + " takes " + str(hp_damage) + " damage (" + str(target.stats.hit_points_current) + " HP remaining)")
+		add_to_combat_log_string("    -> " + get_entity_name(target) + " takes " + str(hp_damage) + " damage (" + str(target.stats.hit_points_current) + " HP remaining)", Color.DARK_RED)
 		stat_changed.emit(target, "hit_points", old_hp, target.stats.hit_points_current)
 		
 		# Check for wounded trigger (50% HP)
@@ -291,7 +296,7 @@ func process_countdown_rules():
 	pass
 
 func process_battle_start_events(first_entity, second_entity):
-	add_to_combat_log_string("\n-- BATTLE START EVENTS --")
+	add_to_combat_log_string("\n-- BATTLE START EVENTS --", Color.PALE_VIOLET_RED)
 	
 	# MILESTONE: Item Effects (if any battle start items exist)
 	await process_entity_items_sequentially(first_entity, Enums.TriggerType.BATTLE_START)
@@ -400,7 +405,7 @@ func collect_triggered_items(entity, trigger_type: Enums.TriggerType) -> Array:
 
 
 func execute_item_rule(item: Item, rule: ItemRule, entity):
-	add_to_combat_log_string("  -> " + item.item_name + ": " + Enums.get_trigger_type_string(rule.trigger_type) + " effect.")
+	add_to_combat_log_string("  -> " + item.item_name + ": " + Enums.get_trigger_type_string(rule.trigger_type) + " effect.", Color.WEB_GREEN)
 
 	# Execute the rule effect based on type
 	match rule.effect_type:
@@ -413,25 +418,6 @@ func execute_item_rule(item: Item, rule: ItemRule, entity):
 		Enums.EffectType.HEAL:
 			await heal_entity(entity, rule.effect_amount)
 	
-
-func _matches_trigger(rule: ItemRule, trigger_type: String) -> bool:
-	# JDM: I think I can delete this now?
-	match trigger_type:
-		"battle_start":
-			return rule.trigger == Enums.TriggerType.BATTLE_START
-		"turn_start":
-			return rule.trigger == Enums.TriggerType.TURN_START
-		"on_hit":
-			return rule.trigger == Enums.TriggerType.ON_HIT
-		"exposed":
-			return rule.trigger == Enums.TriggerType.EXPOSED
-		"wounded":
-			return rule.trigger == Enums.TriggerType.WOUNDED
-		"countdown":
-			return rule.trigger == Enums.TriggerType.COUNTDOWN
-		_:
-			return false
-
 
 func modify_entity_stat(entity, stat_name: Enums.Stats, amount: int):
 	"""Modify an entity's stat and emit appropriate signals"""
@@ -505,7 +491,7 @@ func apply_status_effect(entity, status_name: Enums.StatusEffects, stacks: int):
 			entity.status_effects.increment_status(Enums.StatusEffects.BURN, stacks)
 			new_value = entity.status_effects.burn
 	
-	add_to_combat_log_string("    " + get_entity_name(entity) + " gains " + str(stacks) + " " + Enums.get_status_string(status_name) + " (" + str(new_value) + " total)")
+	add_to_combat_log_string("    " + get_entity_name(entity) + " gains " + str(stacks) + " " + Enums.get_status_string(status_name) + " (" + str(new_value) + " total)", Color.REBECCA_PURPLE)
 	status_applied.emit(entity, status_name, stacks)
 
 func heal_entity(entity, amount: int):
@@ -585,7 +571,7 @@ func process_turn_start_status_effects(entity):
 	if not entity.status_effects:
 		return
 		
-	add_to_combat_log_string(get_entity_name(entity) + " status effects at turn start:")
+	add_to_combat_log_string(get_entity_name(entity) + " status effects at turn start:", Color.GREEN_YELLOW)
 	
 	# Poison damage
 	process_poison_damage(entity)
@@ -613,7 +599,7 @@ func process_turn_start_status_effects(entity):
 		await CombatSpeed.create_timer(CombatSpeed.get_duration("status_effect"))
 
 func trigger_exposed(entity):
-	add_to_combat_log_string(get_entity_name(entity) + " is EXPOSED!")
+	add_to_combat_log_string(get_entity_name(entity) + " is EXPOSED!", Color.DODGER_BLUE)
 	
 	# Mark as triggered for this combat
 	if entity == player_entity:
@@ -628,7 +614,7 @@ func trigger_exposed(entity):
 	await process_exposed_rules(entity)
 
 func trigger_wounded(entity):
-	add_to_combat_log_string(get_entity_name(entity) + " is WOUNDED!")
+	add_to_combat_log_string(get_entity_name(entity) + " is WOUNDED!", Color.RED)
 	
 	# Mark as triggered for this combat
 	if entity == player_entity:

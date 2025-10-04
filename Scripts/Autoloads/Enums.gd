@@ -6,7 +6,10 @@ enum Rarity {
 	RARE,
 	UNIQUE,
 	LEGENDARY,
-	MYSTERIOUS
+	MYSTERIOUS,
+	GOLDEN,
+	DIAMOND,
+	CRAFTED
 }
 
 enum Stats {

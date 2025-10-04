@@ -5,10 +5,10 @@ signal item_selected(Item)
 signal item_skipped()
 signal need_item_replace(Item)
 
-@onready var item_choice_container: GridContainer = $Panel/PanelContainer/VBoxContainer/itemsContainer
-@onready var name_label: Label = $Panel/PanelContainer/VBoxContainer/lblName
-@onready var dialogue_label: RichTextLabel = $Panel/PanelContainer/VBoxContainer/MarginContainer/txtDesc
-@onready var btn_skip: Button = $Panel/PanelContainer/VBoxContainer/btnSkip
+@onready var item_choice_container: GridContainer = $Panel/panelBlack/PanelContainer/VBoxContainer/itemsContainer
+@onready var name_label: Label = $Panel/panelBlack/PanelContainer/VBoxContainer/lblName
+@onready var dialogue_label: RichTextLabel = $Panel/panelBlack/PanelContainer/VBoxContainer/MarginContainer/txtDesc
+@onready var btn_skip: Button = $Panel/panelBlack/PanelContainer/VBoxContainer/btnSkip
 
 @export var item_rarity: Enums.Rarity = Enums.Rarity.COMMON
 @export var items_offered: int = 3
@@ -22,6 +22,7 @@ var offered_items: Array[Item] = []
 func _ready() -> void:
 	add_to_group("item_selection_events") 
 	item_choice_container.columns = items_offered
+	if include_extra_rare: item_choice_container.columns = items_offered + 1
 	generate_item_choices()
 	setup_labels()
 
@@ -33,7 +34,7 @@ func setup_labels():
 
 func generate_item_choices():
 	# Get 3 random common items
-	offered_items = ItemsManager.get_random_items(items_offered, item_rarity)
+	offered_items = ItemsManager.get_random_items(items_offered, item_rarity, include_extra_rare)
 	
 	# Create choice buttons for each item
 	for item in offered_items:

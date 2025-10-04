@@ -57,19 +57,16 @@ var main_game: MainGameController
 
 # State management
 var current_state: PanelState = PanelState.HIDDEN
-var is_animating: bool = false
 
 var item_proc = preload("res://Scenes/Elements/combat_item_proc.tscn")
 var turn_sign = preload("res://Scenes/Elements/combat_turn_sign.tscn")
 var status_box = preload("res://Scenes/Elements/status_box.tscn")
-var turn_box: CombatTurnSign
 
 # Combat state
 var is_visible: bool = false
 var current_player_entity
 var current_enemy_entity: Enemy
 var highlighted_item_slot: ItemSlot = null
-var combat_messages_queue: Array[String] = []
 
 # References to inventory slots for highlighting
 var inventory_item_slots: Array[ItemSlot] = []
@@ -120,21 +117,9 @@ func connect_combat_signals():
 	CombatManager.entity_wounded.connect(_on_entity_wounded)
 
 func setup_for_combat(enemy_entity, inventory_slots: Array[ItemSlot], weapon_slot: ItemSlot):
-	"""Initialize the combat panel with entity data and inventory references"""
 	current_player_entity = Player
 	inventory_item_slots = inventory_slots
 	weapon_slot_ref = weapon_slot
-
-	# --- Verify the slots match player inventory
-	print("Combat Panel Setup - Slots: ", inventory_item_slots.size())
-	for i in range(inventory_item_slots.size()):
-		var slot = inventory_item_slots[i]
-		var player_item = Player.inventory.item_slots[i] if i < Player.inventory.item_slots.size() else null
-		if slot and slot.current_item:
-			print("  Slot %d: %s" % [i, slot.current_item.item_name])
-		if player_item:
-			print("  Player inv %d: %s" % [i, player_item.item_name])
-	# -----------
 
 	current_enemy_entity = enemy_entity.duplicate()  # Work with a copy
 	current_enemy_entity.reset_to_base_values()
@@ -259,7 +244,6 @@ func loop_through_enemy_statuses_for_position(_status: Enums.StatusEffects) -> V
 	return Vector2(400,200)
 
 func highlight_item_slot(slot_index: int, is_weapon: bool = false):
-	"""Highlight a specific inventory slot during combat"""
 	_clear_all_highlights()
 	
 	if is_weapon and weapon_slot_ref:
@@ -300,10 +284,7 @@ func add_combat_message(message: String, color: Color = Color.WHITE):
 # Signal handlers
 func _on_combat_started(player_entity, enemy_entity):
 	print("IS THIS FUNCTION CALL UNNECESSARY????")
-	#create_timed_message("Battle  Start!")
 	main_game.flip_minimap_combat_controls()
-	#setup_for_combat(enemy_entity, inventory_item_slots, weapon_slot_ref)
-	#show_panel()
 
 func _on_combat_ended(winner, loser):
 	var winner_name = CombatManager.get_entity_name(winner)
@@ -366,12 +347,11 @@ func _on_turn_started(entity):
 	turn_label.text = "Turn: " + str(CombatManager.turn_number) + " (" + entity_name + "'s turn)"
 	add_combat_message("\n--- %s's Turn ---" % entity_name, Color.CYAN)
 	
-	# turn_box = create_timed_message("Turn: " + str(CombatManager.turn_number) + " (" + entity_name + "'s turn)")
 
 func _on_turn_ended(entity):
 	"""Handle turn end"""
 	_clear_all_highlights()
-	#turn_box.fade_out()
+
 
 func _on_attack_executed(attacker, target, damage):
 	var attacker_name = CombatManager.get_entity_name(attacker)
@@ -480,22 +460,14 @@ func _on_status_removed(entity, status_name: Enums.StatusEffects):
 		Player.status_updated.emit(null, 0)	
 
 func _on_item_rule_triggered(item: Item, rule: ItemRule, entity):
-	# JDM: For multiplayer I will have to have the entity for the attacker always proc the visual cue regardless of
-	# ---- which entity is the recipient.
-
 	if entity == current_player_entity || entity == current_enemy_entity:
-	# Find which slot this item is in
 		# Check weapon slot
 		if weapon_slot_ref and weapon_slot_ref.current_item == item:
-			#spawn_item_proc_indicator(item, rule, entity)
-			#highlight_item_slot(0, true)
 			add_combat_message("⚔ %s: %s" % [item.item_name, rule.get_description()], color_trigger)
 		else:
 			# Check inventory slots
 			for i in range(inventory_item_slots.size()):
 				if inventory_item_slots[i] and inventory_item_slots[i].current_item == item:
-					#spawn_item_proc_indicator(item, rule, entity)
-					#highlight_item_slot(i, false)
 					add_combat_message("📦 [%d] %s: %s" % [i+1, item.item_name, rule.get_description()], color_trigger)
 					break
 

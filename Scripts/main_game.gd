@@ -252,8 +252,9 @@ func setup_inventory():
 		item_container.slot_clicked.connect(_on_slot_clicked)
 		item_container.slot_double_clicked.connect(_on_slot_double_clicked.bind(i))
 
-		item_slots.append(item_container)
+		item_slots[i] = (item_container)
 		item_grid.add_child(item_container)
+
 
 func show_item_replacement_overlay():
 	anim_tools.play("show_replace_item")
