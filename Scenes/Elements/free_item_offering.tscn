@@ -1,17 +1,19 @@
-[gd_scene load_steps=7 format=3 uid="uid://c3h585v8mippc"]
+[gd_scene load_steps=8 format=3 uid="uid://c3h585v8mippc"]
 
 [ext_resource type="Texture2D" uid="uid://vtf7yfl2710m" path="res://Assets/UI/panel-border-030.png" id="1_4llnu"]
 [ext_resource type="Script" uid="uid://mba17fr2no4g" path="res://Scripts/Components/free_item_offering.gd" id="1_bbqyr"]
 [ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="2_bbqyr"]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ihe0s"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qfudq"]
 bg_color = Color(0, 0, 0, 1)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_k1i5n"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_4llnu"]
 atlas = ExtResource("1_4llnu")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1c0i7"]
-texture = SubResource("AtlasTexture_k1i5n")
+texture = SubResource("AtlasTexture_4llnu")
 texture_margin_left = 32.0
 texture_margin_top = 32.0
 texture_margin_right = 32.0
@@ -40,33 +42,40 @@ offset_bottom = 182.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(275, 132)
-theme_override_styles/panel = SubResource("StyleBoxFlat_qfudq")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_ihe0s")
 
-[node name="PanelContainer" type="PanelContainer" parent="Panel"]
+[node name="panelBlack" type="PanelContainer" parent="Panel"]
+custom_minimum_size = Vector2(300, 150)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_bottom = -18.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_qfudq")
+
+[node name="PanelContainer" type="PanelContainer" parent="Panel/panelBlack"]
+layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_1c0i7")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/panelBlack/PanelContainer"]
 layout_mode = 2
 theme = ExtResource("2_bbqyr")
 theme_override_constants/separation = 10
 
-[node name="lblName" type="Label" parent="Panel/PanelContainer/VBoxContainer"]
+[node name="lblName" type="Label" parent="Panel/panelBlack/PanelContainer/VBoxContainer"]
 layout_mode = 2
 text = "Title of Menu"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel/PanelContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Panel/panelBlack/PanelContainer/VBoxContainer"]
+visible = false
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
-[node name="txtDesc" type="RichTextLabel" parent="Panel/PanelContainer/VBoxContainer/MarginContainer"]
+[node name="txtDesc" type="RichTextLabel" parent="Panel/panelBlack/PanelContainer/VBoxContainer/MarginContainer"]
 layout_mode = 2
 bbcode_enabled = true
 text = "This is where it goes when it exists..."
@@ -74,13 +83,14 @@ fit_content = true
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="itemsContainer" type="GridContainer" parent="Panel/PanelContainer/VBoxContainer"]
+[node name="itemsContainer" type="GridContainer" parent="Panel/panelBlack/PanelContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
+columns = 5
 
-[node name="btnSkip" type="Button" parent="Panel/PanelContainer/VBoxContainer"]
+[node name="btnSkip" type="Button" parent="Panel/panelBlack/PanelContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 text = "Skip"
 
-[connection signal="pressed" from="Panel/PanelContainer/VBoxContainer/btnSkip" to="." method="_on_btn_skip_pressed"]
+[connection signal="pressed" from="Panel/panelBlack/PanelContainer/VBoxContainer/btnSkip" to="." method="_on_btn_skip_pressed"]

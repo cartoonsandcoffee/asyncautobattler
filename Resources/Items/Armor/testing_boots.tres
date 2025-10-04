@@ -30,7 +30,7 @@ metadata/_custom_type_script = "uid://dahay7fvi7bik"
 
 [resource]
 script = ExtResource("2_5c7tm")
-item_name = "Boots of Testing"
+item_name = "Testing Boots"
 item_type = 4
 item_desc = ""
 item_icon = SubResource("AtlasTexture_862d0")

@@ -1,12 +1,53 @@
-[gd_resource type="Resource" script_class="Enemy" load_steps=10 format=3 uid="uid://dg2wcy0kx620y"]
+[gd_resource type="Resource" script_class="Enemy" load_steps=11 format=3 uid="uid://dg2wcy0kx620y"]
 
-[ext_resource type="Script" uid="uid://3iymyv7ft3xw" path="res://Scripts/Resources/EnemyAbility.gd" id="1_sm1jo"]
 [ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="2_aiy86"]
-[ext_resource type="Resource" uid="uid://dk6ysuq8w1mxs" path="res://Resources/Enemies/EnemyAbilities/Rage.tres" id="2_hkn3j"]
 [ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="3_hkn3j"]
 [ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="4_xr38p"]
 [ext_resource type="Texture2D" uid="uid://do0cbbubxlxq6" path="res://Assets/Art/Enemies/Klorg.png" id="6_hkn3j"]
 [ext_resource type="Script" uid="uid://c461mcmm1ot6v" path="res://Scripts/Classes/GameStats.gd" id="7_xr38p"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aiy86"]
+atlas = ExtResource("6_hkn3j")
+region = Rect2(1900, 350, 900, 900)
+
+[sub_resource type="Resource" id="Resource_hkn3j"]
+script = ExtResource("2_aiy86")
+trigger_type = 4
+trigger_stat = 8
+countdown_value = 0
+countdown_recurs = false
+turn_frequency = 2
+has_condition = false
+condition_stat = ""
+condition_category = ""
+condition_comparison = ">"
+condition_value = 0
+effect_type = 0
+target_type = 0
+target_stat = 1
+target_status = 9
+effect_amount = 2
+custom_description = ""
+metadata/_custom_type_script = "uid://dahay7fvi7bik"
+
+[sub_resource type="Resource" id="Resource_xr38p"]
+script = ExtResource("3_hkn3j")
+item_name = "Rage"
+item_type = 0
+item_desc = "When exposed, gain +2 damage."
+item_icon = SubResource("AtlasTexture_aiy86")
+item_color = Color(0.693, 0.385, 0.77, 1)
+rules = Array[ExtResource("2_aiy86")]([SubResource("Resource_hkn3j")])
+rarity = 0
+categories = Array[String]([])
+rng_weight = 1.0
+unlocked = false
+damage_bonus = 0
+shield_bonus = 0
+agility_bonus = 0
+hit_points_bonus = 0
+strikes_bonus = 0
+metadata/_custom_type_script = "uid://dthg27pchm1fm"
 
 [sub_resource type="Resource" id="Resource_gre71"]
 script = ExtResource("7_xr38p")
@@ -24,16 +65,15 @@ region = Rect2(1900, 375, 900, 900)
 
 [resource]
 script = ExtResource("4_xr38p")
-enemy_name = "Klargen"
+enemy_name = "A Despair"
 enemy_type = 0
 description = "On Exposed: Gain 2 attack."
 sprite = ExtResource("6_hkn3j")
-sprite_color = Color(1, 1, 1, 1)
+sprite_color = Color(0.521569, 0.282353, 0.396078, 1)
 weapon_sprite = SubResource("AtlasTexture_xr38p")
 stats = SubResource("Resource_gre71")
 gold = 3
 item_drop_chance = 0.1
 possible_item_drops = Array[ExtResource("3_hkn3j")]([])
-combat_rules = Array[ExtResource("2_aiy86")]([])
-abilities = Array[ExtResource("1_sm1jo")]([ExtResource("2_hkn3j")])
+abilities = Array[ExtResource("3_hkn3j")]([SubResource("Resource_xr38p")])
 metadata/_custom_type_script = "uid://relhyqi21ar8"

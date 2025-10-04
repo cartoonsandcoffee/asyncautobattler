@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="RoomDefinition" load_steps=6 format=3 uid="uid://x8oo5lvxyse8"]
+
+[ext_resource type="Texture2D" uid="uid://w21umqcnpemn" path="res://Assets/Art/Room_02_Background.png" id="1_53ba6"]
+[ext_resource type="Script" uid="uid://b8gvpcv3v7mib" path="res://Scripts/Resources/RoomDefinition.gd" id="1_a5rid"]
+[ext_resource type="Texture2D" uid="uid://by3aww4863ulx" path="res://Assets/Art/Doors/tomb.png" id="2_aqok8"]
+[ext_resource type="Texture2D" uid="uid://bffx10anckips" path="res://Assets/monochrome-transparent_packed.png" id="3_lyeat"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8mjh6"]
+atlas = ExtResource("3_lyeat")
+region = Rect2(16, 224, 16, 16)
+
+[resource]
+script = ExtResource("1_a5rid")
+room_type = 2
+rarity = 0
+room_name = "A Crypt"
+room_desc = "A spiritual energy eminates from beyond."
+background_texture = ExtResource("1_53ba6")
+door_texture = ExtResource("2_aqok8")
+room_icon = SubResource("AtlasTexture_8mjh6")
+room_color = Color(0.48256, 0.2146, 0.58, 1)
+possible_events = Array[PackedScene]([])
+spawn_weight = 1
+min_rank = 1
+max_rank = 5
+metadata/_custom_type_script = "uid://b8gvpcv3v7mib"

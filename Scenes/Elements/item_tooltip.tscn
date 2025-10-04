@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://7ygdm4ameglb"]
+[gd_scene load_steps=6 format=3 uid="uid://7ygdm4ameglb"]
 
 [ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="1_hixa8"]
 [ext_resource type="Script" uid="uid://1rv57854mprd" path="res://Scripts/Components/item_tooltip.gd" id="1_tiwhd"]
 [ext_resource type="PackedScene" uid="uid://bj1txoqo06q6n" path="res://Scenes/Elements/stat_item.tscn" id="2_y7em6"]
+[ext_resource type="FontFile" uid="uid://dcuypk4h1r4ff" path="res://Assets/UI/Fonts/ImperatorSmallCaps.ttf" id="3_f5dut"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tiwhd"]
 
@@ -49,9 +50,21 @@ layout_mode = 2
 size_flags_vertical = 8
 theme_override_constants/separation = 8
 
-[node name="lblName" type="Label" parent="Panel/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="lblName" type="Label" parent="Panel/PanelContainer/MarginContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Item Name"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="lblRarity" type="Label" parent="Panel/PanelContainer/MarginContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_f5dut")
+theme_override_font_sizes/font_size = 10
+text = "- Common -"
 horizontal_alignment = 1
 vertical_alignment = 1
 

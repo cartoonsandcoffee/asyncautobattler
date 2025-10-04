@@ -1,16 +1,17 @@
-[gd_scene load_steps=26 format=3 uid="uid://cqhyru53o5wfx"]
+[gd_scene load_steps=34 format=3 uid="uid://cqhyru53o5wfx"]
 
 [ext_resource type="Script" uid="uid://c60g0xugsdgdl" path="res://Scripts/Components/item_slot.gd" id="1_tnst4"]
 [ext_resource type="FontFile" uid="uid://dgwg8mvobk57a" path="res://Assets/UI/Fonts/ImperatorSmallCaps Bold.ttf" id="3_66iod"]
 [ext_resource type="Texture2D" uid="uid://1p2fhdhgi3x4" path="res://Assets/UI/Select.png" id="4_btogu"]
 [ext_resource type="Texture2D" uid="uid://7h1qtewfvmnq" path="res://Assets/Items/Blank.png" id="4_tnst4"]
-[ext_resource type="Texture2D" uid="uid://bffx10anckips" path="res://Assets/monochrome-transparent_packed.png" id="6_66iod"]
+[ext_resource type="Texture2D" uid="uid://bwo3qldtbc8u6" path="res://Assets/Items/Items.png" id="6_66iod"]
 [ext_resource type="PackedScene" uid="uid://7ygdm4ameglb" path="res://Scenes/Elements/item_tooltip.tscn" id="6_renmp"]
+[ext_resource type="Texture2D" uid="uid://bn24rd5ycn41x" path="res://Assets/UI/rarity_icons.png" id="7_jmixh"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tnst4"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jmixh"]
-bg_color = Color(0.118581, 0.118581, 0.118581, 1)
+bg_color = Color(0, 0, 0, 1)
 border_width_left = 3
 border_width_top = 3
 border_width_right = 3
@@ -23,6 +24,9 @@ region = Rect2(528, 0, 16, 16)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fif6b"]
 bg_color = Color(0.199101, 0.198613, 0.189857, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_66iod"]
+bg_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_renmp"]
 
@@ -137,64 +141,60 @@ _data = {
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_66iod"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_jmixh"]
-atlas = ExtResource("6_66iod")
-region = Rect2(480, 336, 16, 16)
-
 [sub_resource type="Animation" id="Animation_5r5i4"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("combat_highlight:visible")
+tracks/0/path = NodePath("Panel/VBoxContainer/orderContainer:theme_override_styles/panel:bg_color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"update": 0,
+"values": [Color(0.199101, 0.198613, 0.189857, 1)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("combat_highlight:position")
+tracks/1/path = NodePath("Panel/VBoxContainer/orderContainer:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(28, -42)]
+"values": [Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_fif6b"]
 resource_name = "combat_highlight"
-loop_mode = 1
-step = 0.01
+length = 0.5
+step = 0.025
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("combat_highlight:visible")
+tracks/0/path = NodePath("Panel/VBoxContainer/orderContainer:theme_override_styles/panel:bg_color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
+"update": 0,
+"values": [Color(0.199101, 0.198613, 0.189857, 1)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("combat_highlight:position")
-tracks/1/interp = 2
+tracks/1/path = NodePath("Panel/VBoxContainer/orderContainer:modulate")
+tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.4, 0.55, 0.64, 0.75),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(28, -42), Vector2(28, -58), Vector2(28, -40), Vector2(28, -47), Vector2(28, -40)]
+"values": [Color(1, 1, 1, 1), Color(0.9625, 1, 0.25, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_renmp"]
@@ -203,14 +203,26 @@ length = 0.3
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("combat_highlight:visible")
+tracks/0/path = NodePath("Panel/VBoxContainer/orderContainer:theme_override_styles/panel:bg_color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"update": 0,
+"values": [Color(0.199101, 0.198613, 0.189857, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Panel/VBoxContainer/orderContainer:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 0, 1), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_hnyqs"]
@@ -219,6 +231,34 @@ _data = {
 &"combat_highlight": SubResource("Animation_fif6b"),
 &"stop_highlight": SubResource("Animation_renmp")
 }
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5r5i4"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hnyqs"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.753984, 0.753984, 0.753984, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jrdc7"]
+atlas = ExtResource("6_66iod")
+region = Rect2(450, 150, 150, 150)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cr6d1"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iu5vn"]
+atlas = ExtResource("7_jmixh")
+region = Rect2(50, 50, 50, 50)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6j8ey"]
+bg_color = Color(0.111197, 0.111197, 0.111197, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j7okc"]
+bg_color = Color(1, 1, 1, 1)
 
 [node name="Item" type="Control"]
 layout_mode = 3
@@ -275,6 +315,7 @@ theme_override_constants/margin_bottom = 3
 [node name="lblOrder" type="Label" parent="Panel/VBoxContainer/orderContainer/MarginContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.894922, 0.894922, 0.894922, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("3_66iod")
 theme_override_font_sizes/font_size = 12
 text = "weapon"
@@ -300,6 +341,27 @@ patch_margin_left = 25
 patch_margin_top = 25
 patch_margin_right = 25
 patch_margin_bottom = 25
+
+[node name="pnlRare" type="Panel" parent="Panel"]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -20.0
+offset_bottom = 20.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_66iod")
+
+[node name="picRarity" type="TextureRect" parent="Panel/pnlRare"]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
 
 [node name="Button" type="Button" parent="Panel"]
 layout_mode = 1
@@ -335,22 +397,102 @@ offset_top = -2.0
 offset_right = 124.0
 offset_bottom = -2.0
 
-[node name="combat_highlight" type="TextureRect" parent="."]
-visible = false
-modulate = Color(0, 1, 0.0166667, 1)
-z_index = 100
-layout_mode = 1
-offset_left = 28.0
-offset_top = -42.0
-offset_right = 68.0
-offset_bottom = -2.0
-texture = SubResource("AtlasTexture_jmixh")
-expand_mode = 1
-
 [node name="animHighlight" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_hnyqs")
 }
+
+[node name="pnlBlack" type="Panel" parent="."]
+visible = false
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_5r5i4")
+
+[node name="ItemContent" type="MarginContainer" parent="pnlBlack"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="pnlBorder" type="PanelContainer" parent="pnlBlack/ItemContent"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hnyqs")
+
+[node name="MarginContainer" type="MarginContainer" parent="pnlBlack/ItemContent/pnlBorder"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="TextureRect" type="TextureRect" parent="pnlBlack/ItemContent/pnlBorder/MarginContainer"]
+layout_mode = 2
+texture = SubResource("AtlasTexture_jrdc7")
+expand_mode = 1
+
+[node name="ItemRarity" type="PanelContainer" parent="pnlBlack"]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -20.0
+offset_bottom = 20.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_cr6d1")
+
+[node name="MarginContainer" type="MarginContainer" parent="pnlBlack/ItemRarity"]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="iconRarity" type="TextureRect" parent="pnlBlack/ItemRarity/MarginContainer"]
+modulate = Color(0, 1, 0.283333, 1)
+layout_mode = 2
+texture = SubResource("AtlasTexture_iu5vn")
+expand_mode = 1
+
+[node name="panelOrder" type="PanelContainer" parent="pnlBlack"]
+custom_minimum_size = Vector2(100, 20)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_right = 100.0
+offset_bottom = 20.0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_6j8ey")
+
+[node name="pnlActive" type="PanelContainer" parent="pnlBlack/panelOrder"]
+visible = false
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_j7okc")
+
+[node name="MarginContainer" type="MarginContainer" parent="pnlBlack/panelOrder"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="lblOrder" type="Label" parent="pnlBlack/panelOrder/MarginContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.873298, 0.873298, 0.873298, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_66iod")
+theme_override_font_sizes/font_size = 12
+text = "weapon"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="mouse_entered" from="Panel/Button" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="Panel/Button" to="." method="_on_button_mouse_exited"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=66 format=3 uid="uid://yfx4f0fwf4vi"]
+[gd_scene load_steps=65 format=3 uid="uid://yfx4f0fwf4vi"]
 
 [ext_resource type="Texture2D" uid="uid://vtf7yfl2710m" path="res://Assets/UI/panel-border-030.png" id="1_0e3vx"]
 [ext_resource type="Script" uid="uid://c6hur1hg25jx" path="res://Scripts/main_game.gd" id="1_73nn6"]
@@ -21,12 +21,6 @@
 [ext_resource type="FontFile" uid="uid://d236qu1nwukxr" path="res://Assets/UI/Fonts/Imperator Bold.ttf" id="19_hm1wn"]
 [ext_resource type="Texture2D" uid="uid://7gybg0pei0fk" path="res://Resources/StatIcons/stat_gold.tres" id="20_ry2jr"]
 [ext_resource type="Theme" uid="uid://od14ccps1daj" path="res://Themes/descriptive_label.tres" id="21_qnvbm"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mgc0q"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_bb2iq"]
-atlas = ExtResource("4_6j5ir")
-region = Rect2(656, 224, 16, 16)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c78sm"]
 
@@ -84,10 +78,6 @@ bg_color = Color(0.114897, 0.114897, 0.114897, 1)
 [sub_resource type="AtlasTexture" id="AtlasTexture_qnvbm"]
 atlas = ExtResource("15_vc13p")
 region = Rect2(200, 350, 50, 50)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_vvhy6"]
-atlas = ExtResource("15_vc13p")
-region = Rect2(200, 450, 50, 50)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ns551"]
 atlas = ExtResource("15_vc13p")
@@ -270,6 +260,18 @@ tracks/12/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 1)]
 }
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("picEnemy:visible")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="Animation" id="Animation_vc13p"]
 resource_name = "close_combat"
@@ -318,6 +320,23 @@ tracks/3/interp = 2
 tracks/3/loop_wrap = true
 tracks/3/keys = {
 "times": PackedFloat32Array(0.2, 0.3, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1107, 251), Vector2(1041, 251), Vector2(1556, 251)]
+}
+
+[sub_resource type="Animation" id="Animation_58qbg"]
+resource_name = "close_fightrun"
+length = 0.4
+step = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LogPanel:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.4),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Vector2(1107, 251), Vector2(1041, 251), Vector2(1556, 251)]
@@ -426,6 +445,18 @@ tracks/2/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("picEnemy:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
 
 [sub_resource type="Animation" id="Animation_sftma"]
 resource_name = "open_Combat"
@@ -502,6 +533,18 @@ tracks/5/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 1)]
 }
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("picEnemy:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="Animation" id="Animation_ry2jr"]
 resource_name = "player_attack"
@@ -572,6 +615,7 @@ tracks/4/keys = {
 _data = {
 &"RESET": SubResource("Animation_gpk8t"),
 &"close_combat": SubResource("Animation_vc13p"),
+&"close_fightrun": SubResource("Animation_58qbg"),
 &"enemy_attack": SubResource("Animation_hm1wn"),
 &"enemy_die": SubResource("Animation_erobn"),
 &"open_Combat": SubResource("Animation_sftma"),
@@ -590,6 +634,10 @@ texture_margin_left = 32.0
 texture_margin_top = 32.0
 texture_margin_right = 32.0
 texture_margin_bottom = 32.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bb2iq"]
+atlas = ExtResource("4_6j5ir")
+region = Rect2(656, 224, 16, 16)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_erobn"]
 
@@ -610,91 +658,91 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("TopPanel:position")
+tracks/1/path = NodePath("ReplaceItemPanel:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(585, -136)]
+"update": 1,
+"values": [false]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("ReplaceItemPanel:visible")
+tracks/2/path = NodePath("ReplaceItemPanel:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("ReplaceItemPanel:modulate")
+tracks/3/path = NodePath("ReplaceItemPanel/panelBlack:scale")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 1)]
+"values": [Vector2(1, 1)]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("ReplaceItemPanel/panelBlack:scale")
+tracks/4/path = NodePath("ReplaceItemPanel/panelBlack:modulate")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(1, 1)]
+"values": [Color(1, 1, 1, 1)]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("ReplaceItemPanel/panelBlack:modulate")
+tracks/5/path = NodePath("ReplaceItemPanel/panelBlack:pivot_offset")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 1)]
+"values": [Vector2(0, 0)]
 }
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("ReplaceItemPanel/panelBlack:pivot_offset")
+tracks/6/path = NodePath("DropItemPanel:visible")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0, 0)]
+"update": 1,
+"values": [false]
 }
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("DropItemPanel:visible")
+tracks/7/path = NodePath("DropItemPanel:self_modulate")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
 }
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("DropItemPanel:self_modulate")
+tracks/8/path = NodePath("DropItemPanel/panelBlack:modulate")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -706,34 +754,22 @@ tracks/8/keys = {
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("DropItemPanel/panelBlack:modulate")
+tracks/9/path = NodePath("DropItemPanel/panelBlack:scale")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 1)]
+"values": [Vector2(1, 1)]
 }
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("DropItemPanel/panelBlack:scale")
+tracks/10/path = NodePath("DropItemPanel/panelBlack:pivot_offset")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 1)]
-}
-tracks/11/type = "value"
-tracks/11/imported = false
-tracks/11/enabled = true
-tracks/11/path = NodePath("DropItemPanel/panelBlack:pivot_offset")
-tracks/11/interp = 1
-tracks/11/loop_wrap = true
-tracks/11/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -885,18 +921,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Vector2(80, 896), Vector2(80, 599), Vector2(80, 634)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("TopPanel:position")
-tracks/1/interp = 2
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0.3, 0.5, 0.6),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector2(585, -133), Vector2(585, 39), Vector2(585, 10)]
 }
 
 [sub_resource type="Animation" id="Animation_ns551"]
@@ -1158,105 +1182,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-
-[node name="TopPanel" type="Panel" parent="."]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -183.0
-offset_top = -136.0
-offset_right = 181.0
-offset_bottom = -18.0
-grow_horizontal = 2
-theme_override_styles/panel = SubResource("StyleBoxEmpty_mgc0q")
-
-[node name="ColorRect" type="ColorRect" parent="TopPanel"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 1)
-
-[node name="Background" type="NinePatchRect" parent="TopPanel"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("1_0e3vx")
-patch_margin_left = 24
-patch_margin_top = 24
-patch_margin_right = 24
-patch_margin_bottom = 24
-
-[node name="MarginContainer" type="MarginContainer" parent="TopPanel/Background"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -5.0
-offset_bottom = 5.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
-
-[node name="VBoxContainer" type="VBoxContainer" parent="TopPanel/Background/MarginContainer"]
-layout_mode = 2
-
-[node name="lblRank" type="Label" parent="TopPanel/Background/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("2_6j5ir")
-theme_override_font_sizes/font_size = 28
-text = "Dungeon Map Rank : 1"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="RoomGrid" type="GridContainer" parent="TopPanel/Background/MarginContainer/VBoxContainer"]
-layout_mode = 2
-columns = 6
-
-[node name="RoomIcon_1" type="TextureButton" parent="TopPanel/Background/MarginContainer/VBoxContainer/RoomGrid"]
-custom_minimum_size = Vector2(50, 50)
-layout_mode = 2
-texture_normal = SubResource("AtlasTexture_bb2iq")
-stretch_mode = 0
-
-[node name="RoomIcon_2" type="TextureButton" parent="TopPanel/Background/MarginContainer/VBoxContainer/RoomGrid"]
-custom_minimum_size = Vector2(50, 50)
-layout_mode = 2
-texture_normal = SubResource("AtlasTexture_bb2iq")
-stretch_mode = 0
-
-[node name="RoomIcon_3" type="TextureButton" parent="TopPanel/Background/MarginContainer/VBoxContainer/RoomGrid"]
-custom_minimum_size = Vector2(50, 50)
-layout_mode = 2
-texture_normal = SubResource("AtlasTexture_bb2iq")
-stretch_mode = 0
-
-[node name="RoomIcon_4" type="TextureButton" parent="TopPanel/Background/MarginContainer/VBoxContainer/RoomGrid"]
-custom_minimum_size = Vector2(50, 50)
-layout_mode = 2
-texture_normal = SubResource("AtlasTexture_bb2iq")
-stretch_mode = 0
-
-[node name="RoomIcon_5" type="TextureButton" parent="TopPanel/Background/MarginContainer/VBoxContainer/RoomGrid"]
-custom_minimum_size = Vector2(50, 50)
-layout_mode = 2
-texture_normal = SubResource("AtlasTexture_bb2iq")
-stretch_mode = 0
-
-[node name="RoomIcon_6" type="TextureButton" parent="TopPanel/Background/MarginContainer/VBoxContainer/RoomGrid"]
-custom_minimum_size = Vector2(50, 50)
-layout_mode = 2
-texture_normal = SubResource("AtlasTexture_bb2iq")
-stretch_mode = 0
 
 [node name="CombatPanel" type="Panel" parent="."]
 layout_mode = 1
@@ -1588,16 +1513,11 @@ vertical_alignment = 1
 
 [node name="speedControls" type="HBoxContainer" parent="CombatPanel/LogPanel/RightSidePanel/PanelContainer/CombatLogBox"]
 layout_mode = 2
-size_flags_horizontal = 4
 theme = ExtResource("15_erobn")
 
 [node name="btnPause" type="Button" parent="CombatPanel/LogPanel/RightSidePanel/PanelContainer/CombatLogBox/speedControls"]
 layout_mode = 2
 icon = SubResource("AtlasTexture_qnvbm")
-
-[node name="btnNext" type="Button" parent="CombatPanel/LogPanel/RightSidePanel/PanelContainer/CombatLogBox/speedControls"]
-layout_mode = 2
-icon = SubResource("AtlasTexture_vvhy6")
 
 [node name="btnPlay" type="Button" parent="CombatPanel/LogPanel/RightSidePanel/PanelContainer/CombatLogBox/speedControls"]
 layout_mode = 2
@@ -1624,8 +1544,13 @@ scrollable = false
 tick_count = 7
 ticks_on_borders = true
 
+[node name="MarginContainer" type="MarginContainer" parent="CombatPanel/LogPanel/RightSidePanel/PanelContainer/CombatLogBox/speedControls"]
+layout_mode = 2
+size_flags_horizontal = 3
+
 [node name="lblSpeed" type="Label" parent="CombatPanel/LogPanel/RightSidePanel/PanelContainer/CombatLogBox/speedControls"]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "1.5x"
 
 [node name="FightRunBox" type="VBoxContainer" parent="CombatPanel/LogPanel/RightSidePanel/PanelContainer"]
@@ -2179,6 +2104,144 @@ theme_override_constants/margin_bottom = 20
 layout_mode = 2
 theme_override_constants/separation = 8
 
+[node name="hboxStats" type="HBoxContainer" parent="BottomPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="statHealth" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats" instance=ExtResource("8_6y7pd")]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+stat_color = Color(0, 0.91, 0.0758333, 1)
+stat_icon = SubResource("AtlasTexture_0xqxu")
+
+[node name="statDamage" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats" instance=ExtResource("8_6y7pd")]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+stat_color = Color(0.85, 0.0765, 0.0893915, 1)
+stat_icon = SubResource("AtlasTexture_tpqse")
+
+[node name="statShield" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats" instance=ExtResource("8_6y7pd")]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+stat = 3
+stat_color = Color(0, 0.533333, 1, 1)
+stat_icon = SubResource("AtlasTexture_c78sm")
+
+[node name="statAgility" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats" instance=ExtResource("8_6y7pd")]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+stat = 2
+stat_color = Color(0.94, 0.94, 0.3008, 1)
+stat_icon = SubResource("AtlasTexture_i47ox")
+
+[node name="statGold" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats" instance=ExtResource("8_6y7pd")]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+stat = 4
+stat_color = Color(0.88, 0.572, 0.1408, 1)
+stat_icon = SubResource("AtlasTexture_sftma")
+
+[node name="MarginContainer" type="MarginContainer" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="boxMiniMap" type="VBoxContainer" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats"]
+layout_mode = 2
+
+[node name="lblRank" type="Label" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_6j5ir")
+theme_override_font_sizes/font_size = 28
+text = "Dungeon Map Rank : 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RoomGrid" type="GridContainer" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap"]
+layout_mode = 2
+columns = 6
+
+[node name="RoomIcon_1" type="TextureButton" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap/RoomGrid"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture_normal = SubResource("AtlasTexture_bb2iq")
+stretch_mode = 0
+
+[node name="RoomIcon_2" type="TextureButton" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap/RoomGrid"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture_normal = SubResource("AtlasTexture_bb2iq")
+stretch_mode = 0
+
+[node name="RoomIcon_3" type="TextureButton" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap/RoomGrid"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture_normal = SubResource("AtlasTexture_bb2iq")
+stretch_mode = 0
+
+[node name="RoomIcon_4" type="TextureButton" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap/RoomGrid"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture_normal = SubResource("AtlasTexture_bb2iq")
+stretch_mode = 0
+
+[node name="RoomIcon_5" type="TextureButton" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap/RoomGrid"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture_normal = SubResource("AtlasTexture_bb2iq")
+stretch_mode = 0
+
+[node name="RoomIcon_6" type="TextureButton" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap/RoomGrid"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture_normal = SubResource("AtlasTexture_bb2iq")
+stretch_mode = 0
+
+[node name="boxCombatControls" type="VBoxContainer" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats"]
+visible = false
+layout_mode = 2
+
+[node name="lblTurn" type="Label" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("14_erobn")
+theme_override_font_sizes/font_size = 22
+text = "Turn: 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="speedControls" type="HBoxContainer" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls"]
+layout_mode = 2
+theme = ExtResource("15_erobn")
+
+[node name="btnPause" type="Button" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/speedControls"]
+layout_mode = 2
+icon = SubResource("AtlasTexture_qnvbm")
+
+[node name="btnPlay" type="Button" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/speedControls"]
+layout_mode = 2
+icon = SubResource("AtlasTexture_ns551")
+
+[node name="btnFast" type="Button" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/speedControls"]
+layout_mode = 2
+icon = SubResource("AtlasTexture_erobn")
+
+[node name="btnVeryFast" type="Button" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/speedControls"]
+layout_mode = 2
+icon = SubResource("AtlasTexture_vc13p")
+
+[node name="MarginContainer" type="MarginContainer" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/speedControls"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="lblSpeed" type="Label" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/speedControls"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("9_r0mdn")
+text = "1.5x"
+
 [node name="HBoxContainer" type="HBoxContainer" parent="BottomPanel/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 105)
 layout_mode = 2
@@ -2245,51 +2308,6 @@ layout_mode = 2
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="hboxStats" type="HBoxContainer" parent="BottomPanel/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 80)
-layout_mode = 2
-
-[node name="MarginContainer2" type="MarginContainer" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="statHealth" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats" instance=ExtResource("8_6y7pd")]
-custom_minimum_size = Vector2(130, 0)
-layout_mode = 2
-stat_color = Color(0, 0.91, 0.0758333, 1)
-stat_icon = SubResource("AtlasTexture_0xqxu")
-
-[node name="statDamage" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats" instance=ExtResource("8_6y7pd")]
-custom_minimum_size = Vector2(130, 0)
-layout_mode = 2
-stat_color = Color(0.85, 0.0765, 0.0893915, 1)
-stat_icon = SubResource("AtlasTexture_tpqse")
-
-[node name="statShield" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats" instance=ExtResource("8_6y7pd")]
-custom_minimum_size = Vector2(130, 0)
-layout_mode = 2
-stat = 3
-stat_color = Color(0, 0.533333, 1, 1)
-stat_icon = SubResource("AtlasTexture_c78sm")
-
-[node name="statAgility" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats" instance=ExtResource("8_6y7pd")]
-custom_minimum_size = Vector2(130, 0)
-layout_mode = 2
-stat = 2
-stat_color = Color(0.94, 0.94, 0.3008, 1)
-stat_icon = SubResource("AtlasTexture_i47ox")
-
-[node name="statGold" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats" instance=ExtResource("8_6y7pd")]
-custom_minimum_size = Vector2(130, 0)
-layout_mode = 2
-stat = 4
-stat_color = Color(0.88, 0.572, 0.1408, 1)
-stat_icon = SubResource("AtlasTexture_sftma")
-
-[node name="MarginContainer" type="MarginContainer" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats"]
-layout_mode = 2
-size_flags_horizontal = 3
-
 [node name="panelStatus" type="Panel" parent="BottomPanel"]
 layout_mode = 0
 offset_top = -87.0
@@ -2342,3 +2360,7 @@ libraries = {
 [connection signal="pressed" from="ReplaceItemPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/btnCancelReplace" to="." method="_on_btn_cancel_replace_pressed"]
 [connection signal="pressed" from="DropItemPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/HBoxContainer/btnCancelDrop" to="." method="_on_btn_cancel_drop_pressed"]
 [connection signal="pressed" from="DropItemPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/HBoxContainer/btnDrop" to="." method="_on_btn_drop_pressed"]
+[connection signal="pressed" from="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/speedControls/btnPause" to="CombatPanel" method="_on_btn_pause_pressed"]
+[connection signal="pressed" from="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/speedControls/btnPlay" to="CombatPanel" method="_on_btn_play_pressed"]
+[connection signal="pressed" from="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/speedControls/btnFast" to="CombatPanel" method="_on_btn_fast_pressed"]
+[connection signal="pressed" from="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/speedControls/btnVeryFast" to="CombatPanel" method="_on_btn_very_fast_pressed"]
