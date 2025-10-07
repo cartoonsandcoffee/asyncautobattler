@@ -21,7 +21,15 @@ enum Stats {
 	STRIKES,
 	EXPOSED,
 	WOUNDED,
+	BURN_DAMAGE,
 	NONE
+}
+
+enum StatType {		# Used for item conditions and rules
+    CURRENT,
+    BASE,
+    MISSING,
+    NONE
 }
 
 enum RoomType {
@@ -67,9 +75,9 @@ enum TriggerType {
 enum EffectType {
 	MODIFY_STAT,
 	APPLY_STATUS,
+	REMOVE_STATUS,
 	DEAL_DAMAGE,
 	HEAL,
-	CONVERT_STAT,
 	SKIP_ATTACK
 }
 
@@ -90,7 +98,8 @@ enum TargetType {
 	SELF,
 	ENEMY,
 	BOTH,
-	RANDOM
+	RANDOM,
+	NONE
 }
 
 enum Party {
@@ -123,8 +132,6 @@ func get_effect_type_string(_type: Enums.EffectType) -> String:
 			return "Deal Damage"
 		Enums.EffectType.HEAL:
 			return "Heal"
-		Enums.EffectType.CONVERT_STAT:
-			return "Convert Stat"
 		Enums.EffectType.SKIP_ATTACK:
 			return "Skip Attack"
 		_:
@@ -217,5 +224,7 @@ func get_stat_string(_stat: Enums.Stats) -> String:
 			return "gold"
 		Enums.Stats.STRIKES:
 			return "strikes"
+		Enums.Stats.BURN_DAMAGE:
+			return "burn"			
 		_:
 			return "<unknown stat>"

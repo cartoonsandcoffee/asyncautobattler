@@ -3,7 +3,7 @@ extends Node
 var available_items: Dictionary = {}
 var bonus_applied: bool = false
 
-var crafting_recipes: Dictionary = {}  # [recipe_key: String] -> CraftingRecipe
+var crafting_recipes: Array[CraftingRecipe] = []  # [recipe_key: String] -> CraftingRecipe
 var golden_item_registry: Dictionary = {}  # [common_item_name: String] -> golden_item_name: String
 var diamond_item_registry: Dictionary = {}  # [golden_item_name: String] -> diamond_item_name: String
 
@@ -11,18 +11,24 @@ var diamond_item_registry: Dictionary = {}  # [golden_item_name: String] -> diam
 func _ready():
 	# Create all your item types
 	setup_items()
-	register_golden_items()
-	register_diamond_items()
-	setup_crafting_system()
-
-func setup_crafting_system():
-	"""Initialize crafting recipes and upgrade paths"""
-	print("Setting up crafting system...")
-	setup_golden_upgrade_recipes()
-	setup_diamond_upgrade_recipes()
-	print("Crafting system ready. Recipes: ", crafting_recipes.size())
+	setup_crafting_recipes()
 
 
+func setup_crafting_recipes():
+	crafting_recipes.clear()
+
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/golden_testing_boots.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/golden_testing_robe.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/golden_testing_shield.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/golden_liferoot_gauntlets.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/golden_thorn_shield.tres"))
+
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Diamond/diamond_battleworn_shield.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Diamond/diamond_double_plated_armor.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Golden/golden_battleworn_shield.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Golden/golden_double_plated_armor.tres"))
+
+	
 func setup_items():
 	# Store them in our dictionary 
 	# --- COMMON
@@ -50,144 +56,55 @@ func setup_items():
 	available_items["Golden Testing Boots"] = preload("res://Resources/Items/Golden/golden_testing_boots.tres")
 	available_items["Golden Testing Shield"] = preload("res://Resources/Items/Golden/golden_testing_shield.tres")
 	available_items["Golden Testing Robes"] = preload("res://Resources/Items/Golden/golden_testing_robes.tres")
-	
-func register_golden_items():
-	# -- Register all golden tier items
-	# Add golden versions of your common items
-	# Example format:
-	# available_items["Golden [ItemName]"] = preload("res://Resources/Items/GOLDEN/golden_[itemname].tres")
-	
-	# TODO: Add your golden items here as you create them
-	# available_items["Golden Basic Sword"] = preload("res://Resources/Items/GOLDEN/golden_basic_sword.tres")
-	# available_items["Golden Leather Armor"] = preload("res://Resources/Items/GOLDEN/golden_leather_armor.tres")
-	
-	pass  # Remove this once you add items
+	available_items["Golden Double Plated Armor"] = preload("res://Resources/Items/COMMON/double_plated_armor.tres")
 
-func register_diamond_items():
-	# -- Register all diamond tier items
-	# Add golden versions of your common items
-	# Example format:
-	# available_items["Golden [ItemName]"] = preload("res://Resources/Items/GOLDEN/golden_[itemname].tres")
-	
-	# TODO: Add your golden items here as you create them
-	# available_items["Golden Basic Sword"] = preload("res://Resources/Items/GOLDEN/golden_basic_sword.tres")
-	# available_items["Golden Leather Armor"] = preload("res://Resources/Items/GOLDEN/golden_leather_armor.tres")
-	
-	pass  # Remove this once you add items	
+	# --- DIAMOND COMMON ITEMS
+	available_items["Diamond Battleworn Shield"] = preload("res://Resources/Items/Diamond/diamond_battleworn_shield.tres")
 
-func setup_golden_upgrade_recipes():
-	"""Create upgrade recipes for Common → Golden (auto-generated)"""
-	var recipe_count = 0
-	
-	for item_name in available_items.keys():
-		var item = available_items[item_name]
-		if item.rarity == Enums.Rarity.COMMON:
-			var golden_name = "Golden " + item_name
-			
-			# Check if golden version exists
-			if available_items.has(golden_name):
-				# Register the upgrade path
-				golden_item_registry[item_name] = golden_name
-				
-				# Create recipe
-				var recipe = CraftingRecipe.new()
-				recipe.recipe_name = item_name + " → " + golden_name
-				recipe.recipe_type = CraftingRecipe.RecipeType.SAME_ITEM_UPGRADE
-				recipe.ingredient_1_name = item_name
-				recipe.ingredient_2_name = item_name
-				recipe.result_item_name = golden_name
-				recipe.requires_same_items = true
-				
-				# Store recipe with consistent key
-				var recipe_key = generate_recipe_key(item_name, item_name)
-				crafting_recipes[recipe_key] = recipe
-				recipe_count += 1
-				
-				print("  Created recipe: 2x ", item_name, " → ", golden_name)
-	
-	print("Generated ", recipe_count, " golden upgrade recipes")
-
-func setup_diamond_upgrade_recipes():
-	"""Create upgrade recipes for Golden → Diamond (auto-generated)"""
-	var recipe_count = 0
-	
-	for item_name in available_items.keys():
-		var item = available_items[item_name]
-		if item.rarity == Enums.Rarity.GOLDEN:
-			# Diamond name is just replace "Golden" with "Diamond"
-			var diamond_name = item_name.replace("Golden ", "Diamond ")
-			
-			# Check if diamond version exists
-			if available_items.has(diamond_name):
-				# Register the upgrade path
-				diamond_item_registry[item_name] = diamond_name
-				
-				# Create recipe
-				var recipe = CraftingRecipe.new()
-				recipe.recipe_name = item_name + " → " + diamond_name
-				recipe.recipe_type = CraftingRecipe.RecipeType.SAME_ITEM_UPGRADE
-				recipe.ingredient_1_name = item_name
-				recipe.ingredient_2_name = item_name
-				recipe.result_item_name = diamond_name
-				recipe.requires_same_items = true
-				
-				# Store recipe
-				var recipe_key = generate_recipe_key(item_name, item_name)
-				crafting_recipes[recipe_key] = recipe
-				recipe_count += 1
-				
-				print("  Created recipe: 2x ", item_name, " → ", diamond_name)
-	
-	print("Generated ", recipe_count, " diamond upgrade recipes")
-
-func generate_recipe_key(item1_name: String, item2_name: String) -> String:
-	"""Generate a consistent key for recipe lookup"""
-	# Sort names alphabetically to ensure "Sword+Shield" == "Shield+Sword"
-	var names = [item1_name, item2_name]
-	names.sort()
-	return names[0] + "+" + names[1]
+	# --- Sample Build 1
+	available_items["Clearmetal Dagger"] = preload("res://Resources/Items/RARE/Clearmetal_Dagger.tres")
+	available_items["Metallic Glass"] = preload("res://Resources/Items/CRAFTED/Metallic_Glass.tres")
+	available_items["Ironskin Potion"] = preload("res://Resources/Items/UNCOMMON/Ironskin_Potion.tres")
+	available_items["Clearmetal Crown"] = preload("res://Resources/Items/UNCOMMON/Clearmetal_Crown.tres")
+	available_items["Reinforced Gauntlets"] = preload("res://Resources/Items/UNCOMMON/reinforced_gauntlet.tres")
+	available_items["Chainmail Shirt"] = preload("res://Resources/Items/UNCOMMON/Chainmail_Shirt.tres")
+	available_items["Metalliglass Totem"] = preload("res://Resources/Items/RARE/Metalliglass_Totem.tres")
+	available_items["Metalliglass Timepiece"] = preload("res://Resources/Items/RARE/Metalliglass_Timepiece.tres")
+	available_items["Diamond Double Plated Armor"] = preload("res://Resources/Items/Diamond/diamond_double_plated_armor.tres")
+	available_items["Potion of Insecurity"] = preload("res://Resources/Items/UNCOMMON/potion_insecurity.tres")
+	available_items["Indecent Exposure"] = preload("res://Resources/Items/UNCOMMON/Indecent_Exposure.tres")
+	available_items["Golden Battleworn Shield"] = preload("res://Resources/Items/Golden/golden_battleworn_shield.tres")
+	available_items["Clearmetal Battle Horn"] = preload("res://Resources/Items/RARE/Clearmetal_Horn.tres")
 
 func can_craft_items(item1: Item, item2: Item) -> bool:
 	"""Check if two items can be crafted together"""
 	if not item1 or not item2:
 		return false
 	
-	var recipe_key = generate_recipe_key(item1.item_name, item2.item_name)
-	
-	if crafting_recipes.has(recipe_key):
-		var recipe = crafting_recipes[recipe_key]
-		return recipe.validate_ingredients(item1, item2)
-	
+	for recipe in crafting_recipes:
+		if recipe.validate_ingredients(item1, item2):
+			return true
+		
 	return false
 
 func craft_items(item1: Item, item2: Item) -> Item:
-	"""Craft two items together and return the result (doesn't modify inventory)"""
+	# Craft two items together and return the result (doesn't modify inventory)
 	if not can_craft_items(item1, item2):
 		push_error("Cannot craft these items together: " + item1.item_name + " + " + item2.item_name)
 		return null
 	
-	var recipe_key = generate_recipe_key(item1.item_name, item2.item_name)
-	var recipe = crafting_recipes[recipe_key]
+	for recipe in crafting_recipes:
+		if recipe.validate_ingredients(item1, item2):
+			return recipe.get_result_item()
 	
-	return recipe.get_result_item()
-
-func get_golden_version(common_item_name: String) -> Item:
-	"""Get the golden version of a common item"""
-	if golden_item_registry.has(common_item_name):
-		return get_item(golden_item_registry[common_item_name])
 	return null
 
-func get_diamond_version(golden_item_name: String) -> Item:
-	"""Get the diamond version of a golden item"""
-	if diamond_item_registry.has(golden_item_name):
-		return get_item(diamond_item_registry[golden_item_name])
-	return null
 
 func get_all_craftable_items() -> Array[Item]:
 	"""Get all items that can be used in crafting"""
 	var craftable: Array[Item] = []
 	for item in available_items.values():
-		if item.rarity == Enums.Rarity.COMMON or item.rarity == Enums.Rarity.GOLDEN:
+		if item.rarity == Enums.Rarity.DIAMOND or item.rarity == Enums.Rarity.GOLDEN or item.rarity == Enums.Rarity.CRAFTED:
 			craftable.append(item)
 	return craftable
 
@@ -239,6 +156,16 @@ func get_random_items(count: int, rarity: Enums.Rarity, include_bonus: bool = fa
 	if include_bonus && !bonus_applied && count > 1:
 		selected.append(get_item_of_higher_tier(rarity))
 	return selected
+
+func get_item_of_same_tier(rarity: Enums.Rarity, item_name: String) -> Item:
+	var _item: Item = null
+
+	_item = get_random_items(1, rarity, false)[0]
+
+	while _item.item_name == item_name:
+		_item = get_random_items(1, rarity, false)[0]
+		
+	return _item	
 
 func get_item_of_higher_tier(rarity: Enums.Rarity) -> Item:
 	var _item: Item = null

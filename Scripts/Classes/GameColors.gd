@@ -23,6 +23,8 @@ class Rarity:
 	const unique = Color("#D16249")         # Orange
 	const legendary = Color("#9F49D1")      # Magenta
 	const mysterious = Color("#6649D1")     # Purple
+	const golden = Color("#e0b300")		# Golden
+	const diamond = Color("#00e0dd")		# Diamond
 
 class Room:
 	const starter = Color("#4d4663ff")        # Brown

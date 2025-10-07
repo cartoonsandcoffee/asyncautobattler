@@ -39,6 +39,7 @@ enum ItemType {
 @export var agility_bonus: int = 0
 @export var hit_points_bonus: int = 0
 @export var strikes_bonus: int = 0
+@export var burn_damage_bonus: int = 0
 
 
 var instance_id: int = -1 # Add unique instance ID

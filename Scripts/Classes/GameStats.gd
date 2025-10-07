@@ -13,6 +13,7 @@ signal stats_updated()
 @export var hit_points: int = 10
 @export var gold: int = 0
 @export var strikes: int = 1
+@export var burn_damage: int = 3
 
 # Current values that can differ from base values
 var damage_current: int = 0
@@ -20,8 +21,6 @@ var shield_current: int = 0
 var agility_current: int = 0
 var hit_points_current: int = 10
 var strikes_current: int = 1
-
-var burn_damage: int = 3
 var burn_damage_current: int = 3
 
 var refresh_cost: int = 1
@@ -37,6 +36,7 @@ func reset_to_base_values():
 	agility_current = agility
 	#hit_points_current = hit_points   # -- HP shouldn't be maxed for combat... need to do this better
 	strikes_current = strikes
+	burn_damage_current = burn_damage
 
 func reset_base_stats():
 	damage = 0
@@ -44,6 +44,7 @@ func reset_base_stats():
 	agility = 0
 	hit_points = 10
 	strikes = 1
+	burn_damage = 3
 
 func reset_stat_to_base(_stat: Enums.Stats):
 	match _stat:
@@ -57,6 +58,8 @@ func reset_stat_to_base(_stat: Enums.Stats):
 			agility_current = agility
 		Enums.Stats.STRIKES:
 			strikes_current = strikes
+		Enums.Stats.BURN_DAMAGE:
+			burn_damage_current = burn_damage			
 	stats_updated.emit()
 
 func reset_stats_after_combat():
@@ -64,6 +67,7 @@ func reset_stats_after_combat():
 	shield_current = shield
 	agility_current = agility
 	strikes_current = strikes
+	burn_damage_current = burn_damage
 	stats_updated.emit()
 
 func decrease_stat(_stat: Enums.Stats, value: int):
@@ -78,6 +82,8 @@ func decrease_stat(_stat: Enums.Stats, value: int):
 			agility_current -= value
 		Enums.Stats.STRIKES:
 			strikes_current -= value
+		Enums.Stats.BURN_DAMAGE:
+			burn_damage_current -= value			
 		Enums.Stats.GOLD:
 			gold -= value
 	stats_updated.emit()
@@ -94,6 +100,8 @@ func increase_stat(_stat: Enums.Stats, value: int):
 			agility_current += value	
 		Enums.Stats.STRIKES:
 			strikes_current += value
+		Enums.Stats.BURN_DAMAGE:
+			burn_damage_current += value				
 		Enums.Stats.GOLD:
 			gold += value
 	stats_updated.emit()
@@ -110,6 +118,8 @@ func set_stat(_stat: Enums.Stats, value: int):
 			agility_current = value
 		Enums.Stats.STRIKES:
 			strikes_current = value
+		Enums.Stats.BURN_DAMAGE:
+			burn_damage_current = value				
 		Enums.Stats.GOLD:
 			gold = value
 	
@@ -127,6 +137,8 @@ func increase_base_stat(_stat: Enums.Stats, value: int):
 			agility += value	
 		Enums.Stats.STRIKES:
 			strikes += value
+		Enums.Stats.BURN_DAMAGE:
+			burn_damage += value			
 	stats_updated.emit()
 
 func decrease_base_stat(_stat: Enums.Stats, value: int):
@@ -141,4 +153,6 @@ func decrease_base_stat(_stat: Enums.Stats, value: int):
 			agility -= value	
 		Enums.Stats.STRIKES:
 			strikes -= value
+		Enums.Stats.BURN_DAMAGE:
+			burn_damage -= value				
 	stats_updated.emit()	

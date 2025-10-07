@@ -49,12 +49,28 @@ func new_run(nm: String):
 		stats.reset_to_base_values()
 	
 	if inventory:
-		inventory.add_item(ItemsManager.available_items["Testing Shield"])
-		inventory.add_item(ItemsManager.available_items["Fists"])
-		inventory.add_item(ItemsManager.available_items["Liferoot Gauntlets"])
-		inventory.add_item(ItemsManager.available_items["Testing Robes"])
-		inventory.add_item(ItemsManager.available_items["Thorn Shield"])
-		inventory.add_item(ItemsManager.available_items["Testing Boots"])
+		set_test_inventory()
+
+func set_test_inventory():
+	if !inventory:
+		return
+
+	inventory.set_inventory_size(12)
+
+	inventory.add_item(ItemsManager.available_items["Clearmetal Dagger"])
+	inventory.add_item(ItemsManager.available_items["Metallic Glass"])
+	inventory.add_item(ItemsManager.available_items["Ironskin Potion"])
+	inventory.add_item(ItemsManager.available_items["Clearmetal Crown"])
+	inventory.add_item(ItemsManager.available_items["Reinforced Gauntlets"])
+	inventory.add_item(ItemsManager.available_items["Chainmail Shirt"])
+	inventory.add_item(ItemsManager.available_items["Metalliglass Totem"])
+	inventory.add_item(ItemsManager.available_items["Metalliglass Timepiece"])
+	inventory.add_item(ItemsManager.available_items["Diamond Double Plated Armor"])
+	inventory.add_item(ItemsManager.available_items["Potion of Insecurity"])
+	inventory.add_item(ItemsManager.available_items["Indecent Exposure"])
+	inventory.add_item(ItemsManager.available_items["Golden Battleworn Shield"])
+	inventory.add_item(ItemsManager.available_items["Clearmetal Battle Horn"])
+
 
 func update_stats_from_items():
 	stats.reset_base_stats()

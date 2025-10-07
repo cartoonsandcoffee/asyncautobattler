@@ -13,7 +13,7 @@ signal inventory_full(item: Item)
 
 var weapon_slot: Item = null
 var item_slots: Array[Item] = []
-var max_item_slots: int = 8
+var max_item_slots: int = 4
 
 func _init():
 	# Initialize empty item slots
@@ -127,7 +127,7 @@ func remove_item(index: int) -> Item:
 	
 	return item
 
-func remove_multiple_items(indices: Array[int]) -> Array[Item]:
+func remove_multiple_items(indices: Array[int]) -> void:
 	# Remove multiple items by index, returns removed items
 	var removed_items: Array[Item] = []
 	
@@ -144,7 +144,6 @@ func remove_multiple_items(indices: Array[int]) -> Array[Item]:
 	# Compact to remove gaps
 	compact_items()
 	
-	return removed_items
 
 func clear_slot(index: int) -> void:
 	if index >= 0 and index < item_slots.size():
@@ -182,6 +181,10 @@ func get_item_count() -> int:
 
 func expand_inventory(additional_slots: int) -> void:
 	max_item_slots += additional_slots
+	item_slots.resize(max_item_slots)
+
+func set_inventory_size(total_slots: int) -> void:
+	max_item_slots = total_slots
 	item_slots.resize(max_item_slots)
 
 func compact_items():

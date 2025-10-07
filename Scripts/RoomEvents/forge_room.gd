@@ -11,20 +11,21 @@ extends RoomEvent
 
 
 func _ready():
-	print("treasure_room_event -> ready")
+	print("forge_room_event -> ready")
 	button.disabled = true
 	super._ready()  # Call parent's _ready
 
 func initialize_event():
-	print("treasure_room_event -> initialize_event")
+	print("forge_room_event -> initialize_event")
 	#item_combiner.item_selected.connect(_on_item_selected)
 	item_combiner.item_skipped.connect(_on_item_skipped)
 	#item_combiner.need_item_replace.connect(_on_need_item_replace)
 
 func _run_room_event():
-	print("treasure_room_event -> _run_room_event (post-combat)")
+	print("forge_room_event -> _run_room_event (post-combat)")
 	#item_combiner.item_selected.connect(_on_item_selected)
 	item_combiner.item_skipped.connect(_on_item_skipped)
+	item_combiner.combiner_closed.connect(_on_item_skipped)
 	#item_combiner.need_item_replace.connect(_on_need_item_replace)
 	button.disabled = false
 	show_jars()

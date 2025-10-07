@@ -5,7 +5,7 @@ extends Control
 ## Coordinates inventory UI, dungeon map, and room display area
 
 # UI Components
-@onready var dungeon_map_panel: Panel = $TopPanel
+#@onready var dungeon_map_panel: Panel = $TopPanel
 @onready var inventory_panel: Panel = $BottomPanel
 @onready var combat_panel: CombatPanel = $CombatPanel
 
@@ -52,6 +52,7 @@ var dragging_instance_id: int = -1
 var dragging_from_slot: int = -1
 var dragging_slot: ItemSlot = null
 var drag_preview: Control = null
+var is_dragging: bool = false
 
 # for combat
 var awaiting_combat_result: bool = false
@@ -89,7 +90,7 @@ func _input(event: InputEvent):
 	if dragging_slot and drag_preview:
 		if event is InputEventMouseMotion:
 			drag_preview.global_position = event.global_position - Vector2(50, 50)  # Center on mouse
-
+			update_combiner_slot_highlights()
 
 func create_test_player():
 	setup_inventory()
@@ -361,20 +362,39 @@ func _on_drag_started(slot: ItemSlot):
 		slot.tooltip_panel.hide()
 
 func _on_drag_ended(slot: ItemSlot):
+	# Check if dragging over ItemCombiner
+	var combiner = get_current_item_combiner()
+	if combiner:
+		var target_slot = get_combiner_slot_under_mouse(combiner)
+		if target_slot > 0:
+			# Add item to combiner slot
+			combiner.add_item_to_slot(
+				slot.current_item,
+				slot.slot_index,
+				target_slot
+			)
+			clear_dragging_vars()
+			return  # Don't process normal inventory drop
+
 	# Find what slot we're over
 	var target_slot = get_slot_under_mouse()
 	
 	if target_slot and target_slot != slot:
 		# Perform the swap or move
 		perform_item_move(slot, target_slot)
+
+	clear_dragging_vars()
+	slot.modulate.a = 1.0
 	
+func clear_dragging_vars():
 	# Clean up drag state
 	if drag_preview:
 		drag_preview.queue_free()
 		drag_preview = null
 	
 	dragging_slot = null
-	slot.modulate.a = 1.0
+	is_dragging = false
+
 
 func _on_slot_dropped_on(target_slot: ItemSlot, dragged_item: Item):
 	if dragging_slot and dragging_slot != target_slot:
@@ -434,6 +454,41 @@ func get_slot_under_mouse() -> ItemSlot:
 		if slot and slot.get_global_rect().has_point(mouse_pos):
 			return slot
 	return null
+
+func get_current_item_combiner() -> ItemCombiner:
+	# Get the ItemCombiner from current event if it exists
+	if current_event and current_event.has_node("ItemCombiner"):
+		return current_event.get_node("ItemCombiner")
+	return null
+
+func get_combiner_slot_under_mouse(combiner: ItemCombiner) -> int:
+	# Check which combiner slot (1 or 2) the mouse is over, or 0 if neither
+	var mouse_pos = get_global_mouse_position()
+	
+	if combiner.craft_slot_1.get_global_rect().has_point(mouse_pos):
+		return 1
+	elif combiner.craft_slot_2.get_global_rect().has_point(mouse_pos):
+		return 2
+	
+	return 0
+
+func update_combiner_slot_highlights():
+	# Highlight combiner slots when dragging items over them 
+	var combiner = get_current_item_combiner()
+	if not combiner:
+		return
+	
+	var slot_num = get_combiner_slot_under_mouse(combiner)
+	
+	# Reset both slots
+	combiner.craft_slot_1.modulate = Color.WHITE
+	combiner.craft_slot_2.modulate = Color.WHITE
+	
+	# Highlight the hovered slot
+	if slot_num == 1:
+		combiner.craft_slot_1.modulate = Color(1.2, 1.2, 1.0)  # Slight yellow tint
+	elif slot_num == 2:
+		combiner.craft_slot_2.modulate = Color(1.2, 1.2, 1.0)
 
 func create_drag_preview(item: Item):
 	if drag_preview:
