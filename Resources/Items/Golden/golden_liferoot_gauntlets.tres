@@ -1,0 +1,63 @@
+[gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://2b02hnrvc0w6"]
+
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_d5ppc"]
+[ext_resource type="Texture2D" uid="uid://bwo3qldtbc8u6" path="res://Assets/Items/Items.png" id="1_lvvkg"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_lvvkg"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4tf6h"]
+atlas = ExtResource("1_lvvkg")
+region = Rect2(150, 1050, 150, 150)
+
+[sub_resource type="Resource" id="Resource_upueh"]
+script = ExtResource("1_d5ppc")
+trigger_type = 1
+trigger_stat = 8
+trigger_status = 9
+countdown_value = 0
+countdown_recurs = false
+turn_frequency = 2
+has_condition = false
+condition_type = 0
+condition_stat = 0
+condition_status = 9
+condition_comparison = ">"
+compare_to = 0
+condition_value = 0
+condition_party = 4
+condition_stat_type = 3
+condition_party_stat = 9
+effect_type = 1
+target_type = 0
+target_stat_type = null
+target_stat = 8
+target_status = 3
+effect_of = 0
+effect_amount = 6
+effect_stat_party = 4
+effect_stat_type = 3
+effect_stat_value = 9
+repeat_effect_X_times = 0
+repeat_effect_for_category = null
+special_string = null
+custom_description = ""
+metadata/_custom_type_script = "uid://dahay7fvi7bik"
+
+[resource]
+script = ExtResource("2_lvvkg")
+item_name = "Golden Liferoot Gauntlets"
+item_type = 3
+item_desc = ""
+item_icon = SubResource("AtlasTexture_4tf6h")
+item_color = Color(0.878431, 0.701961, 0, 1)
+rules = Array[ExtResource("1_d5ppc")]([SubResource("Resource_upueh")])
+rarity = 0
+categories = Array[String](["Wood"])
+rng_weight = 1.0
+unlocked = true
+damage_bonus = 0
+shield_bonus = 0
+agility_bonus = 0
+hit_points_bonus = 6
+strikes_bonus = 0
+burn_damage_bonus = 0
+metadata/_custom_type_script = "uid://dthg27pchm1fm"

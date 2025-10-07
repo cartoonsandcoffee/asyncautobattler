@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="Item" load_steps=5 format=3 uid="uid://b0fghi2r32pqt"]
+
+[ext_resource type="Texture2D" uid="uid://bwo3qldtbc8u6" path="res://Assets/Items/Items.png" id="1_g8kpg"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_tk5t2"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_g8kpg"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8mq1f"]
+atlas = ExtResource("1_g8kpg")
+region = Rect2(150, 300, 150, 150)
+
+[resource]
+script = ExtResource("2_g8kpg")
+item_name = "Diamond Battleworn Shield"
+item_type = 2
+item_desc = ""
+item_icon = SubResource("AtlasTexture_8mq1f")
+item_color = Color(0.4539, 0.853658, 0.89, 1)
+rules = Array[ExtResource("1_tk5t2")]([])
+rarity = 7
+categories = Array[String]([])
+rng_weight = 1.0
+unlocked = true
+damage_bonus = 0
+shield_bonus = 12
+agility_bonus = 0
+hit_points_bonus = 0
+strikes_bonus = 0
+burn_damage_bonus = 0
+metadata/_custom_type_script = "uid://dthg27pchm1fm"

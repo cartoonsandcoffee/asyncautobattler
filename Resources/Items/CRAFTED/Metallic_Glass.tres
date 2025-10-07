@@ -1,0 +1,97 @@
+[gd_resource type="Resource" script_class="Item" load_steps=7 format=3 uid="uid://dbr7bw5kmsp22"]
+
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_bngs7"]
+[ext_resource type="Texture2D" uid="uid://bwo3qldtbc8u6" path="res://Assets/Items/Items.png" id="1_fxbjj"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_fxbjj"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3k812"]
+atlas = ExtResource("1_fxbjj")
+region = Rect2(450, 1350, 150, 150)
+
+[sub_resource type="Resource" id="Resource_bhlgc"]
+script = ExtResource("1_bngs7")
+trigger_type = 1
+trigger_stat = 9
+trigger_status = 9
+countdown_value = 0
+countdown_recurs = false
+turn_frequency = 2
+has_condition = true
+condition_type = 0
+condition_stat = 0
+condition_status = 9
+condition_comparison = "=="
+compare_to = 1
+condition_value = 0
+condition_party = 0
+condition_stat_type = 1
+condition_party_stat = 0
+effect_type = 0
+target_type = 0
+target_stat_type = 0
+target_stat = 2
+target_status = 9
+effect_of = 0
+effect_amount = 2
+effect_stat_party = 4
+effect_stat_type = 3
+effect_stat_value = 9
+repeat_effect_X_times = 0
+repeat_effect_for_category = null
+special_string = null
+custom_description = ""
+metadata/_custom_type_script = "uid://dahay7fvi7bik"
+
+[sub_resource type="Resource" id="Resource_bn00j"]
+script = ExtResource("1_bngs7")
+trigger_type = 1
+trigger_stat = 9
+trigger_status = 9
+countdown_value = 0
+countdown_recurs = false
+turn_frequency = 2
+has_condition = false
+condition_type = 0
+condition_stat = 9
+condition_status = 9
+condition_comparison = ">"
+compare_to = 0
+condition_value = 0
+condition_party = 4
+condition_stat_type = 3
+condition_party_stat = 9
+effect_type = 3
+target_type = 1
+target_stat_type = null
+target_stat = 9
+target_status = 9
+effect_of = 0
+effect_amount = 2
+effect_stat_party = 4
+effect_stat_type = 3
+effect_stat_value = 9
+repeat_effect_X_times = 2
+repeat_effect_for_category = null
+special_string = null
+custom_description = ""
+metadata/_custom_type_script = "uid://dahay7fvi7bik"
+
+[resource]
+script = ExtResource("2_fxbjj")
+item_name = "Metallic Glass"
+item_type = 9
+item_desc = "Battle Start: If your health is full, gain 2 armor and deal 2 damage; repeat 2 times."
+item_icon = SubResource("AtlasTexture_3k812")
+item_color = Color(0.580392, 0.686275, 0.752941, 1)
+rules = Array[ExtResource("1_bngs7")]([SubResource("Resource_bhlgc"), SubResource("Resource_bn00j")])
+rarity = 8
+categories = Array[String](["Clearmetal"])
+rng_weight = 1.0
+unlocked = true
+damage_bonus = 0
+shield_bonus = 0
+agility_bonus = 0
+hit_points_bonus = 0
+strikes_bonus = 0
+burn_damage_bonus = 0
+metadata/_custom_type_script = "uid://dthg27pchm1fm"
