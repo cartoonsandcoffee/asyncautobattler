@@ -30,6 +30,7 @@ condition_stat_type = 3
 condition_party_stat = 9
 effect_type = 0
 target_type = 0
+target_stat_type = 0
 target_stat = 1
 target_status = 9
 effect_of = 0
@@ -38,6 +39,8 @@ effect_stat_party = 4
 effect_stat_type = 3
 effect_stat_value = 9
 repeat_effect_X_times = 0
+repeat_effect_for_category = ""
+special_string = ""
 custom_description = ""
 metadata/_custom_type_script = "uid://dahay7fvi7bik"
 
@@ -58,6 +61,7 @@ shield_bonus = 0
 agility_bonus = 0
 hit_points_bonus = 0
 strikes_bonus = 0
+burn_damage_bonus = 0
 metadata/_custom_type_script = "uid://dthg27pchm1fm"
 
 [sub_resource type="Resource" id="Resource_gre71"]

@@ -38,7 +38,7 @@ effect_stat_type = 3
 effect_stat_value = 9
 repeat_effect_X_times = 0
 repeat_effect_for_category = ""
-special_string = null
+special_string = ""
 custom_description = ""
 metadata/_custom_type_script = "uid://dahay7fvi7bik"
 

@@ -26,4 +26,5 @@ shield_bonus = 0
 agility_bonus = 0
 hit_points_bonus = 0
 strikes_bonus = 0
+burn_damage_bonus = 0
 metadata/_custom_type_script = "uid://dthg27pchm1fm"
