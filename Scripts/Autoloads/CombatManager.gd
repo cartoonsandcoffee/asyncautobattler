@@ -3,18 +3,18 @@ extends Node
 ## Central combat system that manages turn-based autobattler mechanics
 ## Handles rule resolution, status effects, and combat flow with configurable speed
 
-# Combat flow signals
+# --- Combat flow signals
 signal combat_started(player_entity, enemy_entity)
 signal turn_started(entity)
 signal turn_ended(entity)
 signal combat_ended(winner, loser)
 
-# Action signals  
-signal attack_executed(attacker, target, damage_dealt)
-signal damage_dealt(target, amount, taken_by)
+# --- Action signals  
+#signal attack_executed(attacker, target, damage_dealt)
+#signal damage_dealt(target, amount, taken_by)
 signal healing_applied(target, amount)
 
-# State change signals
+# --- State change signals
 signal stat_changed(entity, stat_name: String, old_value: int, new_value: int)
 signal status_applied(entity, status_name: String, stacks: int)
 signal status_proc(entity, _status: Enums.StatusEffects, _stat: Enums.Stats, value: int) 
@@ -287,9 +287,22 @@ func apply_damage_unified(target, amount: int, source, damage_type: String = "at
 		target.stats.hit_points_current = 0
 		await handle_entity_death(target)
 	
+	if target.stats.hit_points_current == 1:
+		await process_entity_items_sequentially(target, Enums.TriggerType.ONE_HITPOINT_LEFT)
+
 	return (shield_damage + hp_damage)
 
-
+func count_items_with_category(entity, category: String) -> int:
+	var count = 0
+	if entity == player_entity:
+        # Check weapon
+		if entity.inventory.weapon_slot and entity.inventory.weapon_slot.has_category(category):
+			count += 1
+        # Check inventory
+		for item in entity.inventory.item_slots:
+			if item and item.has_category(category):
+				count += 1
+	return count
 
 func process_countdown_rules():
 	# JDM: This function will have to loop through inventory items and decrement countdown/charge items
@@ -413,11 +426,12 @@ func execute_item_rule(item: Item, rule: ItemRule, entity):
 			await modify_entity_stat(entity, rule.target_stat, rule.effect_amount)
 		Enums.EffectType.APPLY_STATUS:
 			await apply_status_effect(entity, rule.target_status, rule.effect_amount)
+		Enums.EffectType.REMOVE_STATUS:
+			await remove_status_effect(entity, rule.target_status, rule.effect_amount)			
 		Enums.EffectType.DEAL_DAMAGE:
-			await apply_damage_unified(get_opponent(entity), rule.effect_amount, entity, "item")
+			await apply_damage_unified(entity, rule.effect_amount, entity, "item")
 		Enums.EffectType.HEAL:
 			await heal_entity(entity, rule.effect_amount)
-	
 
 func modify_entity_stat(entity, stat_name: Enums.Stats, amount: int):
 	"""Modify an entity's stat and emit appropriate signals"""
@@ -441,7 +455,11 @@ func modify_entity_stat(entity, stat_name: Enums.Stats, amount: int):
 			old_value = entity.stats.hit_points_current
 			entity.stats.increase_stat(Enums.Stats.HITPOINTS, amount)
 			new_value = entity.stats.hit_points_current
-			
+		Enums.Stats.GOLD:
+			old_value = entity.stats.gold
+			entity.stats.increase_stat(Enums.Stats.GOLD, amount)
+			new_value = entity.stats.gold	
+
 			# Check for overheal
 			if new_value > entity.stats.hit_points:
 				var overheal_amount = new_value - entity.stats.hit_points
@@ -493,6 +511,44 @@ func apply_status_effect(entity, status_name: Enums.StatusEffects, stacks: int):
 	
 	add_to_combat_log_string("    " + get_entity_name(entity) + " gains " + str(stacks) + " " + Enums.get_status_string(status_name) + " (" + str(new_value) + " total)", Color.REBECCA_PURPLE)
 	status_applied.emit(entity, status_name, stacks)
+
+func remove_status_effect(entity, status_name: Enums.StatusEffects, stacks: int):
+	"""Apply status effect stacks to entity"""
+	if not entity.status_effects:
+		return
+		
+	var old_value: int
+	var new_value: int
+
+	match status_name:
+		Enums.StatusEffects.POISON:
+			old_value = entity.status_effects.poison
+			entity.status_effects.decrement_status(Enums.StatusEffects.POISON, stacks)
+			new_value = entity.status_effects.poison
+		Enums.StatusEffects.THORNS:
+			old_value = entity.status_effects.thorns
+			entity.status_effects.decrement_status(Enums.StatusEffects.THORNS, stacks)
+			new_value = entity.status_effects.thorns
+		Enums.StatusEffects.ACID:
+			old_value = entity.status_effects.acid
+			entity.status_effects.decrement_status(Enums.StatusEffects.ACID, stacks)
+			new_value = entity.status_effects.acid
+		Enums.StatusEffects.REGENERATION:
+			old_value = entity.status_effects.regeneration
+			entity.status_effects.decrement_status(Enums.StatusEffects.REGENERATION, stacks)
+			new_value = entity.status_effects.regeneration
+		Enums.StatusEffects.STUN:
+			old_value = entity.status_effects.stun
+			entity.status_effects.decrement_status(Enums.StatusEffects.STUN, stacks)
+			new_value = entity.status_effects.stun
+		Enums.StatusEffects.BURN:
+			old_value = entity.status_effects.burn
+			entity.status_effects.decrement_status(Enums.StatusEffects.BURN, stacks)
+			new_value = entity.status_effects.burn
+	
+	add_to_combat_log_string("    " + get_entity_name(entity) + " loses " + str(stacks) + " " + Enums.get_status_string(status_name) + " (" + str(new_value) + " total)", Color.REBECCA_PURPLE)
+	status_applied.emit(entity, status_name, stacks)
+
 
 func heal_entity(entity, amount: int):
 	var old_hp = entity.stats.hit_points_current
@@ -640,6 +696,9 @@ func process_wounded_rules(entity):
 func handle_entity_death(dead_entity):
 	add_to_combat_log_string(get_entity_name(dead_entity) + " has died!")
 	
+	if dead_entity == enemy_entity:
+		await process_entity_items_sequentially(player_entity, Enums.TriggerType.ON_KILL)
+ 	
 	# Setting combat_active to false allows it to end gracefully after turn
 	combat_active = false
 

@@ -15,36 +15,44 @@ var gamecolors: GameColors
 const KEYWORDS = {
 	"acid": {
 		"color": "#aaff00",
-		"description": "Reduces enemy armor by 1 each turn, then reduces by 1. No effect if armor is 0."
+		"description": "Removes armor equal to acid at turn start."
 	},
 	"poison": {
-		"color": "#83b44aff",
-		"description": "Deals 1 damage per stack at turn start, then reduces by 1."
+		"color": "#5b812fff",
+		"description": "If you have no shield, take damage equal to poison at turn start. Remove 1 stack at turn start."
 	},
 	"burn": {
 		"color": "#ff6600",
-		"description": "Deals damage equal to stacks × 3 at turn start, then reduces by 1."
+		"description": "At turn end, remove 1 burn stack and take 3 damage."
 	},
 	"thorns": {
 		"color": "#996633",
-		"description": "When attacked, deals damage equal to thorns stacks to attacker, then removes all stacks."
+		"description": "Deal damage equal to your thorn stacks when hit, then remove those thorns. "
 	},
 	"regeneration": {
 		"color": "#00ff88",
-		"description": "Heals 1 HP per stack at turn start, then reduces by 1."
+		"description": "Restore health equalt to regeneration at turn end, then remove 1 stack."
 	},
 	"stun": {
 		"color": "#ffff99",
-		"description": "Skips the target's next turn, then reduces by 1."
+		"description": "When stunned you skip your next strike. Remove 1 stun for each strike you skip."
 	},	
 	"exposed": {
-		"color": "#88d3ffff",
+		"color": "#96b6c9ff",
 		"description": "Triggered when shield reaches 0 for the first time in combat."
 	},
 	"wounded": {
 		"color": "#af4545ff",
-		"description": "Triggered when HP reaches 50% for the first time in combat."
-	}
+		"description": "Triggered when HP reaches 50% or lower for the first time each combat."
+	},
+	"blind": {
+		"color": "#b38b58ff",
+		"description": "Your attack is halved as long as you have blind stacks. Remove 1 at turn end."
+	},
+	"blessing": {
+		"color": "#3ca5e2ff",
+		"description": "When removed, gain 1 attack per stack and 3 health."
+	}		
 }
 
 # Trigger keywords (for special formatting)
@@ -55,8 +63,11 @@ const TRIGGER_KEYWORDS = {
 	"turn start": "#ddddff",
 	"countdown": "#ffddff",
 	"shield": "#6699ff",
+	"armor": "#6699ff",	
 	"damage": "#ff4444",
+	"attack": "#ff4444",	
 	"agility": "#ffdd44",
+	"speed": "#ffdd44",
 	"hit points": "#44ff44",
 	"hitpoints": "#44ff44",
 	"health": "#44ff44",
@@ -76,12 +87,12 @@ var found_keywords = []
 func set_references():
 	panel = $Panel
 	panel_container = $Panel/PanelContainer
-	lbl_name = $Panel/PanelContainer/MarginContainer/VBoxContainer/VBoxContainer/lblName
-	lbl_rarity = $Panel/PanelContainer/MarginContainer/VBoxContainer/VBoxContainer/lblRarity	
-	lbl_desc = $Panel/PanelContainer/MarginContainer/VBoxContainer/lblDesc
-	stats_grid = $Panel/PanelContainer/MarginContainer/VBoxContainer/statsGrid
-	category_grid = $Panel/PanelContainer/MarginContainer/VBoxContainer/categoryGrid
-	vbox = $Panel/PanelContainer/MarginContainer/VBoxContainer
+	lbl_name = $Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/VBoxContainer/lblName
+	lbl_rarity = $Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/VBoxContainer/lblRarity	
+	lbl_desc = $Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/lblDesc
+	stats_grid = $Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/statsGrid
+	category_grid = $Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/categoryGrid
+	vbox = $Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer
 	gamecolors = GameColors.new()
 
 func set_item(this_item: Item):
@@ -154,7 +165,7 @@ func show_categories(categories: Array[String]):
 		for category in categories:
 			var cat_container = category_item.instantiate()
 			cat_container.get_node("PanelContainer/MarginContainer/lblCategory").text = category
-			cat_container.custom_minimum_size = Vector2(cat_container.get_node("PanelContainer").size.x, cat_container.get_node("PanelContainer").size.y)
+			cat_container.custom_minimum_size = Vector2(140,40)
 			category_grid.add_child(cat_container)
 		category_grid.show()
 	else:
@@ -213,7 +224,7 @@ func process_description(text: String) -> String:
 
 func create_stacked_definitions():
 	var y_offset = 0
-	var extra_spacing: int = 10
+	var extra_spacing: int = 5
 	var tooltip_counter: int = 0
 
 	for keyword in found_keywords:
@@ -230,7 +241,7 @@ func create_stacked_definitions():
 		
 		if current_item.slot_index >= 4:
 			def_box.justify_right()
-			def_box.position = Vector2((panel_container.position.x - 400 - extra_spacing), (0 + y_offset))
+			def_box.position = Vector2((panel_container.position.x - 420 - extra_spacing), (0 + y_offset))
 		else:
 			def_box.justify_left()
 			def_box.position = Vector2((panel_container.position.x + panel_container.size.x + extra_spacing), (0 + y_offset))

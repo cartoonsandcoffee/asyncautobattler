@@ -54,7 +54,7 @@ enum TriggerType {
 	EXPOSED,
 	WOUNDED,
 	COUNTDOWN,
-	FIRST_TURN,
+	ENEMY_HIT_YOU,
 	EVERY_OTHER_TURN,
 	EVERY_X_TURNS,
 	EVERY_X_HITS,
@@ -112,7 +112,20 @@ enum Party {
 func get_target_string(_target: Enums.TargetType) -> String:
 	match _target:
 		Enums.TargetType.SELF:
-			return "YOU"
+			return "Your"
+		Enums.TargetType.ENEMY:
+			return "Your Enemy's"
+		Enums.TargetType.BOTH:
+			return "Both Parties'"
+		Enums.TargetType.RANDOM:
+			return "a Random Target's"
+		_:
+			return "<unknown target>"
+
+func get_target_string_nonpossessive(_target: Enums.TargetType) -> String:
+	match _target:
+		Enums.TargetType.SELF:
+			return "Yourself"
 		Enums.TargetType.ENEMY:
 			return "Your Enemy"
 		Enums.TargetType.BOTH:
@@ -122,10 +135,23 @@ func get_target_string(_target: Enums.TargetType) -> String:
 		_:
 			return "<unknown target>"
 
+func get_stat_type_string(_stat: Enums.StatType) -> String:
+	match _stat:
+		Enums.StatType.MISSING:
+			return "Missing"
+		Enums.StatType.BASE:
+			return "Base"
+		Enums.StatType.CURRENT:
+			return "Current"
+		_:
+			return "<unknown>"
+
 func get_effect_type_string(_type: Enums.EffectType) -> String:
 	match _type:
 		Enums.EffectType.APPLY_STATUS:
 			return "Apply Status"
+		Enums.EffectType.REMOVE_STATUS:
+			return "Apply Status"			
 		Enums.EffectType.MODIFY_STAT:
 			return "Modify Stat"
 		Enums.EffectType.DEAL_DAMAGE:
@@ -153,8 +179,8 @@ func get_trigger_type_string(_trigger: Enums.TriggerType) -> String:
 			return "Wounded"
 		Enums.TriggerType.COUNTDOWN:
 			return "Countdown"
-		Enums.TriggerType.FIRST_TURN:
-			return "First Turn"
+		Enums.TriggerType.ENEMY_HIT_YOU:
+			return "Enemy Hits You"
 		Enums.TriggerType.EVERY_OTHER_TURN:
 			return "Every Other Turn"
 		Enums.TriggerType.EVERY_X_TURNS:

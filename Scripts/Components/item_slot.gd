@@ -157,6 +157,21 @@ func get_item_instance() -> Item:
 		return current_item
 	return null
 
+func show_tooltip():
+	var viewport_size = get_viewport().size
+	var item_global_pos = global_position
+	var tooltip_estimated_width = 420  # actual width
+	
+	# Check if tooltip would go off right edge of screen
+	if (item_global_pos.x + 150) + tooltip_estimated_width > viewport_size.x:
+		# Position tooltip to the LEFT of the item instead
+		tooltip_panel.position = Vector2(-tooltip_estimated_width-20, -tooltip_panel.size.y-10)
+	else:
+		# Normal positioning (tooltip to the RIGHT of the item)
+		#tooltip_panel.position = Vector2(size.x + 30, -tooltip_panel.size.y)	
+		pass
+
+	tooltip_panel.visible = true
 
 func _on_button_mouse_exited() -> void:
 	anim_hover.play("stop")
@@ -166,10 +181,10 @@ func _on_button_mouse_exited() -> void:
 func _on_button_mouse_entered() -> void:
 	if !button.disabled:
 		anim_hover.play("hover")
-		tooltip_panel.visible = true
+		show_tooltip()
 
-	if get_parent().get_parent().has_method("is_dragging"):
-		if get_parent().get_parent().is_dragging():
+	if get_parent().has_method("is_dragging"):
+		if get_parent().is_dragging():
 			panel_border.modulate = Color(1.2, 1.2, 1.2)		
 
 func _on_button_down():

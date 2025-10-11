@@ -5,7 +5,7 @@ class_name AnimationManager
 
 signal animation_sequence_complete()
 signal milestone_complete(milestone_name: String)
-signal item_animation_complete(item: Item)
+#signal item_animation_complete(item: Item)
 
 # Animation queue and state
 var animation_queue: Array[AnimationRequest] = []
@@ -180,7 +180,7 @@ func _execute_item_sequence(items: Array, entity, trigger_type: String):
 				await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap") * 0.5)
 
 		#await CombatSpeed.create_timer(CombatSpeed.get_overlap_duration())
-		item_animation_complete.emit(item)
+		#item_animation_complete.emit(item)
 
 	# Brief pause after all items complete
 	await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap"))

@@ -4,12 +4,19 @@ extends Resource
 
 enum ConditionValueType {
     VALUE,
-    STAT_VALUE
+    STAT_VALUE,
+    STATUS_VALUE
 }
 
-enum ConditionType {
+enum StatOrStatus {
     STAT,
     STATUS
+}
+
+enum ConversionAmountType {
+    FIXED_VALUE,     # Convert exactly X (e.g., 1 armor)
+    HALF,      # Convert X% (e.g., 50% = half)
+    ALL              # Convert 100%
 }
 
 @export_group("Trigger")
@@ -22,7 +29,6 @@ enum ConditionType {
 @export var trigger_status: Enums.StatusEffects = Enums.StatusEffects.NONE    # goes with ON_STAT_GAIN/LOSS
 @export var countdown_value: int = 0  # For countdown triggers
 @export var countdown_recurs: bool = false # if the countdown resets
-@export var turn_frequency: int = 2   # For "every X turns" triggers
 
 @export_group("Conditions")
 @export var has_condition: bool = false:
@@ -30,7 +36,7 @@ enum ConditionType {
         has_condition = value
         notify_property_list_changed()  
 
-@export var condition_type: ConditionType = ConditionType.STAT:
+@export var condition_type: StatOrStatus = StatOrStatus.STAT:
     set(value):
         condition_type = value
         notify_property_list_changed()
@@ -47,6 +53,7 @@ enum ConditionType {
 @export var condition_party: Enums.TargetType = Enums.TargetType.NONE  # for when comparing like "PLAYERS/ENEMYS missing health"
 @export var condition_stat_type: Enums.StatType = Enums.StatType.NONE # for like if "players MISSING health"
 @export var condition_party_stat: Enums.Stats = Enums.Stats.NONE  # for like if "players missing HEALTH"
+@export var condition_party_status: Enums.StatusEffects = Enums.StatusEffects.NONE 
 
 # JDM: If you make it so the first ItemRule in the array fails a condition then it doesn't perform further rules then
 #      You won't need to have multiple stat value comparissons or conversions.
@@ -78,8 +85,31 @@ enum ConditionType {
 @export var effect_stat_party: Enums.TargetType = Enums.TargetType.NONE  # for when value is a party's stat amount
 @export var effect_stat_type: Enums.StatType = Enums.StatType.NONE # for like if gain armor equal to enemys armor
 @export var effect_stat_value: Enums.Stats = Enums.Stats.NONE  # for like if "players missing HEALTH"
-@export var repeat_effect_X_times: int = 0      # Having this will repeat the entire ItemRule chain additional times.
-@export var repeat_effect_for_category: String = "" # Repeats the effect for each item that has a category that matches this string
+@export var effect_status_value: Enums.StatusEffects = Enums.StatusEffects.NONE
+
+@export_group("Conversion (when effect_type = CONVERT)")
+@export var convert_from_type: StatOrStatus = StatOrStatus.STAT:
+    set(value):
+        convert_from_type = value
+        notify_property_list_changed()
+
+@export var convert_from_party: Enums.TargetType = Enums.TargetType.SELF
+@export var convert_from_stat: Enums.Stats = Enums.Stats.NONE
+@export var convert_from_status: Enums.StatusEffects = Enums.StatusEffects.NONE
+
+@export var convert_to_type: StatOrStatus = StatOrStatus.STAT
+@export var convert_to_party: Enums.TargetType = Enums.TargetType.SELF
+@export var convert_to_stat: Enums.Stats = Enums.Stats.NONE
+@export var convert_to_status: Enums.StatusEffects = Enums.StatusEffects.NONE
+
+@export var conversion_amount_type: ConversionAmountType = ConversionAmountType.FIXED_VALUE:
+    set(value):
+        conversion_amount_type = value
+        notify_property_list_changed()
+
+@export var conversion_amount_value: int = 1           # Used when FIXED_VALUE
+@export var conversion_amount_percentage: float = 0.5  # Used when PERCENTAGE
+@export var conversion_ratio: float = 1.0      # How much target per source (1:2 = 2.0)
 
 @export_group("Special")
 @export var special_string: String = "" # for special edge-case instructions for persistant rules, like: "exposed-triggers-twice"
@@ -128,12 +158,12 @@ func _validate_property(property: Dictionary) -> void:
     
     # Show condition_stat only for STAT condition type
     if prop_name == "condition_stat":
-        if has_condition and condition_type != ConditionType.STAT:
+        if has_condition and condition_type != StatOrStatus.STAT:
             property.usage = PROPERTY_USAGE_NO_EDITOR
     
     # Show condition_status only for STATUS condition type
     if prop_name == "condition_status":
-        if has_condition and condition_type != ConditionType.STATUS:
+        if has_condition and condition_type != StatOrStatus.STATUS:
             property.usage = PROPERTY_USAGE_NO_EDITOR
     
     # Show condition_value only when comparing to VALUE
@@ -167,37 +197,88 @@ func _validate_property(property: Dictionary) -> void:
         if effect_of != ConditionValueType.STAT_VALUE:
             property.usage = PROPERTY_USAGE_NO_EDITOR
 
+func get_desc_trigger() -> String:
+    return Enums.get_trigger_type_string(trigger_type) 
+
+func get_desc_condition() -> String:
+    var condition_string: String = ""
+
+    if !has_condition:
+        return ""
+
+    condition_string = "If "
+
+    if condition_type == StatOrStatus.STAT:
+        condition_string = "your " + Enums.get_stat_string(condition_stat) + " is " 
+    if condition_type == StatOrStatus.STATUS:
+        condition_string = "you have " + Enums.get_status_string(condition_status)          
+
+    condition_string += get_comparison_string(condition_comparison)
+
+    if compare_to == ConditionValueType.VALUE:
+        condition_string += str(condition_value) + " "
+    if compare_to == ConditionValueType.STAT_VALUE:
+        condition_string += Enums.get_target_string(condition_party) + " " + Enums.get_stat_type_string(condition_stat_type) + " " + Enums.get_stat_string(condition_party_stat)
+
+    return condition_string + "; "
+
 func get_description() -> String:
 
     if custom_description != "":
         return custom_description
 	
-    var desc = ""
-	
-	# Add trigger
-    desc += Enums.get_trigger_type_string(trigger_type) + ": "
-	
-	# Add condition if any
-    if has_condition and condition_stat != Enums.Stats.NONE:
-        desc += "If %s %s %d, " % [Enums.get_stat_string(condition_stat), condition_comparison, condition_value]
-	
+    var desc: String  = ""
+    var value_str: String = ""
+
+    if effect_of == ConditionValueType.VALUE:
+        value_str = " by " + str(effect_amount)
+    if effect_of == ConditionValueType.STAT_VALUE:
+        value_str = " equal to " + Enums.get_target_string(effect_stat_party) + " " + Enums.get_stat_type_string(effect_stat_type) + " " + Enums.get_stat_string(effect_stat_value)
+
 	# Add effect
     match effect_type:
         Enums.EffectType.MODIFY_STAT:
-            var change = "+%d" % effect_amount if effect_amount > 0 else str(effect_amount)
-            desc += "%s %s" % [change, Enums.get_stat_string(target_stat)]
-        Enums.EffectType.APPLY_STATUS:
-            desc += "Apply %d %s" % [effect_amount, Enums.get_status_string(target_status)]
-        Enums.EffectType.REMOVE_STATUS:
-            desc += "Remove %d %s" % [effect_amount, Enums.get_status_string(target_status)]            
-        Enums.EffectType.DEAL_DAMAGE:
-            desc += "Deal %d damage" % effect_amount
-        Enums.EffectType.HEAL:
-            desc += "Heal %d HP" % effect_amount
+            var _pre:String = ""
 
-	# Add target
-    if target_type != Enums.TargetType.SELF:
-        desc += " to " + target_type_to_string(target_type)
+            if target_type == Enums.TargetType.ENEMY:
+                if effect_amount >= 0:
+                    _pre = " Give enemy "
+                else:
+                    _pre = " Remove enemy "
+            else:
+                if effect_amount >= 0:
+                    _pre = " Gain "
+                else:
+                    _pre = " Lose "
+
+            var _max:String = " "
+            if target_stat_type == Enums.StatType.BASE: _max = " Max "
+
+            desc += _pre + _max + Enums.get_stat_string(target_stat) + value_str
+        Enums.EffectType.APPLY_STATUS:
+            if effect_of == ConditionValueType.VALUE:
+                value_str = value_str.trim_prefix(" by ")
+                desc += "Apply %s %s to %s" % [value_str, Enums.get_status_string(target_status), Enums.get_target_string_nonpossessive(target_type)]
+            else:
+                desc += "Apply %s to %s %s" % [Enums.get_status_string(target_status), Enums.get_target_string_nonpossessive(target_type), value_str]
+        Enums.EffectType.REMOVE_STATUS:
+            if effect_of == ConditionValueType.VALUE:
+                value_str = value_str.trim_prefix(" by ")
+                desc += "Remove %s %s from %s" % [value_str, Enums.get_status_string(target_status), Enums.get_target_string_nonpossessive(target_type)]
+            else:
+                desc += "Remove %s from %s %s" % [Enums.get_status_string(target_status), Enums.get_target_string_nonpossessive(target_type), value_str]          
+        Enums.EffectType.DEAL_DAMAGE:
+            if effect_of == ConditionValueType.VALUE:
+                value_str = value_str.trim_prefix(" by ")
+                desc += "Deal %s damage to %s." % [value_str, Enums.get_target_string_nonpossessive(target_type)]
+            else:
+                desc += "Deal Damage to %s %s" % [Enums.get_target_string_nonpossessive(target_type), value_str]  
+        Enums.EffectType.HEAL:
+            if effect_of == ConditionValueType.VALUE:
+                value_str = value_str.trim_prefix(" by ")
+                desc += "Heal %s for %s hitpoints." % [Enums.get_target_string_nonpossessive(target_type), value_str]
+            else:
+                desc += "Heal %s for an amount %s." % [Enums.get_target_string_nonpossessive(target_type), value_str]  
 	
     return desc
 
@@ -237,3 +318,12 @@ func check_condition(entity) -> bool:
         "==": return stat_value == condition_value
 	
     return false
+
+func get_comparison_string(_char: String) -> String:
+    match _char:
+        ">": return "Greater than "
+        "<": return "Less than "
+        ">=": return "Greater than or Equal to "
+        "<=": return "Less than or Equal to "
+        "==": return "Equal to "
+        _: return " <unknown comparison >"

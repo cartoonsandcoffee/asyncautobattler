@@ -56,30 +56,6 @@ func reset_to_base_values():
 	wounded_triggered = false
 	turn_count = 0
 
-func take_damage_OLD(amount: int) -> int:
-	"""Take damage, affecting shield first then HP"""
-	var remaining_damage = amount
-	
-	# Apply to shield first
-	if stats.shield_current > 0:
-		var shield_absorbed = min(stats.shield_current, remaining_damage)
-		stats.shield_current -= shield_absorbed
-		remaining_damage -= shield_absorbed
-		
-		# Check for exposed trigger
-		if stats.shield_current == 0 and not exposed_triggered:
-			exposed_triggered = true
-	
-	# Apply remaining damage to HP
-	if remaining_damage > 0:
-		stats.hit_points_current -= remaining_damage
-		
-		# Check for wounded trigger
-		if stats.hit_points_current <= stats.hit_points / 2 and not wounded_triggered:
-			wounded_triggered = true
-	
-	return amount  # Return actual damage dealt
-
 func is_alive() -> bool:
 	return stats.hit_points_current > 0
 
@@ -91,29 +67,6 @@ func get_item_drop() -> Item:
 	if randf() <= item_drop_chance and not possible_item_drops.is_empty():
 		return possible_item_drops[randi() % possible_item_drops.size()]
 	return null
-
-func process_status_effects():
-	"""Process status effects at turn start"""
-	# Poison
-	if status_effects.poison > 0:
-		if stats.shield_current == 0:  # Poison only affects if no shield
-			stats.hit_points_current -= status_effects.poison
-		status_effects.poison -= 1
-	
-	# Burn
-	if status_effects.burn > 0:
-		var burn_damage = status_effects.burn * stats.burn_damage_current  # Base burn damage
-		take_damage_OLD(burn_damage)
-		status_effects.burn -= 1
-	
-	# Regeneration
-	if status_effects.regeneration > 0:
-		stats.hit_points_current = min(stats.hit_points_current + status_effects.regeneration, stats.hit_points)
-		status_effects.regeneration -= 1
-	
-	# Acid (reduces shield)
-	if status_effects.acid > 0 and stats.shield_current > 0:
-		stats.shield_current = max(0, stats.shield_current - status_effects.acid)
 
 func create_scaled_version(difficulty_multiplier: float) -> Enemy:
 	"""Create a scaled version based on difficulty"""

@@ -25,11 +25,11 @@ const BASE_DURATIONS = {
 	"milestone_sign": 1.5,        # Battle Start, Turn Start signs
 	"item_highlight": 0.8,         # Item slot highlighting
 	"item_proc": 1.0,              # Item effect proc animation
-	"proc_overlap": 0.3,           # Time before starting next proc (for overlap)
-	"attack_slide": 0.6,           # Attack slide animation
+	"proc_overlap": 0.6,           # Time before starting next proc (for overlap)
+	"attack_slide": 1,           # Attack slide animation
 	"damage_number": 0.8,          # Damage indicator animation
 	"status_effect": 0.6,          # Status effect visual
-	"turn_gap": 0.3,               # Brief pause between major phases
+	"turn_gap": 0.6,               # Brief pause between major phases
 }
 
 func get_multiplier() -> float:

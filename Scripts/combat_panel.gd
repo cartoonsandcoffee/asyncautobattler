@@ -81,7 +81,6 @@ var color_trigger = Color.MAGENTA
 
 var gamecolors: GameColors
 
-
 func _ready():
 	# Start off-screen
 	visible = false
@@ -93,22 +92,22 @@ func _ready():
 	_update_speed_label(CombatSpeed.CombatSpeedMode.NORMAL)
 
 func connect_combat_signals():
-	# Connect to CombatManager signals
+	# --- Connect to CombatManager signals
 	CombatManager.combat_started.connect(_on_combat_started)
 	CombatManager.combat_ended.connect(_on_combat_ended)
 	CombatManager.turn_started.connect(_on_turn_started)
 	CombatManager.turn_ended.connect(_on_turn_ended)
 	
-	# Combat event signals
-	CombatManager.attack_executed.connect(_on_attack_executed)
-	CombatManager.damage_dealt.connect(_on_damage_dealt)
+	# --- Combat event signals
+	#CombatManager.attack_executed.connect(_on_attack_executed)
+	#CombatManager.damage_dealt.connect(_on_damage_dealt)
 	CombatManager.healing_applied.connect(_on_healing_applied)
 	CombatManager.stat_changed.connect(_on_stat_changed)
 	CombatManager.status_applied.connect(_on_status_applied)
 	CombatManager.status_removed.connect(_on_status_removed)
 	CombatManager.status_proc.connect(spawn_status_proc_indicator)
 
-	# Item/ability triggers
+	# --- Item/ability triggers
 	CombatManager.item_rule_triggered.connect(_on_item_rule_triggered)
 	CombatManager.enemy_ability_triggered.connect(_on_enemy_ability_triggered)
 	
@@ -358,6 +357,11 @@ func _on_attack_executed(attacker, target, damage):
 	var target_name = CombatManager.get_entity_name(target)
 	add_combat_message("%s attacks %s!" % [attacker_name, target_name], Color.RED)
 
+	if damage < 10:
+		CameraShake.shake_medium()
+	else:
+		CameraShake.shake_heavy()
+
 func _get_status_enum(status_name: String) -> Enums.StatusEffects:
 	match status_name:
 		"poison": return Enums.StatusEffects.POISON
@@ -412,13 +416,16 @@ func create_damage_indicator(target, amount: int, damage_stat: Enums.Stats, visu
 		Player.stats.stats_updated.emit()
 
 
-
+func test_camera_shake():
+	CameraShake.shake_light()
 
 func _on_damage_dealt(target, amount, taken_by):
 	# JDM: ----- UNUSED?!?!?!
 	var target_name = CombatManager.get_entity_name(target)
 	add_combat_message("%s takes %d damage!" % [target_name, amount], color_damage)
 	
+	if amount < 10:
+		CameraShake.shake_medium()
 
 func _on_healing_applied(target, amount):
 	"""Handle healing"""
