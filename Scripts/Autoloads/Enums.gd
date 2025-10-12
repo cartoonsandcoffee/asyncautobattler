@@ -55,12 +55,7 @@ enum TriggerType {
 	WOUNDED,
 	COUNTDOWN,
 	ENEMY_HIT_YOU,
-	EVERY_OTHER_TURN,
-	EVERY_X_TURNS,
-	EVERY_X_HITS,
-	EVERY_X_STRIKES,
 	ON_HEAL,
-	ON_SHIELD_GAIN,
 	ON_STAT_GAIN,
 	ON_STAT_LOSS,
 	ON_TAKING_DAMAGE,
@@ -78,7 +73,8 @@ enum EffectType {
 	REMOVE_STATUS,
 	DEAL_DAMAGE,
 	HEAL,
-	SKIP_ATTACK
+	TRIGGER_OTHER_ITEMS,
+	CONVERT
 }
 
 enum StatusEffects {
@@ -158,8 +154,10 @@ func get_effect_type_string(_type: Enums.EffectType) -> String:
 			return "Deal Damage"
 		Enums.EffectType.HEAL:
 			return "Heal"
-		Enums.EffectType.SKIP_ATTACK:
-			return "Skip Attack"
+		Enums.EffectType.TRIGGER_OTHER_ITEMS:
+			return "Trigger other items"
+		Enums.EffectType.CONVERT:
+			return "Convert"
 		_:
 			return "<unknown effect>"
 
@@ -181,18 +179,8 @@ func get_trigger_type_string(_trigger: Enums.TriggerType) -> String:
 			return "Countdown"
 		Enums.TriggerType.ENEMY_HIT_YOU:
 			return "Enemy Hits You"
-		Enums.TriggerType.EVERY_OTHER_TURN:
-			return "Every Other Turn"
-		Enums.TriggerType.EVERY_X_TURNS:
-			return "Every X Turns"
-		Enums.TriggerType.EVERY_X_HITS:
-			return "every x hits"
-		Enums.TriggerType.EVERY_X_STRIKES:
-			return "every x strikes"
 		Enums.TriggerType.ON_HEAL:
 			return "on heal"
-		Enums.TriggerType.ON_SHIELD_GAIN:
-			return "on shield gain"
 		Enums.TriggerType.ON_STAT_GAIN:
 			return "on stat gain"
 		Enums.TriggerType.ON_STAT_LOSS:
