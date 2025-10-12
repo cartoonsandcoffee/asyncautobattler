@@ -111,6 +111,10 @@ enum ConversionAmountType {
 @export var conversion_amount_percentage: float = 0.5  # Used when PERCENTAGE
 @export var conversion_ratio: float = 1.0      # How much target per source (1:2 = 2.0)
 
+@export_group("Meta Triggers (when effect_type = TRIGGER_OTHER_ITEMS)")
+@export var retrigger_type: Enums.TriggerType = Enums.TriggerType.BATTLE_START
+@export var retrigger_target: Enums.TargetType = Enums.TargetType.SELF
+
 @export_group("Special")
 @export var special_string: String = "" # for special edge-case instructions for persistant rules, like: "exposed-triggers-twice"
 
@@ -144,14 +148,10 @@ func _validate_property(property: Dictionary) -> void:
         if trigger_type != Enums.TriggerType.COUNTDOWN:
             property.usage = PROPERTY_USAGE_NO_EDITOR
     
-    # Only show turn_frequency for turn-frequency triggers
-    if prop_name == "turn_frequency":
-        if trigger_type not in [Enums.TriggerType.EVERY_X_TURNS, Enums.TriggerType.EVERY_X_HITS, Enums.TriggerType.EVERY_X_STRIKES]:
-            property.usage = PROPERTY_USAGE_NO_EDITOR
     
     # === CONDITIONS GROUP ===
     # Hide all condition properties if has_condition is false
-    if prop_name in ["condition_type", "condition_stat", "condition_status", "condition_comparison", "compare_to", "condition_value", "condition_party", "condition_stat_type", "condition_party_stat"]:
+    if prop_name in ["condition_type", "condition_stat", "condition_status", "condition_comparison", "compare_to", "condition_value", "condition_party", "condition_stat_type", "condition_party_stat", "condition_party_status"]:
         if not has_condition:
             property.usage = PROPERTY_USAGE_NO_EDITOR
             return
@@ -175,10 +175,14 @@ func _validate_property(property: Dictionary) -> void:
     if prop_name in ["condition_party", "condition_stat_type", "condition_party_stat"]:
         if has_condition and compare_to != ConditionValueType.STAT_VALUE:
             property.usage = PROPERTY_USAGE_NO_EDITOR
-    
+
+    if prop_name == "condition_party_status":
+        if has_condition and compare_to != ConditionValueType.STATUS_VALUE:
+            property.usage = PROPERTY_USAGE_NO_EDITOR
+
     # === EFFECT GROUP ===
     # Show target_stat only for MODIFY_STAT effect
-    if prop_name == "target_stat" || prop_name == "target_stat_type":
+    if prop_name in ["target_stat", "target_stat_type"]:
         if effect_type != Enums.EffectType.MODIFY_STAT:
             property.usage = PROPERTY_USAGE_NO_EDITOR
     
@@ -197,8 +201,59 @@ func _validate_property(property: Dictionary) -> void:
         if effect_of != ConditionValueType.STAT_VALUE:
             property.usage = PROPERTY_USAGE_NO_EDITOR
 
+    if prop_name == "effect_status_value":
+        if effect_of != ConditionValueType.STATUS_VALUE:
+            property.usage = PROPERTY_USAGE_NO_EDITOR
+
+    # === CONVERSION GROUP ===
+    var conversion_props = ["convert_from_type", "convert_from_stat", "convert_from_status", "convert_from_party",
+                           "convert_to_type", "convert_to_stat", "convert_to_status", "convert_to_party",
+                           "conversion_amount_type", "conversion_amount_value", "conversion_amount_percentage", 
+                           "conversion_ratio"]
+    
+    if prop_name in conversion_props:
+        if effect_type != Enums.EffectType.CONVERT:
+            property.usage = PROPERTY_USAGE_NO_EDITOR
+            return
+    
+    if prop_name == "convert_from_stat":
+        if effect_type == Enums.EffectType.CONVERT and convert_from_type != StatOrStatus.STAT:
+            property.usage = PROPERTY_USAGE_NO_EDITOR
+    
+    if prop_name == "convert_from_status":
+        if effect_type == Enums.EffectType.CONVERT and convert_from_type != StatOrStatus.STATUS:
+            property.usage = PROPERTY_USAGE_NO_EDITOR
+    
+    if prop_name == "convert_to_stat":
+        if effect_type == Enums.EffectType.CONVERT and convert_to_type != StatOrStatus.STAT:
+            property.usage = PROPERTY_USAGE_NO_EDITOR
+    
+    if prop_name == "convert_to_status":
+        if effect_type == Enums.EffectType.CONVERT and convert_to_type != StatOrStatus.STATUS:
+            property.usage = PROPERTY_USAGE_NO_EDITOR
+    
+    if prop_name == "conversion_amount_value":
+        if effect_type == Enums.EffectType.CONVERT and conversion_amount_type != ConversionAmountType.FIXED_VALUE:
+            property.usage = PROPERTY_USAGE_NO_EDITOR
+      
+    # === META TRIGGERS GROUP ===
+    if prop_name in ["retrigger_type", "retrigger_target"]:
+        if effect_type != Enums.EffectType.TRIGGER_OTHER_ITEMS:
+            property.usage = PROPERTY_USAGE_NO_EDITOR
+
 func get_desc_trigger() -> String:
-    return Enums.get_trigger_type_string(trigger_type) 
+    var trigger_str = Enums.get_trigger_type_string(trigger_type)
+    
+    # Add stat/status info for specific triggers
+    if trigger_type in [Enums.TriggerType.ON_STAT_GAIN, Enums.TriggerType.ON_STAT_LOSS]:
+        if trigger_stat != Enums.Stats.NONE:
+            trigger_str += " " + Enums.get_stat_string(trigger_stat) + " "
+    
+    if trigger_type in [Enums.TriggerType.ON_STATUS_GAINED, Enums.TriggerType.ON_STATUS_REMOVED]:
+        if trigger_status != Enums.StatusEffects.NONE:
+            trigger_str += " " + Enums.get_status_string(trigger_status) + " "
+    
+    return trigger_str
 
 func get_desc_condition() -> String:
     var condition_string: String = ""
@@ -219,6 +274,8 @@ func get_desc_condition() -> String:
         condition_string += str(condition_value) + " "
     if compare_to == ConditionValueType.STAT_VALUE:
         condition_string += Enums.get_target_string(condition_party) + " " + Enums.get_stat_type_string(condition_stat_type) + " " + Enums.get_stat_string(condition_party_stat)
+    elif compare_to == ConditionValueType.STATUS_VALUE:
+        condition_string += Enums.get_target_string(condition_party) + " " + Enums.get_status_string(condition_party_status)
 
     return condition_string + "; "
 
@@ -226,50 +283,56 @@ func get_description() -> String:
 
     if custom_description != "":
         return custom_description
-	
+
+    # Handle CONVERT separately
+    if effect_type == Enums.EffectType.CONVERT:
+        return get_conversion_description()
+
+      # Handle TRIGGER_OTHER_ITEMS separately
+    if effect_type == Enums.EffectType.TRIGGER_OTHER_ITEMS:
+        return "Trigger all " + Enums.get_target_string(retrigger_target) + " " + Enums.get_trigger_type_string(retrigger_type) + " items. "
+
+
     var desc: String  = ""
     var value_str: String = ""
 
     if effect_of == ConditionValueType.VALUE:
-        value_str = " by " + str(effect_amount)
+        value_str = str(effect_amount)
     if effect_of == ConditionValueType.STAT_VALUE:
         value_str = " equal to " + Enums.get_target_string(effect_stat_party) + " " + Enums.get_stat_type_string(effect_stat_type) + " " + Enums.get_stat_string(effect_stat_value)
-
+    if effect_of == ConditionValueType.STATUS_VALUE:
+        value_str = " equal to " + Enums.get_target_string(effect_stat_party) + " " + Enums.get_status_string(effect_status_value) + " stacks"
+        
 	# Add effect
     match effect_type:
         Enums.EffectType.MODIFY_STAT:
             var _pre:String = ""
 
             if target_type == Enums.TargetType.ENEMY:
-                if effect_amount >= 0:
-                    _pre = " Give enemy "
-                else:
-                    _pre = " Remove enemy "
+                _pre = " Give enemy " if effect_amount >= 0 else " Remove from enemy "
             else:
-                if effect_amount >= 0:
-                    _pre = " Gain "
-                else:
-                    _pre = " Lose "
+                _pre = " Gain " if effect_amount >= 0 else " Lose "
 
             var _max:String = " "
             if target_stat_type == Enums.StatType.BASE: _max = " Max "
 
-            desc += _pre + _max + Enums.get_stat_string(target_stat) + value_str
+            if effect_of == ConditionValueType.VALUE:
+                desc += _pre + value_str + _max + Enums.get_stat_string(target_stat) 
+            else:
+                desc += _pre + _max + Enums.get_stat_string(target_stat) + value_str
+
         Enums.EffectType.APPLY_STATUS:
             if effect_of == ConditionValueType.VALUE:
-                value_str = value_str.trim_prefix(" by ")
                 desc += "Apply %s %s to %s" % [value_str, Enums.get_status_string(target_status), Enums.get_target_string_nonpossessive(target_type)]
             else:
                 desc += "Apply %s to %s %s" % [Enums.get_status_string(target_status), Enums.get_target_string_nonpossessive(target_type), value_str]
         Enums.EffectType.REMOVE_STATUS:
             if effect_of == ConditionValueType.VALUE:
-                value_str = value_str.trim_prefix(" by ")
                 desc += "Remove %s %s from %s" % [value_str, Enums.get_status_string(target_status), Enums.get_target_string_nonpossessive(target_type)]
             else:
                 desc += "Remove %s from %s %s" % [Enums.get_status_string(target_status), Enums.get_target_string_nonpossessive(target_type), value_str]          
         Enums.EffectType.DEAL_DAMAGE:
             if effect_of == ConditionValueType.VALUE:
-                value_str = value_str.trim_prefix(" by ")
                 desc += "Deal %s damage to %s." % [value_str, Enums.get_target_string_nonpossessive(target_type)]
             else:
                 desc += "Deal Damage to %s %s" % [Enums.get_target_string_nonpossessive(target_type), value_str]  
@@ -327,3 +390,43 @@ func get_comparison_string(_char: String) -> String:
         "<=": return "Less than or Equal to "
         "==": return "Equal to "
         _: return " <unknown comparison >"
+
+func get_conversion_description() -> String:
+    var desc = "Convert "
+    
+    # Amount
+    match conversion_amount_type:
+        ConversionAmountType.FIXED_VALUE:
+            desc += str(conversion_amount_value) + " "
+        ConversionAmountType.HALF:
+            desc += "half of "
+        ConversionAmountType.ALL:
+            desc += "all "
+    
+    # Source
+    var source_str = ""
+    if convert_from_party != Enums.TargetType.SELF:
+        source_str = Enums.get_target_string(convert_from_party).to_lower() + " "
+    
+    if convert_from_type == StatOrStatus.STAT:
+        desc += source_str + Enums.get_stat_string(convert_from_stat)
+    else:
+        desc += source_str + Enums.get_status_string(convert_from_status)
+    
+    # Ratio
+    desc += " to "
+    if conversion_ratio != 1.0:
+        desc += str(conversion_ratio) + "x "
+    
+    # Target
+    var target_str = ""
+    if convert_to_party != Enums.TargetType.SELF:
+        target_str = Enums.get_target_string(convert_to_party).to_lower() + " "
+    
+    if convert_to_type == StatOrStatus.STAT:
+        desc += target_str + Enums.get_stat_string(convert_to_stat)
+    else:
+        desc += target_str + Enums.get_status_string(convert_to_status)
+    
+    return desc
+

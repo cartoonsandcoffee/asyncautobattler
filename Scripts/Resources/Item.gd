@@ -38,7 +38,6 @@ enum ItemType {
 @export var trigger_priority: int = 0   # Higher = earlier
 @export var trigger_only_once: bool = false  # Item can only trigger once per combat
 @export var trigger_only_first_turn: bool = false  # Item can only trigger on turn 1
-@export var trigger_only_first_strike_per_turn: bool = false  # Once per turn max
 
 @export_group("Occurrence")
 @export var trigger_on_occurrence_number: int = 0  # 0 = every, 2 = every other, 3 = every 3  (can be conbined with trigger_only_once to know if resets)
@@ -109,9 +108,10 @@ func get_description() -> String:
 
 	# First display all the triggers:
 	for rule in rules:
-		if desc != "":
+		if desc != "" && prev_trigger != rule.get_desc_trigger():
 			desc += ", "
 		desc += rule.get_desc_trigger()
+		prev_trigger = rule.get_desc_trigger()
 
 	if desc!= "":
 		desc = desc.strip_edges() + ": "
