@@ -46,6 +46,7 @@ var item_processor: CombatItemProcessor
 var condition_evaluator: CombatConditionEvaluator
 var damage_system: CombatDamageSystem
 var effect_executor: CombatEffectExecutor
+var game_colors: GameColors
 
 func _ready():
 	_initialize_systems()
@@ -77,6 +78,8 @@ func _initialize_systems():
 	effect_executor = CombatEffectExecutor.new(self, stat_handler, status_handler, condition_evaluator, damage_system)
 	add_child(effect_executor)
 
+	game_colors = GameColors.new()
+
 func _connect_subsystem_signals():
 	"""Connect sub-system signals to forward them to CombatManager."""
 	# Stat handler signals
@@ -102,7 +105,7 @@ func _connect_subsystem_signals():
 func start_combat(player, enemy):
 	# ---- Initialize and begin combat between player and enemy.
 	combat_log = ""
-	add_to_combat_log_string("=== COMBAT STARTED ===\n", Color.WHITE, true)
+	add_to_combat_log_string("[center]=== COMBAT STARTED ===[/center]\n", Color.WHITE, true)
 	
 	# Store combat entities
 	player_entity = player
@@ -136,7 +139,7 @@ func start_combat(player, enemy):
 	var first_entity = player_entity if player_entity.stats.agility >= enemy_entity.stats.agility else enemy_entity
 	var second_entity = enemy_entity if first_entity == player_entity else player_entity
 	
-	add_to_combat_log_string("Turn order: " + get_entity_name(first_entity) + " goes first.")
+	add_to_combat_log_string("Turn order: " + color_entity(get_entity_name(first_entity)) + " goes first.")
 	
 	# Process battle start events
 	await process_battle_start_events(first_entity, second_entity)
@@ -149,9 +152,11 @@ func process_battle_start_events(first_entity, second_entity):
 	add_to_combat_log_string("\n--- Battle Start Events ---", Color.CYAN)
 	
 	# First entity's battle start items
+	add_to_combat_log_string("\n%s's Battle Start items triggered:" % color_entity(get_entity_name(first_entity)))
 	await process_entity_items_sequentially(first_entity, Enums.TriggerType.BATTLE_START)
 	
 	# Second entity's battle start items
+	add_to_combat_log_string("\n%s's Battle Start items triggered:" % color_entity(get_entity_name(second_entity)))
 	await process_entity_items_sequentially(second_entity, Enums.TriggerType.BATTLE_START)
 
 func combat_loop(first_entity, second_entity):
@@ -183,23 +188,25 @@ func execute_turn(entity):
 	await animation_manager.milestone_complete
 	
 	turn_started.emit(entity)
-	add_to_combat_log_string("\n--- %s's Turn %d ---" % [get_entity_name(entity), turn_number], Color.YELLOW)
+	add_to_combat_log_string("\n--- %s's Turn %d ---" % [color_entity(get_entity_name(entity)), turn_number], Color.YELLOW)
 	
 	# Reset per-turn item states
 	item_processor.reset_per_turn_items(entity)
 	
 	# Process turn-start status effects
+	add_to_combat_log_string("%s's status effects:" % color_entity(get_entity_name(entity)))
 	await status_handler.process_turn_start_status_effects(entity)
 	
 	# Process countdown/charge rules for items
 	#await process_countdown_rules()
 
 	# Process TURN_START items
+	add_to_combat_log_string("\n%s's Turn Start items triggered:" % color_entity(get_entity_name(entity)))
 	await process_entity_items_sequentially(entity, Enums.TriggerType.TURN_START)
 	
 	if entity.status_effects.stun > 0:
 		# If they're stunned, skip attack
-		add_to_combat_log_string(get_entity_name(entity) + " is stunned! Turn skipped.")
+		add_to_combat_log_string(color_entity(get_entity_name(entity)) + " is stunned! Turn skipped.")
 		status_handler.remove_status(entity, Enums.StatusEffects.STUN, 1)
 	else:
 		# Execute attacks
@@ -217,7 +224,7 @@ func execute_attack_sequence(attacker):
 	var target = enemy_entity if attacker == player_entity else player_entity
 	var strikes = attacker.stats.strikes
 	
-	add_to_combat_log_string("%s attacks with %d strike(s)!" % [get_entity_name(attacker), strikes])
+	add_to_combat_log_string("%s attacks with %s strike(s)!" % [color_entity(get_entity_name(attacker)), color_text(str(strikes), Color.WHITE)])
 	
 	for strike in range(strikes):
 		if not combat_active:
@@ -232,6 +239,7 @@ func execute_attack_sequence(attacker):
 		await damage_system.apply_damage(target, damage, attacker, "attack")
 		
 		# Process ON_HIT items
+		add_to_combat_log_string("   -> On Hit items triggered:")
 		await process_entity_items_sequentially(attacker, Enums.TriggerType.ON_HIT)
 		
 		# Small gap between strikes
@@ -256,9 +264,10 @@ func process_entity_items_sequentially(entity, trigger_type: Enums.TriggerType, 
 	var triggered_items = item_processor.process_items(entity, trigger_type, trigger_stat)
 	
 	if triggered_items.is_empty():
+		add_to_combat_log_string("   (none)")
 		return
 	
-	add_to_combat_log_string("  %s items triggered:" % Enums.get_trigger_type_string(trigger_type), Color.LIGHT_BLUE)
+	#add_to_combat_log_string("%s items triggered:" % Enums.get_trigger_type_string(trigger_type), Color.LIGHT_BLUE)
 	
 	# Start item sequence animation
 	var item_list = triggered_items.map(func(data): return data.item)
@@ -273,6 +282,8 @@ func process_entity_items_sequentially(entity, trigger_type: Enums.TriggerType, 
 		var rule = item_data.rule
 		var slot_index = item_data.slot_index
 		
+		add_to_combat_log_string("   Item: %s" % item.item_name)
+
 		# Check if this is a new item (reset continuation flag)
 		if item != current_item:
 			current_item = item
@@ -341,11 +352,15 @@ func end_combat_gracefully():
 	animation_manager.play_milestone("Battle End", {"winner": winner, "loser": loser})
 	await animation_manager.milestone_complete
 	
+	add_to_combat_log_string("\n[center][b][color=yellow]=== COMBAT ENDED ===[/color][/b][/center]")
+	add_to_combat_log_string("[center][b]%s WINS![/b][/center]" % color_entity(get_entity_name(winner)).to_upper())
+	add_to_combat_log_string("[center]%s has been defeated.[/center]" % color_entity(get_entity_name(loser)))
+
 	# Award gold if player won
 	if winner == player_entity:
 		var gold_reward = calculate_gold_reward(loser)
 		player_entity.stats.gold += gold_reward
-		add_to_combat_log_string("You earned %d gold!" % gold_reward, Color.GOLD)
+		add_to_combat_log_string("\nYou earned %s gold!" % color_text(gold_reward, Color.GOLD))
 	
 	# Reset entities
 	player_entity.stats.reset_stats_after_combat()
@@ -355,12 +370,12 @@ func end_combat_gracefully():
 	
 	# Emit combat ended
 	combat_ended.emit(winner, loser)
-	add_to_combat_log_string("=== COMBAT ENDED ===", Color.WHITE)
+	
 
 func calculate_gold_reward(loser) -> int:
 	"""Calculate gold reward for defeating an enemy."""
 	if loser is Enemy:
-		return loser.stats.gold
+		return loser.stats.gold + loser.gold
 	return 0
 
 func process_countdown_rules(entity):
@@ -467,11 +482,66 @@ func get_entity_name(entity) -> String:
 	return "Unknown"
 
 func add_to_combat_log_string(_string: String, _color: Color = Color.GRAY, is_bold: bool = false):
-	"""Add text to combat log"""
-	var color_str: String = _color.to_html()
-	var final_string: String = "[color=#" + color_str + "]" + _string + "[/color]"
+	# -- COMBAT LOG
 
+	# JDM Below is commented out to try keyword coloring
+	#var color_str: String = _color.to_html()
+	#var final_string: String = "[color=#" + color_str + "]" + _string + "[/color]"
+
+	var final_string: String = _string 
 	if is_bold:
 		final_string = "[b]" + final_string + "[/b]"
 
 	combat_log += final_string + "\n"
+
+
+func color_text(text: String, color: Color) -> String:
+	return "[color=#%s]%s[/color]" % [color.to_html(false), text]
+
+func color_stat(stat_name: String) -> String:
+	"""Color a stat name based on its type"""
+	var lower = stat_name.to_lower()
+	if "damage" in lower or "attack" in lower:
+		return color_text(stat_name, game_colors.stats.damage)
+	elif "shield" in lower or "armor" in lower:
+		return color_text(stat_name, game_colors.stats.shield)
+	elif "hitpoint" in lower or "health" in lower or "hp" in lower:
+		return color_text(stat_name, game_colors.stats.hit_points)
+	elif "agility" in lower or "speed" in lower:
+		return color_text(stat_name, game_colors.stats.agility)
+	elif "strike" in lower or "strikes" in lower:
+		return color_text(stat_name, game_colors.stats.strikes)
+	elif "gold" in lower:
+		return color_text(stat_name, game_colors.stats.gold)
+	else:
+		return stat_name
+
+func color_status(status_name: String) -> String:
+	var lower = status_name.to_lower()
+	if "poison" in lower:
+		return color_text(status_name, game_colors.stats.poison)
+	elif "burn" in lower:
+		return color_text(status_name, game_colors.stats.burn)
+	elif "acid" in lower:
+		return color_text(status_name, game_colors.stats.acid)
+	elif "regen" in lower || "regeneration" in lower:
+		return color_text(status_name, game_colors.stats.regeneration)
+	elif "thorns" in lower:
+		return color_text(status_name, game_colors.stats.thorns)
+	elif "stun" in lower || "stunned" in lower:
+		return color_text(status_name, game_colors.stats.stun)
+	elif "blind" in lower:
+		return color_text(status_name, game_colors.stats.blind)
+	elif "blessing" in lower:
+		return color_text(status_name, game_colors.stats.blessing)
+	elif "gold" in lower:
+		return color_text(status_name, game_colors.stats.gold)
+	else:
+		return status_name
+
+func color_entity(entity_name: String) -> String:
+	if "Player" in entity_name:
+		return color_text(entity_name, Color.LIGHT_GREEN)
+	else:
+		return color_text(entity_name, Color.LIGHT_CORAL)
+
