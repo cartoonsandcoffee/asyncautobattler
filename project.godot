@@ -1,0 +1,39 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="AsyncAutobattler"
+run/main_scene="uid://dal4a52ms64j6"
+config/features=PackedStringArray("4.4", "GL Compatibility")
+config/icon="res://icon.svg"
+
+[autoload]
+
+SaveManager="*res://Scripts/Autoloads/SaveManager.gd"
+Player="*res://Scripts/Autoloads/Player.gd"
+ItemsManager="*res://Scripts/Autoloads/ItemsManager.gd"
+DungeonManager="*res://Scripts/Autoloads/DungeonManager.gd"
+Enums="*res://Scripts/Autoloads/Enums.gd"
+RoomRegistry="*res://Scripts/Autoloads/RoomRegistry.gd"
+CombatManager="*res://Scripts/Autoloads/CombatManager.gd"
+CombatSpeed="*res://Scripts/Autoloads/CombatSpeed.gd"
+CameraShake="*res://Scripts/Classes/CameraShake.gd"
+
+[display]
+
+window/size/viewport_width=1536
+window/size/viewport_height=864
+window/stretch/mode="canvas_items"
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"

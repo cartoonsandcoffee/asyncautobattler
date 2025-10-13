@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="Item" load_steps=5 format=3 uid="uid://byaw5qcis6tv7"]
+
+[ext_resource type="Texture2D" uid="uid://bwo3qldtbc8u6" path="res://Assets/Items/Items.png" id="1_ibdli"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_ynjbj"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_ibdli"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ha368"]
+atlas = ExtResource("1_ibdli")
+region = Rect2(750, 750, 150, 150)
+
+[resource]
+script = ExtResource("2_ibdli")
+item_name = "Swiftstrike Rapier"
+item_type = 0
+item_desc = "Battle Start: If you have more speed than the enemy, gain 3 additional strikes"
+item_icon = SubResource("AtlasTexture_ha368")
+item_color = Color(0.73, 0.667707, 0.2628, 1)
+rules = Array[ExtResource("1_ynjbj")]([])
+repeat_rules_X_times = 0
+repeat_rules_for_category = ""
+trigger_priority = 0
+trigger_only_once = false
+trigger_only_first_turn = false
+trigger_on_occurrence_number = 0
+occurrence_resets_per_turn = false
+rarity = 1
+categories = Array[String](["Swift"])
+rng_weight = 1.0
+unlocked = true
+damage_bonus = 2
+shield_bonus = 0
+agility_bonus = 0
+hit_points_bonus = 0
+strikes_bonus = 0
+burn_damage_bonus = 0
+metadata/_custom_type_script = "uid://dthg27pchm1fm"

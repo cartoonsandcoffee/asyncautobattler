@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://5n48mkt6fstg"]
+
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_0mwvo"]
+[ext_resource type="Texture2D" uid="uid://bwo3qldtbc8u6" path="res://Assets/Items/Items.png" id="1_jdkxj"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_mud0x"]
+[ext_resource type="Resource" uid="uid://cj5is1o78r56i" path="res://Resources/Items/Rules/exposed_attack_1.tres" id="3_4e432"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tdard"]
+atlas = ExtResource("1_jdkxj")
+region = Rect2(450, 150, 150, 150)
+
+[resource]
+script = ExtResource("2_mud0x")
+item_name = "Testing Shield"
+item_type = 2
+item_desc = ""
+item_icon = SubResource("AtlasTexture_tdard")
+item_color = Color(0.0715, 0.414425, 0.55, 1)
+rules = Array[ExtResource("1_0mwvo")]([ExtResource("3_4e432")])
+repeat_rules_X_times = 0
+repeat_rules_for_category = ""
+trigger_priority = 0
+trigger_only_once = false
+trigger_only_first_turn = false
+trigger_on_occurrence_number = 0
+occurrence_resets_per_turn = false
+rarity = 2
+categories = Array[String](["Testing"])
+rng_weight = 1.0
+unlocked = true
+damage_bonus = 0
+shield_bonus = 3
+agility_bonus = 0
+hit_points_bonus = 0
+strikes_bonus = 0
+burn_damage_bonus = 0
+metadata/_custom_type_script = "uid://dthg27pchm1fm"

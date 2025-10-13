@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="SlideShow" load_steps=6 format=3 uid="uid://bblelrbpbyobr"]
+
+[ext_resource type="Script" uid="uid://ddci0koix241m" path="res://Scripts/Classes/SlideShow.gd" id="1_7yweb"]
+[ext_resource type="Script" uid="uid://byilpungwqefa" path="res://Scripts/Resources/SlideData.gd" id="2_c86ch"]
+[ext_resource type="Resource" uid="uid://dxk0b6dyonqjv" path="res://Resources/Slides/starter_01.tres" id="3_morkt"]
+[ext_resource type="Resource" uid="uid://botjawpnu2mug" path="res://Resources/Slides/starter_02.tres" id="4_3e5sv"]
+[ext_resource type="Resource" uid="uid://bybny32uxxi21" path="res://Resources/Slides/starter_03.tres" id="5_718d8"]
+
+[resource]
+script = ExtResource("1_7yweb")
+slideshow_name = "Welcome to the dungeon."
+is_done = false
+slides = Array[ExtResource("2_c86ch")]([ExtResource("3_morkt"), ExtResource("4_3e5sv"), ExtResource("5_718d8")])
+metadata/_custom_type_script = "uid://ddci0koix241m"

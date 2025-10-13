@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="Item" load_steps=5 format=3 uid="uid://bpov2dlsbx0p5"]
+
+[ext_resource type="Texture2D" uid="uid://bwo3qldtbc8u6" path="res://Assets/Items/Items.png" id="1_e4csb"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="2_vfewo"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="3_e3ivw"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_001p0"]
+atlas = ExtResource("1_e4csb")
+region = Rect2(600, 0, 150, 150)
+
+[resource]
+script = ExtResource("3_e3ivw")
+item_name = "Ironstone Spear"
+item_type = 0
+item_desc = "On Hit: Lose 1 agility. If your agility is 0 or less, only strike every other turn"
+item_icon = SubResource("AtlasTexture_001p0")
+item_color = Color(0.2346, 0.322433, 0.34, 1)
+rules = Array[ExtResource("2_vfewo")]([])
+repeat_rules_X_times = 0
+repeat_rules_for_category = ""
+trigger_priority = 0
+trigger_only_once = false
+trigger_only_first_turn = false
+trigger_on_occurrence_number = 0
+occurrence_resets_per_turn = false
+rarity = 1
+categories = Array[String](["Stone"])
+rng_weight = 1.0
+unlocked = true
+damage_bonus = 6
+shield_bonus = 0
+agility_bonus = 1
+hit_points_bonus = 0
+strikes_bonus = 0
+burn_damage_bonus = 0
+metadata/_custom_type_script = "uid://dthg27pchm1fm"

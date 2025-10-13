@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="RoomDefinition" load_steps=7 format=3 uid="uid://jbp1ihrw0yuk"]
+
+[ext_resource type="Texture2D" uid="uid://w21umqcnpemn" path="res://Assets/Art/Room_02_Background.png" id="1_abkqc"]
+[ext_resource type="Texture2D" uid="uid://dxx8lmffw6ob7" path="res://Assets/Art/Doors/hallway.png" id="2_ssw72"]
+[ext_resource type="PackedScene" uid="uid://b0dklw464yb2h" path="res://Scenes/Rooms/treasure_chest_room.tscn" id="3_b7ow1"]
+[ext_resource type="Texture2D" uid="uid://bffx10anckips" path="res://Assets/monochrome-transparent_packed.png" id="4_kx06u"]
+[ext_resource type="Script" uid="uid://b8gvpcv3v7mib" path="res://Scripts/Resources/RoomDefinition.gd" id="5_itccu"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c5cr6"]
+atlas = ExtResource("4_kx06u")
+region = Rect2(688, 48, 16, 16)
+
+[resource]
+script = ExtResource("5_itccu")
+room_type = 1
+rarity = 0
+room_name = "A Dusty Door"
+room_desc = "From beyond you can hear distant growls..."
+background_texture = ExtResource("1_abkqc")
+door_texture = ExtResource("2_ssw72")
+room_icon = SubResource("AtlasTexture_c5cr6")
+room_color = Color(0.182806, 0.312163, 0.253739, 1)
+possible_events = Array[PackedScene]([ExtResource("3_b7ow1")])
+spawn_weight = 1
+min_rank = 1
+max_rank = 5
+metadata/_custom_type_script = "uid://b8gvpcv3v7mib"

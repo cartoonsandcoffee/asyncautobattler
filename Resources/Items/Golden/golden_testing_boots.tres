@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="Item" load_steps=5 format=3 uid="uid://oh6wqup4xi4w"]
+
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_ju8xv"]
+[ext_resource type="Texture2D" uid="uid://bwo3qldtbc8u6" path="res://Assets/Items/Items.png" id="1_utc6c"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_utc6c"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cm72m"]
+atlas = ExtResource("1_utc6c")
+region = Rect2(450, 900, 150, 150)
+
+[resource]
+script = ExtResource("2_utc6c")
+item_name = "Golden Testing Boots"
+item_type = 4
+item_desc = ""
+item_icon = SubResource("AtlasTexture_cm72m")
+item_color = Color(0.878431, 0.701961, 0, 1)
+rules = Array[ExtResource("1_ju8xv")]([])
+repeat_rules_X_times = 0
+repeat_rules_for_category = ""
+trigger_priority = 0
+trigger_only_once = false
+trigger_only_first_turn = false
+trigger_on_occurrence_number = 0
+occurrence_resets_per_turn = false
+rarity = 6
+categories = Array[String](["Testing"])
+rng_weight = 1.0
+unlocked = true
+damage_bonus = 0
+shield_bonus = 0
+agility_bonus = 0
+hit_points_bonus = 0
+strikes_bonus = 0
+burn_damage_bonus = 0
+metadata/_custom_type_script = "uid://dthg27pchm1fm"

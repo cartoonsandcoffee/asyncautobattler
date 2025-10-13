@@ -1,0 +1,83 @@
+[gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://ddw2e55q0a0ri"]
+
+[ext_resource type="Texture2D" uid="uid://bwo3qldtbc8u6" path="res://Assets/Items/Items.png" id="1_km1vq"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="2_a1bvt"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="3_fuvuv"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yrns2"]
+atlas = ExtResource("1_km1vq")
+region = Rect2(450, 750, 150, 150)
+
+[sub_resource type="Resource" id="Resource_isnix"]
+script = ExtResource("2_a1bvt")
+trigger_type = 4
+trigger_stat = 9
+trigger_status = 9
+countdown_value = 0
+countdown_recurs = false
+has_condition = false
+condition_type = 0
+condition_stat = 9
+condition_status = 9
+condition_comparison = ">"
+compare_to = 0
+condition_value = 0
+condition_party = 4
+condition_stat_type = 3
+condition_party_stat = 9
+condition_party_status = 9
+effect_type = 0
+target_type = 0
+target_stat_type = 0
+target_stat = 2
+target_status = 9
+effect_of = 0
+effect_amount = 12
+effect_stat_party = 4
+effect_stat_type = 3
+effect_stat_value = 9
+effect_status_value = 9
+convert_from_type = 0
+convert_from_party = 0
+convert_from_stat = 9
+convert_from_status = 9
+convert_to_type = 0
+convert_to_party = 0
+convert_to_stat = 9
+convert_to_status = 9
+conversion_amount_type = 0
+conversion_amount_value = 1
+conversion_amount_percentage = 0.5
+conversion_ratio = 1.0
+retrigger_type = 1
+retrigger_target = 0
+special_string = ""
+custom_description = ""
+metadata/_custom_type_script = "uid://dahay7fvi7bik"
+
+[resource]
+script = ExtResource("3_fuvuv")
+item_name = "Diamond Double Plated Armor"
+item_type = 1
+item_desc = ""
+item_icon = SubResource("AtlasTexture_yrns2")
+item_color = Color(0.454902, 0.854902, 0.890196, 1)
+rules = Array[ExtResource("2_a1bvt")]([SubResource("Resource_isnix")])
+repeat_rules_X_times = 0
+repeat_rules_for_category = ""
+trigger_priority = 0
+trigger_only_once = false
+trigger_only_first_turn = false
+trigger_on_occurrence_number = 0
+occurrence_resets_per_turn = false
+rarity = 7
+categories = Array[String]([])
+rng_weight = 1.0
+unlocked = true
+damage_bonus = 0
+shield_bonus = 8
+agility_bonus = -8
+hit_points_bonus = 0
+strikes_bonus = 0
+burn_damage_bonus = 0
+metadata/_custom_type_script = "uid://dthg27pchm1fm"

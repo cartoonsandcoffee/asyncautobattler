@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="RoomDefinition" load_steps=7 format=3 uid="uid://den12sad6k6o6"]
+
+[ext_resource type="Script" uid="uid://b8gvpcv3v7mib" path="res://Scripts/Resources/RoomDefinition.gd" id="1_3ngwd"]
+[ext_resource type="Texture2D" uid="uid://w21umqcnpemn" path="res://Assets/Art/Room_02_Background.png" id="1_xmtdu"]
+[ext_resource type="Texture2D" uid="uid://dxx8lmffw6ob7" path="res://Assets/Art/Doors/hallway.png" id="2_7m7sr"]
+[ext_resource type="PackedScene" uid="uid://cyk1rros0xlt5" path="res://Scenes/Rooms/basic_merchant_room.tscn" id="3_87h1r"]
+[ext_resource type="Texture2D" uid="uid://bffx10anckips" path="res://Assets/monochrome-transparent_packed.png" id="4_hg131"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_edeuo"]
+atlas = ExtResource("4_hg131")
+region = Rect2(16, 112, 16, 16)
+
+[resource]
+script = ExtResource("1_3ngwd")
+room_type = 1
+rarity = 0
+room_name = "A Dusty Door"
+room_desc = "You can hear the clinking of coins..."
+background_texture = ExtResource("1_xmtdu")
+door_texture = ExtResource("2_7m7sr")
+room_icon = SubResource("AtlasTexture_edeuo")
+room_color = Color(0.184314, 0.313726, 0.254902, 1)
+possible_events = Array[PackedScene]([ExtResource("3_87h1r")])
+spawn_weight = 1
+min_rank = 1
+max_rank = 5
+metadata/_custom_type_script = "uid://b8gvpcv3v7mib"

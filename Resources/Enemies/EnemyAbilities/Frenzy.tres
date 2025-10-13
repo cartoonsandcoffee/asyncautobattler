@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EnemyAbility" load_steps=3 format=3 uid="uid://cc2o6jt0xpgml"]
+
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_15un1"]
+[ext_resource type="Script" uid="uid://3iymyv7ft3xw" path="res://Scripts/Resources/EnemyAbility.gd" id="1_h2lmk"]
+
+[resource]
+script = ExtResource("1_h2lmk")
+ability_name = "Frenzy"
+description = "When wounded: gain +3 attack."
+rules = Array[ExtResource("1_15un1")]([])
+metadata/_custom_type_script = "uid://3iymyv7ft3xw"
