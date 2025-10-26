@@ -22,7 +22,7 @@ extends Control
 @onready var item_grid: GridContainer = $BottomPanel/MarginContainer/VBoxContainer/HBoxContainer/InventorySlots/ItemSlots
 @onready var weapon_slot: ItemSlot = $BottomPanel/MarginContainer/VBoxContainer/HBoxContainer/Weapon
 
-@onready var status_box_container: HBoxContainer = $BottomPanel/panelStatus/statusBox
+@onready var status_box_container: HBoxContainer = $BottomPanel/panelStatus/HBoxContainer/statusBox
 @onready var enemy_status_box_container: HBoxContainer = $CombatPanel/CombatPanelTop/panelStatus/statusBox
 
 @onready var replacement_panel: Panel = $ReplaceItemPanel
@@ -37,6 +37,8 @@ extends Control
 @onready var box_minimap: VBoxContainer = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap
 @onready var box_combatcontrols: VBoxContainer = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls
 
+@onready var lbl_turn: Label = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/lblTurn
+@onready var lbl_speed: Label = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/speedControls/lblSpeed
 
 var current_event: RoomEvent
 
@@ -65,6 +67,8 @@ var inventory_replacement_mode: bool = false
 var pending_drop_item: Item = null
 var pending_drop_slot_index: int = -1
 
+var is_in_combat: bool = false
+
 func get_combat_panel() -> CombatPanel:
 	# Get reference to the combat panel for room events to use
 	return combat_panel
@@ -75,6 +79,11 @@ func _ready():
 	Player.inventory.item_added.connect(_on_inventory_updated)
 	Player.status_updated.connect(_on_status_effects_updated)
 	DungeonManager.show_minimap.connect(_show_panels)
+
+	# Connect to CombatManager signals for real-time combat stat updates
+	CombatManager.stat_changed.connect(_on_combat_stat_changed)
+	CombatManager.combat_started.connect(_on_combat_started_for_ui)
+	CombatManager.combat_ended.connect(_on_combat_ended_for_ui)
 
 	combat_panel.main_game = self
 	combat_panel.combat_completed.connect(_on_combat_completed)
@@ -131,6 +140,12 @@ func show_inventory_replacement_mode(new_item: Item):
 	pending_reward_item = new_item
 	replacement_item.set_item(new_item)
 	show_item_replacement_overlay()
+
+func set_turn_label(_string: String):
+	lbl_turn.text = _string
+
+func set_speed_label(_string: String):
+	lbl_speed.text = _string
 
 func clear_current_event():
 	if current_event:
@@ -222,10 +237,37 @@ func set_background_tint(room_type: Enums.RoomType):
 			room_background.modulate = Color.WHITE  # Default no tint
 
 func set_player_stats():
-	stat_health.update_stat(Enums.Stats.HITPOINTS, Player.stats.hit_points_current, Player.stats.hit_points)
-	stat_damage.update_stat(Enums.Stats.DAMAGE, Player.stats.damage_current, Player.stats.damage)
-	stat_shield.update_stat(Enums.Stats.SHIELD, Player.stats.shield_current, Player.stats.shield)
-	stat_agility.update_stat(Enums.Stats.AGILITY, Player.stats.agility_current, Player.stats.agility)
+	if is_in_combat:
+		# During combat: show current/max for HP, current only for others
+		stat_health.update_stat(Enums.Stats.HITPOINTS, 
+			Player.stats.hit_points_current, 
+			Player.stats.hit_points)
+		stat_damage.update_stat(Enums.Stats.DAMAGE, 
+			Player.stats.damage_current, 
+			Player.stats.damage)
+		stat_shield.update_stat(Enums.Stats.SHIELD, 
+			Player.stats.shield_current, 
+			Player.stats.shield)
+		stat_agility.update_stat(Enums.Stats.AGILITY, 
+			Player.stats.agility_current, 
+			Player.stats.agility)
+	else:
+		# During exploration: show current/max for HP, base values for others
+		# (since stats reset to base between combats)
+		stat_health.update_stat(Enums.Stats.HITPOINTS, 
+			Player.stats.hit_points_current, 
+			Player.stats.hit_points)
+		stat_damage.update_stat(Enums.Stats.DAMAGE, 
+			Player.stats.damage, 
+			Player.stats.damage)  # Show base as both current and max
+		stat_shield.update_stat(Enums.Stats.SHIELD, 
+			Player.stats.shield, 
+			Player.stats.shield)
+		stat_agility.update_stat(Enums.Stats.AGILITY, 
+			Player.stats.agility, 
+			Player.stats.agility)
+	
+	# Gold always shows current amount (no max)
 	stat_gold.update_stat(Enums.Stats.GOLD, Player.stats.gold, -1)
 
 func setup_inventory():
@@ -315,7 +357,7 @@ func _on_stats_updated():
 func _on_inventory_updated(item: Item, slot: int):
 	setup_inventory()
 
-func _on_status_effects_updated(_status: Enums.StatusEffects, amount: int):
+func _on_status_effects_updated():
 	status_effects.clear()
 
 	for child in status_box_container.get_children():
@@ -573,3 +615,40 @@ func _on_btn_cancel_drop_pressed() -> void:
 
 func is_in_replacement_mode() -> bool:
 	return inventory_replacement_mode
+
+# Track when combat starts/ends for proper stat display
+func _on_combat_started_for_ui(player, enemy):
+	is_in_combat = true
+	set_player_stats()  # Refresh to show current values
+
+func _on_combat_ended_for_ui(winner, loser):
+	is_in_combat = false
+	# Stats will reset to base values, so refresh display
+	await get_tree().process_frame  # Wait for stats to reset
+	set_player_stats()
+
+func _on_combat_stat_changed(entity, stat: Enums.Stats, old_value: int, new_value: int):
+	# Only update if the change affects the player
+	if entity == Player:
+		# Update the specific stat that changed
+		match stat:
+			Enums.Stats.HITPOINTS:
+				stat_health.update_stat(Enums.Stats.HITPOINTS, 
+					Player.stats.hit_points_current, 
+					Player.stats.hit_points)
+			Enums.Stats.DAMAGE:
+				stat_damage.update_stat(Enums.Stats.DAMAGE, 
+					Player.stats.damage_current, 
+					Player.stats.damage)
+			Enums.Stats.SHIELD:
+				stat_shield.update_stat(Enums.Stats.SHIELD, 
+					Player.stats.shield_current, 
+					Player.stats.shield)
+			Enums.Stats.AGILITY:
+				stat_agility.update_stat(Enums.Stats.AGILITY, 
+					Player.stats.agility_current, 
+					Player.stats.agility)
+			Enums.Stats.GOLD:
+				stat_gold.update_stat(Enums.Stats.GOLD, 
+					Player.stats.gold, 
+					-1)

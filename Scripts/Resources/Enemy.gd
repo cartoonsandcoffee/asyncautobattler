@@ -12,6 +12,8 @@ enum EnemyType {
 @export var enemy_type: EnemyType = EnemyType.REGULAR
 @export_multiline var description: String = ""
 @export var sprite: Texture2D
+@export var sprite_hit: Texture2D
+@export var sprite_attack: Texture2D
 @export var sprite_color: Color = Color.WHITE
 @export var weapon_sprite: Texture2D
 

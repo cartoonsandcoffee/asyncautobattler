@@ -6,7 +6,7 @@ extends Resource
 ## Each status effect has a stack count that decreases over time
 
 signal overheal_triggered(amount: int)
-signal status_updated(_status: Enums.StatusEffects, amount: int)
+signal status_updated()
 
 # Status effect stacks
 @export var poison: int = 0
@@ -31,7 +31,7 @@ func reset_statuses():
 	burn = 0
 	blessing = 0
 	blind = 0
-	status_updated.emit(null, 0)
+	status_updated.emit()
 
 func decrement_status(_status: Enums.StatusEffects, amount: int = 1):
 	match _status:
@@ -83,7 +83,7 @@ func decrement_status(_status: Enums.StatusEffects, amount: int = 1):
 
 			if blind < 0:
 				blind = 0				
-	status_updated.emit(_status, amount * -1)
+	status_updated.emit()
 
 func remove_status(_status: Enums.StatusEffects):
 	match _status:
@@ -103,7 +103,7 @@ func remove_status(_status: Enums.StatusEffects):
 			blessing = 0
 		Enums.StatusEffects.BLIND:
 			blind = 0
-	status_updated.emit(_status, 0)	
+	status_updated.emit()	
 
 func increment_status(_status: Enums.StatusEffects, amount: int = 1):
 	match _status:
@@ -123,4 +123,4 @@ func increment_status(_status: Enums.StatusEffects, amount: int = 1):
 			blessing += amount
 		Enums.StatusEffects.BLIND:
 			blind += amount
-	status_updated.emit(_status, amount)
+	status_updated.emit()
