@@ -3,7 +3,7 @@ extends Node
 signal player_died()
 
 signal inventory_updated(item: Item, slot_index: int)
-signal status_updated(status: Enums.StatusEffects, amount: int)
+signal status_updated()
 
 var player_name: String = ""
 var stats: GameStats
@@ -112,9 +112,9 @@ func _on_inventory_item_added(item: Item, slot_index: int):
 	#print(item.item_name + " - slot: " + str(slot_index))
 	inventory_updated.emit(item, slot_index)
 
-func _on_status_effect_updated(_status: Enums.StatusEffects, amount: int):
+func _on_status_effect_updated():
 	#print(item.item_name + " - slot: " + str(slot_index))
-	status_updated.emit(_status, amount)
+	status_updated.emit()
 
 func add_gold(value: int):
 	Player.stats.gold += value

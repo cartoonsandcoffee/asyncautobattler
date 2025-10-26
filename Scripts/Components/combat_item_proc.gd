@@ -3,12 +3,12 @@ class_name CombatItemProc
 
 signal stat_animation_done()
 
-@onready var lbl_amount: Label = $Panel/mainPanel/MarginContainer/HBoxContainer/lblAmount
-@onready var lbl_info: Label = $Panel/mainPanel/MarginContainer/VBoxContainer/lblInfo
-@onready var pic_item: TextureRect = $Panel/mainPanel/MarginContainer/HBoxContainer/picItem
-@onready var pic_stat: TextureRect = $Panel/mainPanel/MarginContainer/HBoxContainer/panelStat/picStat
-@onready var panel_stat: PanelContainer = $Panel/mainPanel/MarginContainer/HBoxContainer/panelStat
-@onready var anim_player: AnimationPlayer = $AnimationPlayer
+@onready var lbl_amount: Label
+@onready var lbl_info: Label 
+@onready var pic_item: TextureRect
+@onready var pic_stat: TextureRect 
+@onready var panel_stat: PanelContainer
+@onready var anim_player: AnimationPlayer
 
 
 @export var item: Item = null

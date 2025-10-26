@@ -1,14 +1,14 @@
 extends Control
 
-@onready var panel: Panel = $Panel
-@onready var panel_container: PanelContainer = $Panel/PanelContainer
-@onready var vbox: VBoxContainer = $Panel/PanelContainer/MarginContainer/VBoxContainer
+@onready var panel: Panel 
+@onready var panel_container: PanelContainer 
+@onready var vbox: VBoxContainer 
 
-@onready var lbl_name: Label = $Panel/PanelContainer/MarginContainer/VBoxContainer/VBoxContainer/lblName
-@onready var lbl_rarity: Label = $Panel/PanelContainer/MarginContainer/VBoxContainer/VBoxContainer/lblRarity
-@onready var lbl_desc: RichTextLabel = $Panel/PanelContainer/MarginContainer/VBoxContainer/lblDesc
-@onready var stats_grid: GridContainer = $Panel/PanelContainer/MarginContainer/VBoxContainer/statsGrid
-@onready var category_grid: GridContainer = $Panel/PanelContainer/MarginContainer/VBoxContainer/categoryGrid
+@onready var lbl_name: Label 
+@onready var lbl_rarity: Label
+@onready var lbl_desc: RichTextLabel 
+@onready var stats_grid: GridContainer 
+@onready var category_grid: GridContainer
 
 var gamecolors: GameColors
 
@@ -83,6 +83,7 @@ var definition_box_scene = preload("res://Scenes/Elements/definition_box.tscn")
 var stats_to_add: Dictionary = {}
 var definition_boxes: Array[Control] = []
 var found_keywords = []
+
 
 func set_references():
 	panel = $Panel

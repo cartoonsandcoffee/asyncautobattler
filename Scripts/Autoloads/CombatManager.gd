@@ -5,7 +5,7 @@ extends Node
 
 # --- Combat flow signals
 signal combat_started(player_entity, enemy_entity)
-signal turn_started(entity)
+signal turn_started(entity, turn_number)
 signal turn_ended(entity)
 signal combat_ended(winner, loser)
 
@@ -183,11 +183,11 @@ func execute_turn(entity):
 	# Execute a single entity's turn.
 	current_turn_entity = entity
 	
-	# MILESTONE: Turn Start
-	animation_manager.play_milestone("Turn Start", {"entity": entity, "turn_number": turn_number})
-	await animation_manager.milestone_complete
+	# -- MILESTONE: Turn Start
+	#animation_manager.play_milestone("Turn Start", {"entity": entity, "turn_number": turn_number})
+	#await animation_manager.milestone_complete
 	
-	turn_started.emit(entity)
+	turn_started.emit(entity, turn_number)
 	add_to_combat_log_string("\n--- %s's Turn %d ---" % [color_entity(get_entity_name(entity)), turn_number], Color.YELLOW)
 	
 	# Reset per-turn item states
@@ -264,7 +264,7 @@ func process_entity_items_sequentially(entity, trigger_type: Enums.TriggerType, 
 	var triggered_items = item_processor.process_items(entity, trigger_type, trigger_stat)
 	
 	if triggered_items.is_empty():
-		add_to_combat_log_string("   (none)")
+		add_to_combat_log_string("   (no %s items.)" % [Enums.get_trigger_type_string(trigger_type)])
 		return
 	
 	#add_to_combat_log_string("%s items triggered:" % Enums.get_trigger_type_string(trigger_type), Color.LIGHT_BLUE)
@@ -282,8 +282,6 @@ func process_entity_items_sequentially(entity, trigger_type: Enums.TriggerType, 
 		var rule = item_data.rule
 		var slot_index = item_data.slot_index
 		
-		add_to_combat_log_string("   Item: %s" % item.item_name)
-
 		# Check if this is a new item (reset continuation flag)
 		if item != current_item:
 			current_item = item
@@ -353,14 +351,14 @@ func end_combat_gracefully():
 	await animation_manager.milestone_complete
 	
 	add_to_combat_log_string("\n[center][b][color=yellow]=== COMBAT ENDED ===[/color][/b][/center]")
-	add_to_combat_log_string("[center][b]%s WINS![/b][/center]" % color_entity(get_entity_name(winner)).to_upper())
+	add_to_combat_log_string("[center]%s WINS![/center]" % color_entity(get_entity_name(winner).to_upper()))
 	add_to_combat_log_string("[center]%s has been defeated.[/center]" % color_entity(get_entity_name(loser)))
 
 	# Award gold if player won
 	if winner == player_entity:
 		var gold_reward = calculate_gold_reward(loser)
 		player_entity.stats.gold += gold_reward
-		add_to_combat_log_string("\nYou earned %s gold!" % color_text(gold_reward, Color.GOLD))
+		add_to_combat_log_string("\nYou earned %s gold!" % color_text(str(gold_reward), Color.GOLD))
 	
 	# Reset entities
 	player_entity.stats.reset_stats_after_combat()
@@ -483,7 +481,7 @@ func get_entity_name(entity) -> String:
 
 func add_to_combat_log_string(_string: String, _color: Color = Color.GRAY, is_bold: bool = false):
 	# -- COMBAT LOG
-
+	print(_string)
 	# JDM Below is commented out to try keyword coloring
 	#var color_str: String = _color.to_html()
 	#var final_string: String = "[color=#" + color_str + "]" + _string + "[/color]"
@@ -545,3 +543,11 @@ func color_entity(entity_name: String) -> String:
 	else:
 		return color_text(entity_name, Color.LIGHT_CORAL)
 
+func color_item(item_name: String, item_obj = null) -> String:
+	var item_color = Color.GOLD  # Default fallback
+	
+	# If we have the actual item object, use its color
+	if item_obj is Item and item_obj.item_color:
+		item_color = item_obj.item_color
+	
+	return color_text(item_name, item_color)

@@ -43,6 +43,9 @@ func _ready():
 		CombatManager.combat_started.connect(_on_combat_started)
 		CombatManager.combat_ended.connect(_on_combat_ended)
 
+	CombatSpeed.combat_paused.connect(_on_combat_paused)
+	CombatSpeed.combat_resumed.connect(_on_combat_resumed)
+
 func initialize(panel: CombatPanel):
 	"""Initialize with references to UI components"""
 	combat_panel = panel
@@ -119,14 +122,14 @@ func _play_battle_end(winner, loser):
 	if combat_panel:
 		if loser == CombatManager.enemy_entity:
 			# Enemy death animation
-			if combat_panel.slide_animation.has_animation("enemy_die"):
-				combat_panel.slide_animation.play("enemy_die")
-				await combat_panel.slide_animation.animation_finished
+			if combat_panel.enemy_anim.has_animation("enemy_die"):
+				combat_panel.anim_enemy_die()
+				await combat_panel.enemy_anim.animation_finished
 		else:
 			# Player death animation (if exists)
-			if combat_panel.slide_animation.has_animation("player_die"):
-				combat_panel.slide_animation.play("player_die")
-				await combat_panel.slide_animation.animation_finished
+			if combat_panel.player_anim.has_animation("player_die"):
+				combat_panel.player_anim.play("player_die")
+				await combat_panel.player_anim.animation_finished
 
 	var turn_sign = _create_turn_sign(message)
 	var duration = CombatSpeed.get_duration("milestone_sign")
@@ -204,17 +207,16 @@ func _execute_attack_animation(attacker, target):
 	
 	var is_player_attacking = (attacker == CombatManager.player_entity)
 	
-	# Set animation speed based on combat speed
-	combat_panel.slide_animation.speed_scale = CombatSpeed.get_multiplier()
-	
 	# Play appropriate attack animation
 	if is_player_attacking:
-		combat_panel.slide_animation.play("player_attack")
+		combat_panel.player_anim.speed_scale = CombatSpeed.get_multiplier()
+		combat_panel.anim_player_attack()
+		await combat_panel.player_anim.animation_finished
 	else:
-		combat_panel.slide_animation.play("enemy_attack")
-	
-	# Wait for animation to complete
-	await combat_panel.slide_animation.animation_finished
+		combat_panel.enemy_anim.speed_scale = CombatSpeed.get_multiplier()
+		combat_panel.anim_enemy_attack()
+		await combat_panel.enemy_anim.animation_finished
+
 
 
 func play_damage_indicator(target, amount: int, damage_stat: Enums.Stats, visual_info: Dictionary):
@@ -360,6 +362,10 @@ func wait_for_attack_animation():
 	"""Wait for current attack animation to complete"""
 	if combat_panel and combat_panel.slide_animation and combat_panel.slide_animation.is_playing():
 		await combat_panel.slide_animation.animation_finished
+	if combat_panel and combat_panel.player_anim and (combat_panel.player_anim.get_current_animation() == "player_attack"):
+		await combat_panel.player_anim.animation_finished
+	if combat_panel and combat_panel.enemy_anim and (combat_panel.enemy_anim.get_current_animation() == "enemy_attack"):
+		await combat_panel.enemy_anim.animation_finished
 
 func wait_for_current_sequence():
 	if is_processing:
@@ -395,3 +401,10 @@ func is_busy() -> bool:
 
 func get_current_milestone() -> String:
 	return current_milestone		
+	
+
+func _on_combat_paused():
+	pass
+
+func _on_combat_resumed():
+	pass

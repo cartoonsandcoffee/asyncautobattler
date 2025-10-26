@@ -63,53 +63,8 @@ func change_stat(entity, stat: Enums.Stats, amount: int, _stat_type: Enums.StatT
 # ===== STAT MODIFICATION =====
 
 func modify_stat(entity, stat: Enums.Stats, amount: int, stat_type: Enums.StatType = Enums.StatType.CURRENT):
-	# Directly modify a stat value without triggering item effects.
-	# Used internally by change_stat() and for special cases.
-	
-	# stat_type:
-	# - CURRENT: Modify current value (default)
-	# - BASE: Modify base value (for persistent effects)
-
-	match stat:
-		Enums.Stats.HITPOINTS:
-			if stat_type == Enums.StatType.BASE:
-				entity.stats.hit_points += amount
-				# Also update current if it would exceed new max
-				entity.stats.hit_points_current = mini(entity.stats.hit_points_current, entity.stats.hit_points)
-			else:
-				entity.stats.hit_points_current += amount
-				# Clamp to valid range
-				entity.stats.hit_points_current = clampi(entity.stats.hit_points_current, 0, entity.stats.hit_points)
-		
-		Enums.Stats.SHIELD:
-			if stat_type == Enums.StatType.BASE:
-				entity.stats.shield += amount
-				entity.stats.shield_current = mini(entity.stats.shield_current, entity.stats.shield)
-			else:
-				entity.stats.shield_current += amount
-				entity.stats.shield_current = maxi(entity.stats.shield_current, 0)  # Can't go negative
-		
-		Enums.Stats.DAMAGE:
-			if stat_type == Enums.StatType.BASE:
-				entity.stats.damage += amount
-			else:
-				entity.stats.damage_current += amount
-				entity.stats.damage_current = maxi(entity.stats.damage_current, 0)
-		
-		Enums.Stats.AGILITY:
-			if stat_type == Enums.StatType.BASE:
-				entity.stats.agility += amount
-			else:
-				entity.stats.agility_current += amount
-		
-		Enums.Stats.STRIKES:
-			# Strikes don't have base/current distinction
-			entity.stats.strikes += amount
-			entity.stats.strikes = maxi(entity.stats.strikes, 1)  # Minimum 1 strike
-		
-		Enums.Stats.GOLD:
-			entity.stats.gold += amount
-			entity.stats.gold = maxi(entity.stats.gold, 0)
+	# We pass emit_signal=false because change_stat() emits CombatManager.stat_changed instead
+	entity.stats.modify_stat(stat, amount, stat_type, true)
 
 # ===== STAT GETTERS =====
 
@@ -178,6 +133,7 @@ func _check_thresholds(entity, stat: Enums.Stats, old_value: int, new_value: int
 		if old_value > wounded_threshold and new_value <= wounded_threshold:
 			if not _is_wounded_triggered(entity):
 				_mark_wounded_triggered(entity, true)
+				combat_manager.add_to_combat_log_string("[b][color=orange]%s IS WOUNDED![/color][/b]" % _get_entity_name(entity).to_upper())
 				wounded_triggered.emit(entity)
 		
 		# Check for ONE_HITPOINT_LEFT
@@ -193,18 +149,21 @@ func _check_thresholds(entity, stat: Enums.Stats, old_value: int, new_value: int
 		if old_value > 0 and new_value == 0:
 			if not _is_exposed_triggered(entity):
 				_mark_exposed_triggered(entity, true)
+				combat_manager.add_to_combat_log_string("[b][color=orange]%s IS EXPOSED![/color][/b]" % _get_entity_name(entity).to_upper())
 				exposed_triggered.emit(entity)
 
 # ===== HELPER FUNCTIONS =====
 
 func _log_stat_change(entity, stat: Enums.Stats, old_value: int, new_value: int):
 	"""Log stat changes to combat log."""
-	var entity_name = _get_entity_name(entity)
-	var stat_name = Enums.get_stat_string(stat)
-	var change = new_value - old_value
-	var change_str = ("+" + str(change)) if change > 0 else str(change)
+	var entity_name:String  = _get_entity_name(entity)
+	var stat_name: String = Enums.get_stat_string(stat)
+	var change:int  = new_value - old_value
+	var change_str:String = ("+" + str(change)) if change > 0 else str(change)
 	
-	var log_msg = "    %s %s: %d → %d (%s)" % [entity_name, stat_name, old_value, new_value, change_str]
+	#var log_msg:String = "    %s %s: %d -> %d (%s)" % [entity_name, stat_name, old_value, new_value, change_str]
+	var log_msg:String = "    %s %s for %s. (%d -> %d)" % [change_str, stat_name, entity_name, old_value, new_value]
+
 	combat_manager.add_to_combat_log_string(log_msg)
 
 func _get_entity_name(entity) -> String:

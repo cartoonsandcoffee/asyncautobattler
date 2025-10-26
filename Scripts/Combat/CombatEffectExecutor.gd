@@ -42,7 +42,8 @@ func execute_item_rule(item: Item, rule: ItemRule, source_entity, target_entity)
 
 	# Check condition
 	if not condition_evaluator.evaluate_condition(rule, source_entity, target_entity):
-		combat_manager.add_to_combat_log_string("    ❌ Condition not met: " + condition_evaluator.condition_to_string(rule), Color.GRAY)
+		var item_name = item.item_name if item else "Unknown Item"
+		combat_manager.add_to_combat_log_string("   %s - [color=gray]Condition not met (skipped): %s [/color]" % combat_manager.color_item(item_name), condition_evaluator.condition_to_string(rule))	
 		return false  # Condition failed - signal to stop processing this item's rules
 	
 	# Calculate how many times to execute
@@ -84,73 +85,141 @@ func _calculate_execution_count(item: Item, rule: ItemRule, source_entity) -> in
 
 func _execute_effect_once(item: Item, rule: ItemRule, source_entity, target_entity):
 	# Execute a single instance of the effect.
-	
+	var item_name = item.item_name if item else "Unknown Item"
+
 	# Determine the actual target entity based on rule.target_type
 	var actual_target = _get_target_entity(rule.target_type, source_entity)
 	
 	# Execute based on effect type
 	match rule.effect_type:
 		Enums.EffectType.MODIFY_STAT:
-			await _execute_modify_stat(rule, source_entity, actual_target)
+			await _execute_modify_stat(rule, source_entity, actual_target, item)
 		
 		Enums.EffectType.APPLY_STATUS:
-			await _execute_apply_status(rule, source_entity, actual_target)
+			await _execute_apply_status(rule, source_entity, actual_target, item)
 		
 		Enums.EffectType.REMOVE_STATUS:
-			await _execute_remove_status(rule, source_entity, actual_target)
+			await _execute_remove_status(rule, source_entity, actual_target, item)
 		
 		Enums.EffectType.DEAL_DAMAGE:
 			await _execute_deal_damage(rule, source_entity, actual_target, item)
 		
 		Enums.EffectType.HEAL:
-			await _execute_heal(rule, source_entity, actual_target)
+			await _execute_heal(rule, source_entity, actual_target, item)
 		
 		Enums.EffectType.CONVERT:
-			await _execute_conversion(rule, source_entity)
+			await _execute_conversion(rule, source_entity, item)
 		
 		Enums.EffectType.TRIGGER_OTHER_ITEMS:
 			await _execute_meta_trigger(rule, source_entity)
 
 # ===== INDIVIDUAL EFFECT TYPES =====
 
-func _execute_modify_stat(rule: ItemRule, source_entity, target_entity):
+func _execute_modify_stat(rule: ItemRule, source_entity, target_entity, item: Item):
 	"""Modify a stat (CURRENT or BASE)."""
 	var amount = _calculate_effect_amount(rule, source_entity, target_entity)
 	
+	var old_value = stat_handler.get_stat_value(target_entity, rule.target_stat, Enums.StatType.CURRENT)
+
 	# Apply to stat handler
 	stat_handler.modify_stat(target_entity, rule.target_stat, amount, rule.target_stat_type)
-	
 	# Note: stat_handler.change_stat() will emit signals and trigger items automatically
 
-func _execute_apply_status(rule: ItemRule, source_entity, target_entity):
+	var new_value = stat_handler.get_stat_value(target_entity, rule.target_stat, Enums.StatType.CURRENT)
+	# LOG with colors
+	var verb = "gains" if amount > 0 else "loses"
+	var stat_name = Enums.get_stat_string(rule.target_stat)
+	
+	combat_manager.add_to_combat_log_string("   %s - %s %s %s %s (%d -> %d)" % [combat_manager.color_item(item.item_name, item),
+			combat_manager.color_entity(combat_manager.get_entity_name(target_entity)),
+			verb,
+			combat_manager.color_text(str(abs(amount)), Color.WHITE),
+			combat_manager.color_stat(stat_name),
+			old_value, new_value])
+
+
+func _execute_apply_status(rule: ItemRule, source_entity, target_entity, item: Item):
 	"""Apply a status effect."""
 	var amount = _calculate_effect_amount(rule, source_entity, target_entity)
 	
 	# Apply through status handler
 	status_handler.apply_status(target_entity, rule.target_status, amount)
 
-func _execute_remove_status(rule: ItemRule, source_entity, target_entity):
+	var new_stacks = status_handler.get_status_value(target_entity, rule.target_status)
+
+	# LOG with colors
+	var status_name = Enums.get_status_string(rule.target_status)
+	
+	combat_manager.add_to_combat_log_string(
+		"   %s - %s gains %s %s (total: %d)" % [
+			combat_manager.color_item(item.item_name, item),
+			combat_manager.color_entity(combat_manager.get_entity_name(target_entity)),
+			combat_manager.color_text(str(amount), Color.WHITE),
+			combat_manager.color_status(status_name),
+			new_stacks])
+
+func _execute_remove_status(rule: ItemRule, source_entity, target_entity, item: Item):
 	"""Remove a status effect."""
 	var amount = _calculate_effect_amount(rule, source_entity, target_entity)
 	
 	# Remove through status handler
 	status_handler.remove_status(target_entity, rule.target_status, amount)
 
+	var new_stacks = status_handler.get_status_value(target_entity, rule.target_status)
+	
+	# LOG with colors
+	var status_name = Enums.get_status_string(rule.target_status)
+	
+	combat_manager.add_to_combat_log_string(
+		"   %s - %s loses %s %s (remaining: %d)" % [
+			combat_manager.color_item(item.item_name, item),
+			combat_manager.color_entity(combat_manager.get_entity_name(target_entity)),
+			combat_manager.color_text(str(amount), Color.WHITE),
+			combat_manager.color_status(status_name),
+			new_stacks
+		]
+	)
+
 func _execute_deal_damage(rule: ItemRule, source_entity, target_entity, item: Item):
 	"""Deal direct damage."""
 	var amount = _calculate_effect_amount(rule, source_entity, target_entity)
 	
+	# LOG before damage
+	combat_manager.add_to_combat_log_string("   %s - %s takes %s damage" % [
+			combat_manager.color_item(item.item_name, item),
+			combat_manager.color_entity(combat_manager.get_entity_name(target_entity)),
+			combat_manager.color_text(str(amount), Color.RED)
+		])
+
 	# Deal damage through damage system
 	await damage_system.apply_damage(target_entity, amount, item, "item")
 
-func _execute_heal(rule: ItemRule, source_entity, target_entity):
+func _execute_heal(rule: ItemRule, source_entity, target_entity, item: Item):
 	"""Heal HP."""
 	var amount = _calculate_effect_amount(rule, source_entity, target_entity)
-	
+	var old_hp = target_entity.stats.hit_points_current
+
 	# Heal through damage system
 	await damage_system.heal_entity(target_entity, amount)
 
-func _execute_conversion(rule: ItemRule, source_entity):
+	var new_hp = target_entity.stats.hit_points_current
+	var actual_heal = new_hp - old_hp
+	# LOG with colors
+	if actual_heal > 0:
+		combat_manager.add_to_combat_log_string("   %s - %s heals %s HP (%d -> %d)" % [
+				combat_manager.color_item(item.item_name, item),
+				combat_manager.color_entity(combat_manager.get_entity_name(target_entity)),
+				combat_manager.color_text(str(actual_heal), Color.GREEN),
+				old_hp,
+				new_hp
+			])
+	else:
+		combat_manager.add_to_combat_log_string("   %s - %s already at full HP" % [
+				combat_manager.color_item(item.item_name, item),
+				combat_manager.color_entity(combat_manager.get_entity_name(target_entity))
+			])
+
+func _execute_conversion(rule: ItemRule, source_entity, item: Item):
 	# Execute a CONVERT effect.
 	
 	# Conversions are atomic operations that convert one resource to another.
@@ -165,18 +234,20 @@ func _execute_conversion(rule: ItemRule, source_entity):
 	var from_amount = _calculate_conversion_amount(rule, source_entity)
 	
 	if from_amount <= 0:
-		combat_manager.add_to_combat_log_string("    ⚠ Conversion failed: No source resource available", Color.GRAY)
+		combat_manager.add_to_combat_log_string("   %s - [color=gray]Conversion failed: No source resource[/color]" % combat_manager.color_item(item.item_name))
 		return
 	
 	# Validate we have enough source resource
 	if not _validate_conversion_source(rule, source_entity, from_amount):
-		var from_name = ""
+		var from_name: String = ""
 		if rule.convert_from_type == ItemRule.StatOrStatus.STAT:
 			from_name = Enums.get_stat_string(rule.convert_from_stat)
 		else:
 			from_name = Enums.get_status_string(rule.convert_from_status)
 		
-		combat_manager.add_to_combat_log_string("    ⚠ Conversion failed: Not enough %s (need %d)" % [from_name, from_amount], Color.GRAY)
+		combat_manager.add_to_combat_log_string("   %s - [color=gray]Conversion failed: Not enough %s (need %d)[/color]" % [
+				combat_manager.color_item(item.item_name, item),
+				from_name, from_amount])
 		return
 	
 	# Remove FROM resource
@@ -198,20 +269,25 @@ func _execute_conversion(rule: ItemRule, source_entity):
 		var to_entity = _get_target_entity(rule.convert_to_party, source_entity)
 		status_handler.apply_status(to_entity, rule.convert_to_status, to_amount)
 	
-	# Log the conversion
+	# LOG the conversion with colors
 	var from_name = ""
 	var to_name = ""
 	if rule.convert_from_type == ItemRule.StatOrStatus.STAT:
-		from_name = Enums.get_stat_string(rule.convert_from_stat)
+		from_name = combat_manager.color_stat(Enums.get_stat_string(rule.convert_from_stat))
 	else:
-		from_name = Enums.get_status_string(rule.convert_from_status)
+		from_name = combat_manager.color_status(Enums.get_status_string(rule.convert_from_status))
 	
 	if rule.convert_to_type == ItemRule.StatOrStatus.STAT:
-		to_name = Enums.get_stat_string(rule.convert_to_stat)
+		to_name = combat_manager.color_stat(Enums.get_stat_string(rule.convert_to_stat))
 	else:
-		to_name = Enums.get_status_string(rule.convert_to_status)
+		to_name = combat_manager.color_status(Enums.get_status_string(rule.convert_to_status))
 	
-	combat_manager.add_to_combat_log_string("    🔄 Converted %d %s → %d %s" % [from_amount, from_name, to_amount, to_name], Color.CYAN)
+	combat_manager.add_to_combat_log_string("   %s - Converts %s %s → %s %s" % [
+			combat_manager.color_item(item.item_name, item),
+			combat_manager.color_text(str(from_amount), Color.WHITE),
+			from_name,
+			combat_manager.color_text(str(to_amount), Color.WHITE),
+			to_name])
 
 func _execute_meta_trigger(rule: ItemRule, source_entity):
 	# Execute a meta-trigger (TRIGGER_OTHER_ITEMS).

@@ -41,11 +41,23 @@ func apply_damage(target, amount: int, source, damage_type: String) -> int:
 	
 	# STEP 1: Apply to shield first 
 	if target.stats.shield_current > 0:
-		var shield_damage = mini(target.stats.shield_current, remaining_damage)
-		
+		var shield_before: int = target.stats.shield_current
+		var shield_damage: int = mini(target.stats.shield_current, remaining_damage)
+
 		# Apply shield damage
 		stat_handler.change_stat(target, Enums.Stats.SHIELD, -shield_damage)
-		
+
+		var shield_after: int = target.stats.shield_current
+
+		# THIS IS THE SHIELD LOGGING:
+		combat_manager.add_to_combat_log_string("   %s's %s decreased by %s (%d -> %d)." % [
+				combat_manager.color_entity(combat_manager.get_entity_name(target)),
+				combat_manager.color_stat("shield"),
+				combat_manager.color_text(str(shield_damage), Color.RED),
+				shield_before,
+				shield_after
+			])
+
 		# Create shield damage visual
 		var shield_stat = Enums.Stats.SHIELD
 		if target.stats.shield_current == 0:
@@ -58,11 +70,22 @@ func apply_damage(target, amount: int, source, damage_type: String) -> int:
 	
 	# STEP 2: Apply remaining damage to HP
 	if remaining_damage > 0:
-		var hp_damage = remaining_damage
+		var hp_before: int = target.stats.hit_points_current
+		var hp_damage: int = remaining_damage
 		
 		# Apply HP damage
 		stat_handler.change_stat(target, Enums.Stats.HITPOINTS, -hp_damage)
-		
+		var hp_after:int = target.stats.hit_points_current
+
+		# THIS IS THE HP LOGGING:
+		combat_manager.add_to_combat_log_string("   %s's %s decreased by %s (%d -> %d)." % [
+				combat_manager.color_entity(combat_manager.get_entity_name(target)),
+				combat_manager.color_stat("hitpoints"),
+				combat_manager.color_text(str(hp_damage), Color.RED),
+				hp_before,
+				hp_after
+			])
+
 		# Create HP damage visual
 		var hp_stat = Enums.Stats.HITPOINTS
 		# Check if this brought them to wounded threshold

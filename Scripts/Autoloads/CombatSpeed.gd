@@ -1,6 +1,8 @@
 extends Node
 
 signal speed_changed(new_speed: CombatSpeedMode)
+signal combat_paused()
+signal combat_resumed()
 
 enum CombatSpeedMode {
 	PAUSE = 0,
@@ -72,6 +74,9 @@ func set_speed(mode: CombatSpeedMode):
 	current_mode = mode
 	is_paused = (mode == CombatSpeedMode.PAUSE)
 	
+	if !is_paused && was_paused:  # UNPAUSE COMBAT
+		combat_resumed.emit()
+
 	# Emit signal for all listeners
 	speed_changed.emit(mode)
 	
@@ -80,6 +85,7 @@ func set_speed(mode: CombatSpeedMode):
 
 func pause_combat():
 	set_speed(CombatSpeedMode.PAUSE)
+	combat_paused.emit()
 
 func resume_combat():
 	if is_paused:
@@ -96,7 +102,6 @@ func cycle_speed():
 			set_speed(CombatSpeedMode.NORMAL)
 
 func wait_if_paused():
-	"""Await function that waits while paused"""
 	while is_paused:
 		await get_tree().process_frame
 

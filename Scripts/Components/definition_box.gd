@@ -1,7 +1,7 @@
 extends Control
 
-@onready var keyword_label: Label = $PanelContainer/MarginContainer/VBoxContainer/lblKeyword
-@onready var desc_label: RichTextLabel = $PanelContainer/MarginContainer/VBoxContainer/lblDefinition
+@onready var keyword_label: Label 
+@onready var desc_label: RichTextLabel 
 
 func set_references():
 	keyword_label = $PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/lblKeyword

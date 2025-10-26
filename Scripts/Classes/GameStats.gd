@@ -156,3 +156,70 @@ func decrease_base_stat(_stat: Enums.Stats, value: int):
 		Enums.Stats.BURN_DAMAGE:
 			burn_damage -= value				
 	stats_updated.emit()	
+
+# Universal stat modification function with clamping and stat type support
+func modify_stat(stat: Enums.Stats, amount: int, stat_type: Enums.StatType = Enums.StatType.CURRENT, emit_signal: bool = true):
+	# Universal stat modification function.
+	# - Handles both CURRENT and BASE stat types
+	# - Automatically clamps values to valid ranges
+	# - Optionally emits stats_updated signal
+	
+	# This is the function that CombatStatHandler should call to ensure
+	# both GameStats.stats_updated and CombatManager.stat_changed signals fire.
+	
+	match stat:
+		Enums.Stats.HITPOINTS:
+			if stat_type == Enums.StatType.BASE:
+				hit_points += amount
+				# Ensure current doesn't exceed new max
+				hit_points_current = mini(hit_points_current, hit_points)
+			else:
+				hit_points_current += amount
+				# Clamp to valid range [0, max]
+				hit_points_current = clampi(hit_points_current, 0, hit_points)
+		
+		Enums.Stats.SHIELD:
+			if stat_type == Enums.StatType.BASE:
+				shield += amount
+				shield_current = mini(shield_current, shield)
+			else:
+				shield_current += amount
+				# Shield can't go negative
+				shield_current = maxi(shield_current, 0)
+		
+		Enums.Stats.DAMAGE:
+			if stat_type == Enums.StatType.BASE:
+				damage += amount
+			else:
+				damage_current += amount
+				damage_current = maxi(damage_current, 0)
+		
+		Enums.Stats.AGILITY:
+			if stat_type == Enums.StatType.BASE:
+				agility += amount
+			else:
+				agility_current += amount
+				# Agility can be negative theoretically, but let's floor at 0
+				agility_current = maxi(agility_current, 0)
+		
+		Enums.Stats.STRIKES:
+			strikes += amount
+			strikes_current += amount
+			# Minimum 1 strike
+			strikes = maxi(strikes, 1)
+			strikes_current = maxi(strikes_current, 1)
+		
+		Enums.Stats.BURN_DAMAGE:
+			if stat_type == Enums.StatType.BASE:
+				burn_damage += amount
+			else:
+				burn_damage_current += amount
+				burn_damage_current = maxi(burn_damage_current, 0)
+		
+		Enums.Stats.GOLD:
+			gold += amount
+			gold = maxi(gold, 0)  # Can't have negative gold
+	
+	# Emit signal if requested
+	if emit_signal:
+		stats_updated.emit()

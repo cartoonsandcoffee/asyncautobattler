@@ -40,7 +40,7 @@ func apply_status(entity, status: Enums.StatusEffects, stacks: int):
 	status_applied.emit(entity, status, stacks)
 	
 	# Log
-	_log_status_change(entity, status, old_value, new_value, true)
+	#_log_status_change(entity, status, old_value, new_value, true)
 	
 	# Trigger ON_STATUS_GAINED items
 	status_gained_triggered.emit(entity, status)
@@ -66,8 +66,19 @@ func remove_status(entity, status: Enums.StatusEffects, stacks: int):
 	status_removed.emit(entity, status, stacks)
 	
 	# Log
-	_log_status_change(entity, status, old_value, new_value, false)
-	
+	#_log_status_change(entity, status, old_value, new_value, false)
+	if new_value > 0:
+		combat_manager.add_to_combat_log_string("   %s loses 1 %s (remaining: %d)." % [
+				combat_manager.color_entity(_get_entity_name(entity)),
+				combat_manager.color_status(Enums.get_status_string(status)),
+				new_value
+			])
+	else:
+		combat_manager.add_to_combat_log_string("   %s's %s wears off." % [
+				combat_manager.color_entity(_get_entity_name(entity)),
+				combat_manager.color_status(Enums.get_status_string(status))
+			])
+
 	# Trigger ON_STATUS_REMOVED items (even if partial removal)
 	status_removed_triggered.emit(entity, status)
 
@@ -99,6 +110,14 @@ func get_status_value(entity, status: Enums.StatusEffects) -> int:
 
 # ===== TURN START PROCESSING =====
 
+func has_any(entity) -> bool:
+	return (entity.status_effects.poison > 0 or
+		entity.status_effects.burn > 0 or
+		entity.status_effects.acid > 0 or
+		entity.status_effects.regeneration > 0 or
+		entity.status_effects.blind > 0 or
+		entity.status_effects.thorns > 0)
+
 func process_turn_start_status_effects(entity):
 	# Process all status effects at the start of an entity's turn.
 	# This is called from CombatManager during the turn sequence.
@@ -106,8 +125,10 @@ func process_turn_start_status_effects(entity):
 	if not entity.status_effects:
 		return
 	
-	combat_manager.add_to_combat_log_string(_get_entity_name(entity) + " status effects:", Color.GREEN_YELLOW)
-	
+	if not has_any(entity):
+		combat_manager.add_to_combat_log_string("   (no status effects.)")
+		return		
+
 	# Process each status effect type
 	await _process_poison(entity)
 	await _process_burn(entity)
@@ -130,11 +151,27 @@ func _process_poison(entity):
 	# Check if entity has shield
 	if entity.stats.shield_current > 0:
 		# Shield blocks poison - no damage, but poison still decrements
-		combat_manager.add_to_combat_log_string("  %s's shield blocks %d poison damage!" % [_get_entity_name(entity), damage], Color.CYAN)
+		combat_manager.add_to_combat_log_string("   %s: %s's %s blocks %s poison damage" % [
+				combat_manager.color_status("Poison"),
+				combat_manager.color_entity(_get_entity_name(entity)),
+				combat_manager.color_stat("Shield"),
+				combat_manager.color_text(str(damage), Color.WHITE)
+			])
 	else:
 		# No shield - poison damages HP directly
+		var old_hp = entity.stats.hit_points_current
 		stat_handler.change_stat(entity, Enums.Stats.HITPOINTS, -damage)
-		
+		var new_hp = entity.stats.hit_points_current
+
+		combat_manager.add_to_combat_log_string("   %s: %s's %s decreased by %s (%d -> %d)" % [
+				combat_manager.color_status("Poison"),
+				combat_manager.color_entity(_get_entity_name(entity)),
+				combat_manager.color_stat("hitpoints"),
+				combat_manager.color_text(str(damage), game_colors.stats.poison),
+				old_hp,
+				new_hp
+			])
+
 		# Visual feedback
 		combat_manager.animation_manager.play_damage_indicator(
 			entity, damage, Enums.Stats.HITPOINTS,
@@ -150,7 +187,7 @@ func _process_poison(entity):
 	
 	# Always decrement poison by 1
 	remove_status(entity, Enums.StatusEffects.POISON, 1)
-	
+
 	await CombatSpeed.create_timer(CombatSpeed.get_duration("status_effect"))
 
 func _process_burn(entity):
@@ -169,10 +206,14 @@ func _process_burn(entity):
 	
 	# Calculate burn damage: burn_damage stat * burn stacks
 	var burn_damage_per_stack = burn_source.stats.burn_damage_current if burn_source else 1
-	var total_damage = burn_damage_per_stack * burn_stacks
+	var total_damage = burn_damage_per_stack #* burn_stacks
 	
-	combat_manager.add_to_combat_log_string("  🔥 %s takes %d burn damage (%d×%d)" % [_get_entity_name(entity), total_damage, burn_damage_per_stack, burn_stacks], _get_color("burn"))
-	
+	# LOG the burn proc
+	combat_manager.add_to_combat_log_string("   %s: %s takes %s damage." % [
+			combat_manager.color_status("Burn"),
+			combat_manager.color_entity(_get_entity_name(entity)),
+			combat_manager.color_text(str(total_damage), game_colors.stats.burn)])
+
 	# Visual feedback
 	combat_manager.animation_manager.play_damage_indicator(
 		entity, total_damage, Enums.Stats.HITPOINTS,
@@ -193,7 +234,7 @@ func _process_burn(entity):
 	
 	# Decrement burn by 1
 	remove_status(entity, Enums.StatusEffects.BURN, 1)
-	
+
 	await CombatSpeed.create_timer(CombatSpeed.get_duration("status_effect"))
 
 func _process_acid(entity):
@@ -206,11 +247,25 @@ func _process_acid(entity):
 	
 	# Only damage if they have shield
 	if entity.stats.shield_current > 0:
+		var old_shield = entity.stats.shield_current
 		var damage_dealt = mini(damage, entity.stats.shield_current)
 		
 		# Apply to shield
 		stat_handler.change_stat(entity, Enums.Stats.SHIELD, -damage_dealt)
-		
+		var new_shield = entity.stats.shield_current
+
+		# LOG with colors
+		combat_manager.add_to_combat_log_string(
+			"   %s: %s's %s decreased by %s (%d -> %d)" % [
+				combat_manager.color_status("Acid"),
+				combat_manager.color_entity(_get_entity_name(entity)),
+				combat_manager.color_stat("shield"),
+				combat_manager.color_text(str(damage_dealt), game_colors.stats.acid),
+				old_shield,
+				new_shield
+			]
+		)
+
 		# Visual feedback
 		var stat_for_visual = Enums.Stats.SHIELD
 		if entity.stats.shield_current == 0:
@@ -226,10 +281,14 @@ func _process_acid(entity):
 		)
 		
 		# Emit status proc signal
-		combat_manager.status_proc.emit(entity, Enums.StatusEffects.ACID, stat_for_visual, damage_dealt)
+		combat_manager.status_proc.emit(entity, Enums.StatusEffects.ACID, stat_for_visual, -damage_dealt)
 		
 		await CombatSpeed.create_timer(CombatSpeed.get_duration("status_effect"))
-	
+	else:
+		combat_manager.add_to_combat_log_string("   %s: %s has no shield to damage" % [
+				combat_manager.color_status("Acid"),
+				combat_manager.color_entity(_get_entity_name(entity))])
+
 	# NOTE: Acid does NOT decrement naturally
 
 func _process_regeneration(entity):
@@ -238,27 +297,44 @@ func _process_regeneration(entity):
 	if entity.status_effects.regeneration <= 0:
 		return
 	
-	var heal_amount = entity.status_effects.regeneration
-	
+	var heal_amount:int = entity.status_effects.regeneration
+	var old_hp:int = entity.stats.hit_points_current
+
 	# Heal through stat handler
 	stat_handler.change_stat(entity, Enums.Stats.HITPOINTS, heal_amount)
-	
-	# Visual feedback
-	combat_manager.animation_manager.play_damage_indicator(
-		entity, heal_amount, Enums.Stats.HITPOINTS,
-		{
-			"icon": _get_status_icon(Enums.StatusEffects.REGENERATION),
-			"color": _get_color("regeneration"),
-			"source_name": "Regeneration"
-		}
-	)
-	
-	# Emit status proc signal
-	combat_manager.status_proc.emit(entity, Enums.StatusEffects.REGENERATION, Enums.Stats.HITPOINTS, heal_amount)
-	
+	var new_hp: int  = entity.stats.hit_points_current
+	var actual_heal: int  = new_hp - old_hp
+
+	if actual_heal > 0:
+		combat_manager.add_to_combat_log_string("   %s: %s's %s increased by %s (%d -> %d)" % [
+				combat_manager.color_status("Regeneration"),
+				combat_manager.color_entity(_get_entity_name(entity)),
+				combat_manager.color_stat("hitpoints"),
+				combat_manager.color_text(str(actual_heal), game_colors.stats.regeneration),
+				old_hp, new_hp])
+		
+		# Visual feedback
+		combat_manager.animation_manager.play_damage_indicator(
+			entity, heal_amount, Enums.Stats.HITPOINTS,
+			{
+				"icon": _get_status_icon(Enums.StatusEffects.REGENERATION),
+				"color": _get_color("regeneration"),
+				"source_name": "Regeneration"
+			}
+		)
+		
+		# Emit status proc signal
+		combat_manager.status_proc.emit(entity, Enums.StatusEffects.REGENERATION, Enums.Stats.HITPOINTS, heal_amount)
+	else:
+		combat_manager.add_to_combat_log_string("   %s: %s is already at full %s." % [
+				combat_manager.color_status("Regeneration"),
+				combat_manager.color_entity(_get_entity_name(entity)),
+				combat_manager.color_stat("hitpoints")
+			])
+
 	# Decrement regen by 1
 	remove_status(entity, Enums.StatusEffects.REGENERATION, 1)
-	
+
 	await CombatSpeed.create_timer(CombatSpeed.get_duration("status_effect"))
 
 func _process_blind(entity):
@@ -270,7 +346,7 @@ func _process_blind(entity):
 	
 	# Decrement blind by 1
 	remove_status(entity, Enums.StatusEffects.BLIND, 1)
-	
+
 	await CombatSpeed.create_timer(CombatSpeed.get_duration("status_effect"))
 
 func _process_blessing(entity):
@@ -307,10 +383,17 @@ func process_thorns_reflection(attacker, target):
 		return
 	
 	var thorns_damage = target.status_effects.thorns
-	
-	combat_manager.add_to_combat_log_string(
-		"  💢 %s has %d Thorns! %s takes reflection damage!" % [_get_entity_name(target), thorns_damage, _get_entity_name(attacker)])
-	
+	var attacker_name: String = _get_entity_name(attacker)
+	var target_name: String = _get_entity_name(target)
+
+	# LOG thorns reflection
+	combat_manager.add_to_combat_log_string("   %s: %s takes %s damage from %s." % [
+			combat_manager.color_status("Thorns"),
+			combat_manager.color_entity(attacker_name),
+			combat_manager.color_text(str(thorns_damage), game_colors.stats.thorns),
+			combat_manager.color_entity(target_name)
+		])
+
 	# Apply thorns damage through damage system (respects shield)
 	if combat_manager.damage_system:
 		await combat_manager.damage_system.apply_damage(attacker, thorns_damage, target, "thorns")
