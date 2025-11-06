@@ -25,13 +25,13 @@ const SPEED_MULTIPLIERS = {
 # Duration settings for different animation types (in seconds at NORMAL speed)
 const BASE_DURATIONS = {
 	"milestone_sign": 1.5,        # Battle Start, Turn Start signs
-	"item_highlight": 0.8,         # Item slot highlighting
-	"item_proc": 1.0,              # Item effect proc animation
-	"proc_overlap": 0.6,           # Time before starting next proc (for overlap)
-	"attack_slide": 1,           # Attack slide animation
-	"damage_number": 0.8,          # Damage indicator animation
-	"status_effect": 0.6,          # Status effect visual
-	"turn_gap": 0.6,               # Brief pause between major phases
+	"item_highlight": 1.2,         # Item slot highlighting
+	"item_proc": 1.2,              # Item effect proc animation
+	"proc_overlap": 1.0,           # Time before starting next proc (for overlap)
+	"attack_slide": 1.2,           # Attack slide animation
+	"damage_number": 1.0,          # Damage indicator animation
+	"status_effect": 1.0,          # Status effect visual
+	"turn_gap": 0.5,               # Brief pause between major phases
 }
 
 func get_multiplier() -> float:

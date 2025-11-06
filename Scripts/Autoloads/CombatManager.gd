@@ -92,8 +92,8 @@ func _connect_subsystem_signals():
 	stat_handler.death_triggered.connect(_on_death_triggered)
 	
 	# Status handler signals
-	status_handler.status_applied.connect(_on_status_applied)
-	status_handler.status_removed.connect(_on_status_removed)
+	#status_handler.status_applied.connect(_on_status_applied)
+	#status_handler.status_removed.connect(_on_status_removed)
 	status_handler.status_gained_triggered.connect(_on_status_gained_triggered)
 	status_handler.status_removed_triggered.connect(_on_status_removed_triggered)
 	
@@ -244,7 +244,7 @@ func execute_attack_sequence(attacker):
 		
 		# Small gap between strikes
 		if strike < strikes - 1:
-			await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap") * 0.5)
+			await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap"))
 
 # ===== ITEM PROCESSING =====
 
@@ -433,14 +433,6 @@ func _on_death_triggered(entity):
 	# Check for ON_KILL trigger (for the killer)
 	var killer = enemy_entity if entity == player_entity else player_entity
 	await process_entity_items_sequentially(killer, Enums.TriggerType.ON_KILL)
-
-func _on_status_applied(entity, status: Enums.StatusEffects, stacks: int):
-	"""Forward status_applied signal."""
-	status_applied.emit(entity, status, stacks)
-
-func _on_status_removed(entity, status: Enums.StatusEffects, stacks: int):
-	"""Forward status_removed signal."""
-	status_removed.emit(entity, status, stacks)
 
 func _on_status_gained_triggered(entity, status: Enums.StatusEffects):
 	"""Handle ON_STATUS_GAINED trigger."""

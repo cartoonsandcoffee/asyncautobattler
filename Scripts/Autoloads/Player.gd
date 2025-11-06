@@ -3,7 +3,6 @@ extends Node
 signal player_died()
 
 signal inventory_updated(item: Item, slot_index: int)
-signal status_updated()
 
 var player_name: String = ""
 var stats: GameStats
@@ -37,7 +36,6 @@ func new_run(nm: String):
 	status_effects = StatusEffects.new()
 	
 	inventory.item_added.connect(_on_inventory_item_added)
-	status_effects.status_updated.connect(_on_status_effect_updated)
 
 	if stats:
 		stats.agility = 0
@@ -111,10 +109,6 @@ func update_stats_from_items():
 func _on_inventory_item_added(item: Item, slot_index: int):
 	#print(item.item_name + " - slot: " + str(slot_index))
 	inventory_updated.emit(item, slot_index)
-
-func _on_status_effect_updated():
-	#print(item.item_name + " - slot: " + str(slot_index))
-	status_updated.emit()
 
 func add_gold(value: int):
 	Player.stats.gold += value

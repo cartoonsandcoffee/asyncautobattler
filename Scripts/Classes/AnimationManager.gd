@@ -5,6 +5,7 @@ class_name AnimationManager
 
 signal animation_sequence_complete()
 signal milestone_complete(milestone_name: String)
+signal item_proc_complete(entity, rule: ItemRule)
 #signal item_animation_complete(item: Item)
 
 # Animation queue and state
@@ -100,13 +101,13 @@ func _play_turn_start(entity, turn_number: int):
 	await turn_sign.turn_animation_done
 
 func _play_status_effects_milestone():
-	await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap"))
+	await CombatSpeed.create_timer(CombatSpeed.get_duration("status_effect"))
 
 func _play_item_effects_milestone():
-	await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap"))
+	await CombatSpeed.create_timer(CombatSpeed.get_duration("item_proc"))
 
 func _play_attacks_milestone():
-	await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap"))
+	await CombatSpeed.create_timer(CombatSpeed.get_duration("attack_slide"))
 
 func _play_turn_end():
 	# Turn end cleanup
@@ -176,6 +177,9 @@ func _execute_item_sequence(items: Array, entity, trigger_type: String):
 			var proc_duration = CombatSpeed.get_duration("item_proc")
 			await CombatSpeed.create_timer(proc_duration * 0.8)  # Wait for most of animation
 
+		# emit completion so the status effects update
+		item_proc_complete.emit(entity, rule)
+		
 		# ----- STEP 3: Clear Highlight, move to next
 		if combat_panel:
 			combat_panel._clear_all_highlights()

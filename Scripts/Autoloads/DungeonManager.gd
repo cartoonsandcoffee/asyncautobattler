@@ -2,12 +2,15 @@ extends Node
 
 signal show_minimap()
 signal room_transition_requested(room_data: RoomData)
+signal minimap_update_requested()
 
 var current_rank: int = 1
 var current_room_index: int = 1
 var rooms_cleared_this_rank: int = 0
 var number_of_doors: int = 3
 
+var all_visited_rooms: Array[RoomData] = []
+var current_rank_rooms: Array[RoomData] = []
 
 func generate_door_choices() -> Array[RoomData]:
 	var door_choices: Array[RoomData] = []
@@ -76,17 +79,30 @@ func get_room_type_icon(room_data: RoomData) -> Texture2D:
 	else:
 		return null
 
-func advance_room():
+func advance_room(chosen_room: RoomData):
 	current_room_index += 1
 	rooms_cleared_this_rank += 1
-	
+
+	# Store room if provided
+	if chosen_room:
+		all_visited_rooms.append(chosen_room)
+		current_rank_rooms.append(chosen_room)
+		minimap_update_requested.emit()
+			
 	# Check if we've cleared 5 rooms (time for boss)
-	if rooms_cleared_this_rank >= 5:
-		print("Time for boss room!")
-		# TODO: Generate boss room
+	if rooms_cleared_this_rank >= 6:
+		advance_rank()
 	
-	print("Advanced to room ", current_room_index, " (", rooms_cleared_this_rank, "/5 this rank)")
+	print("Advanced to room ", current_room_index, " (", rooms_cleared_this_rank, "/6 this rank)")
 
 
 func slide_in_menus():
 	show_minimap.emit()
+
+func advance_rank():
+	current_rank += 1
+	current_room_index = 1
+	rooms_cleared_this_rank = 0
+	current_rank_rooms.clear()
+	minimap_update_requested.emit()
+	print("Advanced to Rank ", current_rank)

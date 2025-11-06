@@ -17,7 +17,8 @@ func load_room_definitions():
 	register_room_definition("tomb_grave", preload("res://Resources/Rooms/tomb_grave.tres"))
 	register_room_definition("tomb_altar", preload("res://Resources/Rooms/tomb_altar.tres"))	
 	register_room_definition("royal_forge", preload("res://Resources/Rooms/royal_forge.tres"))
-	
+	register_room_definition("rare_merchant", preload("res://Resources/Rooms/rare_merchant.tres"))
+
 	print("Loaded ", room_definitions.size(), " room definitions")
 
 func register_room_definition(id: String, room_def: RoomDefinition):

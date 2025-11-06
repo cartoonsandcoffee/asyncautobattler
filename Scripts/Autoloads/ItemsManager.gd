@@ -17,23 +17,33 @@ func _ready():
 func setup_crafting_recipes():
 	crafting_recipes.clear()
 
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/golden_testing_boots.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/golden_testing_robe.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/golden_testing_shield.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/golden_liferoot_gauntlets.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/golden_thorn_shield.tres"))
+	add_recipes_golden()
 
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Diamond/diamond_battleworn_shield.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Diamond/diamond_double_plated_armor.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Golden/golden_battleworn_shield.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Golden/golden_double_plated_armor.tres"))
+	add_recipes_diamond()
 
+	# --- BUG RECIPES (GOLDEN)
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Bugs/Golden/golden_dark_crawler.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Bugs/Golden/golden_dew_fly.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Bugs/Golden/golden_firefly.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Bugs/Golden/golden_nimble_fly.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Bugs/Golden/golden_termite.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Bugs/Golden/golden_thorn_bug.tres"))
 	
+	# --- BUG RECIPES (DIAMOND)
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Bugs/Diamond/diamond_dark_crawler.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Bugs/Diamond/diamond_dew_fly.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Bugs/Diamond/diamond_firefly.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Bugs/Diamond/diamond_nimble_fly.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Bugs/Diamond/diamond_termite.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Bugs/Diamond/diamond_thorn_bug.tres"))
+
+
 func setup_items():
 	# Store them in our dictionary 
 	# --- COMMON
+	add_common_items()
+
 	available_items["Fists"] = preload("res://Resources/Items/Weapons/weapon_fists.tres")
-	available_items["Ironstone Greatsword"] = preload("res://Resources/Items/Weapons/weapon_ironstone_greatsword.tres")
 	available_items["Holy Shield"] = preload("res://Resources/Items/Armor/holy_shield.tres")
 	available_items["Tower Shield"] = preload("res://Resources/Items/Armor/tower_shield.tres")
 	available_items["Liferoot Gauntlets"] = preload("res://Resources/Items/Armor/liferoot_gauntlets.tres")
@@ -45,6 +55,8 @@ func setup_items():
 	available_items["Shield Tap"] = preload("res://Resources/Items/Armor/armor_tap.tres")
 
 	# --- UNCOMMON
+	available_items["Ornate Sword"] = preload("res://Resources/Items/UNCOMMON/ornate_sword.tres")
+
 	available_items["Bramble Belt"] = preload("res://Resources/Items/UNCOMMON/bramble_belt.tres")
 	available_items["Bramble Buckler"] = preload("res://Resources/Items/UNCOMMON/bramble_buckler.tres")	
 	available_items["Ironstone Spear"] = preload("res://Resources/Items/UNCOMMON/ironstone_spear.tres")
@@ -57,9 +69,24 @@ func setup_items():
 	available_items["Golden Testing Shield"] = preload("res://Resources/Items/Golden/golden_testing_shield.tres")
 	available_items["Golden Testing Robes"] = preload("res://Resources/Items/Golden/golden_testing_robes.tres")
 	available_items["Golden Double Plated Armor"] = preload("res://Resources/Items/COMMON/double_plated_armor.tres")
+	available_items["Golden Tower Shield"] = preload("res://Resources/Items/GOLDEN/golden_tower_shield.tres")
+	available_items["Golden Lantern"] = preload("res://Resources/Items/GOLDEN/golden_lantern.tres")
 
 	# --- DIAMOND COMMON ITEMS
 	available_items["Diamond Battleworn Shield"] = preload("res://Resources/Items/Diamond/diamond_battleworn_shield.tres")
+	available_items["Diamond Lantern"] = preload("res://Resources/Items/Diamond/diamond_lantern.tres")
+
+	# --- RARE ITEMS
+	available_items["Clearmetal Dagger"] = preload("res://Resources/Items/RARE/Clearmetal_Dagger.tres")
+	available_items["Crude Staff"] = preload("res://Resources/Items/RARE/CrudeGlowingStaff.tres")
+	available_items["Clearmetal Mace"] = preload("res://Resources/Items/RARE/clearmetal_mace.tres")
+	available_items["Nimble Bow"] = preload("res://Resources/Items/RARE/nimble_bow.tres")
+	available_items["Giants Fingernail"] = preload("res://Resources/Items/RARE/giants_fingernail.tres")
+	available_items["Poison Dagger"] = preload("res://Resources/Items/RARE/poison_dagger.tres")
+	available_items["Corrosive Sword"] = preload("res://Resources/Items/RARE/corrosive_sword.tres")
+
+	# --- LEGENDARY 
+	available_items["Flaming Pick"] = preload("res://Resources/Items/LEGENDARY/flaming_sword.tres")
 
 	# --- Sample Build 1
 	available_items["Clearmetal Dagger"] = preload("res://Resources/Items/RARE/Clearmetal_Dagger.tres")
@@ -75,6 +102,96 @@ func setup_items():
 	available_items["Indecent Exposure"] = preload("res://Resources/Items/UNCOMMON/Indecent_Exposure.tres")
 	available_items["Golden Battleworn Shield"] = preload("res://Resources/Items/Golden/golden_battleworn_shield.tres")
 	available_items["Clearmetal Battle Horn"] = preload("res://Resources/Items/RARE/Clearmetal_Horn.tres")
+
+	add_bug_items()
+
+func add_common_items():
+	available_items["Crude Blade"] = preload("res://Resources/Items/COMMON/crude_blade.tres")
+	available_items["Living Wood Club"] = preload("res://Resources/Items/COMMON/living_wood_club.tres")
+	available_items["Spiked Mace"] = preload("res://Resources/Items/COMMON/spiked_mace.tres")
+	available_items["Parrying Blade"] = preload("res://Resources/Items/COMMON/parrying_blade.tres")
+	available_items["Thirsty Steel"] = preload("res://Resources/Items/COMMON/thirsty_blade.tres")
+	available_items["Shafeek Sword"] = preload("res://Resources/Items/COMMON/shafeek_sword.tres")
+	available_items["Elderwood Bow"] = preload("res://Resources/Items/COMMON/elderwood_bow.tres")
+	available_items["Ikurs Spear"] = preload("res://Resources/Items/COMMON/ikur_spear.tres")
+	available_items["Nimble Cutlass"] = preload("res://Resources/Items/COMMON/nimble_cutlass.tres")
+	available_items["Lantern"] = preload("res://Resources/Items/COMMON/lantern.tres")
+	
+	available_items["Bronze Barbed Helm"] = preload("res://Resources/Items/COMMON/bronze_barbed_helm.tres")
+	available_items["Livingwood Cloak"] = preload("res://Resources/Items/COMMON/living_wood_cloak.tres")
+	available_items["Livingwood Helmet"] = preload("res://Resources/Items/COMMON/living_wood_helmet.tres")
+	available_items["Thirsty Helmet"] = preload("res://Resources/Items/COMMON/thirsty_helmet.tres")
+	available_items["Nimble Hood"] = preload("res://Resources/Items/COMMON/nimble_hood.tres")
+	available_items["Peculiar Timepiece"] = preload("res://Resources/Items/COMMON/peculiar_timepiece.tres")
+	available_items["Purpleskin Gloves"] = preload("res://Resources/Items/COMMON/purple_skin_gloves.tres")
+	available_items["Purpleskin Vest"] = preload("res://Resources/Items/COMMON/purple_skin_vest.tres")
+	available_items["Shafeeks Boots"] = preload("res://Resources/Items/COMMON/shafeek_boots.tres")
+	available_items["Shafeeks Shield"] = preload("res://Resources/Items/COMMON/shafeek_shield.tres")
+
+func add_recipes_golden():
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/golden_testing_boots.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/golden_testing_robe.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/golden_testing_shield.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/golden_liferoot_gauntlets.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/golden_thorn_shield.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Golden/golden_battleworn_shield.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Golden/golden_double_plated_armor.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Golden/golden_tower_shield.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Golden/golden_lantern.tres"))
+
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Golden/golden_bronze_barbed_helm.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Golden/golden_livingwood_cloak.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Golden/golden_livingwood_helmet.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Golden/golden_thirsty_helmet.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Golden/golden_nimble_hood.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Golden/golden_peculiar_timepiece.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Golden/golden_purpleskin_gloves.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Golden/golden_purpleskin_vest.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Golden/golden_shafeek_boots.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Golden/golden_shafeek_shield.tres"))
+
+func add_recipes_diamond():
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Diamond/diamond_battleworn_shield.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Diamond/diamond_double_plated_armor.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Diamond/diamond_lantern.tres"))
+
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Diamond/diamond_bronze_barbed_helm.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Diamond/diamond_livingwood_cloak.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Diamond/diamond_livingwood_helmet.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Diamond/diamond_thirsty_helmet.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Diamond/diamond_nimble_hood.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Diamond/diamond_peculiar_timepiece.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Diamond/diamond_purpleskin_gloves.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Diamond/diamond_purpleskin_vest.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Diamond/diamond_shafeek_boots.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Diamond/diamond_shafeek_shield.tres"))
+
+
+func add_bug_items():
+	# --- COMMON
+	available_items["Dark Crawler"] = preload("res://Resources/Items/BUGS/dark_crawler.tres")
+	available_items["Dew Fly"] = preload("res://Resources/Items/BUGS/dew_fly.tres")
+	available_items["Firefly"] = preload("res://Resources/Items/BUGS/firefly.tres")
+	available_items["Living Wood Termite"] = preload("res://Resources/Items/BUGS/living_wood_termite.tres")
+	available_items["Nimble Fly"] = preload("res://Resources/Items/BUGS/nimble_fly.tres")
+	available_items["Thorn Bug"] = preload("res://Resources/Items/BUGS/thorn_bug.tres")
+
+	# --- GOLDEN
+	available_items["Golden Dark Crawler"] = preload("res://Resources/Items/BUGS/GOLDEN/golden_dark_crawler.tres")
+	available_items["Golden Dew Fly"] = preload("res://Resources/Items/BUGS/GOLDEN/golden_dew_fly.tres")
+	available_items["Golden Firefly"] = preload("res://Resources/Items/BUGS/GOLDEN/golden_firefly.tres")
+	available_items["Golden Living Wood Termite"] = preload("res://Resources/Items/BUGS/GOLDEN/golden_living_wood_termite.tres")
+	available_items["Golden Nimble Fly"] = preload("res://Resources/Items/BUGS/GOLDEN/golden_nimble_fly.tres")
+	available_items["Golden Thorn Bug"] = preload("res://Resources/Items/BUGS/GOLDEN/golden_thorn_bug.tres")
+
+	# --- DIAMOND
+	available_items["Diamond Dark Crawler"] = preload("res://Resources/Items/BUGS/DIAMOND/diamond_dark_crawler.tres")
+	available_items["Diamond Dew Fly"] = preload("res://Resources/Items/BUGS/DIAMOND/diamond_dew_fly.tres")
+	available_items["Diamond Firefly"] = preload("res://Resources/Items/BUGS/DIAMOND/diamond_firefly.tres")
+	available_items["Diamond Living Wood Termite"] = preload("res://Resources/Items/BUGS/DIAMOND/diamond_living_wood_termite.tres")
+	available_items["Diamond Nimble Fly"] = preload("res://Resources/Items/BUGS/DIAMOND/diamond_nimble_fly.tres")
+	available_items["Diamond Thorn Bug"] = preload("res://Resources/Items/BUGS/DIAMOND/diamond_thorn_bug.tres")
+
 
 func can_craft_items(item1: Item, item2: Item) -> bool:
 	"""Check if two items can be crafted together"""

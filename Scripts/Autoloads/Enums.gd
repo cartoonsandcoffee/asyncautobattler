@@ -87,6 +87,7 @@ enum StatusEffects {
 	BLESSING,		# on remove: heal 3 and gain 1 damage
 	BURN,			# deal BURN_BASE damage for each stack
 	BLEED,			# prefer this be 'damages health not shield' instead of poison
+	RANDOM,			# Randomizes Status
 	NONE
 }
 
