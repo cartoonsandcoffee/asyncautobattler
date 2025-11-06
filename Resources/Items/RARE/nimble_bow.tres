@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="Item" load_steps=5 format=3 uid="uid://c61ni5luwjrkt"]
+
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_52yek"]
+[ext_resource type="Texture2D" uid="uid://cjqv5mk8ht5lb" path="res://Assets/Items/Weapons.png" id="1_ik4vl"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_ik4vl"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yd8wy"]
+atlas = ExtResource("1_ik4vl")
+region = Rect2(150, 150, 150, 150)
+
+[resource]
+script = ExtResource("2_ik4vl")
+item_name = "Nimble Bow"
+item_type = 0
+item_desc = ""
+item_icon = SubResource("AtlasTexture_yd8wy")
+item_color = Color(0.701961, 0.780392, 0.258824, 1)
+rules = Array[ExtResource("1_52yek")]([])
+repeat_rules_X_times = 0
+repeat_rules_for_category = ""
+trigger_priority = 0
+trigger_only_once = false
+trigger_only_first_turn = false
+trigger_on_occurrence_number = 0
+occurrence_resets_per_turn = false
+rarity = 2
+categories = Array[String](["Nimble"])
+rng_weight = 1.0
+unlocked = true
+damage_bonus = 1
+shield_bonus = 0
+agility_bonus = 0
+hit_points_bonus = 0
+strikes_bonus = 2
+burn_damage_bonus = 0
+metadata/_custom_type_script = "uid://dthg27pchm1fm"

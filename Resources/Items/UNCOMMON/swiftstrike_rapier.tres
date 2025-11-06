@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Item" load_steps=5 format=3 uid="uid://byaw5qcis6tv7"]
+[gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://byaw5qcis6tv7"]
 
 [ext_resource type="Texture2D" uid="uid://bwo3qldtbc8u6" path="res://Assets/Items/Items.png" id="1_ibdli"]
 [ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_ynjbj"]
@@ -8,14 +8,61 @@
 atlas = ExtResource("1_ibdli")
 region = Rect2(750, 750, 150, 150)
 
+[sub_resource type="Resource" id="Resource_ibdli"]
+script = ExtResource("1_ynjbj")
+trigger_type = 1
+trigger_stat = 9
+trigger_status = 9
+countdown_value = 0
+countdown_recurs = false
+has_condition = true
+condition_type = 0
+condition_stat = 3
+condition_status = 9
+condition_comparison = ">"
+compare_to = 1
+condition_value = 0
+condition_party = 1
+condition_stat_type = 0
+condition_party_stat = 3
+condition_party_status = 9
+effect_type = 0
+target_type = 0
+target_stat_type = 0
+target_stat = 5
+target_status = 9
+effect_of = 0
+effect_amount = 3
+effect_stat_party = 4
+effect_stat_type = 3
+effect_stat_value = 9
+effect_status_value = 9
+convert_from_type = 0
+convert_from_party = 0
+convert_from_stat = 9
+convert_from_status = 9
+convert_to_type = 0
+convert_to_party = 0
+convert_to_stat = 9
+convert_to_status = 9
+conversion_amount_type = 0
+conversion_amount_value = 1
+conversion_amount_percentage = 0.5
+conversion_ratio = 1.0
+retrigger_type = 1
+retrigger_target = 0
+special_string = ""
+custom_description = ""
+metadata/_custom_type_script = "uid://dahay7fvi7bik"
+
 [resource]
 script = ExtResource("2_ibdli")
-item_name = "Swiftstrike Rapier"
+item_name = "Bemirian Rapier"
 item_type = 0
 item_desc = "Battle Start: If you have more speed than the enemy, gain 3 additional strikes"
 item_icon = SubResource("AtlasTexture_ha368")
 item_color = Color(0.73, 0.667707, 0.2628, 1)
-rules = Array[ExtResource("1_ynjbj")]([])
+rules = Array[ExtResource("1_ynjbj")]([SubResource("Resource_ibdli")])
 repeat_rules_X_times = 0
 repeat_rules_for_category = ""
 trigger_priority = 0

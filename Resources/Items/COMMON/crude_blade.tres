@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="Item" load_steps=5 format=3 uid="uid://dhs0n0owejjma"]
+
+[ext_resource type="Texture2D" uid="uid://cjqv5mk8ht5lb" path="res://Assets/Items/Weapons.png" id="1_5anrj"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="2_qlh4c"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="3_wyfk8"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jak37"]
+atlas = ExtResource("1_5anrj")
+region = Rect2(300, 0, 150, 150)
+
+[resource]
+script = ExtResource("3_wyfk8")
+item_name = "Crude Hewn Blade"
+item_type = 0
+item_desc = ""
+item_icon = SubResource("AtlasTexture_jak37")
+item_color = Color(0.384143, 0.434351, 0.519212, 1)
+rules = Array[ExtResource("2_qlh4c")]([])
+repeat_rules_X_times = 0
+repeat_rules_for_category = ""
+trigger_priority = 0
+trigger_only_once = false
+trigger_only_first_turn = false
+trigger_on_occurrence_number = 0
+occurrence_resets_per_turn = false
+rarity = 0
+categories = Array[String](["Crude"])
+rng_weight = 1.0
+unlocked = true
+damage_bonus = 4
+shield_bonus = 0
+agility_bonus = -2
+hit_points_bonus = 0
+strikes_bonus = 0
+burn_damage_bonus = 0
+metadata/_custom_type_script = "uid://dthg27pchm1fm"
