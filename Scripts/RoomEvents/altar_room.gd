@@ -24,6 +24,7 @@ func _run_room_event():
 func show_event():
 	anim_player.play("show_event")
 	await anim_player.animation_finished
+	button.disabled = false
 
 func event_idle():
 	anim_player.play("event_idle")
@@ -31,6 +32,7 @@ func event_idle():
 func hide_event():
 	anim_player.play("hide_event")
 	await anim_player.animation_finished
+	disable_button()
 
 func hover_text():
 	anim_player.play("text_hover")
@@ -49,6 +51,7 @@ func _on_button_pressed() -> void:
 func close_box():
 	anim_player.play("closeBox")
 	await anim_player.animation_finished
+	enable_button()
 
 func _on_button_mouse_exited() -> void:
 	if item_combiner.visible == false:
@@ -62,4 +65,3 @@ func _on_item_skipped():
 	close_box()
 	hide_event()
 	complete_event()
-
