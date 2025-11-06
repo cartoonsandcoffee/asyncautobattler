@@ -22,9 +22,6 @@ extends Control
 @onready var item_grid: GridContainer = $BottomPanel/MarginContainer/VBoxContainer/HBoxContainer/InventorySlots/ItemSlots
 @onready var weapon_slot: ItemSlot = $BottomPanel/MarginContainer/VBoxContainer/HBoxContainer/Weapon
 
-@onready var status_box_container: HBoxContainer = $BottomPanel/panelStatus/HBoxContainer/statusBox
-@onready var enemy_status_box_container: HBoxContainer = $CombatPanel/CombatPanelTop/panelStatus/statusBox
-
 @onready var replacement_panel: Panel = $ReplaceItemPanel
 @onready var replacement_item: ItemSlot = $ReplaceItemPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/itemBox/ItemReplace
 @onready var drop_panel: Panel = $DropItemPanel
@@ -34,20 +31,15 @@ extends Control
 @onready var anim_fade: AnimationPlayer = $animFade
 @onready var fade_overlay: ColorRect = $FadeOverlay
 
-@onready var box_minimap: VBoxContainer = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap
-@onready var box_combatcontrols: VBoxContainer = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls
-
-@onready var lbl_turn: Label = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/lblTurn
-@onready var lbl_speed: Label = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/speedControls/lblSpeed
+# Mini-map stuff
+@onready var minimap: Minimap = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap
 
 var current_event: RoomEvent
 
 var item_slot = preload("res://Scenes/item.tscn")
-var status_box = preload("res://Scenes/Elements/status_box.tscn")
 var item_proc = preload("res://Scenes/Elements/combat_item_proc.tscn")
 
 var item_slots: Array[ItemSlot] = []
-var status_effects: Array[StatusBox] = []
 
 # for reordering your inventory
 var dragging_instance_id: int = -1
@@ -69,6 +61,10 @@ var pending_drop_slot_index: int = -1
 
 var is_in_combat: bool = false
 
+# -- Full map screen
+var zoom_panel_scene = preload("res://Scenes/Elements/map_zoom_panel.tscn")
+var zoom_panel: MapZoomPanel 
+
 func get_combat_panel() -> CombatPanel:
 	# Get reference to the combat panel for room events to use
 	return combat_panel
@@ -77,7 +73,7 @@ func _ready():
 	add_to_group("main_game")
 	Player.stats.stats_updated.connect(_on_stats_updated)
 	Player.inventory.item_added.connect(_on_inventory_updated)
-	Player.status_updated.connect(_on_status_effects_updated)
+	#Player.status_updated.connect(_on_status_effects_updated)
 	DungeonManager.show_minimap.connect(_show_panels)
 
 	# Connect to CombatManager signals for real-time combat stat updates
@@ -85,9 +81,21 @@ func _ready():
 	CombatManager.combat_started.connect(_on_combat_started_for_ui)
 	CombatManager.combat_ended.connect(_on_combat_ended_for_ui)
 
+	# Connect minimap signals
+	DungeonManager.minimap_update_requested.connect(_on_minimap_update_requested)
+	minimap.room_icon_clicked.connect(_on_minimap_room_clicked)
+	minimap.zoom_out_requested.connect(_on_zoom_out_requested)
+
 	combat_panel.main_game = self
 	combat_panel.combat_completed.connect(_on_combat_completed)
 	combat_panel.player_chose_run.connect(_on_player_ran)
+
+	# -- Add Map Zoom Panel
+	zoom_panel = MapZoomPanel.new()
+	zoom_panel = zoom_panel_scene.instantiate()
+	add_child(zoom_panel)
+	zoom_panel.closed.connect(_on_zoom_panel_closed)
+	zoom_panel.boss_rush_pressed.connect(_on_boss_rush_pressed)
 
 	create_test_player()
 	load_starting_room()
@@ -113,10 +121,6 @@ func load_starting_room():
 	else:
 		push_error("Failed to generate starter room!")
 
-func flip_minimap_combat_controls():
-	box_minimap.visible = !box_minimap.visible
-	box_combatcontrols.visible = !box_combatcontrols.visible
-
 func load_room(room_data: RoomData):
 	# Update background
 	room_background.texture = room_data.room_definition.background_texture
@@ -140,12 +144,6 @@ func show_inventory_replacement_mode(new_item: Item):
 	pending_reward_item = new_item
 	replacement_item.set_item(new_item)
 	show_item_replacement_overlay()
-
-func set_turn_label(_string: String):
-	lbl_turn.text = _string
-
-func set_speed_label(_string: String):
-	lbl_speed.text = _string
 
 func clear_current_event():
 	if current_event:
@@ -205,8 +203,8 @@ func _on_door_selected(room_data: RoomData):
 	print("Player selected: ", DungeonManager.get_room_type_display_name(room_data))
 	#print("Event will be: ", room_data.chosen_event_scene.event_description)
 	
-	# Advance room counter
-	DungeonManager.advance_room()
+	# Advance room counter and store room
+	DungeonManager.advance_room(room_data)
 	
 	anim_fade.play("fade_out")
 	await anim_fade.animation_finished
@@ -237,38 +235,22 @@ func set_background_tint(room_type: Enums.RoomType):
 			room_background.modulate = Color.WHITE  # Default no tint
 
 func set_player_stats():
-	if is_in_combat:
+	if CombatManager.combat_active:
 		# During combat: show current/max for HP, current only for others
-		stat_health.update_stat(Enums.Stats.HITPOINTS, 
-			Player.stats.hit_points_current, 
-			Player.stats.hit_points)
-		stat_damage.update_stat(Enums.Stats.DAMAGE, 
-			Player.stats.damage_current, 
-			Player.stats.damage)
-		stat_shield.update_stat(Enums.Stats.SHIELD, 
-			Player.stats.shield_current, 
-			Player.stats.shield)
-		stat_agility.update_stat(Enums.Stats.AGILITY, 
-			Player.stats.agility_current, 
-			Player.stats.agility)
+		stat_health.update_stat(Enums.Stats.HITPOINTS, Player.stats.hit_points_current, Player.stats.hit_points)
+		stat_damage.update_stat(Enums.Stats.DAMAGE, Player.stats.damage_current, Player.stats.damage)
+		stat_shield.update_stat(Enums.Stats.SHIELD, Player.stats.shield_current, Player.stats.shield)
+		stat_agility.update_stat(Enums.Stats.AGILITY, Player.stats.agility_current, Player.stats.agility)
 	else:
 		# During exploration: show current/max for HP, base values for others
 		# (since stats reset to base between combats)
-		stat_health.update_stat(Enums.Stats.HITPOINTS, 
-			Player.stats.hit_points_current, 
-			Player.stats.hit_points)
-		stat_damage.update_stat(Enums.Stats.DAMAGE, 
-			Player.stats.damage, 
-			Player.stats.damage)  # Show base as both current and max
-		stat_shield.update_stat(Enums.Stats.SHIELD, 
-			Player.stats.shield, 
-			Player.stats.shield)
-		stat_agility.update_stat(Enums.Stats.AGILITY, 
-			Player.stats.agility, 
-			Player.stats.agility)
+		stat_health.update_stat(Enums.Stats.HITPOINTS, Player.stats.hit_points_current, Player.stats.hit_points)
+		stat_damage.update_stat(Enums.Stats.DAMAGE, Player.stats.damage, Player.stats.damage)  # Show base as both current and max
+		stat_shield.update_stat(Enums.Stats.SHIELD, Player.stats.shield, Player.stats.shield)
+		stat_agility.update_stat(Enums.Stats.AGILITY, Player.stats.agility, Player.stats.agility)
 	
 	# Gold always shows current amount (no max)
-	stat_gold.update_stat(Enums.Stats.GOLD, Player.stats.gold, -1)
+	stat_gold.update_stat(Enums.Stats.GOLD, Player.stats.gold, Player.stats.gold)
 
 func setup_inventory():
 	item_slots.clear()
@@ -333,20 +315,8 @@ func loop_through_player_items_for_position(item: Item) -> Vector2:
 		if item == Player.inventory.item_slots[i]:
 			return item_grid.get_child(i).global_position + offset
 	
-	return Vector2(0,0)
+	return Vector2(422,262)
 
-func loop_through_player_statuses_for_position(_status: Enums.StatusEffects) -> Vector2:
-	var offset: Vector2 = Vector2(45,-50)
-
-	if !_status:
-		return Vector2(0,0)
-
-	for child in status_box_container.get_children():
-		if child:
-			if child.status == _status:
-				return child.global_position + offset
-
-	return Vector2(0,-0)
 
 func setup_weapon():
 	weapon_slot.set_item(Player.inventory.weapon_slot)
@@ -356,39 +326,6 @@ func _on_stats_updated():
 
 func _on_inventory_updated(item: Item, slot: int):
 	setup_inventory()
-
-func _on_status_effects_updated():
-	status_effects.clear()
-
-	for child in status_box_container.get_children():
-		status_box_container.remove_child(child)
-		child.queue_free()
-
-	if Player.status_effects.poison > 0:
-		create_new_status_box(Enums.StatusEffects.POISON, Player.status_effects.poison)
-	if Player.status_effects.acid > 0:
-		create_new_status_box(Enums.StatusEffects.ACID, Player.status_effects.acid)
-	if Player.status_effects.thorns > 0:
-		create_new_status_box(Enums.StatusEffects.THORNS, Player.status_effects.thorns)
-	if Player.status_effects.burn > 0:
-		create_new_status_box(Enums.StatusEffects.BURN, Player.status_effects.burn)
-	if Player.status_effects.regeneration > 0:
-		create_new_status_box(Enums.StatusEffects.REGENERATION, Player.status_effects.regeneration)
-	if Player.status_effects.blind > 0:
-		create_new_status_box(Enums.StatusEffects.BLIND, Player.status_effects.blind)
-	if Player.status_effects.blessing > 0:
-		create_new_status_box(Enums.StatusEffects.BLESSING, Player.status_effects.blessing)
-	if Player.status_effects.stun > 0:
-		create_new_status_box(Enums.StatusEffects.STUN, Player.status_effects.stun)						
-
-func create_new_status_box(_status: Enums.StatusEffects, amount: int):
-		var item_container = status_box.instantiate()
-
-		item_container.set_status(_status, amount)
-		item_container.custom_minimum_size = Vector2(120, 78)
-
-		status_effects.append(item_container)
-		status_box_container.add_child(item_container)
 
 func _on_drag_started(slot: ItemSlot):
 	if not slot.current_item:
@@ -651,4 +588,31 @@ func _on_combat_stat_changed(entity, stat: Enums.Stats, old_value: int, new_valu
 			Enums.Stats.GOLD:
 				stat_gold.update_stat(Enums.Stats.GOLD, 
 					Player.stats.gold, 
-					-1)
+					Player.stats.gold)
+
+func _on_minimap_update_requested():
+	# Update minimap display when rooms change
+	minimap.current_rank = DungeonManager.current_rank
+	minimap.update_display()
+
+func _on_minimap_room_clicked(room_index: int):
+	# Boss room clicked (room index 5)
+	if room_index == 5:
+		show_boss_panel()
+
+func _on_zoom_out_requested():
+	zoom_panel.show_panel()
+
+func _on_zoom_panel_closed():
+	# Panel closed, nothing else needed
+	pass
+
+func _on_boss_rush_pressed():
+	# TODO: Trigger boss battle early
+	print("Boss Rush pressed!")
+	zoom_panel.hide_panel()
+
+func show_boss_panel():
+	# Placeholder for boss room panel
+	print("Boss room clicked - panel coming soon")
+	# TODO: Create and show boss info panel with "Rush" button
