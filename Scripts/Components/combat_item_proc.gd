@@ -39,6 +39,7 @@ func set_status_visuals(_status: Enums.StatusEffects):
 	var status_regen: Texture2D = load("res://Resources/StatIcons/StatusIcons/status_regen.tres")
 	var status_stun: Texture2D = load("res://Resources/StatIcons/StatusIcons/status_stun.tres")
 	var status_thorns: Texture2D = load("res://Resources/StatIcons/StatusIcons/status_thorns.tres")
+	var status_bleed: Texture2D = load("res://Resources/StatIcons/StatusIcons/status_poison.tres")
 
 	match _status:
 		Enums.StatusEffects.POISON:
@@ -64,7 +65,10 @@ func set_status_visuals(_status: Enums.StatusEffects):
 			pic_stat.texture = status_blind	
 		Enums.StatusEffects.BLESSING:
 			stat_color = gamecolors.stats.shield
-			pic_stat.texture = status_blessing					
+			pic_stat.texture = status_blessing
+		Enums.StatusEffects.BLEED:
+			stat_color = gamecolors.stats.damage
+			pic_stat.texture = status_bleed
 		_:
 			pass
 

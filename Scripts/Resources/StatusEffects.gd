@@ -83,7 +83,7 @@ func decrement_status(_status: Enums.StatusEffects, amount: int = 1):
 
 			if blind < 0:
 				blind = 0				
-	status_updated.emit()
+	#status_updated.emit()
 
 func remove_status(_status: Enums.StatusEffects):
 	match _status:
@@ -103,7 +103,7 @@ func remove_status(_status: Enums.StatusEffects):
 			blessing = 0
 		Enums.StatusEffects.BLIND:
 			blind = 0
-	status_updated.emit()	
+	#status_updated.emit()	
 
 func increment_status(_status: Enums.StatusEffects, amount: int = 1):
 	match _status:
@@ -123,4 +123,17 @@ func increment_status(_status: Enums.StatusEffects, amount: int = 1):
 			blessing += amount
 		Enums.StatusEffects.BLIND:
 			blind += amount
-	status_updated.emit()
+	#status_updated.emit()
+
+func get_status_value(status: Enums.StatusEffects) -> int:
+	# --- Helper to get status value by enum
+	match status:
+		Enums.StatusEffects.POISON: return poison
+		Enums.StatusEffects.BURN: return burn
+		Enums.StatusEffects.ACID: return acid
+		Enums.StatusEffects.THORNS: return thorns
+		Enums.StatusEffects.REGENERATION: return regeneration
+		Enums.StatusEffects.BLESSING: return blessing
+		Enums.StatusEffects.STUN: return stun
+		Enums.StatusEffects.BLIND: return blind
+		_: return 0

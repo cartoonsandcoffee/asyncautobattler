@@ -41,9 +41,10 @@ func apply_status(entity, status: Enums.StatusEffects, stacks: int):
 	
 	# Log
 	#_log_status_change(entity, status, old_value, new_value, true)
-	
+
 	# Trigger ON_STATUS_GAINED items
 	status_gained_triggered.emit(entity, status)
+
 
 func remove_status(entity, status: Enums.StatusEffects, stacks: int):
 	# Remove status effect stacks from an entity.
@@ -81,6 +82,7 @@ func remove_status(entity, status: Enums.StatusEffects, stacks: int):
 
 	# Trigger ON_STATUS_REMOVED items (even if partial removal)
 	status_removed_triggered.emit(entity, status)
+
 
 # ===== STATUS GETTERS =====
 

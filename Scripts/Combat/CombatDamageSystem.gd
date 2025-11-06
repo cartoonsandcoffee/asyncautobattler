@@ -149,7 +149,7 @@ func _create_damage_visual(target, amount: int, damage_stat: Enums.Stats, source
 	combat_manager.animation_manager.play_damage_indicator(target, amount, damage_stat, visual_info)
 	
 	# Small delay for visual feedback
-	await CombatSpeed.create_timer(CombatSpeed.get_duration("item_proc") * 0.3)
+	await CombatSpeed.create_timer(CombatSpeed.get_duration("item_proc"))
 
 func _get_visual_info_for_damage_type(damage_type: String, source) -> Dictionary:
 	# Get visual information (icon, color, name) for a damage type.

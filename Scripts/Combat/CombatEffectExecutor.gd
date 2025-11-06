@@ -43,7 +43,7 @@ func execute_item_rule(item: Item, rule: ItemRule, source_entity, target_entity)
 	# Check condition
 	if not condition_evaluator.evaluate_condition(rule, source_entity, target_entity):
 		var item_name = item.item_name if item else "Unknown Item"
-		combat_manager.add_to_combat_log_string("   %s - [color=gray]Condition not met (skipped): %s [/color]" % combat_manager.color_item(item_name), condition_evaluator.condition_to_string(rule))	
+		combat_manager.add_to_combat_log_string("   %s - [color=gray]Condition not met (skipped): %s [/color]" % combat_manager.color_item(item_name, item), condition_evaluator.condition_to_string(rule))	
 		return false  # Condition failed - signal to stop processing this item's rules
 	
 	# Calculate how many times to execute

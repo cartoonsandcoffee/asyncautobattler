@@ -19,6 +19,7 @@ enum ItemType {
 	RELIC,
 	TOOL,
 	PET,
+	BUG,
 	JEWELRY
 }
 

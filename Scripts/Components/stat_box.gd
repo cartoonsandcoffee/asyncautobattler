@@ -10,8 +10,10 @@ class_name StatBoxDisplay
 
 
 @export var stat: Enums.Stats = Enums.Stats.HITPOINTS
-@export var stat_color: Color
-@export var stat_icon: Texture2D
+@export var show_tooltip: bool = true
+
+var stat_color: Color
+var stat_icon: Texture2D
 
 var stat_value: int = 0
 var stat_value_base: int = 0
@@ -23,7 +25,8 @@ func _ready() -> void:
 	gamecolors = GameColors.new()
 
 func update_stat(_stat: Enums.Stats, value: int, base_value: int):
-	set_visuals(_stat)	
+	stat = _stat
+	set_visuals(stat)	
 	stat_value = value
 	stat_value_base = base_value	
 	_set_labels()
@@ -75,11 +78,27 @@ func _set_labels() -> void:
 	stat_holder.modulate = stat_color
 	lbl_stat.text = str(stat_value)
 	icon.texture = stat_icon
-	if (stat_value_base > -1):
+
+	# Determine display format based on context
+	if stat == Enums.Stats.HITPOINTS:
+		# HP always shows current/max format
 		lbl_stat.text = str(stat_value) + "/" + str(stat_value_base)
+		lbl_stat.add_theme_font_size_override("font_size", 34)
+	elif CombatManager.combat_active:
+		# In combat: show only current value for non-HP stats
+		lbl_stat.text = str(stat_value)
+		lbl_stat.add_theme_font_size_override("font_size", 40)
+	else:
+		# Outside combat: show only base value
+		lbl_stat.text = str(stat_value_base)
+		lbl_stat.add_theme_font_size_override("font_size", 40)	
+
+	#if (stat_value_base > -1):
+	#	lbl_stat.text = str(stat_value) + "/" + str(stat_value_base)
 
 func _on_button_mouse_entered() -> void:
-	tooltip.visible = true
+	if show_tooltip:
+		tooltip.visible = true
 
 
 func _on_button_mouse_exited() -> void:
