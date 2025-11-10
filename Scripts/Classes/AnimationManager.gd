@@ -44,14 +44,25 @@ func _ready():
 		CombatManager.combat_started.connect(_on_combat_started)
 		CombatManager.combat_ended.connect(_on_combat_ended)
 
-	CombatSpeed.combat_paused.connect(_on_combat_paused)
-	CombatSpeed.combat_resumed.connect(_on_combat_resumed)
-
 func initialize(panel: CombatPanel):
 	"""Initialize with references to UI components"""
 	combat_panel = panel
 
 # ===== MILESTONE SYSTEM =====
+
+func _get_animation_variant(base_name: String) -> String:
+	"""Get the correct animation variant based on current speed"""
+	match CombatSpeed.current_mode:
+		CombatSpeed.CombatSpeedMode.NORMAL:
+			return base_name
+		CombatSpeed.CombatSpeedMode.FAST:
+			return base_name + "_fast"
+		CombatSpeed.CombatSpeedMode.VERY_FAST:
+			return base_name + "_very_fast"
+		CombatSpeed.CombatSpeedMode.INSTANT:
+			return base_name + "_instant"  # Doesn't matter, won't play
+		_:
+			return base_name
 
 func play_milestone(milestone_name: String, data: Dictionary = {}):
 	"""Play a combat milestone animation"""
@@ -123,14 +134,21 @@ func _play_battle_end(winner, loser):
 	if combat_panel:
 		if loser == CombatManager.enemy_entity:
 			# Enemy death animation
-			if combat_panel.enemy_anim.has_animation("enemy_die"):
-				combat_panel.anim_enemy_die()
-				await combat_panel.enemy_anim.animation_finished
+			var anim_name = _get_animation_variant("enemy_die")
+			if combat_panel.enemy_anim.has_animation(anim_name):
+				combat_panel.enemy_anim.speed_scale = 1.0
+				combat_panel.enemy_anim.play(anim_name)
+				
+				var anim_length = combat_panel.enemy_anim.get_animation(anim_name).length
+				await CombatSpeed.create_timer(anim_length)		
 		else:
-			# Player death animation (if exists)
-			if combat_panel.player_anim.has_animation("player_die"):
-				combat_panel.player_anim.play("player_die")
-				await combat_panel.player_anim.animation_finished
+			var anim_name = _get_animation_variant("player_die")
+			if combat_panel.player_anim.has_animation(anim_name):
+				combat_panel.player_anim.speed_scale = 1.0
+				combat_panel.player_anim.play(anim_name)
+				
+				var anim_length = combat_panel.player_anim.get_animation(anim_name).length
+				await CombatSpeed.create_timer(anim_length)
 
 	var turn_sign = _create_turn_sign(message)
 	var duration = CombatSpeed.get_duration("milestone_sign")
@@ -157,11 +175,8 @@ func _execute_item_sequence(items: Array, entity, trigger_type: String):
 	for i in range(items.size()):
 		var item_data = items[i]
 		var item = item_data				        # item_data["item"]
-		var rule = item_data.rules[0]			    	# item_data["rule"]
+		var rule = item_data.rules[0]			    # item_data["rule"]
 		var slot_index = item_data.slot_index		# item_data.get("slot_index", -1)
-		
-		# Wait if paused
-		await CombatSpeed.wait_if_paused()
 		
 		# ----- STEP 1: Highlight the item
 		# Highlight the item slot
@@ -169,7 +184,7 @@ func _execute_item_sequence(items: Array, entity, trigger_type: String):
 			combat_panel.highlight_item_slot(slot_index, slot_index == -1)
 
 		# Brief moment for highlight to be visible
-		await CombatSpeed.create_timer(CombatSpeed.get_duration("item_highlight") * 0.5)
+		await CombatSpeed.create_timer(CombatSpeed.get_duration("item_highlight_brief"))
 		
 		# ----- STEP 2: Show Item Proc
 		if combat_panel:
@@ -177,14 +192,14 @@ func _execute_item_sequence(items: Array, entity, trigger_type: String):
 			var proc_duration = CombatSpeed.get_duration("item_proc")
 			await CombatSpeed.create_timer(proc_duration * 0.8)  # Wait for most of animation
 
-		# emit completion so the status effects update
-		item_proc_complete.emit(entity, rule)
-		
+			# emit completion so the status effects update
+			item_proc_complete.emit(entity, rule)
+
 		# ----- STEP 3: Clear Highlight, move to next
 		if combat_panel:
 			combat_panel._clear_all_highlights()
 			if i < items.size() - 1:
-				await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap") * 0.5)
+				await CombatSpeed.create_timer(CombatSpeed.get_duration("item_highlight_brief"))
 
 		#await CombatSpeed.create_timer(CombatSpeed.get_overlap_duration())
 		#item_animation_complete.emit(item)
@@ -213,15 +228,20 @@ func _execute_attack_animation(attacker, target):
 	
 	# Play appropriate attack animation
 	if is_player_attacking:
-		combat_panel.player_anim.speed_scale = CombatSpeed.get_multiplier()
-		combat_panel.anim_player_attack()
-		await combat_panel.player_anim.animation_finished
+		var anim_name = _get_animation_variant("player_attack")
+		combat_panel.player_anim.speed_scale = 1.0
+		combat_panel.player_anim.play(anim_name)
+
+		var anim_length = combat_panel.player_anim.get_animation("player_attack").length
+		await CombatSpeed.create_timer(anim_length)
+
 	else:
-		combat_panel.enemy_anim.speed_scale = CombatSpeed.get_multiplier()
-		combat_panel.anim_enemy_attack()
-		await combat_panel.enemy_anim.animation_finished
-
-
+		var anim_name = _get_animation_variant("enemy_attack")
+		combat_panel.enemy_anim.speed_scale = 1.0
+		combat_panel.enemy_anim.play(anim_name)
+		
+		var anim_length = combat_panel.enemy_anim.get_animation(anim_name).length
+		await CombatSpeed.create_timer(anim_length)
 
 func play_damage_indicator(target, amount: int, damage_stat: Enums.Stats, visual_info: Dictionary):
 	"""Queue a damage indicator animation"""
@@ -267,9 +287,6 @@ func _process_animation_queue():
 	
 	while not animation_queue.is_empty():
 		var request = animation_queue.pop_front()
-		
-		# Wait if paused
-		await CombatSpeed.wait_if_paused()
 		
 		# Execute the animation
 		await _execute_animation_request(request)
@@ -365,17 +382,33 @@ func clear_all_animations():
 func wait_for_attack_animation():
 	"""Wait for current attack animation to complete"""
 	if combat_panel and combat_panel.slide_animation and combat_panel.slide_animation.is_playing():
-		await combat_panel.slide_animation.animation_finished
-	if combat_panel and combat_panel.player_anim and (combat_panel.player_anim.get_current_animation() == "player_attack"):
-		await combat_panel.player_anim.animation_finished
-	if combat_panel and combat_panel.enemy_anim and (combat_panel.enemy_anim.get_current_animation() == "enemy_attack"):
-		await combat_panel.enemy_anim.animation_finished
+		#await combat_panel.slide_animation.animation_finished
+		var current_anim = combat_panel.slide_animation.current_animation
+		if current_anim:
+			var anim_length = combat_panel.slide_animation.get_animation(current_anim).length
+			await CombatSpeed.create_timer(anim_length)
+
+	if combat_panel and combat_panel.player_anim and (combat_panel.player_anim.get_current_animation() == CombatSpeed.get_animation_variant("player_attack")):
+		#await combat_panel.player_anim.animation_finished
+		var current_anim = combat_panel.player_anim.current_animation
+		if current_anim:
+			var anim_length = combat_panel.player_anim.get_animation(current_anim).length
+			await CombatSpeed.create_timer(anim_length)
+
+	if combat_panel and combat_panel.enemy_anim and (combat_panel.enemy_anim.get_current_animation() == CombatSpeed.get_animation_variant("enemy_attack")):
+		#await combat_panel.enemy_anim.animation_finished
+		var current_anim = combat_panel.enemy_anim.current_animation
+		if current_anim:
+			var anim_length = combat_panel.enemy_anim.get_animation(current_anim).length
+			await CombatSpeed.create_timer(anim_length)
+
 
 func wait_for_current_sequence():
 	if is_processing:
 		await animation_sequence_complete
 
 	await wait_for_attack_animation()
+
 
 func wait_for_milestone(milestone_name: String):
 	if current_milestone != milestone_name:
@@ -406,9 +439,3 @@ func is_busy() -> bool:
 func get_current_milestone() -> String:
 	return current_milestone		
 	
-
-func _on_combat_paused():
-	pass
-
-func _on_combat_resumed():
-	pass

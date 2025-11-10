@@ -56,13 +56,17 @@ func set_test_inventory():
 	inventory.set_inventory_size(12)
 
 	# -- for testing basic rules
-	inventory.add_item(ItemsManager.available_items["Tower Shield"])
-	inventory.add_item(ItemsManager.available_items["Fists"])
+
+	inventory.add_item(ItemsManager.available_items["Spiked Mace"])
+	inventory.add_item(ItemsManager.available_items["Testing Relic"])
+
+	#inventory.add_item(ItemsManager.available_items["Tower Shield"])
+	#inventory.add_item(ItemsManager.available_items["Fists"])
 	inventory.add_item(ItemsManager.available_items["Liferoot Gauntlets"])
-	inventory.add_item(ItemsManager.available_items["Testing Boots"])
-	inventory.add_item(ItemsManager.available_items["Testing Shield"])
-	inventory.add_item(ItemsManager.available_items["Testing Robes"])
-	inventory.add_item(ItemsManager.available_items["Thorn Shield"])
+	#inventory.add_item(ItemsManager.available_items["Testing Boots"])
+	#inventory.add_item(ItemsManager.available_items["Testing Shield"])
+	#inventory.add_item(ItemsManager.available_items["Testing Robes"])
+	#inventory.add_item(ItemsManager.available_items["Thorn Shield"])
 
 	# -- More complex set for testing detailed rules
 	#inventory.add_item(ItemsManager.available_items["Clearmetal Dagger"])

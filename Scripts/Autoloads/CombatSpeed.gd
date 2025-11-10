@@ -1,44 +1,87 @@
 extends Node
 
 signal speed_changed(new_speed: CombatSpeedMode)
-signal combat_paused()
-signal combat_resumed()
 
 enum CombatSpeedMode {
 	PAUSE = 0,
 	NORMAL = 1,
 	FAST = 2,
-	VERY_FAST = 3
+	VERY_FAST = 3,
+	INSTANT = 4
 }
 
 var current_mode: CombatSpeedMode = CombatSpeedMode.NORMAL
 var is_paused: bool = false
+var in_combat: bool = false
 
-# Speed multipliers for different modes
-const SPEED_MULTIPLIERS = {
-	CombatSpeedMode.PAUSE: 0.0,
-	CombatSpeedMode.NORMAL: 1.0,
-	CombatSpeedMode.FAST: 1.5,
-	CombatSpeedMode.VERY_FAST: 2.0
+const SPEED_CONFIGS = {
+	CombatSpeedMode.PAUSE: {
+		"timer_multiplier": 0.0,
+		"anim_speed": 0.0
+	},
+	CombatSpeedMode.NORMAL: {
+		"timer_multiplier": 1.0,
+		"anim_speed": 1.0
+	},
+	CombatSpeedMode.FAST: {
+		"timer_multiplier": 2.0,    # Waits are half as long
+		"anim_speed": 1.0           # Animations 30% faster (SAFE)
+	},
+	CombatSpeedMode.VERY_FAST: {
+		"timer_multiplier": 4.0,    # Waits are 1/4 as long
+		"anim_speed": 1.0           # Animations 50% faster (MAX SAFE)
+	},
+	CombatSpeedMode.INSTANT: {
+		"timer_multiplier": 999.0,   # effectively instant
+		"anim_speed": 1.0            # anims won't play or play special QUICK combat flash
+	}
 }
 
 # Duration settings for different animation types (in seconds at NORMAL speed)
 const BASE_DURATIONS = {
 	"milestone_sign": 1.5,        # Battle Start, Turn Start signs
-	"item_highlight": 1.2,         # Item slot highlighting
-	"item_proc": 1.2,              # Item effect proc animation
+
+	# ITEM PROCESSING
+	"item_highlight": 1.5,         # Item slot highlighting
+	"item_highlight_brief": 0.6,   # brief flash
+	"item_proc": 1.5,              # Item effect proc animation
 	"proc_overlap": 1.0,           # Time before starting next proc (for overlap)
+	
+	# COMBAT PACING
 	"attack_slide": 1.2,           # Attack slide animation
+	"attack_gap": 0.3,             # between multiple strikes
+
+	# VISUAL FEEDBACK
 	"damage_number": 1.0,          # Damage indicator animation
 	"status_effect": 1.0,          # Status effect visual
-	"turn_gap": 0.5,               # Brief pause between major phases
+
+	"turn_gap": 0.5,               # Brief pause between turns
+	"phase_transition": 0.5,       # between major sections
 }
 
+func get_animation_variant(base_name: String) -> String:
+	"""Get the correct animation variant based on current speed"""
+	match CombatSpeed.current_mode:
+		CombatSpeed.CombatSpeedMode.NORMAL:
+			return base_name
+		CombatSpeed.CombatSpeedMode.FAST:
+			return base_name + "_fast"
+		CombatSpeed.CombatSpeedMode.VERY_FAST:
+			return base_name + "_very_fast"
+		CombatSpeed.CombatSpeedMode.INSTANT:
+			return base_name + "_instant"  # Doesn't matter, won't play
+		_:
+			return base_name
+
 func get_multiplier() -> float:
-	return SPEED_MULTIPLIERS[current_mode]
+	if not in_combat:
+		return 1.0
+	return SPEED_CONFIGS[current_mode]["timer_multiplier"]
+
+func is_instant_mode() -> bool:
+	return in_combat and current_mode == CombatSpeedMode.INSTANT
 
 func get_duration(animation_type: String) -> float:
-	"""Get the adjusted duration for an animation type"""
 	if not animation_type in BASE_DURATIONS:
 		push_warning("Unknown animation type: " + animation_type)
 		return 1.0
@@ -51,45 +94,21 @@ func get_duration(animation_type: String) -> float:
 	
 	return base / multiplier
 
-func get_overlap_duration() -> float:
-	"""Get the overlap time for sequential animations at current speed"""
-	var multiplier = get_multiplier()
-	if multiplier == 0.0:
-		return INF
-	
-	# At normal speed, wait full duration. At faster speeds, allow more overlap
-	match current_mode:
-		CombatSpeedMode.NORMAL:
-			return get_duration("item_proc") * 0.9  # 90% wait before next
-		CombatSpeedMode.FAST:
-			return get_duration("item_proc") * 0.6  # 60% wait before next
-		CombatSpeedMode.VERY_FAST:
-			return get_duration("item_proc") * 0.4  # 40% wait before next
-		_:
-			return INF
-
 func set_speed(mode: CombatSpeedMode):
-	"""Set the combat speed mode"""
 	var was_paused = is_paused
 	current_mode = mode
 	is_paused = (mode == CombatSpeedMode.PAUSE)
 	
-	if !is_paused && was_paused:  # UNPAUSE COMBAT
-		combat_resumed.emit()
-
+	if is_paused and not was_paused:
+		get_tree().paused = true
+	elif not is_paused and was_paused:
+		get_tree().paused = false
+	
 	# Emit signal for all listeners
 	speed_changed.emit(mode)
 	
 	# Log the change
 	print("Combat speed set to: ", CombatSpeedMode.keys()[mode])
-
-func pause_combat():
-	set_speed(CombatSpeedMode.PAUSE)
-	combat_paused.emit()
-
-func resume_combat():
-	if is_paused:
-		set_speed(CombatSpeedMode.NORMAL)
 
 func cycle_speed():
 	"""Cycle through speed modes (excluding pause)"""
@@ -100,15 +119,21 @@ func cycle_speed():
 			set_speed(CombatSpeedMode.VERY_FAST)
 		CombatSpeedMode.VERY_FAST:
 			set_speed(CombatSpeedMode.NORMAL)
+		CombatSpeedMode.INSTANT:
+			set_speed(CombatSpeedMode.NORMAL)
 
-func wait_if_paused():
-	while is_paused:
-		await get_tree().process_frame
+
+func enter_combat():
+	in_combat = true
+
+func exit_combat():
+	in_combat = false
+	get_tree().paused = false
+	set_speed(CombatSpeedMode.NORMAL)
 
 func create_timer(duration: float) -> SceneTreeTimer:
-	"""Create a timer that respects pause state"""
-	if is_paused:
-		await wait_if_paused()
+	# Then create the actual timer
+	if duration > 0:
+		await get_tree().create_timer(duration).timeout
 	
-	await get_tree().create_timer(duration).timeout
-	return null #get_tree().create_timer(duration)
+	return null

@@ -40,12 +40,18 @@ func execute_item_rule(item: Item, rule: ItemRule, source_entity, target_entity)
 	
 	# Returns: true if executed successfully, false if condition failed
 
+	# ====================== JDM: Moved evaluating to before the animation plays
+	# ======================      this can be deleted.
 	# Check condition
-	if not condition_evaluator.evaluate_condition(rule, source_entity, target_entity):
-		var item_name = item.item_name if item else "Unknown Item"
-		combat_manager.add_to_combat_log_string("   %s - [color=gray]Condition not met (skipped): %s [/color]" % combat_manager.color_item(item_name, item), condition_evaluator.condition_to_string(rule))	
-		return false  # Condition failed - signal to stop processing this item's rules
-	
+	#if not condition_evaluator.evaluate_condition(rule, source_entity, target_entity):
+	#	var item_name = item.item_name if item else "Unknown Item"
+	#	combat_manager.add_to_combat_log_string("   %s - [color=gray]Condition not met (skipped): %s [/color]" % [
+	#		combat_manager.color_item(item_name, item), 
+	#		condition_evaluator.condition_to_string(rule)
+	#	])
+	#	return false  # Condition failed - signal to stop processing this item's rules
+	# ======================================================
+
 	# Calculate how many times to execute
 	var execution_count = _calculate_execution_count(item, rule, source_entity)
 	
@@ -55,7 +61,7 @@ func execute_item_rule(item: Item, rule: ItemRule, source_entity, target_entity)
 		
 		# Small delay between repeats
 		if i < execution_count - 1:
-			await CombatSpeed.create_timer(CombatSpeed.get_duration("item_proc") * 0.3)
+			await CombatSpeed.create_timer(CombatSpeed.get_duration("attack_gap"))
 	
 	return true  # Executed successfully
 

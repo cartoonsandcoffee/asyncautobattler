@@ -9,6 +9,7 @@ signal status_applied(entity, status: Enums.StatusEffects, stacks: int)
 signal status_removed(entity, status: Enums.StatusEffects, stacks: int)
 signal status_gained_triggered(entity, status: Enums.StatusEffects)
 signal status_removed_triggered(entity, status: Enums.StatusEffects)
+signal status_proc_visual_complete(entity)
 
 var combat_manager
 var stat_handler: CombatStatHandler

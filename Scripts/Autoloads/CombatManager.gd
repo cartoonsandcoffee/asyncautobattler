@@ -104,6 +104,7 @@ func _connect_subsystem_signals():
 
 func start_combat(player, enemy):
 	# ---- Initialize and begin combat between player and enemy.
+	CombatSpeed.enter_combat()
 	combat_log = ""
 	add_to_combat_log_string("[center]=== COMBAT STARTED ===[/center]\n", Color.WHITE, true)
 	
@@ -244,7 +245,7 @@ func execute_attack_sequence(attacker):
 		
 		# Small gap between strikes
 		if strike < strikes - 1:
-			await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap"))
+			await CombatSpeed.create_timer(CombatSpeed.get_duration("attack_gap"))
 
 # ===== ITEM PROCESSING =====
 
@@ -267,11 +268,8 @@ func process_entity_items_sequentially(entity, trigger_type: Enums.TriggerType, 
 		add_to_combat_log_string("   (no %s items.)" % [Enums.get_trigger_type_string(trigger_type)])
 		return
 	
-	#add_to_combat_log_string("%s items triggered:" % Enums.get_trigger_type_string(trigger_type), Color.LIGHT_BLUE)
-	
-	# Start item sequence animation
-	var item_list = triggered_items.map(func(data): return data.item)
-	animation_manager.play_item_sequence(item_list, entity, Enums.get_trigger_type_string(trigger_type))
+	# -- Get combat panel reference
+	var combat_panel = animation_manager.combat_panel
 	
 	# Process each item - but group by item to handle condition chains
 	var current_item = null
@@ -292,20 +290,68 @@ func process_entity_items_sequentially(entity, trigger_type: Enums.TriggerType, 
 			add_to_combat_log_string("    ⏭ Skipping rule due to failed condition in chain", Color.GRAY)
 			continue
 		
+		# === INSTANT MODE:
+		if CombatSpeed.is_instant_mode():
+			# === INSTANT MODE: Skip all animations ===
+			item_rule_triggered.emit(item, rule, entity)
+			var target = _get_rule_target(entity, rule.target_type)
+			var success = await effect_executor.execute_item_rule(item, rule, entity, target)
+			
+			# Update status boxes immediately
+			if success and rule.effect_type in [Enums.Effects.APPLY_STATUS, Enums.Effects.REMOVE_STATUS]:
+				if combat_panel:
+					combat_panel.rebuild_status_boxes(target)
+			
+			if not success:
+				continue_processing_item = false
+			
+			# No waits in instant mode
+			continue
+
+		# === STEP 0: Check rule condition
+		var target = _get_rule_target(entity, rule.target_type)
+		var condition_passes = condition_evaluator.evaluate_condition(rule, entity, target)
+
+		if not condition_passes:
+			# Log failure but don't animate
+			var item_name = item.item_name if item else "Unknown Item"
+			add_to_combat_log_string("   %s - [color=gray]Condition not met (skipped): %s [/color]" % [
+				color_item(item_name, item), 
+				condition_evaluator.condition_to_string(rule)
+			])
+			continue_processing_item = false
+			continue  # Skip to next rule		
+
+		# ======= NORMAL MODE:
+		# === STEP 1: Highlight the item slot ===
+		if entity == player_entity and combat_panel:
+			combat_panel.highlight_item_slot(slot_index, slot_index == -1)
+		
+		#await CombatSpeed.create_timer(CombatSpeed.get_duration("item_highlight")) # JDM: -- is this necessary?
+		
+		# === STEP 2: Show proc animation ===
+		if combat_panel:
+			combat_panel.spawn_item_proc_indicator(item, rule, entity)
+		
+		await CombatSpeed.create_timer(CombatSpeed.get_duration("item_proc"))
+		
+		# === STEP 3: Execute effect (DATA CHANGES) ===
 		# Emit trigger signal
 		item_rule_triggered.emit(item, rule, entity)
-		
-		# Execute the rule through effect executor - This is where the condition gets evaluated
-		var target = _get_rule_target(entity, rule.target_type)
 		var success = await effect_executor.execute_item_rule(item, rule, entity, target)
+
+
+		# === STEP 4: Update status boxes if needed ===
+		if success and rule.effect_type in [Enums.EffectType.APPLY_STATUS, Enums.EffectType.REMOVE_STATUS]:
+			if combat_panel:
+				combat_panel.rebuild_status_boxes(target)
 		
-		# If rule failed (condition not met), stop processing this item's remaining rules
-		if not success:
-			continue_processing_item = false
-			add_to_combat_log_string("    🚫 Condition failed - remaining rules on this item will be skipped", Color.ORANGE)
+		# === STEP 5: Clear highlight ===
+		if entity == player_entity and combat_panel:
+			combat_panel._clear_all_highlights()
 		
-		# Wait for animation
-		await CombatSpeed.create_timer(CombatSpeed.get_duration("item_proc") * 0.7)
+		# Small gap before next item (needed?)
+		# await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap")) # PAUSE FOR NO REASON?
 	
 	# Wait for all animations to complete
 	await animation_manager.wait_for_current_sequence()
@@ -331,7 +377,7 @@ func process_entity_items_with_status(entity, trigger_type: Enums.TriggerType, t
 		var target = _get_rule_target(entity, rule.target_type)
 		await effect_executor.execute_item_rule(item, rule, entity, target)
 		
-		await CombatSpeed.create_timer(CombatSpeed.get_duration("item_proc") * 0.7)
+		await CombatSpeed.create_timer(CombatSpeed.get_duration("item_proc_overlap"))
 	
 	await animation_manager.wait_for_current_sequence()
 
@@ -368,7 +414,7 @@ func end_combat_gracefully():
 	
 	# Emit combat ended
 	combat_ended.emit(winner, loser)
-	
+	CombatSpeed.exit_combat()
 
 func calculate_gold_reward(loser) -> int:
 	"""Calculate gold reward for defeating an enemy."""
@@ -430,6 +476,11 @@ func _on_death_triggered(entity):
 	add_to_combat_log_string(get_entity_name(entity) + " has died!", Color.RED)
 	combat_active = false  # End combat
 	
+	# Clear the statuses as soon as someone dies.
+	var combat_panel = animation_manager.combat_panel
+	if combat_panel:
+		combat_panel.clear_statuses()
+
 	# Check for ON_KILL trigger (for the killer)
 	var killer = enemy_entity if entity == player_entity else player_entity
 	await process_entity_items_sequentially(killer, Enums.TriggerType.ON_KILL)
@@ -539,7 +590,8 @@ func color_item(item_name: String, item_obj = null) -> String:
 	var item_color = Color.GOLD  # Default fallback
 	
 	# If we have the actual item object, use its color
-	if item_obj is Item and item_obj.item_color:
-		item_color = item_obj.item_color
+	if item_obj:
+		if item_obj is Item and item_obj.item_color:
+			item_color = item_obj.item_color
 	
 	return color_text(item_name, item_color)

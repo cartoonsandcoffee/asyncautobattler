@@ -53,6 +53,7 @@ func setup_items():
 	available_items["Testing Robes"] = preload("res://Resources/Items/Armor/testing_robes.tres")
 	available_items["Thorn Shield"] = preload("res://Resources/Items/Armor/thorn_shield.tres")
 	available_items["Shield Tap"] = preload("res://Resources/Items/Armor/armor_tap.tres")
+	available_items["Testing Relic"] = preload("res://Resources/Items/Armor/test_relic.tres")
 
 	# --- UNCOMMON
 	available_items["Ornate Sword"] = preload("res://Resources/Items/UNCOMMON/ornate_sword.tres")
