@@ -70,12 +70,14 @@ func _on_btn_cancel_pressed() -> void:
 
 func show_store():
 	anim_player.play("show_store")
-	await anim_player.animation_finished
+	var anim_length = anim_player.get_animation("show_store").length
+	await CombatSpeed.create_timer(anim_length)
 	is_store_open = true
 
 func hide_store():
 	anim_player.play("hide_store")
-	await anim_player.animation_finished	
+	var anim_length = anim_player.get_animation("hide_store").length
+	await CombatSpeed.create_timer(anim_length)	
 	is_store_open = false
 	store_closed.emit()
 

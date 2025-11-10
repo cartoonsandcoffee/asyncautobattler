@@ -37,28 +37,32 @@ func set_timer(_sec: float):
 
 func start_timer():
 	is_showing = true
-	anim_player.speed_scale = CombatSpeed.get_multiplier()
+	anim_player.speed_scale = 1.0
 	anim_player.play("fade_in")
 	time_elapsed = 0.0
 
 func _done():
 	is_showing = false
-	anim_player.speed_scale = CombatSpeed.get_multiplier()
+	anim_player.speed_scale = 1.0
 	anim_player.play("hide")
 	turn_animation_done.emit()
 
-	await anim_player.animation_finished
+	# Wait using timer instead of animation_finished
+	var anim_length = anim_player.get_animation("hide").length
+	await CombatSpeed.create_timer(anim_length)
 	queue_free()
 
 func fade_in():
-	anim_player.speed_scale = CombatSpeed.get_multiplier()
+	anim_player.speed_scale = 1.0
 	anim_player.play("fade_in")
 
 func fade_out():
-	anim_player.speed_scale = CombatSpeed.get_multiplier()
+	anim_player.speed_scale = 1.0
 	anim_player.play("fade_out")
-	await anim_player.animation_finished
 
+	# Wait using timer instead of animation_finished
+	var anim_length = anim_player.get_animation("fade_out").length
+	await CombatSpeed.create_timer(anim_length)
 
 func _on_timer_timeout() -> void:
 	is_showing = false

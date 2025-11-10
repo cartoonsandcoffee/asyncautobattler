@@ -167,16 +167,23 @@ func set_label(value: int):
 
 
 func _done():
-	anim_player.speed_scale = CombatSpeed.get_multiplier()
+	anim_player.speed_scale = 1.0
 	anim_player.play("hide")
 	stat_animation_done.emit()
 
-	await anim_player.animation_finished
+	# Wait using timer instead of animation_finished
+	var anim_length = anim_player.get_animation("hide").length
+	await CombatSpeed.create_timer(anim_length)
+
+	#await anim_player.animation_finished
 	queue_free()
 
 func run_animation(_party: Enums.Party):
-	anim_player.speed_scale = CombatSpeed.get_multiplier()
+	anim_player.speed_scale = 1.0
+	var anim_name = ""
 	if _party == Enums.Party.PLAYER:
-		anim_player.play("fade_upwards")
+		anim_name = CombatSpeed.get_animation_variant("fade_upwards")
 	else:
-		anim_player.play("fade_downward")
+		anim_name = CombatSpeed.get_animation_variant("fade_downward")
+	
+	anim_player.play(anim_name)

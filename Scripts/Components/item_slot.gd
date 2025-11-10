@@ -195,6 +195,9 @@ func _on_button_mouse_entered() -> void:
 			panel_border.modulate = Color(1.2, 1.2, 1.2)		
 
 func _on_button_down():
+	if CombatManager.combat_active:
+		return null  # Disable dragging during combat	
+		
 	if current_item:
 		is_dragging = true
 		drag_started.emit(self)
@@ -207,11 +210,12 @@ func _on_button_up():
 		modulate.a = 1.0
 
 func _on_button_pressed():
-#	if current_item:
-#		slot_clicked.emit(self)
 	click_count += 1
 	click_timer = 0.0
 	
+	if CombatManager.combat_active:
+		return false  # Disable dropping during combat
+
 	if click_count == 1:
 		# Start timer for potential double-click
 		pass

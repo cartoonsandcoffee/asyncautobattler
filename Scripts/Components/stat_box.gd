@@ -77,8 +77,7 @@ func _set_labels() -> void:
 	lbl_tooltip.text = stat_tooltip
 	stat_holder.modulate = stat_color
 	lbl_stat.text = str(stat_value)
-	icon.texture = stat_icon
-
+	
 	# Determine display format based on context
 	if stat == Enums.Stats.HITPOINTS:
 		# HP always shows current/max format

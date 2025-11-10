@@ -31,7 +31,7 @@ func reset_statuses():
 	burn = 0
 	blessing = 0
 	blind = 0
-	status_updated.emit()
+	#status_updated.emit()
 
 func decrement_status(_status: Enums.StatusEffects, amount: int = 1):
 	match _status:

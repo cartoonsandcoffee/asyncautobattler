@@ -75,7 +75,7 @@ var weapon_slot_ref: ItemSlot = null
 var gamecolors: GameColors
 
 var player_pos: Vector2 = Vector2(422, 262)
-var enemy_pos: Vector2 = Vector2(675,180)
+var enemy_pos: Vector2 = Vector2(695,180)
 
 # Track pending status updates for batching
 var pending_status_updates: Dictionary = {}  # {entity: [rules]}
@@ -110,11 +110,11 @@ func connect_combat_signals():
 	CombatManager.entity_wounded.connect(_on_entity_wounded)
 
 	# Connect to animation completion for item-based status effects
-	CombatManager.animation_manager.item_proc_complete.connect(_on_item_proc_complete)
+	#CombatManager.animation_manager.item_proc_complete.connect(_on_item_proc_complete)
 	
 	# Connect to status changes for turn-based procs (poison, burn, etc.)
-	CombatManager.status_handler.status_applied.connect(_on_status_data_changed)
-	CombatManager.status_handler.status_removed.connect(_on_status_data_changed)
+	#CombatManager.status_handler.status_applied.connect(_on_status_data_changed)
+	#CombatManager.status_handler.status_removed.connect(_on_status_data_changed)
 
 func setup_for_combat(enemy_entity, inventory_slots: Array[ItemSlot], weapon_slot: ItemSlot):
 	current_player_entity = Player
@@ -134,18 +134,13 @@ func setup_for_combat(enemy_entity, inventory_slots: Array[ItemSlot], weapon_slo
 	
 	# Initialize enemy stats display
 	_update_enemy_stats()
+	clear_statuses()
 	
 	_set_state(PanelState.PRE_COMBAT)
 
 	# Reset turn counter
 	set_turn_label("Battle Start")
 	_update_speed_label(CombatSpeed.current_mode)
-
-	# Clear status boxes at combat start
-	for child in player_status_container.get_children():
-		child.queue_free()
-	for child in enemy_status_container.get_children():
-		child.queue_free()
 
 	# Update the RUN button stuff
 	var can_run = current_player_entity.stats.agility > current_enemy_entity.stats.agility
@@ -156,6 +151,13 @@ func setup_for_combat(enemy_entity, inventory_slots: Array[ItemSlot], weapon_slo
 	# lets see.. i don't know
 	show_panel()
 
+func clear_statuses():
+	# Clear status boxes at combat start
+	for child in player_status_container.get_children():
+		child.queue_free()
+	for child in enemy_status_container.get_children():
+		child.queue_free()
+
 func show_panel():
 	"""Slide the combat panel in from the right"""
 	if is_visible:
@@ -165,7 +167,9 @@ func show_panel():
 	is_visible = true
 	
 	slide_animation.play("open_Combat")
-	await slide_animation.animation_finished
+	#await slide_animation.animation_finished
+
+
 	combat_ui_ready.emit()
 
 func hide_panel():
@@ -174,8 +178,6 @@ func hide_panel():
 		return
 	
 	is_visible = false
-	#slide_animation.play("close_combat")
-	#await slide_animation.animation_finished
 	visible = false
 	
 	box_fight_run.visible = true
@@ -249,14 +251,13 @@ func _on_combat_ended(winner, loser):
 			Player.add_gold(gold_earned)
 	
 	# Wait a moment before hiding
-	Player.status_effects.reset_statuses()
 	for child in player_status_container.get_children():
 		child.queue_free()
 	for child in enemy_status_container.get_children():
 		child.queue_free()
 
 	# Wait before showing victory/death panel
-	await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap") * 2)
+	await CombatSpeed.create_timer(CombatSpeed.get_duration("phase_transition"))
 
 	_set_state(PanelState.POST_COMBAT)
 	_clear_all_highlights()
@@ -264,7 +265,7 @@ func _on_combat_ended(winner, loser):
 
 	if winner == current_player_entity:
 		slide_animation.play("show_victory")
-		await slide_animation.animation_finished
+		#await slide_animation.animation_finished
 	else:
 		death_panel.visible = true
 
@@ -507,51 +508,49 @@ func anim_close_panels():
 	slide_animation.play("close_combat")
 
 func anim_player_hit():
-	player_anim.play("player_hit")
+	player_anim.play(CombatSpeed.get_animation_variant("player_hit"))
 
 func anim_enemy_hit():
 	enemy_sprite.texture = current_enemy_entity.sprite_hit
-	enemy_anim.play("enemy_hit")
+	enemy_anim.play(CombatSpeed.get_animation_variant("enemy_hit"))
 
 func anim_enemy_die():
 	enemy_sprite.texture = current_enemy_entity.sprite_hit
-	enemy_anim.play("enemy_die")
+	enemy_anim.play(CombatSpeed.get_animation_variant("enemy_die"))
 
 func anim_player_idle():
-	player_anim.play("player_idle")
+	player_anim.play(CombatSpeed.get_animation_variant("player_idle"))
 
 func anim_enemy_idle():
 	enemy_sprite.texture = current_enemy_entity.sprite
-	enemy_anim.play("enemy_idle")
+	enemy_anim.play(CombatSpeed.get_animation_variant("enemy_idle"))
 
 func anim_player_attack():
-	player_anim.play("player_attack")
+	player_anim.play(CombatSpeed.get_animation_variant("player_attack"))
 
 func anim_player_done():
 	player_anim.play("player_done")
 
 func anim_enemy_attack():
 	enemy_sprite.texture = current_enemy_entity.sprite_attack
-	enemy_anim.play("enemy_attack")
+	enemy_anim.play(CombatSpeed.get_animation_variant("enemy_attack"))
 
 func _update_speed_label(speed: CombatSpeed.CombatSpeedMode):
 	match speed:
 		CombatSpeed.CombatSpeedMode.PAUSE:
-			set_speed_label("0x")
+			set_speed_label("⏸ PAUSED")
 		CombatSpeed.CombatSpeedMode.NORMAL:
-			set_speed_label("1x")
+			set_speed_label("▶ 1x")
 		CombatSpeed.CombatSpeedMode.FAST:
-			set_speed_label("1.5x")
+			set_speed_label("▶▶ 2x")
 		CombatSpeed.CombatSpeedMode.VERY_FAST:
-			set_speed_label("2x")
+			set_speed_label("▶▶▶ 3.5x")
+		CombatSpeed.CombatSpeedMode.INSTANT:
+			set_speed_label("⚡ INSTANT")
 
 
-func _hide_fight_run_box() -> void:
-	slide_animation.play("close_fightrun")
-	await slide_animation.animation_finished
 
 func _on_btn_run_pressed() -> void:
-	_hide_fight_run_box()
 	# Emit signal for room event
 	player_chose_run.emit()
 	
@@ -562,7 +561,6 @@ func _on_btn_run_pressed() -> void:
 	combat_completed.emit(false)
 
 func _on_btn_fight_pressed() -> void:
-	_hide_fight_run_box()
 	box_fight_run.visible = false
 	box_combat_log.visible = true
 
@@ -580,7 +578,7 @@ func _set_state(new_state: PanelState):
 	
 
 func _on_btn_pause_pressed() -> void:
-	CombatSpeed.pause_combat()
+	CombatSpeed.set_speed(CombatSpeed.CombatSpeedMode.PAUSE)
 	_update_speed_label(CombatSpeed.CombatSpeedMode.PAUSE)
 
 func _on_btn_play_pressed() -> void:
@@ -603,7 +601,7 @@ func set_speed_label(_string: String):
 
 func _on_btn_continue_pressed() -> void:
 	slide_animation.play("hide_victory")
-	await slide_animation.animation_finished
+	#await slide_animation.animation_finished
 
 	await hide_panel()
 	combat_completed.emit(true)
@@ -613,32 +611,6 @@ func _on_btn_history_pressed() -> void:
 	txt_history.visible = !txt_history.visible
 	txt_history.text = CombatManager.combat_log
 
-func _on_item_proc_complete(entity, rule: ItemRule):
-	# Only update UI if rule affected status
-	if rule.effect_type in [Enums.EffectType.APPLY_STATUS, Enums.EffectType.REMOVE_STATUS]:
-		rebuild_status_boxes(entity)
-		# Batch updates if multiple rules for same entity
-		#if not pending_status_updates.has(entity):
-		#	pending_status_updates[entity] = []
-		
-		#pending_status_updates[entity].append(rule)
-		
-		# Use call_deferred to batch multiple status changes in same frame
-		#call_deferred("_process_pending_status_updates", entity)
-
-func _process_pending_status_updates(entity):
-	if not pending_status_updates.has(entity):
-		return
-	
-	# Clear the pending list
-	pending_status_updates.erase(entity)
-	
-	# Update all status boxes at once
-	rebuild_status_boxes(entity)
-
-func _on_status_data_changed(entity, status: Enums.StatusEffects, stacks: int):
-	# Update immediately for turn-based procs
-	rebuild_status_boxes(entity)	
 
 func rebuild_status_boxes(entity):
 	var container = player_status_container if entity == current_player_entity else enemy_status_container
@@ -699,7 +671,7 @@ func _update_status_box_value(box: StatusBox, new_stacks: int):
 	
 	# Pulse animation
 	var tween = create_tween()
-	tween.tween_property(box, "scale", Vector2(1.2, 1.2), 0.1).set_ease(Tween.EASE_OUT)
+	tween.tween_property(box, "scale", Vector2(1.0, 1.0), 0.1).set_ease(Tween.EASE_OUT)
 	tween.tween_property(box, "scale", Vector2.ONE, 0.15).set_ease(Tween.EASE_IN)
 	
 	# Lerp the number
@@ -720,3 +692,8 @@ func _remove_status_box(box: StatusBox):
 	tween.tween_property(box, "modulate:a", 0.0, 0.15)
 	await tween.finished
 	box.queue_free()
+
+
+func _on_btn_instant_pressed() -> void:
+	CombatSpeed.set_speed(CombatSpeed.CombatSpeedMode.INSTANT)
+	_update_speed_label(CombatSpeed.CombatSpeedMode.INSTANT)

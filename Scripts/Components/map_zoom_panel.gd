@@ -82,7 +82,6 @@ func show_panel():
 
 func hide_panel():
 	anim_player.play("slide_out")
-	await anim_player.animation_finished
 	visible = false
 
 func update_display():

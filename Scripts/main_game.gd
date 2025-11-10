@@ -207,7 +207,8 @@ func _on_door_selected(room_data: RoomData):
 	DungeonManager.advance_room(room_data)
 	
 	anim_fade.play("fade_out")
-	await anim_fade.animation_finished
+	var anim_length = anim_fade.get_animation("fade_out").length
+	await CombatSpeed.create_timer(anim_length)
 
 	# Load the selected room
 	load_room(room_data)
