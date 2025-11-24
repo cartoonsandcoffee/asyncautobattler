@@ -36,13 +36,18 @@ enum ItemType {
 @export var repeat_rules_for_category: String = ""
 
 @export_group("Trigger Limits")
-@export var trigger_priority: int = 0   # Higher = earlier
-@export var trigger_only_once: bool = false  # Item can only trigger once per combat
-@export var trigger_only_first_turn: bool = false  # Item can only trigger on turn 1
+## UNUSED! RESOLVES WITH ORDER. Higher = earlier
+@export var trigger_priority: int = 0   
+## Item can only trigger once per combat.
+@export var trigger_only_once: bool = false 
+## Item can trigger every hit, but only during turn 1
+@export var trigger_only_first_turn: bool = false  
 
 @export_group("Occurrence")
-@export var trigger_on_occurrence_number: int = 0  # 0 = every, 2 = every other, 3 = every 3  (can be conbined with trigger_only_once to know if resets)
-@export var occurrence_resets_per_turn: bool = false  # Does counter reset each turn?
+## 0 = every, 2 = every other, 3 = every 3  (can be conbined with trigger_only_once to know if resets)
+@export var trigger_on_occurrence_number: int = 0 
+## Does counter reset each turn? 
+@export var occurrence_resets_per_turn: bool = false  
 
 @export_group("Stats")
 @export var rarity: Enums.Rarity = Enums.Rarity.COMMON
@@ -104,21 +109,80 @@ func get_description() -> String:
 	var desc: String = ""
 	var prev_trigger: String = ""
 
+	var rule_count: int = 0
+	var curr_rule: int = 1
+
 	if item_desc != "":
 		return item_desc
 
+	rule_count = rules.size()
+
 	# First display all the triggers:
-	for rule in rules:
-		if desc != "" && prev_trigger != rule.get_desc_trigger():
-			desc += ", "
-		desc += rule.get_desc_trigger()
-		prev_trigger = rule.get_desc_trigger()
+	if rules:
+		if get_occurrence_string(rules[0]) == "":
+			for rule in rules:
+				if desc != "" && prev_trigger != rule.get_desc_trigger():
+					desc += ", " + rule.get_desc_trigger()
+				elif prev_trigger == rule.get_desc_trigger():
+					continue
+				else:
+					desc += rule.get_desc_trigger()
+				prev_trigger = rule.get_desc_trigger()
+		else:
+			desc += get_occurrence_string(rules[0])
 
 	if desc!= "":
-		desc = desc.strip_edges() + ": "
+		desc = desc.strip_edges() + ": " + get_limit_string()
 
 	for rule in rules:
 		desc += rule.get_desc_condition()
 		desc += rule.get_description()
+
+		if curr_rule < rule_count:
+			desc += " and "
+			curr_rule += 1
 	
+	desc += get_repeat_string()
+
 	return desc
+
+func get_limit_string() -> String:
+	var _limit: String = ""
+
+	if trigger_only_once:
+		_limit += "(Once per combat) "
+	if trigger_only_first_turn:
+		_limit += "(First turn only) "
+
+	return _limit
+
+func get_repeat_string() -> String:
+	var _repeat: String = ""
+
+	if (repeat_rules_X_times > 0):
+		_repeat = " Repeat " + str(repeat_rules_X_times) + " times."
+	if repeat_rules_for_category:
+		if repeat_rules_for_category.strip_edges() != "":
+			_repeat = " Repeat for each [color=gray]" + repeat_rules_for_category + "[/color] item you have."
+
+	return _repeat
+
+func get_occurrence_string(rule: ItemRule) -> String:
+	var _occurrence: String = ""
+	var _type: String = ""
+	var _suffix:String  = ""
+
+	if occurrence_resets_per_turn:
+		_suffix = " per turn"
+
+	if rule.trigger_type == Enums.TriggerType.TURN_START:
+		_type = " turns"
+	elif rule.trigger_type == Enums.TriggerType.ON_HIT:
+		_type = " hits"
+	else:
+		_type  = " " + Enums.get_trigger_type_string(rule.trigger_type) + " triggers"
+
+	if trigger_on_occurrence_number > 0:
+		_occurrence = "Every " + str(trigger_on_occurrence_number) + _type + _suffix 
+
+	return _occurrence

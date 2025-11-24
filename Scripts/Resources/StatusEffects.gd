@@ -17,6 +17,7 @@ signal status_updated()
 @export var burn: int = 0
 @export var blessing: int = 0
 @export var blind: int = 0
+@export var bleed: int = 0
 
 
 func _init():
@@ -31,6 +32,7 @@ func reset_statuses():
 	burn = 0
 	blessing = 0
 	blind = 0
+	bleed = 0
 	#status_updated.emit()
 
 func decrement_status(_status: Enums.StatusEffects, amount: int = 1):
