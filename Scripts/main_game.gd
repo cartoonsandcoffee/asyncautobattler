@@ -34,7 +34,7 @@ extends Control
 # Mini-map stuff
 @onready var minimap: Minimap = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap
 
-var current_event: RoomEvent
+var current_event
 
 var item_slot = preload("res://Scenes/item.tscn")
 var item_proc = preload("res://Scenes/Elements/combat_item_proc.tscn")
@@ -60,6 +60,8 @@ var pending_drop_item: Item = null
 var pending_drop_slot_index: int = -1
 
 var is_in_combat: bool = false
+
+var pending_room_data: RoomData = null
 
 # -- Full map screen
 var zoom_panel_scene = preload("res://Scenes/Elements/map_zoom_panel.tscn")
@@ -117,6 +119,10 @@ func create_test_player():
 func load_starting_room():
 	var starter_room_data = DungeonManager.generate_starter_room()
 	if starter_room_data:
+		DungeonManager.all_visited_rooms.append(starter_room_data)
+		DungeonManager.current_rank_rooms.append(starter_room_data)
+		DungeonManager.minimap_update_requested.emit()
+		
 		await load_room(starter_room_data)
 	else:
 		push_error("Failed to generate starter room!")
@@ -211,8 +217,54 @@ func _on_door_selected(room_data: RoomData):
 	await CombatSpeed.create_timer(anim_length)
 
 	# Load the selected room
-	load_room(room_data)
+	#load_room(room_data)
+	load_hallway(room_data)
 	fade_overlay.visible = false
+
+
+func load_hallway(destination_room: RoomData):
+	var current_hallway = DungeonManager.get_current_hallway()
+	
+	if not current_hallway:
+		push_error("No hallway found!")
+		load_room(destination_room)  # Fallback
+		return
+	
+	# Store destination room for after hallway
+	pending_room_data = destination_room
+	
+	# Set background tint to match destination room color
+	room_background.modulate = destination_room.room_definition.room_color
+	
+	# TODO: Set hallway background texture when you create it
+	room_background.texture = current_hallway.hallway_background_texture
+	
+	clear_doors()
+	clear_current_event()
+	
+	# Load hallway event
+	var hallway_event_scene = current_hallway.get_random_event()
+	if hallway_event_scene:
+		current_event = hallway_event_scene.instantiate()
+		event_container.add_child(current_event)
+		current_event.hallway_completed.connect(_on_hallway_completed)
+	else:
+		push_error("No hallway event scene!")
+		_on_hallway_completed()  # Skip to room
+
+func _on_hallway_completed():
+	DungeonManager.complete_hallway()
+	
+	# Fade out
+	anim_fade.play("fade_out")
+	var anim_length = anim_fade.get_animation("fade_out").length
+	await CombatSpeed.create_timer(anim_length)
+	
+	# Load the actual room
+	load_room(pending_room_data)
+	pending_room_data = null
+	fade_overlay.visible = false
+
 
 func set_background_tint(room_type: Enums.RoomType):
 	var gamecolors = GameColors.new()
@@ -239,7 +291,13 @@ func set_player_stats():
 	if CombatManager.combat_active:
 		# During combat: show current/max for HP, current only for others
 		stat_health.update_stat(Enums.Stats.HITPOINTS, Player.stats.hit_points_current, Player.stats.hit_points)
-		stat_damage.update_stat(Enums.Stats.DAMAGE, Player.stats.damage_current, Player.stats.damage)
+
+		# Check for blind on damage display
+		var displayed_damage = Player.stats.damage_current
+		if Player.status_effects and Player.status_effects.blind > 0:
+			displayed_damage = ceili(displayed_damage / 2.0)
+		stat_damage.update_stat(Enums.Stats.DAMAGE, displayed_damage, Player.stats.damage)
+				
 		stat_shield.update_stat(Enums.Stats.SHIELD, Player.stats.shield_current, Player.stats.shield)
 		stat_agility.update_stat(Enums.Stats.AGILITY, Player.stats.agility_current, Player.stats.agility)
 	else:

@@ -198,8 +198,13 @@ func _update_enemy_stats():
 	enemy_shield_stat.update_stat(Enums.Stats.SHIELD, current_enemy_entity.stats.shield_current, current_enemy_entity.stats.shield_current)
 	
 	# Damage stat
-	enemy_damage_stat.update_stat(Enums.Stats.DAMAGE, current_enemy_entity.stats.damage_current, current_enemy_entity.stats.damage_current)
-	
+	var displayed_damage = current_enemy_entity.stats.damage_current
+	# check for BLIND
+	if current_enemy_entity.status_effects and current_enemy_entity.status_effects.blind > 0:
+		# Halve damage (round up)
+		displayed_damage = ceili(displayed_damage / 2.0)
+	enemy_damage_stat.update_stat(Enums.Stats.DAMAGE, displayed_damage, displayed_damage)
+
 	# Agility stat
 	enemy_agility_stat.update_stat(Enums.Stats.AGILITY, current_enemy_entity.stats.agility_current, current_enemy_entity.stats.agility_current)
 
@@ -309,6 +314,7 @@ func _get_status_enum(status_name: String) -> Enums.StatusEffects:
 		"burn": return Enums.StatusEffects.BURN
 		"acid": return Enums.StatusEffects.ACID
 		"thorns": return Enums.StatusEffects.THORNS
+		"bleed": return Enums.StatusEffects.BLEED
 		_: return Enums.StatusEffects.NONE
 
 func create_damage_indicator(target, amount: int, damage_stat: Enums.Stats, visual_info: Dictionary) -> void:
@@ -402,13 +408,14 @@ func _on_status_removed(entity, status: Enums.StatusEffects, stacks: int):
 func _on_item_rule_triggered(item: Item, rule: ItemRule, entity):
 	pass
 
-func spawn_item_proc_indicator(item: Item, rule: ItemRule, entity):
+func spawn_item_proc_indicator(item: Item, rule: ItemRule, entity, amount: int = 0):
 	var combat_item_proc = item_proc.instantiate()
 	var _pos = Vector2(0,0)
 	var offset = Vector2(45, -50)
 	
 	combat_item_proc.set_references()
-	combat_item_proc.set_label(rule.effect_amount)		
+
+	combat_item_proc.set_label(amount)  
 	combat_item_proc.set_info(Enums.get_trigger_type_string(rule.trigger_type))
 	combat_item_proc.set_item_visuals(item.item_icon, item.item_color)
 
@@ -427,8 +434,13 @@ func spawn_item_proc_indicator(item: Item, rule: ItemRule, entity):
 	elif  rule.effect_type == Enums.EffectType.HEAL:
 		combat_item_proc.set_stat_visuals(Enums.Stats.HITPOINTS)
 	elif  rule.effect_type == Enums.EffectType.DEAL_DAMAGE:
-		combat_item_proc.set_status_visuals(Enums.StatusEffects.BLEED) # JDM --- NEED TO TEST THIS, NOT FULLY WORKING
+		combat_item_proc.set_status_visuals(Enums.StatusEffects.BLEED) 
+		combat_item_proc._done() 
+		return # JDM: This goes through combat damage, does not need status proc
 	elif rule.effect_type == Enums.EffectType.APPLY_STATUS:
+		combat_item_proc.set_status_visuals(rule.target_status)
+		_pos = main_game.loop_through_player_items_for_position(item)
+	elif rule.effect_type == Enums.EffectType.REMOVE_STATUS:
 		combat_item_proc.set_status_visuals(rule.target_status)
 		_pos = main_game.loop_through_player_items_for_position(item)
 
@@ -452,13 +464,6 @@ func spawn_item_proc_indicator(item: Item, rule: ItemRule, entity):
 	if (entity_name != "Player" && rule.target_type == Enums.TargetType.ENEMY):
 		combat_item_proc.position = player_pos
 		combat_item_proc.run_animation(Enums.Party.PLAYER)
-
-
-	# Update enemy stats if they were damaged
-	#if entity == Player:
-	#	combat_item_proc.run_animation(Enums.Party.PLAYER)
-	#else:
-	#	combat_item_proc.run_animation(Enums.Party.ENEMY)
 
 
 func spawn_status_proc_indicator(entity, _status: Enums.StatusEffects, _stat: Enums.Stats, value: int):
@@ -503,6 +508,9 @@ func _on_entity_wounded(entity):
 
 func player_joins_combat_anim():
 	player_anim.play("player_ready")
+
+func anim_player_walk_to_door():
+	player_anim.play("player_walk_to_door")
 
 func anim_close_panels():
 	slide_animation.play("close_combat")
@@ -620,7 +628,13 @@ func rebuild_status_boxes(entity):
 	for child in container.get_children():
 		if child is StatusBox:
 			existing_boxes[child.status] = child
-	
+
+	# Update stats if blind changed (affects damage display)
+	if entity == current_enemy_entity:
+		_update_enemy_stats()
+	elif entity == current_player_entity:
+		main_game.set_player_stats()	
+		
 	# Track which statuses are currently active
 	var active_statuses: Dictionary = {}
 	
@@ -631,7 +645,6 @@ func rebuild_status_boxes(entity):
 		
 		if stacks > 0:
 			active_statuses[status] = stacks
-			
 			if existing_boxes.has(status):
 				# Update existing box with animation
 				var box = existing_boxes[status]
