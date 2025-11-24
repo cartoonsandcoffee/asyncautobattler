@@ -21,6 +21,8 @@ func setup_crafting_recipes():
 
 	add_recipes_diamond()
 
+	setup_potion_recipes()
+
 	# --- BUG RECIPES (GOLDEN)
 	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Bugs/Golden/golden_dark_crawler.tres"))
 	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Bugs/Golden/golden_dew_fly.tres"))
@@ -37,6 +39,18 @@ func setup_crafting_recipes():
 	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Bugs/Diamond/diamond_termite.tres"))
 	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Bugs/Diamond/diamond_thorn_bug.tres"))
 
+func setup_potion_recipes():
+	# --- GOLDEN
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Potions/Golden/golden_acrid_potion.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Potions/Golden/golden_limbering_potion.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Potions/Golden/golden_vicious_potion.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Potions/Golden/golden_essence_of_charcoal.tres"))
+
+	# DIAMOND
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Potions/Diamond/diamond_acrid_potion.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Potions/Diamond/diamond_limbering_potion.tres"))
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Potions/Diamond/diamond_vicious_potion.tres"))	
+	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Potions/Diamond/diamond_essence_of_charcoal.tres"))	
 
 func setup_items():
 	# Store them in our dictionary 
@@ -57,7 +71,6 @@ func setup_items():
 
 	# --- UNCOMMON
 	available_items["Ornate Sword"] = preload("res://Resources/Items/UNCOMMON/ornate_sword.tres")
-
 	available_items["Bramble Belt"] = preload("res://Resources/Items/UNCOMMON/bramble_belt.tres")
 	available_items["Bramble Buckler"] = preload("res://Resources/Items/UNCOMMON/bramble_buckler.tres")	
 	available_items["Ironstone Spear"] = preload("res://Resources/Items/UNCOMMON/ironstone_spear.tres")
@@ -105,6 +118,7 @@ func setup_items():
 	available_items["Clearmetal Battle Horn"] = preload("res://Resources/Items/RARE/Clearmetal_Horn.tres")
 
 	add_bug_items()
+	add_potions()
 
 func add_common_items():
 	available_items["Crude Blade"] = preload("res://Resources/Items/COMMON/crude_blade.tres")
@@ -167,6 +181,24 @@ func add_recipes_diamond():
 	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Diamond/diamond_shafeek_boots.tres"))
 	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Diamond/diamond_shafeek_shield.tres"))
 
+func add_potions():
+	# -- COMMON
+	available_items["Acrid Potion"] = preload("res://Resources/Items/POTIONS/acrid_potion.tres")
+	available_items["Limbering Potion"] = preload("res://Resources/Items/POTIONS/limbering_potion.tres")
+	available_items["Vicious Potion"] = preload("res://Resources/Items/POTIONS/vicious_potion.tres")
+	available_items["Essence of Charcoal"] = preload("res://Resources/Items/POTIONS/essence_of_charcoal.tres")
+
+	# -- GOLDEN
+	available_items["Golden Acrid Potion"] = preload("res://Resources/Items/POTIONS/Golden/golden_acrid_potion.tres")
+	available_items["Golden Limbering Potion"] = preload("res://Resources/Items/POTIONS/Golden/golden_limbering_potion.tres")
+	available_items["Golden Vicious Potion"] = preload("res://Resources/Items/POTIONS/Golden/golden_vicious_potion.tres")
+	available_items["Golden Essence of Charcoal"] = preload("res://Resources/Items/POTIONS/Golden/golden_essence_of_charcoal.tres")
+
+	# -- DIAMOND
+	available_items["Diamond Acrid Potion"] = preload("res://Resources/Items/POTIONS/Diamond/diamond_acrid_potion.tres")
+	available_items["Diamond Limbering Potion"] = preload("res://Resources/Items/POTIONS/Diamond/diamond_limbering_potion.tres")
+	available_items["Diamond Vicious Potion"] = preload("res://Resources/Items/POTIONS/Diamond/diamond_vicious_potion.tres")
+	available_items["Diamond Essence of Charcoal"] = preload("res://Resources/Items/POTIONS/Diamond/diamond_essence_of_charcoal.tres")
 
 func add_bug_items():
 	# --- COMMON

@@ -25,11 +25,11 @@ const SPEED_CONFIGS = {
 	},
 	CombatSpeedMode.FAST: {
 		"timer_multiplier": 2.0,    # Waits are half as long
-		"anim_speed": 1.0           # Animations 30% faster (SAFE)
+		"anim_speed": 1.0           
 	},
 	CombatSpeedMode.VERY_FAST: {
 		"timer_multiplier": 4.0,    # Waits are 1/4 as long
-		"anim_speed": 1.0           # Animations 50% faster (MAX SAFE)
+		"anim_speed": 1.0           
 	},
 	CombatSpeedMode.INSTANT: {
 		"timer_multiplier": 999.0,   # effectively instant
@@ -42,17 +42,18 @@ const BASE_DURATIONS = {
 	"milestone_sign": 1.5,        # Battle Start, Turn Start signs
 
 	# ITEM PROCESSING
-	"item_highlight": 1.5,         # Item slot highlighting
+	"item_highlight": 1.2,         # Item slot highlighting
 	"item_highlight_brief": 0.6,   # brief flash
-	"item_proc": 1.5,              # Item effect proc animation
-	"proc_overlap": 1.0,           # Time before starting next proc (for overlap)
+	"item_proc": 1.2,              # Item effect proc animation
+	"proc_overlap": 0.8,           # Time before starting next proc (for overlap)
 	
 	# COMBAT PACING
 	"attack_slide": 1.2,           # Attack slide animation
 	"attack_gap": 0.3,             # between multiple strikes
 
 	# VISUAL FEEDBACK
-	"damage_number": 1.0,          # Damage indicator animation
+	"damage_number": 1.2,          # Damage indicator animation
+	"exposed_wounded": 2.0,        # Timing for these effects
 	"status_effect": 1.0,          # Status effect visual
 
 	"turn_gap": 0.5,               # Brief pause between turns

@@ -57,15 +57,15 @@ func set_test_inventory():
 
 	# -- for testing basic rules
 
-	inventory.add_item(ItemsManager.available_items["Spiked Mace"])
+	inventory.add_item(ItemsManager.available_items["Crude Blade"])
 	inventory.add_item(ItemsManager.available_items["Testing Relic"])
 
 	#inventory.add_item(ItemsManager.available_items["Tower Shield"])
 	#inventory.add_item(ItemsManager.available_items["Fists"])
-	inventory.add_item(ItemsManager.available_items["Liferoot Gauntlets"])
-	#inventory.add_item(ItemsManager.available_items["Testing Boots"])
+	#inventory.add_item(ItemsManager.available_items["Liferoot Gauntlets"])
+	inventory.add_item(ItemsManager.available_items["Testing Boots"])
 	#inventory.add_item(ItemsManager.available_items["Testing Shield"])
-	#inventory.add_item(ItemsManager.available_items["Testing Robes"])
+	inventory.add_item(ItemsManager.available_items["Testing Robes"])
 	#inventory.add_item(ItemsManager.available_items["Thorn Shield"])
 
 	# -- More complex set for testing detailed rules
@@ -97,6 +97,10 @@ func update_stats_from_items():
 				stats.increase_base_stat(Enums.Stats.HITPOINTS, item.hit_points_bonus)
 			if item.agility_bonus != 0:
 				stats.increase_base_stat(Enums.Stats.AGILITY, item.agility_bonus)
+			if item.strikes_bonus != 0:
+				stats.increase_base_stat(Enums.Stats.STRIKES, item.strikes_bonus)
+			if item.burn_damage_bonus != 0:
+				stats.increase_base_stat(Enums.Stats.BURN_DAMAGE, item.burn_damage_bonus)
 
 	if Player.inventory.weapon_slot:
 		if Player.inventory.weapon_slot.damage_bonus != 0:
@@ -107,6 +111,10 @@ func update_stats_from_items():
 			stats.increase_base_stat(Enums.Stats.HITPOINTS, Player.inventory.weapon_slot.hit_points_bonus)
 		if Player.inventory.weapon_slot.agility_bonus != 0:
 			stats.increase_base_stat(Enums.Stats.AGILITY, Player.inventory.weapon_slot.agility_bonus)
+		if Player.inventory.weapon_slot.strikes_bonus != 0:
+			stats.increase_base_stat(Enums.Stats.STRIKES, Player.inventory.weapon_slot.strikes_bonus)
+		if Player.inventory.weapon_slot.burn_damage_bonus != 0:
+			stats.increase_base_stat(Enums.Stats.BURN_DAMAGE, Player.inventory.weapon_slot.burn_damage_bonus)
 
 	stats.reset_to_base_values()
 

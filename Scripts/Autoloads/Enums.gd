@@ -26,10 +26,10 @@ enum Stats {
 }
 
 enum StatType {		# Used for item conditions and rules
-    CURRENT,
-    BASE,
-    MISSING,
-    NONE
+	CURRENT,
+	BASE,
+	MISSING,
+	NONE
 }
 
 enum RoomType {
@@ -44,6 +44,16 @@ enum RoomType {
 	GALLERY,
 	BOSS,
 	SPECIAL
+}
+
+enum HallwayType {
+	TREASURE,
+	SHRINE,
+	MERCHANT_GENERAL,
+	MERCHANT_GLOVE,
+	MERCHANT_WEAPON,
+	CAMPFIRE,
+	UPGRADE_STATION
 }
 
 enum TriggerType {
@@ -64,7 +74,9 @@ enum TriggerType {
 	ON_STATUS_REMOVED,
 	ONE_HITPOINT_LEFT,
 	ON_ITEM_TRIGGERED,
-	ON_KILL
+	ON_KILL,
+	OVERHEAL,
+	TURN_END
 }
 
 enum EffectType {
@@ -109,37 +121,37 @@ enum Party {
 func get_target_string(_target: Enums.TargetType) -> String:
 	match _target:
 		Enums.TargetType.SELF:
-			return "Your"
+			return "your"
 		Enums.TargetType.ENEMY:
-			return "Your Enemy's"
+			return "your Enemy's"
 		Enums.TargetType.BOTH:
-			return "Both Parties'"
+			return "both parties'"
 		Enums.TargetType.RANDOM:
-			return "a Random Target's"
+			return "a random target's"
 		_:
 			return "<unknown target>"
 
 func get_target_string_nonpossessive(_target: Enums.TargetType) -> String:
 	match _target:
 		Enums.TargetType.SELF:
-			return "Yourself"
+			return "yourself"
 		Enums.TargetType.ENEMY:
-			return "Your Enemy"
+			return "your Enemy"
 		Enums.TargetType.BOTH:
-			return "Both Parties"
+			return "both parties"
 		Enums.TargetType.RANDOM:
-			return "a Random Target"
+			return "a random target"
 		_:
 			return "<unknown target>"
 
 func get_stat_type_string(_stat: Enums.StatType) -> String:
 	match _stat:
 		Enums.StatType.MISSING:
-			return "Missing"
+			return "missing"
 		Enums.StatType.BASE:
-			return "Base"
+			return "base"
 		Enums.StatType.CURRENT:
-			return "Current"
+			return "current"
 		_:
 			return "<unknown>"
 
@@ -181,25 +193,29 @@ func get_trigger_type_string(_trigger: Enums.TriggerType) -> String:
 		Enums.TriggerType.ENEMY_HIT_YOU:
 			return "Enemy Hits You"
 		Enums.TriggerType.ON_HEAL:
-			return "on heal"
+			return "On Heal"
 		Enums.TriggerType.ON_STAT_GAIN:
-			return "on stat gain"
+			return "On Stat Gain"
 		Enums.TriggerType.ON_STAT_LOSS:
-			return "on stat loss"
+			return "On Stat Loss"
 		Enums.TriggerType.ON_TAKING_DAMAGE:
-			return "on taking damage"
+			return "On Taking Damage"
 		Enums.TriggerType.ON_DEALING_DAMAGE:
-			return "on dealing damage"
+			return "On Dealing Damage"
 		Enums.TriggerType.ON_STATUS_GAINED:
-			return "on status gained"
+			return "On Status Gained"
 		Enums.TriggerType.ON_STATUS_REMOVED:
-			return "on status removed"
+			return "On Status Removed"
 		Enums.TriggerType.ONE_HITPOINT_LEFT:
-			return "one hitpoint left"
+			return "One Hitpoint Left"
 		Enums.TriggerType.ON_ITEM_TRIGGERED:
-			return "on item triggered"
+			return "On Item Triggered"
 		Enums.TriggerType.ON_KILL:
-			return "on kill"
+			return "On Kill"
+		Enums.TriggerType.TURN_END:
+			return "Turn End"
+		Enums.TriggerType.OVERHEAL:
+			return "Overheal"
 		_:
 			return "<unknown trigger>"
 

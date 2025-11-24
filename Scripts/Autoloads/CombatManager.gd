@@ -38,6 +38,12 @@ var enemy_exposed_triggered: bool = false
 var player_wounded_triggered: bool = false
 var enemy_wounded_triggered: bool = false
 
+# RULE RECURSION PROTECTION
+const MAX_STAT_TRIGGER_DEPTH = 3
+var current_stat_trigger_depth = 0
+const MAX_STATUS_TRIGGER_DEPTH = 3
+var current_status_trigger_depth = 0
+
 # === SUB-SYSTEMS ===
 var animation_manager: AnimationManager
 var stat_handler: CombatStatHandler
@@ -115,6 +121,8 @@ func start_combat(player, enemy):
 	# Reset combat state
 	combat_active = true
 	turn_number = 0
+	current_stat_trigger_depth = 0
+	current_status_trigger_depth = 0
 	stat_handler.reset_combat_state()
 	effect_executor.reset_recursion_depth()
 	item_processor.reset_all_items(player_entity)
@@ -199,7 +207,7 @@ func execute_turn(entity):
 	await status_handler.process_turn_start_status_effects(entity)
 	
 	# Process countdown/charge rules for items
-	#await process_countdown_rules()
+	await process_countdown_rules(entity)
 
 	# Process TURN_START items
 	add_to_combat_log_string("\n%s's Turn Start items triggered:" % color_entity(get_entity_name(entity)))
@@ -218,10 +226,13 @@ func execute_turn(entity):
 	
 	# Turn end
 	turn_ended.emit(entity)
+	await process_entity_items_sequentially(entity, Enums.TriggerType.TURN_END)
+
 	await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap"))
 
 func execute_attack_sequence(attacker):
-	"""Execute all of an entity's attack strikes."""
+	# === Execute all of an entity's attack strikes. ===
+
 	var target = enemy_entity if attacker == player_entity else player_entity
 	var strikes = attacker.stats.strikes
 	
@@ -236,7 +247,12 @@ func execute_attack_sequence(attacker):
 		await animation_manager.wait_for_current_sequence()
 		
 		# Deal damage
-		var damage = attacker.stats.damage_current
+		var damage: int = attacker.stats.damage_current
+
+		# -- APPLY BLIND IF PRESENT
+		if attacker.status_effects.blind > 0:
+			damage = int(ceil(float(damage) / 2))
+
 		await damage_system.apply_damage(target, damage, attacker, "attack")
 		
 		# Process ON_HIT items
@@ -249,7 +265,7 @@ func execute_attack_sequence(attacker):
 
 # ===== ITEM PROCESSING =====
 
-func process_entity_items_sequentially(entity, trigger_type: Enums.TriggerType, trigger_stat = Enums.Stats.NONE):
+func process_entity_items_sequentially(entity, trigger_type: Enums.TriggerType, trigger_stat = Enums.Stats.NONE, source_item: Item = null, stat_amount: int = 0):
 	# Process all items that match the trigger type for an entity.
 	# Items are processed sequentially with animations.
 	
@@ -262,8 +278,12 @@ func process_entity_items_sequentially(entity, trigger_type: Enums.TriggerType, 
 	#   If Rule 1's condition fails, Rules 2 and 3 won't execute
 
 	# Collect triggered items through item processor
-	var triggered_items = item_processor.process_items(entity, trigger_type, trigger_stat)
+	var triggered_items = item_processor.process_items(entity, trigger_type, trigger_stat, stat_amount)
 	
+	# MAKE SURE ITEMS CANNOT TRIGGER THEMSELVES
+	if source_item:
+		triggered_items = triggered_items.filter(func(item_data): return item_data.item != source_item)
+
 	if triggered_items.is_empty():
 		add_to_combat_log_string("   (no %s items.)" % [Enums.get_trigger_type_string(trigger_type)])
 		return
@@ -287,7 +307,7 @@ func process_entity_items_sequentially(entity, trigger_type: Enums.TriggerType, 
 		
 		# Skip if previous rule on this item failed its condition
 		if not continue_processing_item:
-			add_to_combat_log_string("    ⏭ Skipping rule due to failed condition in chain", Color.GRAY)
+			add_to_combat_log_string("     Skipping rule due to failed condition in chain", Color.GRAY)
 			continue
 		
 		# === INSTANT MODE:
@@ -298,7 +318,7 @@ func process_entity_items_sequentially(entity, trigger_type: Enums.TriggerType, 
 			var success = await effect_executor.execute_item_rule(item, rule, entity, target)
 			
 			# Update status boxes immediately
-			if success and rule.effect_type in [Enums.Effects.APPLY_STATUS, Enums.Effects.REMOVE_STATUS]:
+			if success and rule.effect_type in [Enums.EffectType.APPLY_STATUS, Enums.EffectType.REMOVE_STATUS, Enums.EffectType.CONVERT]:
 				if combat_panel:
 					combat_panel.rebuild_status_boxes(target)
 			
@@ -308,53 +328,46 @@ func process_entity_items_sequentially(entity, trigger_type: Enums.TriggerType, 
 			# No waits in instant mode
 			continue
 
-		# === STEP 0: Check rule condition
-		var target = _get_rule_target(entity, rule.target_type)
-		var condition_passes = condition_evaluator.evaluate_condition(rule, entity, target)
-
-		if not condition_passes:
-			# Log failure but don't animate
-			var item_name = item.item_name if item else "Unknown Item"
-			add_to_combat_log_string("   %s - [color=gray]Condition not met (skipped): %s [/color]" % [
-				color_item(item_name, item), 
-				condition_evaluator.condition_to_string(rule)
-			])
-			continue_processing_item = false
-			continue  # Skip to next rule		
-
 		# ======= NORMAL MODE:
 		# === STEP 1: Highlight the item slot ===
 		if entity == player_entity and combat_panel:
 			combat_panel.highlight_item_slot(slot_index, slot_index == -1)
-		
-		#await CombatSpeed.create_timer(CombatSpeed.get_duration("item_highlight")) # JDM: -- is this necessary?
-		
-		# === STEP 2: Show proc animation ===
-		if combat_panel:
-			combat_panel.spawn_item_proc_indicator(item, rule, entity)
-		
-		await CombatSpeed.create_timer(CombatSpeed.get_duration("item_proc"))
-		
-		# === STEP 3: Execute effect (DATA CHANGES) ===
-		# Emit trigger signal
-		item_rule_triggered.emit(item, rule, entity)
+				
+		# === STEP 2: Execute effect (DATA CHANGES) (This checks permissions and procs animation)===
+		var target = _get_rule_target(entity, rule.target_type)
 		var success = await effect_executor.execute_item_rule(item, rule, entity, target)
+		if success:
+			# Emit trigger signal
+			item_rule_triggered.emit(item, rule, entity)
+		else:
+			continue_processing_item = false
 
-
-		# === STEP 4: Update status boxes if needed ===
-		if success and rule.effect_type in [Enums.EffectType.APPLY_STATUS, Enums.EffectType.REMOVE_STATUS]:
+		# === STEP 3: Update status boxes if needed ===
+		if success and rule.effect_type in [Enums.EffectType.APPLY_STATUS, Enums.EffectType.REMOVE_STATUS, Enums.EffectType.CONVERT]:
 			if combat_panel:
-				combat_panel.rebuild_status_boxes(target)
+				if rule.effect_type == Enums.EffectType.CONVERT:
+					var from_entity = effect_executor._get_target_entity(rule.convert_from_party, entity)
+					var to_entity = effect_executor._get_target_entity(rule.convert_to_party, entity)
+					combat_panel.rebuild_status_boxes(from_entity)
+					if to_entity != from_entity:
+						combat_panel.rebuild_status_boxes(to_entity)
+				else:
+					combat_panel.rebuild_status_boxes(target)
 		
-		# === STEP 5: Clear highlight ===
+		# === STEP 4: Clear highlight ===
 		if entity == player_entity and combat_panel:
 			combat_panel._clear_all_highlights()
 		
-		# Small gap before next item (needed?)
-		# await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap")) # PAUSE FOR NO REASON?
-	
 	# Wait for all animations to complete
 	await animation_manager.wait_for_current_sequence()
+
+func proc_item(item, rule, entity, amount: int):
+	# -- Get combat panel reference
+	var combat_panel = animation_manager.combat_panel
+	if combat_panel:
+		if amount != 0: # Don't proc if a value doesn't change
+			combat_panel.spawn_item_proc_indicator(item, rule, entity, amount)
+			await CombatSpeed.create_timer(CombatSpeed.get_duration("item_proc"))	
 
 func process_entity_items_with_status(entity, trigger_type: Enums.TriggerType, trigger_status: Enums.StatusEffects):
 	"""Process items that trigger based on status effects."""
@@ -446,13 +459,25 @@ func _on_stat_changed(entity, stat: Enums.Stats, old_value: int, new_value: int)
 	"""Forward stat_changed signal."""
 	stat_changed.emit(entity, stat, old_value, new_value)
 
-func _on_stat_gain_triggered(entity, stat: Enums.Stats, amount: int):
-	"""Handle ON_STAT_GAIN trigger."""
-	await process_entity_items_sequentially(entity, Enums.TriggerType.ON_STAT_GAIN, stat)
+func _on_stat_gain_triggered(entity, stat: Enums.Stats, amount: int, source_item: Item):
+	# == Handle ON_STAT_GAIN trigger.
+	if current_stat_trigger_depth >= MAX_STAT_TRIGGER_DEPTH:
+		add_to_combat_log_string("     Stat gain trigger recursion limit reached", Color.ORANGE)
+		return	
+	
+	current_stat_trigger_depth += 1
+	await process_entity_items_sequentially(entity, Enums.TriggerType.ON_STAT_GAIN, stat, source_item, amount)
+	current_stat_trigger_depth -= 1
 
-func _on_stat_loss_triggered(entity, stat: Enums.Stats, amount: int):
-	"""Handle ON_STAT_LOSS trigger."""
-	await process_entity_items_sequentially(entity, Enums.TriggerType.ON_STAT_LOSS, stat)
+func _on_stat_loss_triggered(entity, stat: Enums.Stats, amount: int, source_item: Item):
+	# == Handle ON_STAT_LOSS trigger.
+	if current_stat_trigger_depth >= MAX_STAT_TRIGGER_DEPTH:
+		add_to_combat_log_string("      Stat loss trigger recursion limit reached", Color.ORANGE)
+		return
+
+	current_stat_trigger_depth += 1
+	await process_entity_items_sequentially(entity, Enums.TriggerType.ON_STAT_LOSS, stat, source_item, amount)
+	current_stat_trigger_depth -= 1	
 
 func _on_wounded_triggered(entity):
 	"""Handle WOUNDED trigger."""
@@ -486,12 +511,30 @@ func _on_death_triggered(entity):
 	await process_entity_items_sequentially(killer, Enums.TriggerType.ON_KILL)
 
 func _on_status_gained_triggered(entity, status: Enums.StatusEffects):
-	"""Handle ON_STATUS_GAINED trigger."""
+	var combat_panel = animation_manager.combat_panel
+	if combat_panel:
+		combat_panel.rebuild_status_boxes(entity)
+
+	if current_status_trigger_depth >= MAX_STATUS_TRIGGER_DEPTH:
+		add_to_combat_log_string("      Status applied trigger recursion limit reached", Color.ORANGE)
+		return
+
+	current_status_trigger_depth += 1
 	await process_entity_items_with_status(entity, Enums.TriggerType.ON_STATUS_GAINED, status)
+	current_status_trigger_depth -= 1
 
 func _on_status_removed_triggered(entity, status: Enums.StatusEffects):
-	"""Handle ON_STATUS_REMOVED trigger."""
+	var combat_panel = animation_manager.combat_panel
+	if combat_panel:
+		combat_panel.rebuild_status_boxes(entity)
+
+	if current_status_trigger_depth >= MAX_STATUS_TRIGGER_DEPTH:
+		add_to_combat_log_string("      Status applied trigger recursion limit reached", Color.ORANGE)
+		return
+
+	current_status_trigger_depth += 1
 	await process_entity_items_with_status(entity, Enums.TriggerType.ON_STATUS_REMOVED, status)
+	current_status_trigger_depth -= 1
 
 func _on_healing_applied(target, amount):
 	"""Forward healing_applied signal."""
