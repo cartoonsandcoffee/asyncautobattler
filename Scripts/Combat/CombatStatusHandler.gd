@@ -9,6 +9,7 @@ signal status_applied(entity, status: Enums.StatusEffects, stacks: int)
 signal status_removed(entity, status: Enums.StatusEffects, stacks: int)
 signal status_gained_triggered(entity, status: Enums.StatusEffects)
 signal status_removed_triggered(entity, status: Enums.StatusEffects)
+signal overheal_triggered(entity, amount: int)
 signal status_proc_visual_complete(entity)
 
 var combat_manager
@@ -133,12 +134,9 @@ func process_turn_start_status_effects(entity):
 		return		
 
 	# Process each status effect type
-	await _process_poison(entity)
-	await _process_burn(entity)
 	await _process_acid(entity)
-	await _process_regeneration(entity)
-	await _process_blind(entity)
-	await _process_blessing(entity)
+	await _process_poison(entity)
+
 
 # ===== INDIVIDUAL STATUS PROCESSORS =====
 
@@ -186,7 +184,7 @@ func _process_poison(entity):
 		)
 		
 		# Emit status proc signal
-		combat_manager.status_proc.emit(entity, Enums.StatusEffects.POISON, Enums.Stats.HITPOINTS, damage)
+		combat_manager.status_proc.emit(entity, Enums.StatusEffects.POISON, Enums.Stats.HITPOINTS, -damage)
 	
 	# Always decrement poison by 1
 	remove_status(entity, Enums.StatusEffects.POISON, 1)
@@ -208,8 +206,8 @@ func _process_burn(entity):
 	var burn_source = combat_manager.enemy_entity if entity == combat_manager.player_entity else combat_manager.player_entity
 	
 	# Calculate burn damage: burn_damage stat * burn stacks
-	var burn_damage_per_stack = burn_source.stats.burn_damage_current if burn_source else 1
-	var total_damage = burn_damage_per_stack #* burn_stacks
+	var burn_damage_per_stack = burn_source.stats.burn_damage_current if burn_source else 4
+	var total_damage = burn_damage_per_stack
 	
 	# LOG the burn proc
 	combat_manager.add_to_combat_log_string("   %s: %s takes %s damage." % [
@@ -232,9 +230,6 @@ func _process_burn(entity):
 	if combat_manager.damage_system:
 		await combat_manager.damage_system.apply_damage(entity, total_damage, burn_source, "burn")
 		
-	# Emit status proc signal for UI
-	combat_manager.status_proc.emit(entity, Enums.StatusEffects.BURN, Enums.Stats.HITPOINTS, total_damage)
-	
 	# Decrement burn by 1
 	remove_status(entity, Enums.StatusEffects.BURN, 1)
 
@@ -307,6 +302,7 @@ func _process_regeneration(entity):
 	stat_handler.change_stat(entity, Enums.Stats.HITPOINTS, heal_amount)
 	var new_hp: int  = entity.stats.hit_points_current
 	var actual_heal: int  = new_hp - old_hp
+	var overheal: int = heal_amount - actual_heal
 
 	if actual_heal > 0:
 		combat_manager.add_to_combat_log_string("   %s: %s's %s increased by %s (%d -> %d)" % [
@@ -328,11 +324,16 @@ func _process_regeneration(entity):
 		
 		# Emit status proc signal
 		combat_manager.status_proc.emit(entity, Enums.StatusEffects.REGENERATION, Enums.Stats.HITPOINTS, heal_amount)
+
+		if overheal > 0:
+			overheal_triggered.emit(entity, overheal)
 	else:
-		combat_manager.add_to_combat_log_string("   %s: %s is already at full %s." % [
+		overheal_triggered.emit(entity, overheal)
+		combat_manager.add_to_combat_log_string("   %s: %s is already at full %s.  (Overheal %s)" % [
 				combat_manager.color_status("Regeneration"),
 				combat_manager.color_entity(_get_entity_name(entity)),
-				combat_manager.color_stat("hitpoints")
+				combat_manager.color_stat("hitpoints"),
+				str(overheal)
 			])
 
 	# Decrement regen by 1
@@ -368,7 +369,11 @@ func process_turn_end_status_effects(entity):
 	if not entity.status_effects:
 		return
 	
-	# Future: Add any turn-end status behaviors here
+	await _process_burn(entity)  
+	await _process_regeneration(entity)  
+	await _process_blind(entity)  
+	#await _process_blessing(entity)  # MANUALLY PROC'ED ON REMOVAL
+
 	pass
 
 # ===== THORNS REFLECTION =====

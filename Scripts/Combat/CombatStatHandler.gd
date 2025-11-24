@@ -6,8 +6,8 @@ extends Node
 
 # Signals for stat changes
 signal stat_changed(entity, stat: Enums.Stats, old_value: int, new_value: int)
-signal stat_gain_triggered(entity, stat: Enums.Stats, amount: int)
-signal stat_loss_triggered(entity, stat: Enums.Stats, amount: int)
+signal stat_gain_triggered(entity, stat: Enums.Stats, amount: int, source_item: Item)
+signal stat_loss_triggered(entity, stat: Enums.Stats, amount: int, source_item: Item)
 signal wounded_triggered(entity)
 signal exposed_triggered(entity)
 signal one_hitpoint_left_triggered(entity)
@@ -20,7 +20,7 @@ func _init(manager):
 
 # ===== MAIN ENTRY POINT =====
 
-func change_stat(entity, stat: Enums.Stats, amount: int, _stat_type: Enums.StatType = Enums.StatType.CURRENT):
+func change_stat(entity, stat: Enums.Stats, amount: int, _stat_type: Enums.StatType = Enums.StatType.CURRENT, source_item: Item = null):
 	# -- SINGLE SOURCE OF TRUTH for all stat changes.
 	
 	# This function:
@@ -44,18 +44,18 @@ func change_stat(entity, stat: Enums.Stats, amount: int, _stat_type: Enums.StatT
 	# Emit the stat_changed signal
 	stat_changed.emit(entity, stat, old_value, new_value)
 	
-	# Log the change
-	_log_stat_change(entity, stat, old_value, new_value)
+	# Log the change -- JDM: Commenting this out for now because logs handled elsewhere in most cases?
+	#_log_stat_change(entity, stat, old_value, new_value)
 	
 	# Determine if this was a gain or loss
 	var delta = new_value - old_value
 	
 	if delta > 0:
 		# Stat increased - trigger ON_STAT_GAIN items
-		stat_gain_triggered.emit(entity, stat, delta)
+		stat_gain_triggered.emit(entity, stat, delta, source_item)
 	elif delta < 0:
 		# Stat decreased - trigger ON_STAT_LOSS items
-		stat_loss_triggered.emit(entity, stat, abs(delta))
+		stat_loss_triggered.emit(entity, stat, abs(delta), source_item)
 	
 	# Check for special thresholds
 	await _check_thresholds(entity, stat, old_value, new_value)
@@ -133,6 +133,10 @@ func _check_thresholds(entity, stat: Enums.Stats, old_value: int, new_value: int
 		if old_value > wounded_threshold and new_value <= wounded_threshold:
 			if not _is_wounded_triggered(entity):
 				_mark_wounded_triggered(entity, true)
+
+				# Wait for damage animation to complete before showing wounded
+				await CombatSpeed.create_timer(CombatSpeed.get_duration("item_proc"))
+
 				combat_manager.add_to_combat_log_string("[b][color=orange]%s IS WOUNDED![/color][/b]" % _get_entity_name(entity).to_upper())
 				wounded_triggered.emit(entity)
 		
@@ -149,6 +153,10 @@ func _check_thresholds(entity, stat: Enums.Stats, old_value: int, new_value: int
 		if old_value > 0 and new_value == 0:
 			if not _is_exposed_triggered(entity):
 				_mark_exposed_triggered(entity, true)
+				
+				# Wait for damage animation to complete before showing exposed
+				await CombatSpeed.create_timer(CombatSpeed.get_duration("item_proc"))
+
 				combat_manager.add_to_combat_log_string("[b][color=orange]%s IS EXPOSED![/color][/b]" % _get_entity_name(entity).to_upper())
 				exposed_triggered.emit(entity)
 

@@ -96,14 +96,14 @@ func _get_comparison_value(rule: ItemRule, checking_entity) -> int:
 		
 		ItemRule.ConditionValueType.STAT_VALUE:
 			# Compare to another entity's stat
-			var compare_entity = get_target_entity_for_condition(rule.condition_party, checking_entity)
+			var compare_entity = get_target_entity_for_condition(rule.condition_to_party, checking_entity)
 			if compare_entity:
 				return stat_handler.get_stat_value(compare_entity, rule.condition_party_stat, rule.condition_stat_type)
 			return 0
 		
 		ItemRule.ConditionValueType.STATUS_VALUE:
 			# Compare to another entity's status
-			var compare_entity = get_target_entity_for_condition(rule.condition_party, checking_entity)
+			var compare_entity = get_target_entity_for_condition(rule.condition_to_party, checking_entity)
 			if compare_entity:
 				return status_handler.get_status_value(compare_entity, rule.condition_party_status)
 			return 0
@@ -143,9 +143,12 @@ func get_condition_check_entity(rule: ItemRule, source_entity, target_entity):
 	# - condition_check_entity: The entity whose stat/status we're checking
 	# - condition_party: The entity we're comparing AGAINST (for STAT_VALUE/STATUS_VALUE)
 
-	# For now, conditions are always checked on the source entity
-	# (the entity that owns the item)
-	return source_entity
+	if rule.condition_of == Enums.TargetType.SELF:
+		return source_entity
+	elif rule.condition_of == Enums.TargetType.ENEMY:
+		return target_entity
+	else:
+		return source_entity
 
 func get_target_entity_for_condition(target_type: Enums.TargetType, source_entity):
 	# Get the entity referenced by a target type for condition comparisons.
@@ -200,11 +203,11 @@ func condition_to_string(rule: ItemRule) -> String:
 		ItemRule.ConditionValueType.VALUE:
 			condition_str += str(rule.condition_value)
 		ItemRule.ConditionValueType.STAT_VALUE:
-			condition_str += Enums.get_target_string(rule.condition_party) + " "
+			condition_str += Enums.get_target_string(rule.condition_to_party) + " "
 			condition_str += Enums.get_stat_type_string(rule.condition_stat_type) + " "
 			condition_str += Enums.get_stat_string(rule.condition_party_stat)
 		ItemRule.ConditionValueType.STATUS_VALUE:
-			condition_str += Enums.get_target_string(rule.condition_party) + " "
+			condition_str += Enums.get_target_string(rule.condition_to_party) + " "
 			condition_str += Enums.get_status_string(rule.condition_party_status)
 	
 	return condition_str

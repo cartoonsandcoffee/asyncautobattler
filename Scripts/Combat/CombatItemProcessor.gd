@@ -20,12 +20,12 @@ func _init(manager):
 
 # ===== MAIN ENTRY POINT =====
 
-func process_items(entity, trigger_type: Enums.TriggerType, trigger_stat = Enums.Stats.NONE) -> Array:
+func process_items(entity, trigger_type: Enums.TriggerType, trigger_stat = Enums.Stats.NONE, amount: int = 0) -> Array:
 	# Main entry point for processing items with a given trigger.
 	# Returns an array of item data dictionaries ready for execution.
 
 	# Collect all items that match this trigger
-	var triggered_items = collect_triggered_items(entity, trigger_type, trigger_stat)
+	var triggered_items = collect_triggered_items(entity, trigger_type, trigger_stat, amount)
 	
 	# Filter based on trigger conditions and increment counters
 	var validated_items = []
@@ -72,7 +72,7 @@ func process_items_with_status(entity, trigger_type: Enums.TriggerType, trigger_
 
 # ===== ITEM COLLECTION =====
 
-func collect_triggered_items(entity, trigger_type: Enums.TriggerType, trigger_stat = Enums.Stats.NONE) -> Array:
+func collect_triggered_items(entity, trigger_type: Enums.TriggerType, trigger_stat = Enums.Stats.NONE, stat_change_amount: int = 0) -> Array:
 	# Collect all items/rules that match the given trigger type and optional stat.
 	# Returns array of {item, rule, slot_index} dictionaries.
 
@@ -86,11 +86,12 @@ func collect_triggered_items(entity, trigger_type: Enums.TriggerType, trigger_st
 					# If trigger has a stat filter, check it
 					if trigger_stat != Enums.Stats.NONE and rule.trigger_stat != Enums.Stats.NONE:
 						if rule.trigger_stat == trigger_stat:
-							items_to_proc.append({
-								"item": entity.inventory.weapon_slot,
-								"rule": rule,
-								"slot_index": -1  # -1 indicates weapon
-							})
+							if rule.trigger_value_threshold == 0 or abs(stat_change_amount) >= rule.trigger_value_threshold:
+								items_to_proc.append({
+									"item": entity.inventory.weapon_slot,
+									"rule": rule,
+									"slot_index": -1  # -1 indicates weapon
+								})
 					else:
 						# No stat filter, just add it
 						items_to_proc.append({
@@ -108,11 +109,12 @@ func collect_triggered_items(entity, trigger_type: Enums.TriggerType, trigger_st
 						# Check stat filter if applicable
 						if trigger_stat != Enums.Stats.NONE and rule.trigger_stat != Enums.Stats.NONE:
 							if rule.trigger_stat == trigger_stat:
-								items_to_proc.append({
-									"item": item,
-									"rule": rule,
-									"slot_index": i
-								})
+								if rule.trigger_value_threshold == 0 or abs(stat_change_amount) >= rule.trigger_value_threshold:
+									items_to_proc.append({
+										"item": item,
+										"rule": rule,
+										"slot_index": i
+									})
 						else:
 							items_to_proc.append({
 								"item": item,
@@ -128,11 +130,12 @@ func collect_triggered_items(entity, trigger_type: Enums.TriggerType, trigger_st
 					if rule.trigger_type == trigger_type:
 						if trigger_stat != Enums.Stats.NONE and rule.trigger_stat != Enums.Stats.NONE:
 							if rule.trigger_stat == trigger_stat:
-								items_to_proc.append({
-									"item": ability,
-									"rule": rule,
-									"slot_index": -2  # -2 indicates enemy ability
-								})
+								if rule.trigger_value_threshold == 0 or abs(stat_change_amount) >= rule.trigger_value_threshold:
+									items_to_proc.append({
+										"item": ability,
+										"rule": rule,
+										"slot_index": -2  # -2 indicates enemy ability
+									})
 						else:
 							items_to_proc.append({
 								"item": ability,
@@ -145,7 +148,7 @@ func collect_triggered_items(entity, trigger_type: Enums.TriggerType, trigger_st
 	
 	return items_to_proc
 
-func collect_triggered_items_with_status(entity, trigger_type: Enums.TriggerType, trigger_status: Enums.StatusEffects) -> Array:
+func collect_triggered_items_with_status(entity, trigger_type: Enums.TriggerType, trigger_status: Enums.StatusEffects, status_change_amount: int = 0) -> Array:
 	# Collect items that trigger based on status effects.
 	# Similar to collect_triggered_items but filters by status instead of stat.
 
@@ -159,11 +162,12 @@ func collect_triggered_items_with_status(entity, trigger_type: Enums.TriggerType
 					# Check if rule has status filter
 					if rule.trigger_status != Enums.StatusEffects.NONE:
 						if rule.trigger_status == trigger_status:
-							items_to_proc.append({
-								"item": entity.inventory.weapon_slot,
-								"rule": rule,
-								"slot_index": -1
-							})
+							if rule.trigger_value_threshold == 0 or abs(status_change_amount) >= rule.trigger_value_threshold:
+								items_to_proc.append({
+									"item": entity.inventory.weapon_slot,
+									"rule": rule,
+									"slot_index": -1
+								})
 					else:
 						# No status filter, triggers on any status change
 						items_to_proc.append({
@@ -180,11 +184,12 @@ func collect_triggered_items_with_status(entity, trigger_type: Enums.TriggerType
 					if rule.trigger_type == trigger_type:
 						if rule.trigger_status != Enums.StatusEffects.NONE:
 							if rule.trigger_status == trigger_status:
-								items_to_proc.append({
-									"item": item,
-									"rule": rule,
-									"slot_index": i
-								})
+								if rule.trigger_value_threshold == 0 or abs(status_change_amount) >= rule.trigger_value_threshold:
+									items_to_proc.append({
+										"item": item,
+										"rule": rule,
+										"slot_index": i
+									})
 						else:
 							items_to_proc.append({
 								"item": item,
@@ -199,11 +204,12 @@ func collect_triggered_items_with_status(entity, trigger_type: Enums.TriggerType
 					if rule.trigger_type == trigger_type:
 						if rule.trigger_status != Enums.StatusEffects.NONE:
 							if rule.trigger_status == trigger_status:
-								items_to_proc.append({
-									"item": ability,
-									"rule": rule,
-									"slot_index": -2
-								})
+								if rule.trigger_value_threshold == 0 or abs(status_change_amount) >= rule.trigger_value_threshold:
+									items_to_proc.append({
+										"item": ability,
+										"rule": rule,
+										"slot_index": -2
+									})
 						else:
 							items_to_proc.append({
 								"item": ability,

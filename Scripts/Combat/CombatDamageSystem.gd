@@ -43,6 +43,11 @@ func apply_damage(target, amount: int, source, damage_type: String) -> int:
 	if target.stats.shield_current > 0:
 		var shield_before: int = target.stats.shield_current
 		var shield_damage: int = mini(target.stats.shield_current, remaining_damage)
+		
+		# == SHOW VISUAL DAMAGE PROC ANIMATION
+		var will_expose:bool = (target.stats.shield_current - shield_damage) == 0
+		var visual_stat = Enums.Stats.EXPOSED if will_expose else Enums.Stats.SHIELD
+		await _create_damage_visual(target, shield_damage, visual_stat, source, damage_type)
 
 		# Apply shield damage
 		stat_handler.change_stat(target, Enums.Stats.SHIELD, -shield_damage)
@@ -58,13 +63,6 @@ func apply_damage(target, amount: int, source, damage_type: String) -> int:
 				shield_after
 			])
 
-		# Create shield damage visual
-		var shield_stat = Enums.Stats.SHIELD
-		if target.stats.shield_current == 0:
-			shield_stat = Enums.Stats.EXPOSED
-		
-		await _create_damage_visual(target, shield_damage, shield_stat, source, damage_type)
-		
 		total_damage_dealt += shield_damage
 		remaining_damage -= shield_damage
 	
@@ -73,6 +71,11 @@ func apply_damage(target, amount: int, source, damage_type: String) -> int:
 		var hp_before: int = target.stats.hit_points_current
 		var hp_damage: int = remaining_damage
 		
+		# == SHOW VISUAL DAMAGE PROC ANIMATION
+		var will_wound:bool = (float(hp_before - hp_damage) / float(target.stats.hit_points)) <= 0.5
+		var visual_stat = Enums.Stats.WOUNDED if will_wound else Enums.Stats.HITPOINTS
+		await _create_damage_visual(target, hp_damage, visual_stat, source, damage_type)
+
 		# Apply HP damage
 		stat_handler.change_stat(target, Enums.Stats.HITPOINTS, -hp_damage)
 		var hp_after:int = target.stats.hit_points_current
@@ -85,15 +88,6 @@ func apply_damage(target, amount: int, source, damage_type: String) -> int:
 				hp_before,
 				hp_after
 			])
-
-		# Create HP damage visual
-		var hp_stat = Enums.Stats.HITPOINTS
-		# Check if this brought them to wounded threshold
-		var hp_percent = float(target.stats.hit_points_current) / float(target.stats.hit_points)
-		if hp_percent <= 0.5:
-			hp_stat = Enums.Stats.WOUNDED
-		
-		await _create_damage_visual(target, hp_damage, hp_stat, source, damage_type)
 		
 		total_damage_dealt += hp_damage
 	
@@ -108,7 +102,7 @@ func apply_damage(target, amount: int, source, damage_type: String) -> int:
 
 # ===== HEALING =====
 
-func heal_entity(entity, amount: int):
+func heal_entity(entity, amount: int, source):
 	# Heal an entity's HP.
 	# Automatically clamps to max HP.
 
@@ -123,8 +117,8 @@ func heal_entity(entity, amount: int):
 	var actual_healing = entity.stats.hit_points_current - old_hp
 	
 	if actual_healing > 0:
-		# Create healing visual
-		await _create_damage_visual(entity, actual_healing, Enums.Stats.HITPOINTS, null, "heal")
+		# VISUAL DONE IN CombatEffectExecutor
+		# await _create_damage_visual(entity, actual_healing, Enums.Stats.HITPOINTS, source, "item")
 		
 		# Emit signal
 		healing_applied.emit(entity, actual_healing)
@@ -196,6 +190,11 @@ func _get_visual_info_for_damage_type(damage_type: String, source) -> Dictionary
 			info.color = game_colors.stats.thorns
 			info.source_name = "Thorns"
 		
+		"regeneration":
+			info.icon = load("res://Resources/StatIcons/StatusIcons/status_regen.tres")
+			info.color = game_colors.stats.thorns
+			info.source_name = "Regeneration"
+
 		"item":
 			# For item damage, source should be the item
 			if source is Item:
@@ -203,7 +202,7 @@ func _get_visual_info_for_damage_type(damage_type: String, source) -> Dictionary
 				info.color = source.item_color
 				info.source_name = source.item_name
 		
-		"heal", "regeneration":
+		"heal":
 			info.icon = load("res://Resources/StatIcons/icon_health.tres")
 			info.color = game_colors.stats.regeneration
 			info.source_name = "Heal"
