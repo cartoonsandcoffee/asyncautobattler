@@ -18,6 +18,7 @@ signal need_item_replace(Item)
 
 var item_choice_scene = preload("res://Scenes/item_choice.tscn")
 var offered_items: Array[Item] = []
+var selection_locked: bool = false
 
 func _ready() -> void:
 	add_to_group("item_selection_events") 
@@ -45,6 +46,12 @@ func generate_item_choices():
 		choice_button.item_selected.connect(_on_item_selected)
 
 func _on_item_selected(item: Item):
+	if selection_locked:
+		return
+	
+	selection_locked = true
+	btn_skip.disabled = true
+
 	if Player.inventory.has_empty_slot():
 		Player.inventory.add_item(item)
 		Player.update_stats_from_items()

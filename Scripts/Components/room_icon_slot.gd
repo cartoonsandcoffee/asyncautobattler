@@ -52,7 +52,7 @@ func set_visited_room(data: RoomData):
 	if room_data and room_data.room_definition:
 		texture_rect.texture = room_data.room_definition.room_icon
 		texture_rect.modulate = room_data.room_definition.room_color
-		_set_border_color(room_data.room_definition.room_color)
+		_set_border(room_data.room_definition.room_color, 2)
 		
 		# Set tooltip
 		icon_button.tooltip_text = room_data.room_definition.room_name + "\n" + room_data.room_definition.room_desc
@@ -63,7 +63,7 @@ func set_boss_room():
 	
 	texture_rect.texture = crown_texture
 	texture_rect.modulate = Color.GOLD
-	_set_border_color(Color.GOLD)
+	_set_border(Color.GOLD, 2)
 	icon_button.tooltip_text = "Boss Room - Coming Soon"
 
 func set_unknown():
@@ -72,7 +72,7 @@ func set_unknown():
 	
 	texture_rect.texture = question_mark_texture
 	texture_rect.modulate = Color.WHITE
-	_set_border_color(Color.DARK_GRAY)
+	_set_border(Color.DARK_GRAY, 2)
 	icon_button.tooltip_text = "Unexplored"
 
 func set_current(is_current: bool):
@@ -89,17 +89,36 @@ func set_current(is_current: bool):
 		style.border_width_bottom = 3
 		border.add_theme_stylebox_override("panel", style)
 	else:
-		_set_border_color(texture_rect.modulate)
+		_set_border(texture_rect.modulate, 2)
 
-func _set_border_color(color: Color):
+func _set_border(color: Color, bsize: int):
 	var style = StyleBoxFlat.new()
 	style.bg_color = Color.TRANSPARENT
 	style.border_color = color
-	style.border_width_left = 2
-	style.border_width_right = 2
-	style.border_width_top = 2
-	style.border_width_bottom = 2
+	style.border_width_left = bsize
+	style.border_width_right = bsize
+	style.border_width_top = bsize
+	style.border_width_bottom = bsize
 	border.add_theme_stylebox_override("panel", style)
+
+func set_hallway(hallway_def: HallwayDefinition):
+	if not hallway_def:
+		set_unknown()
+		return
+	
+	# Set icon and color from hallway definition
+	if hallway_def.hallway_icon:
+		texture_rect.texture = hallway_def.hallway_icon
+	else:
+		texture_rect.texture = question_mark_texture
+	
+	texture_rect.modulate = hallway_def.hallway_color
+	
+	# Hallways have subtle border
+	_set_border(Color(0.3, 0.3, 0.3), 1)
+
+	# Set tooltip (optional)
+	tooltip_text = hallway_def.hallway_name
 
 func _on_button_pressed():
 	if is_boss:

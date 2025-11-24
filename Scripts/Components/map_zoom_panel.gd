@@ -17,10 +17,12 @@ signal boss_rush_pressed()
 @onready var btn_rush: Button = $Panel/PanelContainer/VBoxContainer/buttonContainer/btnRush
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 
+const NODES_PER_RANK = 11  # 6 rooms + 5 hallways
 const ROOMS_PER_RANK = 6
+const HALLWAYS_PER_RANK = 5
 const MAX_RANKS = 5
 
-var room_icons: Array[Array] = []  # 2D array: [rank][room_index]
+var node_icons: Array[Array] = []  # 2D array: [rank][node_index]
 var room_box = preload("res://Scenes/Elements/room_icon_slot.tscn")
 
 func _ready():
@@ -29,28 +31,33 @@ func _ready():
 	visible = false
 
 func _setup_grid():
-	dungeon_grid.columns = ROOMS_PER_RANK
+	dungeon_grid.columns = NODES_PER_RANK
 
 	# Add final boss row (larger crown)
 	#_add_final_boss_row()
 
 	# Create 5 ranks (rows) + 1 final boss row
 	for rank in range(MAX_RANKS, 0, -1):  # Rank 5 at top, Rank 1 at bottom
-		var rank_icons: Array[RoomIconSlot] = []
+		var rank_nodes: Array[RoomIconSlot] = []
 		
-		for room_idx in range(ROOMS_PER_RANK):
-			var room_slot = room_box.instantiate()
-			room_slot.set_references()
-			room_slot.room_index = room_idx
-			room_slot.custom_minimum_size = Vector2(40, 40)
+		for node_idx in range(NODES_PER_RANK):
+			var node_slot = room_box.instantiate()
+			node_slot.set_references()
+			node_slot.room_index = node_idx
+
+			# Hallways are smaller (every odd index except last)
+			if node_idx % 2 == 1:  # Hallway
+				node_slot.custom_minimum_size = Vector2(30, 30)
+			else:  # Room
+				node_slot.custom_minimum_size = Vector2(40, 40)
 			
 			# Don't allow clicking in zoom view
-			room_slot.icon_button.disabled = true
+			node_slot.icon_button.disabled = true
 			
-			dungeon_grid.add_child(room_slot)
-			rank_icons.append(room_slot)
+			dungeon_grid.add_child(node_slot)
+			rank_nodes.append(node_slot)
 		
-		room_icons.insert(0, rank_icons)  # Insert at front so index matches rank
+		node_icons.insert(0, rank_nodes)  # Insert at front so index matches rank
 	
 
 
@@ -86,12 +93,13 @@ func hide_panel():
 
 func update_display():
 	var all_rooms = DungeonManager.all_visited_rooms
+	var all_hallways = DungeonManager.all_visited_hallways
 	var current_rank = DungeonManager.current_rank
 	
-	# Clear all icons to unknown first
+	# Clear all nodes to unknown first
 	for rank in range(MAX_RANKS):
-		for room_idx in range(ROOMS_PER_RANK):
-			room_icons[rank][room_idx].set_unknown()
+		for node_idx in range(NODES_PER_RANK):
+			node_icons[rank][node_idx].set_unknown()
 	
 	# Fill in visited rooms
 	var room_counter = 0
@@ -100,24 +108,40 @@ func update_display():
 		var room_index = room_counter % ROOMS_PER_RANK  # Which room in rank (0-5)
 		
 		if rank_index < MAX_RANKS:
+			var node_index = room_index * 2  # Rooms are at even indices: 0,2,4,6,8,10
+			
 			if room_index == ROOMS_PER_RANK - 1:
 				# Boss room
-				room_icons[rank_index][room_index].set_boss_room()
+				node_icons[rank_index][node_index].set_boss_room()
 			else:
-				room_icons[rank_index][room_index].set_visited_room(room_data)
+				node_icons[rank_index][node_index].set_visited_room(room_data)
 		
 		room_counter += 1
+	
+	# Fill in visited hallways
+	var hallway_counter = 0
+	for hallway_def in all_hallways:
+		var rank_index = hallway_counter / HALLWAYS_PER_RANK  # Which rank (0-4)
+		var hallway_index = hallway_counter % HALLWAYS_PER_RANK  # Which hallway in rank (0-4)
+		
+		if rank_index < MAX_RANKS:
+			var node_index = hallway_index * 2 + 1  # Hallways are at odd indices: 1,3,5,7,9
+			node_icons[rank_index][node_index].set_hallway(hallway_def)
+		
+		hallway_counter += 1
 	
 	# Show current rank's boss with gold crown
 	var current_rank_index = current_rank - 1
 	if current_rank_index < MAX_RANKS:
-		room_icons[current_rank_index][ROOMS_PER_RANK - 1].set_boss_room()
-		room_icons[current_rank_index][ROOMS_PER_RANK - 1].texture_rect.modulate = Color.GOLD
+		var boss_node_index = (ROOMS_PER_RANK - 1) * 2  # Boss is at node 10
+		node_icons[current_rank_index][boss_node_index].set_boss_room()
+		node_icons[current_rank_index][boss_node_index].texture_rect.modulate = Color.GOLD
 	
 	# Grey out future boss rooms
 	for rank in range(current_rank, MAX_RANKS):
-		room_icons[rank][ROOMS_PER_RANK - 1].set_boss_room()
-		room_icons[rank][ROOMS_PER_RANK - 1].texture_rect.modulate = Color.DARK_GRAY
+		var boss_node_index = (ROOMS_PER_RANK - 1) * 2
+		node_icons[rank][boss_node_index].set_boss_room()
+		node_icons[rank][boss_node_index].texture_rect.modulate = Color.DARK_GRAY
 	
 	# Update boss info (placeholder for now)
 	_update_boss_info()

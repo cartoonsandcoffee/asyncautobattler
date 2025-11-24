@@ -16,6 +16,7 @@ enum ItemType {
 @onready var panel_border: PanelContainer
 @onready var order_container: PanelContainer
 @onready var lbl_order: Label 
+@onready var lbl_countdown: Label 
 @onready var item_icon: TextureRect 
 @onready var anim_hover: AnimationPlayer
 @onready var anim_highlight: AnimationPlayer
@@ -56,6 +57,7 @@ func set_references():
 	anim_highlight = $animHighlight
 	pic_rarity = $Panel/pnlRare/picRarity
 	pnl_rarity = $Panel/pnlRare
+	lbl_countdown = $Panel/VBoxContainer/itemContainer/lblCountdown
 
 	if !button.button_down.is_connected(_on_button_down):
 		button.button_down.connect(_on_button_down)

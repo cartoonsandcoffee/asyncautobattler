@@ -37,18 +37,22 @@ func show_slides(slide_array: Array[SlideData]):
 	_update_slide()
 
 func _update_slide():
-	var slide = slides[current_index]
-	
-	if slide == null:
+	if current_index >= slides.size() or slides[current_index] == null:
+		push_error("Invalid slide at index %d" % current_index)
 		btn_close.visible = true
 		return
+
+	var slide = slides[current_index]
 	
-	lbl_header.text = slide.header
+	lbl_header.text = slide.header if slide.header else ""
 	#pic.texture = slide.image
 	txt_main.visible_ratio = 0
-	txt_main.text = slide.body_text
 	
-	#btn_next.text = " Next (" + str(current_index + 1) + "/" + str(slides.size()) + ")  >> "
+	if slide.body_text:
+		txt_main.text = slide.body_text
+	else:
+		txt_main.text = ""
+		push_warning("Slide %d has empty body_text" % current_index)
 
 	# Show/hide buttons
 	btn_next.visible = current_index < slides.size() - 1

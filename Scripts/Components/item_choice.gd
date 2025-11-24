@@ -32,6 +32,7 @@ var item_instance_id: int = -1  # Track the specific instance
 var slot_index: int = 10  # to track position
 
 var gamecolors: GameColors
+var has_been_selected: bool = false
 
 func _ready() -> void:
 	set_references()
@@ -171,6 +172,12 @@ func _on_button_mouse_entered() -> void:
 		tooltip_panel.visible = true
 
 func _on_button_pressed() -> void:
+	if has_been_selected:
+		return
+
+	has_been_selected = true
+	button.disabled = true
+	
 	if choice_type == ChoiceType.REWARD:
 		item_selected.emit(current_item)
 	elif choice_type == ChoiceType.PURCHASE:

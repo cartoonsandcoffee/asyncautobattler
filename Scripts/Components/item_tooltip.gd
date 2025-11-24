@@ -68,6 +68,7 @@ const TRIGGER_KEYWORDS = {
 	"attack": "#ff4444",	
 	"agility": "#ffdd44",
 	"speed": "#ffdd44",
+	"strikes": "#cad48eff",	
 	"hit points": "#44ff44",
 	"hitpoints": "#44ff44",
 	"health": "#44ff44",
@@ -128,6 +129,12 @@ func get_stat_bonuses():
 	if current_item.hit_points_bonus != 0:
 		stats_to_add[statcount] = {"name": "hitpoints", "value": str(current_item.hit_points_bonus)}
 		statcount += 1	
+	if current_item.strikes_bonus != 0:
+		stats_to_add[statcount] = {"name": "strikes", "value": str(current_item.strikes_bonus)}
+		statcount += 1	
+	if current_item.burn_damage_bonus != 0:
+		stats_to_add[statcount] = {"name": "burn_damage", "value": str(current_item.burn_damage_bonus)}
+		statcount += 1	
 
 	if statcount <= 0:
 		stats_grid.hide()
@@ -145,7 +152,12 @@ func show_description(this_item: Item):
 		lbl_desc.hide()
 
 func show_stats():
+	if stats_to_add.size() == 0:
+		stats_grid.hide()
+		return
+
 	stats_grid.columns = stats_to_add.size()
+	stats_grid.show()
 
 	for child in stats_grid.get_children():
 		stats_grid.remove_child(child)
@@ -264,7 +276,11 @@ func set_rarity_color() -> Color:
 	elif current_item.rarity == Enums.Rarity.RARE:
 		return gamecolors.rarity.rare
 	elif current_item.rarity == Enums.Rarity.LEGENDARY:
-		return gamecolors.rarity.legendary	
+		return gamecolors.rarity.legendary
+	elif current_item.rarity == Enums.Rarity.GOLDEN:
+		return gamecolors.rarity.golden
+	elif current_item.rarity == Enums.Rarity.DIAMOND:
+		return gamecolors.rarity.diamond
 	else:
 		return Color.WHITE
 
@@ -281,5 +297,11 @@ func set_rarity():
 	elif current_item.rarity == Enums.Rarity.LEGENDARY:
 		lbl_rarity.modulate =  gamecolors.rarity.legendary	
 		lbl_rarity.text = " - Legendary -"
+	elif current_item.rarity == Enums.Rarity.GOLDEN:
+		lbl_rarity.modulate =  gamecolors.rarity.golden	
+		lbl_rarity.text = " - Golden -"
+	elif current_item.rarity == Enums.Rarity.DIAMOND:
+		lbl_rarity.modulate =  gamecolors.rarity.diamond	
+		lbl_rarity.text = " - Diamond -"
 	else:
 		lbl_rarity.modulate =  Color.WHITE
