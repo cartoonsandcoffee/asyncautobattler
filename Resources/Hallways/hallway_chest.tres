@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="HallwayDefinition" load_steps=6 format=3 uid="uid://djp2ygtflrmws"]
+
+[ext_resource type="Texture2D" uid="uid://ccbefxbhjge3h" path="res://Assets/Art/Room_04_Background.png" id="1_4ot1n"]
+[ext_resource type="Script" uid="uid://d1s6b3dx65n2a" path="res://Scripts/Resources/HallwayDefinition.gd" id="1_y42xr"]
+[ext_resource type="Texture2D" uid="uid://bffx10anckips" path="res://Assets/monochrome-transparent_packed.png" id="2_4ot1n"]
+[ext_resource type="PackedScene" uid="uid://b0vi56n2ciwg6" path="res://Scenes/Hallways/hallway_chest.tscn" id="3_gbv32"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_psb1h"]
+atlas = ExtResource("2_4ot1n")
+region = Rect2(128, 96, 16, 16)
+
+[resource]
+script = ExtResource("1_y42xr")
+hallway_type = 0
+hallway_name = "An overgrown vine."
+hallway_desc = "Tangled among the roots of this bizare and overgrown vine is a chest..."
+hallway_background_texture = ExtResource("1_4ot1n")
+hallway_icon = SubResource("AtlasTexture_psb1h")
+hallway_color = Color(0.556863, 0.611765, 0.243137, 1)
+possible_events = Array[PackedScene]([ExtResource("3_gbv32")])
+spawn_weight = 1
+min_rank = 1
+max_rank = 5
+allowed_positions = Array[int]([0, 1, 2, 3, 4])
+metadata/_custom_type_script = "uid://d1s6b3dx65n2a"

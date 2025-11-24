@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="HallwayDefinition" load_steps=6 format=3 uid="uid://t7r7l7y14b8d"]
+
+[ext_resource type="Script" uid="uid://d1s6b3dx65n2a" path="res://Scripts/Resources/HallwayDefinition.gd" id="1_ec3g6"]
+[ext_resource type="Texture2D" uid="uid://ccbefxbhjge3h" path="res://Assets/Art/Room_04_Background.png" id="1_wddg6"]
+[ext_resource type="Texture2D" uid="uid://bffx10anckips" path="res://Assets/monochrome-transparent_packed.png" id="2_5y4m7"]
+[ext_resource type="PackedScene" uid="uid://c127vn167w5k8" path="res://Scenes/Hallways/hallway_treasure.tscn" id="3_5y4m7"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qkaa4"]
+atlas = ExtResource("2_5y4m7")
+region = Rect2(128, 96, 16, 16)
+
+[resource]
+script = ExtResource("1_ec3g6")
+hallway_type = 1
+hallway_name = "An unfortunate soul"
+hallway_desc = "Some anonymous hero was laid to rest here."
+hallway_background_texture = ExtResource("1_wddg6")
+hallway_icon = SubResource("AtlasTexture_qkaa4")
+hallway_color = Color(0.556863, 0.611765, 0.243137, 1)
+possible_events = Array[PackedScene]([ExtResource("3_5y4m7")])
+spawn_weight = 1
+min_rank = 1
+max_rank = 5
+allowed_positions = Array[int]([0, 1, 2, 3, 4])
+metadata/_custom_type_script = "uid://d1s6b3dx65n2a"

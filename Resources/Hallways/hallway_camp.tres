@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="HallwayDefinition" load_steps=6 format=3 uid="uid://c3mcry1ar4jcn"]
+
+[ext_resource type="Script" uid="uid://d1s6b3dx65n2a" path="res://Scripts/Resources/HallwayDefinition.gd" id="1_5akgg"]
+[ext_resource type="Texture2D" uid="uid://ccbefxbhjge3h" path="res://Assets/Art/Room_04_Background.png" id="1_mydag"]
+[ext_resource type="Texture2D" uid="uid://bffx10anckips" path="res://Assets/monochrome-transparent_packed.png" id="2_c2ang"]
+[ext_resource type="PackedScene" uid="uid://dl7fby7lsklkk" path="res://Scenes/Hallways/hallway_camp.tscn" id="3_c2ang"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c2ang"]
+atlas = ExtResource("2_c2ang")
+region = Rect2(224, 160, 16, 16)
+
+[resource]
+script = ExtResource("1_5akgg")
+hallway_type = 5
+hallway_name = "A Cozy Camp"
+hallway_desc = "Seems like someone has been here..."
+hallway_background_texture = ExtResource("1_mydag")
+hallway_icon = SubResource("AtlasTexture_c2ang")
+hallway_color = Color(0.5551, 0.61, 0.244, 1)
+possible_events = Array[PackedScene]([ExtResource("3_c2ang")])
+spawn_weight = 1
+min_rank = 1
+max_rank = 5
+allowed_positions = Array[int]([0, 1, 2, 3, 4])
+metadata/_custom_type_script = "uid://d1s6b3dx65n2a"
