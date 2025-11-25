@@ -1,5 +1,5 @@
 class_name HallwayEvent_Camp
-extends HallwayEvent
+extends RoomEvent
 
 @onready var anim_event: AnimationPlayer = $animFire
 @onready var anim_label: AnimationPlayer = $animText
@@ -36,4 +36,4 @@ func _on_continue_pressed():
 
 func complete_hallway():
 	hide_event()
-	event_completed()
+	complete_event()
