@@ -12,6 +12,7 @@ extends Control
 @onready var room_background: TextureRect = $RoomContainer/roomPic
 @onready var event_container: Node = $EventContainer
 @onready var door_container: HBoxContainer = $DoorContainer/HBoxContainer
+@onready var btn_continue: Button = $DoorContainer/btnContinue
 
 @onready var stat_health: Control = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/statHealth
 @onready var stat_damage: Control = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/statDamage
@@ -61,8 +62,6 @@ var pending_drop_slot_index: int = -1
 
 var is_in_combat: bool = false
 
-var pending_room_data: RoomData = null
-
 # -- Full map screen
 var zoom_panel_scene = preload("res://Scenes/Elements/map_zoom_panel.tscn")
 var zoom_panel: MapZoomPanel 
@@ -91,6 +90,11 @@ func _ready():
 	combat_panel.main_game = self
 	combat_panel.combat_completed.connect(_on_combat_completed)
 	combat_panel.player_chose_run.connect(_on_player_ran)
+
+	if btn_continue:
+		btn_continue.pressed.connect(_on_continue_pressed)
+		btn_continue.disabled = true
+		btn_continue.visible = false 
 
 	# -- Add Map Zoom Panel
 	zoom_panel = MapZoomPanel.new()
@@ -130,10 +134,9 @@ func load_starting_room():
 func load_room(room_data: RoomData):
 	# Update background
 	room_background.texture = room_data.room_definition.background_texture
-	set_background_tint(room_data.room_definition.room_type)
+	room_background.modulate = room_data.room_definition.room_color
 
 	# Clear previous event
-	clear_doors()
 	clear_current_event()
 	
 	# Load new event
@@ -144,7 +147,6 @@ func load_room(room_data: RoomData):
 			if room_event.has_signal("need_item_replace"):
 				room_event.need_item_replace.connect(show_inventory_replacement_mode)
 
-	show_door_choices()
 
 func show_inventory_replacement_mode(new_item: Item):
 	pending_reward_item = new_item
@@ -164,8 +166,14 @@ func load_room_event(room_data: RoomData):
 	var event_scene = room_data.chosen_event_scene
 	if event_scene:
 		current_event = event_scene.instantiate()
+
+		if current_event.has_method("setup"):
+			current_event.setup(room_data)
+		else:
+			# Fallback: set directly if setup method doesn't exist
+			current_event.room_data = room_data
+
 		event_container.add_child(current_event)
-		current_event.setup(room_data)
 		current_event.event_completed.connect(_on_event_completed)
 
 		# Connect to combat request if the event needs it
@@ -178,114 +186,45 @@ func _on_event_completed():
 	await get_tree().process_frame
 	
 	clear_current_event()
-	for child in door_container.get_children():
-		if child.has_method("on_room_completed"):
-			child.on_room_completed()
+	show_continue_button()
 
-
-func show_door_choices():
-	# Clear any existing doors
-	clear_doors()
+func _on_continue_pressed():
+	hide_continue_button()
 	
-	# Generate 3 door choices from DungeonManager
-	var door_options = DungeonManager.generate_door_choices()
+	# Advance to next room in sequence
+	DungeonManager.advance_room()
 	
-	# Create door choice buttons
-	var door_choice_scene = preload("res://Scenes/door_choice.tscn")
-	
-	for room_data in door_options:
-		var door_choice = door_choice_scene.instantiate()
-		door_choice.custom_minimum_size.x = 180
-
-		door_container.add_child(door_choice)
-		door_choice.setup_door(room_data)
-		door_choice.door_selected.connect(_on_door_selected)
-
-func clear_doors():
-	for child in door_container.get_children():
-		child.queue_free()
-
-func _on_door_selected(room_data: RoomData):
-	print("Player selected: ", DungeonManager.get_room_type_display_name(room_data))
-	#print("Event will be: ", room_data.chosen_event_scene.event_description)
-	
-	# Advance room counter and store room
-	DungeonManager.advance_room(room_data)
-	
-	anim_fade.play("fade_out")
-	var anim_length = anim_fade.get_animation("fade_out").length
-	await CombatSpeed.create_timer(anim_length)
-
-	# Load the selected room
-	#load_room(room_data)
-	load_hallway(room_data)
-	fade_overlay.visible = false
-
-
-func load_hallway(destination_room: RoomData):
-	var current_hallway = DungeonManager.get_current_hallway()
-	
-	if not current_hallway:
-		push_error("No hallway found!")
-		load_room(destination_room)  # Fallback
+	# Check if rank is complete
+	if DungeonManager.rooms_cleared_this_rank >= DungeonManager.ROOMS_PER_RANK:
+		# TODO: Trigger boss fight
+		print("Rank complete! Boss fight would trigger here.")
+		# For now, just advance rank
+		DungeonManager.advance_rank()
 		return
 	
-	# Store destination room for after hallway
-	pending_room_data = destination_room
-	
-	# Set background tint to match destination room color
-	room_background.modulate = destination_room.room_definition.room_color
-	
-	# TODO: Set hallway background texture when you create it
-	room_background.texture = current_hallway.hallway_background_texture
-	
-	clear_doors()
-	clear_current_event()
-	
-	# Load hallway event
-	var hallway_event_scene = current_hallway.get_random_event()
-	if hallway_event_scene:
-		current_event = hallway_event_scene.instantiate()
-		event_container.add_child(current_event)
-		current_event.hallway_completed.connect(_on_hallway_completed)
+	# Get next room and load it
+	var next_room = DungeonManager.get_current_room()
+	if next_room:
+		# Fade transition
+		anim_fade.play("fade_out")
+		var anim_length = anim_fade.get_animation("fade_out").length
+		await CombatSpeed.create_timer(anim_length)
+		
+		load_room(next_room)
+		fade_overlay.visible = false
 	else:
-		push_error("No hallway event scene!")
-		_on_hallway_completed()  # Skip to room
+		push_error("No next room found!")
 
-func _on_hallway_completed():
-	DungeonManager.complete_hallway()
-	
-	# Fade out
-	anim_fade.play("fade_out")
-	var anim_length = anim_fade.get_animation("fade_out").length
-	await CombatSpeed.create_timer(anim_length)
-	
-	# Load the actual room
-	load_room(pending_room_data)
-	pending_room_data = null
-	fade_overlay.visible = false
+func show_continue_button():
+	if btn_continue:
+		btn_continue.visible = true
+		btn_continue.disabled = false
+		btn_continue.grab_focus()  # Optional: auto-focus for keyboard users
 
-
-func set_background_tint(room_type: Enums.RoomType):
-	var gamecolors = GameColors.new()
-	
-	match room_type:
-		Enums.RoomType.STARTER:
-			room_background.modulate = gamecolors.room.starter
-		Enums.RoomType.HALLWAY:
-			room_background.modulate = gamecolors.room.hallway
-		Enums.RoomType.TOMB:
-			room_background.modulate = gamecolors.room.tomb
-		Enums.RoomType.CHAMBERS:
-			room_background.modulate = gamecolors.room.royal
-		Enums.RoomType.FORGE:
-			room_background.modulate = gamecolors.room.forge
-		Enums.RoomType.COVEN:
-			room_background.modulate = gamecolors.room.coven
-		Enums.RoomType.BOSS:
-			room_background.modulate = gamecolors.room.boss
-		_:
-			room_background.modulate = Color.WHITE  # Default no tint
+func hide_continue_button():
+	if btn_continue:
+		btn_continue.visible = false
+		btn_continue.disabled = true
 
 func set_player_stats():
 	if CombatManager.combat_active:
