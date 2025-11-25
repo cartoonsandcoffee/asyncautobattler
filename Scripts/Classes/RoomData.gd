@@ -6,6 +6,10 @@ var room_definition: RoomDefinition     # Reference to the template
 var chosen_event_scene: PackedScene     # Which specific event was chosen
 var room_state: Dictionary = {}         # Runtime state (visited, completed, etc.)
 
+# Combat tracking (assigned during generation)
+var has_combat_this_instance: bool = false
+var assigned_enemy: Enemy = null
+
 func _init(def: RoomDefinition = null, event: PackedScene = null):
 	room_definition = def
 	chosen_event_scene = event
@@ -27,4 +31,4 @@ func get_rarity() -> Enums.Rarity:
 	return room_definition.rarity if room_definition else Enums.Rarity.COMMON
 
 func get_room_type() -> Enums.RoomType:
-	return room_definition.room_type if room_definition else Enums.RoomType.HALLWAY
+	return room_definition.room_type if room_definition else Enums.RoomType.TREASURE
