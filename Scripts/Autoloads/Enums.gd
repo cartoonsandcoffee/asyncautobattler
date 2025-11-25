@@ -33,16 +33,12 @@ enum StatType {		# Used for item conditions and rules
 }
 
 enum RoomType {
-	STARTER,
-	HALLWAY,
-	TOMB,
-	CHAMBERS,
-	FORGE, 
-	LIBRARY,
-	COVEN,
-	LARDER,
-	GALLERY,
-	BOSS,
+	STARTER,		# Always very first room, the Old Man 
+	TREASURE,		# Any room that gives you loot
+	MERCHANT,		# Any room where you can purchase things
+	UTILITY,		# Any room where you can modify cards (upgrade, replace, etc)
+	CAMPFIRE,		# Restore player's health, never combat
+	BOSS,			# The Asynchronous multiplayer PVP battles
 	SPECIAL
 }
 
