@@ -101,24 +101,34 @@ func _set_border(color: Color, bsize: int):
 	style.border_width_bottom = bsize
 	border.add_theme_stylebox_override("panel", style)
 
-func set_hallway(hallway_def: HallwayDefinition):
-	if not hallway_def:
+func set_room_type(room_data: RoomData):
+	"""Display abstract room type icon (for future/current rooms)"""
+	if not room_data or not room_data.room_definition:
 		set_unknown()
 		return
 	
-	# Set icon and color from hallway definition
-	if hallway_def.hallway_icon:
-		texture_rect.texture = hallway_def.hallway_icon
+	var room_def = room_data.room_definition
+	
+	# Set abstract type icon
+	if room_def.room_icon:
+		texture_rect.texture = room_def.room_icon
 	else:
 		texture_rect.texture = question_mark_texture
 	
-	texture_rect.modulate = hallway_def.hallway_color
+	# Set type color
+	texture_rect.modulate = room_def.room_color
 	
-	# Hallways have subtle border
-	_set_border(Color(0.3, 0.3, 0.3), 1)
+	# Show combat indicator if room has combat
+	if room_data.has_combat_this_instance:
+		# TODO: Add combat indicator overlay (sword icon)
+		# For now, just slightly darken rooms with combat
+		texture_rect.modulate = texture_rect.modulate.darkened(0.2)
+	
+	# Set border
+	_set_border(Color(0.4, 0.4, 0.4), 2)
 
-	# Set tooltip (optional)
-	tooltip_text = hallway_def.hallway_name
+	# Set tooltip
+	tooltip_text = room_def.room_name
 
 func _on_button_pressed():
 	if is_boss:
