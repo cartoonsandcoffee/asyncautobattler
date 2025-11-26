@@ -699,12 +699,17 @@ func _update_status_box_value(box: StatusBox, new_stacks: int):
 		lerp_tween.tween_callback(func(): box.lbl_amount.text = str(int(value))).set_delay(step_duration)
 
 func _remove_status_box(box: StatusBox):
+	if not is_instance_valid(box):
+		return
+
 	var tween = create_tween()
 	tween.set_parallel(true)
 	tween.tween_property(box, "scale", Vector2.ZERO, 0.2).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_BACK)
 	tween.tween_property(box, "modulate:a", 0.0, 0.15)
 	await tween.finished
-	box.queue_free()
+
+	if is_instance_valid(box) and not box.is_queued_for_deletion():
+		box.queue_free()	
 
 
 func _on_btn_instant_pressed() -> void:

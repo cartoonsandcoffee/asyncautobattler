@@ -39,6 +39,7 @@ var current_event
 
 var item_slot = preload("res://Scenes/item.tscn")
 var item_proc = preload("res://Scenes/Elements/combat_item_proc.tscn")
+var door_choice_scene = preload("res://Scenes/door_choice.tscn")
 
 var item_slots: Array[ItemSlot] = []
 
@@ -124,7 +125,6 @@ func load_starting_room():
 	var starter_room_data = DungeonManager.generate_starter_room()
 	if starter_room_data:
 		DungeonManager.all_visited_rooms.append(starter_room_data)
-		DungeonManager.current_rank_rooms.append(starter_room_data)
 		DungeonManager.minimap_update_requested.emit()
 		
 		await load_room(starter_room_data)
@@ -141,6 +141,11 @@ func load_room(room_data: RoomData):
 	
 	# Load new event
 	load_room_event(room_data)
+
+	# Fade transition
+	anim_fade.play("fade_in")
+	var anim_length = anim_fade.get_animation("fade_in").length
+	await CombatSpeed.create_timer(anim_length)
 
 	if get_tree().has_group("item_selection_events"):
 		for room_event in get_tree().get_nodes_in_group("item_selection_events"):
@@ -188,6 +193,14 @@ func _on_event_completed():
 	clear_current_event()
 	show_continue_button()
 
+	# Check for shortcuts
+	var completed_room = DungeonManager.current_rank_rooms[DungeonManager.current_room_index]
+	var shortcuts = DungeonManager.check_for_shortcuts(completed_room)
+	
+	if shortcuts.size() > 0:
+		# Show doors (normal + shortcuts)
+		show_doors_with_shortcuts(shortcuts)
+
 func _on_continue_pressed():
 	hide_continue_button()
 	
@@ -225,6 +238,71 @@ func hide_continue_button():
 	if btn_continue:
 		btn_continue.visible = false
 		btn_continue.disabled = true
+
+func show_doors_with_shortcuts(shortcuts: Array[ShortcutOption]):
+	"""Show 3 doors: Continue + 2 shortcuts (reusing existing door system)"""
+	
+	# Clear any old doors
+	for child in door_container.get_children():
+		child.queue_free()
+
+	# DOOR 2 & 3: Shortcuts
+	for option in shortcuts:
+		# Convert ShortcutOption to RoomData so door can display it
+		var shortcut_room = create_room_data_for_door(option)
+		
+		var shortcut_door = door_choice_scene.instantiate()
+		door_container.add_child(shortcut_door)
+		shortcut_door.setup_door(shortcut_room)  # ← YOUR EXISTING METHOD
+		shortcut_door.door_selected.connect(func(rd): _on_shortcut_door_selected(option))
+		shortcut_door.on_room_completed()  # ← YOUR EXISTING ANIMATION
+	
+	# Show the door container
+	door_container.visible = true
+	
+func _on_shortcut_door_selected(option: ShortcutOption):
+	# Player chose shortcut door
+	
+	door_container.visible = false
+	
+	# Apply the shortcut (marks rooms skipped, replaces destination)
+	DungeonManager.apply_shortcut(option)
+	
+	# Advance to destination
+	DungeonManager.advance_room()  # Advance once past current room
+	
+	# Skip ahead
+	for i in range(option.skip_count):
+		DungeonManager.advance_room()
+	
+	# Load destination room
+	var dest_room = DungeonManager.get_current_room()
+	if dest_room:
+		anim_fade.play("fade_out")
+		var anim_length = anim_fade.get_animation("fade_out").length
+		await CombatSpeed.create_timer(anim_length)
+		await load_room(dest_room)
+
+func create_room_data_for_door(option: ShortcutOption) -> RoomData:
+	"""Convert shortcut option into RoomData so door system can display it"""
+	
+	# Create room data from destination
+	var room_data = RoomData.new(
+		option.destination_room,
+		option.destination_room.get_random_event()
+	)
+	
+	# Add shortcut info to description
+	var base_desc = option.destination_room.room_desc
+	var shortcut_info = "\n\n🚪 Shortcut: Skip %d rooms\n%s" % [
+		option.skip_count,
+		" Combat ahead" if option.has_combat else " Safe passage"
+	]
+	
+	# Store modified description (door tooltip will show this)
+	room_data.room_state["custom_desc"] = base_desc + shortcut_info
+	
+	return room_data
 
 func set_player_stats():
 	if CombatManager.combat_active:

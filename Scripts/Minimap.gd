@@ -60,6 +60,8 @@ func update_display():
 				# Already visited - show actual room (full color)
 				room_icons[i].set_visited_room(room_data)
 				room_icons[i].set_current(false)
+				if room_data.room_state.get("skipped", false):
+					room_icons[i].set_skipped()				
 			elif i == current_room_idx:
 				# Current room - highlight
 				room_icons[i].set_room_type(room_data)
