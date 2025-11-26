@@ -15,6 +15,7 @@ var is_current_room: bool = false
 # Icon resources
 var question_mark_texture: AtlasTexture
 var crown_texture: AtlasTexture
+var x_texture: AtlasTexture
 
 func _ready():
 	set_references()
@@ -43,6 +44,7 @@ func _load_icons():
 	question_mark_texture = preload("res://Resources/Icons/icon_question.tres")
 	# Load crown icon for boss
 	crown_texture = preload("res://Resources/Icons/icon_crown.tres")
+	x_texture = preload("res://Resources/Icons/minimap_x.tres")
 
 
 func set_visited_room(data: RoomData):
@@ -74,6 +76,17 @@ func set_unknown():
 	texture_rect.modulate = Color.WHITE
 	_set_border(Color.DARK_GRAY, 2)
 	icon_button.tooltip_text = "Unexplored"
+
+func set_skipped():
+	texture_rect.modulate = Color(0.4, 0.4, 0.4)
+	
+	room_data = null
+	is_boss = false
+	
+	texture_rect.texture = x_texture
+	texture_rect.modulate = Color.WHITE
+	_set_border(Color.DARK_GRAY, 2)
+	icon_button.tooltip_text = "Skipped"
 
 func set_current(is_current: bool):
 	is_current_room = is_current
