@@ -32,6 +32,11 @@ func setup_door(data: RoomData):
 		room_desc.text = room_data.room_definition.room_desc
 		room_desc.visible = true
 
+		if room_data.room_state.has("custom_desc"):
+			room_desc.text = room_data.room_state["custom_desc"]
+		else:
+			room_desc.text = room_data.room_definition.room_desc
+			
 		if room_data.room_definition.door_texture:
 			pic_door.texture = room_data.room_definition.door_texture
 		else:

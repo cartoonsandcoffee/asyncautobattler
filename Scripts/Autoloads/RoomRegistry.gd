@@ -84,3 +84,37 @@ func get_all_room_definitions() -> Array[RoomDefinition]:
 	for room_def in room_definitions.values():
 		all_rooms.append(room_def)
 	return all_rooms
+
+func get_rooms_by_type_and_rarity(type: Enums.RoomType, rarity: Enums.Rarity) -> Array[RoomDefinition]:
+	# Get all room definitions matching specific type and rarity
+	# Used for guaranteed room placements
+	var results: Array[RoomDefinition] = []
+	
+	for room_def in room_definitions.values():
+		if room_def.room_type == type and room_def.rarity == rarity:
+			results.append(room_def)
+	
+	return results
+
+func get_rooms_by_type(type: Enums.RoomType) -> Array[RoomDefinition]:
+	# Get all room definitions matching specific type (any rarity)
+	# Useful for flexible guaranteed placements
+	var results: Array[RoomDefinition] = []
+	
+	for room_def in room_definitions.values():
+		if room_def.room_type == type:
+			results.append(room_def)
+	
+	return results
+
+func get_rooms_by_type_rarity_and_rank(type: Enums.RoomType, rarity: Enums.Rarity, rank: int) -> Array[RoomDefinition]:
+	# Get rooms matching type, rarity, AND valid for current rank
+	# Most strict filter for guaranteed rooms
+	var results: Array[RoomDefinition] = []
+	
+	for room_def in room_definitions.values():
+		if room_def.room_type == type and room_def.rarity == rarity:
+			if room_def.can_appear_at_rank(rank):
+				results.append(room_def)
+	
+	return results
