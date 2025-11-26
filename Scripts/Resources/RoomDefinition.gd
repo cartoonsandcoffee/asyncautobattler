@@ -3,13 +3,17 @@ class_name RoomDefinition
 extends Resource
 
 @export_group("Room Identity")
-@export var room_type: Enums.RoomType
+@export var room_type: Enums.RoomType:
+	set(value):
+		room_type = value
+		notify_property_list_changed()
 @export var rarity: Enums.Rarity  = Enums.Rarity.COMMON:
 	set(value):
 		rarity = value
 		notify_property_list_changed()
 @export var room_name: String = "Unknown Room"
 @export_multiline var room_desc: String = "Unknown Room"
+@export var utility_subtype: String
 
 @export_group("Visuals")
 @export var background_texture: Texture2D
@@ -54,6 +58,11 @@ func _validate_property(property: Dictionary) -> void:
 	if prop_name == "can_spawn_shortcuts" || prop_name == "shortcut_chance":
 		if rarity not in [Enums.Rarity.UNCOMMON, Enums.Rarity.RARE]:
 			property.usage = PROPERTY_USAGE_NO_EDITOR
+
+	if prop_name == "utility_subtype":
+		if room_type not in [Enums.RoomType.UTILITY]:
+			property.usage = PROPERTY_USAGE_NO_EDITOR
+
 
 func get_random_event() -> PackedScene:
 	if possible_events.size() > 0:
