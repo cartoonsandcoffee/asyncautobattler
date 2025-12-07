@@ -53,95 +53,14 @@ func setup_potion_recipes():
 	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Potions/Diamond/diamond_essence_of_charcoal.tres"))	
 
 func setup_items():
-	# Store them in our dictionary 
-	# --- COMMON
-	add_common_items()
-
-	available_items["Fists"] = preload("res://Resources/Items/Weapons/weapon_fists.tres")
-	available_items["Holy Shield"] = preload("res://Resources/Items/Armor/holy_shield.tres")
-	available_items["Tower Shield"] = preload("res://Resources/Items/Armor/tower_shield.tres")
-	available_items["Liferoot Gauntlets"] = preload("res://Resources/Items/Armor/liferoot_gauntlets.tres")
-	available_items["Rusted Plate"] = preload("res://Resources/Items/Armor/rusted_plate.tres")
-	available_items["Testing Boots"] = preload("res://Resources/Items/Armor/testing_boots.tres")
-	available_items["Testing Shield"] = preload("res://Resources/Items/Armor/testing_shield.tres")
-	available_items["Testing Robes"] = preload("res://Resources/Items/Armor/testing_robes.tres")
-	available_items["Thorn Shield"] = preload("res://Resources/Items/Armor/thorn_shield.tres")
-	available_items["Shield Tap"] = preload("res://Resources/Items/Armor/armor_tap.tres")
-	available_items["Testing Relic"] = preload("res://Resources/Items/Armor/test_relic.tres")
-
-	# --- UNCOMMON
-	available_items["Ornate Sword"] = preload("res://Resources/Items/UNCOMMON/ornate_sword.tres")
-	available_items["Bramble Belt"] = preload("res://Resources/Items/UNCOMMON/bramble_belt.tres")
-	available_items["Bramble Buckler"] = preload("res://Resources/Items/UNCOMMON/bramble_buckler.tres")	
-	available_items["Ironstone Spear"] = preload("res://Resources/Items/UNCOMMON/ironstone_spear.tres")
-	available_items["Leather Boots"] = preload("res://Resources/Items/UNCOMMON/leather_boots.tres")
-	available_items["Swiftstrike Rapier"] = preload("res://Resources/Items/UNCOMMON/swiftstrike_rapier.tres")
-	available_items["Weird Axe"] = preload("res://Resources/Items/UNCOMMON/weird_axe.tres")
-
-	# --- GOLDEN COMMON ITEMS
-	available_items["Golden Testing Boots"] = preload("res://Resources/Items/Golden/golden_testing_boots.tres")
-	available_items["Golden Testing Shield"] = preload("res://Resources/Items/Golden/golden_testing_shield.tres")
-	available_items["Golden Testing Robes"] = preload("res://Resources/Items/Golden/golden_testing_robes.tres")
-	available_items["Golden Double Plated Armor"] = preload("res://Resources/Items/COMMON/double_plated_armor.tres")
-	available_items["Golden Tower Shield"] = preload("res://Resources/Items/GOLDEN/golden_tower_shield.tres")
-	available_items["Golden Lantern"] = preload("res://Resources/Items/GOLDEN/golden_lantern.tres")
-
-	# --- DIAMOND COMMON ITEMS
-	available_items["Diamond Battleworn Shield"] = preload("res://Resources/Items/Diamond/diamond_battleworn_shield.tres")
-	available_items["Diamond Lantern"] = preload("res://Resources/Items/Diamond/diamond_lantern.tres")
-
-	# --- RARE ITEMS
-	available_items["Clearmetal Dagger"] = preload("res://Resources/Items/RARE/Clearmetal_Dagger.tres")
-	available_items["Crude Staff"] = preload("res://Resources/Items/RARE/CrudeGlowingStaff.tres")
-	available_items["Clearmetal Mace"] = preload("res://Resources/Items/RARE/clearmetal_mace.tres")
-	available_items["Nimble Bow"] = preload("res://Resources/Items/RARE/nimble_bow.tres")
-	available_items["Giants Fingernail"] = preload("res://Resources/Items/RARE/giants_fingernail.tres")
-	available_items["Poison Dagger"] = preload("res://Resources/Items/RARE/poison_dagger.tres")
-	available_items["Corrosive Sword"] = preload("res://Resources/Items/RARE/corrosive_sword.tres")
-
-	# --- LEGENDARY 
-	available_items["Flaming Pick"] = preload("res://Resources/Items/LEGENDARY/flaming_sword.tres")
-
-	# --- Sample Build 1
-	available_items["Clearmetal Dagger"] = preload("res://Resources/Items/RARE/Clearmetal_Dagger.tres")
-	available_items["Metallic Glass"] = preload("res://Resources/Items/CRAFTED/Metallic_Glass.tres")
-	available_items["Ironskin Potion"] = preload("res://Resources/Items/UNCOMMON/Ironskin_Potion.tres")
-	available_items["Clearmetal Crown"] = preload("res://Resources/Items/UNCOMMON/Clearmetal_Crown.tres")
-	available_items["Reinforced Gauntlets"] = preload("res://Resources/Items/UNCOMMON/reinforced_gauntlet.tres")
-	available_items["Chainmail Shirt"] = preload("res://Resources/Items/UNCOMMON/Chainmail_Shirt.tres")
-	available_items["Metalliglass Totem"] = preload("res://Resources/Items/RARE/Metalliglass_Totem.tres")
-	available_items["Metalliglass Timepiece"] = preload("res://Resources/Items/RARE/Metalliglass_Timepiece.tres")
-	available_items["Diamond Double Plated Armor"] = preload("res://Resources/Items/Diamond/diamond_double_plated_armor.tres")
-	available_items["Potion of Insecurity"] = preload("res://Resources/Items/UNCOMMON/potion_insecurity.tres")
-	available_items["Indecent Exposure"] = preload("res://Resources/Items/UNCOMMON/Indecent_Exposure.tres")
-	available_items["Golden Battleworn Shield"] = preload("res://Resources/Items/Golden/golden_battleworn_shield.tres")
-	available_items["Clearmetal Battle Horn"] = preload("res://Resources/Items/RARE/Clearmetal_Horn.tres")
-
-	add_bug_items()
-	add_potions()
-
-func add_common_items():
-	available_items["Crude Blade"] = preload("res://Resources/Items/COMMON/crude_blade.tres")
-	available_items["Living Wood Club"] = preload("res://Resources/Items/COMMON/living_wood_club.tres")
-	available_items["Spiked Mace"] = preload("res://Resources/Items/COMMON/spiked_mace.tres")
-	available_items["Parrying Blade"] = preload("res://Resources/Items/COMMON/parrying_blade.tres")
-	available_items["Thirsty Steel"] = preload("res://Resources/Items/COMMON/thirsty_blade.tres")
-	available_items["Shafeek Sword"] = preload("res://Resources/Items/COMMON/shafeek_sword.tres")
-	available_items["Elderwood Bow"] = preload("res://Resources/Items/COMMON/elderwood_bow.tres")
-	available_items["Ikurs Spear"] = preload("res://Resources/Items/COMMON/ikur_spear.tres")
-	available_items["Nimble Cutlass"] = preload("res://Resources/Items/COMMON/nimble_cutlass.tres")
-	available_items["Lantern"] = preload("res://Resources/Items/COMMON/lantern.tres")
-	
-	available_items["Bronze Barbed Helm"] = preload("res://Resources/Items/COMMON/bronze_barbed_helm.tres")
-	available_items["Livingwood Cloak"] = preload("res://Resources/Items/COMMON/living_wood_cloak.tres")
-	available_items["Livingwood Helmet"] = preload("res://Resources/Items/COMMON/living_wood_helmet.tres")
-	available_items["Thirsty Helmet"] = preload("res://Resources/Items/COMMON/thirsty_helmet.tres")
-	available_items["Nimble Hood"] = preload("res://Resources/Items/COMMON/nimble_hood.tres")
-	available_items["Peculiar Timepiece"] = preload("res://Resources/Items/COMMON/peculiar_timepiece.tres")
-	available_items["Purpleskin Gloves"] = preload("res://Resources/Items/COMMON/purple_skin_gloves.tres")
-	available_items["Purpleskin Vest"] = preload("res://Resources/Items/COMMON/purple_skin_vest.tres")
-	available_items["Shafeeks Boots"] = preload("res://Resources/Items/COMMON/shafeek_boots.tres")
-	available_items["Shafeeks Shield"] = preload("res://Resources/Items/COMMON/shafeek_shield.tres")
+	get_all_files_from_directory("res://Resources/Items/", ".tres")
+	#_load_item_definitions(Enums.Rarity.COMMON)
+	#_load_item_definitions(Enums.Rarity.UNCOMMON)
+	#_load_item_definitions(Enums.Rarity.RARE)
+	#_load_item_definitions(Enums.Rarity.LEGENDARY)
+	#_load_item_definitions(Enums.Rarity.CRAFTED)
+	#_load_item_definitions(Enums.Rarity.GOLDEN)
+	#_load_item_definitions(Enums.Rarity.DIAMOND)
 
 func add_recipes_golden():
 	crafting_recipes.append(preload("res://Resources/CraftingRecipes/golden_testing_boots.tres"))
@@ -180,51 +99,6 @@ func add_recipes_diamond():
 	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Diamond/diamond_purpleskin_vest.tres"))
 	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Diamond/diamond_shafeek_boots.tres"))
 	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Diamond/diamond_shafeek_shield.tres"))
-
-func add_potions():
-	# -- COMMON
-	available_items["Acrid Potion"] = preload("res://Resources/Items/POTIONS/acrid_potion.tres")
-	available_items["Limbering Potion"] = preload("res://Resources/Items/POTIONS/limbering_potion.tres")
-	available_items["Vicious Potion"] = preload("res://Resources/Items/POTIONS/vicious_potion.tres")
-	available_items["Essence of Charcoal"] = preload("res://Resources/Items/POTIONS/essence_of_charcoal.tres")
-
-	# -- GOLDEN
-	available_items["Golden Acrid Potion"] = preload("res://Resources/Items/POTIONS/Golden/golden_acrid_potion.tres")
-	available_items["Golden Limbering Potion"] = preload("res://Resources/Items/POTIONS/Golden/golden_limbering_potion.tres")
-	available_items["Golden Vicious Potion"] = preload("res://Resources/Items/POTIONS/Golden/golden_vicious_potion.tres")
-	available_items["Golden Essence of Charcoal"] = preload("res://Resources/Items/POTIONS/Golden/golden_essence_of_charcoal.tres")
-
-	# -- DIAMOND
-	available_items["Diamond Acrid Potion"] = preload("res://Resources/Items/POTIONS/Diamond/diamond_acrid_potion.tres")
-	available_items["Diamond Limbering Potion"] = preload("res://Resources/Items/POTIONS/Diamond/diamond_limbering_potion.tres")
-	available_items["Diamond Vicious Potion"] = preload("res://Resources/Items/POTIONS/Diamond/diamond_vicious_potion.tres")
-	available_items["Diamond Essence of Charcoal"] = preload("res://Resources/Items/POTIONS/Diamond/diamond_essence_of_charcoal.tres")
-
-func add_bug_items():
-	# --- COMMON
-	available_items["Dark Crawler"] = preload("res://Resources/Items/BUGS/dark_crawler.tres")
-	available_items["Dew Fly"] = preload("res://Resources/Items/BUGS/dew_fly.tres")
-	available_items["Firefly"] = preload("res://Resources/Items/BUGS/firefly.tres")
-	available_items["Living Wood Termite"] = preload("res://Resources/Items/BUGS/living_wood_termite.tres")
-	available_items["Nimble Fly"] = preload("res://Resources/Items/BUGS/nimble_fly.tres")
-	available_items["Thorn Bug"] = preload("res://Resources/Items/BUGS/thorn_bug.tres")
-
-	# --- GOLDEN
-	available_items["Golden Dark Crawler"] = preload("res://Resources/Items/BUGS/GOLDEN/golden_dark_crawler.tres")
-	available_items["Golden Dew Fly"] = preload("res://Resources/Items/BUGS/GOLDEN/golden_dew_fly.tres")
-	available_items["Golden Firefly"] = preload("res://Resources/Items/BUGS/GOLDEN/golden_firefly.tres")
-	available_items["Golden Living Wood Termite"] = preload("res://Resources/Items/BUGS/GOLDEN/golden_living_wood_termite.tres")
-	available_items["Golden Nimble Fly"] = preload("res://Resources/Items/BUGS/GOLDEN/golden_nimble_fly.tres")
-	available_items["Golden Thorn Bug"] = preload("res://Resources/Items/BUGS/GOLDEN/golden_thorn_bug.tres")
-
-	# --- DIAMOND
-	available_items["Diamond Dark Crawler"] = preload("res://Resources/Items/BUGS/DIAMOND/diamond_dark_crawler.tres")
-	available_items["Diamond Dew Fly"] = preload("res://Resources/Items/BUGS/DIAMOND/diamond_dew_fly.tres")
-	available_items["Diamond Firefly"] = preload("res://Resources/Items/BUGS/DIAMOND/diamond_firefly.tres")
-	available_items["Diamond Living Wood Termite"] = preload("res://Resources/Items/BUGS/DIAMOND/diamond_living_wood_termite.tres")
-	available_items["Diamond Nimble Fly"] = preload("res://Resources/Items/BUGS/DIAMOND/diamond_nimble_fly.tres")
-	available_items["Diamond Thorn Bug"] = preload("res://Resources/Items/BUGS/DIAMOND/diamond_thorn_bug.tres")
-
 
 func can_craft_items(item1: Item, item2: Item) -> bool:
 	"""Check if two items can be crafted together"""
@@ -394,3 +268,80 @@ func load_from_save(save_data: Dictionary) -> void:
 			available_items[item_name] = item
 		else:
 			push_warning("Failed to load item at path: " + path)
+
+func get_item_by_id(item_id: String) -> Item:
+	for item_name in available_items:
+		var item = available_items[item_name]
+		if item.item_id == item_id:
+			return item
+	if available_items.has(item_id):
+		return available_items[item_id]
+	return null
+
+func _load_item_definitions(rarity: Enums.Rarity):
+	var item_dir = "res://Resources/Items/"
+	var rarity_dir: String = ""
+
+	match rarity:
+		Enums.Rarity.COMMON:
+			rarity_dir = "COMMON/"
+		Enums.Rarity.UNCOMMON:
+			rarity_dir = "UNCOMMON/"
+		Enums.Rarity.RARE:
+			rarity_dir = "RARE/"
+		Enums.Rarity.LEGENDARY:
+			rarity_dir = "LEGENDARY/"
+		Enums.Rarity.MYSTERIOUS:
+			rarity_dir = "MYSTERIOUS/"
+		Enums.Rarity.GOLDEN:
+			rarity_dir = "Golden/"
+		Enums.Rarity.DIAMOND:
+			rarity_dir = "Diamond/"
+		Enums.Rarity.CRAFTED:
+			rarity_dir = "CRAFTED/"
+		Enums.Rarity.UNIQUE:
+			rarity_dir = "UNIQUE/"
+
+	var dir = DirAccess.open(item_dir + rarity_dir)
+
+	if dir:
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		
+		while file_name != "":
+			if file_name.ends_with(".tres"):
+				var item_path = item_dir + rarity_dir + file_name
+				var item = load(item_path) as Item
+				
+				if item:
+					var key: String = file_name.replace(".tres", "")
+					item.item_id = key
+					available_items[key] = item
+					print("Loaded item: ", key)
+				else:
+					push_warning("Failed to load item: " + file_name)
+			
+			file_name = dir.get_next()
+		
+		dir.list_dir_end()
+	else:
+		push_error("Could not open item directory: " + item_dir + rarity_dir)
+
+func get_all_files_from_directory(path : String, file_ext:= "", files := []):
+	var resources = ResourceLoader.list_directory(path)
+	for res in resources:
+		print(str(path+res))
+		if res.ends_with("/"): 
+			# recursive for sub-directories
+			get_all_files_from_directory(path+res, file_ext, files)		
+		elif file_ext && res.ends_with(file_ext): 
+			files.append(path+res)
+			var item = load(path+res) as Item
+			if item:
+				var key: String = res.replace(".tres", "")
+				item.item_id = key
+				available_items[key] = item
+				print("Loaded item: ", key)
+			else:
+				push_warning("Failed to load item: " + res)	
+	return files

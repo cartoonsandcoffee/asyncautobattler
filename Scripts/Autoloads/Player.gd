@@ -4,10 +4,12 @@ signal player_died()
 
 signal inventory_updated(item: Item, slot_index: int)
 
+var player_uuid: String = ""
 var player_name: String = ""
 var stats: GameStats
 var status_effects: StatusEffects
 var inventory: Inventory
+var skin_id: int = 0
 
 # Entity state flags
 var is_player: bool = false
@@ -49,6 +51,19 @@ func new_run(nm: String):
 	if inventory:
 		set_test_inventory()
 
+	current_rank = 1
+	current_room = 1
+	rooms_cleared_this_run = 0
+	enemies_defeated_this_run = 0
+	gold_earned_this_run = 0
+	damage_dealt_this_run = 0
+	damage_taken_this_run = 0
+
+	# Run state tracking
+	run_start_time = 0.0
+	max_gold_this_run = 0
+	items_found_this_run = 0
+
 func set_test_inventory():
 	if !inventory:
 		return
@@ -57,15 +72,15 @@ func set_test_inventory():
 
 	# -- for testing basic rules
 
-	inventory.add_item(ItemsManager.available_items["Crude Blade"])
-	inventory.add_item(ItemsManager.available_items["Testing Relic"])
+	inventory.add_item(ItemsManager.available_items["crude_blade"])
+	inventory.add_item(ItemsManager.available_items["test_relic"])
+	inventory.add_item(ItemsManager.available_items["testing_boots"])
+	inventory.add_item(ItemsManager.available_items["testing_robes"])
 
 	#inventory.add_item(ItemsManager.available_items["Tower Shield"])
 	#inventory.add_item(ItemsManager.available_items["Fists"])
 	#inventory.add_item(ItemsManager.available_items["Liferoot Gauntlets"])
-	inventory.add_item(ItemsManager.available_items["Testing Boots"])
 	#inventory.add_item(ItemsManager.available_items["Testing Shield"])
-	inventory.add_item(ItemsManager.available_items["Testing Robes"])
 	#inventory.add_item(ItemsManager.available_items["Thorn Shield"])
 
 	# -- More complex set for testing detailed rules
@@ -133,3 +148,52 @@ func subtract_gold(value: int):
 		stats.stats_updated.emit()
 	else:	
 		return false
+
+func generate_or_load_uuid() -> String:
+	if player_uuid.is_empty():
+		# Simple approach: Use OS process ID + timestamp + random
+		var timestamp = Time.get_unix_time_from_system()
+		var random_part = randi() % 100000
+		
+		# Format as UUID-like string
+		player_uuid = "%08x-%04x-%04x-%04x-%012x" % [
+			OS.get_process_id(),
+			int(timestamp) % 65536,
+			4096 + (randi() % 4096),  # Version 4
+			32768 + (randi() % 16384),  # Variant
+			random_part
+		]
+		
+		print("[Player] Generated UUID: %s" % player_uuid)
+	return player_uuid
+
+func to_boss_data() -> Dictionary:
+	return {
+		"player_id": generate_or_load_uuid(),
+		"username": player_name,
+		"skin_id": skin_id,
+		"rank": DungeonManager.current_rank,
+		"max_hp": stats.hit_points,
+		"curr_hp": stats.hit_points_current,
+		"base_damage": stats.damage,
+		"shield": stats.shield,
+		"agility": stats.agility,
+		"strikes": stats.strikes,
+		"burn_damage": stats.burn_damage,
+		"gold": stats.gold,
+		"inventory": _serialize_inventory(),
+		"weapon": _serialize_weapon()
+	}
+
+func _serialize_inventory() -> Array:
+	var inv = []
+	for i in range(inventory.item_slots.size()):
+		var item = inventory.item_slots[i]
+		if item and not item.item_id.is_empty():
+			inv.append({"id": item.item_id, "slot": i, "name": item.item_name})
+	return inv
+
+func _serialize_weapon() -> Dictionary:
+	if inventory.weapon_slot and not inventory.weapon_slot.item_id.is_empty():
+		return {"id": inventory.weapon_slot.item_id, "name": inventory.weapon_slot.item_name}
+	return {}

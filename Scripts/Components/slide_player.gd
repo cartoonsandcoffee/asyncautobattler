@@ -2,12 +2,12 @@ extends Control
 
 signal close_slideshow()
 
-@onready var lbl_header: Label = $slideContainer/NinePatchRect/MarginContainer/VBoxContainer/lblTitle
-@onready var pic: TextureRect = $slideContainer/NinePatchRect/MarginContainer/VBoxContainer/pic
-@onready var txt_main: RichTextLabel = $slideContainer/NinePatchRect/MarginContainer/VBoxContainer/ColorRect/MarginContainer/txtMain
-@onready var btn_close: Button = $slideContainer/NinePatchRect/MarginContainer/VBoxContainer/HBoxContainer/MarginContainer/btnClose
-@onready var btn_next: Button = $slideContainer/NinePatchRect/MarginContainer/VBoxContainer/HBoxContainer/MarginContainer3/btnNext
-@onready var btn_back: Button = $slideContainer/NinePatchRect/MarginContainer/VBoxContainer/HBoxContainer/MarginContainer2/btnBack
+@onready var lbl_header: Label = $slideContainer/panelBlack/paneBorder/VBoxContainer/lblTitle
+@onready var pic: TextureRect = $slideContainer/panelBlack/paneBorder/VBoxContainer/pic
+@onready var txt_main: RichTextLabel = $slideContainer/panelBlack/paneBorder/VBoxContainer/ColorRect/MarginContainer/txtMain
+@onready var btn_close: Button = $slideContainer/panelBlack/paneBorder/VBoxContainer/HBoxContainer/MarginContainer/btnClose
+@onready var btn_next: Button = $slideContainer/panelBlack/paneBorder/VBoxContainer/HBoxContainer/MarginContainer3/btnNext
+@onready var btn_back: Button = $slideContainer/panelBlack/paneBorder/VBoxContainer/HBoxContainer/MarginContainer2/btnBack
 
 @export var slideshow: SlideShow = null
 

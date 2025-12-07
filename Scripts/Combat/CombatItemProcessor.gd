@@ -75,10 +75,12 @@ func process_items_with_status(entity, trigger_type: Enums.TriggerType, trigger_
 func collect_triggered_items(entity, trigger_type: Enums.TriggerType, trigger_stat = Enums.Stats.NONE, stat_change_amount: int = 0) -> Array:
 	# Collect all items/rules that match the given trigger type and optional stat.
 	# Returns array of {item, rule, slot_index} dictionaries.
-
+	# UPDATED: Now handles both Player and Enemy inventory systems.
+	
 	var items_to_proc = []
 	
-	if entity == combat_manager.player_entity:
+	# UNIVERSAL INVENTORY CHECK - Works for both Player and Enemy
+	if "inventory" in entity and entity.inventory:
 		# Check weapon first
 		if entity.inventory.weapon_slot:
 			for rule in entity.inventory.weapon_slot.rules:
@@ -122,8 +124,9 @@ func collect_triggered_items(entity, trigger_type: Enums.TriggerType, trigger_st
 								"slot_index": i
 							})
 	
-	else:  # Enemy entity
-		# Check enemy abilities
+	# FALLBACK: Old enemy ability system (for backwards compatibility)
+	elif "abilities" in entity and entity.abilities:
+		print("[CombatItemProcessor] WARNING: Enemy using old ability system instead of inventory")
 		for ability in entity.abilities:
 			if ability:
 				for rule in ability.rules:
@@ -134,7 +137,7 @@ func collect_triggered_items(entity, trigger_type: Enums.TriggerType, trigger_st
 									items_to_proc.append({
 										"item": ability,
 										"rule": rule,
-										"slot_index": -2  # -2 indicates enemy ability
+										"slot_index": -2  # -2 indicates enemy ability (legacy)
 									})
 						else:
 							items_to_proc.append({
@@ -144,17 +147,20 @@ func collect_triggered_items(entity, trigger_type: Enums.TriggerType, trigger_st
 							})
 	
 	# Sort by trigger_priority (higher = earlier)
-	#items_to_proc.sort_custom(func(a, b): return a.item.trigger_priority > b.item.trigger_priority)
+	# Uncomment if you want priority sorting:
+	# items_to_proc.sort_custom(func(a, b): return a.item.trigger_priority > b.item.trigger_priority)
 	
 	return items_to_proc
 
 func collect_triggered_items_with_status(entity, trigger_type: Enums.TriggerType, trigger_status: Enums.StatusEffects, status_change_amount: int = 0) -> Array:
 	# Collect items that trigger based on status effects.
 	# Similar to collect_triggered_items but filters by status instead of stat.
-
+	# UPDATED: Now handles both Player and Enemy inventory systems.
+	
 	var items_to_proc = []
 	
-	if entity == combat_manager.player_entity:
+	# UNIVERSAL INVENTORY CHECK - Works for both Player and Enemy
+	if "inventory" in entity and entity.inventory:
 		# Check weapon
 		if entity.inventory.weapon_slot:
 			for rule in entity.inventory.weapon_slot.rules:
@@ -197,7 +203,9 @@ func collect_triggered_items_with_status(entity, trigger_type: Enums.TriggerType
 								"slot_index": i
 							})
 	
-	else:  # Enemy
+	# FALLBACK: Old enemy ability system
+	elif "abilities" in entity and entity.abilities:
+		print("[CombatItemProcessor] WARNING: Enemy using old ability system instead of inventory")
 		for ability in entity.abilities:
 			if ability:
 				for rule in ability.rules:
@@ -216,8 +224,6 @@ func collect_triggered_items_with_status(entity, trigger_type: Enums.TriggerType
 								"rule": rule,
 								"slot_index": -2
 							})
-	
-	#items_to_proc.sort_custom(func(a, b): return a.item.trigger_priority > b.item.trigger_priority)
 	
 	return items_to_proc
 
@@ -285,20 +291,23 @@ func get_occurrence_count(entity, item: Item, trigger_type: Enums.TriggerType) -
 	return occurrence_counters[entity][trigger_type][item]
 
 func reset_occurrence_counters_per_turn(entity):
-	# Reset occurrence counters for items with occurrence_resets_per_turn = true.
+	#Reset occurrence counters for items with occurrence_resets_per_turn = true.
 	# Called at the start of each turn.
-
-	if entity == combat_manager.player_entity:
+	# UPDATED: Now handles both Player and Enemy inventory systems.
+	
+	# UNIVERSAL INVENTORY CHECK
+	if "inventory" in entity and entity.inventory:
 		# Check weapon
 		if entity.inventory.weapon_slot and entity.inventory.weapon_slot.occurrence_resets_per_turn:
 			_reset_item_occurrences(entity, entity.inventory.weapon_slot)
 		
-		# Check inventory
+		# Check inventory items
 		for item in entity.inventory.item_slots:
 			if item and item.occurrence_resets_per_turn:
 				_reset_item_occurrences(entity, item)
 	
-	else:  # Enemy
+	# FALLBACK: Old enemy ability system
+	elif "abilities" in entity and entity.abilities:
 		for ability in entity.abilities:
 			if ability and ability.occurrence_resets_per_turn:
 				_reset_item_occurrences(entity, ability)
@@ -353,23 +362,23 @@ func reset_per_turn_items(entity):
 func count_items_with_category(entity, category: String) -> int:
 	# Count how many items the entity has with a specific category.
 	# Used for repeat_rules_for_category calculations.
-
+	# UPDATED: Now handles both Player and Enemy inventory systems.
+	
 	var count = 0
 	
-	if entity == combat_manager.player_entity:
+	# UNIVERSAL INVENTORY CHECK
+	if "inventory" in entity and entity.inventory:
 		# Check weapon
 		if entity.inventory.weapon_slot:
 			if category in entity.inventory.weapon_slot.categories:
 				count += 1
 		
-		# Check inventory
+		# Check inventory items
 		for item in entity.inventory.item_slots:
 			if item:
 				if category in item.categories:
 					count += 1
 	
-	else:  # Enemy
-		# Enemies don't have categories on abilities (yet)
-		pass
+	# Note: Old enemy abilities don't have categories
 	
 	return count

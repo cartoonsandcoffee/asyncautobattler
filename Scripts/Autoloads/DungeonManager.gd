@@ -3,7 +3,7 @@ extends Node
 signal show_minimap()
 signal room_transition_requested(room_data: RoomData)
 signal minimap_update_requested()
-
+signal boss_loaded(boss: Enemy)            # Emitted when boss fetched for rank
 
 # ============ ADVANCED DISTRIBUTION RULES ============
 
@@ -57,7 +57,7 @@ const RARITY_WEIGHTS_BY_RANK: Dictionary = {
 # Utility subtype tracking (for "max 1 of each COMMON utility type")
 var used_utility_subtypes: Dictionary = {}
 
-
+const TESTING_BOSS_AT_ROOM_3 = false  # Set to false to disable testing mode
 const ROOMS_PER_RANK = 10
 const BOSS_ROOM_INDEX = 10  # Boss is last room
 
@@ -69,6 +69,8 @@ var all_visited_rooms: Array[RoomData] = []
 var current_rank_rooms: Array[RoomData] = []  # Predetermined rooms for this rank
 
 var pending_room_data: RoomData = null  # For future hallway→room transition (not used yet)
+var current_boss_data: Dictionary = {}     # Raw opponent data from Supabase
+var current_boss_enemy: Enemy = null       # Enemy object for combat
 
 func generate_starter_room() -> RoomData:
 	var starter_def = RoomRegistry.get_room_definition("starter")
@@ -117,17 +119,79 @@ func generate_rank_rooms():
 		if room_data:
 			assign_combat_to_room(room_data)
 	
+	# TESTING: Force boss room at position 3 (index 2)
+	if TESTING_BOSS_AT_ROOM_3:
+		print("[DungeonManager] TESTING MODE: Injecting boss room at position 3")
+		var boss_room = get_boss_room()
+		if boss_room:
+			current_rank_rooms[2] = boss_room  # Position 3 (0-indexed)
+			print("[DungeonManager] Boss room injected successfully")
+
+		# Fetch boss for this rank
+	await _fetch_and_create_boss()
+	# -------------------------	
+
 	# Verify no null rooms remain
 	var null_count = 0
 	for room_data in current_rank_rooms:
 		if room_data == null:
 			null_count += 1
-	
+
 	if null_count > 0:
 		push_error("generate_rank_rooms() left %d null rooms!" % null_count)
 	
 	print("[DungeonManager] Generated %d rooms for rank %d" % [current_rank_rooms.size(), current_rank])
 	minimap_update_requested.emit()
+
+
+func _fetch_and_create_boss():
+	"""Fetch opponent from Supabase and create boss enemy for this rank."""
+	print("[DungeonManager] Fetching boss for rank %d..." % current_rank)
+	
+	# Check if SupabaseManager exists
+	if not has_node("/root/SupabaseManager"):
+		push_warning("[DungeonManager] SupabaseManager not found, using fallback boss")
+		current_boss_enemy = BossHandler.get_fallback_boss(current_rank)
+		boss_loaded.emit(current_boss_enemy)
+		return
+	
+	# Fetch opponent data
+	var player_id = Player.generate_or_load_uuid()
+	current_boss_data = await SupabaseManager.fetch_opponent_for_rank(current_rank, player_id)
+	
+	# Create boss enemy
+	if current_boss_data.is_empty():
+		print("[DungeonManager] No opponents found, using fallback boss")
+		current_boss_enemy = BossHandler.get_fallback_boss(current_rank)
+	else:
+		print("[DungeonManager] Boss data fetched: %s" % current_boss_data.get("username", "Unknown"))
+		current_boss_enemy = BossHandler.create_boss_enemy(current_boss_data)
+		
+	if not current_boss_enemy:
+		push_error("[DungeonManager] Boss creation failed! Boss will be null.")
+		return
+
+	print("[DungeonManager] Boss ready: %s (HP: %d, Items: %d)" % [
+		current_boss_enemy.enemy_name,
+		current_boss_enemy.stats.hit_points,
+		_count_boss_items()
+	])
+	
+	# Emit signal for map zoom panel to update
+	boss_loaded.emit(current_boss_enemy)
+
+func _count_boss_items() -> int:
+	"""Helper to count boss items for debug output."""
+	if not current_boss_enemy or not current_boss_enemy.inventory:
+		return 0
+	
+	var count = 0
+	if current_boss_enemy.inventory.weapon_slot:
+		count += 1
+	for item in current_boss_enemy.inventory.item_slots:
+		if item:
+			count += 1
+	return count
 
 func assign_combat_to_room(room_data: RoomData):
 	# Determine if this room instance will have combat
@@ -179,6 +243,7 @@ func get_boss_room() -> RoomData:
 		var boss_room = RoomData.new()
 		boss_room.room_definition = boss_def
 		boss_room.chosen_event_scene = boss_def.get_random_event()
+		boss_room.has_combat_this_instance = true  # Boss always has combat
 		return boss_room
 	return null
 	
@@ -198,17 +263,46 @@ func advance_room():
 	print("Advanced to room %d/%d (rank %d)" % [current_room_index + 1, ROOMS_PER_RANK, current_rank])
 
 func advance_rank():
-	# Move to next rank
 	current_rank += 1
 	current_room_index = 0
 	rooms_cleared_this_rank = 0
-	all_visited_rooms.clear()  # Or keep for history
 	
-	# Generate new rooms for new rank
+	# Increase inventory size: +2 slots per rank (4→6→8→10→12)
+	var current_size = Player.inventory.max_item_slots
+	Player.inventory.set_inventory_size(current_size + 2)
+	print("[DungeonManager] Rank %d! Inventory expanded to %d slots" % [
+		current_rank, 
+		Player.inventory.max_item_slots
+	])
+	
+	# Clear old boss data
+	current_boss_data = {}
+	current_boss_enemy = null
+	
+	# Generate new rank (includes fetching new boss)
 	generate_rank_rooms()
 	
+	# Update UI
 	minimap_update_requested.emit()
-	print("Advanced to Rank %d" % current_rank)
+	
+	# Load first room of new rank
+	_load_first_room()
+
+func _load_first_room():
+	"""Load the first room after rank advancement."""
+	var first_room = get_current_room()
+	if first_room:
+		# Signal main game to load this room
+		# TODO: How does main_game know to load this room?
+		# Option A: Emit signal that main_game connects to
+		# Option B: main_game calls this function and gets the room
+		# For now, just log:
+		print("[DungeonManager] First room of rank %d ready: %s" % [
+			current_rank,
+			first_room.room_definition.room_name
+		])
+	else:
+		push_error("[DungeonManager] Failed to get first room for rank %d!" % current_rank)
 
 func get_room_type_display_name(room_data: RoomData) -> String:
 	if room_data.room_definition:

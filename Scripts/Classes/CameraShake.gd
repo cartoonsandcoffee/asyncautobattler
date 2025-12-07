@@ -1,69 +1,52 @@
 extends Node
 
-var shake_strength: float = 0.0
-var shake_time: float = 0.0
+var trauma: float = 0.0
+var trauma_power: int = 2
+var decay: float = 1.0  # Trauma reduction per second
+var max_offset: float = 100.0
+var max_rotation: float = 10.0
 
-var rng = RandomNumberGenerator.new()
+var noise: FastNoiseLite
+var noise_speed: float = 50.0
+var time: float = 0.0
 
-var camera: Camera2D
+@onready var ui_root: Control  # Assign in _ready()
 
 func _ready():
-	# Set process to always run (autoload behavior)
-	set_process(true)
+	# Get reference to main UI container
+	#ui_root = get_tree().root.get_node(".")
+	# Or however your scene is structured
 	
-	# Try to find camera immediately
-	call_deferred("_initial_camera_check")
+	# Setup noise for smooth shake
+	noise = FastNoiseLite.new()
+	noise.seed = randi()
+	noise.frequency = 0.5
 
-func _initial_camera_check():
-	refresh_camera()
+func _process(delta):
+	if trauma > 0:
+		time += delta
+		trauma = max(trauma - decay * delta, 0)
+		_apply_shake()
+	elif ui_root and ui_root.position != Vector2.ZERO:
+		# Reset position when shake ends
+		ui_root.position = Vector2.ZERO
+		ui_root.rotation = 0
 
-func _process(delta: float):
-	# Get current camera if we don't have one or if scene changed
-	if not is_instance_valid(camera):
-		refresh_camera()
+func add_trauma(amount: float):
+	"""Add trauma for screen shake. Value from 0-1."""
+	trauma = min(trauma + amount, 1.0)
+
+func _apply_shake():
+	if not ui_root:
+		return
 	
-	if shake_strength > 0:
-		# Reduce trauma over time
-		shake_strength = lerpf(shake_strength, 0, shake_time * delta)
-		camera.offset = random_offset()
-
-func random_offset() -> Vector2:
-	return Vector2(rng.randf_range(-shake_strength,shake_strength),rng.randf_range(-shake_strength,shake_strength))
-
-
-## Preset shake intensities for common use cases
-func shake_light():
-	shake_strength = 30.0
-	shake_time = 5.0
-
-func shake_medium():
-	shake_strength = 60.0
-	shake_time = 4.0
-
-func shake_heavy():
-	shake_strength = 120.0
-	shake_time = 3.0
-
-func shake_extreme():
-	shake_strength = 150.0
-	shake_time = 2.0
-
-## Custom shake with specific parameters
-func shake_custom(intensity: float, duration: float = 1.0):
-	shake_strength = intensity
-	shake_time = duration
-
-
-## Refresh camera reference (useful after scene changes)
-func refresh_camera():
-	camera = get_viewport().get_camera_2d()
-
-	if camera:
-		var viewport_size = get_viewport().size
-		
-		# Center the camera on the viewport
-		# Position the camera at half the viewport size
-		camera.global_position = viewport_size / 2
-		
-		# Reset offset to zero (screen shake will use this)
-		camera.offset = Vector2.ZERO
+	var shake_amount = pow(trauma, trauma_power)
+	
+	# Get noise values for smooth shake
+	var offset_x = noise.get_noise_2d(time * noise_speed, 0) * max_offset * shake_amount
+	var offset_y = noise.get_noise_2d(0, time * noise_speed) * max_offset * shake_amount
+	var rotation = noise.get_noise_2d(time * noise_speed, time * noise_speed) * max_rotation * shake_amount
+	
+	# Apply to UI root
+	ui_root.position = Vector2(offset_x, offset_y)
+	ui_root.rotation_degrees = rotation

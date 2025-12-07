@@ -189,6 +189,8 @@ func _on_button_mouse_exited() -> void:
 
 func _on_button_mouse_entered() -> void:
 	if !button.disabled:
+		if current_item && !is_dragging:  # Only if slot has item
+			AudioManager.play_ui_sound("item_hover")
 		anim_hover.play("hover")
 		show_tooltip()
 
@@ -203,12 +205,14 @@ func _on_button_down():
 	if current_item:
 		is_dragging = true
 		drag_started.emit(self)
+		AudioManager.play_ui_sound("item_pickup")
 		modulate.a = 0.5  # Make semi-transparent while dragging
 
 func _on_button_up():
 	if is_dragging:
 		is_dragging = false
 		drag_ended.emit(self)
+		AudioManager.play_ui_sound("item_drop")
 		modulate.a = 1.0
 
 func _on_button_pressed():
@@ -217,6 +221,8 @@ func _on_button_pressed():
 	
 	if CombatManager.combat_active:
 		return false  # Disable dropping during combat
+
+
 
 	if click_count == 1:
 		# Start timer for potential double-click

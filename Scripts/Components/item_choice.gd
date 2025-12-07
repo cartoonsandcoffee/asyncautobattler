@@ -167,6 +167,8 @@ func _on_button_mouse_exited() -> void:
 	panel_border.modulate = Color.WHITE
 
 func _on_button_mouse_entered() -> void:
+	if current_item:  # Only if slot has item
+		AudioManager.play_ui_sound("item_hover")	
 	if !button.disabled:
 		anim_hover.play("hover")
 		tooltip_panel.visible = true
@@ -174,6 +176,9 @@ func _on_button_mouse_entered() -> void:
 func _on_button_pressed() -> void:
 	if has_been_selected:
 		return
+
+	if current_item:  # Only if slot has item
+		AudioManager.play_ui_sound("item_pickup")
 
 	has_been_selected = true
 	button.disabled = true
