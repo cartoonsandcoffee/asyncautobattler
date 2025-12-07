@@ -23,7 +23,7 @@ enum ItemType {
 	JEWELRY
 }
 
-
+@export var item_id: String = ""
 @export var item_name: String = ""
 @export var item_type: ItemType = ItemType.WEAPON
 @export_multiline var item_desc: String = ""

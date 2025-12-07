@@ -20,6 +20,7 @@ extends Resource
 @export var door_texture: Texture2D
 @export var room_icon: Texture2D  # abstract icon type for minimap
 @export var room_color: Color = Color.WHITE
+@export var music_override: AudioStream 
 
 @export_group("Combat")
 @export var can_have_random_combat: bool = false:

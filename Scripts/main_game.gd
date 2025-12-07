@@ -28,9 +28,12 @@ extends Control
 @onready var drop_panel: Panel = $DropItemPanel
 @onready var drop_item: ItemSlot = $DropItemPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/itemBox/ItemDrop
 
+@onready var anim_promotion: AnimationPlayer  = $animPromotion
 @onready var anim_tools: AnimationPlayer = $animToolbars
 @onready var anim_fade: AnimationPlayer = $animFade
 @onready var fade_overlay: ColorRect = $FadeOverlay
+
+@onready var crt_shader: CanvasLayer = $CRT_Shader
 
 # Mini-map stuff
 @onready var minimap: Minimap = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap
@@ -97,6 +100,13 @@ func _ready():
 		btn_continue.disabled = true
 		btn_continue.visible = false 
 
+	# CRT SHADER SETTING
+	if GameSettings.crt_effect_enabled:
+		crt_shader.visible = true
+	else:
+		crt_shader.visible = false
+
+
 	# -- Add Map Zoom Panel
 	zoom_panel = MapZoomPanel.new()
 	zoom_panel = zoom_panel_scene.instantiate()
@@ -105,7 +115,13 @@ func _ready():
 	zoom_panel.boss_rush_pressed.connect(_on_boss_rush_pressed)
 
 	create_test_player()
+	await _ensure_player_profile()
+
 	load_starting_room()
+
+	#AUDIO
+	var dungeon_ambient = load("res://Assets/Audio/Music/Ambience 01.mp3")
+	AudioManager.play_ambient(dungeon_ambient, true)
 
 	set_process_input(true) # for drag preview
 	
@@ -201,9 +217,56 @@ func _on_event_completed():
 		# Show doors (normal + shortcuts)
 		show_doors_with_shortcuts(shortcuts)
 
+func _handle_boss_victory():
+	# Handle rank advancement after boss victory.
+	print("[MainGame] Boss defeated! Starting rank advancement sequence")
+	
+	# 1. Play staircase animation (comic-book panel of player ascending)
+	await _play_staircase_animation()
+	
+	# 2. Advance rank (increases inventory, fetches new boss, generates rooms)
+	DungeonManager.advance_rank()
+	
+	# 3. Load first room of new rank
+	var first_room = DungeonManager.get_current_room()
+	if first_room:
+		print("[MainGame] Loading first room of rank %d" % DungeonManager.current_rank)
+		
+		# Fade transition
+		anim_fade.play("fade_out")
+		var anim_length = anim_fade.get_animation("fade_out").length
+		await CombatSpeed.create_timer(anim_length)
+		
+		load_room(first_room)
+		fade_overlay.visible = false
+	else:
+		push_error("[MainGame] Failed to load first room of new rank!")
+
+func _play_staircase_animation():
+	if anim_promotion:
+		print("[MainGame] Playing staircase animation")
+		anim_promotion.play("ascend_stairs")
+		await anim_promotion.animation_finished
+	else:
+		# No animation - brief delay for testing
+		print("[MainGame] No staircase animation - using brief delay")
+		await get_tree().create_timer(1.5).timeout
+
 func _on_continue_pressed():
 	hide_continue_button()
+
+	# Check if we just completed a boss room
+	var current_room = DungeonManager.current_rank_rooms[DungeonManager.current_room_index]
+	var is_boss_room = false
 	
+	if current_room and current_room.room_definition:
+		is_boss_room = current_room.room_definition.room_type == Enums.RoomType.BOSS
+	
+	if is_boss_room:
+		# Boss victory - play staircase animation and advance rank
+		await _handle_boss_victory()
+		return
+
 	# Advance to next room in sequence
 	DungeonManager.advance_room()
 	
@@ -222,7 +285,11 @@ func _on_continue_pressed():
 		anim_fade.play("fade_out")
 		var anim_length = anim_fade.get_animation("fade_out").length
 		await CombatSpeed.create_timer(anim_length)
-		
+
+		# Clear any old doors
+		for child in door_container.get_children():
+			child.queue_free()
+
 		load_room(next_room)
 		fade_overlay.visible = false
 	else:
@@ -633,12 +700,14 @@ func is_in_replacement_mode() -> bool:
 func _on_combat_started_for_ui(player, enemy):
 	is_in_combat = true
 	set_player_stats()  # Refresh to show current values
+	AudioManager.on_combat_started(enemy.enemy_type == Enemy.EnemyType.BOSS_PLAYER)	
 
 func _on_combat_ended_for_ui(winner, loser):
 	is_in_combat = false
 	# Stats will reset to base values, so refresh display
 	await get_tree().process_frame  # Wait for stats to reset
 	set_player_stats()
+	AudioManager.on_combat_ended()
 
 func _on_combat_stat_changed(entity, stat: Enums.Stats, old_value: int, new_value: int):
 	# Only update if the change affects the player
@@ -692,3 +761,106 @@ func show_boss_panel():
 	# Placeholder for boss room panel
 	print("Boss room clicked - panel coming soon")
 	# TODO: Create and show boss info panel with "Rush" button
+
+func _ensure_player_profile():
+	#Create player profile if it doesn't exist.
+	# JDM: Move this to the main menu scene to avoid that weird delay at game start
+
+	var player_id = Player.generate_or_load_uuid()
+	var username = Player.player_name 
+	
+	print("[Game] Ensuring player profile exists...")
+	var profile = await SupabaseManager.get_or_create_player(player_id, username)
+	
+	if profile.is_empty():
+		push_warning("[Game] Failed to create player profile!")
+	else:
+		print("[Game] - Player profile ready: %s" % profile.get("username"))
+
+## === AUDIO FUNCTIONS
+func play_popup_open_sfx():
+	AudioManager.play_synced_sound("popup_open")
+
+func play_popup_close_sfx():
+	AudioManager.play_synced_sound("popup_close")
+
+## =============================================================================
+## RESET FUNCTIONS
+## =============================================================================
+
+func reset_player_for_new_run():
+	"""Reset player to starting state for new run."""
+	print("[MainGame] Resetting player state...")
+	
+	Player.new_run(Player.player_name)
+
+	# Reset inventory size to starting value (4 slots)
+	#Player.inventory.set_inventory_size(4)
+	
+	# Clear all items from inventory
+	#Player.inventory.clear_all_items()
+	
+	# Reset stats to base values
+	#Player.stats.reset_base_stats()
+	#Player.stats.reset_to_base_values()
+
+	# Clear status effects
+	#if Player.status_effects:
+	#	Player.status_effects.clear_all_statuses()
+	
+	# Reset gold (if you have it)
+	#if Player.stats.has("gold"):
+	#	Player.stats.gold = 0
+	#	Player.stats.gold_current = 0
+	
+	# Keep player UUID and username (same account)
+	# Don't reset: Player.player_uuid, Player.username
+	
+	print("[MainGame] Player reset complete")
+
+func reset_dungeon_for_new_run():
+	"""Reset dungeon manager to rank 1."""
+	print("[MainGame] Resetting dungeon state...")
+	
+	# Reset to rank 1
+	DungeonManager.current_rank = 1
+	DungeonManager.current_room_index = 0
+	DungeonManager.rooms_cleared_this_rank = 0
+	
+	# Clear current rooms
+	DungeonManager.current_rank_rooms.clear()
+	DungeonManager.all_visited_rooms.clear()
+
+	# Clear boss data
+	DungeonManager.current_boss_data = {}
+	DungeonManager.current_boss_enemy = null
+	
+	# Generate fresh rank 1 rooms
+	DungeonManager.generate_rank_rooms()
+	
+	# Update minimap
+	DungeonManager.minimap_update_requested.emit()
+	
+	print("[MainGame] Dungeon reset to Rank 1")
+
+func screen_shake(intensity: float = 10.0, duration: float = 0.5):
+	"""Shake the entire UI root instead of camera."""
+	var ui_root = get_node(".")  # Your main UI container
+	
+	if not ui_root:
+		return
+	
+	var original_position = ui_root.position
+	var shake_tween = create_tween()
+	
+	# Shake effect
+	var shake_count = int(duration * 60)  # 60 fps
+	for i in shake_count:
+		var offset = Vector2(
+			randf_range(-intensity, intensity),
+			randf_range(-intensity, intensity)
+		)
+		shake_tween.tween_property(ui_root, "position", original_position + offset, 0.016)
+	
+	# Return to original position
+	shake_tween.tween_property(ui_root, "position", original_position, 0.1)

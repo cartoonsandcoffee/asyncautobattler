@@ -23,7 +23,14 @@ func _ready():
 	main_game_ref = get_tree().get_root().get_node_or_null("MainGame")
 	if not main_game_ref:
 		push_error("RoomEvent: Could not find MainGame node!")
-	
+
+	# Check for music override
+	if room_data and room_data.room_definition:
+		# Play room music if set
+		var music = room_data.room_definition.music_override
+		if music:
+			AudioManager.on_room_entered(music)
+				
 	# Start the event sequence
 	_begin_event_sequence()
 
@@ -77,6 +84,7 @@ func _begin_event_sequence():
 	await _run_room_event()
 	
 func complete_event():
+	AudioManager.clear_room_override()
 	event_completed.emit()
 
 

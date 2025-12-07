@@ -10,17 +10,71 @@ extends RoomEvent
 @onready var anim_old_man: AnimationPlayer = $animOldMan
 @onready var anim_box: AnimationPlayer = $animBox
 @onready var anim_starter: AnimationPlayer = $animStarter
+@onready var anim_opening: AnimationPlayer = $animOpening
+@onready var lbl_opening: RichTextLabel = $picOpening/lblOpening
 
 var item_choice_scene = preload("res://Scenes/item_choice.tscn")
 var offered_items: Array[Item] = []
 var items_offered: int = 3
 
-
+var msg_speed: float = 0.75
+var show_opening: bool = false
+var current_panel: int = 0
+var total_panels: int = 4
 
 func initialize_event():
 	slideshow_player.close_slideshow.connect(_close_slideshow)
-	anim_starter.play("open_slideshow")
+	#anim_starter.play("open_slideshow")
+	
+	start_intro_movie()
+
 	generate_item_choices()
+
+func start_intro_movie():
+	lbl_opening.text = ""
+	lbl_opening.visible_ratio = 0
+	current_panel = 1
+	
+	show_opening = true
+	anim_opening.play("opening_show_panel_1")
+
+func _process(delta: float) -> void:
+	if show_opening:
+		if lbl_opening.visible_ratio < 1:
+			lbl_opening.visible_ratio += msg_speed * delta
+
+func show_text_panel_1():
+	lbl_opening.visible_ratio = 0
+	AudioManager.play_synced_sound("text_type")	
+	lbl_opening.text = "Can you remember how you got here?"
+
+func show_panel_2():
+	current_panel = 2
+	anim_opening.play("opening_show_panel_2")
+	await CombatSpeed.create_timer(0.5)
+	lbl_opening.visible_ratio = 0
+	AudioManager.play_synced_sound("text_type")	
+	lbl_opening.text = "Before your mind is lost to madness..."
+
+func show_panel_3():
+	current_panel = 3
+	anim_opening.play("opening_show_panel_3")
+	await CombatSpeed.create_timer(0.5)
+	lbl_opening.visible_ratio = 0
+	AudioManager.play_synced_sound("text_type")	
+	lbl_opening.text = "Suddenly, opportunity..."
+
+func show_panel_4():
+	current_panel = 4
+	anim_opening.play("opening_show_panel_4")
+	await CombatSpeed.create_timer(0.5)
+	lbl_opening.visible_ratio = 0
+	AudioManager.play_synced_sound("text_type")	
+	lbl_opening.text = "Is escape even possible? Or will you lose yourself to their will."
+
+func finish_opening():
+	show_opening = false
+	anim_opening.play("opening_close")
 
 
 func start_old_man():

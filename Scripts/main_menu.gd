@@ -6,6 +6,7 @@ extends Control
 @onready var txt_name: TextEdit = $Panel/panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/txtName
 @onready var btn_name: Button = $Panel/panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/btnName
 @onready var panel_name: Panel = $Panel/panelName
+@onready var settings_panel = $Panel/SettingsPanel
 
 const GAME_SCENE = preload("res://Scenes/main_game.tscn")
 var good_name: bool = false
@@ -13,20 +14,28 @@ var good_name: bool = false
 func _ready() -> void:
 	if not SaveManager.save_exists():
 		btn_continue.disabled = true
+	_setup_button_audio()
+	
+	AudioManager.play_general_music()
+
 
 func _on_btn_quit_pressed() -> void:
+	AudioManager.play_ui_sound("button_click")
 	get_tree().quit()
 
 
 func _on_btn_new_game_pressed() -> void:
+	AudioManager.play_ui_sound("button_click")
 	animation_player.play("namebox_flyin")
 	#get_tree().change_scene_to_packed(GAME_SCENE)
 
 func _on_btn_continue_pressed() -> void:
+	AudioManager.play_ui_sound("button_click")
 	pass # Replace with function body.
 
 
 func _on_btn_name_pressed() -> void:
+	AudioManager.play_ui_sound("button_click")
 	Player.new_run(txt_name.text)
 	get_tree().change_scene_to_packed(GAME_SCENE)
 
@@ -58,3 +67,40 @@ func _on_txt_name_text_changed() -> void:
 		txt_name.text = filtered_text
 		txt_name.set_caret_column(min(caret_column, txt_name.text.length())) # Adjust caret position
 		txt_name.set_caret_line(caret_line)
+
+
+func _on_btn_settings_pressed() -> void:
+	AudioManager.play_ui_sound("button_click")
+	if settings_panel:
+		settings_panel.show_panel()
+	else:
+		push_warning("[MainMenu] Settings panel not found!")
+
+func _setup_button_audio():
+	# Automatically add audio to all buttons in scene tree.
+	for button in _get_all_buttons(self):
+		# Connect hover
+		if not button.mouse_entered.is_connected(_on_button_hover):
+			button.mouse_entered.connect(_on_button_hover.bind(button))
+
+func _get_all_buttons(node: Node) -> Array[Button]:
+	# Recursively find all buttons in tree.
+	var buttons: Array[Button] = []
+	
+	if node is Button:
+		buttons.append(node)
+	
+	for child in node.get_children():
+		buttons.append_array(_get_all_buttons(child))
+	
+	return buttons	
+
+func _on_button_hover(button: Button):
+	if not button.disabled:
+		AudioManager.play_ui_sound("button_hover")
+
+func play_popup_open_sfx():
+	AudioManager.play_synced_sound("popup_open")
+
+func play_popup_close_sfx():
+	AudioManager.play_synced_sound("popup_close")

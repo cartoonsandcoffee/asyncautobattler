@@ -36,9 +36,15 @@ enum PanelState {
 @onready var enemy_agility_stat: StatBoxDisplay = $CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/statsContainer/statAgility
 @onready var stat_container: PanelContainer = $CombatPanelTop/PanelContainer
 
+@onready var enemy_weapon_slot: ItemSlot = $CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyInventory/Weapon
+@onready var enemy_item_grid: GridContainer = $CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyInventory/InventorySlots/ItemSlots
+@onready var enemy_inventory: HBoxContainer = $CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyInventory
+
+
 # Status Effect Boxes
 @onready var player_status_container: HBoxContainer = $CombatPanelTop/panelStatusPlayer/HBoxContainer/statusBox
 @onready var enemy_status_container: HBoxContainer = $CombatPanelTop/panelStatusEnemy/statusBox
+@onready var enemy_status_holder: PanelContainer = $CombatPanelTop/panelStatusEnemy
 
 # Victory Panel
 @onready var victory_panel: Panel = $VictoryPanel
@@ -136,17 +142,33 @@ func setup_for_combat(enemy_entity, inventory_slots: Array[ItemSlot], weapon_slo
 	_update_enemy_stats()
 	clear_statuses()
 	
+	_populate_enemy_inventory(current_enemy_entity)
+
 	_set_state(PanelState.PRE_COMBAT)
 
 	# Reset turn counter
 	set_turn_label("Battle Start")
 	_update_speed_label(CombatSpeed.current_mode)
 
+	var is_boss_fight = current_enemy_entity.enemy_type == Enemy.EnemyType.BOSS_PLAYER
+
 	# Update the RUN button stuff
-	var can_run = current_player_entity.stats.agility > current_enemy_entity.stats.agility
-	btn_run.disabled = !can_run
-	if not can_run:
-		btn_run.tooltip_text = "Enemy is too fast to escape!"
+	if is_boss_fight:
+		# Boss fight - cannot run
+		btn_run.disabled = true
+		enemy_status_holder.position.y = 245
+		btn_run.tooltip_text = "You cannot flee, this is inevitable!"
+		enemy_inventory.visible = true
+	else:
+		# Normal fight - can run if fast enough
+		enemy_inventory.visible = false
+		enemy_status_holder.position.y = 135
+		var can_run = current_player_entity.stats.agility > current_enemy_entity.stats.agility
+		btn_run.disabled = !can_run
+		if not can_run:
+			btn_run.tooltip_text = "Enemy is too fast to escape!"
+		else:
+			btn_run.tooltip_text = "Flee from combat"
 	
 	# lets see.. i don't know
 	show_panel()
@@ -303,10 +325,10 @@ func _on_attack_executed(attacker, target, damage):
 	var attacker_name = CombatManager.get_entity_name(attacker)
 	var target_name = CombatManager.get_entity_name(target)
 
-	if damage < 10:
-		CameraShake.shake_medium()
-	else:
-		CameraShake.shake_heavy()
+	#if damage < 10:
+	#	CameraShake.shake_medium()
+	#else:
+	#	CameraShake.shake_heavy()
 
 func _get_status_enum(status_name: String) -> Enums.StatusEffects:
 	match status_name:
@@ -342,7 +364,8 @@ func create_damage_indicator(target, amount: int, damage_stat: Enums.Stats, visu
 	# Position based on target and stat
 	add_child(combat_item_proc)
 	var position_offset = Vector2(45, 50) if target == current_enemy_entity else Vector2(45, -50)
-	
+	AudioManager.play_ui_sound("item_proc")
+
 	if target == current_enemy_entity:
 		# Enemy takes damage
 		#if damage_stat == Enums.Stats.SHIELD or damage_stat == Enums.Stats.EXPOSED:
@@ -366,14 +389,19 @@ func create_damage_indicator(target, amount: int, damage_stat: Enums.Stats, visu
 
 
 func test_camera_shake():
-	CameraShake.shake_medium()
+	#CameraShake.shake_medium()
+	main_game.screen_shake(40,0.5)
+	AudioManager.play_synced_sound("combat_player_hit_light")
+
+func play_sfx_footstep():
+	AudioManager.play_synced_sound("combat_footstep")
 
 func _on_damage_dealt(target, amount, taken_by):
 	# JDM: ----- UNUSED?!?!?!
 	var target_name = CombatManager.get_entity_name(target)
 
-	if amount < 10:
-		CameraShake.shake_medium()
+	#if amount < 10:
+	#	CameraShake.shake_medium()
 
 func _on_healing_applied(target, amount):
 	"""Handle healing"""
@@ -446,7 +474,7 @@ func spawn_item_proc_indicator(item: Item, rule: ItemRule, entity, amount: int =
 
 	add_child(combat_item_proc)
 	combat_item_proc.position = _pos
-
+	AudioManager.play_ui_sound("item_proc")
 	var entity_name: String = CombatManager.get_entity_name(entity)
 
 	if (entity_name == "Player" && rule.target_type == Enums.TargetType.SELF):
@@ -677,6 +705,15 @@ func _create_status_box(container: HBoxContainer, status: Enums.StatusEffects, s
 
 
 func _update_status_box_value(box: StatusBox, new_stacks: int):
+	if not box or not is_instance_valid(box):
+		push_warning("[CombatPanel] Cannot animate status change - box is null")
+		return
+	
+	# Additional check for lbl_amount
+	if not box.has_node("lbl_amount"):
+		push_warning("[CombatPanel] Status box missing lbl_amount label")
+		return
+
 	var old_value = int(box.lbl_amount.text)
 	
 	if old_value == new_stacks:
@@ -715,3 +752,60 @@ func _remove_status_box(box: StatusBox):
 func _on_btn_instant_pressed() -> void:
 	CombatSpeed.set_speed(CombatSpeed.CombatSpeedMode.INSTANT)
 	_update_speed_label(CombatSpeed.CombatSpeedMode.INSTANT)
+
+
+func _populate_enemy_inventory(enemy: Enemy):
+	enemy_item_grid.columns = enemy.inventory.item_slots.size()
+
+	for child in enemy_item_grid.get_children():
+		enemy_item_grid.remove_child(child)
+		child.queue_free()
+
+	if not enemy.inventory:
+		print("[CombatPanel] Enemy has no inventory")
+		return
+	
+	var item_slot_scene = preload("res://Scenes/item.tscn")
+	
+	# Add weapon first
+	if enemy.inventory.weapon_slot:
+		enemy_weapon_slot.set_item(enemy.inventory.weapon_slot)
+		print("[CombatPanel] Added enemy weapon: %s" % enemy.inventory.weapon_slot.item_name)
+	
+	# Add inventory items
+	for i in range(enemy.inventory.item_slots.size()):
+		var item = enemy.inventory.item_slots[i]
+		if item:
+			var item_slot = item_slot_scene.instantiate()
+			item_slot.set_item(item)
+			item_slot.custom_minimum_size = Vector2(100, 100)
+			item_slot.slot_index = i + 1
+			item_slot.set_order(i + 1)
+			enemy_item_grid.add_child(item_slot)
+			print("[CombatPanel] Added enemy item %d: %s" % [i, item.item_name])
+
+
+func _on_btn_quit_pressed() -> void:
+	# Optional: Save any stats/progress before quitting
+	# await save_run_stats()
+	
+	# Load main menu scene
+	get_tree().change_scene_to_file("res://Scenes/main_menu.tscn")
+
+
+func _on_btn_new_run_pressed() -> void:
+	hide_death_panel()
+	
+	# Reset player state
+	main_game.reset_player_for_new_run()
+	
+	# Reset dungeon manager
+	main_game.reset_dungeon_for_new_run()
+	
+	# Load starter room
+	main_game.load_starting_room()
+
+func hide_death_panel():
+	if death_panel:
+		death_panel.visible = false
+		visible = false
