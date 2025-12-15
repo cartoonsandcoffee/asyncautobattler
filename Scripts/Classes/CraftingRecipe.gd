@@ -33,4 +33,4 @@ func get_result_item() -> Item:
 	return result_item
 
 func get_recipe_description() -> String:
-	return ingredient_1.item_name + " + " + ingredient_2.item_name + " → " + result_item.item_name
+	return ingredient_1.item_name + " + " + ingredient_2.item_name + " = " + result_item.item_name

@@ -14,9 +14,9 @@ class Stats:
 	const thorns = Color("#996633")         # Brown
 	const acid = Color("#aaff00")           # Yellow-green
 	const regeneration = Color("#00ff88")   # Teal
-	const stun = Color("#ffff99")           # Light yellow
+	const stun = Color("#bdb280ff")           # Light brown
 	const blessing = Color("#99dfffff")           # Light yellow
-	const blind = Color("#c29e9eff")           # Light yellow
+	const blind = Color("#fff5cf")           # Light yellow
 
 class Rarity:
 	const common = Color("#49AFD1")         # Gray

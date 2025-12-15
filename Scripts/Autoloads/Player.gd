@@ -68,7 +68,7 @@ func set_test_inventory():
 	if !inventory:
 		return
 
-	inventory.set_inventory_size(12)
+	inventory.set_inventory_size(4)
 
 	# -- for testing basic rules
 

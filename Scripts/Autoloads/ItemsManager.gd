@@ -54,13 +54,6 @@ func setup_potion_recipes():
 
 func setup_items():
 	get_all_files_from_directory("res://Resources/Items/", ".tres")
-	#_load_item_definitions(Enums.Rarity.COMMON)
-	#_load_item_definitions(Enums.Rarity.UNCOMMON)
-	#_load_item_definitions(Enums.Rarity.RARE)
-	#_load_item_definitions(Enums.Rarity.LEGENDARY)
-	#_load_item_definitions(Enums.Rarity.CRAFTED)
-	#_load_item_definitions(Enums.Rarity.GOLDEN)
-	#_load_item_definitions(Enums.Rarity.DIAMOND)
 
 func add_recipes_golden():
 	crafting_recipes.append(preload("res://Resources/CraftingRecipes/golden_testing_boots.tres"))
@@ -158,15 +151,23 @@ func get_all_items() -> Array[Item]:
 	items.sort_custom(func(a, b): return a.rarity < b.rarity)
 	return items
 
-func get_random_items(count: int, rarity: Enums.Rarity, include_bonus: bool = false) -> Array[Item]:
+func get_random_items(count: int, rarity: Enums.Rarity, include_bonus: bool = false, include_weapons: bool = false) -> Array[Item]:
 	var subset_items: Array[Item] = []
 	var all_items = get_all_items()
 	
 	# Filter for common rarity only
 	for item in all_items:
 		if item.rarity == rarity and item.unlocked:
-			item.slot_index = 100 #set a larger slot number so tooltips generate right-side
-			subset_items.append(item)
+			if include_weapons:				
+				item.slot_index = 100 #set a larger slot number so tooltips generate right-side
+				subset_items.append(item)
+			else:
+				# exclude weapons
+				if item.item_type == Item.ItemType.WEAPON:
+					pass
+				else:
+					item.slot_index = 100 #set a larger slot number so tooltips generate right-side
+					subset_items.append(item)
 	
 	# Pick random items (without duplicates)
 	var selected: Array[Item] = []
@@ -181,13 +182,59 @@ func get_random_items(count: int, rarity: Enums.Rarity, include_bonus: bool = fa
 		selected.append(get_item_of_higher_tier(rarity))
 	return selected
 
+
+func get_items_by_item_type(count: int, _item_type: Item.ItemType, _limit_rarity: bool = false, _rarity: Enums.Rarity = Enums.Rarity.COMMON):
+	var subset_items: Array[Item] = []
+	var all_items = get_all_items()
+	
+	# Filter for common rarity only
+	for item in all_items:
+		if item.item_type == _item_type:
+			if _limit_rarity and item.rarity == _rarity:
+				item.slot_index = 100 #set a larger slot number so tooltips generate right-side
+				subset_items.append(item)
+			elif !_limit_rarity:
+				item.slot_index = 100 #set a larger slot number so tooltips generate right-side
+				subset_items.append(item)				
+
+	# Pick random items (without duplicates)
+	var selected: Array[Item] = []
+	for i in count:
+		if subset_items.size() > 0:
+			var random_item = subset_items.pick_random()
+			selected.append(random_item)
+			subset_items.erase(random_item)  # Remove to avoid duplicates
+
+	return selected
+
+func get_items_by_category(count: int, _category: String):
+	var subset_items: Array[Item] = []
+	var all_items = get_all_items()
+	
+	# Filter for common rarity only
+	for item in all_items:
+		for cat in item.categories:
+			if cat == _category:
+				item.slot_index = 100 #set a larger slot number so tooltips generate right-side
+				subset_items.append(item)
+
+	# Pick random items (without duplicates)
+	var selected: Array[Item] = []
+	for i in count:
+		if subset_items.size() > 0:
+			var random_item = subset_items.pick_random()
+			selected.append(random_item)
+			subset_items.erase(random_item)  # Remove to avoid duplicates
+
+	return selected
+
 func get_item_of_same_tier(rarity: Enums.Rarity, item_name: String) -> Item:
 	var _item: Item = null
 
-	_item = get_random_items(1, rarity, false)[0]
+	_item = get_random_items(1, rarity, false, false)[0]
 
 	while _item.item_name == item_name:
-		_item = get_random_items(1, rarity, false)[0]
+		_item = get_random_items(1, rarity, false, false)[0]
 		
 	return _item	
 
@@ -277,55 +324,6 @@ func get_item_by_id(item_id: String) -> Item:
 	if available_items.has(item_id):
 		return available_items[item_id]
 	return null
-
-func _load_item_definitions(rarity: Enums.Rarity):
-	var item_dir = "res://Resources/Items/"
-	var rarity_dir: String = ""
-
-	match rarity:
-		Enums.Rarity.COMMON:
-			rarity_dir = "COMMON/"
-		Enums.Rarity.UNCOMMON:
-			rarity_dir = "UNCOMMON/"
-		Enums.Rarity.RARE:
-			rarity_dir = "RARE/"
-		Enums.Rarity.LEGENDARY:
-			rarity_dir = "LEGENDARY/"
-		Enums.Rarity.MYSTERIOUS:
-			rarity_dir = "MYSTERIOUS/"
-		Enums.Rarity.GOLDEN:
-			rarity_dir = "Golden/"
-		Enums.Rarity.DIAMOND:
-			rarity_dir = "Diamond/"
-		Enums.Rarity.CRAFTED:
-			rarity_dir = "CRAFTED/"
-		Enums.Rarity.UNIQUE:
-			rarity_dir = "UNIQUE/"
-
-	var dir = DirAccess.open(item_dir + rarity_dir)
-
-	if dir:
-		dir.list_dir_begin()
-		var file_name = dir.get_next()
-		
-		while file_name != "":
-			if file_name.ends_with(".tres"):
-				var item_path = item_dir + rarity_dir + file_name
-				var item = load(item_path) as Item
-				
-				if item:
-					var key: String = file_name.replace(".tres", "")
-					item.item_id = key
-					available_items[key] = item
-					print("Loaded item: ", key)
-				else:
-					push_warning("Failed to load item: " + file_name)
-			
-			file_name = dir.get_next()
-		
-		dir.list_dir_end()
-	else:
-		push_error("Could not open item directory: " + item_dir + rarity_dir)
 
 func get_all_files_from_directory(path : String, file_ext:= "", files := []):
 	var resources = ResourceLoader.list_directory(path)

@@ -66,6 +66,7 @@ const UI_SOUND_NAMES = {
 	"combat_player_hit_heavy": "res://Assets/Audio/SFX/COMBAT/Player_Hit_Heavy.ogg",
 	"combat_enemy_hit": "res://Assets/Audio/SFX/COMBAT/Enemy_Hit.ogg",
 	"item_proc": "res://Assets/Audio/SFX/COMBAT/impactPlank_medium_003.ogg",
+	"campfire": "res://Assets/Audio/SFX/COMBAT/campfire.ogg",
 }
 
 ## =============================================================================
@@ -208,7 +209,7 @@ func play_room_music(track: Variant):
 	if track == null:
 		clear_room_override()
 		return
-	
+
 	var stream: AudioStream = null
 	var track_name: String = ""
 	
@@ -256,12 +257,12 @@ func clear_room_override():
 	
 	# Only change music if we were actually playing the room override
 	if current_context == MusicContext.ROOM_OVERRIDE and current_track_name == was_override:
-		print("[AudioManager] → Room override was playing, restoring appropriate music")
+		print("[AudioManager] -> Room override was playing, restoring appropriate music")
 		current_context = MusicContext.NONE
 		_restore_appropriate_music()
 	else:
 		# Override existed but wasn't playing (e.g., combat was playing)
-		print("[AudioManager] → Override cleared but not playing, keeping: %s" % current_track_name)
+		print("[AudioManager] -> Override cleared but not playing, keeping: %s" % current_track_name)
 
 func stop_music(fade_out: bool = true):
 	"""Stop all music."""
@@ -306,7 +307,7 @@ func _switch_music_context(new_context: MusicContext, track_name: String, stream
 		push_warning("[AudioManager] Music stream is null: %s" % track_name)
 		return
 	
-	print("[AudioManager] Switching music: %s → %s" % [current_track_name, track_name])
+	print("[AudioManager] Switching music: %s -> %s" % [current_track_name, track_name])
 	
 	# Update state
 	current_context = new_context
@@ -361,14 +362,14 @@ func _restore_appropriate_music():
 
 	# Priority 1: Room override (if set)
 	if not room_override_track.is_empty():
-		print("[AudioManager] → Room has override: %s" % room_override_track)
+		print("[AudioManager] -> Room has override: %s" % room_override_track)
 		play_room_music(room_override_track)
 		return
 	
 	# Priority 2: Combat (if active)
 	if CombatManager and CombatManager.has_method("is_combat_active"):
 		if CombatManager.combat_active:
-			print("[AudioManager] → Combat is active")
+			print("[AudioManager] -> Combat is active")
 			var is_pvp = false
 			if CombatManager.enemy_entity:
 				is_pvp = CombatManager.enemy_entity.enemy_type == Enemy.EnemyType.BOSS_PLAYER
@@ -376,7 +377,7 @@ func _restore_appropriate_music():
 			return
 	
 	# Priority 3: Default to general music
-	print("[AudioManager] → Defaulting to general music")
+	print("[AudioManager] -> Defaulting to general music")
 	play_general_music()
 
 ## =============================================================================
@@ -483,11 +484,11 @@ func on_combat_ended():
 	# Check if we have a room override to return to
 	if not room_override_track.is_empty():
 		# Room has special music, return to it
-		print("[AudioManager] → Returning to room music: %s" % room_override_track)
+		print("[AudioManager] -> Returning to room music: %s" % room_override_track)
 		play_room_music(room_override_track)
 	else:
 		# No room override, return to general music
-		print("[AudioManager] → Returning to general music")
+		print("[AudioManager] -> Returning to general music")
 		play_general_music()
 
 ## =============================================================================

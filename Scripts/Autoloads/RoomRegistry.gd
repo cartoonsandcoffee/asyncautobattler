@@ -46,6 +46,11 @@ func get_available_rooms_for_rank(rank: int) -> Array[RoomDefinition]:
 	
 	return available_rooms
 
+func get_room_by_id(_id: String) -> RoomDefinition:
+	if !room_definitions[_id]:
+		return null
+	return room_definitions[_id] 
+
 func get_room_definition(id: String) -> RoomDefinition:
 	return room_definitions.get(id)
 

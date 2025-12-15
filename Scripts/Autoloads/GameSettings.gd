@@ -108,6 +108,11 @@ func set_screen_shake(enabled: bool):
 	graphics_changed.emit("screen_shake", enabled)
 	settings_changed.emit()
 
+func set_skip_opening(enabled: bool):
+	skip_opening = enabled
+	graphics_changed.emit("skip_opening", enabled)
+	settings_changed.emit()
+	
 func set_vsync(enabled: bool):
 	"""Enable/disable V-Sync."""
 	vsync_enabled = enabled

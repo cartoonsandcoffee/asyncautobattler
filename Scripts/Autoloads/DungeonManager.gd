@@ -17,7 +17,7 @@ const SHORTCUT_SKIP_RANGES: Dictionary = {
 const ADJACENCY_RULES: Dictionary = {
 	Enums.RoomType.CAMPFIRE: {
 		"cannot_be_adjacent_to": [Enums.RoomType.CAMPFIRE],
-		"min_spacing": 3  # At least 1 room between campfires
+		"min_spacing": 3  # At least 3 room between campfires
 	},
 	Enums.RoomType.UTILITY: {
 		"cannot_be_adjacent_to": [Enums.RoomType.UTILITY],
@@ -29,14 +29,22 @@ const ADJACENCY_RULES: Dictionary = {
 const TYPE_COUNT_LIMITS: Dictionary = {
 	Enums.RoomType.UTILITY: {
 		Enums.Rarity.COMMON: 2,    # Max 2 COMMON utilities
-		Enums.Rarity.RARE: 3,      # Max 3 RARE utilities
+		Enums.Rarity.UNCOMMON: 3,    # Max 2 UNCOMMON utilities		
+		Enums.Rarity.RARE: 2,      # Max 3 RARE utilities
 		Enums.Rarity.LEGENDARY: 1  # Max 1 LEGENDARY utility
 	},
 	Enums.RoomType.CAMPFIRE: {
 		Enums.Rarity.COMMON: 2,
+		Enums.Rarity.UNCOMMON: 0,		
 		Enums.Rarity.RARE: 0,
 		Enums.Rarity.LEGENDARY: 0  # No legendary campfires
-	}
+	},
+	Enums.RoomType.SKIPPED: {  # SKIPPED room just used for minimap, can't generate
+		Enums.Rarity.COMMON: 0,
+		Enums.Rarity.UNCOMMON: 0,
+		Enums.Rarity.RARE: 0,
+		Enums.Rarity.LEGENDARY: 0 
+	}	
 }
 
 # Specific room limits (unique rooms)
@@ -47,19 +55,22 @@ const SPECIFIC_ROOM_LIMITS: Dictionary = {
 
 # Dynamic rarity weights by rank
 const RARITY_WEIGHTS_BY_RANK: Dictionary = {
-	1: {Enums.Rarity.COMMON: 75, Enums.Rarity.RARE: 25, Enums.Rarity.LEGENDARY: 0},
-	2: {Enums.Rarity.COMMON: 70, Enums.Rarity.RARE: 30, Enums.Rarity.LEGENDARY: 0},
-	3: {Enums.Rarity.COMMON: 60, Enums.Rarity.RARE: 35, Enums.Rarity.LEGENDARY: 5},
-	4: {Enums.Rarity.COMMON: 45, Enums.Rarity.RARE: 45, Enums.Rarity.LEGENDARY: 10},
-	5: {Enums.Rarity.COMMON: 40, Enums.Rarity.RARE: 45, Enums.Rarity.LEGENDARY: 15}
+	1: {Enums.Rarity.COMMON: 75, Enums.Rarity.UNCOMMON: 25, Enums.Rarity.RARE: 0, Enums.Rarity.LEGENDARY: 0},
+	2: {Enums.Rarity.COMMON: 65, Enums.Rarity.UNCOMMON: 30, Enums.Rarity.RARE: 5, Enums.Rarity.LEGENDARY: 0},
+	3: {Enums.Rarity.COMMON: 60, Enums.Rarity.UNCOMMON: 34, Enums.Rarity.RARE: 5, Enums.Rarity.LEGENDARY: 1},
+	4: {Enums.Rarity.COMMON: 40, Enums.Rarity.UNCOMMON: 40, Enums.Rarity.RARE: 10, Enums.Rarity.LEGENDARY: 5},
+	5: {Enums.Rarity.COMMON: 30, Enums.Rarity.UNCOMMON: 40, Enums.Rarity.RARE: 20, Enums.Rarity.LEGENDARY: 10}
 }
+
+@export_group("Testing")
+@export var testing_force_room_2: bool = false
+@export var testing_room_2_definition: RoomDefinition  # Drag room here!
 
 # Utility subtype tracking (for "max 1 of each COMMON utility type")
 var used_utility_subtypes: Dictionary = {}
 
-const TESTING_BOSS_AT_ROOM_3 = false  # Set to false to disable testing mode
+var boss_room_position: int = 10  # 0 = disabled, 1-10 = room slot
 const ROOMS_PER_RANK = 10
-const BOSS_ROOM_INDEX = 10  # Boss is last room
 
 var current_rank: int = 1
 var current_room_index: int = 0  # 0-10 (0 = start, 10 = last room before boss)
@@ -68,7 +79,6 @@ var rooms_cleared_this_rank: int = 0
 var all_visited_rooms: Array[RoomData] = []
 var current_rank_rooms: Array[RoomData] = []  # Predetermined rooms for this rank
 
-var pending_room_data: RoomData = null  # For future hallway→room transition (not used yet)
 var current_boss_data: Dictionary = {}     # Raw opponent data from Supabase
 var current_boss_enemy: Enemy = null       # Enemy object for combat
 
@@ -119,13 +129,23 @@ func generate_rank_rooms():
 		if room_data:
 			assign_combat_to_room(room_data)
 	
-	# TESTING: Force boss room at position 3 (index 2)
-	if TESTING_BOSS_AT_ROOM_3:
-		print("[DungeonManager] TESTING MODE: Injecting boss room at position 3")
+	# Placing the boss room at the determined position
+	if boss_room_position > 0 and boss_room_position <= current_rank_rooms.size():
+		var boss_index: int = boss_room_position - 1
+		
+		# Replace room at this position with boss room
 		var boss_room = get_boss_room()
-		if boss_room:
-			current_rank_rooms[2] = boss_room  # Position 3 (0-indexed)
-			print("[DungeonManager] Boss room injected successfully")
+		current_rank_rooms[boss_index] = boss_room
+
+		print("[DungeonManager]: Boss placed at room %d" % boss_room_position)
+
+	# TESTING: Force room at position 2 (index 1)
+	if testing_force_room_2 and testing_room_2_definition:
+		var debug_room = RoomData.new()
+		debug_room.room_definition = testing_room_2_definition
+		debug_room.room_state = {}
+		current_rank_rooms[1] = debug_room
+		print("[DungeonManager]  TEST: Forced room at position 2: %s" % testing_room_2_definition.room_name)
 
 		# Fetch boss for this rank
 	await _fetch_and_create_boss()
@@ -267,13 +287,14 @@ func advance_rank():
 	current_room_index = 0
 	rooms_cleared_this_rank = 0
 	
-	# Increase inventory size: +2 slots per rank (4→6→8→10→12)
+	# Increase inventory size: +2 slots per rank (4,6,8,10,12)
 	var current_size = Player.inventory.max_item_slots
-	Player.inventory.set_inventory_size(current_size + 2)
-	print("[DungeonManager] Rank %d! Inventory expanded to %d slots" % [
-		current_rank, 
-		Player.inventory.max_item_slots
-	])
+	if current_size < 12:
+		Player.inventory.set_inventory_size(current_size + 2)
+		print("[DungeonManager] Rank %d! Inventory expanded to %d slots" % [
+			current_rank, 
+			Player.inventory.max_item_slots
+		])
 	
 	# Clear old boss data
 	current_boss_data = {}
@@ -364,8 +385,11 @@ func generate_shortcut_options(source_rarity: Enums.Rarity) -> Array[ShortcutOpt
 		var dest_room = available.pop_at(randi() % available.size())
 		
 		# Pick random skip count
-		var skip_count = randi_range(skip_range["min"], skip_range["max"])
+		var skip_count:int = randi_range(skip_range["min"], skip_range["max"])
 		
+		if !can_skip_room(skip_count):
+			return []
+
 		# Will it have combat?
 		var has_combat = will_room_have_combat(dest_room)
 		
@@ -374,6 +398,28 @@ func generate_shortcut_options(source_rarity: Enums.Rarity) -> Array[ShortcutOpt
 		options.append(option)
 	
 	return options
+
+func can_skip_room(skip_count: int) -> bool:
+	#Check if player can use skip functionality.
+	#Cannot skip if it would take you past the boss room.
+	
+	
+	# Calculate how many rooms left in rank (including current)
+	var rooms_left = ROOMS_PER_RANK - current_room_index
+	
+	# Need at least 2 rooms left (current + 1 to skip to)
+	# This ensures you can't skip from room 9 to 11 (boss)
+	if rooms_left <= skip_count:
+		print("[DungeonManager] Cannot skip - too close to boss (rooms left: %d)" % rooms_left)
+		return false
+	
+	# Check if on boss room already
+	if current_room_index >= ROOMS_PER_RANK:
+		print("[DungeonManager] Cannot skip - already on boss")
+		return false
+	
+	return true
+
 
 func get_shortcut_destinations(source_rarity: Enums.Rarity) -> Array[RoomDefinition]:
 	"""Get rooms that can be shortcut targets (same rarity, not on current path)"""
@@ -443,6 +489,8 @@ func mark_room_skipped(room_index: int):
 		var room = current_rank_rooms[room_index]
 		if room:
 			room.room_state["skipped"] = true
+			# JDM: Try making room skipped as well
+			current_rank_rooms[room_index].room_state["skipped"] = true
 
 
 # ============================================================================
@@ -482,7 +530,7 @@ func place_guaranteed_merchant():
 		return
 	
 	# Find any open slot
-	var position = find_open_slot_in_range(0, ROOMS_PER_RANK - 1)
+	var position = find_open_slot_in_range(0, ROOMS_PER_RANK - 2) # must be 2 because last room always boss
 	if position == -1:
 		push_warning("[DungeonManager] No open slots for merchant")
 		return
@@ -503,7 +551,7 @@ func place_guaranteed_campfire():
 		return
 	
 	# Find open slot in range 8-9
-	var position = find_open_slot_in_range(8, 9)
+	var position = find_open_slot_in_range(7, 8)
 	if position == -1:
 		push_warning("[DungeonManager] No open slots in positions 9-10 for campfire")
 		return
@@ -524,7 +572,7 @@ func place_guaranteed_utility():
 		return
 	
 	# Find any open slot
-	var position = find_open_slot_in_range(0, ROOMS_PER_RANK - 1)
+	var position = find_open_slot_in_range(0, ROOMS_PER_RANK - 2)
 	if position == -1:
 		push_warning("[DungeonManager] No open slots for utility room")
 		return

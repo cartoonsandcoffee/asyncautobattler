@@ -39,7 +39,8 @@ enum RoomType {
 	UTILITY,		# Any room where you can modify cards (upgrade, replace, etc)
 	CAMPFIRE,		# Restore player's health, never combat
 	BOSS,			# The Asynchronous multiplayer PVP battles
-	SPECIAL
+	SPECIAL,
+	SKIPPED
 }
 
 enum HallwayType {
@@ -252,6 +253,6 @@ func get_stat_string(_stat: Enums.Stats) -> String:
 		Enums.Stats.STRIKES:
 			return "strikes"
 		Enums.Stats.BURN_DAMAGE:
-			return "burn"			
+			return "burn damage"
 		_:
 			return "<unknown stat>"
