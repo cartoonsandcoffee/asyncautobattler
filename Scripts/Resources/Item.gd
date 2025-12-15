@@ -12,6 +12,7 @@ enum ItemType {
 	GLOVES, 
 	BOOTS,
 	HELMET,
+	BELT,
 	FOOD,
 	POTION,
 	TOME,
@@ -20,6 +21,7 @@ enum ItemType {
 	TOOL,
 	PET,
 	BUG,
+	CRYSTAL,
 	JEWELRY
 }
 

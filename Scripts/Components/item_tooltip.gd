@@ -112,6 +112,9 @@ func set_item(this_item: Item):
 
 
 	#update_panel_size()
+	
+func set_tooltip_position(_pos: Vector2):
+	global_position = _pos
 
 func get_stat_bonuses():
 	stats_to_add.clear()

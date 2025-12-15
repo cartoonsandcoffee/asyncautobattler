@@ -119,16 +119,26 @@ func purchase_item_from_store(purchased_item: ItemChoice):
 	if Player.stats.gold >= purchased_item.item_cost:
 		Player.subtract_gold(purchased_item.item_cost)
 
-		if Player.inventory.has_empty_slot():
-			Player.inventory.add_item(purchased_item.current_item)
+
+		if purchased_item.current_item.item_type == Item.ItemType.WEAPON:
+			# Automatic weapon swap
+			Player.inventory.set_weapon(purchased_item.current_item)
 			Player.update_stats_from_items()
-			item_selected.emit(purchased_item.current_item)	
+			AudioManager.play_ui_sound("item_pickup")
+			item_selected.emit(purchased_item.current_item)
 			replace_item_with_empty(purchased_item.current_item)
 		else:
-			need_item_replace.emit(purchased_item.current_item)
-			replace_item_with_empty(purchased_item.current_item)
+			if Player.inventory.has_empty_slot():
+				Player.inventory.add_item(purchased_item.current_item)
+				Player.update_stats_from_items()
+				AudioManager.play_ui_sound("item_pickup")
+				item_selected.emit(purchased_item.current_item)	
+				replace_item_with_empty(purchased_item.current_item)
+			else:
+				need_item_replace.emit(purchased_item.current_item)
+				replace_item_with_empty(purchased_item.current_item)
 
-		check_affordability()
+			check_affordability()
 
 # Alternative approach if you want to rebuild the entire grid:
 func refresh_store_display():

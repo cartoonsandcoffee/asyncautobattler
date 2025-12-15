@@ -10,6 +10,7 @@ signal boss_rush_pressed()
 @onready var boss_pic: TextureRect = $Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/boxProfile/bossPic
 @onready var lbl_boss: Label = $Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/boxProfile/VBoxContainer/lblBoss
 @onready var boss_stat_grid: Container = $Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/boxProfile/VBoxContainer/bossStatGrid
+@onready var lbl_rank: Label = $Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/lblRank
 
 @onready var boss_stat_health: StatBoxDisplay = $Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/boxProfile/VBoxContainer/bossStatGrid/statHealth
 @onready var boss_stat_shield: StatBoxDisplay = $Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/boxProfile/VBoxContainer/bossStatGrid/statShield
@@ -26,7 +27,6 @@ signal boss_rush_pressed()
 # @onready var boss_stat_gold = boss_stat_grid.get_node("statGold")
 
 
-const ROOMS_PER_RANK = 11
 const MAX_RANKS = 5
 
 var node_icons: Array[Array] = []  # 2D array: [rank][room_index]
@@ -41,13 +41,13 @@ func _ready():
 		DungeonManager.boss_loaded.connect(_on_boss_loaded)
 
 func _setup_grid():
-	dungeon_grid.columns = ROOMS_PER_RANK
+	dungeon_grid.columns = DungeonManager.ROOMS_PER_RANK
 	
 	# Create 5 ranks (rows), each with 10 rooms
 	for rank in range(MAX_RANKS, 0, -1):  # Rank 5 at top, Rank 1 at bottom
 		var rank_nodes: Array[RoomIconSlot] = []
 		
-		for room_idx in range(ROOMS_PER_RANK):
+		for room_idx in range(DungeonManager.ROOMS_PER_RANK):
 			var node_slot = room_box.instantiate()
 			node_slot.set_references()
 			node_slot.room_index = room_idx
@@ -77,21 +77,27 @@ func hide_panel():
 func update_display():
 	var all_rooms = DungeonManager.all_visited_rooms
 	var current_rank = DungeonManager.current_rank
-	
+
+	lbl_rank.text = "Rank  " + str(current_rank) + "  Boss"
+
 	# Clear all nodes to unknown first
 	for rank in range(MAX_RANKS):
-		for room_idx in range(ROOMS_PER_RANK):
+		for room_idx in range(DungeonManager.ROOMS_PER_RANK):
 			node_icons[rank][room_idx].set_unknown()
 	
 	# Fill in visited rooms from history
 	var room_counter = 0
 	for room_data in all_rooms:
-		var rank_index = room_counter / ROOMS_PER_RANK  # Which rank (0-4)
-		var room_index = room_counter % ROOMS_PER_RANK  # Which room in rank (0-9)
+		var rank_index = room_counter / DungeonManager.ROOMS_PER_RANK  # Which rank (0-4)
+		var room_index = room_counter % DungeonManager.ROOMS_PER_RANK  # Which room in rank (0-9)
 		
 		if rank_index < MAX_RANKS:
 			node_icons[rank_index][room_index].set_visited_room(room_data)
 		
+			# CHECK IF SKIPPED 
+			if room_data.room_state.get("skipped", false):
+				node_icons[rank_index][room_index].set_skipped()
+
 		room_counter += 1
 	
 	# Show current rank's predetermined rooms (abstract icons, greyed out if not visited)
@@ -175,7 +181,7 @@ func _update_boss_sprite(boss: Enemy):
 		skin_id = DungeonManager.current_boss_data.get("skin_id", 0)
 	
 	# Load sprite
-	var sprite_path = "res://Assets/Art/Player/Player_Skin_%d.png" % skin_id
+	var sprite_path = "res://Assets/Art/Player/PVP/Player_Skin_%d.png" % skin_id
 	if ResourceLoader.exists(sprite_path):
 		boss_pic.texture = load(sprite_path)
 	else:

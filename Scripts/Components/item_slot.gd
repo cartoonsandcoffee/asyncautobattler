@@ -78,7 +78,10 @@ func set_item(item: Item):
 		current_item = item
 		item_instance_id = item.instance_id  
 		update_visuals()
+		set_item_type_desc()	
 		tooltip.set_item(item)
+		#tooltip.set_tooltip_position(global_position)
+		#print("ITEM: ", global_position)
 		button.disabled = false
 		pnl_rarity.visible = false
 	else:
@@ -87,6 +90,8 @@ func set_item(item: Item):
 func set_item_type_desc():
 	if current_item:
 		match current_item.item_type:
+			Item.ItemType.WEAPON:
+				lbl_order.text = "weapon"			
 			Item.ItemType.BODY_ARMOR:
 				lbl_order.text = "armor"
 			Item.ItemType.BOOTS:
@@ -95,12 +100,32 @@ func set_item_type_desc():
 				lbl_order.text = "gloves"
 			Item.ItemType.SHIELD:
 				lbl_order.text = "shield"
+			Item.ItemType.HELMET:
+				lbl_order.text = "helmet"
+			Item.ItemType.BELT:
+				lbl_order.text = "belt"
 			Item.ItemType.POTION:
 				lbl_order.text = "potion"
 			Item.ItemType.JEWELRY:
 				lbl_order.text = "jewelry"
-			_:
+			Item.ItemType.TOME:
+				lbl_order.text = "tome"
+			Item.ItemType.SCROLL:
+				lbl_order.text = "scroll"
+			Item.ItemType.RELIC:
+				lbl_order.text = "relic"
+			Item.ItemType.FOOD:
+				lbl_order.text = "food"
+			Item.ItemType.BUG:
+				lbl_order.text = "bug"
+			Item.ItemType.PET:
+				lbl_order.text = "pet"
+			Item.ItemType.CRYSTAL:
+				lbl_order.text = "crystal"
+			Item.ItemType.TOOL:
 				lbl_order.text = "tool"
+			_:
+				lbl_order.text = "<other>"
 
 func start_combat_highlight():
 	anim_hover.play("hover")
@@ -179,17 +204,20 @@ func show_tooltip():
 		# Normal positioning (tooltip to the RIGHT of the item)
 		#tooltip_panel.position = Vector2(size.x + 30, -tooltip_panel.size.y)	
 		pass
+	print("tt: ", tooltip_panel.position)
 
 	tooltip_panel.visible = true
 
 func _on_button_mouse_exited() -> void:
 	anim_hover.play("stop")
+	CursorManager.reset_cursor()
 	tooltip_panel.visible = false
 	panel_border.modulate = Color.WHITE
 
 func _on_button_mouse_entered() -> void:
 	if !button.disabled:
 		if current_item && !is_dragging:  # Only if slot has item
+			CursorManager.set_item_hover_cursor()
 			AudioManager.play_ui_sound("item_hover")
 		anim_hover.play("hover")
 		show_tooltip()
@@ -201,10 +229,14 @@ func _on_button_mouse_entered() -> void:
 func _on_button_down():
 	if CombatManager.combat_active:
 		return null  # Disable dragging during combat	
-		
+	
+	if is_dragging:
+		return
+
 	if current_item:
 		is_dragging = true
 		drag_started.emit(self)
+		CursorManager.set_item_grab_cursor()
 		AudioManager.play_ui_sound("item_pickup")
 		modulate.a = 0.5  # Make semi-transparent while dragging
 
@@ -212,6 +244,7 @@ func _on_button_up():
 	if is_dragging:
 		is_dragging = false
 		drag_ended.emit(self)
+		CursorManager.reset_cursor()
 		AudioManager.play_ui_sound("item_drop")
 		modulate.a = 1.0
 
@@ -237,6 +270,7 @@ func _on_button_pressed():
 func _on_button_gui_input(event: InputEvent):
 	if event is InputEventMouseMotion and is_dragging:
 		# Update drag preview position if needed
+		CursorManager.set_item_grab_cursor()
 		pass
 
 func set_selectable(_set: bool):

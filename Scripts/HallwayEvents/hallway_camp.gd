@@ -3,7 +3,8 @@ extends RoomEvent
 
 @onready var anim_event: AnimationPlayer = $animFire
 @onready var anim_label: AnimationPlayer = $animText
-@onready var btn_continue: Button = $btnContinue
+@onready var anim_main: AnimationPlayer = $animMain
+@onready var btn_continue: Button = $btnDone
 @onready var label: RichTextLabel = $lblRested
 @onready var particles: CPUParticles2D = $smoke
 
@@ -19,6 +20,7 @@ func initialize_event():
 
 func show_event():
 	btn_continue.disabled = false
+	#AudioManager.play_synced_sound("campfire")	
 	anim_event.play("fire_glow")
 
 	# -- Heal the player
@@ -28,12 +30,17 @@ func show_event():
 		
 func hide_event():
 	particles.emitting = false
-	anim_event.play("hide_event")
-	await anim_event.animation_finished
+	anim_main.play("campfire_hide_event")
+	var anim_length = anim_main.get_animation("campfire_hide_event").length
+	await CombatSpeed.create_timer(anim_length)
 
 func _on_continue_pressed():
-	complete_hallway()
-
-func complete_hallway():
 	hide_event()
 	complete_event()
+
+
+func _on_btn_continue_mouse_exited() -> void:
+	CursorManager.reset_cursor()
+
+func _on_btn_continue_mouse_entered() -> void:
+	CursorManager.set_interact_cursor()

@@ -163,12 +163,14 @@ func can_afford():
 
 func _on_button_mouse_exited() -> void:
 	anim_hover.play("stop")
+	CursorManager.reset_cursor()
 	tooltip_panel.visible = false
 	panel_border.modulate = Color.WHITE
 
 func _on_button_mouse_entered() -> void:
 	if current_item:  # Only if slot has item
 		AudioManager.play_ui_sound("item_hover")	
+		CursorManager.set_interact_cursor()
 	if !button.disabled:
 		anim_hover.play("hover")
 		tooltip_panel.visible = true

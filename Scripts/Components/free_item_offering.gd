@@ -15,6 +15,7 @@ signal need_item_replace(Item)
 @export var box_name:String = ""
 @export_multiline var box_desc:String = ""
 @export var include_extra_rare: bool = false
+@export var include_weapons: bool = true
 
 var item_choice_scene = preload("res://Scenes/item_choice.tscn")
 var offered_items: Array[Item] = []
@@ -35,7 +36,7 @@ func setup_labels():
 
 func generate_item_choices():
 	# Get 3 random common items
-	offered_items = ItemsManager.get_random_items(items_offered, item_rarity, include_extra_rare)
+	offered_items = ItemsManager.get_random_items(items_offered, item_rarity, include_extra_rare, include_weapons)
 	
 	# Create choice buttons for each item
 	for item in offered_items:
@@ -52,12 +53,20 @@ func _on_item_selected(item: Item):
 	selection_locked = true
 	btn_skip.disabled = true
 
-	if Player.inventory.has_empty_slot():
-		Player.inventory.add_item(item)
+	if item.item_type == Item.ItemType.WEAPON:
+		# Automatic weapon swap
+		Player.inventory.set_weapon(item)
 		Player.update_stats_from_items()
-		item_selected.emit(item)	
+		AudioManager.play_ui_sound("item_pickup")
+		item_selected.emit(item)
 	else:
-		need_item_replace.emit(item)
+		if Player.inventory.has_empty_slot():
+			Player.inventory.add_item(item)
+			Player.update_stats_from_items()
+			AudioManager.play_ui_sound("item_pickup")
+			item_selected.emit(item)	
+		else:
+			need_item_replace.emit(item)
 
 func _on_btn_skip_pressed() -> void:
 	item_skipped.emit()
