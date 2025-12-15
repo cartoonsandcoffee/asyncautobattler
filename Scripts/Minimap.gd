@@ -8,7 +8,6 @@ signal zoom_out_requested()
 @onready var room_grid: GridContainer = $RoomGrid
 @onready var btn_zoom_out: LinkButton = $VBoxContainer/btnZoom
 
-const ROOMS_PER_RANK = 10
 const QUESTION_MARK_ICON = preload("res://Resources/Icons/icon_question.tres") 
 const CROWN_ICON = preload("res://Resources/Icons/icon_crown.tres") 
 
@@ -30,10 +29,10 @@ func _initialize_room_slots():
 		child.queue_free()
 	
 	room_icons.clear()
-	room_grid.columns = ROOMS_PER_RANK + 1  # plus one for boss room
+	room_grid.columns = DungeonManager.ROOMS_PER_RANK
 	
 	# Create 10 room icon slots
-	for i in range(ROOMS_PER_RANK + 1):
+	for i in range(DungeonManager.ROOMS_PER_RANK):
 		var room_slot = room_box.instantiate()
 		room_slot.room_index = i
 		room_slot.custom_minimum_size = Vector2(40, 40)  
@@ -52,7 +51,7 @@ func update_display():
 	# Show starter room as first icon
 	var showing_starter = (current_rank == 0 and DungeonManager.rooms_cleared_this_rank == 0)
 	
-	for i in range(ROOMS_PER_RANK):
+	for i in range(DungeonManager.ROOMS_PER_RANK):
 		if i < predetermined_rooms.size():
 			var room_data = predetermined_rooms[i]
 			
@@ -80,7 +79,7 @@ func update_display():
 			# No room data - show unknown
 			room_icons[i].set_unknown()
 
-	room_icons[ROOMS_PER_RANK].set_boss_room()
+	#room_icons[DungeonManager.ROOMS_PER_RANK].set_boss_room()
 
 	# If showing starter room, override first slot
 	if showing_starter:

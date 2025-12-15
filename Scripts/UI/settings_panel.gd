@@ -92,7 +92,9 @@ func _connect_signals():
 		check_vsync.toggled.connect(_on_vsync_toggled)
 	if check_fullscreen:
 		check_fullscreen.toggled.connect(_on_fullscreen_toggled)
-	
+	if check_skip_opening:
+		check_skip_opening.toggled.connect(_on_skip_opening_toggled)
+
 	# Buttons
 	if btn_apply:
 		btn_apply.pressed.connect(_on_apply_pressed)
@@ -133,6 +135,8 @@ func load_current_settings():
 		check_vsync.button_pressed = GameSettings.vsync_enabled
 	if check_fullscreen:
 		check_fullscreen.button_pressed = GameSettings.fullscreen_enabled
+	if check_skip_opening:
+		check_skip_opening.button_pressed = GameSettings.skip_opening
 
 func apply_settings():
 	"""Apply all settings to GameSettings and save."""
@@ -179,6 +183,9 @@ func _on_vsync_toggled(enabled: bool):
 
 func _on_fullscreen_toggled(enabled: bool):
 	GameSettings.set_fullscreen(enabled)
+
+func _on_skip_opening_toggled(enabled: bool):
+	GameSettings.set_skip_opening(enabled)
 
 ## =============================================================================
 ## BUTTON CALLBACKS

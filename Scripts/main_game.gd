@@ -38,6 +38,9 @@ extends Control
 # Mini-map stuff
 @onready var minimap: Minimap = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap
 
+@onready var pause_menu: Control = $PauseMenu
+@onready var settings_menu: Control = $SettingsPanel
+
 var current_event
 
 var item_slot = preload("res://Scenes/item.tscn")
@@ -95,6 +98,9 @@ func _ready():
 	combat_panel.combat_completed.connect(_on_combat_completed)
 	combat_panel.player_chose_run.connect(_on_player_ran)
 
+	if pause_menu and settings_menu:
+		pause_menu.settings_panel = settings_menu
+
 	if btn_continue:
 		btn_continue.pressed.connect(_on_continue_pressed)
 		btn_continue.disabled = true
@@ -140,7 +146,7 @@ func create_test_player():
 func load_starting_room():
 	var starter_room_data = DungeonManager.generate_starter_room()
 	if starter_room_data:
-		DungeonManager.all_visited_rooms.append(starter_room_data)
+		#DungeonManager.all_visited_rooms.append(starter_room_data)
 		DungeonManager.minimap_update_requested.emit()
 		
 		await load_room(starter_room_data)
@@ -268,6 +274,7 @@ func _on_continue_pressed():
 		return
 
 	# Advance to next room in sequence
+	DungeonManager.all_visited_rooms.append(current_room)
 	DungeonManager.advance_room()
 	
 	# Check if rank is complete
@@ -329,7 +336,9 @@ func show_doors_with_shortcuts(shortcuts: Array[ShortcutOption]):
 	
 func _on_shortcut_door_selected(option: ShortcutOption):
 	# Player chose shortcut door
-	
+	var current_room = DungeonManager.current_rank_rooms[DungeonManager.current_room_index]
+	DungeonManager.all_visited_rooms.append(current_room)
+
 	door_container.visible = false
 	
 	# Apply the shortcut (marks rooms skipped, replaces destination)
@@ -340,6 +349,10 @@ func _on_shortcut_door_selected(option: ShortcutOption):
 	
 	# Skip ahead
 	for i in range(option.skip_count):
+		var room_data = RoomData.new()
+		room_data.room_definition = RoomRegistry.get_room_by_id("SKIPPED")
+		room_data.room_state["skipped"] = true
+		DungeonManager.all_visited_rooms.append(room_data)
 		DungeonManager.advance_room()
 	
 	# Load destination room
@@ -864,3 +877,10 @@ func screen_shake(intensity: float = 10.0, duration: float = 0.5):
 	
 	# Return to original position
 	shake_tween.tween_property(ui_root, "position", original_position, 0.1)
+
+
+func _on_btn_continue_mouse_exited() -> void:
+	CursorManager.reset_cursor()
+
+func _on_btn_continue_mouse_entered() -> void:
+	CursorManager.set_navigation_cursor()

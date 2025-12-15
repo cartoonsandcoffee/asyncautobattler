@@ -29,7 +29,7 @@ func _begin_event_sequence():
 	pass
 
 func _boss_battle_sequence():
-	"""Main boss battle flow: flavor → combat → victory."""
+	"""Main boss battle flow: flavor -> combat -> victory."""
 	print("[BossRoom] Starting boss battle sequence")
 	
 	# 1. Get boss from DungeonManager (already loaded at rank start)

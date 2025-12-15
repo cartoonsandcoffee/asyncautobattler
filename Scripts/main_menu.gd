@@ -1,19 +1,20 @@
 extends Control
 
-@onready var btn_continue: Button = $Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/btnContinue
 @onready var animation_player: AnimationPlayer = $Panel/AnimationPlayer
 @onready var txt_error: Label = $Panel/panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/MarginContainer2/txtError
 @onready var txt_name: TextEdit = $Panel/panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/txtName
 @onready var btn_name: Button = $Panel/panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/btnName
 @onready var panel_name: Panel = $Panel/panelName
 @onready var settings_panel = $Panel/SettingsPanel
+@onready var compendium_panel = $Panel/Compendium
 
 const GAME_SCENE = preload("res://Scenes/main_game.tscn")
 var good_name: bool = false
 
 func _ready() -> void:
 	if not SaveManager.save_exists():
-		btn_continue.disabled = true
+		#btn_continue.disabled = true
+		pass
 	_setup_button_audio()
 	
 	AudioManager.play_general_music()
@@ -104,3 +105,11 @@ func play_popup_open_sfx():
 
 func play_popup_close_sfx():
 	AudioManager.play_synced_sound("popup_close")
+
+
+func _on_btn_compendium_pressed() -> void:
+	AudioManager.play_ui_sound("button_click")
+	if compendium_panel:
+		compendium_panel.show_panel()
+	else:
+		push_warning("[MainMenu] Settings panel not found!")

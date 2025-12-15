@@ -11,6 +11,7 @@ extends RoomEvent
 @onready var anim_box: AnimationPlayer = $animBox
 @onready var anim_starter: AnimationPlayer = $animStarter
 @onready var anim_opening: AnimationPlayer = $animOpening
+@onready var anim_rope: AnimationPlayer = $animRope
 @onready var lbl_opening: RichTextLabel = $picOpening/lblOpening
 
 var item_choice_scene = preload("res://Scenes/item_choice.tscn")
@@ -26,9 +27,14 @@ func initialize_event():
 	slideshow_player.close_slideshow.connect(_close_slideshow)
 	#anim_starter.play("open_slideshow")
 	
-	start_intro_movie()
-
 	generate_item_choices()
+
+	if GameSettings.skip_opening == false:
+		start_intro_movie()
+	else:
+		anim_opening.play("skip_opening")
+		start_old_man()
+
 
 func start_intro_movie():
 	lbl_opening.text = ""
@@ -112,9 +118,13 @@ func _on_item_selected(item: Item):
 	# Hide item choices
 	anim_box.play("hide_box")
 	await anim_box.animation_finished
-	
 	anim_old_man.play("walk_out")
 	await anim_old_man.animation_finished
+
+	anim_rope.play("show_rope")
+	await anim_rope.animation_finished
+	anim_rope.play("rope_sway")
+	
 	await DungeonManager.slide_in_menus()
 
 	# Complete the event
