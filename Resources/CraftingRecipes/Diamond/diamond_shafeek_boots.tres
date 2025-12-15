@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=5 format=3 uid="uid://4r015swejqno"]
+
+[ext_resource type="Resource" uid="uid://c31fumtauekst" path="res://Resources/Items/Golden/golden_shafeek_boots.tres" id="1_2x6cq"]
+[ext_resource type="Resource" uid="uid://bnrlehhguu2vj" path="res://Resources/Items/COMMON/shafeek_boots.tres" id="2_wwlpw"]
+[ext_resource type="Resource" uid="uid://b5feggqdh455o" path="res://Resources/Items/Diamond/diamond_shafeek_boots.tres" id="3_tm3hk"]
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="4_01mnq"]
+
+[resource]
+script = ExtResource("4_01mnq")
+recipe_name = "Diamond Shafeek Boots"
+result_item = ExtResource("3_tm3hk")
+ingredient_1 = ExtResource("1_2x6cq")
+ingredient_2 = ExtResource("2_wwlpw")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

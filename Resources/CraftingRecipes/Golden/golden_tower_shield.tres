@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=4 format=3 uid="uid://8hetlrv6f6fv"]
+
+[ext_resource type="Resource" uid="uid://bh2aamqftfqto" path="res://Resources/Items/COMMON/tower_shield.tres" id="1_bop33"]
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="1_h6kfb"]
+[ext_resource type="Resource" uid="uid://bnr5fghw6r3tn" path="res://Resources/Items/Golden/golden_tower_shield.tres" id="2_icck8"]
+
+[resource]
+script = ExtResource("1_h6kfb")
+recipe_name = "Golden Tower Shield Recipe"
+result_item = ExtResource("2_icck8")
+ingredient_1 = ExtResource("1_bop33")
+ingredient_2 = ExtResource("1_bop33")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=4 format=3 uid="uid://b4uujfmnjsrds"]
+
+[ext_resource type="Resource" uid="uid://dw0v5pec7f04i" path="res://Resources/Items/COMMON/lantern.tres" id="1_8iudj"]
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="1_gxg5w"]
+[ext_resource type="Resource" uid="uid://b5rl7lypy26of" path="res://Resources/Items/Golden/golden_lantern.tres" id="2_q2als"]
+
+[resource]
+script = ExtResource("1_gxg5w")
+recipe_name = "Golden Lantern Recipe"
+result_item = ExtResource("2_q2als")
+ingredient_1 = ExtResource("1_8iudj")
+ingredient_2 = ExtResource("1_8iudj")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

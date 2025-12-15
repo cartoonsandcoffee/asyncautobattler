@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=4 format=3 uid="uid://bl4gxpj42jir1"]
+
+[ext_resource type="Resource" uid="uid://drjihx06j3xeo" path="res://Resources/Items/Golden/golden_peculiar_timepiece.tres" id="1_m8aea"]
+[ext_resource type="Resource" uid="uid://cy848oaoacl5i" path="res://Resources/Items/Diamond/diamond_peculiar_timepiece.tres" id="2_84pq4"]
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="3_r4uyt"]
+
+[resource]
+script = ExtResource("3_r4uyt")
+recipe_name = "Diamond Peculiar Timepiece Recipe"
+result_item = ExtResource("2_84pq4")
+ingredient_1 = ExtResource("1_m8aea")
+ingredient_2 = ExtResource("1_m8aea")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

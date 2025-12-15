@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=4 format=3 uid="uid://bpmscq2ukx6s3"]
+
+[ext_resource type="Resource" uid="uid://dr8hffuc5bcjk" path="res://Resources/Items/Golden/golden_shafeek_shield.tres" id="1_55g38"]
+[ext_resource type="Resource" uid="uid://x87ndy5fckng" path="res://Resources/Items/Diamond/diamond_shafeek_shield.tres" id="2_adqae"]
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="3_hbu7b"]
+
+[resource]
+script = ExtResource("3_hbu7b")
+recipe_name = "Diamond Shafeek Shield"
+result_item = ExtResource("2_adqae")
+ingredient_1 = ExtResource("1_55g38")
+ingredient_2 = ExtResource("1_55g38")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=4 format=3 uid="uid://by8v67dq1kb1n"]
+
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="1_gyeme"]
+[ext_resource type="Resource" uid="uid://b5rl7lypy26of" path="res://Resources/Items/Golden/golden_lantern.tres" id="1_qdn50"]
+[ext_resource type="Resource" uid="uid://bp28jk074e7v5" path="res://Resources/Items/Diamond/diamond_lantern.tres" id="2_oyovq"]
+
+[resource]
+script = ExtResource("1_gyeme")
+recipe_name = "Diamond Lantern Recipe"
+result_item = ExtResource("2_oyovq")
+ingredient_1 = ExtResource("1_qdn50")
+ingredient_2 = ExtResource("1_qdn50")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

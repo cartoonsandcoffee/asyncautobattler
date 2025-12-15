@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=2 format=3 uid="uid://citb4x3ol6mb7"]
+
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="1_p3qjf"]
+
+[resource]
+script = ExtResource("1_p3qjf")
+recipe_name = ""
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

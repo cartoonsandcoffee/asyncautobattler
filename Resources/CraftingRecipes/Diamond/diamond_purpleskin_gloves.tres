@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=4 format=3 uid="uid://cpltg4gnnlq6a"]
+
+[ext_resource type="Resource" uid="uid://bpf3ucegqf735" path="res://Resources/Items/Golden/golden_purple_skin_gloves.tres" id="1_0a608"]
+[ext_resource type="Resource" uid="uid://cg5e2te4sigg1" path="res://Resources/Items/Diamond/diamond_purple_skin_gloves.tres" id="2_uskvj"]
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="3_q5iv5"]
+
+[resource]
+script = ExtResource("3_q5iv5")
+recipe_name = "Diamond Purpleskin Gloves"
+result_item = ExtResource("2_uskvj")
+ingredient_1 = ExtResource("1_0a608")
+ingredient_2 = ExtResource("1_0a608")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

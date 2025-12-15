@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=4 format=3 uid="uid://cjqnl2upsyrxm"]
+
+[ext_resource type="Resource" uid="uid://bpm4dnw1smibx" path="res://Resources/Items/Golden/golden_bronze_barbed_helm.tres" id="1_ieerx"]
+[ext_resource type="Resource" uid="uid://c4shgsko5bcsg" path="res://Resources/Items/Diamond/diamond_bronze_barbed_helm.tres" id="2_gcuwk"]
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="3_eo4bv"]
+
+[resource]
+script = ExtResource("3_eo4bv")
+recipe_name = "Diamond Bronze Barbed Helm"
+result_item = ExtResource("2_gcuwk")
+ingredient_1 = ExtResource("1_ieerx")
+ingredient_2 = ExtResource("1_ieerx")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"
