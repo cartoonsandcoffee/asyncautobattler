@@ -1,0 +1,302 @@
+[gd_scene load_steps=14 format=3 uid="uid://bpqljjke1liyx"]
+
+[ext_resource type="Script" uid="uid://7td1u4y3tfm4" path="res://Scripts/Components/map_zoom_panel.gd" id="1_0ltav"]
+[ext_resource type="Texture2D" uid="uid://derrdt27xagod" path="res://Assets/UI/panel-border-007.png" id="1_dlfjx"]
+[ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="2_8u2o6"]
+[ext_resource type="Texture2D" uid="uid://dodv4eqs1sxcl" path="res://Assets/Art/Enemies/Player.png" id="3_oiv5d"]
+[ext_resource type="PackedScene" uid="uid://dm35l5es4kole" path="res://Scenes/Elements/stat_box.tscn" id="4_f3wo3"]
+[ext_resource type="Texture2D" uid="uid://ccbcslnsifj3o" path="res://Assets/UI/divider-fade-002.png" id="5_0ltav"]
+[ext_resource type="PackedScene" uid="uid://cqhyru53o5wfx" path="res://Scenes/item.tscn" id="7_s1gig"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lja66"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_oiv5d"]
+texture = ExtResource("1_dlfjx")
+texture_margin_left = 32.0
+texture_margin_top = 32.0
+texture_margin_right = 32.0
+texture_margin_bottom = 32.0
+
+[sub_resource type="Animation" id="Animation_s1gig"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 950)]
+}
+
+[sub_resource type="Animation" id="Animation_cr0pl"]
+resource_name = "slide_in"
+length = 0.5
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.35, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 915), Vector2(0, -40), Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_0ltav"]
+resource_name = "slide_out"
+length = 0.5
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -40), Vector2(0, 915)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_mj34i"]
+_data = {
+&"RESET": SubResource("Animation_s1gig"),
+&"slide_in": SubResource("Animation_cr0pl"),
+&"slide_out": SubResource("Animation_0ltav")
+}
+
+[node name="MapZoomPanel" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_0ltav")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 950.0
+offset_bottom = 950.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_lja66")
+
+[node name="PanelContainer" type="PanelContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -600.0
+offset_top = -350.0
+offset_right = 600.0
+offset_bottom = 350.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_oiv5d")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/PanelContainer"]
+layout_mode = 2
+theme = ExtResource("2_8u2o6")
+
+[node name="mainContent" type="HBoxContainer" parent="Panel/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_8u2o6")
+
+[node name="dungeonContainer" type="VBoxContainer" parent="Panel/PanelContainer/VBoxContainer/mainContent"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Panel/PanelContainer/VBoxContainer/mainContent/dungeonContainer"]
+layout_mode = 2
+text = "Dungeon Map"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="dungeonGrid" type="GridContainer" parent="Panel/PanelContainer/VBoxContainer/mainContent/dungeonContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+columns = 6
+
+[node name="bossContainer" type="VBoxContainer" parent="Panel/PanelContainer/VBoxContainer/mainContent"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="lblRank" type="Label" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer"]
+layout_mode = 2
+text = "Rank Boss"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="boxProfile" type="HBoxContainer" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer"]
+layout_mode = 2
+
+[node name="bossPic" type="TextureRect" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/boxProfile"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("3_oiv5d")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/boxProfile"]
+layout_mode = 2
+
+[node name="lblBoss" type="Label" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/boxProfile/VBoxContainer"]
+layout_mode = 2
+text = "[Boss Name]"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="bossStatGrid" type="GridContainer" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/boxProfile/VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="statHealth" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/boxProfile/VBoxContainer/bossStatGrid" instance=ExtResource("4_f3wo3")]
+custom_minimum_size = Vector2(125, 60)
+layout_mode = 2
+show_tooltip = false
+
+[node name="statShield" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/boxProfile/VBoxContainer/bossStatGrid" instance=ExtResource("4_f3wo3")]
+custom_minimum_size = Vector2(125, 60)
+layout_mode = 2
+stat = 2
+show_tooltip = false
+
+[node name="statAttack" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/boxProfile/VBoxContainer/bossStatGrid" instance=ExtResource("4_f3wo3")]
+custom_minimum_size = Vector2(125, 60)
+layout_mode = 2
+stat = 1
+show_tooltip = false
+
+[node name="statAgility" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/boxProfile/VBoxContainer/bossStatGrid" instance=ExtResource("4_f3wo3")]
+custom_minimum_size = Vector2(125, 60)
+layout_mode = 2
+stat = 3
+show_tooltip = false
+
+[node name="divider" type="HBoxContainer" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer"]
+layout_mode = 2
+
+[node name="TextureRect2" type="TextureRect" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/divider"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("5_0ltav")
+stretch_mode = 5
+
+[node name="Label2" type="Label" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/divider"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Inventory"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/divider"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("5_0ltav")
+stretch_mode = 5
+flip_h = true
+
+[node name="bossInventoryGrid" type="GridContainer" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer"]
+layout_mode = 2
+columns = 6
+
+[node name="Item" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item2" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item3" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item4" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item5" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item6" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item7" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item8" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item9" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item10" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item11" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item12" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item13" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="buttonContainer" type="HBoxContainer" parent="Panel/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/PanelContainer/VBoxContainer/buttonContainer"]
+visible = false
+layout_mode = 2
+
+[node name="btnClose" type="Button" parent="Panel/PanelContainer/VBoxContainer/buttonContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "CLOSE"
+
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/PanelContainer/VBoxContainer/buttonContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="btnRush" type="Button" parent="Panel/PanelContainer/VBoxContainer/buttonContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "RUSH BOSS"
+
+[node name="MarginContainer3" type="MarginContainer" parent="Panel/PanelContainer/VBoxContainer/buttonContainer"]
+visible = false
+layout_mode = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_mj34i")
+}

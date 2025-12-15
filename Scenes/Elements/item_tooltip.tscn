@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://7ygdm4ameglb"]
+[gd_scene load_steps=8 format=3 uid="uid://7ygdm4ameglb"]
 
 [ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="1_hixa8"]
 [ext_resource type="Script" uid="uid://1rv57854mprd" path="res://Scripts/Components/item_tooltip.gd" id="1_tiwhd"]
@@ -7,6 +7,17 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tiwhd"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f5dut"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s2rdf"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(1, 1, 1, 1)
+
 [node name="ItemTooltip" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -14,6 +25,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_tiwhd")
 
 [node name="Panel" type="Panel" parent="."]
@@ -25,6 +37,7 @@ anchor_bottom = 1.0
 offset_top = -75.0
 offset_right = 383.0
 grow_vertical = 0
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_tiwhd")
 
 [node name="PanelContainer" type="PanelContainer" parent="Panel"]
@@ -32,35 +45,50 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = -68.0
-offset_right = 376.0
+offset_top = -77.0
+offset_right = 420.0
 grow_vertical = 0
+mouse_filter = 2
 theme = ExtResource("1_hixa8")
+theme_override_styles/panel = SubResource("StyleBoxFlat_f5dut")
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel/PanelContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/PanelContainer"]
 layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="PanelContainer" type="PanelContainer" parent="Panel/PanelContainer/MarginContainer2"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_s2rdf")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/PanelContainer/MarginContainer2/PanelContainer"]
+layout_mode = 2
+mouse_filter = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/PanelContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer"]
 custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_constants/separation = 8
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="lblName" type="Label" parent="Panel/PanelContainer/MarginContainer/VBoxContainer/VBoxContainer"]
+[node name="lblName" type="Label" parent="Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Item Name"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="lblRarity" type="Label" parent="Panel/PanelContainer/MarginContainer/VBoxContainer/VBoxContainer"]
+[node name="lblRarity" type="Label" parent="Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_f5dut")
 theme_override_font_sizes/font_size = 10
@@ -68,7 +96,7 @@ text = "- Common -"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="lblDesc" type="RichTextLabel" parent="Panel/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="lblDesc" type="RichTextLabel" parent="Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer"]
 visible = false
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
@@ -78,7 +106,7 @@ fit_content = true
 scroll_active = false
 vertical_alignment = 1
 
-[node name="statsGrid" type="GridContainer" parent="Panel/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="statsGrid" type="GridContainer" parent="Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer"]
 visible = false
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
@@ -86,24 +114,24 @@ size_flags_horizontal = 4
 size_flags_vertical = 2
 columns = 4
 
-[node name="StatItem" parent="Panel/PanelContainer/MarginContainer/VBoxContainer/statsGrid" instance=ExtResource("2_y7em6")]
+[node name="StatItem" parent="Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/statsGrid" instance=ExtResource("2_y7em6")]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="StatItem2" parent="Panel/PanelContainer/MarginContainer/VBoxContainer/statsGrid" instance=ExtResource("2_y7em6")]
+[node name="StatItem2" parent="Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/statsGrid" instance=ExtResource("2_y7em6")]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 
-[node name="StatItem3" parent="Panel/PanelContainer/MarginContainer/VBoxContainer/statsGrid" instance=ExtResource("2_y7em6")]
+[node name="StatItem3" parent="Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/statsGrid" instance=ExtResource("2_y7em6")]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 
-[node name="StatItem4" parent="Panel/PanelContainer/MarginContainer/VBoxContainer/statsGrid" instance=ExtResource("2_y7em6")]
+[node name="StatItem4" parent="Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/statsGrid" instance=ExtResource("2_y7em6")]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 
-[node name="categoryGrid" type="GridContainer" parent="Panel/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="categoryGrid" type="GridContainer" parent="Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer"]
 visible = false
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2

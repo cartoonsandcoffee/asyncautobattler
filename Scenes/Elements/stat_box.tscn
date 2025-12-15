@@ -31,7 +31,7 @@ script = ExtResource("1_8ja2n")
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 0
 offset_right = 125.0
-offset_bottom = 75.0
+offset_bottom = 60.0
 theme_override_styles/panel = SubResource("StyleBoxEmpty_rtndc")
 
 [node name="stat_holder" type="NinePatchRect" parent="Panel"]
@@ -52,6 +52,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -8.0
+offset_top = -12.0
+offset_right = 8.0
+offset_bottom = 13.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 20
@@ -63,20 +67,16 @@ theme_override_constants/margin_bottom = 20
 layout_mode = 2
 
 [node name="icon" type="TextureRect" parent="Panel/stat_holder/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 texture = SubResource("AtlasTexture_lw8oi")
-expand_mode = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="Panel/stat_holder/MarginContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
+expand_mode = 1
 
 [node name="lbl_stat" type="Label" parent="Panel/stat_holder/MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("4_xyjii")
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 34
 text = "55/55"
 horizontal_alignment = 1
 vertical_alignment = 1

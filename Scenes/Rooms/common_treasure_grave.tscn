@@ -1,0 +1,526 @@
+[gd_scene load_steps=31 format=3 uid="uid://c127vn167w5k8"]
+
+[ext_resource type="Texture2D" uid="uid://ccbefxbhjge3h" path="res://Assets/Art/Room_04_Background.png" id="1_1v1em"]
+[ext_resource type="Script" uid="uid://hs4xhk5aag7r" path="res://Scripts/HallwayEvents/hallway_treasure.gd" id="1_dp2er"]
+[ext_resource type="Texture2D" uid="uid://0iqhm24jpnqh" path="res://Assets/Art/Events/Grave.png" id="2_wuomh"]
+[ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="4_wsc3q"]
+[ext_resource type="Texture2D" uid="uid://dxw4wnrx37lmp" path="res://Assets/Art/Particles/magic_05.png" id="5_3bg5k"]
+[ext_resource type="PackedScene" uid="uid://c3h585v8mippc" path="res://Scenes/Elements/free_item_offering.tscn" id="6_wg1yh"]
+[ext_resource type="Animation" uid="uid://h1pr5qyht8io" path="res://Animations/itembox_hide.res" id="7_3bg5k"]
+[ext_resource type="Animation" uid="uid://c3i266wq8xrth" path="res://Animations/itembox_show.res" id="8_wg1yh"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wuomh"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wsc3q"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3bg5k"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wg1yh"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1tpv4"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_adbuy"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qkems"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_k4ton"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4iit6"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dp2er"]
+
+[sub_resource type="Curve" id="Curve_1tpv4"]
+_limits = [0.3, 3.0, 0.0, 1.0]
+_data = [Vector2(0, 0.3), 0.0, 0.0, 0, 0, Vector2(1, 1.0618), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_qkems"]
+offsets = PackedFloat32Array(0, 0.625, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="Animation" id="Animation_ac2k8"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("picEvent/lblEvent:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.5, 0.5)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("picEvent/lblEvent:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(99, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("picEvent/lblEvent:pivot_offset")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(48, 29)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("picEvent/lblEvent:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_854vh"]
+resource_name = "hide_label"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("picEvent/lblEvent:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.5, 0.5)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("picEvent/lblEvent:position")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(99, -50), Vector2(99, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("picEvent/lblEvent:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("picEvent/lblEvent:pivot_offset")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(48, 29)]
+}
+
+[sub_resource type="Animation" id="Animation_ki0au"]
+resource_name = "show_label"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("picEvent/lblEvent:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.5, 0.5), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("picEvent/lblEvent:position")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(99, 0), Vector2(99, -50)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("picEvent/lblEvent:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("picEvent/lblEvent:pivot_offset")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(48, 29)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_tf3i0"]
+_data = {
+&"RESET": SubResource("Animation_ac2k8"),
+&"hide_label": SubResource("Animation_854vh"),
+&"show_label": SubResource("Animation_ki0au")
+}
+
+[sub_resource type="Animation" id="Animation_gtte2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FreeItemOffering:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("FreeItemOffering:pivot_offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("FreeItemOffering:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("FreeItemOffering:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ns11b"]
+_data = {
+&"RESET": SubResource("Animation_gtte2"),
+&"hide_items": ExtResource("7_3bg5k"),
+&"show_items": ExtResource("8_wg1yh")
+}
+
+[sub_resource type="Animation" id="Animation_wsc3q"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("picEvent/particles:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("picEvent:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("picEvent/btnEvent:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_3bg5k"]
+resource_name = "hide_event"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("picEvent:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(0, 0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("picEvent/particles:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("picEvent/btnEvent:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
+[sub_resource type="Animation" id="Animation_dp2er"]
+resource_name = "show_event"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("picEvent:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("picEvent/particles:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("picEvent/btnEvent:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_wg1yh"]
+_data = {
+&"RESET": SubResource("Animation_wsc3q"),
+&"hide_event": SubResource("Animation_3bg5k"),
+&"show_event": SubResource("Animation_dp2er")
+}
+
+[node name="HallwayTreasure" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_dp2er")
+
+[node name="picBack" type="TextureRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_1v1em")
+expand_mode = 1
+
+[node name="btnContinue" type="Button" parent="."]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 0
+offset_left = 664.0
+offset_top = 322.0
+offset_right = 838.0
+offset_bottom = 437.0
+theme_override_styles/focus = SubResource("StyleBoxEmpty_wuomh")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_wsc3q")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_3bg5k")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_wg1yh")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_1tpv4")
+
+[node name="picEvent" type="TextureRect" parent="."]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 0
+offset_left = 569.0
+offset_top = 388.0
+offset_right = 863.0
+offset_bottom = 601.0
+texture = ExtResource("2_wuomh")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="lblEvent" type="Label" parent="picEvent"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -48.0
+offset_top = -50.0
+offset_right = 48.0
+offset_bottom = 8.0
+grow_horizontal = 2
+scale = Vector2(0.5, 0.5)
+pivot_offset = Vector2(48, 29)
+theme_override_colors/font_color = Color(1, 0.866667, 0, 1)
+theme_override_colors/font_outline_color = Color(0.51, 0.306, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("4_wsc3q")
+theme_override_font_sizes/font_size = 46
+text = "Dig?"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="btnEvent" type="Button" parent="picEvent"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_adbuy")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_qkems")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_k4ton")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_4iit6")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_dp2er")
+disabled = true
+
+[node name="particles" type="CPUParticles2D" parent="picEvent"]
+position = Vector2(173, 140)
+emitting = false
+amount = 10
+texture = ExtResource("5_3bg5k")
+speed_scale = 0.3
+randomness = 0.3
+emission_shape = 3
+emission_rect_extents = Vector2(100, 20)
+direction = Vector2(0, 0)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 100.0
+initial_velocity_max = 300.0
+angular_velocity_min = 30.0
+angular_velocity_max = 200.0
+scale_amount_min = 0.1
+scale_amount_max = 0.2
+scale_amount_curve = SubResource("Curve_1tpv4")
+color = Color(0.760379, 0.640721, 0.605235, 1)
+color_ramp = SubResource("Gradient_qkems")
+
+[node name="FreeItemOffering" parent="." instance=ExtResource("6_wg1yh")]
+visible = false
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+items_offered = 2
+box_name = "Someone's Grave"
+box_desc = "Well... it's no longer of use to the dead."
+include_extra_rare = true
+
+[node name="animLabel" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_tf3i0")
+}
+
+[node name="animItems" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_ns11b")
+}
+
+[node name="animEvent" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_wg1yh")
+}
+
+[connection signal="mouse_entered" from="picEvent/btnEvent" to="." method="_on_btn_event_mouse_entered"]
+[connection signal="mouse_exited" from="picEvent/btnEvent" to="." method="_on_btn_event_mouse_exited"]
+[connection signal="pressed" from="picEvent/btnEvent" to="." method="_on_btn_event_pressed"]

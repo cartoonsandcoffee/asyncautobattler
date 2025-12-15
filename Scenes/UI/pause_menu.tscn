@@ -1,0 +1,129 @@
+[gd_scene load_steps=7 format=3 uid="uid://vsf0s3kixuku"]
+
+[ext_resource type="Script" uid="uid://cii4qy0wlkljr" path="res://Scripts/UI/pause_menu.gd" id="1_oykix"]
+[ext_resource type="Texture2D" uid="uid://derrdt27xagod" path="res://Assets/UI/panel-border-007.png" id="1_r2i2h"]
+[ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="2_oykix"]
+[ext_resource type="Texture2D" uid="uid://ccbcslnsifj3o" path="res://Assets/UI/divider-fade-002.png" id="3_kdnb7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_702e2"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_qyryt"]
+texture = ExtResource("1_r2i2h")
+texture_margin_left = 32.0
+texture_margin_top = 32.0
+texture_margin_right = 32.0
+texture_margin_bottom = 32.0
+
+[node name="PauseMenu" type="Control"]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_oykix")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.784314)
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="panelBlackBack" type="PanelContainer" parent="Panel"]
+custom_minimum_size = Vector2(500, 100)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_702e2")
+
+[node name="panelBorder" type="PanelContainer" parent="Panel/panelBlackBack"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_qyryt")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/panelBlackBack/panelBorder"]
+layout_mode = 2
+theme = ExtResource("2_oykix")
+theme_override_constants/separation = 10
+
+[node name="menuTitle" type="HBoxContainer" parent="Panel/panelBlackBack/panelBorder/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_oykix")
+
+[node name="TextureRect2" type="TextureRect" parent="Panel/panelBlackBack/panelBorder/VBoxContainer/menuTitle"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("3_kdnb7")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="lblTitle" type="Label" parent="Panel/panelBlackBack/panelBorder/VBoxContainer/menuTitle"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 48
+text = " Paused "
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="Panel/panelBlackBack/panelBorder/VBoxContainer/menuTitle"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("3_kdnb7")
+expand_mode = 1
+stretch_mode = 5
+flip_h = true
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/panelBlackBack/panelBorder/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="btnResume" type="Button" parent="Panel/panelBlackBack/panelBorder/VBoxContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+text = "Resume"
+
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/panelBlackBack/panelBorder/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="btnNewRun" type="Button" parent="Panel/panelBlackBack/panelBorder/VBoxContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+text = "New Run"
+
+[node name="btnSettings" type="Button" parent="Panel/panelBlackBack/panelBorder/VBoxContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+text = "Settings"
+
+[node name="btnQuit" type="Button" parent="Panel/panelBlackBack/panelBorder/VBoxContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+text = "Return to Main Menu"

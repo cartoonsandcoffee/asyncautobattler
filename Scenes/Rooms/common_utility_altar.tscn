@@ -1,0 +1,389 @@
+[gd_scene load_steps=22 format=3 uid="uid://bqvlcutw40dvm"]
+
+[ext_resource type="Script" uid="uid://cqorbe72ves58" path="res://Scripts/RoomEvents/altar_room.gd" id="1_tcxes"]
+[ext_resource type="Texture2D" uid="uid://b3pokhfwe3jp7" path="res://Assets/Art/Events/Altar.png" id="2_kbibm"]
+[ext_resource type="Resource" uid="uid://gm0vvksbp7e4" path="res://Resources/Enemies/Anguish.tres" id="2_x31fb"]
+[ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="3_tcxes"]
+[ext_resource type="Texture2D" uid="uid://csprhhu3ka3ig" path="res://Assets/Art/Room_03_Background.png" id="3_x31fb"]
+[ext_resource type="PackedScene" uid="uid://dfuglhrwpha2" path="res://Scenes/Elements/item_combiner.tscn" id="4_kbibm"]
+[ext_resource type="Animation" uid="uid://dxyver3777wa6" path="res://Animations/altar_close_box.res" id="7_axv24"]
+[ext_resource type="Animation" uid="uid://ltynyahqn3n6" path="res://Animations/altar_hide_text.res" id="8_txvgj"]
+[ext_resource type="Animation" uid="uid://dfgi52spygusb" path="res://Animations/altar_open_box.res" id="9_ws8rf"]
+[ext_resource type="Animation" uid="uid://u4wkdm5bvrhg" path="res://Animations/altar_show_text.res" id="10_pc7tr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_x31fb"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_n3iiu"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5jklw"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dwi30"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_axv24"]
+
+[sub_resource type="Animation" id="Animation_n3iiu"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("picEvent:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("picEvent/Button:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("picEvent:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Label:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Label:pivot_offset")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Label:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Label:scale")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Label:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(523, 177)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("ItemCombiner:visible")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("ItemCombiner:pivot_offset")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("ItemCombiner:modulate")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("ItemCombiner:scale")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_5jklw"]
+resource_name = "hide_event"
+length = 0.4
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("picEvent:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("picEvent/Button:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("picEvent:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_x31fb"]
+resource_name = "show_event"
+length = 0.4
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("picEvent:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("picEvent/Button:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("picEvent:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_pc7tr"]
+_data = {
+&"RESET": SubResource("Animation_n3iiu"),
+&"closeBox": ExtResource("7_axv24"),
+&"hide_event": SubResource("Animation_5jklw"),
+&"hide_text": ExtResource("8_txvgj"),
+&"openBox": ExtResource("9_ws8rf"),
+&"show_event": SubResource("Animation_x31fb"),
+&"show_text": ExtResource("10_pc7tr")
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_5veg6"]
+_data = {
+&"altar_hide_text": ExtResource("8_txvgj"),
+&"altar_show_text": ExtResource("10_pc7tr")
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_y00et"]
+_data = {
+&"altar_close_box": ExtResource("7_axv24"),
+&"altar_open_box": ExtResource("9_ws8rf")
+}
+
+[node name="AltarRoom" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_tcxes")
+enemy_resource = ExtResource("2_x31fb")
+
+[node name="picBack" type="TextureRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_x31fb")
+expand_mode = 1
+
+[node name="picEvent" type="TextureRect" parent="."]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -215.0
+offset_top = -193.0
+offset_right = 215.0
+offset_bottom = 193.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_kbibm")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="Button" type="Button" parent="picEvent"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 154.0
+offset_top = 56.0
+offset_right = -128.0
+offset_bottom = -21.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_x31fb")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_n3iiu")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_5jklw")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_dwi30")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_axv24")
+disabled = true
+
+[node name="Label" type="Label" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -245.0
+offset_top = -255.0
+offset_right = 263.0
+offset_bottom = -185.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 0.9, 0, 1)
+theme_override_colors/font_outline_color = Color(0.631053, 0.435967, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("3_tcxes")
+theme_override_font_sizes/font_size = 55
+text = "Make an Offering?"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ItemCombiner" parent="." instance=ExtResource("4_kbibm")]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+combiner_mode = 1
+number_of_slots = 1
+allow_multiple_crafts = false
+auto_close_on_craft = true
+instruction_text = "Leave an offering..."
+box_name = "A  Crumbling  Altar"
+button_text = "Offer this Item"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_pc7tr")
+}
+
+[node name="textAnim" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_5veg6")
+}
+
+[node name="boxAnim" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_y00et")
+}
+
+[connection signal="mouse_entered" from="picEvent/Button" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="picEvent/Button" to="." method="_on_button_mouse_exited"]
+[connection signal="pressed" from="picEvent/Button" to="." method="_on_button_pressed"]

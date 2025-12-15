@@ -1,0 +1,418 @@
+[gd_scene load_steps=13 format=3 uid="uid://bqe1p63qqfmnw"]
+
+[ext_resource type="Script" uid="uid://dh7un1alskdo3" path="res://Scripts/UI/compendium.gd" id="1_i31vm"]
+[ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="1_q7jf6"]
+[ext_resource type="Texture2D" uid="uid://derrdt27xagod" path="res://Assets/UI/panel-border-007.png" id="2_3utmk"]
+[ext_resource type="Texture2D" uid="uid://ccbcslnsifj3o" path="res://Assets/UI/divider-fade-002.png" id="3_i31vm"]
+[ext_resource type="Texture2D" uid="uid://vtf7yfl2710m" path="res://Assets/UI/panel-border-030.png" id="4_iay8p"]
+[ext_resource type="Theme" uid="uid://od14ccps1daj" path="res://Themes/descriptive_label.tres" id="5_3ohpy"]
+[ext_resource type="PackedScene" uid="uid://cqhyru53o5wfx" path="res://Scenes/item.tscn" id="6_3utmk"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dd1gw"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ahmr2"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_vgcpq"]
+texture = ExtResource("2_3utmk")
+texture_margin_left = 32.0
+texture_margin_top = 32.0
+texture_margin_right = 32.0
+texture_margin_bottom = 32.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_o2wav"]
+texture = ExtResource("4_iay8p")
+texture_margin_left = 24.0
+texture_margin_top = 24.0
+texture_margin_right = 24.0
+texture_margin_bottom = 24.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_f4ijw"]
+texture = ExtResource("4_iay8p")
+texture_margin_left = 24.0
+texture_margin_top = 24.0
+texture_margin_right = 24.0
+texture_margin_bottom = 24.0
+
+[node name="Compendium" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_i31vm")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_dd1gw")
+
+[node name="pnlBlackBack" type="PanelContainer" parent="Panel"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ahmr2")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/pnlBlackBack"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="pnlBorder" type="PanelContainer" parent="Panel/pnlBlackBack/MarginContainer"]
+custom_minimum_size = Vector2(500, 100)
+layout_mode = 2
+theme = ExtResource("1_q7jf6")
+theme_override_styles/panel = SubResource("StyleBoxTexture_vgcpq")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="menuTitle" type="HBoxContainer" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/menuTitle"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect2" type="TextureRect" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/menuTitle"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("3_i31vm")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="lblTitle" type="Label" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/menuTitle"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 48
+text = "Compendium"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/menuTitle"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("3_i31vm")
+expand_mode = 1
+stretch_mode = 5
+flip_h = true
+
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/menuTitle"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer3" type="MarginContainer" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="panelFilters" type="PanelContainer" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_o2wav")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters"]
+layout_mode = 2
+theme = ExtResource("5_3ohpy")
+theme_override_constants/separation = 5
+
+[node name="lblFilters" type="Label" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_q7jf6")
+text = "- Filters -"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="lblTypes" type="Label" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Item Type"
+
+[node name="optTypes" type="OptionButton" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+selected = 0
+item_count = 6
+popup/item_0/text = "All"
+popup/item_0/id = 0
+popup/item_1/text = "Weapons"
+popup/item_1/id = 1
+popup/item_2/text = "Armor"
+popup/item_2/id = 2
+popup/item_3/text = "Tools"
+popup/item_3/id = 3
+popup/item_4/text = "Bugs"
+popup/item_4/id = 4
+popup/item_5/text = "Potions"
+popup/item_5/id = 5
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="lblRarity" type="Label" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Rarity"
+
+[node name="optRarity" type="OptionButton" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+selected = 0
+item_count = 6
+popup/item_0/text = "All"
+popup/item_0/id = 0
+popup/item_1/text = "Common"
+popup/item_1/id = 1
+popup/item_2/text = "Uncommon"
+popup/item_2/id = 2
+popup/item_3/text = "Rare"
+popup/item_3/id = 3
+popup/item_4/text = "Legendary"
+popup/item_4/id = 4
+popup/item_5/text = "Crafted"
+popup/item_5/id = 5
+
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="panelItems" type="PanelContainer" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxTexture_f4ijw")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems"]
+layout_mode = 2
+follow_focus = true
+horizontal_scroll_mode = 0
+
+[node name="gridItems" type="GridContainer" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+columns = 10
+
+[node name="Item" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item2" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item3" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item4" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item5" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item6" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item7" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item8" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item9" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item10" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item11" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item12" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item13" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item14" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item15" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item16" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item17" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item18" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item19" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item20" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item21" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item22" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item23" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item24" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item25" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item26" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item27" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item28" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item29" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item30" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item31" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item32" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item33" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item34" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item35" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item36" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item37" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item38" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item39" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item40" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item41" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item42" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="Item43" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+
+[node name="VScrollBar" type="VScrollBar" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems"]
+visible = false
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="Buttons" type="HBoxContainer" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/Buttons"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="btnDone" type="Button" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/Buttons"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Done
+"
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/Buttons"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[connection signal="item_selected" from="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer/optTypes" to="." method="_on_opt_types_item_selected"]
+[connection signal="item_selected" from="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer/optRarity" to="." method="_on_opt_rarity_item_selected"]
+[connection signal="mouse_entered" from="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/Buttons/btnDone" to="." method="_on_btn_done_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/Buttons/btnDone" to="." method="_on_btn_done_mouse_exited"]
+[connection signal="pressed" from="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/Buttons/btnDone" to="." method="_on_btn_done_pressed"]

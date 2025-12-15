@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://dal4a52ms64j6"]
+[gd_scene load_steps=26 format=3 uid="uid://dal4a52ms64j6"]
 
 [ext_resource type="Script" uid="uid://ddldx468qw34w" path="res://Scripts/main_menu.gd" id="1_n45e2"]
 [ext_resource type="Texture2D" uid="uid://vtf7yfl2710m" path="res://Assets/UI/panel-border-030.png" id="2_ce3w2"]
@@ -11,6 +11,8 @@
 [ext_resource type="Texture2D" uid="uid://dbqqhnh3sx2ey" path="res://Assets/Art/Blob.png" id="5_vtepg"]
 [ext_resource type="Texture2D" uid="uid://bwbr46yaud2np" path="res://Assets/Art/Player_Combat.png" id="6_8dnnj"]
 [ext_resource type="Texture2D" uid="uid://072s2rxwk6m8" path="res://Assets/UI/panel-border-004.png" id="6_opfnp"]
+[ext_resource type="PackedScene" uid="uid://cf3ax1fquw2mm" path="res://Scenes/UI/settings_panel.tscn" id="12_t1dhk"]
+[ext_resource type="PackedScene" uid="uid://bqe1p63qqfmnw" path="res://Scenes/UI/compendium.tscn" id="13_5egv6"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_opfnp"]
 
@@ -115,7 +117,7 @@ tracks/4/keys = {
 [sub_resource type="Animation" id="Animation_opfnp"]
 resource_name = "namebox_flyin"
 length = 0.5
-step = 0.01
+step = 0.025
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -175,6 +177,20 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector2(303, 65)]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("..")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play_popup_open_sfx"
+}]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_yhxw7"]
@@ -312,7 +328,7 @@ anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 27.0
-offset_top = -522.0
+offset_top = -648.0
 offset_right = 528.0
 offset_bottom = -30.0
 grow_vertical = 0
@@ -359,6 +375,7 @@ theme_override_constants/margin_bottom = 20
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer"]
 layout_mode = 2
 theme = ExtResource("3_n45e2")
+theme_override_constants/separation = 10
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -396,16 +413,21 @@ custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
 text = "New Game"
 
-[node name="btnContinue" type="Button" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="btnPrivate" type="Button" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
 disabled = true
-text = "Continue"
+text = "Private Server"
+
+[node name="btnHeroes" type="Button" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 75)
+layout_mode = 2
+disabled = true
+text = "Hall of Heroes"
 
 [node name="btnCompendium" type="Button" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
-disabled = true
 text = "Compendium"
 
 [node name="btnSettings" type="Button" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer"]
@@ -560,13 +582,23 @@ layout_mode = 2
 theme = ExtResource("3_n45e2")
 text = "Done"
 
+[node name="SettingsPanel" parent="Panel" instance=ExtResource("12_t1dhk")]
+visible = false
+layout_mode = 1
+
+[node name="Compendium" parent="Panel" instance=ExtResource("13_5egv6")]
+visible = false
+layout_mode = 1
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Panel"]
 libraries = {
 &"": SubResource("AnimationLibrary_yhxw7")
 }
 
 [connection signal="pressed" from="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/btnNewGame" to="." method="_on_btn_new_game_pressed"]
-[connection signal="pressed" from="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/btnContinue" to="." method="_on_btn_continue_pressed"]
+[connection signal="pressed" from="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/btnPrivate" to="." method="_on_btn_continue_pressed"]
+[connection signal="pressed" from="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/btnCompendium" to="." method="_on_btn_compendium_pressed"]
+[connection signal="pressed" from="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/btnSettings" to="." method="_on_btn_settings_pressed"]
 [connection signal="pressed" from="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/btnQuit" to="." method="_on_btn_quit_pressed"]
 [connection signal="text_changed" from="Panel/panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/txtName" to="." method="_on_txt_name_text_changed"]
 [connection signal="pressed" from="Panel/panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/btnName" to="." method="_on_btn_name_pressed"]

@@ -1,12 +1,23 @@
-[gd_scene load_steps=6 format=3 uid="uid://xkllxymbfbm6"]
+[gd_scene load_steps=9 format=3 uid="uid://xkllxymbfbm6"]
 
 [ext_resource type="Texture2D" uid="uid://vtf7yfl2710m" path="res://Assets/UI/panel-border-030.png" id="1_1lxbj"]
 [ext_resource type="Script" uid="uid://cvxanw2w26j4i" path="res://Scripts/Components/slide_player.gd" id="1_biuxw"]
 [ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="2_biuxw"]
 [ext_resource type="Resource" uid="uid://bblelrbpbyobr" path="res://Resources/SlideShows/StartingRoom.tres" id="2_h607j"]
+[ext_resource type="Texture2D" uid="uid://xhebd4byrekv" path="res://Assets/Art/Cutscenes/Opening_Comic.png" id="5_6crn0"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h607j"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_t083f"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1ya1j"]
 bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_t23ke"]
+texture = ExtResource("1_1lxbj")
+texture_margin_left = 24.0
+texture_margin_top = 24.0
+texture_margin_right = 24.0
+texture_margin_bottom = 32.0
+region_rect = Rect2(0, 0, 96, 96)
 
 [node name="SlidePlayer" type="Control"]
 layout_mode = 3
@@ -18,66 +29,68 @@ grow_vertical = 2
 script = ExtResource("1_biuxw")
 slideshow = ExtResource("2_h607j")
 
-[node name="slideContainer" type="PanelContainer" parent="."]
+[node name="slideContainer" type="Panel" parent="."]
+custom_minimum_size = Vector2(100, 100)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -306.5
-offset_top = -140.0
-offset_right = 306.5
-offset_bottom = 140.0
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_h607j")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_t083f")
 
-[node name="NinePatchRect" type="NinePatchRect" parent="slideContainer"]
-layout_mode = 2
-texture = ExtResource("1_1lxbj")
-region_rect = Rect2(0, 0, 96, 96)
-patch_margin_left = 32
-patch_margin_top = 32
-patch_margin_right = 32
-patch_margin_bottom = 32
-
-[node name="MarginContainer" type="MarginContainer" parent="slideContainer/NinePatchRect"]
+[node name="panelBlack" type="PanelContainer" parent="slideContainer"]
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -50.0
+offset_right = 250.0
+offset_bottom = 50.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
+theme_override_styles/panel = SubResource("StyleBoxFlat_1ya1j")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="slideContainer/NinePatchRect/MarginContainer"]
+[node name="paneBorder" type="PanelContainer" parent="slideContainer/panelBlack"]
+custom_minimum_size = Vector2(500, 100)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_t23ke")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="slideContainer/panelBlack/paneBorder"]
 layout_mode = 2
 theme = ExtResource("2_biuxw")
 theme_override_constants/separation = 10
 
-[node name="lblTitle" type="Label" parent="slideContainer/NinePatchRect/MarginContainer/VBoxContainer"]
+[node name="lblTitle" type="Label" parent="slideContainer/panelBlack/paneBorder/VBoxContainer"]
 layout_mode = 2
 text = "Back  down  you  go..."
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="pic" type="TextureRect" parent="slideContainer/NinePatchRect/MarginContainer/VBoxContainer"]
+[node name="pic" type="TextureRect" parent="slideContainer/panelBlack/paneBorder/VBoxContainer"]
 visible = false
-custom_minimum_size = Vector2(570, 110)
+custom_minimum_size = Vector2(800, 400)
 layout_mode = 2
+texture = ExtResource("5_6crn0")
 expand_mode = 1
 
-[node name="ColorRect" type="ColorRect" parent="slideContainer/NinePatchRect/MarginContainer/VBoxContainer"]
+[node name="ColorRect" type="ColorRect" parent="slideContainer/panelBlack/paneBorder/VBoxContainer"]
 show_behind_parent = true
 custom_minimum_size = Vector2(570, 110)
 layout_mode = 2
 color = Color(0.103744, 0.103744, 0.103744, 1)
 
-[node name="MarginContainer" type="MarginContainer" parent="slideContainer/NinePatchRect/MarginContainer/VBoxContainer/ColorRect"]
+[node name="MarginContainer" type="MarginContainer" parent="slideContainer/panelBlack/paneBorder/VBoxContainer/ColorRect"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -89,43 +102,44 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="txtMain" type="RichTextLabel" parent="slideContainer/NinePatchRect/MarginContainer/VBoxContainer/ColorRect/MarginContainer"]
+[node name="txtMain" type="RichTextLabel" parent="slideContainer/panelBlack/paneBorder/VBoxContainer/ColorRect/MarginContainer"]
 layout_mode = 2
 bbcode_enabled = true
+text = "Test text"
 fit_content = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="slideContainer/NinePatchRect/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="slideContainer/panelBlack/paneBorder/VBoxContainer"]
 custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
 
-[node name="MarginContainer2" type="MarginContainer" parent="slideContainer/NinePatchRect/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="slideContainer/panelBlack/paneBorder/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="btnBack" type="Button" parent="slideContainer/NinePatchRect/MarginContainer/VBoxContainer/HBoxContainer/MarginContainer2"]
+[node name="btnBack" type="Button" parent="slideContainer/panelBlack/paneBorder/VBoxContainer/HBoxContainer/MarginContainer2"]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 text = "<<  Back"
 
-[node name="MarginContainer" type="MarginContainer" parent="slideContainer/NinePatchRect/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="slideContainer/panelBlack/paneBorder/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="btnClose" type="Button" parent="slideContainer/NinePatchRect/MarginContainer/VBoxContainer/HBoxContainer/MarginContainer"]
+[node name="btnClose" type="Button" parent="slideContainer/panelBlack/paneBorder/VBoxContainer/HBoxContainer/MarginContainer"]
 visible = false
 layout_mode = 2
 text = "Close"
 
-[node name="MarginContainer3" type="MarginContainer" parent="slideContainer/NinePatchRect/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="MarginContainer3" type="MarginContainer" parent="slideContainer/panelBlack/paneBorder/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="btnNext" type="Button" parent="slideContainer/NinePatchRect/MarginContainer/VBoxContainer/HBoxContainer/MarginContainer3"]
+[node name="btnNext" type="Button" parent="slideContainer/panelBlack/paneBorder/VBoxContainer/HBoxContainer/MarginContainer3"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Next  >>"
 
-[connection signal="pressed" from="slideContainer/NinePatchRect/MarginContainer/VBoxContainer/HBoxContainer/MarginContainer2/btnBack" to="." method="_on_btn_back_pressed"]
-[connection signal="pressed" from="slideContainer/NinePatchRect/MarginContainer/VBoxContainer/HBoxContainer/MarginContainer/btnClose" to="." method="_on_btn_close_pressed"]
-[connection signal="pressed" from="slideContainer/NinePatchRect/MarginContainer/VBoxContainer/HBoxContainer/MarginContainer3/btnNext" to="." method="_on_btn_next_pressed"]
+[connection signal="pressed" from="slideContainer/panelBlack/paneBorder/VBoxContainer/HBoxContainer/MarginContainer2/btnBack" to="." method="_on_btn_back_pressed"]
+[connection signal="pressed" from="slideContainer/panelBlack/paneBorder/VBoxContainer/HBoxContainer/MarginContainer/btnClose" to="." method="_on_btn_close_pressed"]
+[connection signal="pressed" from="slideContainer/panelBlack/paneBorder/VBoxContainer/HBoxContainer/MarginContainer3/btnNext" to="." method="_on_btn_next_pressed"]

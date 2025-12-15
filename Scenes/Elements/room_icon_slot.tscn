@@ -1,0 +1,60 @@
+[gd_scene load_steps=9 format=3 uid="uid://b2gloabm0twxk"]
+
+[ext_resource type="Texture2D" uid="uid://cmqrx3hrqs4ep" path="res://Resources/Icons/icon_question.tres" id="1_psc4f"]
+[ext_resource type="Script" uid="uid://4hejm8umsn7t" path="res://Scripts/Components/room_icon_slot.gd" id="1_qrh7r"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qrh7r"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cc81g"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xfpx5"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xa8xx"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4ifod"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qg8jo"]
+
+[node name="RoomIconSlot" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qrh7r")
+
+[node name="Panel" type="Panel" parent="."]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qrh7r")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="TextureRect" type="TextureRect" parent="Panel/MarginContainer"]
+layout_mode = 2
+texture = ExtResource("1_psc4f")
+expand_mode = 1
+
+[node name="Button" type="Button" parent="Panel/MarginContainer"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_cc81g")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_xfpx5")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_xa8xx")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_4ifod")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_qg8jo")

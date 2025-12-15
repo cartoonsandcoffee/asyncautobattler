@@ -1,0 +1,315 @@
+[gd_scene load_steps=21 format=3 uid="uid://dtmu8m4k80tt3"]
+
+[ext_resource type="Script" uid="uid://dh06jc8uy1xdx" path="res://Scripts/RoomEvents/rare_merchant_room.gd" id="1_yiccd"]
+[ext_resource type="Resource" uid="uid://gm0vvksbp7e4" path="res://Resources/Enemies/Anguish.tres" id="2_inb5p"]
+[ext_resource type="Texture2D" uid="uid://csprhhu3ka3ig" path="res://Assets/Art/Room_03_Background.png" id="3_0p0f4"]
+[ext_resource type="Texture2D" uid="uid://dbclbklsxjo03" path="res://Assets/Art/Events/Merchant02_Dark.png" id="4_ytph8"]
+[ext_resource type="Texture2D" uid="uid://dqi6l36fb53pn" path="res://Assets/Art/Events/Merchant02_Light.png" id="5_jwoux"]
+[ext_resource type="PackedScene" uid="uid://bb31dt8vvd6f4" path="res://Scenes/Elements/item_merchant_store.tscn" id="6_7st5r"]
+[ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="7_umddc"]
+[ext_resource type="Texture2D" uid="uid://dxt3yb4gkjn6x" path="res://Assets/Art/Particles/smoke_07.png" id="8_p0uv6"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u3e5k"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fgisx"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ebe42"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hg87j"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o0xvr"]
+
+[sub_resource type="Animation" id="Animation_jlqs5"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("merchantControl/merchantDark:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("merchantControl/merchantLight:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("smoke:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_t26a3"]
+resource_name = "merchant_close"
+length = 0.5
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("merchantControl/merchantDark:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("merchantControl/merchantLight:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("smoke:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_ugds1"]
+resource_name = "merchant_idle"
+length = 4.0
+loop_mode = 1
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("merchantControl/merchantDark:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("merchantControl/merchantLight:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.65, 1.05, 1.525, 2.65, 4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0.866667), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("smoke:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.65, 1.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_fgisx"]
+resource_name = "show_merchant"
+length = 0.5
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("merchantControl/merchantDark:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play_idle"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ebe42"]
+_data = {
+&"RESET": SubResource("Animation_jlqs5"),
+&"merchant_close": SubResource("Animation_t26a3"),
+&"merchant_idle": SubResource("Animation_ugds1"),
+&"show_merchant": SubResource("Animation_fgisx")
+}
+
+[sub_resource type="Curve" id="Curve_fgisx"]
+_limits = [0.3, 3.0, 0.0, 1.0]
+_data = [Vector2(0, 0.3), 0.0, 0.0, 0, 0, Vector2(0.751244, 0.694382), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_ebe42"]
+offsets = PackedFloat32Array(0, 0.625, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[node name="RareMerchantRoom" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_yiccd")
+event_description = "You catch the scent of tobacco in the air..."
+enemy_resource = ExtResource("2_inb5p")
+
+[node name="picBack" type="TextureRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_0p0f4")
+expand_mode = 3
+
+[node name="merchantControl" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -768.0
+offset_top = -621.0
+offset_right = -768.0
+offset_bottom = -621.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.4, 0.4)
+pivot_offset = Vector2(768, 432)
+
+[node name="merchantDark" type="TextureRect" parent="merchantControl"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 0
+offset_right = 1253.0
+offset_bottom = 1660.0
+texture = ExtResource("4_ytph8")
+
+[node name="merchantLight" type="TextureRect" parent="merchantControl"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_right = 1253.0
+offset_bottom = 1660.0
+texture = ExtResource("5_jwoux")
+
+[node name="Button" type="Button" parent="merchantControl/merchantLight"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_u3e5k")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_fgisx")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_ebe42")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hg87j")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_o0xvr")
+
+[node name="item_merchant_store" parent="." instance=ExtResource("6_7st5r")]
+layout_mode = 1
+items_offered = 5
+box_name = "A peddler's hut"
+box_desc = "Smoke wafts from within a monster's maw."
+include_extra_rare = true
+
+[node name="lblAction" type="Label" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -283.0
+offset_top = 29.0
+offset_right = 213.0
+offset_bottom = 99.0
+grow_horizontal = 2
+pivot_offset = Vector2(248, 35)
+theme_override_colors/font_color = Color(0.899266, 0.805079, 0.264486, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.458824)
+theme_override_colors/font_outline_color = Color(0.50771, 0.241023, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("7_umddc")
+theme_override_font_sizes/font_size = 55
+text = "Shop"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="animMerchant" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_ebe42")
+}
+
+[node name="smoke" type="CPUParticles2D" parent="."]
+position = Vector2(684, 491)
+emitting = false
+amount = 3
+texture = ExtResource("8_p0uv6")
+speed_scale = 0.75
+randomness = 0.2
+direction = Vector2(-20, -10)
+gravity = Vector2(0, -1)
+initial_velocity_min = 50.0
+initial_velocity_max = 100.0
+angular_velocity_min = 30.0
+angular_velocity_max = 100.0
+scale_amount_min = 0.1
+scale_amount_max = 0.5
+scale_amount_curve = SubResource("Curve_fgisx")
+color = Color(0.637843, 0.637843, 0.637843, 1)
+color_ramp = SubResource("Gradient_ebe42")
+
+[connection signal="mouse_entered" from="merchantControl/merchantLight/Button" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="merchantControl/merchantLight/Button" to="." method="_on_button_mouse_exited"]
+[connection signal="pressed" from="merchantControl/merchantLight/Button" to="." method="_on_button_pressed"]
