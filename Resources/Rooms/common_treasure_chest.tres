@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="RoomDefinition" load_steps=8 format=3 uid="uid://la5exegfj7to"]
+
+[ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="1_qr28o"]
+[ext_resource type="Texture2D" uid="uid://ccbefxbhjge3h" path="res://Assets/Art/Room_04_Background.png" id="1_t2fu7"]
+[ext_resource type="Script" uid="uid://d211hcjce7xyf" path="res://Scripts/Resources/RoomDefinition.gd" id="2_gij51"]
+[ext_resource type="Texture2D" uid="uid://dxx8lmffw6ob7" path="res://Assets/Art/Doors/hallway.png" id="2_tck0q"]
+[ext_resource type="PackedScene" uid="uid://b0vi56n2ciwg6" path="res://Scenes/Rooms/common_treasure_chest.tscn" id="3_6csk6"]
+[ext_resource type="Resource" uid="uid://dg2wcy0kx620y" path="res://Resources/Enemies/Goblin.tres" id="5_tck0q"]
+[ext_resource type="Texture2D" uid="uid://crih8ktekhdwb" path="res://Resources/Icons/minimap_treasure.tres" id="5_uxewc"]
+
+[resource]
+script = ExtResource("2_gij51")
+room_type = 1
+rarity = 0
+room_name = "A hidden chest"
+room_desc = "Tangled among the roots of a bizarre tree is a treasure chest."
+utility_subtype = ""
+background_texture = ExtResource("1_t2fu7")
+door_texture = ExtResource("2_tck0q")
+room_icon = ExtResource("5_uxewc")
+room_color = Color(0.4167, 0.6, 0.366, 1)
+can_have_random_combat = true
+random_combat_chance = 1.0
+random_enemy_pool = Array[ExtResource("1_qr28o")]([ExtResource("5_tck0q")])
+can_spawn_shortcuts = false
+shortcut_chance = 0.0
+possible_events = Array[PackedScene]([ExtResource("3_6csk6")])
+spawn_weight = 5
+min_rank = 1
+max_rank = 5
+metadata/_custom_type_script = "uid://d211hcjce7xyf"

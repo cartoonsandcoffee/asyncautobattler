@@ -1,9 +1,10 @@
-[gd_resource type="Resource" script_class="Enemy" load_steps=11 format=3 uid="uid://gm0vvksbp7e4"]
+[gd_resource type="Resource" script_class="Enemy" load_steps=12 format=3 uid="uid://gm0vvksbp7e4"]
 
 [ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="1_yn4yh"]
 [ext_resource type="Texture2D" uid="uid://dv4wg0eliyecr" path="res://Assets/Art/Enemies/Hugger.png" id="2_mnldd"]
 [ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="2_n1qiu"]
 [ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="3_2vtmy"]
+[ext_resource type="Texture2D" uid="uid://buoclmp32624c" path="res://Assets/Art/Enemies/Ogle.png" id="5_2vtmy"]
 [ext_resource type="Script" uid="uid://c461mcmm1ot6v" path="res://Scripts/Classes/GameStats.gd" id="5_u1i2p"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ih78y"]
@@ -15,16 +16,18 @@ script = ExtResource("3_2vtmy")
 trigger_type = 3
 trigger_stat = 8
 trigger_status = 9
+trigger_value_threshold = 0
 countdown_value = 0
 countdown_recurs = false
 has_condition = false
 condition_type = 0
+condition_of = 4
 condition_stat = 0
 condition_status = 9
 condition_comparison = ">"
 compare_to = 0
 condition_value = 0
-condition_party = 4
+condition_to_party = 4
 condition_stat_type = 3
 condition_party_stat = 9
 condition_party_status = 9
@@ -49,7 +52,6 @@ convert_to_stat = 9
 convert_to_status = 9
 conversion_amount_type = 0
 conversion_amount_value = 1
-conversion_amount_percentage = 0.5
 conversion_ratio = 1.0
 retrigger_type = 1
 retrigger_target = 0
@@ -59,6 +61,7 @@ metadata/_custom_type_script = "uid://dahay7fvi7bik"
 
 [sub_resource type="Resource" id="Resource_k7ajg"]
 script = ExtResource("1_yn4yh")
+item_id = ""
 item_name = "Indigestion"
 item_type = 0
 item_desc = "On Hit: Give the player 1 acid."
@@ -95,18 +98,21 @@ strikes = 1
 burn_damage = 3
 metadata/_custom_type_script = "uid://c461mcmm1ot6v"
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ohrd5"]
-atlas = ExtResource("2_mnldd")
-region = Rect2(1400, 400, 1200, 1200)
+[sub_resource type="AtlasTexture" id="AtlasTexture_cxui7"]
+atlas = ExtResource("5_2vtmy")
+region = Rect2(650, 500, 350, 350)
 
 [resource]
 script = ExtResource("2_n1qiu")
-enemy_name = "An Indigestion"
+enemy_name = "An Ogle"
 enemy_type = 0
 description = "On Hit: Give the player 1 acid."
-sprite = ExtResource("2_mnldd")
+sprite = ExtResource("5_2vtmy")
+sprite_hit = ExtResource("5_2vtmy")
+sprite_attack = ExtResource("5_2vtmy")
 sprite_color = Color(0.2806, 0.61, 0.40138, 1)
-weapon_sprite = SubResource("AtlasTexture_ohrd5")
+weapon_sprite = SubResource("AtlasTexture_cxui7")
+skin_id = 0
 stats = SubResource("Resource_f84qh")
 gold = 3
 item_drop_chance = 0.1

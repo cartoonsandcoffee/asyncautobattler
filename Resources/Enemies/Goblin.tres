@@ -1,9 +1,12 @@
-[gd_resource type="Resource" script_class="Enemy" load_steps=11 format=3 uid="uid://dg2wcy0kx620y"]
+[gd_resource type="Resource" script_class="Enemy" load_steps=14 format=3 uid="uid://dg2wcy0kx620y"]
 
 [ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="2_aiy86"]
 [ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="3_hkn3j"]
 [ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="4_xr38p"]
+[ext_resource type="Texture2D" uid="uid://gqgack7wbc8y" path="res://Assets/Art/Enemies/Anguish_Idle.png" id="5_gre71"]
+[ext_resource type="Texture2D" uid="uid://dpjaensyug3aq" path="res://Assets/Art/Enemies/Anguish_Attack.png" id="6_ggdh7"]
 [ext_resource type="Texture2D" uid="uid://do0cbbubxlxq6" path="res://Assets/Art/Enemies/Klorg.png" id="6_hkn3j"]
+[ext_resource type="Texture2D" uid="uid://5a2sokd8ur44" path="res://Assets/Art/Enemies/Anguish_Hit.png" id="7_ag7pw"]
 [ext_resource type="Script" uid="uid://c461mcmm1ot6v" path="res://Scripts/Classes/GameStats.gd" id="7_xr38p"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_aiy86"]
@@ -15,16 +18,18 @@ script = ExtResource("2_aiy86")
 trigger_type = 4
 trigger_stat = 8
 trigger_status = 9
+trigger_value_threshold = 0
 countdown_value = 0
 countdown_recurs = false
 has_condition = false
 condition_type = 0
+condition_of = 4
 condition_stat = 0
 condition_status = 9
 condition_comparison = ">"
 compare_to = 0
 condition_value = 0
-condition_party = 4
+condition_to_party = 4
 condition_stat_type = 3
 condition_party_stat = 9
 condition_party_status = 9
@@ -49,7 +54,6 @@ convert_to_stat = 9
 convert_to_status = 9
 conversion_amount_type = 0
 conversion_amount_value = 1
-conversion_amount_percentage = 0.5
 conversion_ratio = 1.0
 retrigger_type = 1
 retrigger_target = 0
@@ -59,6 +63,7 @@ metadata/_custom_type_script = "uid://dahay7fvi7bik"
 
 [sub_resource type="Resource" id="Resource_xr38p"]
 script = ExtResource("3_hkn3j")
+item_id = ""
 item_name = "Rage"
 item_type = 0
 item_desc = "When exposed, gain +2 damage."
@@ -97,16 +102,19 @@ metadata/_custom_type_script = "uid://c461mcmm1ot6v"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xr38p"]
 atlas = ExtResource("6_hkn3j")
-region = Rect2(1900, 375, 900, 900)
+region = Rect2(550, 0, 1100, 1100)
 
 [resource]
 script = ExtResource("4_xr38p")
 enemy_name = "A Despair"
 enemy_type = 0
 description = "On Exposed: Gain 2 attack."
-sprite = ExtResource("6_hkn3j")
+sprite = ExtResource("5_gre71")
+sprite_hit = ExtResource("7_ag7pw")
+sprite_attack = ExtResource("6_ggdh7")
 sprite_color = Color(0.521569, 0.282353, 0.396078, 1)
 weapon_sprite = SubResource("AtlasTexture_xr38p")
+skin_id = 0
 stats = SubResource("Resource_gre71")
 gold = 3
 item_drop_chance = 0.1

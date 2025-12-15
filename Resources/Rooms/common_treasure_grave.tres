@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="RoomDefinition" load_steps=7 format=3 uid="uid://bibsyccw741ny"]
+
+[ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="1_1n5t2"]
+[ext_resource type="Texture2D" uid="uid://ccbefxbhjge3h" path="res://Assets/Art/Room_04_Background.png" id="1_t11hc"]
+[ext_resource type="Script" uid="uid://d211hcjce7xyf" path="res://Scripts/Resources/RoomDefinition.gd" id="2_b5ld8"]
+[ext_resource type="Texture2D" uid="uid://by3aww4863ulx" path="res://Assets/Art/Doors/tomb.png" id="2_wf4ax"]
+[ext_resource type="PackedScene" uid="uid://c127vn167w5k8" path="res://Scenes/Rooms/common_treasure_grave.tscn" id="3_pp4mf"]
+[ext_resource type="Texture2D" uid="uid://crih8ktekhdwb" path="res://Resources/Icons/minimap_treasure.tres" id="5_mdiuk"]
+
+[resource]
+script = ExtResource("2_b5ld8")
+room_type = 1
+rarity = 0
+room_name = "A shallow grave..."
+room_desc = "Well it's no longer of use to the dead..."
+utility_subtype = null
+background_texture = ExtResource("1_t11hc")
+door_texture = ExtResource("2_wf4ax")
+room_icon = ExtResource("5_mdiuk")
+room_color = Color(0.70356, 0.4524, 0.78, 1)
+can_have_random_combat = false
+random_combat_chance = 0.0
+random_enemy_pool = Array[ExtResource("1_1n5t2")]([])
+can_spawn_shortcuts = false
+shortcut_chance = 0.0
+possible_events = Array[PackedScene]([ExtResource("3_pp4mf")])
+spawn_weight = 5
+min_rank = 1
+max_rank = 5
+metadata/_custom_type_script = "uid://d211hcjce7xyf"

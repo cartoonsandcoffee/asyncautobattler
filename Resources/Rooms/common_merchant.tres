@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="RoomDefinition" load_steps=8 format=3 uid="uid://kg84u2xvx8jl"]
+
+[ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="1_0jrex"]
+[ext_resource type="Texture2D" uid="uid://ccbefxbhjge3h" path="res://Assets/Art/Room_04_Background.png" id="1_jnlyt"]
+[ext_resource type="Script" uid="uid://d211hcjce7xyf" path="res://Scripts/Resources/RoomDefinition.gd" id="2_h55d7"]
+[ext_resource type="Texture2D" uid="uid://dxx8lmffw6ob7" path="res://Assets/Art/Doors/hallway.png" id="2_x6ghl"]
+[ext_resource type="PackedScene" uid="uid://m163y3gcbfc4" path="res://Scenes/Rooms/common_merchant.tscn" id="3_unat0"]
+[ext_resource type="Texture2D" uid="uid://qj84yrov8e6x" path="res://Resources/Icons/minimap_merchant.tres" id="5_uo4n4"]
+[ext_resource type="Resource" uid="uid://gm0vvksbp7e4" path="res://Resources/Enemies/Anguish.tres" id="5_x6ghl"]
+
+[resource]
+script = ExtResource("2_h55d7")
+room_type = 2
+rarity = 0
+room_name = "A wandering peddlerr"
+room_desc = "A skittish creature approaches..."
+utility_subtype = ""
+background_texture = ExtResource("1_jnlyt")
+door_texture = ExtResource("2_x6ghl")
+room_icon = ExtResource("5_uo4n4")
+room_color = Color(0.89, 0.585323, 0.1869, 1)
+can_have_random_combat = true
+random_combat_chance = 1.0
+random_enemy_pool = Array[ExtResource("1_0jrex")]([ExtResource("5_x6ghl")])
+can_spawn_shortcuts = false
+shortcut_chance = 0.0
+possible_events = Array[PackedScene]([ExtResource("3_unat0")])
+spawn_weight = 5
+min_rank = 1
+max_rank = 5
+metadata/_custom_type_script = "uid://d211hcjce7xyf"

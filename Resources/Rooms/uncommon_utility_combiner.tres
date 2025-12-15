@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="RoomDefinition" load_steps=7 format=3 uid="uid://d3oi0y3l1yb57"]
+
+[ext_resource type="Texture2D" uid="uid://csprhhu3ka3ig" path="res://Assets/Art/Room_03_Background.png" id="1_67ta2"]
+[ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="1_jt03m"]
+[ext_resource type="Texture2D" uid="uid://cto702ujeclyt" path="res://Assets/Art/Doors/chamber.png" id="2_sfeti"]
+[ext_resource type="Script" uid="uid://d211hcjce7xyf" path="res://Scripts/Resources/RoomDefinition.gd" id="2_tsvht"]
+[ext_resource type="PackedScene" uid="uid://ce4v0pt2qw5lh" path="res://Scenes/Rooms/uncommon_utility_combiner.tscn" id="3_sfbjp"]
+[ext_resource type="Texture2D" uid="uid://dui540vrg7otc" path="res://Resources/Icons/minimap_utility.tres" id="5_6feub"]
+
+[resource]
+script = ExtResource("2_tsvht")
+room_type = 3
+rarity = 1
+room_name = "A forge"
+room_desc = "What is that thing?"
+utility_subtype = ""
+background_texture = ExtResource("1_67ta2")
+door_texture = ExtResource("2_sfeti")
+room_icon = ExtResource("5_6feub")
+room_color = Color(0.1827, 0.4809, 0.63, 1)
+can_have_random_combat = false
+random_combat_chance = 0.0
+random_enemy_pool = Array[ExtResource("1_jt03m")]([])
+can_spawn_shortcuts = true
+shortcut_chance = 1.0
+possible_events = Array[PackedScene]([ExtResource("3_sfbjp")])
+spawn_weight = 3
+min_rank = 1
+max_rank = 5
+metadata/_custom_type_script = "uid://d211hcjce7xyf"

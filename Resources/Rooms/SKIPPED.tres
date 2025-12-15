@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="RoomDefinition" load_steps=4 format=3 uid="uid://tp8gtllxw7v0"]
+
+[ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="1_q7a4n"]
+[ext_resource type="Script" uid="uid://d211hcjce7xyf" path="res://Scripts/Resources/RoomDefinition.gd" id="2_ay5ru"]
+[ext_resource type="Texture2D" uid="uid://v23vy8rn0mh" path="res://Resources/Icons/minimap_x.tres" id="2_mvoeu"]
+
+[resource]
+script = ExtResource("2_ay5ru")
+room_type = 7
+rarity = 3
+room_name = "Skipped"
+room_desc = "You skipped this room via a shortcut."
+utility_subtype = ""
+room_icon = ExtResource("2_mvoeu")
+room_color = Color(1, 1, 1, 1)
+can_have_random_combat = false
+random_combat_chance = 0.0
+random_enemy_pool = Array[ExtResource("1_q7a4n")]([])
+can_spawn_shortcuts = false
+shortcut_chance = 0.0
+possible_events = Array[PackedScene]([])
+spawn_weight = 1
+min_rank = 1
+max_rank = 5
+metadata/_custom_type_script = "uid://d211hcjce7xyf"

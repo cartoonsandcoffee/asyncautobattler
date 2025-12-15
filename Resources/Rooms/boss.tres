@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="RoomDefinition" load_steps=7 format=3 uid="uid://d7h01tll416i"]
+
+[ext_resource type="Texture2D" uid="uid://bu1mkenrfhi7i" path="res://Assets/Art/Backgrounds/Starter Room.png" id="1_3lb66"]
+[ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="1_bmkhg"]
+[ext_resource type="Texture2D" uid="uid://dm4mqcf00whsb" path="res://Assets/Art/Doors/arch.png" id="2_3lb66"]
+[ext_resource type="Script" uid="uid://d211hcjce7xyf" path="res://Scripts/Resources/RoomDefinition.gd" id="2_vil3g"]
+[ext_resource type="PackedScene" uid="uid://bqku84hu1c31k" path="res://Scenes/Rooms/boss_room.tscn" id="3_3lb66"]
+[ext_resource type="Texture2D" uid="uid://bh1sonyp1icqd" path="res://Resources/Icons/icon_crown.tres" id="4_yosaq"]
+
+[resource]
+script = ExtResource("2_vil3g")
+room_type = 5
+rarity = 0
+room_name = "Boss Room"
+room_desc = "Another hero approaches."
+utility_subtype = ""
+background_texture = ExtResource("1_3lb66")
+door_texture = ExtResource("2_3lb66")
+room_icon = ExtResource("4_yosaq")
+room_color = Color(0.87, 0.1218, 0.1218, 1)
+can_have_random_combat = false
+random_combat_chance = 0.0
+random_enemy_pool = Array[ExtResource("1_bmkhg")]([])
+can_spawn_shortcuts = false
+shortcut_chance = 0.0
+possible_events = Array[PackedScene]([ExtResource("3_3lb66")])
+spawn_weight = 1
+min_rank = 0
+max_rank = 0
+metadata/_custom_type_script = "uid://d211hcjce7xyf"

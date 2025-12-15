@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="RoomDefinition" load_steps=7 format=3 uid="uid://sd3gm8d5vy0e"]
+
+[ext_resource type="Texture2D" uid="uid://ccbefxbhjge3h" path="res://Assets/Art/Room_04_Background.png" id="1_bxpgh"]
+[ext_resource type="Texture2D" uid="uid://dxx8lmffw6ob7" path="res://Assets/Art/Doors/hallway.png" id="2_glhkp"]
+[ext_resource type="PackedScene" uid="uid://dl7fby7lsklkk" path="res://Scenes/Rooms/common_camp.tscn" id="3_ir3p1"]
+[ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="4_60vst"]
+[ext_resource type="Texture2D" uid="uid://c8jd3qlr2nrc5" path="res://Resources/Icons/minimap_camp.tres" id="5_y411f"]
+[ext_resource type="Script" uid="uid://d211hcjce7xyf" path="res://Scripts/Resources/RoomDefinition.gd" id="6_ae1pi"]
+
+[resource]
+script = ExtResource("6_ae1pi")
+room_type = 4
+rarity = 0
+room_name = "A camp"
+room_desc = "It looks like someone has been here. "
+utility_subtype = ""
+background_texture = ExtResource("1_bxpgh")
+door_texture = ExtResource("2_glhkp")
+room_icon = ExtResource("5_y411f")
+room_color = Color(0.84, 0.82292, 0.3276, 1)
+can_have_random_combat = false
+random_combat_chance = 0.0
+random_enemy_pool = Array[ExtResource("4_60vst")]([])
+can_spawn_shortcuts = false
+shortcut_chance = 0.0
+possible_events = Array[PackedScene]([ExtResource("3_ir3p1")])
+spawn_weight = 5
+min_rank = 1
+max_rank = 5
+metadata/_custom_type_script = "uid://d211hcjce7xyf"

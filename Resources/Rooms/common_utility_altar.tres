@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="RoomDefinition" load_steps=7 format=3 uid="uid://d2aik1ynja484"]
+
+[ext_resource type="Texture2D" uid="uid://ccbefxbhjge3h" path="res://Assets/Art/Room_04_Background.png" id="1_dugsg"]
+[ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="1_mm3hu"]
+[ext_resource type="Texture2D" uid="uid://dxx8lmffw6ob7" path="res://Assets/Art/Doors/hallway.png" id="2_1v85e"]
+[ext_resource type="Script" uid="uid://d211hcjce7xyf" path="res://Scripts/Resources/RoomDefinition.gd" id="2_sl7qa"]
+[ext_resource type="PackedScene" uid="uid://bqvlcutw40dvm" path="res://Scenes/Rooms/common_utility_altar.tscn" id="3_5c0gr"]
+[ext_resource type="Texture2D" uid="uid://dui540vrg7otc" path="res://Resources/Icons/minimap_utility.tres" id="5_exaa3"]
+
+[resource]
+script = ExtResource("2_sl7qa")
+room_type = 3
+rarity = 0
+room_name = "A strange altar"
+room_desc = "Would you like to leave an offering to something long-forgotten?"
+utility_subtype = ""
+background_texture = ExtResource("1_dugsg")
+door_texture = ExtResource("2_1v85e")
+room_icon = ExtResource("5_exaa3")
+room_color = Color(0.31, 0.516667, 0.62, 1)
+can_have_random_combat = false
+random_combat_chance = 0.0
+random_enemy_pool = Array[ExtResource("1_mm3hu")]([])
+can_spawn_shortcuts = false
+shortcut_chance = 0.0
+possible_events = Array[PackedScene]([ExtResource("3_5c0gr")])
+spawn_weight = 5
+min_rank = 1
+max_rank = 5
+metadata/_custom_type_script = "uid://d211hcjce7xyf"
