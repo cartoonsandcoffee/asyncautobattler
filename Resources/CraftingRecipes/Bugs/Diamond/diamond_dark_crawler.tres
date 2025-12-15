@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=4 format=3 uid="uid://yapjx1wk22y7"]
+
+[ext_resource type="Resource" uid="uid://dpmu5g4yt8ili" path="res://Resources/Items/Diamond/Bugs/diamond_dark_crawler.tres" id="2_vbjlt"]
+[ext_resource type="Resource" uid="uid://draab7xhb4hsc" path="res://Resources/Items/Golden/Bugs/golden_dark_crawler.tres" id="2_vlt10"]
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="3_5mfxh"]
+
+[resource]
+script = ExtResource("3_5mfxh")
+recipe_name = "Diamond Dark Crawler"
+result_item = ExtResource("2_vbjlt")
+ingredient_1 = ExtResource("2_vlt10")
+ingredient_2 = ExtResource("2_vlt10")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

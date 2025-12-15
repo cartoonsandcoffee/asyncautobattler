@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=4 format=3 uid="uid://cincojtsnplc8"]
+
+[ext_resource type="Resource" uid="uid://bxutqn0j4k42k" path="res://Resources/Items/COMMON/Bugs/bloodmoth.tres" id="1_qrvfv"]
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="1_ylg77"]
+[ext_resource type="Resource" uid="uid://b5n03qqfygr04" path="res://Resources/Items/Golden/Bugs/golden_bloodmoth.tres" id="2_dh4dt"]
+
+[resource]
+script = ExtResource("1_ylg77")
+recipe_name = "Golden Bloodmoth Recipe"
+result_item = ExtResource("2_dh4dt")
+ingredient_1 = ExtResource("1_qrvfv")
+ingredient_2 = ExtResource("1_qrvfv")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

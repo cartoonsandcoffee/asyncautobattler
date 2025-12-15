@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=4 format=3 uid="uid://5b3hui0pl0k8"]
+
+[ext_resource type="Resource" uid="uid://b08dyq7ol8k4j" path="res://Resources/Items/Diamond/Bugs/diamond_nimble_fly.tres" id="2_e2j3e"]
+[ext_resource type="Resource" uid="uid://rlu8kanm0uys" path="res://Resources/Items/Golden/Bugs/golden_nimble_fly.tres" id="2_k35hp"]
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="3_it635"]
+
+[resource]
+script = ExtResource("3_it635")
+recipe_name = "Diamond Nimble Fly"
+result_item = ExtResource("2_e2j3e")
+ingredient_1 = ExtResource("2_k35hp")
+ingredient_2 = ExtResource("2_k35hp")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"
