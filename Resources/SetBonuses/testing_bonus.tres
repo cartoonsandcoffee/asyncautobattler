@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="SetBonus" load_steps=6 format=3 uid="uid://cdaosa8xnhlns"]
+
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_6l27a"]
+[ext_resource type="Resource" uid="uid://c60ugplpsf8f5" path="res://Resources/Items/COMMON/test_relic.tres" id="2_xb0fh"]
+[ext_resource type="Resource" uid="uid://djjjm1m8qr2pm" path="res://Resources/Items/COMMON/testing_boots.tres" id="3_dskyl"]
+[ext_resource type="Script" uid="uid://drivepk7scvso" path="res://Scripts/Resources/SetBonus.gd" id="3_xb0fh"]
+[ext_resource type="Resource" uid="uid://dpnji2trqctxi" path="res://Resources/SetBonus_Items/testing_bonus_item.tres" id="5_xb0fh"]
+
+[resource]
+script = ExtResource("3_xb0fh")
+setbonus_name = "Testing Bonus"
+unlocked = true
+required_items = Array[ExtResource("2_6l27a")]([ExtResource("2_xb0fh"), ExtResource("3_dskyl")])
+setbonus_item = ExtResource("5_xb0fh")
+metadata/_custom_type_script = "uid://drivepk7scvso"

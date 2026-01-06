@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="1_abdws"]
 [ext_resource type="Texture2D" uid="uid://csprhhu3ka3ig" path="res://Assets/Art/Room_03_Background.png" id="1_akb8j"]
-[ext_resource type="Texture2D" uid="uid://cto702ujeclyt" path="res://Assets/Art/Doors/chamber.png" id="2_ojbnj"]
+[ext_resource type="Texture2D" uid="uid://by3aww4863ulx" path="res://Assets/Art/Doors/tomb.png" id="2_akb8j"]
 [ext_resource type="Script" uid="uid://d211hcjce7xyf" path="res://Scripts/Resources/RoomDefinition.gd" id="2_qu4wd"]
 [ext_resource type="PackedScene" uid="uid://bonuuoofoy2li" path="res://Scenes/Rooms/uncommon_treasure_grave.tscn" id="3_628wp"]
 [ext_resource type="Texture2D" uid="uid://crih8ktekhdwb" path="res://Resources/Icons/minimap_treasure.tres" id="5_5v7cb"]
@@ -13,9 +13,9 @@ room_type = 1
 rarity = 1
 room_name = "An ancient sarcophagus"
 room_desc = "Looks like this belonged to someone important"
-utility_subtype = null
+utility_subtype = ""
 background_texture = ExtResource("1_akb8j")
-door_texture = ExtResource("2_ojbnj")
+door_texture = ExtResource("2_akb8j")
 room_icon = ExtResource("5_5v7cb")
 room_color = Color(0.556373, 0.2816, 0.64, 1)
 can_have_random_combat = false
