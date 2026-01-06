@@ -6,9 +6,29 @@ signal inventory_updated(item: Item, slot_index: int)
 
 var player_uuid: String = ""
 var player_name: String = ""
-var stats: GameStats
-var status_effects: StatusEffects
-var inventory: Inventory
+
+var stats: GameStats:
+	get:
+		if stats == null:
+			stats = GameStats.new()
+		return stats
+	set(value):
+		stats = value	
+var status_effects: StatusEffects:
+	get:
+		if status_effects == null:
+			status_effects = StatusEffects.new()
+		return status_effects
+	set(value):
+		status_effects = value
+var inventory: Inventory:
+	get:
+		if inventory == null:
+			inventory = Inventory.new()
+		return inventory
+	set(value):
+		inventory = value
+
 var skin_id: int = 0
 
 # Entity state flags
@@ -75,6 +95,7 @@ func set_test_inventory():
 	inventory.add_item(ItemsManager.available_items["crude_blade"])
 	inventory.add_item(ItemsManager.available_items["test_relic"])
 	inventory.add_item(ItemsManager.available_items["testing_boots"])
+	inventory.add_item(ItemsManager.available_items["testing_boots"])
 	inventory.add_item(ItemsManager.available_items["testing_robes"])
 
 	#inventory.add_item(ItemsManager.available_items["Tower Shield"])
@@ -102,39 +123,38 @@ func set_test_inventory():
 func update_stats_from_items():
 	stats.reset_base_stats()
 
-	for item in Player.inventory.item_slots:
+    # Add regular item bonuses
+	for item in inventory.item_slots:
 		if item:
-			if item.damage_bonus != 0:
-				stats.increase_base_stat(Enums.Stats.DAMAGE, item.damage_bonus)
-			if item.shield_bonus != 0:
-				stats.increase_base_stat(Enums.Stats.SHIELD, item.shield_bonus)
-			if item.hit_points_bonus != 0:
-				stats.increase_base_stat(Enums.Stats.HITPOINTS, item.hit_points_bonus)
-			if item.agility_bonus != 0:
-				stats.increase_base_stat(Enums.Stats.AGILITY, item.agility_bonus)
-			if item.strikes_bonus != 0:
-				stats.increase_base_stat(Enums.Stats.STRIKES, item.strikes_bonus)
-			if item.burn_damage_bonus != 0:
-				stats.increase_base_stat(Enums.Stats.BURN_DAMAGE, item.burn_damage_bonus)
-
-	if Player.inventory.weapon_slot:
-		if Player.inventory.weapon_slot.damage_bonus != 0:
-			stats.increase_base_stat(Enums.Stats.DAMAGE, Player.inventory.weapon_slot.damage_bonus)
-		if Player.inventory.weapon_slot.shield_bonus != 0:
-			stats.increase_base_stat(Enums.Stats.SHIELD, Player.inventory.weapon_slot.shield_bonus)
-		if Player.inventory.weapon_slot.hit_points_bonus != 0:
-			stats.increase_base_stat(Enums.Stats.HITPOINTS, Player.inventory.weapon_slot.hit_points_bonus)
-		if Player.inventory.weapon_slot.agility_bonus != 0:
-			stats.increase_base_stat(Enums.Stats.AGILITY, Player.inventory.weapon_slot.agility_bonus)
-		if Player.inventory.weapon_slot.strikes_bonus != 0:
-			stats.increase_base_stat(Enums.Stats.STRIKES, Player.inventory.weapon_slot.strikes_bonus)
-		if Player.inventory.weapon_slot.burn_damage_bonus != 0:
-			stats.increase_base_stat(Enums.Stats.BURN_DAMAGE, Player.inventory.weapon_slot.burn_damage_bonus)
+			_apply_item_stat_bonuses(item)
+    
+    # Add weapon bonuses
+	if inventory.weapon_slot:
+		_apply_item_stat_bonuses(inventory.weapon_slot)
+    
+    # Add set bonus item bonuses
+	for bonus_item in SetBonusManager.get_active_set_bonuses(self):
+		_apply_item_stat_bonuses(bonus_item)
 
 	stats.reset_to_base_values()
 
+func _apply_item_stat_bonuses(item: Item):
+	if item.damage_bonus != 0:
+		stats.increase_base_stat(Enums.Stats.DAMAGE, item.damage_bonus)
+	if item.shield_bonus != 0:
+		stats.increase_base_stat(Enums.Stats.SHIELD, item.shield_bonus)
+	if item.agility_bonus != 0:
+		stats.increase_base_stat(Enums.Stats.AGILITY, item.agility_bonus)
+	if item.hit_points_bonus != 0:
+		stats.increase_base_stat(Enums.Stats.HITPOINTS, item.hit_points_bonus)
+	if item.strikes_bonus != 0:
+		stats.increase_base_stat(Enums.Stats.STRIKES, item.strikes_bonus)
+	if item.burn_damage_bonus != 0:
+		stats.increase_base_stat(Enums.Stats.BURN_DAMAGE, item.burn_damage_bonus)
+
 func _on_inventory_item_added(item: Item, slot_index: int):
 	#print(item.item_name + " - slot: " + str(slot_index))
+	SetBonusManager.check_set_bonuses(self)
 	inventory_updated.emit(item, slot_index)
 
 func add_gold(value: int):

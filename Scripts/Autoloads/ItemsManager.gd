@@ -1,7 +1,6 @@
 extends Node
 # Dictionary to store all item types by name for easy lookup
 var available_items: Dictionary = {}
-var bonus_applied: bool = false
 
 var crafting_recipes: Array[CraftingRecipe] = []  # [recipe_key: String] -> CraftingRecipe
 var golden_item_registry: Dictionary = {}  # [common_item_name: String] -> golden_item_name: String
@@ -131,14 +130,14 @@ func get_item(item_name: String) -> Item:
 	if available_items.has(item_name):
 		return available_items[item_name]
 	else:
-		print("item not found: ", item_name)
+		push_warning("[ItemsManager] item not found: ", item_name)
 		return null
 
 func get_item_picture(item_name: String) -> Texture2D:
 	if available_items.has(item_name):
 		return available_items[item_name].item_icon
 	else:
-		print("Item not found: ", item_name)
+		push_warning("[ItemsManager] Item picture not found: ", item_name)
 		return null
 
 func get_all_items() -> Array[Item]:
@@ -151,34 +150,48 @@ func get_all_items() -> Array[Item]:
 	items.sort_custom(func(a, b): return a.rarity < b.rarity)
 	return items
 
-func get_random_items(count: int, rarity: Enums.Rarity, include_bonus: bool = false, include_weapons: bool = false) -> Array[Item]:
+func get_random_items(count: int, rarity: Enums.Rarity, include_bonus: bool = false, include_weapons: bool = false, max_1_weapon: bool = false) -> Array[Item]:
 	var subset_items: Array[Item] = []
 	var all_items = get_all_items()
-	
+	var wep_count: int = 0
+
 	# Filter for common rarity only
 	for item in all_items:
 		if item.rarity == rarity and item.unlocked:
-			if include_weapons:				
-				item.slot_index = 100 #set a larger slot number so tooltips generate right-side
+			if include_weapons:	
+				if item.item_name == Player.inventory.weapon_slot.item_name:  # Don't offer player weapon they already have.
+					continue
 				subset_items.append(item)
 			else:
 				# exclude weapons
 				if item.item_type == Item.ItemType.WEAPON:
 					pass
 				else:
-					item.slot_index = 100 #set a larger slot number so tooltips generate right-side
 					subset_items.append(item)
 	
 	# Pick random items (without duplicates)
 	var selected: Array[Item] = []
-	for i in count:
-		if subset_items.size() > 0:
-			var random_item = subset_items.pick_random()
-			selected.append(random_item)
-			subset_items.erase(random_item)  # Remove to avoid duplicates
+	var attempts: int = 0
+	var max_attempts: int = count * 10  # Safety limit
+
+	while selected.size() < count and subset_items.size() > 0 and attempts < max_attempts:
+		attempts += 1
+		var random_item = subset_items.pick_random()
+
+		# If limiting weapons, check if we already have one
+		if max_1_weapon and random_item.item_type == Item.ItemType.WEAPON:
+			if wep_count >= 1:
+				# Skip this weapon, try again
+				subset_items.erase(random_item)
+				continue
+			else:
+				wep_count += 1
+
+		selected.append(random_item)
+		subset_items.erase(random_item)  # Remove to avoid duplicates
 
 	# include bonus item of higher rarity
-	if include_bonus && !bonus_applied && count > 1:
+	if include_bonus && count > 1:
 		selected.append(get_item_of_higher_tier(rarity))
 	return selected
 
@@ -191,11 +204,11 @@ func get_items_by_item_type(count: int, _item_type: Item.ItemType, _limit_rarity
 	for item in all_items:
 		if item.item_type == _item_type:
 			if _limit_rarity and item.rarity == _rarity:
-				item.slot_index = 100 #set a larger slot number so tooltips generate right-side
+				if item.item_name == "Bare Fists":
+					continue
 				subset_items.append(item)
 			elif !_limit_rarity:
-				item.slot_index = 100 #set a larger slot number so tooltips generate right-side
-				subset_items.append(item)				
+				subset_items.append(item)	
 
 	# Pick random items (without duplicates)
 	var selected: Array[Item] = []
@@ -253,7 +266,6 @@ func get_item_of_higher_tier(rarity: Enums.Rarity) -> Item:
 		_:
 			_item = get_random_items(1, Enums.Rarity.RARE, false)[0]
 
-	bonus_applied = true
 	return _item
 
 func get_random_common_items(count: int) -> Array[Item]:
@@ -280,7 +292,6 @@ func get_random_common_items(count: int) -> Array[Item]:
 func reset_items():
 	available_items.clear()
 	setup_items()
-	bonus_applied = false
 
 func to_dict() -> Dictionary:
 	return get_save_data()
@@ -328,7 +339,7 @@ func get_item_by_id(item_id: String) -> Item:
 func get_all_files_from_directory(path : String, file_ext:= "", files := []):
 	var resources = ResourceLoader.list_directory(path)
 	for res in resources:
-		print(str(path+res))
+		#print(str(path+res))
 		if res.ends_with("/"): 
 			# recursive for sub-directories
 			get_all_files_from_directory(path+res, file_ext, files)		
@@ -339,7 +350,7 @@ func get_all_files_from_directory(path : String, file_ext:= "", files := []):
 				var key: String = res.replace(".tres", "")
 				item.item_id = key
 				available_items[key] = item
-				print("Loaded item: ", key)
+				#print("[ItemsManager] Loaded item: ", key)
 			else:
-				push_warning("Failed to load item: " + res)	
+				push_warning("[ItemsManager] Failed to load item: " + res)	
 	return files

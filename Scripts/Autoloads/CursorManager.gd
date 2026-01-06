@@ -33,7 +33,6 @@ var cursor_hotspots: Dictionary = {
 func _ready():
 	_load_cursors()
 	set_cursor(CursorType.DEFAULT)
-	print("[CursorManager] Initialized with %d cursor types" % cursors.size())
 
 func _load_cursors():
 	"""Load all cursor textures from Resources/Cursors/"""
@@ -58,7 +57,6 @@ func _load_cursors():
 			var texture = load(path)
 			if texture:
 				cursors[cursor_type] = texture
-				print("[CursorManager] - Loaded: %s" % path.get_file())
 		else:
 			push_warning("[CursorManager] Cursor not found: %s" % path)
 			# Use default Godot cursor as fallback
@@ -67,7 +65,6 @@ func _load_cursors():
 func set_cursor(cursor_type: CursorType):
 	"""Change the active cursor."""
 	if cursor_type == current_cursor:
-		print("[CursorManager] Already using this cursor.")
 		return  # Already using this cursor
 	
 	current_cursor = cursor_type

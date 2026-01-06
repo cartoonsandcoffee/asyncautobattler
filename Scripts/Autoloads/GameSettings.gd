@@ -35,10 +35,8 @@ signal graphics_changed(setting: String, value)
 ## =============================================================================
 
 func _ready():
-	print("[GameSettings] Initializing...")
 	load_settings()
 	apply_all_settings()
-	print("[GameSettings] Settings loaded and applied")
 
 ## =============================================================================
 ## AUDIO SETTINGS
@@ -98,9 +96,6 @@ func set_crt_effect(enabled: bool):
 	graphics_changed.emit("crt_effect", enabled)
 	settings_changed.emit()
 	
-	# Apply CRT effect to viewport
-	# TODO: Implement CRT shader application
-	print("[GameSettings] CRT effect: %s" % ("ON" if enabled else "OFF"))
 
 func set_screen_shake(enabled: bool):
 	"""Enable/disable screen shake effects."""
@@ -213,7 +208,6 @@ func apply_all_settings():
 	set_fullscreen(fullscreen_enabled)
 	set_crt_effect(crt_effect_enabled)
 	
-	print("[GameSettings] All settings applied")
 
 func reset_to_defaults():
 	"""Reset all settings to default values."""
@@ -236,7 +230,6 @@ func reset_to_defaults():
 	save_settings()
 	
 	settings_changed.emit()
-	print("[GameSettings] Reset to defaults")
 
 ## =============================================================================
 ## UTILITY FUNCTIONS

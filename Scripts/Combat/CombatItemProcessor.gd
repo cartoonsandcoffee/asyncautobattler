@@ -26,7 +26,8 @@ func process_items(entity, trigger_type: Enums.TriggerType, trigger_stat = Enums
 
 	# Collect all items that match this trigger
 	var triggered_items = collect_triggered_items(entity, trigger_type, trigger_stat, amount)
-	
+	triggered_items.append_array(_collect_set_bonus_items(entity, trigger_type, trigger_stat, Enums.StatusEffects.NONE))
+
 	# Filter based on trigger conditions and increment counters
 	var validated_items = []
 	for item_data in triggered_items:
@@ -53,7 +54,8 @@ func process_items_with_status(entity, trigger_type: Enums.TriggerType, trigger_
 	# Used for ON_STATUS_GAINED and ON_STATUS_REMOVED.
 
 	var triggered_items = collect_triggered_items_with_status(entity, trigger_type, trigger_status)
-	
+	triggered_items.append_array(_collect_set_bonus_items(entity, trigger_type, Enums.Stats.NONE,  trigger_status))
+
 	var validated_items = []
 	for item_data in triggered_items:
 		var item = item_data.item
@@ -69,6 +71,30 @@ func process_items_with_status(entity, trigger_type: Enums.TriggerType, trigger_
 					mark_item_as_triggered(entity, item)
 	
 	return validated_items
+
+func _collect_set_bonus_items(entity, trigger_type: Enums.TriggerType, trigger_stat: Enums.Stats, trigger_status: Enums.StatusEffects) -> Array:
+    # Collect triggered rules from set bonus items."""
+	var items_to_proc = []
+    
+	var bonus_items = SetBonusManager.get_granted_items(entity)
+    
+	for item in bonus_items:
+		for rule in item.rules:
+			if rule.trigger_type == trigger_type:
+				# Check trigger_stat if relevant
+				if trigger_type in [Enums.TriggerType.ON_STAT_GAIN, Enums.TriggerType.ON_STAT_LOSS]:
+					if rule.trigger_stat != Enums.Stats.NONE and rule.trigger_stat != trigger_stat:
+						continue
+				if trigger_type in [Enums.TriggerType.ON_STATUS_GAINED, Enums.TriggerType.ON_STATUS_REMOVED]:
+					if rule.trigger_status != Enums.StatusEffects.NONE and rule.trigger_status != trigger_status:
+						continue
+
+				items_to_proc.append({
+					"item": item,
+					"rule": rule,
+					"slot_index": -3  # Special index for set bonuses
+				})
+	return items_to_proc
 
 # ===== ITEM COLLECTION =====
 
@@ -226,6 +252,7 @@ func collect_triggered_items_with_status(entity, trigger_type: Enums.TriggerType
 							})
 	
 	return items_to_proc
+
 
 # ===== VALIDATION =====
 

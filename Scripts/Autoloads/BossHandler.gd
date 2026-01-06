@@ -18,6 +18,8 @@ func create_boss_enemy(opponent_data: Dictionary) -> Enemy:
 		# Fallback to default or enemy sprite if boss skin doesn't exist
 		if boss.sprite:
 			boss.sprite = boss.sprite
+			boss.sprite_attack = boss.sprite
+			boss.sprite_hit = boss.sprite
 		else:
 			push_warning("[MapZoomPanel] Boss sprite not found: %s" % sprite_path)
 
@@ -50,6 +52,7 @@ func create_boss_enemy(opponent_data: Dictionary) -> Enemy:
 		var weapon = ItemsManager.get_item_by_id(weapon_id)
 		if weapon:
 			boss.inventory.set_weapon(weapon)
+			boss.weapon_sprite = weapon.item_icon
 			print("[BossHandler] Loaded weapon: %s" % weapon.item_name)
 		else:
 			push_warning("[BossHandler] Boss weapon not found: %s (for %s)" % [weapon_id, boss.enemy_name])

@@ -10,7 +10,7 @@ func _ready():
 func get_all_files_from_directory(path : String, file_ext:= "", files := []):
 	var resources = ResourceLoader.list_directory(path)
 	for res in resources:
-		print(str(path+res))
+		#print(str(path+res))
 		if file_ext && res.ends_with(file_ext): 
 			files.append(path+res)
 			var room = load(path+res) as RoomDefinition
@@ -18,14 +18,14 @@ func get_all_files_from_directory(path : String, file_ext:= "", files := []):
 			if room:
 				var key: String = res.replace(".tres", "")
 				room_definitions[key] = room
-				print("Loaded room: ", key)
+				#print("Loaded room: ", key)
 			else:
-				push_warning("Failed to load room: " + res)			
+				push_warning("[RoomRegistry] Failed to load room: " + res)			
 	return files
 
 func register_room_definition(id: String, room_def: RoomDefinition):
 	if room_def == null:
-		push_warning("Failed to load room definition: " + id)
+		push_warning("[RoomRegistry] Failed to load room definition: " + id)
 		return
 	
 	room_definitions[id] = room_def
@@ -35,7 +35,7 @@ func register_room_definition(id: String, room_def: RoomDefinition):
 		rooms_by_type[room_def.room_type] = []
 	rooms_by_type[room_def.room_type].append(room_def)
 	
-	print("Registered room: ", room_def.room_name, " (", id, ")")
+	print("[RoomRegistry] Registered room: ", room_def.room_name, " (", id, ")")
 
 func get_available_rooms_for_rank(rank: int) -> Array[RoomDefinition]:
 	var available_rooms: Array[RoomDefinition] = []

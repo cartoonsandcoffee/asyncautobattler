@@ -128,6 +128,10 @@ func start_combat(player, enemy):
 	item_processor.reset_all_items(player_entity)
 	item_processor.reset_all_items(enemy_entity)
 	
+	# Check set bonuses for both entities
+	SetBonusManager.check_set_bonuses(player_entity)
+	SetBonusManager.check_set_bonuses(enemy_entity)
+	
 	# Reset entities to base values
 	player_entity.stats.reset_to_base_values()
 	enemy_entity.stats.reset_to_base_values()

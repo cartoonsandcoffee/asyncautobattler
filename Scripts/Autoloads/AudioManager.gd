@@ -47,6 +47,7 @@ var crossfade_duration: float = 2.0  # Seconds for music transition
 
 # Store loaded UI sounds
 var ui_sounds: Dictionary = {}
+var sfx_sounds: Dictionary = {}
 var is_ready: bool = false
 
 # UI sound names (define all your UI sounds here)
@@ -67,15 +68,41 @@ const UI_SOUND_NAMES = {
 	"combat_enemy_hit": "res://Assets/Audio/SFX/COMBAT/Enemy_Hit.ogg",
 	"item_proc": "res://Assets/Audio/SFX/COMBAT/impactPlank_medium_003.ogg",
 	"campfire": "res://Assets/Audio/SFX/COMBAT/campfire.ogg",
+	"woosh": "res://Assets/Audio/SFX/UI/woosh2.ogg",
 }
+
+const EVENT_SOUND_NAMES = {
+	"coins_fall": "res://Assets/Audio/SFX/EVENT/coins_fall.ogg",
+	"coins_03": "res://Assets/Audio/SFX/EVENT/coins_05.ogg",
+	"coins_02": "res://Assets/Audio/SFX/EVENT/coins_02.ogg",
+	"coins_01": "res://Assets/Audio/SFX/EVENT/coins_01.ogg",
+	"campfire": "res://Assets/Audio/SFX/COMBAT/campfire.ogg",
+	"altar": "res://Assets/Audio/SFX/EVENT/altar2.ogg",
+	"dig_grave": "res://Assets/Audio/SFX/EVENT/dig_grave.ogg",
+	"corpse": "res://Assets/Audio/SFX/EVENT/corpse_pile.ogg",
+	"pipe": "res://Assets/Audio/SFX/EVENT/pipe.ogg",
+	"mmm": "res://Assets/Audio/SFX/EVENT/Mmm.ogg",
+	"ooo": "res://Assets/Audio/SFX/EVENT/Ooo.ogg",
+	"drip": "res://Assets/Audio/SFX/EVENT/drip.ogg",
+	"drop_01": "res://Assets/Audio/SFX/EVENT/drop_01.ogg",
+	"drop_02": "res://Assets/Audio/SFX/EVENT/drop_02.ogg",
+	"sarcophagus": "res://Assets/Audio/SFX/EVENT/sarcophagus.ogg",
+	"ah": "res://Assets/Audio/SFX/EVENT/Ah.ogg",
+	"kneel": "res://Assets/Audio/SFX/EVENT/kneel.ogg",
+	"chomp": "res://Assets/Audio/SFX/EVENT/chomp.ogg",
+	"forge": "res://Assets/Audio/SFX/EVENT/forge.ogg",
+	"forge_bad": "res://Assets/Audio/SFX/EVENT/forge_bad.ogg",
+	"fire_01": "res://Assets/Audio/SFX/EVENT/fire_01.ogg",
+	"fire_02": "res://Assets/Audio/SFX/EVENT/fire_02.ogg",
+	"fire_out": "res://Assets/Audio/SFX/EVENT/fire_out.ogg",
+}
+
 
 ## =============================================================================
 ## INITIALIZATION
 ## =============================================================================
 
 func _ready():
-	print("[AudioManager] Initializing audio system...")
-	
 	# Create music players
 	_create_music_players()
 	
@@ -90,13 +117,15 @@ func _ready():
 	
 	# Load UI sounds
 	_load_ui_sounds()
+
+	# Load Event SFX
+	_load_sfx_sounds()
 	
 	# Connect to GameSettings for volume changes
 	if GameSettings:
 		GameSettings.volume_changed.connect(_on_volume_changed)
 	
 	is_ready = true
-	print("[AudioManager] Audio system ready!")
 
 func _create_music_players():
 	"""Create two music players for crossfading."""
@@ -154,7 +183,6 @@ func _load_music_tracks():
 		if ResourceLoader.exists(path):
 			var stream = load(path)
 			music_tracks[track_name] = stream
-			print("[AudioManager] Loaded music: %s" % track_name)
 		else:
 			push_warning("[AudioManager] Music not found: %s" % path)
 			music_tracks.erase(track_name)
@@ -165,9 +193,17 @@ func _load_ui_sounds():
 		var path = UI_SOUND_NAMES[sound_name]
 		if ResourceLoader.exists(path):
 			ui_sounds[sound_name] = load(path)
-			print("[AudioManager] Loaded UI sound: %s" % sound_name)
 		else:
 			push_warning("[AudioManager] UI sound not found: %s at %s" % [sound_name, path])
+
+func _load_sfx_sounds():
+	for sound_name in EVENT_SOUND_NAMES.keys():
+		var path = EVENT_SOUND_NAMES[sound_name]
+		if ResourceLoader.exists(path):
+			sfx_sounds[sound_name] = load(path)
+		else:
+			push_warning("[AudioManager] UI sound not found: %s at %s" % [sound_name, path])
+
 
 ## =============================================================================
 ## MUSIC CONTROL - PUBLIC API
@@ -219,7 +255,7 @@ func play_room_music(track: Variant):
 		# Use filename as track name for debug
 		track_name = track.resource_path.get_file().get_basename()
 		room_override_track = track_name
-		print("[AudioManager] Playing room music from resource: %s" % track_name)
+		#print("[AudioManager] Playing room music from resource: %s" % track_name)
 	
 	# Handle string track name (lookup in library)
 	elif track is String:
@@ -234,7 +270,7 @@ func play_room_music(track: Variant):
 		stream = music_tracks[track]
 		track_name = track
 		room_override_track = track_name
-		print("[AudioManager] Playing room music from library: %s" % track_name)
+		#print("[AudioManager] Playing room music from library: %s" % track_name)
 	
 	else:
 		push_warning("[AudioManager] Invalid music track type: %s" % typeof(track))
@@ -248,16 +284,16 @@ func play_room_music(track: Variant):
 func clear_room_override():
 	if room_override_track.is_empty():
 		# No override was set, nothing to clear
-		print("[AudioManager] No room override to clear")
+		#print("[AudioManager] No room override to clear")
 		return
 
-	print("[AudioManager] Clearing room override: %s" % room_override_track)
+	#print("[AudioManager] Clearing room override: %s" % room_override_track)
 	var was_override = room_override_track
 	room_override_track = ""
 	
 	# Only change music if we were actually playing the room override
 	if current_context == MusicContext.ROOM_OVERRIDE and current_track_name == was_override:
-		print("[AudioManager] -> Room override was playing, restoring appropriate music")
+		#print("[AudioManager] -> Room override was playing, restoring appropriate music")
 		current_context = MusicContext.NONE
 		_restore_appropriate_music()
 	else:
@@ -289,7 +325,7 @@ func _switch_music_context(new_context: MusicContext, track_name: String, stream
 		return
 
 	if track_name == current_track_name and current_music_player.playing:
-		print("[AudioManager] Already playing %s, no change needed" % track_name)
+		#print("[AudioManager] Already playing %s, no change needed" % track_name)
 		
 		# Update context but don't crossfade
 		current_context = new_context
@@ -307,7 +343,7 @@ func _switch_music_context(new_context: MusicContext, track_name: String, stream
 		push_warning("[AudioManager] Music stream is null: %s" % track_name)
 		return
 	
-	print("[AudioManager] Switching music: %s -> %s" % [current_track_name, track_name])
+	#print("[AudioManager] Switching music: %s -> %s" % [current_track_name, track_name])
 	
 	# Update state
 	current_context = new_context
@@ -358,18 +394,18 @@ func _crossfade_to_silence():
 	tween.tween_callback(func(): current_music_player.stop())
 
 func _restore_appropriate_music():
-	print("[AudioManager] Restoring appropriate music...")
+	#print("[AudioManager] Restoring appropriate music...")
 
 	# Priority 1: Room override (if set)
 	if not room_override_track.is_empty():
-		print("[AudioManager] -> Room has override: %s" % room_override_track)
+		#print("[AudioManager] -> Room has override: %s" % room_override_track)
 		play_room_music(room_override_track)
 		return
 	
 	# Priority 2: Combat (if active)
 	if CombatManager and CombatManager.has_method("is_combat_active"):
 		if CombatManager.combat_active:
-			print("[AudioManager] -> Combat is active")
+			#print("[AudioManager] -> Combat is active")
 			var is_pvp = false
 			if CombatManager.enemy_entity:
 				is_pvp = CombatManager.enemy_entity.enemy_type == Enemy.EnemyType.BOSS_PLAYER
@@ -377,7 +413,7 @@ func _restore_appropriate_music():
 			return
 	
 	# Priority 3: Default to general music
-	print("[AudioManager] -> Defaulting to general music")
+	#print("[AudioManager] -> Defaulting to general music")
 	play_general_music()
 
 ## =============================================================================
@@ -397,6 +433,20 @@ func play_ui_sound(sound_name: String):
 		return
 	
 	player.stream = ui_sounds[sound_name]
+	player.play()
+
+func play_event_sound(sound_name: String):
+	if not sfx_sounds.has(sound_name):
+		push_warning("[AudioManager] SFX EVENT sound not found: %s" % sound_name)
+		return
+	
+	# Find available player
+	var player = _get_available_ui_player()
+	if not player:
+		push_warning("[AudioManager] No available SFX sound players!")
+		return
+	
+	player.stream = sfx_sounds[sound_name]
 	player.play()
 
 func play_synced_sound(sound_name: String):
@@ -434,7 +484,7 @@ func play_ambient(ambient: Variant, loop: bool = true):
 	# Handle AudioStream resource
 	if ambient is AudioStream:
 		stream = ambient
-		print("[AudioManager] Playing ambient from resource: %s" % stream.resource_path.get_file())
+		#print("[AudioManager] Playing ambient from resource: %s" % stream.resource_path.get_file())
 	
 	# Handle string name (if you want to preload ambients like music)
 	elif ambient is String:
@@ -442,7 +492,7 @@ func play_ambient(ambient: Variant, loop: bool = true):
 		# For now, try to load directly
 		if ResourceLoader.exists(ambient):
 			stream = load(ambient)
-			print("[AudioManager] Playing ambient from path: %s" % ambient)
+			#print("[AudioManager] Playing ambient from path: %s" % ambient)
 		else:
 			push_warning("[AudioManager] Ambient sound not found: %s" % ambient)
 			return
@@ -455,7 +505,7 @@ func play_ambient(ambient: Variant, loop: bool = true):
 	ambient_player.stream = stream
 	ambient_player.play()
 	
-	print("[AudioManager] Ambient sound started")
+	#print("[AudioManager] Ambient sound started")
 
 func stop_ambient(fade_out: bool = true):
 	"""Stop ambient sound."""
@@ -475,7 +525,7 @@ func on_combat_started(is_boss_fight: bool):
 	play_combat_music(is_boss_fight)
 
 func on_combat_ended():
-	print("[AudioManager] Combat ended, restoring music...")
+	#print("[AudioManager] Combat ended, restoring music...")
 	
 	# Reset combat context
 	if current_context == MusicContext.COMBAT_NPC or current_context == MusicContext.COMBAT_PVP:
@@ -484,11 +534,11 @@ func on_combat_ended():
 	# Check if we have a room override to return to
 	if not room_override_track.is_empty():
 		# Room has special music, return to it
-		print("[AudioManager] -> Returning to room music: %s" % room_override_track)
+		#print("[AudioManager] -> Returning to room music: %s" % room_override_track)
 		play_room_music(room_override_track)
 	else:
 		# No room override, return to general music
-		print("[AudioManager] -> Returning to general music")
+		#print("[AudioManager] -> Returning to general music")
 		play_general_music()
 
 ## =============================================================================

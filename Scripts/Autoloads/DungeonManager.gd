@@ -143,8 +143,10 @@ func generate_rank_rooms():
 	if testing_force_room_2 and testing_room_2_definition:
 		var debug_room = RoomData.new()
 		debug_room.room_definition = testing_room_2_definition
+		debug_room.chosen_event_scene = testing_room_2_definition.get_random_event()
 		debug_room.room_state = {}
 		current_rank_rooms[1] = debug_room
+		current_rank_rooms[2] = debug_room
 		print("[DungeonManager]  TEST: Forced room at position 2: %s" % testing_room_2_definition.room_name)
 
 		# Fetch boss for this rank
