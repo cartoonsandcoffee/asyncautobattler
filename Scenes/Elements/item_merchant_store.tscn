@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://bb31dt8vvd6f4"]
+[gd_scene load_steps=27 format=3 uid="uid://bb31dt8vvd6f4"]
 
 [ext_resource type="Texture2D" uid="uid://vtf7yfl2710m" path="res://Assets/UI/panel-border-030.png" id="1_8xbrl"]
 [ext_resource type="Script" uid="uid://coee827wkatp1" path="res://Scripts/Components/item_merchant_store.gd" id="1_ebopx"]
@@ -93,7 +93,19 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 1)]
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_advby"]
@@ -201,6 +213,18 @@ tracks/3/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_of0g0"]
 _data = {
@@ -209,7 +233,62 @@ _data = {
 &"show_store": SubResource("Animation_es5x0")
 }
 
+[sub_resource type="Animation" id="Animation_xggb2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel/sidePanelBlack:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_k3smq"]
+resource_name = "reroll_hide"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel/sidePanelBlack:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1.1, 1.1), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_ebopx"]
+resource_name = "reroll_show"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel/sidePanelBlack:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.1, 1.1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_bhv48"]
+_data = {
+&"RESET": SubResource("Animation_xggb2"),
+&"reroll_hide": SubResource("Animation_k3smq"),
+&"reroll_show": SubResource("Animation_ebopx")
+}
+
 [node name="item_merchant_store" type="Control"]
+visible = false
 layout_mode = 3
 anchors_preset = 8
 anchor_left = 0.5
@@ -224,7 +303,7 @@ item_columns = 6
 
 [node name="Panel" type="Panel" parent="."]
 visible = false
-z_index = 100
+modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -321,44 +400,45 @@ offset_top = -108.0
 offset_right = 180.0
 offset_bottom = -16.0
 grow_horizontal = 0
+pivot_offset = Vector2(135, 46)
 theme_override_styles/panel = SubResource("StyleBoxEmpty_ebopx")
 
-[node name="PanelContainer" type="PanelContainer" parent="Panel/sidePanelBlack"]
+[node name="panelReroll" type="PanelContainer" parent="Panel/sidePanelBlack"]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_k3smq")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/sidePanelBlack/PanelContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/sidePanelBlack/panelReroll"]
 layout_mode = 2
 theme = ExtResource("2_wjeb1")
 
-[node name="Label" type="Label" parent="Panel/sidePanelBlack/PanelContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="Panel/sidePanelBlack/panelReroll/HBoxContainer"]
 layout_mode = 2
 text = "Restock Shop"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="Panel/sidePanelBlack/PanelContainer/HBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="Panel/sidePanelBlack/panelReroll/HBoxContainer"]
 modulate = Color(1, 0.733333, 0, 1)
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("2_wjeb1")
 theme_override_constants/separation = 10
 
-[node name="MarginContainer2" type="MarginContainer" parent="Panel/sidePanelBlack/PanelContainer/HBoxContainer/HBoxContainer2"]
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/sidePanelBlack/panelReroll/HBoxContainer/HBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="TextureRect" type="TextureRect" parent="Panel/sidePanelBlack/PanelContainer/HBoxContainer/HBoxContainer2"]
+[node name="TextureRect" type="TextureRect" parent="Panel/sidePanelBlack/panelReroll/HBoxContainer/HBoxContainer2"]
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 texture = ExtResource("5_ebopx")
 expand_mode = 3
 
-[node name="lblRerollCost" type="Label" parent="Panel/sidePanelBlack/PanelContainer/HBoxContainer/HBoxContainer2"]
+[node name="lblRerollCost" type="Label" parent="Panel/sidePanelBlack/panelReroll/HBoxContainer/HBoxContainer2"]
 layout_mode = 2
 text = "1"
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel/sidePanelBlack/PanelContainer/HBoxContainer/HBoxContainer2"]
+[node name="MarginContainer" type="MarginContainer" parent="Panel/sidePanelBlack/panelReroll/HBoxContainer/HBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -375,5 +455,12 @@ libraries = {
 &"": SubResource("AnimationLibrary_of0g0")
 }
 
+[node name="animReroll" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_bhv48")
+}
+
 [connection signal="pressed" from="Panel/BlackBack/PanelContainer/VBoxContainer/btnCancel" to="." method="_on_btn_cancel_pressed"]
+[connection signal="mouse_entered" from="Panel/sidePanelBlack/btnReroll" to="." method="_on_btn_reroll_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/sidePanelBlack/btnReroll" to="." method="_on_btn_reroll_mouse_exited"]
 [connection signal="pressed" from="Panel/sidePanelBlack/btnReroll" to="." method="_on_btn_reroll_pressed"]

@@ -1,0 +1,76 @@
+[gd_scene load_steps=6 format=3 uid="uid://b0fp41v6klk1o"]
+
+[ext_resource type="Script" uid="uid://77hua4ax14yn" path="res://Scripts/Components/upgrade_weapon_stats.gd" id="1_gr881"]
+[ext_resource type="Texture2D" uid="uid://dhi5j8sjiltq7" path="res://Assets/UI/Border/panel-border-006.png" id="1_ixqcq"]
+[ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="2_gr881"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_13meu"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8uoxt"]
+texture = ExtResource("1_ixqcq")
+texture_margin_left = 28.0
+texture_margin_top = 28.0
+texture_margin_right = 28.0
+texture_margin_bottom = 28.0
+
+[node name="UpgradeWeaponStats" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_gr881")
+
+[node name="panelBack" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="panelBlack" type="PanelContainer" parent="panelBack"]
+custom_minimum_size = Vector2(600, 300)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -100.0
+offset_right = 200.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_13meu")
+
+[node name="MarginContainer" type="MarginContainer" parent="panelBack/panelBlack"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="panelBox" type="PanelContainer" parent="panelBack/panelBlack/MarginContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_8uoxt")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="panelBack/panelBlack/MarginContainer/panelBox"]
+layout_mode = 2
+theme = ExtResource("2_gr881")
+
+[node name="lblTitle" type="Label" parent="panelBack/panelBlack/MarginContainer/panelBox/VBoxContainer"]
+layout_mode = 2
+text = "Let  me  see  your  weapon..."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="txtDesc" type="RichTextLabel" parent="panelBack/panelBlack/MarginContainer/panelBox/VBoxContainer"]
+layout_mode = 2
+bbcode_enabled = true
+text = "Would you like me to [color=#6699ff][b]spit[/b][/color] on it, [color=#ff4444][b]bleed[/b][/color] on it, or [color=#ffdd44][b]blow[/b][/color] on it?"
+fit_content = true
+horizontal_alignment = 1

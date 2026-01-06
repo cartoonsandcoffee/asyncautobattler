@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://dl7fby7lsklkk"]
+[gd_scene load_steps=36 format=3 uid="uid://dl7fby7lsklkk"]
 
 [ext_resource type="Script" uid="uid://biptebupq216e" path="res://Scripts/HallwayEvents/hallway_camp.gd" id="1_hyja3"]
 [ext_resource type="Texture2D" uid="uid://ccbefxbhjge3h" path="res://Assets/Art/Room_04_Background.png" id="2_owu7u"]
@@ -49,6 +49,16 @@ shader_parameter/Texture_2 = SubResource("GradientTexture2D_bd1y7")
 shader_parameter/Texture_3 = ExtResource("8_55hwx")
 shader_parameter/Texture_4 = SubResource("GradientTexture2D_55lkv")
 shader_parameter/Texture_Color_1D = SubResource("GradientTexture1D_rfd6m")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xwpmn"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2kbbf"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dxkbg"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_i7pbw"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_p82xo"]
 
 [sub_resource type="Animation" id="Animation_6t15k"]
 length = 0.001
@@ -122,7 +132,19 @@ tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 1)]
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("picEvent/Fire:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_0o6mo"]
@@ -166,28 +188,181 @@ tracks/2/keys = {
 "update": 0,
 "values": [Vector2(41, 37)]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("picEvent/Fire:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("lblRested:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_owu7u"]
+resource_name = "fire_out"
+length = 0.5
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("smoke:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("picEvent/Fire:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("picEvent/picHighlight:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("lblRested:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_wqj5t"]
 _data = {
 &"RESET": SubResource("Animation_6t15k"),
 &"fire_glow": SubResource("Animation_0o6mo"),
+&"fire_out": SubResource("Animation_owu7u"),
 &"hide_event": ExtResource("10_owu7u")
+}
+
+[sub_resource type="Animation" id="Animation_g5vxb"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("lblRested:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_n4m1l"]
+resource_name = "hide_text"
+length = 0.5
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("lblRested:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_do143"]
+_data = {
+&"RESET": SubResource("Animation_g5vxb"),
+&"hide_text": SubResource("Animation_n4m1l")
+}
+
+[sub_resource type="Animation" id="Animation_rs8c2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_yicm8"]
+resource_name = "show_event"
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.45, 0.55, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.45),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"change_fire"
+}]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_n4m1l"]
 _data = {
-&"campfire_hide_event": ExtResource("10_owu7u")
+&"RESET": SubResource("Animation_rs8c2"),
+&"campfire_hide_event": ExtResource("10_owu7u"),
+&"show_event": SubResource("Animation_yicm8")
 }
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xwpmn"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2kbbf"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dxkbg"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_i7pbw"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_p82xo"]
 
 [node name="HallwayCamp" type="Control"]
 layout_mode = 3
@@ -266,18 +441,6 @@ offset_bottom = 66.0
 texture = ExtResource("9_13384")
 expand_mode = 1
 
-[node name="animFire" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_wqj5t")
-}
-
-[node name="animText" type="AnimationPlayer" parent="."]
-
-[node name="animMain" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_n4m1l")
-}
-
 [node name="btnDone" type="Button" parent="."]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 0
@@ -310,6 +473,32 @@ bbcode_enabled = true
 text = "[tornado]You feel rested...[/tornado]"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="ColorRect" type="ColorRect" parent="."]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="animFire" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_wqj5t")
+}
+
+[node name="animText" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_do143")
+}
+
+[node name="animMain" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_n4m1l")
+}
 
 [connection signal="mouse_entered" from="btnDone" to="." method="_on_btn_continue_mouse_entered"]
 [connection signal="mouse_exited" from="btnDone" to="." method="_on_btn_continue_mouse_exited"]

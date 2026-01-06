@@ -22,7 +22,7 @@ config/supabase/anon_key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhY
 SaveManager="*res://Scripts/Autoloads/SaveManager.gd"
 Player="*res://Scripts/Autoloads/Player.gd"
 ItemsManager="*res://Scripts/Autoloads/ItemsManager.gd"
-DungeonManager="*res://Scripts/Autoloads/DungeonManager.gd"
+DungeonManager="*res://Scenes/Autoloads/dungeon_manager.tscn"
 Enums="*res://Scripts/Autoloads/Enums.gd"
 RoomRegistry="*res://Scripts/Autoloads/RoomRegistry.gd"
 CombatManager="*res://Scripts/Autoloads/CombatManager.gd"
@@ -33,11 +33,14 @@ BossHandler="*res://Scripts/Autoloads/BossHandler.gd"
 GameSettings="*res://Scripts/Autoloads/GameSettings.gd"
 AudioManager="*res://Scripts/Autoloads/AudioManager.gd"
 CursorManager="*res://Scripts/Autoloads/CursorManager.gd"
+TooltipManager="*res://Scripts/Autoloads/TooltipManager.gd"
+SetBonusManager="*res://Scripts/Autoloads/SetBonusManager.gd"
 
 [display]
 
 window/size/viewport_width=1536
 window/size/viewport_height=864
+window/size/resizable=false
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 

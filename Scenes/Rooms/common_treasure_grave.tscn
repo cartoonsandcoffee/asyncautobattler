@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://c127vn167w5k8"]
+[gd_scene load_steps=26 format=3 uid="uid://c127vn167w5k8"]
 
 [ext_resource type="Texture2D" uid="uid://ccbefxbhjge3h" path="res://Assets/Art/Room_04_Background.png" id="1_1v1em"]
 [ext_resource type="Script" uid="uid://hs4xhk5aag7r" path="res://Scripts/HallwayEvents/hallway_treasure.gd" id="1_dp2er"]
@@ -8,16 +8,6 @@
 [ext_resource type="PackedScene" uid="uid://c3h585v8mippc" path="res://Scenes/Elements/free_item_offering.tscn" id="6_wg1yh"]
 [ext_resource type="Animation" uid="uid://h1pr5qyht8io" path="res://Animations/itembox_hide.res" id="7_3bg5k"]
 [ext_resource type="Animation" uid="uid://c3i266wq8xrth" path="res://Animations/itembox_show.res" id="8_wg1yh"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wuomh"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wsc3q"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3bg5k"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wg1yh"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1tpv4"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_adbuy"]
 
@@ -407,19 +397,6 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("1_1v1em")
 expand_mode = 1
-
-[node name="btnContinue" type="Button" parent="."]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 0
-offset_left = 664.0
-offset_top = 322.0
-offset_right = 838.0
-offset_bottom = 437.0
-theme_override_styles/focus = SubResource("StyleBoxEmpty_wuomh")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_wsc3q")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_3bg5k")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_wg1yh")
-theme_override_styles/normal = SubResource("StyleBoxEmpty_1tpv4")
 
 [node name="picEvent" type="TextureRect" parent="."]
 modulate = Color(0, 0, 0, 1)

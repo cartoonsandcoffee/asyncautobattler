@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://b0vi56n2ciwg6"]
+[gd_scene load_steps=26 format=3 uid="uid://b0vi56n2ciwg6"]
 
 [ext_resource type="Script" uid="uid://n5v64n1jeto2" path="res://Scripts/HallwayEvents/hallway_chest.gd" id="1_7xgip"]
 [ext_resource type="Texture2D" uid="uid://ccbefxbhjge3h" path="res://Assets/Art/Room_04_Background.png" id="1_8kryq"]
@@ -8,16 +8,6 @@
 [ext_resource type="PackedScene" uid="uid://c3h585v8mippc" path="res://Scenes/Elements/free_item_offering.tscn" id="5_o16tn"]
 [ext_resource type="Animation" uid="uid://h1pr5qyht8io" path="res://Animations/itembox_hide.res" id="7_xcab8"]
 [ext_resource type="Animation" uid="uid://c3i266wq8xrth" path="res://Animations/itembox_show.res" id="8_nhd8p"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8kryq"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_x57kp"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7xgip"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1xwjt"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bqoxt"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xcab8"]
 
@@ -91,7 +81,7 @@ tracks/3/keys = {
 
 [sub_resource type="Animation" id="Animation_axvhq"]
 resource_name = "hide_label"
-length = 0.4
+length = 0.3
 step = 0.025
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -109,10 +99,10 @@ tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/path = NodePath("picEvent/lblEvent:position")
-tracks/1/interp = 1
+tracks/1/interp = 2
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.4),
+"times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector2(280, 50), Vector2(298, 108)]
@@ -121,10 +111,10 @@ tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/path = NodePath("picEvent/lblEvent:scale")
-tracks/2/interp = 1
+tracks/2/interp = 2
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.4),
+"times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector2(1, 1), Vector2(0.5, 0.5)]
@@ -136,7 +126,7 @@ tracks/3/path = NodePath("picEvent/lblEvent:modulate")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.4),
+"times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
@@ -144,7 +134,7 @@ tracks/3/keys = {
 
 [sub_resource type="Animation" id="Animation_13cp2"]
 resource_name = "show_label"
-length = 0.4
+length = 0.3
 step = 0.025
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -162,10 +152,10 @@ tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/path = NodePath("picEvent/lblEvent:position")
-tracks/1/interp = 1
+tracks/1/interp = 2
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.4),
+"times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector2(298, 108), Vector2(280, 50)]
@@ -174,10 +164,10 @@ tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/path = NodePath("picEvent/lblEvent:scale")
-tracks/2/interp = 1
+tracks/2/interp = 2
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.4),
+"times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector2(0.5, 0.5), Vector2(1, 1)]
@@ -189,7 +179,7 @@ tracks/3/path = NodePath("picEvent/lblEvent:modulate")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.4),
+"times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
@@ -408,26 +398,6 @@ grow_vertical = 2
 texture = ExtResource("1_8kryq")
 expand_mode = 1
 
-[node name="btnContinue" type="Button" parent="."]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -100.0
-offset_top = -91.0
-offset_right = 74.0
-offset_bottom = 24.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_8kryq")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_x57kp")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_7xgip")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_1xwjt")
-theme_override_styles/normal = SubResource("StyleBoxEmpty_bqoxt")
-
 [node name="picEvent" type="TextureRect" parent="."]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 0
@@ -444,10 +414,10 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = 513.83
-offset_top = 430.0
-offset_right = 705.83
-offset_bottom = 488.0
+offset_left = 33.83
+offset_top = 108.0
+offset_right = 225.83
+offset_bottom = 166.0
 grow_horizontal = 2
 scale = Vector2(0.5, 0.5)
 pivot_offset = Vector2(48, 29)

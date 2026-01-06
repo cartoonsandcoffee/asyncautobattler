@@ -1,0 +1,485 @@
+[gd_scene load_steps=10 format=3 uid="uid://oba2ikwv3ve2"]
+
+[ext_resource type="Texture2D" uid="uid://w8xx58x2n851" path="res://Assets/UI/Border/panel-border-025.png" id="1_dcfpc"]
+[ext_resource type="Script" uid="uid://crq4brg1xw6jb" path="res://Scripts/UI/game_info.gd" id="1_rvpa8"]
+[ext_resource type="Texture2D" uid="uid://ccbcslnsifj3o" path="res://Assets/UI/divider-fade-002.png" id="2_ct6pu"]
+[ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="3_nhtwg"]
+[ext_resource type="Texture2D" uid="uid://cqmy8blu3j6h1" path="res://Assets/Help/help_rank.png" id="4_ct6pu"]
+[ext_resource type="Texture2D" uid="uid://bloxd8nc0p46l" path="res://Assets/Help/help_items.png" id="5_nhtwg"]
+[ext_resource type="Texture2D" uid="uid://m7ua7f10d1vm" path="res://Assets/Help/help_stats_main.png" id="6_fgnkp"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fgnkp"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rvpa8"]
+texture = ExtResource("1_dcfpc")
+texture_margin_left = 44.0
+texture_margin_top = 44.0
+texture_margin_right = 44.0
+texture_margin_bottom = 44.0
+
+[node name="GameInfo" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_rvpa8")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.827451)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 50
+
+[node name="panelBlack" type="Panel" parent="MarginContainer"]
+custom_minimum_size = Vector2(300, 100)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_fgnkp")
+
+[node name="panelBorder" type="PanelContainer" parent="MarginContainer/panelBlack"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_rvpa8")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/panelBlack/panelBorder"]
+layout_mode = 2
+theme = ExtResource("3_nhtwg")
+theme_override_constants/separation = 15
+
+[node name="boxHeader" type="HBoxContainer" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer"]
+modulate = Color(0.68, 0.68, 0.68, 1)
+layout_mode = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/boxHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect2" type="TextureRect" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/boxHeader"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 2
+auto_translate_mode = 0
+editor_description = ""
+visible = true
+modulate = Color(1, 1, 1, 1)
+self_modulate = Color(1, 1, 1, 1)
+show_behind_parent = false
+top_level = false
+clip_children = 0
+light_mask = 1
+visibility_layer = 1
+z_index = 0
+z_as_relative = true
+y_sort_enabled = false
+texture_filter = 0
+texture_repeat = 0
+material = null
+use_parent_material = false
+clip_contents = false
+custom_minimum_size = Vector2(0, 0)
+layout_direction = 0
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+size_flags_stretch_ratio = 1.0
+localize_numeral_system = true
+tooltip_text = ""
+tooltip_auto_translate_mode = 0
+focus_neighbor_left = NodePath("")
+focus_neighbor_top = NodePath("")
+focus_neighbor_right = NodePath("")
+focus_neighbor_bottom = NodePath("")
+focus_next = NodePath("")
+focus_previous = NodePath("")
+focus_mode = 0
+mouse_filter = 1
+mouse_force_pass_scroll_events = true
+mouse_default_cursor_shape = 0
+theme = null
+theme_type_variation = &""
+texture = ExtResource("2_ct6pu")
+expand_mode = 1
+stretch_mode = 5
+flip_h = false
+flip_v = false
+script = null
+
+[node name="Label" type="Label" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/boxHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("3_nhtwg")
+theme_override_font_sizes/font_size = 42
+text = "  What  you  need  to  know  "
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/boxHeader"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 2
+auto_translate_mode = 0
+editor_description = ""
+visible = true
+modulate = Color(1, 1, 1, 1)
+self_modulate = Color(1, 1, 1, 1)
+show_behind_parent = false
+top_level = false
+clip_children = 0
+light_mask = 1
+visibility_layer = 1
+z_index = 0
+z_as_relative = true
+y_sort_enabled = false
+texture_filter = 0
+texture_repeat = 0
+material = null
+use_parent_material = false
+clip_contents = false
+custom_minimum_size = Vector2(0, 0)
+layout_direction = 0
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+size_flags_stretch_ratio = 1.0
+localize_numeral_system = true
+tooltip_text = ""
+tooltip_auto_translate_mode = 0
+focus_neighbor_left = NodePath("")
+focus_neighbor_top = NodePath("")
+focus_neighbor_right = NodePath("")
+focus_neighbor_bottom = NodePath("")
+focus_next = NodePath("")
+focus_previous = NodePath("")
+focus_mode = 0
+mouse_filter = 1
+mouse_force_pass_scroll_events = true
+mouse_default_cursor_shape = 0
+theme = null
+theme_type_variation = &""
+texture = ExtResource("2_ct6pu")
+expand_mode = 1
+stretch_mode = 5
+flip_h = true
+flip_v = false
+script = null
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/boxHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+follow_focus = true
+scroll_vertical = 100
+
+[node name="helpContent" type="VBoxContainer" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="lblWhat" type="Label" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent"]
+layout_mode = 2
+text = "What am I doing here?"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent"]
+layout_mode = 2
+bbcode_enabled = true
+text = "Escaping the citidel. There are 5 floors to traverse, full of rooms and events that will allow you to fill your inventory with items that can help you. But beware, there is only 1 escape pod, and all the other prisoners are heading for it as well. You'll have to fight your way through them too. At the end of each rank (floor) of the citidel, you will fight other players also trying to be the one to make it out."
+fit_content = true
+
+[node name="lblWhere" type="Label" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent"]
+layout_mode = 2
+text = "Explain the Dungeon..."
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent"]
+custom_minimum_size = Vector2(0, 240)
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+bbcode_enabled = true
+text = "Throughout the citidel there are 4 different main types of rooms: Treasures, Utilities, Merchants, and Camps. Treasure rooms are any rooms that let you select free cards to add to your inventory. Utility Rooms are any rooms that can modify cards in your inventory. Merchant Rooms are where you can spend your gold to buy new inventory cards. Camps allow you to rest up to full hit points.  Each room type has several different events that can happen therein, and there are different rarities among them: Common, Uncommon, and Rare.
+
+The rooms with red borders are the ones that contain enemies that you will have to fight. Death is permanent, tread carefully."
+fit_content = true
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent/HBoxContainer"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 2
+auto_translate_mode = 0
+editor_description = ""
+visible = true
+modulate = Color(1, 1, 1, 1)
+self_modulate = Color(1, 1, 1, 1)
+show_behind_parent = false
+top_level = false
+clip_children = 0
+light_mask = 1
+visibility_layer = 1
+z_index = 0
+z_as_relative = true
+y_sort_enabled = false
+texture_filter = 0
+texture_repeat = 0
+material = null
+use_parent_material = false
+clip_contents = false
+custom_minimum_size = Vector2(540, 0)
+layout_direction = 0
+layout_mode = 2
+size_flags_horizontal = 1
+size_flags_vertical = 1
+size_flags_stretch_ratio = 1.0
+localize_numeral_system = true
+tooltip_text = ""
+tooltip_auto_translate_mode = 0
+focus_neighbor_left = NodePath("")
+focus_neighbor_top = NodePath("")
+focus_neighbor_right = NodePath("")
+focus_neighbor_bottom = NodePath("")
+focus_next = NodePath("")
+focus_previous = NodePath("")
+focus_mode = 0
+mouse_filter = 1
+mouse_force_pass_scroll_events = true
+mouse_default_cursor_shape = 0
+theme = null
+theme_type_variation = &""
+texture = ExtResource("4_ct6pu")
+expand_mode = 5
+stretch_mode = 3
+flip_h = false
+flip_v = false
+script = null
+
+[node name="lblItems" type="Label" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent"]
+layout_mode = 2
+text = "Tell me about these items..."
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent/HBoxContainer2"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 2
+auto_translate_mode = 0
+editor_description = ""
+visible = true
+modulate = Color(1, 1, 1, 1)
+self_modulate = Color(1, 1, 1, 1)
+show_behind_parent = false
+top_level = false
+clip_children = 0
+light_mask = 1
+visibility_layer = 1
+z_index = 0
+z_as_relative = true
+y_sort_enabled = false
+texture_filter = 0
+texture_repeat = 0
+material = null
+use_parent_material = false
+clip_contents = false
+custom_minimum_size = Vector2(0, 0)
+layout_direction = 0
+layout_mode = 2
+size_flags_horizontal = 1
+size_flags_vertical = 1
+size_flags_stretch_ratio = 1.0
+localize_numeral_system = true
+tooltip_text = ""
+tooltip_auto_translate_mode = 0
+focus_neighbor_left = NodePath("")
+focus_neighbor_top = NodePath("")
+focus_neighbor_right = NodePath("")
+focus_neighbor_bottom = NodePath("")
+focus_next = NodePath("")
+focus_previous = NodePath("")
+focus_mode = 0
+mouse_filter = 1
+mouse_force_pass_scroll_events = true
+mouse_default_cursor_shape = 0
+theme = null
+theme_type_variation = &""
+texture = ExtResource("5_nhtwg")
+expand_mode = 0
+stretch_mode = 0
+flip_h = false
+flip_v = false
+script = null
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Throughout the citidel you will discover many items of many different types that will help you win fights. 
+
+You can hold a single weapon, and four items of any other type (Armor, Helmet, tools, potions, etc). You begin with 4 inventory slots available, but will unlock 2 additional slots each time you defeat another player at the end of a rank, up to a total of 12 inventory slots. 
+
+An item card is comprised of: 
+1) The Name
+2) Rarity
+3) Passive Stat Bonuses
+4) Custom Item Rules
+5) Categories
+
+"
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent"]
+layout_mode = 2
+text = "So these boots are \"Byzantium Boots\", they are of Common rarity (also denoted by the blue border in the inventory), they passively provide 2 shield and 1 agility, they have a custom rule where at the start of battle they apply 1 stun status to the enemy, and they are in the category of \"Byzantium\"
+
+Passive stats always apply and effect the base/max value of that stat. Custom Item Rules typically apply during combat, and resolve sequentially, so order matters. Categories can show how items are grouped, items can be in multiple categories."
+fit_content = true
+
+[node name="lblStats" type="Label" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent"]
+layout_mode = 2
+text = "Explain Stats and what they are..."
+
+[node name="boxStatsMain" type="HBoxContainer" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent"]
+custom_minimum_size = Vector2(0, 450)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent/boxStatsMain"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 2
+auto_translate_mode = 0
+editor_description = ""
+visible = true
+modulate = Color(1, 1, 1, 1)
+self_modulate = Color(1, 1, 1, 1)
+show_behind_parent = false
+top_level = false
+clip_children = 0
+light_mask = 1
+visibility_layer = 1
+z_index = 0
+z_as_relative = true
+y_sort_enabled = false
+texture_filter = 0
+texture_repeat = 0
+material = null
+use_parent_material = false
+clip_contents = false
+custom_minimum_size = Vector2(150, 0)
+layout_direction = 0
+layout_mode = 2
+size_flags_horizontal = 1
+size_flags_vertical = 1
+size_flags_stretch_ratio = 1.0
+localize_numeral_system = true
+tooltip_text = ""
+tooltip_auto_translate_mode = 0
+focus_neighbor_left = NodePath("")
+focus_neighbor_top = NodePath("")
+focus_neighbor_right = NodePath("")
+focus_neighbor_bottom = NodePath("")
+focus_next = NodePath("")
+focus_previous = NodePath("")
+focus_mode = 0
+mouse_filter = 1
+mouse_force_pass_scroll_events = true
+mouse_default_cursor_shape = 0
+theme = null
+theme_type_variation = &""
+texture = ExtResource("6_fgnkp")
+expand_mode = 1
+stretch_mode = 2
+flip_h = false
+flip_v = false
+script = null
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent/boxStatsMain"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "
+Hit Points / Health - Your life force, when it reaches zero you die. Your current amount / your maximum amount. HP does not refresh automatically between encounters.
+
+Shield - How much damage you can withstand before you begin to lose hit points. Replenishes between battles.
+
+Attack Damage - The amount you take away from the enemy's shield or hit points each turn in combat. While this number can be negative, you will never do less than 0 damage (or through attack damage cause the enemy to gain life).
+
+Agility - Your speed. The party with higher agility goes first in combat. Agility determines if you can run away from enemies in the citidel.
+
+
+Gold - The currency of the dungeon, spend it to buy items and weapons.
+
+Secondary Stats:
+Strikes - How many hits  a weapon makes each turn in combat.
+Burn Damage - How much shield or hit points get taken away when a \"Burn\" stack is activated in combat."
+
+[node name="lblCombat" type="Label" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent"]
+layout_mode = 2
+text = "Combat Details:"
+
+[node name="txtCombat" type="RichTextLabel" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent"]
+layout_mode = 2
+text = "Combat is initiated when you enter a room with an enemy, or at the end of the rank when you face another player to progress.
+
+First turn is determined by which entity has more agility. In a tie, you go first. A battle follows the following progression.
+Battle Starts, the faster entity's 1st turn starts, entity hits for as many strikes as their stats denote (attacks always hit), that entity's turn ends, the other entity starts their turn, they hit for as many strikes as their stats denote, the other entity's turn ends, then the 2nd turn begins... This repeats until one entity is dead. The first time an entity loses all their sheild they become EXPOSED. The first time an entity reaches less than half of their hitpoints, they become WOUNDED. If you die, that's it, you must start a new run. 
+
+Combat Flow:
+Battle Start -> Turn Start -> Turn Start Status Effects Trigger -> Entity Hits (1x for each strike stat) -> Turn End Status Effects Trigger -> (Repeat for both players until there is a winner) -> Battle Ends."
+fit_content = true
+
+[node name="boxButtons" type="HBoxContainer" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/boxButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="btnClose" type="Button" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/boxButtons"]
+custom_minimum_size = Vector2(200, 75)
+layout_mode = 2
+text = "Close"
+
+[connection signal="pressed" from="MarginContainer/panelBlack/panelBorder/VBoxContainer/boxButtons/btnClose" to="." method="_on_btn_close_pressed"]

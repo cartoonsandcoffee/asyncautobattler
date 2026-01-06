@@ -1,9 +1,12 @@
-[gd_scene load_steps=9 format=3 uid="uid://dfuglhrwpha2"]
+[gd_scene load_steps=15 format=3 uid="uid://dfuglhrwpha2"]
 
 [ext_resource type="Texture2D" uid="uid://vtf7yfl2710m" path="res://Assets/UI/panel-border-030.png" id="1_ml8qj"]
 [ext_resource type="Script" uid="uid://c3jpimlh4u1c0" path="res://Scripts/Components/item_combiner.gd" id="1_s2t3v"]
 [ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="2_s2t3v"]
 [ext_resource type="Theme" uid="uid://od14ccps1daj" path="res://Themes/descriptive_label.tres" id="4_d4lnh"]
+[ext_resource type="Texture2D" uid="uid://8npufy4nk401" path="res://Assets/Art/Particles/circle_03.png" id="5_7co36"]
+[ext_resource type="PackedScene" uid="uid://cpl3ovqtw13ok" path="res://Scenes/Zooms/zoom_forge.tscn" id="6_2dfb1"]
+[ext_resource type="PackedScene" uid="uid://bxrbkkqe0pd1u" path="res://Scenes/Zooms/zoom_altar.tscn" id="6_sxq1v"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_d4lnh"]
 
@@ -19,6 +22,18 @@ texture_margin_left = 32.0
 texture_margin_top = 32.0
 texture_margin_right = 32.0
 texture_margin_bottom = 32.0
+
+[sub_resource type="Gradient" id="Gradient_d4lnh"]
+offsets = PackedFloat32Array(0, 0.642023, 1)
+colors = PackedColorArray(1, 0.843137, 0, 1, 1, 0.647059, 0, 1, 1, 1, 1, 0)
+
+[sub_resource type="Curve" id="Curve_sxq1v"]
+_data = [Vector2(0, 0.376454), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_2dfb1"]
+offsets = PackedFloat32Array(0, 0.607004, 1)
+colors = PackedColorArray(0.478431, 0.803922, 0.870588, 1, 0.7254, 0.8959, 0.93, 1, 1, 1, 1, 0)
 
 [node name="ItemCombiner" type="Control"]
 layout_mode = 3
@@ -59,6 +74,7 @@ offset_right = 300.0
 offset_bottom = 180.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset = Vector2(300, 180)
 theme_override_styles/panel = SubResource("StyleBoxFlat_7co36")
 
 [node name="panelInvalid" type="PanelContainer" parent="Panel/panelBlack"]
@@ -73,7 +89,7 @@ theme_override_constants/separation = 10
 
 [node name="lblName" type="Label" parent="Panel/panelBlack/panelInvalid/VBoxContainer"]
 layout_mode = 2
-text = "That Doesn't Work!"
+text = "Nothing happens..."
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -84,7 +100,7 @@ layout_mode = 2
 [node name="txtDesc" type="RichTextLabel" parent="Panel/panelBlack/panelInvalid/VBoxContainer/MarginContainer"]
 layout_mode = 2
 bbcode_enabled = true
-text = "These two items don't taste right together..."
+text = "What a let down."
 fit_content = true
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -279,7 +295,53 @@ custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 text = "\"Thank you.\""
 
+[node name="particles_crafting" type="CPUParticles2D" parent="."]
+position = Vector2(770, 431)
+emitting = false
+amount = 50
+one_shot = true
+explosiveness = 0.8
+emission_shape = 1
+emission_sphere_radius = 30.0
+gravity = Vector2(0, 150)
+initial_velocity_min = 100.0
+initial_velocity_max = 200.0
+scale_amount_min = 2.0
+scale_amount_max = 4.0
+color_ramp = SubResource("Gradient_d4lnh")
+
+[node name="particles_offering" type="CPUParticles2D" parent="."]
+position = Vector2(774, 431)
+emitting = false
+amount = 10
+texture = ExtResource("5_7co36")
+one_shot = true
+speed_scale = 0.4
+emission_shape = 1
+emission_sphere_radius = 50.0
+direction = Vector2(0, 0)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 50.0
+initial_velocity_max = 200.0
+angular_velocity_min = 30.0
+angular_velocity_max = 200.0
+orbit_velocity_max = 0.5
+scale_amount_min = 0.05
+scale_amount_max = 0.2
+scale_amount_curve = SubResource("Curve_sxq1v")
+color = Color(0.4785, 0.80475, 0.87, 1)
+color_ramp = SubResource("Gradient_2dfb1")
+
+[node name="zoomForge" parent="." instance=ExtResource("6_2dfb1")]
+layout_mode = 1
+
+[node name="zoomAltar" parent="." instance=ExtResource("6_sxq1v")]
+layout_mode = 1
+
 [connection signal="pressed" from="Panel/panelBlack/panelInvalid/VBoxContainer/btnBack" to="." method="_on_btn_back_pressed"]
+[connection signal="mouse_entered" from="Panel/panelBlack/panelCombiner/VBoxContainer/boxButtons/btnSkip" to="." method="_on_btn_skip_mouse_entered"]
 [connection signal="pressed" from="Panel/panelBlack/panelCombiner/VBoxContainer/boxButtons/btnSkip" to="." method="_on_btn_skip_pressed"]
+[connection signal="mouse_entered" from="Panel/panelBlack/panelCombiner/VBoxContainer/boxButtons/btnCraft" to="." method="_on_btn_craft_mouse_entered"]
 [connection signal="pressed" from="Panel/panelBlack/panelCombiner/VBoxContainer/boxButtons/btnCraft" to="." method="_on_btn_craft_pressed"]
 [connection signal="pressed" from="Panel/panelBlack/panelReward/VBoxContainer/btnDone" to="." method="_on_btn_done_pressed"]

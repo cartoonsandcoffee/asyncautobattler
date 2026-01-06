@@ -1,4 +1,4 @@
-[gd_scene load_steps=102 format=3 uid="uid://yfx4f0fwf4vi"]
+[gd_scene load_steps=103 format=3 uid="uid://yfx4f0fwf4vi"]
 
 [ext_resource type="Texture2D" uid="uid://vtf7yfl2710m" path="res://Assets/UI/panel-border-030.png" id="1_0e3vx"]
 [ext_resource type="Script" uid="uid://c6hur1hg25jx" path="res://Scripts/main_game.gd" id="1_73nn6"]
@@ -1963,6 +1963,8 @@ texture_margin_bottom = 32.0
 atlas = ExtResource("4_6j5ir")
 region = Rect2(656, 224, 16, 16)
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_smxg7"]
+
 [sub_resource type="Animation" id="Animation_73nn6"]
 length = 0.001
 tracks/0/type = "value"
@@ -3778,6 +3780,21 @@ layout_mode = 2
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
+[node name="panelSets" type="PanelContainer" parent="BottomPanel"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = -61.0
+offset_bottom = -11.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_smxg7")
+
+[node name="gridSets" type="GridContainer" parent="BottomPanel/panelSets"]
+layout_mode = 2
+size_flags_horizontal = 8
+columns = 6
+
 [node name="FadeOverlay" type="ColorRect" parent="."]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 1
@@ -3838,6 +3855,7 @@ enabled = false
 [connection signal="pressed" from="CombatPanel/DeathPanel/PanelContainer/MarginContainer/VBoxContainer/boxHistory/HBoxContainer/btnHistory" to="CombatPanel" method="_on_btn_history_pressed"]
 [connection signal="pressed" from="CombatPanel/DeathPanel/PanelContainer/MarginContainer/VBoxContainer/btnNewRun" to="CombatPanel" method="_on_btn_new_run_pressed"]
 [connection signal="pressed" from="CombatPanel/DeathPanel/PanelContainer/MarginContainer/VBoxContainer/btnQuit" to="CombatPanel" method="_on_btn_quit_pressed"]
+[connection signal="mouse_entered" from="ReplaceItemPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/btnCancelReplace" to="." method="_on_btn_cancel_replace_mouse_entered"]
 [connection signal="pressed" from="ReplaceItemPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/btnCancelReplace" to="." method="_on_btn_cancel_replace_pressed"]
 [connection signal="pressed" from="DropItemPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/HBoxContainer/btnCancelDrop" to="." method="_on_btn_cancel_drop_pressed"]
 [connection signal="pressed" from="DropItemPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/HBoxContainer/btnDrop" to="." method="_on_btn_drop_pressed"]
