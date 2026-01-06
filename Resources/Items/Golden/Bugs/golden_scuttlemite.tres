@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="Item" load_steps=5 format=3 uid="uid://dshtnhj4b2l53"]
+
+[ext_resource type="Texture2D" uid="uid://ofqhkq0qfkqk" path="res://Assets/Items/Bugs.png" id="1_w38or"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_wbreb"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_w38or"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_57kwd"]
+atlas = ExtResource("1_w38or")
+region = Rect2(150, 150, 150, 150)
+
+[resource]
+script = ExtResource("2_w38or")
+item_id = ""
+item_name = "Golden Scuttlemite"
+item_type = 13
+item_desc = ""
+item_icon = SubResource("AtlasTexture_57kwd")
+item_color = Color(0.878431, 0.701961, 0, 1)
+rules = Array[ExtResource("1_wbreb")]([])
+repeat_rules_X_times = 0
+repeat_rules_for_category = ""
+trigger_priority = 0
+trigger_only_once = false
+trigger_only_first_turn = false
+trigger_on_occurrence_number = 0
+occurrence_resets_per_turn = false
+rarity = 6
+categories = Array[String](["Wood"])
+rng_weight = 1.0
+unlocked = true
+damage_bonus = 0
+shield_bonus = 0
+agility_bonus = 0
+hit_points_bonus = 10
+strikes_bonus = 0
+burn_damage_bonus = 0
+metadata/_custom_type_script = "uid://dthg27pchm1fm"

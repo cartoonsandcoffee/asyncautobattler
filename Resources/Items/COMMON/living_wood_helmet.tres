@@ -1,15 +1,70 @@
-[gd_resource type="Resource" script_class="Item" load_steps=3 format=3 uid="uid://bfl3qx0yp5nlx"]
+[gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://bfl3qx0yp5nlx"]
 
 [ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_i7i7x"]
+[ext_resource type="Texture2D" uid="uid://hl37x7hsnly" path="res://Assets/Items/Helmets.png" id="1_j21kh"]
 [ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_j21kh"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_00p0y"]
+atlas = ExtResource("1_j21kh")
+region = Rect2(300, 150, 150, 150)
+
+[sub_resource type="Resource" id="Resource_sviro"]
+script = ExtResource("1_i7i7x")
+trigger_type = 4
+trigger_stat = 9
+trigger_status = 10
+trigger_value_threshold = 0
+countdown_value = 0
+countdown_recurs = false
+has_condition = false
+condition_type = 0
+condition_of = 4
+condition_stat = 9
+condition_status = 10
+condition_comparison = ">"
+compare_to = 0
+condition_value = 0
+condition_to_party = 4
+condition_stat_type = 3
+condition_party_stat = 9
+condition_party_status = 10
+effect_type = 4
+target_type = 0
+target_stat_type = 0
+target_stat = 9
+target_status = 10
+effect_of = 0
+effect_amount = 3
+effect_stat_party = 4
+effect_stat_type = 3
+effect_stat_value = 9
+effect_status_value = 10
+convert_from_type = 0
+convert_from_party = 0
+convert_from_stat = 9
+convert_from_status = 10
+convert_to_type = 0
+convert_to_party = 0
+convert_to_stat = 9
+convert_to_status = 10
+conversion_amount_type = 0
+conversion_amount_value = 1
+conversion_ratio = 1.0
+retrigger_type = 1
+retrigger_target = 0
+special_string = ""
+custom_description = ""
+metadata/_custom_type_script = "uid://dahay7fvi7bik"
 
 [resource]
 script = ExtResource("2_j21kh")
-item_name = ""
-item_type = 0
+item_id = ""
+item_name = "Living Wood Helmet"
+item_type = 5
 item_desc = ""
-item_color = Color(0, 0, 0, 1)
-rules = Array[ExtResource("1_i7i7x")]([])
+item_icon = SubResource("AtlasTexture_00p0y")
+item_color = Color(0.341176, 0.27451, 0.196078, 1)
+rules = Array[ExtResource("1_i7i7x")]([SubResource("Resource_sviro")])
 repeat_rules_X_times = 0
 repeat_rules_for_category = ""
 trigger_priority = 0
@@ -18,13 +73,13 @@ trigger_only_first_turn = false
 trigger_on_occurrence_number = 0
 occurrence_resets_per_turn = false
 rarity = 0
-categories = Array[String]([])
+categories = Array[String](["Wood"])
 rng_weight = 1.0
-unlocked = false
+unlocked = true
 damage_bonus = 0
-shield_bonus = 0
+shield_bonus = 1
 agility_bonus = 0
-hit_points_bonus = 0
+hit_points_bonus = 1
 strikes_bonus = 0
 burn_damage_bonus = 0
 metadata/_custom_type_script = "uid://dthg27pchm1fm"

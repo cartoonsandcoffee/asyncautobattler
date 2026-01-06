@@ -10,6 +10,7 @@ region = Rect2(150, 300, 150, 150)
 
 [resource]
 script = ExtResource("2_s1jpd")
+item_id = ""
 item_name = "Golden Battleworn Shield"
 item_type = 2
 item_desc = ""

@@ -1,0 +1,133 @@
+[gd_resource type="Resource" script_class="Item" load_steps=7 format=3 uid="uid://cg532tnf4vok1"]
+
+[ext_resource type="Texture2D" uid="uid://fujbmxi0k7vs" path="res://Assets/Items/Tools.png" id="1_pekov"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_td7vi"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_pekov"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mlnik"]
+atlas = ExtResource("1_pekov")
+region = Rect2(150, 600, 150, 150)
+
+[sub_resource type="Resource" id="Resource_tt723"]
+script = ExtResource("1_td7vi")
+trigger_type = 1
+trigger_stat = 9
+trigger_status = 10
+trigger_value_threshold = 0
+countdown_value = 0
+countdown_recurs = false
+has_condition = true
+condition_type = 0
+condition_of = 0
+condition_stat = 2
+condition_status = 10
+condition_comparison = "="
+compare_to = 0
+condition_value = 0
+condition_to_party = 4
+condition_stat_type = 3
+condition_party_stat = 9
+condition_party_status = 10
+effect_type = 0
+target_type = 0
+target_stat_type = 1
+target_stat = 0
+target_status = 10
+effect_of = 0
+effect_amount = 3
+effect_stat_party = 4
+effect_stat_type = 3
+effect_stat_value = 9
+effect_status_value = 10
+convert_from_type = 0
+convert_from_party = 0
+convert_from_stat = 9
+convert_from_status = 10
+convert_to_type = 0
+convert_to_party = 0
+convert_to_stat = 9
+convert_to_status = 10
+conversion_amount_type = 0
+conversion_amount_value = 1
+conversion_ratio = 1.0
+retrigger_type = 1
+retrigger_target = 0
+special_string = ""
+custom_description = ""
+metadata/_custom_type_script = "uid://dahay7fvi7bik"
+
+[sub_resource type="Resource" id="Resource_f2g7l"]
+script = ExtResource("1_td7vi")
+trigger_type = 1
+trigger_stat = 9
+trigger_status = 10
+trigger_value_threshold = 0
+countdown_value = 0
+countdown_recurs = false
+has_condition = true
+condition_type = 0
+condition_of = 0
+condition_stat = 2
+condition_status = 10
+condition_comparison = "="
+compare_to = 0
+condition_value = 0
+condition_to_party = 4
+condition_stat_type = 3
+condition_party_stat = 9
+condition_party_status = 10
+effect_type = 4
+target_type = 0
+target_stat_type = 0
+target_stat = 9
+target_status = 10
+effect_of = 0
+effect_amount = 3
+effect_stat_party = 4
+effect_stat_type = 3
+effect_stat_value = 9
+effect_status_value = 10
+convert_from_type = 0
+convert_from_party = 0
+convert_from_stat = 9
+convert_from_status = 10
+convert_to_type = 0
+convert_to_party = 0
+convert_to_stat = 9
+convert_to_status = 10
+conversion_amount_type = 0
+conversion_amount_value = 1
+conversion_ratio = 1.0
+retrigger_type = 1
+retrigger_target = 0
+special_string = ""
+custom_description = ""
+metadata/_custom_type_script = "uid://dahay7fvi7bik"
+
+[resource]
+script = ExtResource("2_pekov")
+item_id = ""
+item_name = "Purpleskin Belt"
+item_type = 6
+item_desc = "Battle Start: If you have 0 base shield, gain 3 max health and heal for 3."
+item_icon = SubResource("AtlasTexture_mlnik")
+item_color = Color(0.643137, 0.376471, 0.741176, 1)
+rules = Array[ExtResource("1_td7vi")]([SubResource("Resource_tt723"), SubResource("Resource_f2g7l")])
+repeat_rules_X_times = 0
+repeat_rules_for_category = ""
+trigger_priority = 0
+trigger_only_once = false
+trigger_only_first_turn = false
+trigger_on_occurrence_number = 0
+occurrence_resets_per_turn = false
+rarity = 0
+categories = Array[String]([])
+rng_weight = 1.0
+unlocked = true
+damage_bonus = 0
+shield_bonus = 0
+agility_bonus = 0
+hit_points_bonus = 3
+strikes_bonus = 0
+burn_damage_bonus = 0
+metadata/_custom_type_script = "uid://dthg27pchm1fm"

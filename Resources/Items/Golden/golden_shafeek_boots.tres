@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="Item" load_steps=5 format=3 uid="uid://c31fumtauekst"]
+
+[ext_resource type="Texture2D" uid="uid://c6vpfj00alg03" path="res://Assets/Items/Boots.png" id="1_m1whn"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="2_abk6x"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="3_3b2i4"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_um0yl"]
+atlas = ExtResource("1_m1whn")
+region = Rect2(450, 0, 150, 150)
+
+[resource]
+script = ExtResource("3_3b2i4")
+item_id = ""
+item_name = "Golden Shafeek's Overlarge Boots"
+item_type = 4
+item_desc = ""
+item_icon = SubResource("AtlasTexture_um0yl")
+item_color = Color(0.878431, 0.701961, 0, 1)
+rules = Array[ExtResource("2_abk6x")]([])
+repeat_rules_X_times = 0
+repeat_rules_for_category = ""
+trigger_priority = 0
+trigger_only_once = false
+trigger_only_first_turn = false
+trigger_on_occurrence_number = 0
+occurrence_resets_per_turn = false
+rarity = 6
+categories = Array[String]([])
+rng_weight = 1.0
+unlocked = true
+damage_bonus = 0
+shield_bonus = 0
+agility_bonus = 4
+hit_points_bonus = 0
+strikes_bonus = 0
+burn_damage_bonus = 0
+metadata/_custom_type_script = "uid://dthg27pchm1fm"

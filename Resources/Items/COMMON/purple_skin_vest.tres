@@ -1,14 +1,21 @@
-[gd_resource type="Resource" script_class="Item" load_steps=3 format=3 uid="uid://b2vu4l3lbgp0c"]
+[gd_resource type="Resource" script_class="Item" load_steps=5 format=3 uid="uid://b2vu4l3lbgp0c"]
 
+[ext_resource type="Texture2D" uid="uid://c673mfqdoecpa" path="res://Assets/Items/Armor.png" id="1_8batp"]
 [ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_rhbph"]
 [ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_8batp"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_ofvsu"]
+atlas = ExtResource("1_8batp")
+region = Rect2(0, 0, 150, 150)
+
 [resource]
 script = ExtResource("2_8batp")
-item_name = ""
-item_type = 0
+item_id = ""
+item_name = "Purpleskin Vest"
+item_type = 1
 item_desc = ""
-item_color = Color(0, 0, 0, 1)
+item_icon = SubResource("AtlasTexture_ofvsu")
+item_color = Color(0.643137, 0.376471, 0.741176, 1)
 rules = Array[ExtResource("1_rhbph")]([])
 repeat_rules_X_times = 0
 repeat_rules_for_category = ""
@@ -20,10 +27,10 @@ occurrence_resets_per_turn = false
 rarity = 0
 categories = Array[String]([])
 rng_weight = 1.0
-unlocked = false
+unlocked = true
 damage_bonus = 0
-shield_bonus = 0
-agility_bonus = 0
+shield_bonus = 2
+agility_bonus = 1
 hit_points_bonus = 0
 strikes_bonus = 0
 burn_damage_bonus = 0

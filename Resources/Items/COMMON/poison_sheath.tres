@@ -1,0 +1,85 @@
+[gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://ekip41rfxjgj"]
+
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_2ufvv"]
+[ext_resource type="Texture2D" uid="uid://fujbmxi0k7vs" path="res://Assets/Items/Tools.png" id="1_a6e7w"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_a6e7w"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2sqm0"]
+atlas = ExtResource("1_a6e7w")
+region = Rect2(150, 600, 150, 150)
+
+[sub_resource type="Resource" id="Resource_es5if"]
+script = ExtResource("1_2ufvv")
+trigger_type = 3
+trigger_stat = 9
+trigger_status = 10
+trigger_value_threshold = 0
+countdown_value = 0
+countdown_recurs = false
+has_condition = false
+condition_type = 0
+condition_of = 4
+condition_stat = 9
+condition_status = 10
+condition_comparison = ">"
+compare_to = 0
+condition_value = 0
+condition_to_party = 4
+condition_stat_type = 3
+condition_party_stat = 9
+condition_party_status = 10
+effect_type = 1
+target_type = 1
+target_stat_type = 0
+target_stat = 9
+target_status = 0
+effect_of = 0
+effect_amount = 2
+effect_stat_party = 4
+effect_stat_type = 3
+effect_stat_value = 9
+effect_status_value = 10
+convert_from_type = 0
+convert_from_party = 0
+convert_from_stat = 9
+convert_from_status = 10
+convert_to_type = 0
+convert_to_party = 0
+convert_to_stat = 9
+convert_to_status = 10
+conversion_amount_type = 0
+conversion_amount_value = 1
+conversion_ratio = 1.0
+retrigger_type = 1
+retrigger_target = 0
+special_string = ""
+custom_description = ""
+metadata/_custom_type_script = "uid://dahay7fvi7bik"
+
+[resource]
+script = ExtResource("2_a6e7w")
+item_id = ""
+item_name = "Poison Sheath"
+item_type = 12
+item_desc = ""
+item_icon = SubResource("AtlasTexture_2sqm0")
+item_color = Color(1, 0.4, 1, 1)
+rules = Array[ExtResource("1_2ufvv")]([SubResource("Resource_es5if")])
+repeat_rules_X_times = 0
+repeat_rules_for_category = ""
+trigger_priority = 0
+trigger_only_once = false
+trigger_only_first_turn = true
+trigger_on_occurrence_number = 0
+occurrence_resets_per_turn = false
+rarity = 0
+categories = Array[String]([])
+rng_weight = 1.0
+unlocked = true
+damage_bonus = 0
+shield_bonus = 0
+agility_bonus = 0
+hit_points_bonus = 0
+strikes_bonus = 0
+burn_damage_bonus = 0
+metadata/_custom_type_script = "uid://dthg27pchm1fm"

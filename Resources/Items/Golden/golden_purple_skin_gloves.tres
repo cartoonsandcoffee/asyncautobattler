@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="Item" load_steps=5 format=3 uid="uid://bpf3ucegqf735"]
+
+[ext_resource type="Texture2D" uid="uid://dw53wtdf1qlwm" path="res://Assets/Items/Gloves.png" id="1_tgbt4"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="2_t5hcb"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="3_yyo6y"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d5t7p"]
+atlas = ExtResource("1_tgbt4")
+region = Rect2(0, 0, 150, 150)
+
+[resource]
+script = ExtResource("3_yyo6y")
+item_id = ""
+item_name = "Golden Purpleskin Gloves"
+item_type = 3
+item_desc = ""
+item_icon = SubResource("AtlasTexture_d5t7p")
+item_color = Color(0.878431, 0.701961, 0, 1)
+rules = Array[ExtResource("2_t5hcb")]([])
+repeat_rules_X_times = 0
+repeat_rules_for_category = ""
+trigger_priority = 0
+trigger_only_once = false
+trigger_only_first_turn = false
+trigger_on_occurrence_number = 0
+occurrence_resets_per_turn = false
+rarity = 6
+categories = Array[String]([])
+rng_weight = 1.0
+unlocked = true
+damage_bonus = 0
+shield_bonus = 0
+agility_bonus = 2
+hit_points_bonus = 6
+strikes_bonus = 0
+burn_damage_bonus = 0
+metadata/_custom_type_script = "uid://dthg27pchm1fm"
