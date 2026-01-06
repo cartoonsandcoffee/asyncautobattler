@@ -18,7 +18,7 @@ const KEYWORDS = {
 		"description": "Removes armor equal to acid at turn start."
 	},
 	"poison": {
-		"color": "#5b812fff",
+		"color": "#ff66ff",
 		"description": "If you have no shield, take damage equal to poison at turn start. Remove 1 stack at turn start."
 	},
 	"burn": {
@@ -34,7 +34,7 @@ const KEYWORDS = {
 		"description": "Restore health equal to regeneration at turn end, then remove 1 stack."
 	},
 	"stun": {
-		"color": "#ffff99",
+		"color": "#bdb280ff",
 		"description": "When stunned you skip your next strike. Remove 1 stun for each strike you skip."
 	},	
 	"exposed": {
@@ -46,11 +46,11 @@ const KEYWORDS = {
 		"description": "Triggered when HP reaches 50% or lower for the first time each combat."
 	},
 	"blind": {
-		"color": "#b38b58ff",
+		"color": "#fff5cf",
 		"description": "Your attack is halved as long as you have blind stacks. Remove 1 at turn end."
 	},
 	"blessing": {
-		"color": "#3ca5e2ff",
+		"color": "#99dfffff",
 		"description": "When removed, gain 1 attack per stack and 3 health."
 	}		
 }
@@ -68,11 +68,12 @@ const TRIGGER_KEYWORDS = {
 	"attack": "#ff4444",	
 	"agility": "#ffdd44",
 	"speed": "#ffdd44",
-	"strikes": "#cad48eff",	
+	"strikes": "#d0db9eff",	
 	"hit points": "#44ff44",
 	"hitpoints": "#44ff44",
 	"health": "#44ff44",
-	"gold": "#ffaa00"
+	"gold": "#ffaa00",
+	"burn damage": "#ff6600"
 }
 
 var current_item: Item = null
@@ -97,7 +98,7 @@ func set_references():
 	vbox = $Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer
 	gamecolors = GameColors.new()
 
-func set_item(this_item: Item):
+func set_item(this_item: Item, create_definitions: bool = true):
 	set_references()
 	clear_definition_boxes()
 
@@ -106,13 +107,18 @@ func set_item(this_item: Item):
 	set_rarity()
 	get_stat_bonuses()
 
-	show_description(this_item)
+	show_description(this_item, create_definitions)
 	show_stats()
 	show_categories(this_item.categories)
 
-
+	if this_item.item_type == Item.ItemType.SET_BONUS:
+		set_bonus()
 	#update_panel_size()
 	
+func set_bonus():
+	lbl_rarity.visible = false
+	category_grid.visible = false
+
 func set_tooltip_position(_pos: Vector2):
 	global_position = _pos
 
@@ -144,12 +150,13 @@ func get_stat_bonuses():
 	else:
 		stats_grid.show()
 
-func show_description(this_item: Item):
+func show_description(this_item: Item, create_definitions: bool = true):
 	var desc: String = this_item.get_description()
 
 	if desc and desc.length() > 0:
 		lbl_desc.text = process_description(desc)
-		create_stacked_definitions()
+		if create_definitions:
+			create_stacked_definitions()
 		lbl_desc.show()
 	else:
 		lbl_desc.hide()
@@ -239,11 +246,15 @@ func process_description(text: String) -> String:
 	return processed_text
 
 func create_stacked_definitions():
-	var y_offset = 0
 	var extra_spacing: int = 5
-	var tooltip_counter: int = 0
+	var def_box_width: float = 420.0
+	
+	# Start at bottom of tooltip (y=0 since Panel is bottom-anchored)
+	# First definition box bottom should be flush with tooltip bottom
+	var y_offset = 20
 
-	for keyword in found_keywords:
+	for i in range(found_keywords.size()):
+		var keyword = found_keywords[i]
 		if keyword not in KEYWORDS:
 			continue
 		
@@ -251,19 +262,43 @@ func create_stacked_definitions():
 		panel.add_child(def_box)
 		def_box.setup(keyword, KEYWORDS[keyword].description, Color(KEYWORDS[keyword].color))
 		
-		# Position above main panel
-		if tooltip_counter > 0:
-			y_offset -= (80 + extra_spacing)  # Stack upward 
+		# Wait one frame for def_box size to be calculated
+		await get_tree().process_frame
 		
-		if current_item.slot_index >= 4:
-			def_box.justify_right()
-			def_box.position = Vector2((panel_container.position.x - 420 - extra_spacing), (0 + y_offset))
-		else:
+		# Get actual viewport and tooltip positions
+		var viewport_size = get_viewport().get_visible_rect().size
+		var tooltip_global_x = global_position.x
+		var panel_right_edge = tooltip_global_x + panel_container.size.x
+		var panel_left_edge = tooltip_global_x
+		
+		# Calculate positions for both sides
+		var pos_right_x = panel_container.size.x + extra_spacing
+		var pos_left_x = -def_box_width - extra_spacing
+		
+		# Check which side has room in global coordinates
+		var global_right_edge = panel_right_edge + def_box_width + extra_spacing
+		var global_left_edge = panel_left_edge - def_box_width - extra_spacing
+		
+		# Decide positioning
+		var use_right_side = true
+		if global_right_edge > viewport_size.x - 10:  # Would go offscreen right
+			if global_left_edge >= 10:  # Left side has room
+				use_right_side = false
+		
+		# Set position and justification
+		if use_right_side:
 			def_box.justify_left()
-			def_box.position = Vector2((panel_container.position.x + panel_container.size.x + extra_spacing), (0 + y_offset))
-
+			def_box.position = Vector2(pos_right_x, y_offset)
+		else:
+			def_box.justify_right()
+			def_box.position = Vector2(pos_left_x, y_offset)
+		
 		definition_boxes.append(def_box)
-		tooltip_counter += 1
+		def_box.show_def()
+
+		# Stack upward for next box (negative y since Panel is bottom-anchored)
+		if i < found_keywords.size() - 1:  # If not the last one
+			y_offset -= (85 + extra_spacing)
 
 func clear_definition_boxes():
 	for box in definition_boxes:

@@ -48,6 +48,7 @@ func reset_all_animations():
 	# Find and reset all AnimationPlayers in this room 
 	for child in get_children():
 		if child is AnimationPlayer:
+			print("[RoomEvent] Resetting Animation... ", child.name)
 			if child.has_animation("RESET"):
 				child.play("RESET")
 				child.stop()  # Stop after setting to RESET state

@@ -14,8 +14,13 @@ signal need_item_replace(Item)
 @export var items_offered: int = 3
 @export var box_name:String = ""
 @export_multiline var box_desc:String = ""
+
+## Includes an extra item of one rarity higher than selected above.
 @export var include_extra_rare: bool = false
+## Have choices include weapons or just items
 @export var include_weapons: bool = true
+## Don't show more than 1 weapon in choices (requires "Include_Weapons" be selected)
+@export var max_1_weapon: bool = true
 
 var item_choice_scene = preload("res://Scenes/item_choice.tscn")
 var offered_items: Array[Item] = []
@@ -36,7 +41,7 @@ func setup_labels():
 
 func generate_item_choices():
 	# Get 3 random common items
-	offered_items = ItemsManager.get_random_items(items_offered, item_rarity, include_extra_rare, include_weapons)
+	offered_items = ItemsManager.get_random_items(items_offered, item_rarity, include_extra_rare, include_weapons, max_1_weapon)
 	
 	# Create choice buttons for each item
 	for item in offered_items:
@@ -57,16 +62,24 @@ func _on_item_selected(item: Item):
 		# Automatic weapon swap
 		Player.inventory.set_weapon(item)
 		Player.update_stats_from_items()
-		AudioManager.play_ui_sound("item_pickup")
+		#AudioManager.play_ui_sound("item_pickup")
 		item_selected.emit(item)
 	else:
 		if Player.inventory.has_empty_slot():
 			Player.inventory.add_item(item)
 			Player.update_stats_from_items()
-			AudioManager.play_ui_sound("item_pickup")
+			#AudioManager.play_ui_sound("item_pickup")
 			item_selected.emit(item)	
 		else:
 			need_item_replace.emit(item)
 
 func _on_btn_skip_pressed() -> void:
 	item_skipped.emit()
+
+
+
+func _on_btn_skip_mouse_exited() -> void:
+	pass # Replace with function body.
+
+func _on_btn_skip_mouse_entered() -> void:
+	AudioManager.play_ui_sound("woosh")

@@ -53,6 +53,8 @@ func disable_button():
 func _on_button_pressed() -> void:
 	disable_button()
 	particles.emitting = false
+	CursorManager.reset_cursor()
+	AudioManager.play_event_sound("chomp")
 	anim_open.play("hide_text")
 	anim_box.play("openBox")
 
@@ -62,10 +64,12 @@ func close_box():
 
 func _on_button_mouse_exited() -> void:
 	if item_combiner.visible == false:
+		CursorManager.reset_cursor()
 		anim_open.play("hide_text")
 
 func _on_button_mouse_entered() -> void:
 	if item_combiner.visible == false:	
+		CursorManager.set_interact_cursor()
 		anim_open.play("show_text")
 
 func _on_item_selected(item: Item):

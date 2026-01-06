@@ -7,7 +7,7 @@ extends RoomEvent
 @onready var button: Button = $picTreasure/Button
 @onready var items_offering: ItemOffering = $FreeItemOffering
 
-@onready var particles: CPUParticles2D = $jar_particles
+@onready var particles: CPUParticles2D = $particleBlood
 
 
 func _ready():
@@ -54,6 +54,8 @@ func _on_button_pressed() -> void:
 	particles.emitting = false
 	anim_open.play("hide_text")
 	anim_box.play("openBox")
+	CursorManager.reset_cursor()
+	AudioManager.play_event_sound("corpse")
 
 func close_box():
 	anim_box.play("closeBox")
@@ -62,10 +64,13 @@ func close_box():
 func _on_button_mouse_exited() -> void:
 	if items_offering.visible == false:
 		anim_open.play("hide_text")
+		CursorManager.reset_cursor()
 
 func _on_button_mouse_entered() -> void:
 	if items_offering.visible == false:	
 		anim_open.play("show_text")
+		CursorManager.set_interact_cursor()
+		AudioManager.play_ui_sound("woosh")
 
 func _on_item_selected(item: Item):
 	close_box()

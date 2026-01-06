@@ -8,6 +8,8 @@ extends RoomEvent
 @onready var label: RichTextLabel = $lblRested
 @onready var particles: CPUParticles2D = $smoke
 
+var event_active: bool = true
+
 func _ready():
 	print("grave_hallway -> ready")
 	super._ready()  # Call parent's _ready
@@ -17,6 +19,9 @@ func initialize_event():
 	btn_continue.pressed.connect(_on_continue_pressed)
 	btn_continue.disabled = true
 	show_event()
+
+func disable_button():
+	btn_continue.disabled = true
 
 func show_event():
 	btn_continue.disabled = false
@@ -28,19 +33,33 @@ func show_event():
 	if main_game_ref and main_game_ref.has_method("set_player_stats"):
 		main_game_ref.set_player_stats()
 		
-func hide_event():
-	particles.emitting = false
-	anim_main.play("campfire_hide_event")
-	var anim_length = anim_main.get_animation("campfire_hide_event").length
-	await CombatSpeed.create_timer(anim_length)
-
 func _on_continue_pressed():
-	hide_event()
-	complete_event()
+	if event_active:
+		CursorManager.reset_cursor()
+		AudioManager.play_event_sound("fire_02")
+		event_active = false
+		disable_button()
 
+		anim_main.play("show_event")
+		var anim_length = anim_main.get_animation("show_event").length + 1.0
+		await CombatSpeed.create_timer(anim_length)
+
+		AudioManager.play_event_sound("fire_out")
+		particles.emitting = false
+		anim_main.play("campfire_hide_event")
+		anim_length = anim_main.get_animation("campfire_hide_event").length
+		await CombatSpeed.create_timer(anim_length)
+
+		complete_event()
+
+func change_fire():
+	anim_event.play("fire_out")
 
 func _on_btn_continue_mouse_exited() -> void:
 	CursorManager.reset_cursor()
 
 func _on_btn_continue_mouse_entered() -> void:
-	CursorManager.set_interact_cursor()
+	if event_active:
+		CursorManager.set_interact_cursor()
+		AudioManager.play_event_sound("fire_01")
+

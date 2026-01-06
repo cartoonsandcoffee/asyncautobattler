@@ -11,8 +11,9 @@ signal need_item_replace(Item)
 @onready var btn_cancel: Button = $Panel/BlackBack/PanelContainer/VBoxContainer/btnCancel
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 @onready var refresh_panel: PanelContainer = $Panel/sidePanelBlack
-@onready var refresh_cost: Label = $Panel/sidePanelBlack/PanelContainer/HBoxContainer/HBoxContainer2/lblRerollCost
+@onready var refresh_cost: Label = $Panel/sidePanelBlack/panelReroll/HBoxContainer/HBoxContainer2/lblRerollCost
 @onready var btn_refresh: Button = $Panel/sidePanelBlack/btnReroll
+@onready var anim_reroll: AnimationPlayer = $animReroll
 
 @export var item_rarity: Enums.Rarity = Enums.Rarity.UNCOMMON
 @export var items_offered: int = 6
@@ -75,6 +76,7 @@ func show_store():
 	is_store_open = true
 
 func hide_store():
+	AudioManager.play_ui_sound("popup_close")
 	anim_player.play("hide_store")
 	var anim_length = anim_player.get_animation("hide_store").length
 	await CombatSpeed.create_timer(anim_length)	
@@ -144,13 +146,25 @@ func purchase_item_from_store(purchased_item: ItemChoice):
 func refresh_store_display():
 	# Clear all existing children
 	if Player.stats.gold >= Player.stats.refresh_cost:
-		Player.stats.gold -= Player.stats.refresh_cost
+		Player.subtract_gold(Player.stats.refresh_cost)
 		Player.stats.refresh_cost += 1
 		refresh_cost.text = str(Player.stats.refresh_cost)
-	
-		# Add items back (including empty slots for null items)
-		generate_item_choices()		
+
+		generate_item_choices()
+		check_affordability()
 
 
 func _on_btn_reroll_pressed() -> void:
 	refresh_store_display()
+	AudioManager.play_event_sound("coins_01")
+
+
+
+func _on_btn_reroll_mouse_exited() -> void:
+	CursorManager.reset_cursor()
+	anim_reroll.play("reroll_hide")
+
+func _on_btn_reroll_mouse_entered() -> void:
+	CursorManager.set_interact_cursor()
+	AudioManager.play_ui_sound("woosh")
+	anim_reroll.play("reroll_show")

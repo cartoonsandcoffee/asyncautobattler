@@ -26,12 +26,20 @@ enum CombinerMode {
 @onready var result_display: PanelContainer = $Panel/panelBlack/panelReward
 @onready var result_icon: TextureRect = $Panel/panelBlack/panelReward/VBoxContainer/itemsContainer/RewardPanel/itemIcon
 @onready var result_label: Label = $Panel/panelBlack/panelReward/VBoxContainer/itemsContainer/RewardPanel/itemLabel
+@onready var result_name: Label = $Panel/panelBlack/panelReward/VBoxContainer/lblName
+@onready var result_text: RichTextLabel = $Panel/panelBlack/panelReward/VBoxContainer/MarginContainer/txtDesc
 @onready var continue_button: Button = $Panel/panelBlack/panelReward/VBoxContainer/btnDone
 
 @onready var slot_1_icon: TextureRect = $Panel/panelBlack/panelCombiner/VBoxContainer/itemsContainer/CraftSlot1/itemIcon
 @onready var slot_2_icon: TextureRect = $Panel/panelBlack/panelCombiner/VBoxContainer/itemsContainer/CraftSlot2/itemIcon
 @onready var slot_1_label: Label = $Panel/panelBlack/panelCombiner/VBoxContainer/itemsContainer/CraftSlot1/itemLabel
 @onready var slot_2_label: Label = $Panel/panelBlack/panelCombiner/VBoxContainer/itemsContainer/CraftSlot2/itemLabel
+
+@onready var particle_crafting: CPUParticles2D = $particles_crafting
+@onready var particle_offering: CPUParticles2D = $particles_offering
+
+@onready var zoom_altar: ZoomEvent = $zoomAltar
+@onready var zoom_forge: ZoomEvent = $zoomForge
 
 @export var combiner_mode: CombinerMode = CombinerMode.CRAFT
 @export var number_of_slots: int = 2:
@@ -45,6 +53,12 @@ enum CombinerMode {
 @export_multiline var instruction_text: String = "Feed me two identical common items..."
 @export var box_name:String = ""
 @export var button_text: String = ""
+@export var crafting_message: String = "Crafting..."
+
+@export_group("Success Box")
+@export var sb_name: String = ""
+@export var sb_text: String = ""
+@export var sb_button: String = ""
 
 var slot_1_item: Item = null
 var slot_2_item: Item = null
@@ -53,8 +67,13 @@ var slot_2_inventory_index: int = -1
 
 var crafting_particles: CPUParticles2D
 var is_processing_craft: bool = false
+var result: Item = null
 
 func _ready():
+	zoom_altar.zoom_completed.connect(_on_altar_zoom_completed)
+	zoom_forge.zoom_completed.connect(_on_forge_zoom_completed)
+	result = null
+
 	setup_ui()
 	setup_particles()
 	setup_drop_zones()
@@ -77,6 +96,10 @@ func setup_ui():
 	message_label.text = instruction_text
 	result_display.visible = false
 	
+	result_text.text = sb_text
+	result_name.text = sb_name
+	continue_button.text = sb_button
+
 	slot_1_label.text = "SLOT 1"
 	slot_2_label.text = "SLOT 2"
 	
@@ -125,6 +148,10 @@ func add_item_to_slot(item: Item, inventory_index: int, slot_number: int):
 		return  # Don't allow changes during crafting
 	
 	if slot_number == 1:
+		if inventory_index == slot_2_inventory_index:
+			show_error_message("Can't use the same item twice!")
+			return
+
 		slot_1_item = item
 		slot_1_inventory_index = inventory_index
 		slot_1_icon.texture = item.item_icon
@@ -132,6 +159,10 @@ func add_item_to_slot(item: Item, inventory_index: int, slot_number: int):
 		slot_1_icon.visible = true
 		slot_1_label.text = item.item_name
 	elif slot_number == 2:
+		if inventory_index == slot_1_inventory_index:
+			show_error_message("Can't use the same item twice!")
+			return
+
 		slot_2_item = item
 		slot_2_inventory_index = inventory_index
 		slot_2_icon.texture = item.item_icon
@@ -140,7 +171,7 @@ func add_item_to_slot(item: Item, inventory_index: int, slot_number: int):
 		slot_2_label.text = item.item_name
 	
 	if combiner_mode == CombinerMode.CRAFT:
-		validate_combination()
+		validate_combination(slot_number)
 	else:
 		validate_offering()
 
@@ -163,26 +194,29 @@ func remove_item_from_slot(slot_number: int):
 		slot_2_label.text = "SLOT 2"
 	
 	if combiner_mode == CombinerMode.CRAFT:
-		validate_combination()
+		validate_combination(slot_number)
 	else:
 		validate_offering()
 
-func validate_combination():
+func validate_combination(slot_number: int):
 	"""Check if current items can be crafted and update UI accordingly"""
 	if slot_1_item and slot_2_item:
 		if ItemsManager.can_craft_items(slot_1_item, slot_2_item):
 			craft_button.disabled = false
 			message_label.text = "Hmmm... these will taste good."
 			message_label.modulate = Color.GREEN
-			
+			AudioManager.play_event_sound("mmm")
+
 			# Preview the result
-			var result = ItemsManager.craft_items(slot_1_item, slot_2_item)
-			if result:
-				message_label.text = "Ready to craft: " + result.item_name
+			#result = ItemsManager.craft_items(slot_1_item, slot_2_item)
+			#if result:
+			#	message_label.text = "Ready to craft: " + result.item_name
 		else:
 			craft_button.disabled = true
-			message_label.text = "These items don't taste right together..."
-			message_label.modulate = Color.RED
+			remove_item_from_slot(slot_number)
+			await show_error_message("These items don't taste right together...")
+			#message_label.text = "These items don't taste right together..."
+			#message_label.modulate = Color.RED
 	else:
 		craft_button.disabled = true
 		message_label.text = instruction_text
@@ -195,7 +229,8 @@ func validate_offering():
 		craft_button.disabled = true
 
 func _on_craft_pressed():
-	"""Perform the crafting"""
+	# CRAFT!!!
+
 	if is_processing_craft:
 		return
 	
@@ -206,9 +241,6 @@ func _on_craft_pressed():
 		
 	is_processing_craft = true
 	craft_button.disabled = true
-	
-	# Get the crafted result
-	var result: Item = null
 	
 	if combiner_mode == CombinerMode.CRAFT:
 		result = ItemsManager.craft_items(slot_1_item, slot_2_item)
@@ -222,9 +254,13 @@ func _on_craft_pressed():
 		is_processing_craft = false
 		return
 
-	# Play crafting animation
-	await play_crafting_animation()
-	
+	if combiner_mode == CombinerMode.CRAFT:
+		zoom_forge.show_popup(result, result)
+	elif combiner_mode == CombinerMode.REPLACE_SAME_RARITY:
+		zoom_altar.show_popup(slot_1_item, result)
+	elif combiner_mode == CombinerMode.REPLACE_HIGHER_TIER:
+		pass
+
 	# Remove consumed items from player inventory
 	var removed_successfully = remove_consumed_items()
 	if not removed_successfully:
@@ -242,10 +278,7 @@ func _on_craft_pressed():
 		return
 	
 	Player.update_stats_from_items()
-	
-	# Show success result
-	show_crafting_result(result)
-	
+		
 	# Emit signal
 	item_crafted.emit(result)
 	
@@ -255,29 +288,6 @@ func _on_craft_pressed():
 	if auto_close_on_craft:
 		await get_tree().create_timer(2.0).timeout
 		combiner_closed.emit()
-
-func play_crafting_animation() -> void:
-	"""Visual effect for crafting"""
-	message_label.text = "Crafting..."
-	message_label.modulate = Color.YELLOW
-	
-	# Emit particles
-	crafting_particles.emitting = true
-	
-	# Flash effect on slots - items being consumed
-	var tween = create_tween()
-	tween.tween_property(craft_slot_1, "modulate", Color(1, 1, 1, 0.3), 0.2)
-	tween.parallel().tween_property(craft_slot_2, "modulate", Color(1, 1, 1, 0.3), 0.2)
-	tween.tween_property(craft_slot_1, "modulate", Color.WHITE, 0.2)
-	tween.parallel().tween_property(craft_slot_2, "modulate", Color.WHITE, 0.2)
-	tween.tween_property(craft_slot_1, "modulate", Color(1, 1, 1, 0), 0.3)
-	tween.parallel().tween_property(craft_slot_2, "modulate", Color(1, 1, 1, 0), 0.3)
-	
-	await get_tree().create_timer(1.2).timeout
-	
-	# Reset slot visibility
-	craft_slot_1.modulate = Color.WHITE
-	craft_slot_2.modulate = Color.WHITE
 
 func remove_consumed_items() -> bool:
 	"""Remove the two crafted items from player inventory"""
@@ -307,27 +317,14 @@ func show_crafting_result(result_item: Item):
 	result_label.text = result_item.item_name 
 	continue_button.visible = !auto_close_on_craft
 	
-	var gamecolors = GameColors.new()
-	result_label.modulate = gamecolors.rarity.golden
-	
-	# Animate result panel in
-	result_display.scale = Vector2(0.5, 0.5)
-	result_display.modulate.a = 0.0
-	
-	var tween = create_tween()
-	tween.parallel().tween_property(result_display, "scale", Vector2(1.0, 1.0), 0.4).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	tween.parallel().tween_property(result_display, "modulate:a", 1.0, 0.3)
+	#var gamecolors = GameColors.new()
+	result_label.modulate = result_item.item_color
+
 
 func _on_continue_pressed():
-	"""Continue crafting or close"""
-	result_display.visible = false
-	invalid_display.visible = false
-	craft_display.visible = true
-
-	reset()
 	if allow_multiple_crafts:
 		# Clear slots for next craft
-		clear_crafting_slots()
+		reset()
 		message_label.text = instruction_text
 		message_label.modulate = Color.WHITE
 	else:
@@ -351,7 +348,7 @@ func clear_crafting_slots():
 	slot_2_label.text = "SLOT 2"
 	
 	if combiner_mode == CombinerMode.CRAFT:
-		validate_combination()
+		validate_combination(0)
 	else:
 		validate_offering()
 
@@ -361,20 +358,22 @@ func show_error_message(error_text: String):
 	message_label.modulate = Color.RED
 	
 	invalid_combination.emit()
-	
+	AudioManager.play_event_sound("forge_bad")
+
 	# Flash the message
 	var tween = create_tween()
-	tween.tween_property(message_label, "modulate:a", 0.3, 0.2)
-	tween.tween_property(message_label, "modulate:a", 1.0, 0.2)
+	tween.tween_property(message_label, "modulate:a", 0.3, 1)
+	tween.tween_property(message_label, "modulate:a", 1.0, 1)
 	tween.tween_callback(func(): 
 		message_label.text = instruction_text
 		message_label.modulate = Color.WHITE
 	)
 
 func reset():
-	"""Reset the combiner to initial state"""
 	clear_crafting_slots()
 	result_display.visible = false
+	invalid_display.visible = false
+	craft_display.visible = true	
 	is_processing_craft = false
 	message_label.text = instruction_text
 	message_label.modulate = Color.WHITE
@@ -396,3 +395,16 @@ func _on_btn_skip_pressed() -> void:
 
 func _on_btn_done_pressed() -> void:
 	_on_continue_pressed()
+
+func _on_altar_zoom_completed():
+	show_crafting_result(result)
+
+func _on_forge_zoom_completed():
+	show_crafting_result(result)
+
+
+func _on_btn_craft_mouse_entered() -> void:
+	AudioManager.play_ui_sound("woosh")
+
+func _on_btn_skip_mouse_entered() -> void:
+	AudioManager.play_ui_sound("woosh")

@@ -20,8 +20,8 @@ enum ItemType {
 @onready var item_icon: TextureRect 
 @onready var anim_hover: AnimationPlayer
 @onready var anim_highlight: AnimationPlayer
-@onready var tooltip: Control
-@onready var tooltip_panel: Panel
+#@onready var tooltip: Control
+#@onready var tooltip_panel: Panel
 @onready var button: Button
 @onready var pic_rarity: TextureRect
 @onready var pnl_rarity: Panel
@@ -51,8 +51,6 @@ func set_references():
 	lbl_order = $Panel/VBoxContainer/orderContainer/MarginContainer/lblOrder
 	item_icon = $Panel/VBoxContainer/itemContainer/MarginContainer/item_icon
 	anim_hover = $animSelect
-	tooltip = $ToolTip/ItemTooltip
-	tooltip_panel = $ToolTip
 	button = $Panel/Button
 	anim_highlight = $animHighlight
 	pic_rarity = $Panel/pnlRare/picRarity
@@ -79,14 +77,11 @@ func set_item(item: Item):
 		item_instance_id = item.instance_id  
 		update_visuals()
 		set_item_type_desc()	
-		tooltip.set_item(item)
-		#tooltip.set_tooltip_position(global_position)
-		#print("ITEM: ", global_position)
 		button.disabled = false
 		pnl_rarity.visible = false
 	else:
 		set_empty()
-	
+
 func set_item_type_desc():
 	if current_item:
 		match current_item.item_type:
@@ -173,12 +168,31 @@ func set_rarity_color():
 	elif current_item.rarity == Enums.Rarity.LEGENDARY:
 		pic_rarity.texture = rarity_legendary
 		pic_rarity.self_modulate = gamecolors.rarity.legendary
-		panel_border.self_modulate = gamecolors.rarity.legendary	
+		panel_border.self_modulate = gamecolors.rarity.legendary
+	elif current_item.rarity == Enums.Rarity.MYSTERIOUS:
+		pic_rarity.texture = rarity_mystic
+		pic_rarity.self_modulate = gamecolors.rarity.mysterious
+		panel_border.self_modulate = gamecolors.rarity.mysterious
+	elif current_item.rarity == Enums.Rarity.GOLDEN:
+		pic_rarity.texture = rarity_common
+		pic_rarity.self_modulate = gamecolors.rarity.golden
+		panel_border.self_modulate = gamecolors.rarity.golden
+	elif current_item.rarity == Enums.Rarity.DIAMOND:
+		pic_rarity.texture = rarity_common
+		pic_rarity.self_modulate = gamecolors.rarity.diamond
+		panel_border.self_modulate = gamecolors.rarity.diamond
 
 func set_order(order: int):
 	set_references()
 	lbl_order.text = str(order)
 	slot_index = order - 1 
+
+func set_bonus():
+	set_references()
+	lbl_order.text = "Set Bonus"
+	order_container.visible = false
+	panel_border.self_modulate = Color.BLACK
+	$Panel.scale = Vector2(0.5, 0.5)
 
 func set_weapon_text_color():
 	lbl_order.text = "weapon"
@@ -192,34 +206,26 @@ func get_item_instance() -> Item:
 	return null
 
 func show_tooltip():
-	var viewport_size = get_viewport().size
-	var item_global_pos = global_position
-	var tooltip_estimated_width = 420  # actual width
-	
-	# Check if tooltip would go off right edge of screen
-	if (item_global_pos.x + 150) + tooltip_estimated_width > viewport_size.x:
-		# Position tooltip to the LEFT of the item instead
-		tooltip_panel.position = Vector2(-tooltip_estimated_width-20, -tooltip_panel.size.y-10)
-	else:
-		# Normal positioning (tooltip to the RIGHT of the item)
-		#tooltip_panel.position = Vector2(size.x + 30, -tooltip_panel.size.y)	
-		pass
-	print("tt: ", tooltip_panel.position)
-
-	tooltip_panel.visible = true
+	if current_item:
+		# Use global tooltip manager with item's global position
+		TooltipManager.show_item_tooltip(current_item, global_position, size)
 
 func _on_button_mouse_exited() -> void:
 	anim_hover.play("stop")
 	CursorManager.reset_cursor()
-	tooltip_panel.visible = false
+	TooltipManager.hide_tooltip()  # Use global manager
 	panel_border.modulate = Color.WHITE
 
 func _on_button_mouse_entered() -> void:
-	if !button.disabled:
-		if current_item && !is_dragging:  # Only if slot has item
-			CursorManager.set_item_hover_cursor()
-			AudioManager.play_ui_sound("item_hover")
-		anim_hover.play("hover")
+	if current_item && current_item.item_type != Item.ItemType.SET_BONUS:
+		if !button.disabled:
+			if current_item && !is_dragging:  # Only if slot has item
+				CursorManager.set_item_hover_cursor()
+				AudioManager.play_ui_sound("item_hover")
+			anim_hover.play("hover")
+			show_tooltip()
+	if current_item && current_item.item_type == Item.ItemType.SET_BONUS:
+		CursorManager.set_interact_cursor()
 		show_tooltip()
 
 	if get_parent().has_method("is_dragging"):
@@ -234,6 +240,8 @@ func _on_button_down():
 		return
 
 	if current_item:
+		if current_item.item_type == Item.ItemType.SET_BONUS:
+			return
 		is_dragging = true
 		drag_started.emit(self)
 		CursorManager.set_item_grab_cursor()

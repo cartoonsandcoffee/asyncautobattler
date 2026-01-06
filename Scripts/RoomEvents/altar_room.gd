@@ -47,23 +47,35 @@ func disable_button():
 
 func _on_button_pressed() -> void:
 	disable_button()
+	CursorManager.reset_cursor()
+	AudioManager.play_event_sound("kneel")
 	text_anim.play("altar_hide_text")
 	box_anim.play("altar_open_box")
 
 func close_box():
 	box_anim.play("altar_close_box")
-	await anim_player.animation_finished
+	await box_anim.animation_finished
 	enable_button()
 
 func _on_button_mouse_exited() -> void:
 	if item_combiner.visible == false:
+		CursorManager.reset_cursor()
 		text_anim.play("altar_hide_text")
 
 func _on_button_mouse_entered() -> void:
 	if item_combiner.visible == false:	
+		CursorManager.set_interact_cursor()
+		AudioManager.play_event_sound("ah")
 		text_anim.play("altar_show_text")
 
 func _on_item_skipped():
-	close_box()
-	hide_event()
+	box_anim.play("altar_close_box")
+	await box_anim.animation_finished
+
+	anim_player.play("hide_event")
+	var anim_length = anim_player.get_animation("hide_event").length
+	await CombatSpeed.create_timer(anim_length)
+	
+	disable_button()
+
 	complete_event()

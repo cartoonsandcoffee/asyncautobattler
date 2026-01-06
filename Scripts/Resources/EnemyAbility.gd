@@ -5,8 +5,14 @@ extends Resource
 @export var ability_name: String = "Unknown Ability"
 @export_multiline var description: String = ""
 
-@export var rules: Array[ItemRule]	#this should make all the variables below it unnecessary.
-
+@export var rules: Array[ItemRule]:	#this should make all the variables below it unnecessary.
+	get:
+		if rules == null:
+			rules = []
+		return rules
+	set(value):
+		rules = value
+		
 # Runtime state
 var current_countdown: int = 0
 var times_triggered: int = 0

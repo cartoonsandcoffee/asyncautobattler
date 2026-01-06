@@ -5,14 +5,23 @@ extends RoomEvent
 @onready var button: Button = $merchantControl/merchantLight/Button
 @onready var item_store: ItemStore = $item_merchant_store
 @onready var lbl_action: Label = $lblAction
-
+@onready var anim_label: AnimationPlayer = $animLabel
+@onready var smoke: CPUParticles2D = $smoke
 
 func _on_button_mouse_exited() -> void:
-	lbl_action.visible = false
+	if !item_store.visible:
+		anim_label.play("hide_label")
+		CursorManager.reset_cursor()
 
 
 func _on_button_mouse_entered() -> void:
-	lbl_action.visible = true
+	if !item_store.visible:
+		anim_label.play("show_label")
+		AudioManager.play_event_sound("mmm")
+		CursorManager.set_talk_cursor()
+
+func pipe_sfx():
+	AudioManager.play_event_sound("pipe")
 
 func play_idle():
 	anim_player.play("merchant_idle")
@@ -43,7 +52,12 @@ func play_merchant_idle():
 	anim_player.play("merchant_idle")
 
 func _on_button_pressed() -> void:
+	anim_label.play("hide_label")
+	button.disabled = true
+	CursorManager.reset_cursor()
+	AudioManager.play_event_sound("ooo")
 	item_store.show_store()
+	anim_player.stop()
 
 func close_up_shop():
 	anim_player.play("merchant_close")

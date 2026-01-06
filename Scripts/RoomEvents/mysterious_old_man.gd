@@ -6,13 +6,17 @@ extends RoomEvent
 @onready var name_label: Label = $panelOffer/PanelContainer/MarginContainer/VBoxContainer/lblName
 @onready var dialogue_label: RichTextLabel = $panelOffer/PanelContainer/MarginContainer/VBoxContainer/lblDialog
 @onready var slideshow_player: Control = $SlidePlayer
+@onready var btn_event: Button = $picEvent/btnEvent
+@onready var panel_offer: Panel = $panelOffer
 
-@onready var anim_old_man: AnimationPlayer = $animOldMan
+@onready var anim_event: AnimationPlayer = $animEvent
+@onready var anim_label: AnimationPlayer = $animLabel
 @onready var anim_box: AnimationPlayer = $animBox
-@onready var anim_starter: AnimationPlayer = $animStarter
+@onready var anim_slides: AnimationPlayer = $animSlides
 @onready var anim_opening: AnimationPlayer = $animOpening
 @onready var anim_rope: AnimationPlayer = $animRope
 @onready var lbl_opening: RichTextLabel = $picOpening/lblOpening
+@onready var anim_blood:AnimationPlayer = $animBlood
 
 var item_choice_scene = preload("res://Scenes/item_choice.tscn")
 var offered_items: Array[Item] = []
@@ -25,9 +29,10 @@ var total_panels: int = 4
 
 func initialize_event():
 	slideshow_player.close_slideshow.connect(_close_slideshow)
-	#anim_starter.play("open_slideshow")
+	#anim_slides.play("open_slideshow")
 	
 	generate_item_choices()
+	disable_button()
 
 	if GameSettings.skip_opening == false:
 		start_intro_movie()
@@ -43,6 +48,9 @@ func start_intro_movie():
 	
 	show_opening = true
 	anim_opening.play("opening_show_panel_1")
+
+func disable_button():
+	btn_event.disabled = true
 
 func _process(delta: float) -> void:
 	if show_opening:
@@ -82,22 +90,30 @@ func finish_opening():
 	show_opening = false
 	anim_opening.play("opening_close")
 
+func sfx_drip():
+	AudioManager.play_event_sound("drop_01")
+
+func sfx_splash():
+	AudioManager.play_event_sound("drop_02")
+
+func play_blood():
+	anim_blood.play("show_blood")
 
 func start_old_man():
-	anim_old_man.play("walk_in")
+	anim_event.play("show_event")
 
 func start_slideshow():
 	slideshow_player.play_slideshow()
 
 func _close_slideshow():
-	anim_starter.play("close_slideshow")
+	anim_slides.play("close_slideshow")
 
 func slide_in_the_menus():
 	DungeonManager.slide_in_menus()
 
 func generate_item_choices():
 	# Get 3 random common items
-	offered_items = ItemsManager.get_random_common_items(items_offered)
+	offered_items = ItemsManager.get_items_by_item_type(items_offered, Item.ItemType.WEAPON, true, Enums.Rarity.COMMON)
 	
 	# Create choice buttons for each item
 	for item in offered_items:
@@ -114,12 +130,13 @@ func _on_item_selected(item: Item):
 	# Add chosen item to player inventory
 	Player.inventory.add_item(item)
 	Player.update_stats_from_items()
-	
+	disable_button()
+
 	# Hide item choices
 	anim_box.play("hide_box")
 	await anim_box.animation_finished
-	anim_old_man.play("walk_out")
-	await anim_old_man.animation_finished
+	anim_event.play("hide_event")
+	await anim_event.animation_finished
 
 	anim_rope.play("show_rope")
 	await anim_rope.animation_finished
@@ -129,3 +146,24 @@ func _on_item_selected(item: Item):
 
 	# Complete the event
 	complete_event()
+
+
+func _on_btn_event_pressed() -> void:
+	AudioManager.play_event_sound("corpse")
+	CursorManager.reset_cursor()
+	anim_label.play("hide_label")
+	disable_button()
+	show_item_box()
+
+
+func _on_btn_event_mouse_exited() -> void:
+	if !panel_offer.visible:
+		CursorManager.reset_cursor()
+		anim_label.play("hide_label")
+
+
+func _on_btn_event_mouse_entered() -> void:
+	if !panel_offer.visible:
+		anim_label.play("show_label")
+		CursorManager.set_interact_cursor()
+		AudioManager.play_ui_sound("woosh")

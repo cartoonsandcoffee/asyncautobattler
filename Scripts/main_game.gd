@@ -22,6 +22,7 @@ extends Control
 
 @onready var item_grid: GridContainer = $BottomPanel/MarginContainer/VBoxContainer/HBoxContainer/InventorySlots/ItemSlots
 @onready var weapon_slot: ItemSlot = $BottomPanel/MarginContainer/VBoxContainer/HBoxContainer/Weapon
+@onready var sets_grid: GridContainer = $BottomPanel/panelSets/gridSets
 
 @onready var replacement_panel: Panel = $ReplaceItemPanel
 @onready var replacement_item: ItemSlot = $ReplaceItemPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/itemBox/ItemReplace
@@ -82,6 +83,8 @@ func _ready():
 	Player.stats.stats_updated.connect(_on_stats_updated)
 	Player.inventory.item_added.connect(_on_inventory_updated)
 	#Player.status_updated.connect(_on_status_effects_updated)
+	SetBonusManager.set_bonuses_updated.connect(setup_bonuses)
+
 	DungeonManager.show_minimap.connect(_show_panels)
 
 	# Connect to CombatManager signals for real-time combat stat updates
@@ -111,7 +114,6 @@ func _ready():
 		crt_shader.visible = true
 	else:
 		crt_shader.visible = false
-
 
 	# -- Add Map Zoom Panel
 	zoom_panel = MapZoomPanel.new()
@@ -374,7 +376,7 @@ func create_room_data_for_door(option: ShortcutOption) -> RoomData:
 	
 	# Add shortcut info to description
 	var base_desc = option.destination_room.room_desc
-	var shortcut_info = "\n\n🚪 Shortcut: Skip %d rooms\n%s" % [
+	var shortcut_info = "\n\n Shortcut: Skip %d rooms\n%s" % [
 		option.skip_count,
 		" Combat ahead" if option.has_combat else " Safe passage"
 	]
@@ -437,6 +439,26 @@ func setup_inventory():
 		item_grid.add_child(item_container)
 
 
+func setup_bonuses(entity):
+	if not (entity == Player):
+		return
+
+	sets_grid.columns = 6
+
+	for child in sets_grid.get_children():
+		sets_grid.remove_child(child)
+		child.queue_free()
+
+	for bonus_item in SetBonusManager.get_active_set_bonuses(Player):
+		var item_container = item_slot.instantiate()
+
+		item_container.set_item(bonus_item)
+		item_container.slot_index = -3
+		item_container.custom_minimum_size = Vector2(100, 100)
+		item_container.set_bonus() 
+		sets_grid.add_child(item_container)
+
+
 func show_item_replacement_overlay():
 	anim_tools.play("show_replace_item")
 	inventory_replacement_mode = true
@@ -493,8 +515,7 @@ func _on_drag_started(slot: ItemSlot):
 	create_drag_preview(slot.current_item)
 	
 	# Optional: Hide tooltip while dragging
-	if slot.tooltip_panel:
-		slot.tooltip_panel.hide()
+	TooltipManager.hide_tooltip()
 
 func _on_drag_ended(slot: ItemSlot):
 	# Check if dragging over ItemCombiner
@@ -884,3 +905,7 @@ func _on_btn_continue_mouse_exited() -> void:
 
 func _on_btn_continue_mouse_entered() -> void:
 	CursorManager.set_navigation_cursor()
+
+
+func _on_btn_cancel_replace_mouse_entered() -> void:
+	AudioManager.play_ui_sound("woosh")

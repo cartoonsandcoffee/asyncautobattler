@@ -1,12 +1,14 @@
 extends Control
 
 @onready var animation_player: AnimationPlayer = $Panel/AnimationPlayer
+@onready var anim_back: AnimationPlayer = $animBack
 @onready var txt_error: Label = $Panel/panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/MarginContainer2/txtError
 @onready var txt_name: TextEdit = $Panel/panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/txtName
 @onready var btn_name: Button = $Panel/panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/btnName
 @onready var panel_name: Panel = $Panel/panelName
 @onready var settings_panel = $Panel/SettingsPanel
 @onready var compendium_panel = $Panel/Compendium
+@onready var info_panel = $Panel/GameInfo
 
 const GAME_SCENE = preload("res://Scenes/main_game.tscn")
 var good_name: bool = false
@@ -18,25 +20,26 @@ func _ready() -> void:
 	_setup_button_audio()
 	
 	AudioManager.play_general_music()
+	anim_back.play("back_flicker")
 
 
 func _on_btn_quit_pressed() -> void:
-	AudioManager.play_ui_sound("button_click")
+	AudioManager.play_ui_sound("button_hover")
 	get_tree().quit()
 
 
 func _on_btn_new_game_pressed() -> void:
-	AudioManager.play_ui_sound("button_click")
+	AudioManager.play_ui_sound("button_hover")
 	animation_player.play("namebox_flyin")
 	#get_tree().change_scene_to_packed(GAME_SCENE)
 
 func _on_btn_continue_pressed() -> void:
-	AudioManager.play_ui_sound("button_click")
+	AudioManager.play_ui_sound("button_hover")
 	pass # Replace with function body.
 
 
 func _on_btn_name_pressed() -> void:
-	AudioManager.play_ui_sound("button_click")
+	AudioManager.play_ui_sound("button_hover")
 	Player.new_run(txt_name.text)
 	get_tree().change_scene_to_packed(GAME_SCENE)
 
@@ -71,7 +74,7 @@ func _on_txt_name_text_changed() -> void:
 
 
 func _on_btn_settings_pressed() -> void:
-	AudioManager.play_ui_sound("button_click")
+	AudioManager.play_ui_sound("button_hover")
 	if settings_panel:
 		settings_panel.show_panel()
 	else:
@@ -98,7 +101,7 @@ func _get_all_buttons(node: Node) -> Array[Button]:
 
 func _on_button_hover(button: Button):
 	if not button.disabled:
-		AudioManager.play_ui_sound("button_hover")
+		AudioManager.play_ui_sound("woosh")
 
 func play_popup_open_sfx():
 	AudioManager.play_synced_sound("popup_open")
@@ -108,8 +111,12 @@ func play_popup_close_sfx():
 
 
 func _on_btn_compendium_pressed() -> void:
-	AudioManager.play_ui_sound("button_click")
+	AudioManager.play_ui_sound("button_hover")
 	if compendium_panel:
 		compendium_panel.show_panel()
 	else:
 		push_warning("[MainMenu] Settings panel not found!")
+
+
+func _on_btn_info_pressed() -> void:
+	info_panel.visible = true

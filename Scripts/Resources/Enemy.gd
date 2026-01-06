@@ -19,9 +19,27 @@ enum EnemyType {
 @export var skin_id: int = 0
 
 @export_group("Stats")
-@export var stats: GameStats
-@export var status_effects: StatusEffects
-@export var inventory: Inventory
+@export var stats: GameStats:
+	get:
+		if stats == null:
+			stats = GameStats.new()
+		return stats
+	set(value):
+		stats = value
+@export var status_effects: StatusEffects:
+	get:
+		if status_effects == null:
+			status_effects = StatusEffects.new()
+		return status_effects
+	set(value):
+		status_effects = value	
+@export var inventory: Inventory:
+	get:
+		if inventory == null:
+			inventory = Inventory.new()
+		return inventory
+	set(value):
+		inventory = value	
 
 # Rewards
 @export_group("Rewards")

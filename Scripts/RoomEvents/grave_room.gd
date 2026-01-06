@@ -49,6 +49,8 @@ func _on_button_pressed() -> void:
 	disable_button()
 	particles.emitting = false
 	anim_open.play("hide_text")
+	CursorManager.reset_cursor()
+	AudioManager.play_event_sound("sarcophagus")
 	anim_box.play("openBox")
 
 func close_box():
@@ -57,10 +59,13 @@ func close_box():
 
 func _on_button_mouse_exited() -> void:
 	if items_offering.visible == false:
+		CursorManager.reset_cursor()
 		anim_open.play("hide_text")
 
 func _on_button_mouse_entered() -> void:
 	if items_offering.visible == false:	
+		CursorManager.set_interact_cursor()
+		AudioManager.play_event_sound("ah")
 		anim_open.play("show_text")
 
 func _on_item_selected(item: Item):

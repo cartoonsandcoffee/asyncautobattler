@@ -76,7 +76,8 @@ func _on_btn_done_mouse_exited() -> void:
 	pass # Replace with function body.
 
 func _on_btn_done_mouse_entered() -> void:
-	AudioManager.play_ui_sound("button_hover")
+	#AudioManager.play_ui_sound("button_hover")
+	pass
 
 func _on_btn_done_pressed() -> void:
 	hide_panel()

@@ -389,8 +389,8 @@ func create_damage_indicator(target, amount: int, damage_stat: Enums.Stats, visu
 
 
 func test_camera_shake():
-	#CameraShake.shake_medium()
-	main_game.screen_shake(40,0.5)
+	if GameSettings.screen_shake_enabled:
+		main_game.screen_shake(30,0.5)
 	AudioManager.play_synced_sound("combat_player_hit_light")
 
 func play_sfx_footstep():
@@ -574,15 +574,15 @@ func anim_enemy_attack():
 func _update_speed_label(speed: CombatSpeed.CombatSpeedMode):
 	match speed:
 		CombatSpeed.CombatSpeedMode.PAUSE:
-			set_speed_label("⏸ PAUSED")
+			set_speed_label(" PAUSED")
 		CombatSpeed.CombatSpeedMode.NORMAL:
-			set_speed_label("▶ 1x")
+			set_speed_label(" 1x")
 		CombatSpeed.CombatSpeedMode.FAST:
-			set_speed_label("▶▶ 2x")
+			set_speed_label(" 2x")
 		CombatSpeed.CombatSpeedMode.VERY_FAST:
-			set_speed_label("▶▶▶ 3.5x")
+			set_speed_label(" 3.5x")
 		CombatSpeed.CombatSpeedMode.INSTANT:
-			set_speed_label("⚡ INSTANT")
+			set_speed_label(" INSTANT")
 
 
 

@@ -22,7 +22,8 @@ enum ItemType {
 	PET,
 	BUG,
 	CRYSTAL,
-	JEWELRY
+	JEWELRY,
+	SET_BONUS
 }
 
 @export var item_id: String = ""
@@ -31,7 +32,13 @@ enum ItemType {
 @export_multiline var item_desc: String = ""
 @export var item_icon: Texture2D
 @export var item_color: Color
-@export var rules: Array[ItemRule]
+@export var rules: Array[ItemRule]:
+	get:
+		if rules == null:
+			rules = []
+		return rules
+	set(value):
+		rules = value
 
 @export_group("Repeat Behavior")
 @export var repeat_rules_X_times: int = 0
