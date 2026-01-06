@@ -1,15 +1,15 @@
-[gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://dbcuw51hbph1u"]
+[gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://b5aylx4q6nu3h"]
 
-[ext_resource type="Texture2D" uid="uid://bwo3qldtbc8u6" path="res://Assets/Items/Items.png" id="1_3ff8b"]
-[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_8adik"]
-[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_3ff8b"]
+[ext_resource type="Texture2D" uid="uid://fujbmxi0k7vs" path="res://Assets/Items/Tools.png" id="1_l1hsr"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_vmlpi"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_l1hsr"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_5p27t"]
-atlas = ExtResource("1_3ff8b")
-region = Rect2(0, 300, 150, 150)
+[sub_resource type="AtlasTexture" id="AtlasTexture_w5nil"]
+atlas = ExtResource("1_l1hsr")
+region = Rect2(150, 300, 150, 150)
 
-[sub_resource type="Resource" id="Resource_3ff8b"]
-script = ExtResource("1_8adik")
+[sub_resource type="Resource" id="Resource_7xund"]
+script = ExtResource("1_vmlpi")
 trigger_type = 1
 trigger_stat = 9
 trigger_status = 10
@@ -21,7 +21,7 @@ condition_type = 0
 condition_of = 0
 condition_stat = 3
 condition_status = 10
-condition_comparison = ">"
+condition_comparison = "<"
 compare_to = 1
 condition_value = 0
 condition_to_party = 1
@@ -33,11 +33,11 @@ target_type = 0
 target_stat_type = 0
 target_stat = 1
 target_status = 10
-effect_of = 0
-effect_amount = 2
-effect_stat_party = 4
-effect_stat_type = 3
-effect_stat_value = 9
+effect_of = 1
+effect_amount = 0
+effect_stat_party = 0
+effect_stat_type = 0
+effect_stat_value = 3
 effect_status_value = 10
 convert_from_type = 0
 convert_from_party = 0
@@ -57,14 +57,14 @@ custom_description = ""
 metadata/_custom_type_script = "uid://dahay7fvi7bik"
 
 [resource]
-script = ExtResource("2_3ff8b")
+script = ExtResource("2_l1hsr")
 item_id = ""
-item_name = "Purpleskin Boots"
-item_type = 4
-item_desc = "Battle Start: If you have more agility than the enemy, gain 2 attack"
-item_icon = SubResource("AtlasTexture_5p27t")
-item_color = Color(0.643137, 0.376471, 0.741176, 1)
-rules = Array[ExtResource("1_8adik")]([SubResource("Resource_3ff8b")])
+item_name = "Slow and Steady"
+item_type = 10
+item_desc = ""
+item_icon = SubResource("AtlasTexture_w5nil")
+item_color = Color(0.4757, 0.53818, 0.71, 1)
+rules = Array[ExtResource("1_vmlpi")]([SubResource("Resource_7xund")])
 repeat_rules_X_times = 0
 repeat_rules_for_category = ""
 trigger_priority = 0
@@ -73,12 +73,12 @@ trigger_only_first_turn = false
 trigger_on_occurrence_number = 0
 occurrence_resets_per_turn = false
 rarity = 1
-categories = Array[String](["Leather"])
+categories = Array[String]([])
 rng_weight = 1.0
 unlocked = true
 damage_bonus = 0
 shield_bonus = 0
-agility_bonus = 1
+agility_bonus = 2
 hit_points_bonus = 0
 strikes_bonus = 0
 burn_damage_bonus = 0

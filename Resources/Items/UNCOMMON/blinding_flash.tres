@@ -1,15 +1,15 @@
-[gd_resource type="Resource" script_class="Item" load_steps=7 format=3 uid="uid://cgn17rtm0oaxt"]
+[gd_resource type="Resource" script_class="Item" load_steps=7 format=3 uid="uid://dlkut7ysb51h4"]
 
-[ext_resource type="Texture2D" uid="uid://fujbmxi0k7vs" path="res://Assets/Items/Tools.png" id="1_mscfe"]
-[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_w14v7"]
-[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_mscfe"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_7dr2v"]
+[ext_resource type="Texture2D" uid="uid://fujbmxi0k7vs" path="res://Assets/Items/Tools.png" id="1_uis11"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_uis11"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_cx7oj"]
-atlas = ExtResource("1_mscfe")
-region = Rect2(150, 150, 150, 150)
+[sub_resource type="AtlasTexture" id="AtlasTexture_ctwhy"]
+atlas = ExtResource("1_uis11")
+region = Rect2(450, 300, 150, 150)
 
-[sub_resource type="Resource" id="Resource_cx7oj"]
-script = ExtResource("1_w14v7")
+[sub_resource type="Resource" id="Resource_axcrb"]
+script = ExtResource("1_7dr2v")
 trigger_type = 1
 trigger_stat = 9
 trigger_status = 10
@@ -32,9 +32,9 @@ effect_type = 1
 target_type = 0
 target_stat_type = 0
 target_stat = 9
-target_status = 2
+target_status = 5
 effect_of = 0
-effect_amount = 2
+effect_amount = 5
 effect_stat_party = 4
 effect_stat_type = 3
 effect_stat_value = 9
@@ -56,8 +56,8 @@ special_string = ""
 custom_description = ""
 metadata/_custom_type_script = "uid://dahay7fvi7bik"
 
-[sub_resource type="Resource" id="Resource_r2x6e"]
-script = ExtResource("1_w14v7")
+[sub_resource type="Resource" id="Resource_26uix"]
+script = ExtResource("1_7dr2v")
 trigger_type = 1
 trigger_stat = 9
 trigger_status = 10
@@ -76,13 +76,13 @@ condition_to_party = 4
 condition_stat_type = 3
 condition_party_stat = 9
 condition_party_status = 10
-effect_type = 0
+effect_type = 1
 target_type = 1
 target_stat_type = 0
-target_stat = 5
-target_status = 10
+target_stat = 9
+target_status = 5
 effect_of = 0
-effect_amount = 1
+effect_amount = 5
 effect_stat_party = 4
 effect_stat_type = 3
 effect_stat_value = 9
@@ -105,14 +105,14 @@ custom_description = ""
 metadata/_custom_type_script = "uid://dahay7fvi7bik"
 
 [resource]
-script = ExtResource("2_mscfe")
+script = ExtResource("2_uis11")
 item_id = ""
-item_name = "Thorn Circlet"
-item_type = 5
-item_desc = "Battle Start: Gain 1 thorns and give the enemy 1 additional strike"
-item_icon = SubResource("AtlasTexture_cx7oj")
-item_color = Color(0.33155, 0.38, 0.1862, 1)
-rules = Array[ExtResource("1_w14v7")]([SubResource("Resource_cx7oj"), SubResource("Resource_r2x6e")])
+item_name = "Blinding Flash"
+item_type = 10
+item_desc = ""
+item_icon = SubResource("AtlasTexture_ctwhy")
+item_color = Color(1, 0.900333, 0.77, 1)
+rules = Array[ExtResource("1_7dr2v")]([SubResource("Resource_axcrb"), SubResource("Resource_26uix")])
 repeat_rules_X_times = 0
 repeat_rules_for_category = ""
 trigger_priority = 0

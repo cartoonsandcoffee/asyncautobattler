@@ -1,16 +1,16 @@
-[gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://yywdb8f5xt73"]
+[gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://bpov2dlsbx0p5"]
 
-[ext_resource type="Texture2D" uid="uid://bwo3qldtbc8u6" path="res://Assets/Items/Items.png" id="1_fmpw2"]
-[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_hoibn"]
-[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_fmpw2"]
+[ext_resource type="Texture2D" uid="uid://bwo3qldtbc8u6" path="res://Assets/Items/Items.png" id="1_e4csb"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="2_vfewo"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="3_e3ivw"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ut7kp"]
-atlas = ExtResource("1_fmpw2")
-region = Rect2(150, 1050, 150, 150)
+[sub_resource type="AtlasTexture" id="AtlasTexture_001p0"]
+atlas = ExtResource("1_e4csb")
+region = Rect2(600, 0, 150, 150)
 
-[sub_resource type="Resource" id="Resource_8on23"]
-script = ExtResource("1_hoibn")
-trigger_type = 2
+[sub_resource type="Resource" id="Resource_e4csb"]
+script = ExtResource("2_vfewo")
+trigger_type = 3
 trigger_stat = 9
 trigger_status = 9
 trigger_value_threshold = 0
@@ -18,8 +18,8 @@ countdown_value = 0
 countdown_recurs = false
 has_condition = true
 condition_type = 0
-condition_of = 0
-condition_stat = 2
+condition_of = 4
+condition_stat = 3
 condition_status = 9
 condition_comparison = ">"
 compare_to = 0
@@ -31,10 +31,10 @@ condition_party_status = 9
 effect_type = 0
 target_type = 0
 target_stat_type = 0
-target_stat = 2
+target_stat = 3
 target_status = 9
 effect_of = 0
-effect_amount = 1
+effect_amount = -1
 effect_stat_party = 4
 effect_stat_type = 3
 effect_stat_value = 9
@@ -57,14 +57,13 @@ custom_description = ""
 metadata/_custom_type_script = "uid://dahay7fvi7bik"
 
 [resource]
-script = ExtResource("2_fmpw2")
-item_id = ""
-item_name = "Reinforced Gauntlet"
-item_type = 3
-item_desc = "Turn Start: If you have shield, gain 1 additional shield"
-item_icon = SubResource("AtlasTexture_ut7kp")
-item_color = Color(0.243614, 0.295857, 0.401332, 1)
-rules = Array[ExtResource("1_hoibn")]([SubResource("Resource_8on23")])
+script = ExtResource("3_e3ivw")
+item_name = "Heavy Crude Mace"
+item_type = 0
+item_desc = "On Hit: Lose 1 agility. If your agility is 0 or less, only strike every other turn"
+item_icon = SubResource("AtlasTexture_001p0")
+item_color = Color(0.384314, 0.435294, 0.517647, 1)
+rules = Array[ExtResource("2_vfewo")]([SubResource("Resource_e4csb")])
 repeat_rules_X_times = 0
 repeat_rules_for_category = ""
 trigger_priority = 0
@@ -73,12 +72,12 @@ trigger_only_first_turn = false
 trigger_on_occurrence_number = 0
 occurrence_resets_per_turn = false
 rarity = 1
-categories = Array[String]([])
+categories = Array[String](["Crude"])
 rng_weight = 1.0
 unlocked = true
-damage_bonus = 0
+damage_bonus = 6
 shield_bonus = 0
-agility_bonus = 0
+agility_bonus = 1
 hit_points_bonus = 0
 strikes_bonus = 0
 burn_damage_bonus = 0

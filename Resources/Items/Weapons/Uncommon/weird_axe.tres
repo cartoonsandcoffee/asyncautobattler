@@ -1,16 +1,16 @@
-[gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://bgqjjq7qtqqqu"]
+[gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://cso8384uo74of"]
 
-[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_2otmq"]
-[ext_resource type="Texture2D" uid="uid://bwo3qldtbc8u6" path="res://Assets/Items/Items.png" id="1_pvt27"]
-[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_pvt27"]
+[ext_resource type="Texture2D" uid="uid://bwo3qldtbc8u6" path="res://Assets/Items/Items.png" id="1_6rhdo"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_es8bm"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_6rhdo"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_mtd2x"]
-atlas = ExtResource("1_pvt27")
-region = Rect2(600, 1050, 150, 150)
+[sub_resource type="AtlasTexture" id="AtlasTexture_kby4g"]
+atlas = ExtResource("1_6rhdo")
+region = Rect2(300, 450, 150, 150)
 
-[sub_resource type="Resource" id="Resource_7lsk4"]
-script = ExtResource("1_2otmq")
-trigger_type = 0
+[sub_resource type="Resource" id="Resource_6rhdo"]
+script = ExtResource("1_es8bm")
+trigger_type = 3
 trigger_stat = 9
 trigger_status = 9
 trigger_value_threshold = 0
@@ -28,43 +28,42 @@ condition_to_party = 4
 condition_stat_type = 3
 condition_party_stat = 9
 condition_party_status = 9
-effect_type = 0
+effect_type = 6
 target_type = 0
 target_stat_type = 0
 target_stat = 9
 target_status = 9
 effect_of = 0
-effect_amount = 0
-effect_stat_party = 4
+effect_amount = 2
+effect_stat_party = 0
 effect_stat_type = 3
 effect_stat_value = 9
 effect_status_value = 9
 convert_from_type = 0
 convert_from_party = 0
-convert_from_stat = 9
+convert_from_stat = 0
 convert_from_status = 9
 convert_to_type = 0
 convert_to_party = 0
-convert_to_stat = 9
+convert_to_stat = 2
 convert_to_status = 9
 conversion_amount_type = 0
-conversion_amount_value = 1
-conversion_ratio = 1.0
+conversion_amount_value = 4
+conversion_ratio = 2.0
 retrigger_type = 1
 retrigger_target = 0
-special_string = "[exposed] +1"
+special_string = ""
 custom_description = ""
 metadata/_custom_type_script = "uid://dahay7fvi7bik"
 
 [resource]
-script = ExtResource("2_pvt27")
-item_id = ""
-item_name = "Indecent Exposure"
-item_type = 12
-item_desc = "Exposed can trigger 1 additional time."
-item_icon = SubResource("AtlasTexture_mtd2x")
-item_color = Color(0.499866, 0.624219, 0.212876, 1)
-rules = Array[ExtResource("1_2otmq")]([SubResource("Resource_7lsk4")])
+script = ExtResource("2_6rhdo")
+item_name = "Weird Axe"
+item_type = 0
+item_desc = "On Hit: Lose 2 health, gain 4 shield."
+item_icon = SubResource("AtlasTexture_kby4g")
+item_color = Color(0.64, 0.448, 0.448, 1)
+rules = Array[ExtResource("1_es8bm")]([SubResource("Resource_6rhdo")])
 repeat_rules_X_times = 0
 repeat_rules_for_category = ""
 trigger_priority = 0
@@ -76,7 +75,7 @@ rarity = 1
 categories = Array[String]([])
 rng_weight = 1.0
 unlocked = true
-damage_bonus = 0
+damage_bonus = 4
 shield_bonus = 0
 agility_bonus = 0
 hit_points_bonus = 0

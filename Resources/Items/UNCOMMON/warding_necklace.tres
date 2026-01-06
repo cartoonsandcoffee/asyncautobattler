@@ -1,16 +1,16 @@
-[gd_resource type="Resource" script_class="Item" load_steps=7 format=3 uid="uid://cgn17rtm0oaxt"]
+[gd_resource type="Resource" script_class="Item" load_steps=7 format=3 uid="uid://1uck5xxcy1j5"]
 
-[ext_resource type="Texture2D" uid="uid://fujbmxi0k7vs" path="res://Assets/Items/Tools.png" id="1_mscfe"]
-[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_w14v7"]
-[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_mscfe"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_few51"]
+[ext_resource type="Texture2D" uid="uid://fujbmxi0k7vs" path="res://Assets/Items/Tools.png" id="1_vtmyo"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_vtmyo"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_cx7oj"]
-atlas = ExtResource("1_mscfe")
-region = Rect2(150, 150, 150, 150)
+[sub_resource type="AtlasTexture" id="AtlasTexture_6uxef"]
+atlas = ExtResource("1_vtmyo")
+region = Rect2(600, 450, 150, 150)
 
-[sub_resource type="Resource" id="Resource_cx7oj"]
-script = ExtResource("1_w14v7")
-trigger_type = 1
+[sub_resource type="Resource" id="Resource_i6hgf"]
+script = ExtResource("1_few51")
+trigger_type = 19
 trigger_stat = 9
 trigger_status = 10
 trigger_value_threshold = 0
@@ -28,11 +28,11 @@ condition_to_party = 4
 condition_stat_type = 3
 condition_party_stat = 9
 condition_party_status = 10
-effect_type = 1
+effect_type = 0
 target_type = 0
 target_stat_type = 0
-target_stat = 9
-target_status = 2
+target_stat = 2
+target_status = 10
 effect_of = 0
 effect_amount = 2
 effect_stat_party = 4
@@ -56,9 +56,9 @@ special_string = ""
 custom_description = ""
 metadata/_custom_type_script = "uid://dahay7fvi7bik"
 
-[sub_resource type="Resource" id="Resource_r2x6e"]
-script = ExtResource("1_w14v7")
-trigger_type = 1
+[sub_resource type="Resource" id="Resource_7yaoo"]
+script = ExtResource("1_few51")
+trigger_type = 19
 trigger_stat = 9
 trigger_status = 10
 trigger_value_threshold = 0
@@ -79,10 +79,10 @@ condition_party_status = 10
 effect_type = 0
 target_type = 1
 target_stat_type = 0
-target_stat = 5
+target_stat = 2
 target_status = 10
 effect_of = 0
-effect_amount = 1
+effect_amount = 2
 effect_stat_party = 4
 effect_stat_type = 3
 effect_stat_value = 9
@@ -105,14 +105,14 @@ custom_description = ""
 metadata/_custom_type_script = "uid://dahay7fvi7bik"
 
 [resource]
-script = ExtResource("2_mscfe")
+script = ExtResource("2_vtmyo")
 item_id = ""
-item_name = "Thorn Circlet"
-item_type = 5
-item_desc = "Battle Start: Gain 1 thorns and give the enemy 1 additional strike"
-item_icon = SubResource("AtlasTexture_cx7oj")
-item_color = Color(0.33155, 0.38, 0.1862, 1)
-rules = Array[ExtResource("1_w14v7")]([SubResource("Resource_cx7oj"), SubResource("Resource_r2x6e")])
+item_name = "Warding Necklace"
+item_type = 16
+item_desc = ""
+item_icon = SubResource("AtlasTexture_6uxef")
+item_color = Color(0.5742, 0.59994, 0.66, 1)
+rules = Array[ExtResource("1_few51")]([SubResource("Resource_i6hgf"), SubResource("Resource_7yaoo")])
 repeat_rules_X_times = 0
 repeat_rules_for_category = ""
 trigger_priority = 0
@@ -121,7 +121,7 @@ trigger_only_first_turn = false
 trigger_on_occurrence_number = 0
 occurrence_resets_per_turn = false
 rarity = 1
-categories = Array[String]([])
+categories = Array[String](["Stone"])
 rng_weight = 1.0
 unlocked = true
 damage_bonus = 0

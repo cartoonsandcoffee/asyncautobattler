@@ -1,16 +1,16 @@
-[gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://b472ddmma467f"]
+[gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://fyu5wbymqw63"]
 
-[ext_resource type="Texture2D" uid="uid://bwo3qldtbc8u6" path="res://Assets/Items/Items.png" id="1_cc72e"]
-[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="2_4d7ci"]
-[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="3_u4myx"]
+[ext_resource type="Texture2D" uid="uid://cjqv5mk8ht5lb" path="res://Assets/Items/Weapons.png" id="1_0u0u7"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_311c5"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_0u0u7"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_hynvv"]
-atlas = ExtResource("1_cc72e")
-region = Rect2(150, 1500, 150, 150)
+[sub_resource type="AtlasTexture" id="AtlasTexture_lg5lt"]
+atlas = ExtResource("1_0u0u7")
+region = Rect2(450, 600, 150, 150)
 
-[sub_resource type="Resource" id="Resource_gq14g"]
-script = ExtResource("2_4d7ci")
-trigger_type = 1
+[sub_resource type="Resource" id="Resource_uxolc"]
+script = ExtResource("1_311c5")
+trigger_type = 0
 trigger_stat = 9
 trigger_status = 9
 trigger_value_threshold = 0
@@ -31,7 +31,7 @@ condition_party_status = 9
 effect_type = 0
 target_type = 0
 target_stat_type = 1
-target_stat = 0
+target_stat = 2
 target_status = 9
 effect_of = 1
 effect_amount = 0
@@ -57,14 +57,14 @@ custom_description = ""
 metadata/_custom_type_script = "uid://dahay7fvi7bik"
 
 [resource]
-script = ExtResource("3_u4myx")
+script = ExtResource("2_0u0u7")
 item_id = ""
-item_name = "Clearmetal Crown"
-item_type = 5
-item_desc = "Battle Start: Gain Max Health equal to your Base Armor"
-item_icon = SubResource("AtlasTexture_hynvv")
-item_color = Color(0.580392, 0.686275, 0.752941, 1)
-rules = Array[ExtResource("2_4d7ci")]([SubResource("Resource_gq14g")])
+item_name = "Crude Glowing Staff"
+item_type = 0
+item_desc = "Your base shield is doubled."
+item_icon = SubResource("AtlasTexture_lg5lt")
+item_color = Color(0.384314, 0.435294, 0.517647, 1)
+rules = Array[ExtResource("1_311c5")]([SubResource("Resource_uxolc")])
 repeat_rules_X_times = 0
 repeat_rules_for_category = ""
 trigger_priority = 0
@@ -72,12 +72,12 @@ trigger_only_once = false
 trigger_only_first_turn = false
 trigger_on_occurrence_number = 0
 occurrence_resets_per_turn = false
-rarity = 1
-categories = Array[String](["Clearmetal"])
+rarity = 2
+categories = Array[String](["Crude"])
 rng_weight = 1.0
 unlocked = true
-damage_bonus = 0
-shield_bonus = 0
+damage_bonus = 2
+shield_bonus = 1
 agility_bonus = 0
 hit_points_bonus = 0
 strikes_bonus = 0

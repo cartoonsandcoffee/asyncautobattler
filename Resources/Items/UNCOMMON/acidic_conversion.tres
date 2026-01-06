@@ -1,16 +1,16 @@
-[gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://bwqgo2kf7bpax"]
+[gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://dl71payia83dq"]
 
-[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_806we"]
-[ext_resource type="Texture2D" uid="uid://bwo3qldtbc8u6" path="res://Assets/Items/Items.png" id="1_q3jw7"]
-[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_q3jw7"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_ffjch"]
+[ext_resource type="Texture2D" uid="uid://fujbmxi0k7vs" path="res://Assets/Items/Tools.png" id="1_vaj03"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_vaj03"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_v8d4b"]
-atlas = ExtResource("1_q3jw7")
-region = Rect2(0, 150, 150, 150)
+[sub_resource type="AtlasTexture" id="AtlasTexture_b8d6r"]
+atlas = ExtResource("1_vaj03")
+region = Rect2(450, 450, 150, 150)
 
-[sub_resource type="Resource" id="Resource_q3jw7"]
-script = ExtResource("1_806we")
-trigger_type = 2
+[sub_resource type="Resource" id="Resource_vepu4"]
+script = ExtResource("1_ffjch")
+trigger_type = 5
 trigger_stat = 9
 trigger_status = 10
 trigger_value_threshold = 0
@@ -39,15 +39,15 @@ effect_stat_party = 4
 effect_stat_type = 3
 effect_stat_value = 9
 effect_status_value = 10
-convert_from_type = 0
+convert_from_type = 1
 convert_from_party = 0
-convert_from_stat = 2
-convert_from_status = 10
-convert_to_type = 1
+convert_from_stat = 9
+convert_from_status = 1
+convert_to_type = 0
 convert_to_party = 0
-convert_to_stat = 9
-convert_to_status = 2
-conversion_amount_type = 0
+convert_to_stat = 0
+convert_to_status = 10
+conversion_amount_type = 2
 conversion_amount_value = 1
 conversion_ratio = 2.0
 retrigger_type = 1
@@ -57,14 +57,14 @@ custom_description = ""
 metadata/_custom_type_script = "uid://dahay7fvi7bik"
 
 [resource]
-script = ExtResource("2_q3jw7")
+script = ExtResource("2_vaj03")
 item_id = ""
-item_name = "Thorn Shield"
-item_type = 2
+item_name = "Acidic Conversion"
+item_type = 12
 item_desc = ""
-item_icon = SubResource("AtlasTexture_v8d4b")
-item_color = Color(0.333333, 0.380392, 0.184314, 1)
-rules = Array[ExtResource("1_806we")]([SubResource("Resource_q3jw7")])
+item_icon = SubResource("AtlasTexture_b8d6r")
+item_color = Color(0.3276, 0.78, 0.33514, 1)
+rules = Array[ExtResource("1_ffjch")]([SubResource("Resource_vepu4")])
 repeat_rules_X_times = 0
 repeat_rules_for_category = ""
 trigger_priority = 0
@@ -77,7 +77,7 @@ categories = Array[String]([])
 rng_weight = 1.0
 unlocked = true
 damage_bonus = 0
-shield_bonus = 2
+shield_bonus = 0
 agility_bonus = 0
 hit_points_bonus = 0
 strikes_bonus = 0

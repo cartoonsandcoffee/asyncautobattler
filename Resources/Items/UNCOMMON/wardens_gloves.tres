@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="Item" load_steps=5 format=3 uid="uid://csptgi1kcshy"]
+
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_mta4k"]
+[ext_resource type="Texture2D" uid="uid://dw53wtdf1qlwm" path="res://Assets/Items/Gloves.png" id="1_qe8hd"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_qe8hd"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y8nfv"]
+atlas = ExtResource("1_qe8hd")
+region = Rect2(300, 0, 150, 150)
+
+[resource]
+script = ExtResource("2_qe8hd")
+item_id = ""
+item_name = "Warden's Gauntlets"
+item_type = 3
+item_desc = ""
+item_icon = SubResource("AtlasTexture_y8nfv")
+item_color = Color(0.901961, 0.87451, 0.513726, 1)
+rules = Array[ExtResource("1_mta4k")]([])
+repeat_rules_X_times = 0
+repeat_rules_for_category = ""
+trigger_priority = 0
+trigger_only_once = false
+trigger_only_first_turn = false
+trigger_on_occurrence_number = 0
+occurrence_resets_per_turn = false
+rarity = 1
+categories = Array[String]([])
+rng_weight = 1.0
+unlocked = true
+damage_bonus = 0
+shield_bonus = 0
+agility_bonus = 2
+hit_points_bonus = 0
+strikes_bonus = 0
+burn_damage_bonus = 0
+metadata/_custom_type_script = "uid://dthg27pchm1fm"
