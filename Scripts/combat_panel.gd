@@ -80,11 +80,11 @@ var weapon_slot_ref: ItemSlot = null
 
 var gamecolors: GameColors
 
+# Variables for item/status proc inidcator visual spawning
 var player_pos: Vector2 = Vector2(422, 262)
 var enemy_pos: Vector2 = Vector2(695,180)
-
-# Track pending status updates for batching
-var pending_status_updates: Dictionary = {}  # {entity: [rules]}
+var pos_shift: int = 15
+var last_indicator_spawn_time: float = 0.0
 
 func _ready():
 	# Start off-screen
@@ -341,6 +341,7 @@ func _get_status_enum(status_name: String) -> Enums.StatusEffects:
 
 func create_damage_indicator(target, amount: int, damage_stat: Enums.Stats, visual_info: Dictionary) -> void:
 	"""Create a damage indicator at the appropriate position - called by AnimationManager"""
+	await _wait_for_indicator_stagger()
 	var combat_item_proc = item_proc.instantiate()
 	
 	combat_item_proc.set_references()
@@ -363,30 +364,19 @@ func create_damage_indicator(target, amount: int, damage_stat: Enums.Stats, visu
 	
 	# Position based on target and stat
 	add_child(combat_item_proc)
-	var position_offset = Vector2(45, 50) if target == current_enemy_entity else Vector2(45, -50)
 	AudioManager.play_ui_sound("item_proc")
 
 	if target == current_enemy_entity:
 		# Enemy takes damage
-		#if damage_stat == Enums.Stats.SHIELD or damage_stat == Enums.Stats.EXPOSED:
-		#	combat_item_proc.global_position = enemy_shield_stat.global_position + position_offset
-		#else:
-		#	combat_item_proc.global_position = enemy_health_stat.global_position + position_offset
-		combat_item_proc.global_position = enemy_pos
+		combat_item_proc.global_position = enemy_pos + Vector2(randi_range(-pos_shift, pos_shift), 0)
 		
 		combat_item_proc.run_animation(Enums.Party.PLAYER) # - change back to ENEMY to make it go downward
 		_update_enemy_stats()
 	else:
 		# Player takes damage
-		#if damage_stat == Enums.Stats.SHIELD or damage_stat == Enums.Stats.EXPOSED:
-		#	combat_item_proc.position = main_game.stat_shield.global_position + position_offset
-		#else:
-		#	combat_item_proc.position = main_game.stat_health.global_position + position_offset
-		combat_item_proc.global_position = player_pos
-		
+		combat_item_proc.global_position = player_pos + Vector2(randi_range(-pos_shift, pos_shift), 0)
 		combat_item_proc.run_animation(Enums.Party.PLAYER)
 		Player.stats.stats_updated.emit()
-
 
 func test_camera_shake():
 	if GameSettings.screen_shake_enabled:
@@ -437,6 +427,9 @@ func _on_item_rule_triggered(item: Item, rule: ItemRule, entity):
 	pass
 
 func spawn_item_proc_indicator(item: Item, rule: ItemRule, entity, amount: int = 0):
+	# Wait for any previous spawn to finish
+	await _wait_for_indicator_stagger()
+
 	var combat_item_proc = item_proc.instantiate()
 	var _pos = Vector2(0,0)
 	var offset = Vector2(45, -50)
@@ -478,23 +471,25 @@ func spawn_item_proc_indicator(item: Item, rule: ItemRule, entity, amount: int =
 	var entity_name: String = CombatManager.get_entity_name(entity)
 
 	if (entity_name == "Player" && rule.target_type == Enums.TargetType.SELF):
-		combat_item_proc.position = player_pos
+		combat_item_proc.position = player_pos + Vector2(randi_range(-pos_shift, pos_shift), 0)
 		combat_item_proc.run_animation(Enums.Party.PLAYER)
 
 	if (entity_name == "Player" && rule.target_type == Enums.TargetType.ENEMY):
-		combat_item_proc.position = enemy_pos
+		combat_item_proc.position = enemy_pos + Vector2(randi_range(-pos_shift, pos_shift), 0)
 		combat_item_proc.run_animation(Enums.Party.PLAYER)
 
 	if (entity_name != "Player" && rule.target_type == Enums.TargetType.SELF):
-		combat_item_proc.position = enemy_pos
+		combat_item_proc.position = enemy_pos + Vector2(randi_range(-pos_shift, pos_shift), 0)
 		combat_item_proc.run_animation(Enums.Party.PLAYER)
 
 	if (entity_name != "Player" && rule.target_type == Enums.TargetType.ENEMY):
-		combat_item_proc.position = player_pos
+		combat_item_proc.position = player_pos + Vector2(randi_range(-pos_shift, pos_shift), 0)
 		combat_item_proc.run_animation(Enums.Party.PLAYER)
 
-
 func spawn_status_proc_indicator(entity, _status: Enums.StatusEffects, _stat: Enums.Stats, value: int):
+	# Wait for any previous spawn to finish
+	await _wait_for_indicator_stagger()
+	
 	var combat_item_proc = item_proc.instantiate()
 	
 	combat_item_proc.set_references()
@@ -504,26 +499,13 @@ func spawn_status_proc_indicator(entity, _status: Enums.StatusEffects, _stat: En
 	combat_item_proc.set_stat_visuals(_stat)
 
 	add_child(combat_item_proc)
+	AudioManager.play_ui_sound("item_proc")
 
 	if entity == current_player_entity:
-		combat_item_proc.position = player_pos
+		combat_item_proc.position = player_pos + Vector2(randi_range(-pos_shift, pos_shift), 0)
 	else:
-		combat_item_proc.position = enemy_pos
+		combat_item_proc.position = enemy_pos + Vector2(randi_range(-pos_shift, pos_shift), 0)
 	combat_item_proc.run_animation(Enums.Party.PLAYER)
-
-	#if entity == current_player_entity:
-	#	combat_item_proc.run_animation(Enums.Party.PLAYER)
-	#	if _stat == Enums.Stats.SHIELD || _stat == Enums.Stats.EXPOSED:
-	#		combat_item_proc.global_position = main_game.stat_shield.global_position + Vector2(45,-50)
-	#	else:
-	#		combat_item_proc.global_position = main_game.stat_health.global_position + Vector2(45,-50)
-	#else:
-	#	combat_item_proc.run_animation(Enums.Party.ENEMY)
-	#	if _stat == Enums.Stats.SHIELD || _stat == Enums.Stats.EXPOSED:
-	#		combat_item_proc.global_position = enemy_shield_stat.global_position + Vector2(45,50)
-	#	else:
-	#		combat_item_proc.global_position = enemy_health_stat.global_position + Vector2(45,50)
-
 
 func _on_enemy_ability_triggered(ability: EnemyAbility, entity):
 	pass
@@ -647,10 +629,24 @@ func _on_btn_history_pressed() -> void:
 	txt_history.visible = !txt_history.visible
 	txt_history.text = CombatManager.combat_log
 
+func _print_node_tree(node: Node, depth: int):
+	var indent = "  ".repeat(depth)
+	print("%s%s (%s)" % [indent, node.name, node.get_class()])
+	
+	for child in node.get_children():
+		_print_node_tree(child, depth + 1)
 
 func rebuild_status_boxes(entity):
+	if not entity or not entity.status_effects:
+		push_warning("[CombatPanel] Cannot rebuild status boxes - entity or status_effects is null")
+		return
+
 	var container = player_status_container if entity == current_player_entity else enemy_status_container
 	
+	if not container or not is_instance_valid(container):
+		push_warning("[CombatPanel] Cannot rebuild status boxes - container is invalid")
+		return
+
 	# Get current boxes to check for changes
 	var existing_boxes: Dictionary = {}
 	for child in container.get_children():
@@ -689,61 +685,35 @@ func rebuild_status_boxes(entity):
 
 func _create_status_box(container: HBoxContainer, status: Enums.StatusEffects, stacks: int):
 	var box = status_box.instantiate()
+	box.custom_minimum_size = Vector2(100, 55)
 	container.add_child(box)
 	box.set_status(status, stacks)
 	
 	# Spawn animation
-	box.scale = Vector2.ZERO
-	box.modulate.a = 0.0
-	box.custom_minimum_size = Vector2(110, 60)
-	box.pivot_offset = Vector2(55, 30)
-
-	var tween = create_tween()
-	tween.set_parallel(true)
-	tween.tween_property(box, "scale", Vector2.ONE, 0.2).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
-	tween.tween_property(box, "modulate:a", 1.0, 0.15)
+	box.show_box()
 
 
 func _update_status_box_value(box: StatusBox, new_stacks: int):
 	if not box or not is_instance_valid(box):
 		push_warning("[CombatPanel] Cannot animate status change - box is null")
 		return
-	
-	# Additional check for lbl_amount
-	if not box.has_node("lbl_amount"):
-		push_warning("[CombatPanel] Status box missing lbl_amount label")
+
+	if not box.lbl_amount:
+		push_warning("[CombatPanel] Status box lbl_amount is null - box may not be ready")
 		return
 
 	var old_value = int(box.lbl_amount.text)
-	
+
 	if old_value == new_stacks:
 		return  # No change
-	
-	# Pulse animation
-	var tween = create_tween()
-	tween.tween_property(box, "scale", Vector2(1.0, 1.0), 0.1).set_ease(Tween.EASE_OUT)
-	tween.tween_property(box, "scale", Vector2.ONE, 0.15).set_ease(Tween.EASE_IN)
-	
-	# Lerp the number
-	var lerp_tween = create_tween()
-	var duration = 0.25
-	var steps = 10
-	var step_duration = duration / steps
-	
-	for step in range(steps + 1):
-		var progress = float(step) / float(steps)
-		var value = lerp(old_value, new_stacks, progress)
-		lerp_tween.tween_callback(func(): box.lbl_amount.text = str(int(value))).set_delay(step_duration)
+
+	box.update_label(new_stacks)
 
 func _remove_status_box(box: StatusBox):
 	if not is_instance_valid(box):
 		return
 
-	var tween = create_tween()
-	tween.set_parallel(true)
-	tween.tween_property(box, "scale", Vector2.ZERO, 0.2).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_BACK)
-	tween.tween_property(box, "modulate:a", 0.0, 0.15)
-	await tween.finished
+	box.hide_box()
 
 	if is_instance_valid(box) and not box.is_queued_for_deletion():
 		box.queue_free()	
@@ -809,3 +779,14 @@ func hide_death_panel():
 	if death_panel:
 		death_panel.visible = false
 		visible = false
+
+func _wait_for_indicator_stagger():
+	# Ensure minimum delay between indicator spawns for visual clarity
+	var time_since_last = Time.get_ticks_msec() / 1000.0 - last_indicator_spawn_time
+	var required_delay: float = CombatSpeed.get_duration("proc_overlap")
+
+	if time_since_last < required_delay:
+		var wait_time = required_delay - time_since_last
+		await get_tree().create_timer(wait_time).timeout
+
+	last_indicator_spawn_time = Time.get_ticks_msec() / 1000.0

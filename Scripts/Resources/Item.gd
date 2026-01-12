@@ -28,7 +28,10 @@ enum ItemType {
 
 @export var item_id: String = ""
 @export var item_name: String = ""
-@export var item_type: ItemType = ItemType.WEAPON
+@export var item_type: ItemType = ItemType.WEAPON:
+	set(value):
+		item_type = value
+		notify_property_list_changed()
 @export_multiline var item_desc: String = ""
 @export var item_icon: Texture2D
 @export var item_color: Color
@@ -71,6 +74,8 @@ enum ItemType {
 @export var hit_points_bonus: int = 0
 @export var strikes_bonus: int = 0
 @export var burn_damage_bonus: int = 0
+## ONLY applicable to Weapons, specifies whether the weapon is passive and can't attack/strike at all
+@export var cant_attack: bool = false
 
 # Runtime state (reset each combat)
 var has_triggered_this_combat: bool = false
@@ -81,6 +86,14 @@ var instance_id: int = -1 # Add unique instance ID
 var slot_index: int = -1  # Track which slot this item is in
 
 var occurrence_count: int = 0
+
+# This function controls which properties are visible in the inspector
+func _validate_property(property: Dictionary) -> void:
+	var prop_name = property.name
+	
+	if prop_name == "cant_attack":
+		if item_type not in [Item.ItemType.WEAPON]:
+			property.usage = PROPERTY_USAGE_NO_EDITOR
 
 func reset_runtime_state():
 	has_triggered_this_combat = false
@@ -152,6 +165,9 @@ func get_description() -> String:
 			curr_rule += 1
 	
 	desc += get_repeat_string()
+
+	if cant_attack:
+		desc += "[b] (Does not strike.)[/b]"
 
 	return desc
 

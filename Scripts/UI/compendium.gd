@@ -29,6 +29,7 @@ func show_items():
 		var choice_button = item_scene.instantiate()
 		choice_button.custom_minimum_size = Vector2(120, 120)
 		item_grid.add_child(choice_button)
+		choice_button.set_is_from_compendium(true)
 		choice_button.set_item(item)
 
 func get_items_by_item_type(_selection: int) -> void:

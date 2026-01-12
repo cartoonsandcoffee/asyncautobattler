@@ -131,7 +131,9 @@ func _on_item_selected(item: Item):
 	Player.inventory.add_item(item)
 	Player.update_stats_from_items()
 	disable_button()
+	finish_event()
 
+func finish_event():
 	# Hide item choices
 	anim_box.play("hide_box")
 	await anim_box.animation_finished
@@ -146,7 +148,6 @@ func _on_item_selected(item: Item):
 
 	# Complete the event
 	complete_event()
-
 
 func _on_btn_event_pressed() -> void:
 	AudioManager.play_event_sound("corpse")
@@ -167,3 +168,11 @@ func _on_btn_event_mouse_entered() -> void:
 		anim_label.play("show_label")
 		CursorManager.set_interact_cursor()
 		AudioManager.play_ui_sound("woosh")
+
+
+
+func _on_btn_skip_mouse_entered() -> void:
+	AudioManager.play_ui_sound("woosh")
+
+func _on_btn_skip_pressed() -> void:
+	finish_event()

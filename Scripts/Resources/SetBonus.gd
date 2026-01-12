@@ -3,6 +3,7 @@ extends Resource
 
 @export var setbonus_name: String = ""
 @export var unlocked: bool = true
+@export var discovered: bool = false
 
 @export_group("recipe")
 # Required items (drag .tres files into this array)

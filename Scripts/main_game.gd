@@ -91,6 +91,7 @@ func _ready():
 	CombatManager.stat_changed.connect(_on_combat_stat_changed)
 	CombatManager.combat_started.connect(_on_combat_started_for_ui)
 	CombatManager.combat_ended.connect(_on_combat_ended_for_ui)
+	CombatManager.item_processor.occurrence_updated.connect(_on_occurrence_updated)
 
 	# Connect minimap signals
 	DungeonManager.minimap_update_requested.connect(_on_minimap_update_requested)
@@ -437,7 +438,8 @@ func setup_inventory():
 
 		item_slots[i] = (item_container)
 		item_grid.add_child(item_container)
-
+	
+	SetBonusManager.check_set_bonuses(Player)
 
 func setup_bonuses(entity):
 	if not (entity == Player):
@@ -743,6 +745,14 @@ func _on_combat_ended_for_ui(winner, loser):
 	set_player_stats()
 	AudioManager.on_combat_ended()
 
+	# Reset all countdown displays
+	for slot in item_slots:
+		if slot.current_item and slot.current_item.trigger_on_occurrence_number > 0:
+			slot.update_countdown_display(slot.current_item.trigger_on_occurrence_number)
+	
+	if weapon_slot.current_item and weapon_slot.current_item.trigger_on_occurrence_number > 0:
+		weapon_slot.update_countdown_display(weapon_slot.current_item.trigger_on_occurrence_number)
+
 func _on_combat_stat_changed(entity, stat: Enums.Stats, old_value: int, new_value: int):
 	# Only update if the change affects the player
 	if entity == Player:
@@ -768,6 +778,21 @@ func _on_combat_stat_changed(entity, stat: Enums.Stats, old_value: int, new_valu
 				stat_gold.update_stat(Enums.Stats.GOLD, 
 					Player.stats.gold, 
 					Player.stats.gold)
+
+func _on_occurrence_updated(entity, item: Item, trigger_type: Enums.TriggerType, current_count: int, remaining: int):
+	# Only update if it's the player's item
+	if entity != Player:
+		return
+	
+	# Find the item slot that has this item
+	for slot in item_slots:
+		if slot.current_item and slot.current_item.instance_id == item.instance_id:
+			slot.update_countdown_display(remaining)
+			return
+	
+	# Check weapon slot
+	if weapon_slot.current_item and weapon_slot.current_item.instance_id == item.instance_id:
+		weapon_slot.update_countdown_display(remaining)
 
 func _on_minimap_update_requested():
 	# Update minimap display when rooms change
