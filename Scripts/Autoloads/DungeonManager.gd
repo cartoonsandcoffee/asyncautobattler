@@ -145,6 +145,7 @@ func generate_rank_rooms():
 		debug_room.room_definition = testing_room_2_definition
 		debug_room.chosen_event_scene = testing_room_2_definition.get_random_event()
 		debug_room.room_state = {}
+		assign_combat_to_room(debug_room)
 		current_rank_rooms[1] = debug_room
 		current_rank_rooms[2] = debug_room
 		print("[DungeonManager]  TEST: Forced room at position 2: %s" % testing_room_2_definition.room_name)

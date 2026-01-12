@@ -31,6 +31,14 @@ var inventory: Inventory:
 
 var skin_id: int = 0
 
+# Applied to current weapon (resets on weapon swap)
+var current_weapon_stat_upgrades: Dictionary = {
+	"damage": 0, 
+	"shield": 0, 
+	"agility": 0
+}
+var current_weapon_rule_upgrade: Item = null  # The enchantment item
+
 # Entity state flags
 var is_player: bool = false
 var has_taken_turn_this_combat: bool = false
@@ -92,9 +100,8 @@ func set_test_inventory():
 
 	# -- for testing basic rules
 
-	inventory.add_item(ItemsManager.available_items["crude_blade"])
+	inventory.add_item(ItemsManager.available_items["weapon_fists"])
 	inventory.add_item(ItemsManager.available_items["test_relic"])
-	inventory.add_item(ItemsManager.available_items["testing_boots"])
 	inventory.add_item(ItemsManager.available_items["testing_boots"])
 	inventory.add_item(ItemsManager.available_items["testing_robes"])
 
@@ -119,20 +126,30 @@ func set_test_inventory():
 	#inventory.add_item(ItemsManager.available_items["Golden Battleworn Shield"])
 	#inventory.add_item(ItemsManager.available_items["Clearmetal Battle Horn"])
 
+func reset_weapon_bonus():
+	current_weapon_stat_upgrades["damage"] = 0
+	current_weapon_stat_upgrades["shield"] = 0
+	current_weapon_stat_upgrades["agility"] = 0
+	current_weapon_rule_upgrade = null 
 
 func update_stats_from_items():
 	stats.reset_base_stats()
 
-    # Add regular item bonuses
+	# Add regular item bonuses
 	for item in inventory.item_slots:
 		if item:
 			_apply_item_stat_bonuses(item)
-    
-    # Add weapon bonuses
+	
+	# Add weapon bonuses
 	if inventory.weapon_slot:
 		_apply_item_stat_bonuses(inventory.weapon_slot)
-    
-    # Add set bonus item bonuses
+
+		# Apply weapon upgrades
+		stats.increase_base_stat(Enums.Stats.DAMAGE, current_weapon_stat_upgrades["damage"])
+		stats.increase_base_stat(Enums.Stats.SHIELD, current_weapon_stat_upgrades["shield"])
+		stats.increase_base_stat(Enums.Stats.AGILITY, current_weapon_stat_upgrades["agility"])
+
+	# Add set bonus item bonuses
 	for bonus_item in SetBonusManager.get_active_set_bonuses(self):
 		_apply_item_stat_bonuses(bonus_item)
 

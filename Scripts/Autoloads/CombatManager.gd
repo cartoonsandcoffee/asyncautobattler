@@ -220,6 +220,7 @@ func execute_turn(entity):
 	if entity.status_effects.stun > 0:
 		# If they're stunned, skip attack
 		add_to_combat_log_string(color_entity(get_entity_name(entity)) + " is stunned! Turn skipped.")
+		await CombatSpeed.create_timer(CombatSpeed.get_duration("attack_slide"))  # -- just to make sure the anim shows turn_start procs
 		status_handler.remove_status(entity, Enums.StatusEffects.STUN, 1)
 	else:
 		# Execute attacks
@@ -232,7 +233,7 @@ func execute_turn(entity):
 	turn_ended.emit(entity)
 	await process_entity_items_sequentially(entity, Enums.TriggerType.TURN_END)
 
-	await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap"))
+	#await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap"))
 
 func execute_attack_sequence(attacker):
 	# === Execute all of an entity's attack strikes. ===
@@ -333,9 +334,9 @@ func process_entity_items_sequentially(entity, trigger_type: Enums.TriggerType, 
 			continue
 
 		# ======= NORMAL MODE:
-		# === STEP 1: Highlight the item slot ===
-		if entity == player_entity and combat_panel:
-			combat_panel.highlight_item_slot(slot_index, slot_index == -1)
+		# === STEP 1: Highlight the item slot ===   JDM: Removed combat item highlighting
+		#if entity == player_entity and combat_panel:
+		#	combat_panel.highlight_item_slot(slot_index, slot_index == -1)
 				
 		# === STEP 2: Execute effect (DATA CHANGES) (This checks permissions and procs animation)===
 		var target = _get_rule_target(entity, rule.target_type)
@@ -371,7 +372,7 @@ func proc_item(item, rule, entity, amount: int):
 	if combat_panel:
 		if amount != 0: # Don't proc if a value doesn't change
 			combat_panel.spawn_item_proc_indicator(item, rule, entity, amount)
-			await CombatSpeed.create_timer(CombatSpeed.get_duration("item_proc"))	
+			await CombatSpeed.create_timer(CombatSpeed.get_duration("item_proc")) # JDM - timer pause now handled in spawn function
 
 func process_entity_items_with_status(entity, trigger_type: Enums.TriggerType, trigger_status: Enums.StatusEffects):
 	"""Process items that trigger based on status effects."""
@@ -394,7 +395,7 @@ func process_entity_items_with_status(entity, trigger_type: Enums.TriggerType, t
 		var target = _get_rule_target(entity, rule.target_type)
 		await effect_executor.execute_item_rule(item, rule, entity, target)
 		
-		await CombatSpeed.create_timer(CombatSpeed.get_duration("item_proc_overlap"))
+		await CombatSpeed.create_timer(CombatSpeed.get_duration("proc_overlap")) #JDM: pause should be handled in proc spawn now
 	
 	await animation_manager.wait_for_current_sequence()
 
@@ -515,8 +516,11 @@ func _on_death_triggered(entity):
 	await process_entity_items_sequentially(killer, Enums.TriggerType.ON_KILL)
 
 func _on_status_gained_triggered(entity, status: Enums.StatusEffects):
+	await get_tree().process_frame
+
 	var combat_panel = animation_manager.combat_panel
 	if combat_panel:
+		print("STATUS PROC ANIM TEST: " + Enums.get_status_string(status) + " " + get_entity_name(entity))
 		combat_panel.rebuild_status_boxes(entity)
 
 	if current_status_trigger_depth >= MAX_STATUS_TRIGGER_DEPTH:
@@ -528,8 +532,11 @@ func _on_status_gained_triggered(entity, status: Enums.StatusEffects):
 	current_status_trigger_depth -= 1
 
 func _on_status_removed_triggered(entity, status: Enums.StatusEffects):
+	await get_tree().process_frame
+
 	var combat_panel = animation_manager.combat_panel
 	if combat_panel:
+		print("STATUS PROC ANIM TEST: " + Enums.get_status_string(status) + " " + get_entity_name(entity))
 		combat_panel.rebuild_status_boxes(entity)
 
 	if current_status_trigger_depth >= MAX_STATUS_TRIGGER_DEPTH:

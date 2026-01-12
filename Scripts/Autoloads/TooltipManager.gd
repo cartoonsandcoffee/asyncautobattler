@@ -15,7 +15,7 @@ func _ready():
 
 ## Show tooltip for an item at the given global position and size
 ## Tooltip anchors bottom to top of item and grows upward by default
-func show_item_tooltip(item: Item, anchor_global_pos: Vector2, anchor_size: Vector2 = Vector2(100, 100)) -> void:
+func show_item_tooltip(item: Item, anchor_global_pos: Vector2, anchor_size: Vector2 = Vector2(100, 100), is_from_compendium: bool = false) -> void:
 	hide_tooltip()
 	
 	if not item:
@@ -23,6 +23,7 @@ func show_item_tooltip(item: Item, anchor_global_pos: Vector2, anchor_size: Vect
 	
 	# Instantiate the existing tooltip scene
 	current_tooltip = item_tooltip_scene.instantiate()
+	current_tooltip.is_from_compendium = is_from_compendium
 	add_child(current_tooltip)
 	
 	# Setup the tooltip with item data (uses existing item_tooltip.gd logic)

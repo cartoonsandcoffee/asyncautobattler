@@ -235,6 +235,8 @@ func get_status_string(_status: Enums.StatusEffects) -> String:
 			return "regeneration"
 		Enums.StatusEffects.STUN:
 			return "stun"
+		Enums.StatusEffects.RANDOM:
+			return "random status effect"
 		_:
 			return "<unknown status effect>"
 

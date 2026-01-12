@@ -12,13 +12,13 @@ func _ready():
 
 func load_all_set_bonuses():
 	all_set_bonuses.clear()
-	var dir = DirAccess.open("res://Resources/SetBonuses/")
+	var dir = DirAccess.open("res://Resources/SetBonus_Recipes/")
 	if dir:
 		dir.list_dir_begin()
 		var file_name = dir.get_next()
 		while file_name != "":
 			if file_name.ends_with(".tres"):
-				var set_bonus = load("res://Resources/SetBonuses/" + file_name)
+				var set_bonus = load("res://Resources/SetBonus_Recipes/" + file_name)
 				if set_bonus is SetBonus:
 					if set_bonus.unlocked:
 						all_set_bonuses.append(set_bonus)
@@ -26,9 +26,8 @@ func load_all_set_bonuses():
 
 func check_set_bonuses(entity):
 	# Check which set bonuses are active for this entity.
+
 	var new_active_sets: Array[Item] = []
-    
-	# Get all items this entity has
 	var owned_items: Array[Item] = _get_entity_items(entity)
     
     # Check each set bonus
