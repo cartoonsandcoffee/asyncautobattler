@@ -125,10 +125,6 @@ func heal_entity(entity, amount: int, source):
 		
 		combat_manager.add_to_combat_log_string("  %s heals for %d HP" % [_get_entity_name(entity), actual_healing], Color.GREEN)
 	
-	# Handle overheal for special mechanics
-	var overheal = amount - actual_healing
-	if overheal > 0 and entity.status_effects:
-		entity.status_effects.overheal_triggered.emit(overheal)
 
 # ===== DAMAGE VISUALS =====
 
@@ -143,7 +139,7 @@ func _create_damage_visual(target, amount: int, damage_stat: Enums.Stats, source
 	combat_manager.animation_manager.play_damage_indicator(target, amount, damage_stat, visual_info)
 	
 	# Small delay for visual feedback
-	await CombatSpeed.create_timer(CombatSpeed.get_duration("damage_number"))
+	await CombatSpeed.create_timer(CombatSpeed.get_duration("damage_number")) 
 
 func _get_visual_info_for_damage_type(damage_type: String, source) -> Dictionary:
 	# Get visual information (icon, color, name) for a damage type.
@@ -192,8 +188,13 @@ func _get_visual_info_for_damage_type(damage_type: String, source) -> Dictionary
 		
 		"regeneration":
 			info.icon = load("res://Resources/StatIcons/StatusIcons/status_regen.tres")
-			info.color = game_colors.stats.thorns
+			info.color = game_colors.stats.regeneration
 			info.source_name = "Regeneration"
+
+		"blessing":
+			info.icon = load("res://Resources/StatIcons/StatusIcons/status_blessing.tres")
+			info.color = game_colors.stats.blessing
+			info.source_name = "Blessing"
 
 		"item":
 			# For item damage, source should be the item

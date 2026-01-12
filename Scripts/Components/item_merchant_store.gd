@@ -49,7 +49,7 @@ func generate_item_choices():
 		child.queue_free()
 		
 	# Get 3 random common items
-	offered_items = ItemsManager.get_random_items(items_offered, item_rarity)
+	offered_items = ItemsManager.get_random_items(items_offered, item_rarity, include_extra_rare, true)
 	
 	# Create choice buttons for each item
 	for item in offered_items:

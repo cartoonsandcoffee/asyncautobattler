@@ -92,7 +92,8 @@ func set_weapon(new_weapon: Item) -> bool:
 	
 	var old_weapon = weapon_slot
 	weapon_slot = new_weapon
-	
+	Player.reset_weapon_bonus()
+
 	if old_weapon != null:
 		item_removed.emit(old_weapon, -1)  # -1 indicates weapon slot
 	item_added.emit(new_weapon, -1)

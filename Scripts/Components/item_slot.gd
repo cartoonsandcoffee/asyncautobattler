@@ -25,7 +25,6 @@ enum ItemType {
 @onready var button: Button
 @onready var pic_rarity: TextureRect
 @onready var pnl_rarity: Panel
-
 @export var item_type: ItemType = ItemType.OTHER
 @export var current_item: Item = null
 
@@ -39,6 +38,7 @@ var click_count: int = 0
 var click_timer: float = 0.0
 var double_click_time: float = 0.3  # Time window for double-click
 
+var is_from_compendium: bool = false
 var gamecolors: GameColors
 
 func _ready() -> void:
@@ -79,6 +79,13 @@ func set_item(item: Item):
 		set_item_type_desc()	
 		button.disabled = false
 		pnl_rarity.visible = false
+
+		# Initialize countdown display
+		if item.trigger_on_occurrence_number > 0:
+			lbl_countdown.text = str(item.trigger_on_occurrence_number)
+			lbl_countdown.visible = true
+		else:
+			lbl_countdown.visible = false
 	else:
 		set_empty()
 
@@ -136,6 +143,7 @@ func set_empty():
 	panel_border.self_modulate = Color.WHITE
 	button.disabled = true
 	pnl_rarity.visible = false
+	lbl_countdown.visible = false
 
 func update_visuals():
 	if current_item:
@@ -205,10 +213,34 @@ func get_item_instance() -> Item:
 		return current_item
 	return null
 
+func set_is_from_compendium(_isit: bool):
+	is_from_compendium = _isit
+	
 func show_tooltip():
 	if current_item:
 		# Use global tooltip manager with item's global position
-		TooltipManager.show_item_tooltip(current_item, global_position, size)
+		TooltipManager.show_item_tooltip(current_item, global_position, size, is_from_compendium)
+
+func update_countdown_display(remaining: int):
+	"""Update the countdown label for occurrence-based items"""
+	if not current_item:
+		lbl_countdown.visible = false
+		return
+	
+	if current_item.trigger_on_occurrence_number > 0:
+		if remaining == 0 and current_item.trigger_only_once:
+			# Item has triggered and can't trigger again
+			lbl_countdown.text = "X"  
+			lbl_countdown.modulate = Color.GRAY
+			lbl_countdown.visible = true
+		elif remaining >= 0:
+			lbl_countdown.text = str(remaining)
+			lbl_countdown.modulate = Color.WHITE
+			lbl_countdown.visible = true
+		else:
+			lbl_countdown.visible = false
+	else:
+		lbl_countdown.visible = false
 
 func _on_button_mouse_exited() -> void:
 	anim_hover.play("stop")

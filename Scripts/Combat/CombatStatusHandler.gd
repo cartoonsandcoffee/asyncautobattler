@@ -39,7 +39,7 @@ func apply_status(entity, status: Enums.StatusEffects, stacks: int):
 	var new_value = get_status_value(entity, status)
 	
 	# Emit signals
-	status_applied.emit(entity, status, stacks)
+	#status_applied.emit(entity, status, stacks)
 	
 	# Log
 	#_log_status_change(entity, status, old_value, new_value, true)
@@ -65,9 +65,10 @@ func remove_status(entity, status: Enums.StatusEffects, stacks: int):
 	
 	var new_value = get_status_value(entity, status)
 	
-	# Emit signals
-	status_removed.emit(entity, status, stacks)
-	
+	# Handle Blessing
+	if status == Enums.StatusEffects.BLESSING:
+		_process_blessing(entity, stacks)
+
 	# Log
 	#_log_status_change(entity, status, old_value, new_value, false)
 	if new_value > 0:
@@ -120,7 +121,8 @@ func has_any(entity) -> bool:
 		entity.status_effects.acid > 0 or
 		entity.status_effects.regeneration > 0 or
 		entity.status_effects.blind > 0 or
-		entity.status_effects.thorns > 0)
+		entity.status_effects.thorns > 0 or
+		entity.status_effects.blessing > 0)
 
 func process_turn_start_status_effects(entity):
 	# Process all status effects at the start of an entity's turn.
@@ -134,8 +136,8 @@ func process_turn_start_status_effects(entity):
 		return		
 
 	# Process each status effect type
-	await _process_acid(entity)
-	await _process_poison(entity)
+	_process_acid(entity)
+	_process_poison(entity)
 
 
 # ===== INDIVIDUAL STATUS PROCESSORS =====
@@ -174,14 +176,14 @@ func _process_poison(entity):
 			])
 
 		# Visual feedback
-		combat_manager.animation_manager.play_damage_indicator(
-			entity, damage, Enums.Stats.HITPOINTS,
-			{
-				"icon": _get_status_icon(Enums.StatusEffects.POISON),
-				"color": _get_color("poison"),
-				"source_name": "Poison"
-			}
-		)
+		#combat_manager.animation_manager.play_damage_indicator(
+		#	entity, damage, Enums.Stats.HITPOINTS,
+		#	{
+		#		"icon": _get_status_icon(Enums.StatusEffects.POISON),
+		#		"color": _get_color("poison"),
+		#		"source_name": "Poison"
+		#	}
+		#)
 		
 		# Emit status proc signal
 		combat_manager.status_proc.emit(entity, Enums.StatusEffects.POISON, Enums.Stats.HITPOINTS, -damage)
@@ -215,15 +217,16 @@ func _process_burn(entity):
 			combat_manager.color_entity(_get_entity_name(entity)),
 			combat_manager.color_text(str(total_damage), game_colors.stats.burn)])
 
+	# --- JDM: Commented this bit out because the combat_manager.damage_system also procs the visual indicator (they were overlapping)
 	# Visual feedback
-	combat_manager.animation_manager.play_damage_indicator(
-		entity, total_damage, Enums.Stats.HITPOINTS,
-		{
-			"icon": _get_status_icon(Enums.StatusEffects.BURN),
-			"color": _get_color("burn"),
-			"source_name": "Burn"
-		}
-	)
+	#combat_manager.animation_manager.play_damage_indicator(
+	#	entity, total_damage, Enums.Stats.HITPOINTS,
+	#	{
+	#		"icon": _get_status_icon(Enums.StatusEffects.BURN),
+	#		"color": _get_color("burn"),
+	#		"source_name": "Burn"
+	#	}
+	#)
 	
 	# Apply burn damage through damage system
 	# This respects shield and can trigger EXPOSED
@@ -269,14 +272,14 @@ func _process_acid(entity):
 		if entity.stats.shield_current == 0:
 			stat_for_visual = Enums.Stats.EXPOSED
 		
-		combat_manager.animation_manager.play_damage_indicator(
-			entity, damage_dealt, stat_for_visual,
-			{
-				"icon": _get_status_icon(Enums.StatusEffects.ACID),
-				"color": _get_color("acid"),
-				"source_name": "Acid"
-			}
-		)
+		#combat_manager.animation_manager.play_damage_indicator(
+		#	entity, damage_dealt, stat_for_visual,
+		#	{
+		#		"icon": _get_status_icon(Enums.StatusEffects.ACID),
+		#		"color": _get_color("acid"),
+		#		"source_name": "Acid"
+		#	}
+		#)
 		
 		# Emit status proc signal
 		combat_manager.status_proc.emit(entity, Enums.StatusEffects.ACID, stat_for_visual, -damage_dealt)
@@ -313,14 +316,14 @@ func _process_regeneration(entity):
 				old_hp, new_hp])
 		
 		# Visual feedback
-		combat_manager.animation_manager.play_damage_indicator(
-			entity, heal_amount, Enums.Stats.HITPOINTS,
-			{
-				"icon": _get_status_icon(Enums.StatusEffects.REGENERATION),
-				"color": _get_color("regeneration"),
-				"source_name": "Regeneration"
-			}
-		)
+		#combat_manager.animation_manager.play_damage_indicator(
+		#	entity, heal_amount, Enums.Stats.HITPOINTS,
+		#	{
+		#		"icon": _get_status_icon(Enums.StatusEffects.REGENERATION),
+		#		"color": _get_color("regeneration"),
+		#		"source_name": "Regeneration"
+		#	}
+		#)
 		
 		# Emit status proc signal
 		combat_manager.status_proc.emit(entity, Enums.StatusEffects.REGENERATION, Enums.Stats.HITPOINTS, heal_amount)
@@ -353,12 +356,46 @@ func _process_blind(entity):
 
 	await CombatSpeed.create_timer(CombatSpeed.get_duration("status_effect"))
 
-func _process_blessing(entity):
+func _process_blessing(entity, _stacks: int):
 	# Blessing: Special behavior on removal (heal 3 and gain 1 damage).
-	# Currently just tracks, actual removal behavior happens in remove_status.
+	var heal_per_stack = 3
+	var damage_per_stack = 1
+    
+	var total_heal = heal_per_stack * _stacks
+	var total_damage = damage_per_stack * _stacks
 
-	# Blessing doesn't proc at turn start, it procs when removed
-	pass
+	var old_hp: int = entity.stats.hit_points_current
+
+	if total_heal > 0:
+		combat_manager.damage_system.heal_entity(entity, total_heal, null)
+	if total_damage > 0:
+		stat_handler.change_stat(entity, Enums.Stats.DAMAGE, total_damage, Enums.StatType.CURRENT)
+
+	var new_hp: int  = entity.stats.hit_points_current
+	var actual_heal: int  = new_hp - old_hp
+	var overheal: int = total_heal - actual_heal
+
+	# LOG with colors
+	var str_overheal: String = ""
+	if overheal > 0:
+		str_overheal = "(Overheal for %s.)" % [combat_manager.color_text(str(overheal), game_colors.stats.hit_points)]
+
+	combat_manager.add_to_combat_log_string(
+		"   %s: Removed %d from %s. Healing %s HP %sand gaining %s attack damage." % [
+			combat_manager.color_status("Blessing"),
+			_stacks,
+			combat_manager.color_entity(_get_entity_name(entity)),
+			combat_manager.color_text(str(total_heal), game_colors.stats.hit_points),
+			str_overheal,
+			combat_manager.color_text(str(total_damage), game_colors.stats.damage)
+		]
+	)
+
+	if overheal > 0:
+		overheal_triggered.emit(entity, overheal)
+
+	combat_manager.status_proc.emit(entity, Enums.StatusEffects.BLESSING, Enums.Stats.DAMAGE, _stacks)
+
 
 # ===== TURN END PROCESSING =====
 
@@ -372,7 +409,6 @@ func process_turn_end_status_effects(entity):
 	await _process_burn(entity)  
 	await _process_regeneration(entity)  
 	await _process_blind(entity)  
-	#await _process_blessing(entity)  # MANUALLY PROC'ED ON REMOVAL
 
 	pass
 

@@ -18,6 +18,16 @@ func set_references():
 	panel_main = $mainPanel
 	anim_player = $AnimationPlayer
 
+func show_box():
+	anim_player.play("show_box")
+
+func hide_box():
+	anim_player.play("hide_box")
+
+func update_label(_new_val: int):
+	anim_player.play("update_box")
+	lbl_amount.text = str(_new_val)
+	
 func set_status(_stat: Enums.StatusEffects, amount: int):
 	set_references()
 	var status_acid: Texture2D = load("res://Resources/StatIcons/StatusIcons/status_acid.tres")

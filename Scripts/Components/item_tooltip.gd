@@ -9,8 +9,10 @@ extends Control
 @onready var lbl_desc: RichTextLabel 
 @onready var stats_grid: GridContainer 
 @onready var category_grid: GridContainer
+@onready var txt_upgrades: RichTextLabel
 
 var gamecolors: GameColors
+var is_from_compendium: bool = false
 
 const KEYWORDS = {
 	"acid": {
@@ -96,6 +98,7 @@ func set_references():
 	stats_grid = $Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/statsGrid
 	category_grid = $Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/categoryGrid
 	vbox = $Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer
+	txt_upgrades = $Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/txtUpgrades
 	gamecolors = GameColors.new()
 
 func set_item(this_item: Item, create_definitions: bool = true):
@@ -106,6 +109,8 @@ func set_item(this_item: Item, create_definitions: bool = true):
 	lbl_name.text = this_item.item_name
 	set_rarity()
 	get_stat_bonuses()
+
+	set_upgrades()
 
 	show_description(this_item, create_definitions)
 	show_stats()
@@ -122,19 +127,66 @@ func set_bonus():
 func set_tooltip_position(_pos: Vector2):
 	global_position = _pos
 
+func set_upgrades():
+	var str_upgrades: String = ""
+	if !is_from_compendium:
+		if current_item.item_type == Item.ItemType.WEAPON:
+			if current_item.item_id != Player.inventory.weapon_slot.item_id:
+				return
+			if Player.current_weapon_stat_upgrades["damage"] > 0 :
+				str_upgrades += "[color=#ff4444][b] blood[/b][/color]"
+			if Player.current_weapon_stat_upgrades["shield"] > 0 :
+				if str_upgrades != "":
+					str_upgrades += ","
+				str_upgrades += "[color=#6699ff][b] spit[/b][/color] "
+			if Player.current_weapon_stat_upgrades["agility"] > 0 :
+				if str_upgrades != "":
+					if str_upgrades.contains(","):
+						str_upgrades += ", and"
+					else:
+						str_upgrades += " and"
+				str_upgrades += "[color=#ffdd44][b] sweat[/b][/color]"
+			
+	if str_upgrades != "":
+		txt_upgrades.visible = true
+		txt_upgrades.text = "It's covered in" + str_upgrades + "."
+
 func get_stat_bonuses():
 	stats_to_add.clear()
 	var statcount: int = 0
 
-	if current_item.damage_bonus != 0:
-		stats_to_add[statcount] = {"name": "damage", "value": str(current_item.damage_bonus)}
-		statcount += 1
-	if current_item.shield_bonus != 0:
-		stats_to_add[statcount] = {"name": "shield", "value": str(current_item.shield_bonus)}
-		statcount += 1	
-	if current_item.agility_bonus != 0:
-		stats_to_add[statcount] = {"name": "agility", "value": str(current_item.agility_bonus)}
-		statcount += 1	
+	if !is_from_compendium:
+		if current_item.item_type == Item.ItemType.WEAPON && current_item.item_id == Player.inventory.weapon_slot.item_id:
+			if current_item.damage_bonus != 0 || Player.current_weapon_stat_upgrades["damage"] != 0 :
+				stats_to_add[statcount] = {"name": "damage", "value": str(current_item.damage_bonus + Player.current_weapon_stat_upgrades["damage"])}
+				statcount += 1
+			if current_item.shield_bonus != 0 || Player.current_weapon_stat_upgrades["shield"] != 0 :
+				stats_to_add[statcount] = {"name": "shield", "value": str(current_item.shield_bonus + Player.current_weapon_stat_upgrades["shield"])}
+				statcount += 1
+			if current_item.agility_bonus != 0 || Player.current_weapon_stat_upgrades["agility"] != 0 :
+				stats_to_add[statcount] = {"name": "agility", "value": str(current_item.agility_bonus + Player.current_weapon_stat_upgrades["agility"])}
+				statcount += 1
+		else:
+			if current_item.damage_bonus != 0:
+				stats_to_add[statcount] = {"name": "damage", "value": str(current_item.damage_bonus)}
+				statcount += 1
+			if current_item.shield_bonus != 0:
+				stats_to_add[statcount] = {"name": "shield", "value": str(current_item.shield_bonus)}
+				statcount += 1	
+			if current_item.agility_bonus != 0:
+				stats_to_add[statcount] = {"name": "agility", "value": str(current_item.agility_bonus)}
+				statcount += 1	
+	else:
+		if current_item.damage_bonus != 0:
+			stats_to_add[statcount] = {"name": "damage", "value": str(current_item.damage_bonus)}
+			statcount += 1
+		if current_item.shield_bonus != 0:
+			stats_to_add[statcount] = {"name": "shield", "value": str(current_item.shield_bonus)}
+			statcount += 1	
+		if current_item.agility_bonus != 0:
+			stats_to_add[statcount] = {"name": "agility", "value": str(current_item.agility_bonus)}
+			statcount += 1	
+
 	if current_item.hit_points_bonus != 0:
 		stats_to_add[statcount] = {"name": "hitpoints", "value": str(current_item.hit_points_bonus)}
 		statcount += 1	

@@ -1,6 +1,8 @@
 class_name CombatItemProcessor
 extends Node
 
+signal occurrence_updated(entity, item: Item, trigger_type: Enums.TriggerType, current_count: int, max_count: int)
+
 ## Handles item trigger validation, occurrence counting, and item collection
 ## This is the gatekeeper that determines WHICH items should trigger and WHEN
 
@@ -73,11 +75,11 @@ func process_items_with_status(entity, trigger_type: Enums.TriggerType, trigger_
 	return validated_items
 
 func _collect_set_bonus_items(entity, trigger_type: Enums.TriggerType, trigger_stat: Enums.Stats, trigger_status: Enums.StatusEffects) -> Array:
-    # Collect triggered rules from set bonus items."""
+	# Collect triggered rules from set bonus items."""
 	var items_to_proc = []
-    
-	var bonus_items = SetBonusManager.get_granted_items(entity)
-    
+	
+	var bonus_items = SetBonusManager.get_active_set_bonuses(entity)
+	
 	for item in bonus_items:
 		for rule in item.rules:
 			if rule.trigger_type == trigger_type:
@@ -288,6 +290,19 @@ func increment_occurrence_counter(entity, item: Item, trigger_type: Enums.Trigge
 	
 	occurrence_counters[entity][trigger_type][item] += 1
 
+	# Emit signal for UI update
+	if item.trigger_on_occurrence_number > 0:
+		var current = occurrence_counters[entity][trigger_type][item]
+		# If trigger_only_once and already triggered, show "X" or hide counter
+		if item.trigger_only_once and has_item_triggered(entity, item):
+			occurrence_updated.emit(entity, item, trigger_type, current, 0)  # Show 0 or hide
+		else:
+			# Calculate remaining until next trigger
+			var remaining = item.trigger_on_occurrence_number - (current % item.trigger_on_occurrence_number)
+			if remaining == item.trigger_on_occurrence_number:
+				remaining = 0  # Just triggered
+			occurrence_updated.emit(entity, item, trigger_type, current, remaining)
+
 func check_occurrence_match(entity, item: Item, rule: ItemRule, trigger_type: Enums.TriggerType) -> bool:
 	# Check if the current occurrence count matches the item's trigger_on_occurrence_number.
 	
@@ -332,7 +347,7 @@ func reset_occurrence_counters_per_turn(entity):
 		for item in entity.inventory.item_slots:
 			if item and item.occurrence_resets_per_turn:
 				_reset_item_occurrences(entity, item)
-	
+
 	# FALLBACK: Old enemy ability system
 	elif "abilities" in entity and entity.abilities:
 		for ability in entity.abilities:
@@ -347,6 +362,11 @@ func _reset_item_occurrences(entity, item: Item):
 	for trigger_type in occurrence_counters[entity].keys():
 		if occurrence_counters[entity][trigger_type].has(item):
 			occurrence_counters[entity][trigger_type][item] = 0
+
+			# Emit signal for UI reset
+			if item.trigger_on_occurrence_number > 0:
+				occurrence_updated.emit(entity, item, trigger_type, 0, item.trigger_on_occurrence_number)
+
 
 # ===== TRIGGER TRACKING =====
 

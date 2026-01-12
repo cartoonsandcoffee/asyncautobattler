@@ -112,19 +112,23 @@ func _play_turn_start(entity, turn_number: int):
 	await turn_sign.turn_animation_done
 
 func _play_status_effects_milestone():
-	await CombatSpeed.create_timer(CombatSpeed.get_duration("status_effect"))
+	pass
+	#await CombatSpeed.create_timer(CombatSpeed.get_duration("status_effect"))
 
 func _play_item_effects_milestone():
-	await CombatSpeed.create_timer(CombatSpeed.get_duration("item_proc"))
+	pass
+	#await CombatSpeed.create_timer(CombatSpeed.get_duration("item_proc"))
 
 func _play_attacks_milestone():
-	await CombatSpeed.create_timer(CombatSpeed.get_duration("attack_slide"))
+	pass
+	#await CombatSpeed.create_timer(CombatSpeed.get_duration("attack_slide"))
 
 func _play_turn_end():
+	pass
 	# Turn end cleanup
-	if combat_panel:
-		combat_panel._clear_all_highlights()
-	await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap"))
+	#if combat_panel:
+	#	combat_panel._clear_all_highlights()
+	#await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap"))
 
 func _play_battle_end(winner, loser):
 	var winner_name = CombatManager.get_entity_name(winner)
@@ -178,28 +182,31 @@ func _execute_item_sequence(items: Array, entity, trigger_type: String):
 		var rule = item_data.rules[0]			    # item_data["rule"]
 		var slot_index = item_data.slot_index		# item_data.get("slot_index", -1)
 		
+		## -- JDM: Removing Item highlighting during combat, seems redundant and causes visual noise
+
 		# ----- STEP 1: Highlight the item
 		# Highlight the item slot
-		if combat_panel and entity == CombatManager.player_entity:
-			combat_panel.highlight_item_slot(slot_index, slot_index == -1)
+		#if combat_panel and entity == CombatManager.player_entity:
+		#	combat_panel.highlight_item_slot(slot_index, slot_index == -1)
 
 		# Brief moment for highlight to be visible
-		await CombatSpeed.create_timer(CombatSpeed.get_duration("item_highlight_brief"))
+		#await CombatSpeed.create_timer(CombatSpeed.get_duration("item_highlight_brief"))
 		
 		# ----- STEP 2: Show Item Proc
 		if combat_panel:
 			combat_panel.spawn_item_proc_indicator(item, rule, entity)
 			var proc_duration = CombatSpeed.get_duration("item_proc")
-			await CombatSpeed.create_timer(proc_duration * 0.8)  # Wait for most of animation
+			#await CombatSpeed.create_timer(proc_duration * 0.8)  # Wait for most of animation
 
 			# emit completion so the status effects update
 			item_proc_complete.emit(entity, rule)
 
+		## -- JDM: removing this because removing item highlighting, but that if-statement may be useful for overlap timing
 		# ----- STEP 3: Clear Highlight, move to next
-		if combat_panel:
-			combat_panel._clear_all_highlights()
-			if i < items.size() - 1:
-				await CombatSpeed.create_timer(CombatSpeed.get_duration("item_highlight_brief"))
+		#if combat_panel:
+		#	combat_panel._clear_all_highlights()
+		#	if i < items.size() - 1:
+		#		await CombatSpeed.create_timer(CombatSpeed.get_duration("item_highlight_brief"))
 
 		#await CombatSpeed.create_timer(CombatSpeed.get_overlap_duration())
 		#item_animation_complete.emit(item)
@@ -230,18 +237,17 @@ func _execute_attack_animation(attacker, target):
 	if is_player_attacking:
 		var anim_name = _get_animation_variant("player_attack")
 		combat_panel.player_anim.speed_scale = 1.0
-		combat_panel.player_anim.play(anim_name)
-
 		var anim_length = combat_panel.player_anim.get_animation("player_attack").length
-		await CombatSpeed.create_timer(anim_length)
+		combat_panel.player_anim.play(anim_name)
+		#await CombatSpeed.create_timer(anim_length * 0.5)
 
 	else:
 		var anim_name = _get_animation_variant("enemy_attack")
 		combat_panel.enemy_anim.speed_scale = 1.0
-		combat_panel.enemy_anim.play(anim_name)
-		
 		var anim_length = combat_panel.enemy_anim.get_animation(anim_name).length
-		await CombatSpeed.create_timer(anim_length)
+		combat_panel.enemy_anim.play(anim_name)
+
+		#await CombatSpeed.create_timer(anim_length * 0.5)
 
 func play_damage_indicator(target, amount: int, damage_stat: Enums.Stats, visual_info: Dictionary):
 	"""Queue a damage indicator animation"""
@@ -303,12 +309,13 @@ func _execute_animation_request(request: AnimationRequest):
 		AnimationType.MILESTONE:
 			await _execute_milestone(request.data.name, request.data.get("data", {}))
 
-		AnimationType.ITEM_SEQUENCE:  # This calls your new function
-			await _execute_item_sequence(
-				request.data.items,
-				request.data.entity,
-				request.data.trigger_type
-			)	
+		AnimationType.ITEM_SEQUENCE:  # Testing if this function is unnecessary now
+			pass
+			#await _execute_item_sequence(
+			#	request.data.items,
+			#	request.data.entity,
+			#	request.data.trigger_type
+			#)	
 
 		AnimationType.ITEM_HIGHLIGHT:
 			pass #handled in item sequencer now
@@ -352,7 +359,7 @@ func _on_combat_started(player, enemy):
 
 func _on_combat_ended(winner, loser):
 	# Wait a moment for any final animations
-	await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap"))
+	#await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap"))
 	
 	# Clear everything
 	clear_all_animations()
@@ -431,7 +438,7 @@ func wait_for_all_animations():
 				await child.stat_animation_done
 	
 	# Small final pause
-	await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap"))
+	#await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap"))
 
 func is_busy() -> bool:
 	return is_processing

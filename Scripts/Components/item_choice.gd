@@ -44,8 +44,6 @@ func set_references():
 	lbl_order = $Panel/VBoxContainer/orderContainer/MarginContainer/lblOrder
 	item_icon = $Panel/VBoxContainer/itemContainer/MarginContainer/item_icon
 	anim_hover = $animSelect
-	#tooltip = $ToolTip/ItemTooltip
-	#tooltip_panel = $ToolTip
 	button = $Panel/Button
 	lbl_price = $Panel/priceContainer/MarginContainer/hboxCost/lblPrice
 	price_container = $Panel/priceContainer
@@ -64,7 +62,6 @@ func set_item(item: Item):
 		current_item = item
 		item_instance_id = item.instance_id  
 		update_visuals()
-		#tooltip.set_item(item)
 		button.disabled = false
 	else:
 		set_empty()
@@ -164,7 +161,6 @@ func can_afford():
 func _on_button_mouse_exited() -> void:
 	anim_hover.play("stop")
 	CursorManager.reset_cursor()
-	#tooltip_panel.visible = false
 	TooltipManager.hide_tooltip() 
 	panel_border.modulate = Color.WHITE
 
@@ -174,7 +170,6 @@ func _on_button_mouse_entered() -> void:
 		CursorManager.set_interact_cursor()
 	if !button.disabled:
 		anim_hover.play("hover")
-		#tooltip_panel.visible = true
 		TooltipManager.show_item_tooltip(current_item, global_position, size)
 
 func _on_button_pressed() -> void:
