@@ -84,7 +84,9 @@ var gamecolors: GameColors
 var player_pos: Vector2 = Vector2(422, 262)
 var enemy_pos: Vector2 = Vector2(695,180)
 var pos_shift: int = 15
-var last_indicator_spawn_time: float = 0.0
+#var last_indicator_spawn_time: float = 0.0
+var indicator_spawn_queue: Array[Dictionary] = []
+var is_processing_indicator_queue: bool = false
 
 func _ready():
 	# Start off-screen
@@ -103,8 +105,6 @@ func connect_combat_signals():
 	# --- Combat event signals
 	CombatManager.healing_applied.connect(_on_healing_applied)
 	CombatManager.stat_changed.connect(_on_stat_changed)
-	#CombatManager.status_applied.connect(_on_status_applied)   # JDM: - Remove this? 
-	#CombatManager.status_removed.connect(_on_status_removed)   # JDM: - Remove this?
 	CombatManager.status_proc.connect(spawn_status_proc_indicator)
 
 	# --- Item/ability triggers
@@ -115,9 +115,6 @@ func connect_combat_signals():
 	CombatManager.entity_exposed.connect(_on_entity_exposed)
 	CombatManager.entity_wounded.connect(_on_entity_wounded)
 
-	# Connect to animation completion for item-based status effects
-	#CombatManager.animation_manager.item_proc_complete.connect(_on_item_proc_complete)
-	
 	# Connect to status changes for turn-based procs (poison, burn, etc.)
 	#CombatManager.status_handler.status_applied.connect(_on_status_data_changed)
 	#CombatManager.status_handler.status_removed.connect(_on_status_data_changed)
@@ -289,6 +286,7 @@ func _on_combat_ended(winner, loser):
 	_set_state(PanelState.POST_COMBAT)
 	_clear_all_highlights()
 	clear_all_proc_indicators()
+	clear_indicator_queue()  # Clear any pending indicators when combat ends
 
 	if winner == current_player_entity:
 		slide_animation.play("show_victory")
@@ -337,16 +335,20 @@ func _get_status_enum(status_name: String) -> Enums.StatusEffects:
 		"acid": return Enums.StatusEffects.ACID
 		"thorns": return Enums.StatusEffects.THORNS
 		"bleed": return Enums.StatusEffects.BLEED
+		"thorns": return Enums.StatusEffects.THORNS
+		"regeneration": return Enums.StatusEffects.REGENERATION
+		"blessing": return Enums.StatusEffects.BLESSING
+		"stun": return Enums.StatusEffects.STUN
+		"random": return Enums.StatusEffects.RANDOM
 		_: return Enums.StatusEffects.NONE
 
-func create_damage_indicator(target, amount: int, damage_stat: Enums.Stats, visual_info: Dictionary) -> void:
+func _spawn_damage_indicator_immediate(target, amount: int, damage_stat: Enums.Stats, visual_info: Dictionary) -> void:
 	"""Create a damage indicator at the appropriate position - called by AnimationManager"""
-	await _wait_for_indicator_stagger()
 	var combat_item_proc = item_proc.instantiate()
 	
 	combat_item_proc.set_references()
 	combat_item_proc.set_label(amount * -1)  # Negative for damage
-	combat_item_proc.set_info(visual_info.get("info", "Damage!"))
+	combat_item_proc.set_info(visual_info.get("source_name", "Damage!"))
 	
 	# Set visuals based on damage type
 	if visual_info.has("status"):
@@ -380,7 +382,7 @@ func create_damage_indicator(target, amount: int, damage_stat: Enums.Stats, visu
 
 func test_camera_shake():
 	if GameSettings.screen_shake_enabled:
-		main_game.screen_shake(30,0.5)
+		main_game.screen_shake(20,0.33)
 	AudioManager.play_synced_sound("combat_player_hit_light")
 
 func play_sfx_footstep():
@@ -426,10 +428,7 @@ func _on_status_removed(entity, status: Enums.StatusEffects, stacks: int):
 func _on_item_rule_triggered(item: Item, rule: ItemRule, entity):
 	pass
 
-func spawn_item_proc_indicator(item: Item, rule: ItemRule, entity, amount: int = 0):
-	# Wait for any previous spawn to finish
-	await _wait_for_indicator_stagger()
-
+func _spawn_item_proc_indicator_immediate(item: Item, rule: ItemRule, entity, amount: int = 0):
 	var combat_item_proc = item_proc.instantiate()
 	var _pos = Vector2(0,0)
 	var offset = Vector2(45, -50)
@@ -486,10 +485,7 @@ func spawn_item_proc_indicator(item: Item, rule: ItemRule, entity, amount: int =
 		combat_item_proc.position = player_pos + Vector2(randi_range(-pos_shift, pos_shift), 0)
 		combat_item_proc.run_animation(Enums.Party.PLAYER)
 
-func spawn_status_proc_indicator(entity, _status: Enums.StatusEffects, _stat: Enums.Stats, value: int):
-	# Wait for any previous spawn to finish
-	await _wait_for_indicator_stagger()
-	
+func _spawn_status_proc_indicator_immediate(entity, _status: Enums.StatusEffects, _stat: Enums.Stats, value: int):
 	var combat_item_proc = item_proc.instantiate()
 	
 	combat_item_proc.set_references()
@@ -780,13 +776,104 @@ func hide_death_panel():
 		death_panel.visible = false
 		visible = false
 
-func _wait_for_indicator_stagger():
-	# Ensure minimum delay between indicator spawns for visual clarity
-	var time_since_last = Time.get_ticks_msec() / 1000.0 - last_indicator_spawn_time
-	var required_delay: float = CombatSpeed.get_duration("proc_overlap")
+# ============================================================================
+# PUBLIC SPAWN FUNCTIONS (Entry Points - Called from everywhere)
+# ============================================================================
 
-	if time_since_last < required_delay:
-		var wait_time = required_delay - time_since_last
-		await get_tree().create_timer(wait_time).timeout
+func spawn_status_proc_indicator(entity, _status: Enums.StatusEffects, _stat: Enums.Stats, value: int):
+	"""Queue a status effect indicator spawn"""
+	indicator_spawn_queue.append({
+		"type": "status",
+		"entity": entity,
+		"status": _status,
+		"stat": _stat,
+		"value": value
+	})
+	
+	if not is_processing_indicator_queue:
+		_process_indicator_queue()
 
-	last_indicator_spawn_time = Time.get_ticks_msec() / 1000.0
+func spawn_item_proc_indicator(item: Item, rule: ItemRule, entity, amount: int = 0):
+	"""Queue an item proc indicator spawn"""
+	indicator_spawn_queue.append({
+		"type": "item",
+		"item": item,
+		"rule": rule,
+		"entity": entity,
+		"amount": amount
+	})
+	
+	if not is_processing_indicator_queue:
+		_process_indicator_queue()
+
+func create_damage_indicator(target, amount: int, damage_stat: Enums.Stats, visual_info: Dictionary):
+	"""Queue a damage indicator spawn"""
+	indicator_spawn_queue.append({
+		"type": "damage",
+		"target": target,
+		"amount": amount,
+		"damage_stat": damage_stat,
+		"visual_info": visual_info
+	})
+	
+	if not is_processing_indicator_queue:
+		_process_indicator_queue()	
+	
+# ============================================================================
+# QUEUE PROCESSOR (Sequential Spawning with Timing)
+# ============================================================================
+
+func _process_indicator_queue():
+	"""Process the indicator spawn queue sequentially with proper timing"""
+	if is_processing_indicator_queue:
+		return
+	
+	is_processing_indicator_queue = true
+	
+	while not indicator_spawn_queue.is_empty():
+		var request = indicator_spawn_queue.pop_front()
+		
+		# Spawn the appropriate indicator type
+		match request.type:
+			"status":
+				_spawn_status_proc_indicator_immediate(
+					request.entity,
+					request.status,
+					request.stat,
+					request.value
+				)
+			"item":
+				_spawn_item_proc_indicator_immediate(
+					request.item,
+					request.rule,
+					request.entity,
+					request.amount
+				)
+			"damage":
+				_spawn_damage_indicator_immediate(
+					request.target,
+					request.amount,
+					request.damage_stat,
+					request.visual_info
+				)
+		
+		# Wait for readability (respects combat speed settings)
+		await CombatSpeed.create_timer(CombatSpeed.get_duration("status_effect"))
+	
+	is_processing_indicator_queue = false
+
+# ============================================================================
+# QUEUE MANAGEMENT UTILITIES
+# ============================================================================
+
+func clear_indicator_queue():
+	"""Clear the indicator queue (useful for combat end or reset)"""
+	indicator_spawn_queue.clear()
+	is_processing_indicator_queue = false
+
+func wait_for_indicator_queue_to_finish():
+	"""Wait for all queued indicators to finish processing"""
+	# If queue is actively processing, wait for it to complete
+	
+	while is_processing_indicator_queue or not indicator_spawn_queue.is_empty():
+		await get_tree().process_frame
