@@ -381,7 +381,7 @@ func _execute_conversion(rule: ItemRule, source_entity, item: Item):
 		visual_rule_placeholder.trigger_type = rule.trigger_type		
 
 	# SPAWN PROC VISUAL FOR CONVERT_TO PART
-	await CombatSpeed.create_timer(CombatSpeed.get_duration("proc_overlap")) #JDM: Pause should be handled in proc spawn now <-- this line was the pause between the two visual indicators for converting stats.
+	#await CombatSpeed.create_timer(CombatSpeed.get_duration("proc_overlap")) #JDM: Pause should be handled in proc spawn now <-- this line was the pause between the two visual indicators for converting stats fro
 	await combat_manager.proc_item(item, visual_rule_placeholder, source_entity, to_amount)
 
 	combat_manager.add_to_combat_log_string("   %s - Converts %s %s -> %s %s" % [

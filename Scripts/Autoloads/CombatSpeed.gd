@@ -42,8 +42,6 @@ const BASE_DURATIONS = {
 	"milestone_sign": 1.3,        # Battle Start, Turn Start signs
 
 	# ITEM PROCESSING
-	"item_highlight": 1.2,         # Item slot highlighting     --- REMOVE ME 
-	"item_highlight_brief": 0.6,   # brief flash                --- REMOVE ME
 	"item_proc": 0.8,              # Item effect proc animation
 	"proc_overlap": 0.66,           # Time before starting next proc (for overlap)
 	
@@ -52,7 +50,7 @@ const BASE_DURATIONS = {
 	"attack_gap": 0.2,             # between multiple strikes
 
 	# VISUAL FEEDBACK
-	"damage_number": 1.0,          # Damage indicator animation
+	"damage_number": 0.8,          # Damage indicator animation
 	"exposed_wounded": 1.0,        # Timing for these effects
 	"status_effect": 0.8,          # Status effect visual
 
@@ -134,17 +132,6 @@ func exit_combat():
 
 func create_timer(duration: float) -> SceneTreeTimer:
 	# Then create the actual timer
-	var mod_duration: float = 1.0
-
-	match current_mode:
-		CombatSpeedMode.PAUSE, CombatSpeedMode.NORMAL:
-			mod_duration = 1.0
-		CombatSpeedMode.FAST:
-			mod_duration = 0.75
-		CombatSpeedMode.VERY_FAST:
-			mod_duration = 0.66
-		CombatSpeedMode.INSTANT:
-			mod_duration = 0.5
 
 	if duration > 0:
 		await get_tree().create_timer(duration).timeout

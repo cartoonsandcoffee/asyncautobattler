@@ -113,22 +113,18 @@ func _play_turn_start(entity, turn_number: int):
 
 func _play_status_effects_milestone():
 	pass
-	#await CombatSpeed.create_timer(CombatSpeed.get_duration("status_effect"))
 
 func _play_item_effects_milestone():
 	pass
-	#await CombatSpeed.create_timer(CombatSpeed.get_duration("item_proc"))
+
 
 func _play_attacks_milestone():
 	pass
-	#await CombatSpeed.create_timer(CombatSpeed.get_duration("attack_slide"))
+
 
 func _play_turn_end():
 	pass
-	# Turn end cleanup
-	#if combat_panel:
-	#	combat_panel._clear_all_highlights()
-	#await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap"))
+
 
 func _play_battle_end(winner, loser):
 	var winner_name = CombatManager.get_entity_name(winner)
@@ -212,7 +208,7 @@ func _execute_item_sequence(items: Array, entity, trigger_type: String):
 		#item_animation_complete.emit(item)
 
 	# Brief pause after all items complete
-	await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap"))
+	#await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap"))
 
 
 # ===== ITEM ANIMATION SYSTEM =====
@@ -298,7 +294,7 @@ func _process_animation_queue():
 		await _execute_animation_request(request)
 		
 		# Brief gap between animations for clarity
-		await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap"))
+		#await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap"))
 	
 	is_processing = false
 	animation_sequence_complete.emit()

@@ -168,9 +168,18 @@ func process_battle_start_events(first_entity, second_entity):
 	add_to_combat_log_string("\n%s's Battle Start items triggered:" % color_entity(get_entity_name(first_entity)))
 	await process_entity_items_sequentially(first_entity, Enums.TriggerType.BATTLE_START)
 	
+	# - Wait for first wave of BATTLE START items to proc
+	if animation_manager and animation_manager.combat_panel:
+		await animation_manager.combat_panel.wait_for_indicator_queue_to_finish()
+
 	# Second entity's battle start items
 	add_to_combat_log_string("\n%s's Battle Start items triggered:" % color_entity(get_entity_name(second_entity)))
 	await process_entity_items_sequentially(second_entity, Enums.TriggerType.BATTLE_START)
+
+	# - Wait for second wave of BATTLE START items to proc
+	if animation_manager and animation_manager.combat_panel:
+		await animation_manager.combat_panel.wait_for_indicator_queue_to_finish()
+
 
 func combat_loop(first_entity, second_entity):
 	# --- Main combat loop - alternates turns until combat ends.
@@ -217,6 +226,10 @@ func execute_turn(entity):
 	add_to_combat_log_string("\n%s's Turn Start items triggered:" % color_entity(get_entity_name(entity)))
 	await process_entity_items_sequentially(entity, Enums.TriggerType.TURN_START)
 	
+	# JDM - timing wait for all turn start procs to finish
+	if animation_manager and animation_manager.combat_panel:
+		await animation_manager.combat_panel.wait_for_indicator_queue_to_finish()
+
 	if entity.status_effects.stun > 0:
 		# If they're stunned, skip attack
 		add_to_combat_log_string(color_entity(get_entity_name(entity)) + " is stunned! Turn skipped.")
@@ -232,6 +245,10 @@ func execute_turn(entity):
 	# Turn end
 	turn_ended.emit(entity)
 	await process_entity_items_sequentially(entity, Enums.TriggerType.TURN_END)
+
+	# JDM: wait for items to finish procing at turn end
+	if animation_manager and animation_manager.combat_panel:
+		await animation_manager.combat_panel.wait_for_indicator_queue_to_finish()
 
 	#await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap"))
 
@@ -264,6 +281,10 @@ func execute_attack_sequence(attacker):
 		add_to_combat_log_string("   -> On Hit items triggered:")
 		await process_entity_items_sequentially(attacker, Enums.TriggerType.ON_HIT)
 		
+		# JDM: Wait for ON HIT procs to finish
+		#if animation_manager and animation_manager.combat_panel:
+		#	await animation_manager.combat_panel.wait_for_indicator_queue_to_finish()
+
 		# Small gap between strikes
 		if strike < strikes - 1:
 			await CombatSpeed.create_timer(CombatSpeed.get_duration("attack_gap"))
@@ -372,7 +393,7 @@ func proc_item(item, rule, entity, amount: int):
 	if combat_panel:
 		if amount != 0: # Don't proc if a value doesn't change
 			combat_panel.spawn_item_proc_indicator(item, rule, entity, amount)
-			await CombatSpeed.create_timer(CombatSpeed.get_duration("item_proc")) # JDM - timer pause now handled in spawn function
+			#await CombatSpeed.create_timer(CombatSpeed.get_duration("item_proc")) # JDM - timer pause now handled in spawn function
 
 func process_entity_items_with_status(entity, trigger_type: Enums.TriggerType, trigger_status: Enums.StatusEffects):
 	"""Process items that trigger based on status effects."""
@@ -394,9 +415,7 @@ func process_entity_items_with_status(entity, trigger_type: Enums.TriggerType, t
 		
 		var target = _get_rule_target(entity, rule.target_type)
 		await effect_executor.execute_item_rule(item, rule, entity, target)
-		
-		await CombatSpeed.create_timer(CombatSpeed.get_duration("proc_overlap")) #JDM: pause should be handled in proc spawn now
-	
+
 	await animation_manager.wait_for_current_sequence()
 
 # ===== COMBAT END =====

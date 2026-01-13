@@ -175,7 +175,6 @@ func _done():
 	var anim_length = anim_player.get_animation("hide").length
 	await CombatSpeed.create_timer(anim_length)
 
-	#await anim_player.animation_finished
 	queue_free()
 
 func run_animation(_party: Enums.Party):

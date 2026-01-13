@@ -38,12 +38,6 @@ func apply_status(entity, status: Enums.StatusEffects, stacks: int):
 	
 	var new_value = get_status_value(entity, status)
 	
-	# Emit signals
-	#status_applied.emit(entity, status, stacks)
-	
-	# Log
-	#_log_status_change(entity, status, old_value, new_value, true)
-
 	# Trigger ON_STATUS_GAINED items
 	status_gained_triggered.emit(entity, status)
 
@@ -136,8 +130,13 @@ func process_turn_start_status_effects(entity):
 		return		
 
 	# Process each status effect type
-	_process_acid(entity)
-	_process_poison(entity)
+	await _process_acid(entity)
+	await _process_poison(entity)
+
+	# New timing code instead of all the CombatSpeed.create_timer(...) calls for visual procs
+	var combat_panel = get_tree().get_first_node_in_group("combat_panel")
+	if combat_panel:
+		await combat_panel.wait_for_indicator_queue_to_finish()
 
 
 # ===== INDIVIDUAL STATUS PROCESSORS =====
@@ -175,23 +174,10 @@ func _process_poison(entity):
 				new_hp
 			])
 
-		# Visual feedback
-		#combat_manager.animation_manager.play_damage_indicator(
-		#	entity, damage, Enums.Stats.HITPOINTS,
-		#	{
-		#		"icon": _get_status_icon(Enums.StatusEffects.POISON),
-		#		"color": _get_color("poison"),
-		#		"source_name": "Poison"
-		#	}
-		#)
-		
-		# Emit status proc signal
 		combat_manager.status_proc.emit(entity, Enums.StatusEffects.POISON, Enums.Stats.HITPOINTS, -damage)
 	
 	# Always decrement poison by 1
 	remove_status(entity, Enums.StatusEffects.POISON, 1)
-
-	await CombatSpeed.create_timer(CombatSpeed.get_duration("status_effect"))
 
 func _process_burn(entity):
 	# Burn: Damages HP based on burn_damage stat * burn stacks.
@@ -217,17 +203,6 @@ func _process_burn(entity):
 			combat_manager.color_entity(_get_entity_name(entity)),
 			combat_manager.color_text(str(total_damage), game_colors.stats.burn)])
 
-	# --- JDM: Commented this bit out because the combat_manager.damage_system also procs the visual indicator (they were overlapping)
-	# Visual feedback
-	#combat_manager.animation_manager.play_damage_indicator(
-	#	entity, total_damage, Enums.Stats.HITPOINTS,
-	#	{
-	#		"icon": _get_status_icon(Enums.StatusEffects.BURN),
-	#		"color": _get_color("burn"),
-	#		"source_name": "Burn"
-	#	}
-	#)
-	
 	# Apply burn damage through damage system
 	# This respects shield and can trigger EXPOSED
 	if combat_manager.damage_system:
@@ -235,8 +210,6 @@ func _process_burn(entity):
 		
 	# Decrement burn by 1
 	remove_status(entity, Enums.StatusEffects.BURN, 1)
-
-	await CombatSpeed.create_timer(CombatSpeed.get_duration("status_effect"))
 
 func _process_acid(entity):
 	# Acid: Damages shield only, does NOT decrement naturally. Can trigger EXPOSED when shield reaches 0.
@@ -272,19 +245,8 @@ func _process_acid(entity):
 		if entity.stats.shield_current == 0:
 			stat_for_visual = Enums.Stats.EXPOSED
 		
-		#combat_manager.animation_manager.play_damage_indicator(
-		#	entity, damage_dealt, stat_for_visual,
-		#	{
-		#		"icon": _get_status_icon(Enums.StatusEffects.ACID),
-		#		"color": _get_color("acid"),
-		#		"source_name": "Acid"
-		#	}
-		#)
-		
-		# Emit status proc signal
 		combat_manager.status_proc.emit(entity, Enums.StatusEffects.ACID, stat_for_visual, -damage_dealt)
 		
-		await CombatSpeed.create_timer(CombatSpeed.get_duration("status_effect"))
 	else:
 		combat_manager.add_to_combat_log_string("   %s: %s has no shield to damage" % [
 				combat_manager.color_status("Acid"),
@@ -315,17 +277,6 @@ func _process_regeneration(entity):
 				combat_manager.color_text(str(actual_heal), game_colors.stats.regeneration),
 				old_hp, new_hp])
 		
-		# Visual feedback
-		#combat_manager.animation_manager.play_damage_indicator(
-		#	entity, heal_amount, Enums.Stats.HITPOINTS,
-		#	{
-		#		"icon": _get_status_icon(Enums.StatusEffects.REGENERATION),
-		#		"color": _get_color("regeneration"),
-		#		"source_name": "Regeneration"
-		#	}
-		#)
-		
-		# Emit status proc signal
 		combat_manager.status_proc.emit(entity, Enums.StatusEffects.REGENERATION, Enums.Stats.HITPOINTS, heal_amount)
 
 		if overheal > 0:
@@ -342,8 +293,6 @@ func _process_regeneration(entity):
 	# Decrement regen by 1
 	remove_status(entity, Enums.StatusEffects.REGENERATION, 1)
 
-	await CombatSpeed.create_timer(CombatSpeed.get_duration("status_effect"))
-
 func _process_blind(entity):
 	# Blind: Placeholder behavior - currently just decrements.
 	# TODO: Implement damage halving during attack phase.
@@ -353,8 +302,6 @@ func _process_blind(entity):
 	
 	# Decrement blind by 1
 	remove_status(entity, Enums.StatusEffects.BLIND, 1)
-
-	await CombatSpeed.create_timer(CombatSpeed.get_duration("status_effect"))
 
 func _process_blessing(entity, _stacks: int):
 	# Blessing: Special behavior on removal (heal 3 and gain 1 damage).
@@ -379,6 +326,9 @@ func _process_blessing(entity, _stacks: int):
 	var str_overheal: String = ""
 	if overheal > 0:
 		str_overheal = "(Overheal for %s.)" % [combat_manager.color_text(str(overheal), game_colors.stats.hit_points)]
+
+	if actual_heal > 0:
+		combat_manager.status_proc.emit(entity, Enums.StatusEffects.BLESSING, Enums.Stats.HITPOINTS, actual_heal)
 
 	combat_manager.add_to_combat_log_string(
 		"   %s: Removed %d from %s. Healing %s HP %sand gaining %s attack damage." % [
@@ -410,7 +360,12 @@ func process_turn_end_status_effects(entity):
 	await _process_regeneration(entity)  
 	await _process_blind(entity)  
 
-	pass
+	#JDM: Thorns should remove on turn_end so that way they proc for each hit/strike as a counter to many strikes
+
+	# New timing code instead of all the CombatSpeed.create_timer(...) calls for visual procs
+	var combat_panel = get_tree().get_first_node_in_group("combat_panel")
+	if combat_panel:
+		await combat_panel.wait_for_indicator_queue_to_finish()
 
 # ===== THORNS REFLECTION =====
 

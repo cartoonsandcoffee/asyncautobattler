@@ -135,7 +135,7 @@ func _check_thresholds(entity, stat: Enums.Stats, old_value: int, new_value: int
 				_mark_wounded_triggered(entity, true)
 
 				# Wait for damage animation to complete before showing wounded
-				await CombatSpeed.create_timer(CombatSpeed.get_duration("item_proc")) # JDM: pause now handled in proc spawn
+				#await CombatSpeed.create_timer(CombatSpeed.get_duration("item_proc")) # JDM: pause now handled in proc spawn
 
 				combat_manager.add_to_combat_log_string("[b][color=orange]%s IS WOUNDED![/color][/b]" % _get_entity_name(entity).to_upper())
 				wounded_triggered.emit(entity)
@@ -155,7 +155,7 @@ func _check_thresholds(entity, stat: Enums.Stats, old_value: int, new_value: int
 				_mark_exposed_triggered(entity, true)
 				
 				# Wait for damage animation to complete before showing exposed
-				await CombatSpeed.create_timer(CombatSpeed.get_duration("item_proc")) # JDM: Pause now handled in proc spawn
+				#await CombatSpeed.create_timer(CombatSpeed.get_duration("item_proc")) # JDM: Pause now handled in proc spawn
 
 				combat_manager.add_to_combat_log_string("[b][color=orange]%s IS EXPOSED![/color][/b]" % _get_entity_name(entity).to_upper())
 				exposed_triggered.emit(entity)
