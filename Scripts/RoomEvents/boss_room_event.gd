@@ -11,6 +11,7 @@ var boss_enemy: Enemy = null
 func _ready():
 	# Get main game reference
 	main_game_ref = get_tree().get_root().get_node_or_null("MainGame")
+	CombatSpeed.set_speed(CombatSpeed.CombatSpeedMode.NORMAL) #Always default to normal speed for boss battles
 	if not main_game_ref:
 		push_error("[BossRoom] Could not find MainGame node!")
 		return

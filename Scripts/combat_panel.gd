@@ -8,6 +8,7 @@ signal combat_ui_ready()
 signal player_chose_fight()
 signal player_chose_run()
 signal combat_completed(player_won: bool)
+signal attack_sequence_complete()
 
 enum PanelState {
 	HIDDEN,
@@ -115,9 +116,6 @@ func connect_combat_signals():
 	CombatManager.entity_exposed.connect(_on_entity_exposed)
 	CombatManager.entity_wounded.connect(_on_entity_wounded)
 
-	# Connect to status changes for turn-based procs (poison, burn, etc.)
-	#CombatManager.status_handler.status_applied.connect(_on_status_data_changed)
-	#CombatManager.status_handler.status_removed.connect(_on_status_data_changed)
 
 func setup_for_combat(enemy_entity, inventory_slots: Array[ItemSlot], weapon_slot: ItemSlot):
 	current_player_entity = Player
@@ -380,6 +378,37 @@ func _spawn_damage_indicator_immediate(target, amount: int, damage_stat: Enums.S
 		combat_item_proc.run_animation(Enums.Party.PLAYER)
 		Player.stats.stats_updated.emit()
 
+
+func _handle_status_box_update_immediate(entity, status: Enums.StatusEffects, stacks: int):
+	"""Handle status box update immediately (called from queue processor)"""
+	var container = player_status_container if entity == current_player_entity else enemy_status_container
+	
+	# Find existing box
+	var existing_box: StatusBox = null
+	for child in container.get_children():
+		if child is StatusBox and child.status == status:
+			existing_box = child
+			break
+	
+	if stacks > 0:
+		if existing_box:
+			# Update existing box
+			_update_status_box_value(existing_box, stacks)
+		else:
+			# Create new box
+			_create_status_box(container, status, stacks)
+	else:
+		# Remove box (stacks reached 0)
+		if existing_box:
+			_remove_status_box(existing_box)
+
+	# Update stats if blind changed (affects damage display)
+	if entity == current_enemy_entity:
+		_update_enemy_stats()
+	elif entity == current_player_entity:
+		main_game.set_player_stats()	
+
+
 func test_camera_shake():
 	if GameSettings.screen_shake_enabled:
 		main_game.screen_shake(20,0.33)
@@ -534,10 +563,12 @@ func anim_enemy_die():
 
 func anim_player_idle():
 	player_anim.play(CombatSpeed.get_animation_variant("player_idle"))
+	attack_sequence_complete.emit()
 
 func anim_enemy_idle():
 	enemy_sprite.texture = current_enemy_entity.sprite
 	enemy_anim.play(CombatSpeed.get_animation_variant("enemy_idle"))
+	attack_sequence_complete.emit()
 
 func anim_player_attack():
 	player_anim.play(CombatSpeed.get_animation_variant("player_attack"))
@@ -562,6 +593,13 @@ func _update_speed_label(speed: CombatSpeed.CombatSpeedMode):
 		CombatSpeed.CombatSpeedMode.INSTANT:
 			set_speed_label(" INSTANT")
 
+func pause_all_combat_animations(_pause: bool):
+	if _pause:
+		player_anim.pause()
+		enemy_anim.pause()
+	else:
+		player_anim.play()
+		enemy_anim.play()
 
 
 func _on_btn_run_pressed() -> void:
@@ -592,19 +630,23 @@ func _set_state(new_state: PanelState):
 	
 
 func _on_btn_pause_pressed() -> void:
+	pause_all_combat_animations(true)
 	CombatSpeed.set_speed(CombatSpeed.CombatSpeedMode.PAUSE)
 	_update_speed_label(CombatSpeed.CombatSpeedMode.PAUSE)
 
 func _on_btn_play_pressed() -> void:
 	CombatSpeed.set_speed(CombatSpeed.CombatSpeedMode.NORMAL)
+	pause_all_combat_animations(false)
 	_update_speed_label(CombatSpeed.CombatSpeedMode.NORMAL)
 
 func _on_btn_fast_pressed() -> void:
 	CombatSpeed.set_speed(CombatSpeed.CombatSpeedMode.FAST)
+	pause_all_combat_animations(false)
 	_update_speed_label(CombatSpeed.CombatSpeedMode.FAST)
 
 func _on_btn_very_fast_pressed() -> void:
 	CombatSpeed.set_speed(CombatSpeed.CombatSpeedMode.VERY_FAST)
+	pause_all_combat_animations(false)
 	_update_speed_label(CombatSpeed.CombatSpeedMode.VERY_FAST)
 
 func set_turn_label(_string: String):
@@ -633,6 +675,8 @@ func _print_node_tree(node: Node, depth: int):
 		_print_node_tree(child, depth + 1)
 
 func rebuild_status_boxes(entity):
+	## JDM ---- THIS FUNCTION MAY BE DELETED AFTER WE FULLY USE THE INDICATOR QUEUE
+
 	if not entity or not entity.status_effects:
 		push_warning("[CombatPanel] Cannot rebuild status boxes - entity or status_effects is null")
 		return
@@ -662,8 +706,10 @@ func rebuild_status_boxes(entity):
 	for status_value in Enums.StatusEffects.values():
 		var status: Enums.StatusEffects = status_value
 		var stacks = entity.status_effects.get_status_value(status)
-		
+
 		if stacks > 0:
+			print("\n\n\n" + Enums.get_status_string(status) + " " + str(stacks) + "\n\n\n")
+
 			active_statuses[status] = stacks
 			if existing_boxes.has(status):
 				# Update existing box with animation
@@ -673,7 +719,7 @@ func rebuild_status_boxes(entity):
 			else:
 				# Create new box with spawn animation
 				_create_status_box(container, status, stacks)
-	
+
 	# Remove boxes for statuses that are now 0
 	for status in existing_boxes.keys():
 		var box = existing_boxes[status]
@@ -709,7 +755,7 @@ func _remove_status_box(box: StatusBox):
 	if not is_instance_valid(box):
 		return
 
-	box.hide_box()
+	await box.hide_box()
 
 	if is_instance_valid(box) and not box.is_queued_for_deletion():
 		box.queue_free()	
@@ -818,48 +864,64 @@ func create_damage_indicator(target, amount: int, damage_stat: Enums.Stats, visu
 	
 	if not is_processing_indicator_queue:
 		_process_indicator_queue()	
+
+func spawn_status_box_update(entity, status: Enums.StatusEffects, new_stacks: int):
+	"""Queue a status box update"""
+	indicator_spawn_queue.append({
+		"type": "status_box_update",
+		"entity": entity,
+		"status": status,
+		"stacks": new_stacks
+	})
 	
+	if not is_processing_indicator_queue:
+		_process_indicator_queue()
+
 # ============================================================================
 # QUEUE PROCESSOR (Sequential Spawning with Timing)
 # ============================================================================
 
 func _process_indicator_queue():
 	"""Process the indicator spawn queue sequentially with proper timing"""
-	if is_processing_indicator_queue:
+	if is_processing_indicator_queue or indicator_spawn_queue.is_empty():
 		return
 	
 	is_processing_indicator_queue = true
 	
 	while not indicator_spawn_queue.is_empty():
+		# Check if we should stop (game paused or scene changing)
+		if get_tree().paused or not is_inside_tree():
+			is_processing_indicator_queue = false
+			return
+
 		var request = indicator_spawn_queue.pop_front()
-		
+		var timer_duration: float = 0.0
 		# Spawn the appropriate indicator type
 		match request.type:
 			"status":
-				_spawn_status_proc_indicator_immediate(
-					request.entity,
-					request.status,
-					request.stat,
-					request.value
-				)
+				_spawn_status_proc_indicator_immediate(request.entity, request.status, request.stat, request.value)
+				timer_duration = CombatSpeed.get_duration("item_proc")
 			"item":
-				_spawn_item_proc_indicator_immediate(
-					request.item,
-					request.rule,
-					request.entity,
-					request.amount
-				)
+				_spawn_item_proc_indicator_immediate(request.item,request.rule,request.entity,request.amount)
+				timer_duration = CombatSpeed.get_duration("item_proc")
 			"damage":
-				_spawn_damage_indicator_immediate(
-					request.target,
-					request.amount,
-					request.damage_stat,
-					request.visual_info
-				)
-		
-		# Wait for readability (respects combat speed settings)
-		await CombatSpeed.create_timer(CombatSpeed.get_duration("status_effect"))
-	
+				_spawn_damage_indicator_immediate(request.target,request.amount,request.damage_stat,request.visual_info)
+				timer_duration = CombatSpeed.get_duration("item_proc")
+			"status_box_update":
+				_handle_status_box_update_immediate(request.entity,request.status,request.stacks)
+				timer_duration = CombatSpeed.get_duration("status_effect")
+
+		# Wait for readability - but check pause state
+		var elapsed = 0.0
+		while elapsed < timer_duration:
+			# If paused or scene changing, stop processing
+			if get_tree().paused or not is_inside_tree():
+				is_processing_indicator_queue = false
+				return
+			
+			await get_tree().create_timer(0.1, false).timeout  # false = doesn't pause
+			elapsed += 0.1
+
 	is_processing_indicator_queue = false
 
 # ============================================================================
@@ -876,4 +938,10 @@ func wait_for_indicator_queue_to_finish():
 	# If queue is actively processing, wait for it to complete
 	
 	while is_processing_indicator_queue or not indicator_spawn_queue.is_empty():
+	#while not indicator_spawn_queue.is_empty():
 		await get_tree().process_frame
+
+func _exit_tree():
+	# Clear the queue to prevent processing in wrong scene
+	indicator_spawn_queue.clear()
+	is_processing_indicator_queue = false

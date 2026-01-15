@@ -19,10 +19,13 @@ func set_references():
 	anim_player = $AnimationPlayer
 
 func show_box():
+	await get_tree().process_frame
 	anim_player.play("show_box")
+
 
 func hide_box():
 	anim_player.play("hide_box")
+	await anim_player.animation_finished
 
 func update_label(_new_val: int):
 	anim_player.play("update_box")
@@ -63,8 +66,8 @@ func set_status(_stat: Enums.StatusEffects, amount: int):
 			stat_color = gamecolors.stats.strikes
 			pic_status.texture = status_blind	
 		Enums.StatusEffects.BLESSING:
-			stat_color = gamecolors.stats.shield
-			pic_status.texture = status_blessing					
+			stat_color = gamecolors.stats.blessing
+			pic_status.texture = status_blessing	
 		_:
 			pass
 

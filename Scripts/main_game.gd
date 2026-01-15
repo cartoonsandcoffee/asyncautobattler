@@ -82,6 +82,7 @@ func _ready():
 	add_to_group("main_game")
 	Player.stats.stats_updated.connect(_on_stats_updated)
 	Player.inventory.item_added.connect(_on_inventory_updated)
+	Player.inventory.inventory_size_changed.connect(_on_inventory_size_changed)
 	#Player.status_updated.connect(_on_status_effects_updated)
 	SetBonusManager.set_bonuses_updated.connect(setup_bonuses)
 
@@ -410,6 +411,9 @@ func set_player_stats():
 	
 	# Gold always shows current amount (no max)
 	stat_gold.update_stat(Enums.Stats.GOLD, Player.stats.gold, Player.stats.gold)
+
+func _on_inventory_size_changed(_new_size: int):
+	setup_inventory()
 
 func setup_inventory():
 	item_slots.clear()
