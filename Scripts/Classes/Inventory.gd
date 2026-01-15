@@ -10,6 +10,7 @@ signal weapon_changed(old_weapon: Item, new_weapon: Item)
 signal item_added(item: Item, slot_index: int)
 signal item_removed(item: Item, slot_index: int)
 signal inventory_full(item: Item)
+signal inventory_size_changed(_new_size: int)
 
 var weapon_slot: Item = null
 var item_slots: Array[Item] = []
@@ -187,6 +188,7 @@ func expand_inventory(additional_slots: int) -> void:
 func set_inventory_size(total_slots: int) -> void:
 	max_item_slots = total_slots
 	item_slots.resize(max_item_slots)
+	inventory_size_changed.emit(total_slots)
 
 func compact_items():
 	"""Removes all null gaps in the inventory by shifting items left"""

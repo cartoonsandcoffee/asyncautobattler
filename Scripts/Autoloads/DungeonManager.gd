@@ -294,6 +294,7 @@ func advance_rank():
 	var current_size = Player.inventory.max_item_slots
 	if current_size < 12:
 		Player.inventory.set_inventory_size(current_size + 2)
+		
 		print("[DungeonManager] Rank %d! Inventory expanded to %d slots" % [
 			current_rank, 
 			Player.inventory.max_item_slots

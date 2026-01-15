@@ -139,16 +139,16 @@ func _play_battle_end(winner, loser):
 				combat_panel.enemy_anim.speed_scale = 1.0
 				combat_panel.enemy_anim.play(anim_name)
 				
-				var anim_length = combat_panel.enemy_anim.get_animation(anim_name).length
-				await CombatSpeed.create_timer(anim_length)		
+				#var anim_length = combat_panel.enemy_anim.get_animation(anim_name).length
+				#await CombatSpeed.create_timer(anim_length)		
 		else:
 			var anim_name = _get_animation_variant("player_die")
 			if combat_panel.player_anim.has_animation(anim_name):
 				combat_panel.player_anim.speed_scale = 1.0
 				combat_panel.player_anim.play(anim_name)
 				
-				var anim_length = combat_panel.player_anim.get_animation(anim_name).length
-				await CombatSpeed.create_timer(anim_length)
+				#var anim_length = combat_panel.player_anim.get_animation(anim_name).length
+				#await CombatSpeed.create_timer(anim_length)
 
 	var turn_sign = _create_turn_sign(message)
 	var duration = CombatSpeed.get_duration("milestone_sign")
@@ -190,12 +190,12 @@ func _execute_item_sequence(items: Array, entity, trigger_type: String):
 		
 		# ----- STEP 2: Show Item Proc
 		if combat_panel:
-			combat_panel.spawn_item_proc_indicator(item, rule, entity)
+			#combat_panel.spawn_item_proc_indicator(item, rule, entity)
 			var proc_duration = CombatSpeed.get_duration("item_proc")
 			#await CombatSpeed.create_timer(proc_duration * 0.8)  # Wait for most of animation
 
 			# emit completion so the status effects update
-			item_proc_complete.emit(entity, rule)
+			#item_proc_complete.emit(entity, rule)
 
 		## -- JDM: removing this because removing item highlighting, but that if-statement may be useful for overlap timing
 		# ----- STEP 3: Clear Highlight, move to next
@@ -385,25 +385,22 @@ func clear_all_animations():
 func wait_for_attack_animation():
 	"""Wait for current attack animation to complete"""
 	if combat_panel and combat_panel.slide_animation and combat_panel.slide_animation.is_playing():
-		#await combat_panel.slide_animation.animation_finished
 		var current_anim = combat_panel.slide_animation.current_animation
 		if current_anim:
-			var anim_length = combat_panel.slide_animation.get_animation(current_anim).length
-			await CombatSpeed.create_timer(anim_length)
+			await combat_panel.attack_sequence_complete
+			return
 
 	if combat_panel and combat_panel.player_anim and (combat_panel.player_anim.get_current_animation() == CombatSpeed.get_animation_variant("player_attack")):
-		#await combat_panel.player_anim.animation_finished
 		var current_anim = combat_panel.player_anim.current_animation
 		if current_anim:
-			var anim_length = combat_panel.player_anim.get_animation(current_anim).length
-			await CombatSpeed.create_timer(anim_length)
+			await combat_panel.attack_sequence_complete
+			return	
 
 	if combat_panel and combat_panel.enemy_anim and (combat_panel.enemy_anim.get_current_animation() == CombatSpeed.get_animation_variant("enemy_attack")):
-		#await combat_panel.enemy_anim.animation_finished
 		var current_anim = combat_panel.enemy_anim.current_animation
 		if current_anim:
-			var anim_length = combat_panel.enemy_anim.get_animation(current_anim).length
-			await CombatSpeed.create_timer(anim_length)
+			await combat_panel.attack_sequence_complete
+			return			
 
 
 func wait_for_current_sequence():

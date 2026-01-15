@@ -176,6 +176,14 @@ func _execute_apply_status(rule: ItemRule, source_entity, target_entity, item: I
 		
 		status_to_apply = valid_statuses[randi() % valid_statuses.size()]
 
+	# Set the status for RANDOM
+	rule.target_status = status_to_apply
+
+	# Queue visuals in correct order
+	var combat_panel = combat_manager.get_tree().get_first_node_in_group("combat_panel")
+	if combat_panel:
+		combat_panel.spawn_item_proc_indicator(item, rule, source_entity, amount)
+
 	# Apply through status handler
 	status_handler.apply_status(target_entity, status_to_apply, amount)
 
@@ -183,12 +191,6 @@ func _execute_apply_status(rule: ItemRule, source_entity, target_entity, item: I
 
 	# LOG with colors
 	var status_name = Enums.get_status_string(status_to_apply)
-
-	# Set the status for RANDOM
-	rule.target_status = status_to_apply
-
-	# - SPAWN THE VISUAL INDICATOR
-	await combat_manager.proc_item(item, rule, source_entity, amount)
 	combat_manager.add_to_combat_log_string(
 		"   %s - %s gains %s %s (total: %d)" % [
 			combat_manager.color_item(item.item_name, item),
@@ -226,20 +228,23 @@ func _execute_remove_status(rule: ItemRule, source_entity, target_entity, item: 
 		# No stacks to remove, skip visual and execution
 		return
 
+	var effective_amount: int = max(old_stacks - old_stacks, old_stacks - amount) #old_stacks - new_stacks
+
+	# Overwrite the rule status for RANDOM   ## JDM: This might be where the RANDOM keyword is getting overwritten once a 'remove random' item procs
+	rule.target_status = status_to_remove
+
+	# Queue visuals in correct order
+	var combat_panel = combat_manager.get_tree().get_first_node_in_group("combat_panel")
+	if combat_panel:
+		combat_panel.spawn_item_proc_indicator(item, rule, target_entity, (effective_amount * -1))
+
 	# Remove through status handler
 	status_handler.remove_status(target_entity, status_to_remove, amount)
 
 	var new_stacks: int = status_handler.get_status_value(target_entity, status_to_remove)
-	
+
 	# LOG with colors
-	var status_name = Enums.get_status_string(status_to_remove)
-	var effective_amount: int = old_stacks - new_stacks
-
-	# Overwrite the rule status for RANDOM
-	rule.target_status = status_to_remove
-
-	# - SPAWN THE VISUAL INDICATOR
-	await combat_manager.proc_item(item, rule, target_entity, (effective_amount * -1)) # negative amount to indicate remove
+	var status_name = Enums.get_status_string(status_to_remove)	
 	combat_manager.add_to_combat_log_string(
 		"   %s - %s loses %s %s (remaining: %d)" % [
 			combat_manager.color_item(item.item_name, item),
@@ -355,34 +360,36 @@ func _execute_conversion(rule: ItemRule, source_entity, item: Item):
 		visual_rule_placeholder.trigger_type = rule.trigger_type
 
 	# SPAWN PROC VISUAL FOR CONVERT_FROM PART
-	await combat_manager.proc_item(item, visual_rule_placeholder, source_entity, -from_amount)
+	print("\n\n\n stat:" + Enums.get_stat_string(visual_rule_placeholder.target_stat) + " \n\n\n ")
+	combat_manager.proc_item(item, visual_rule_placeholder, source_entity, -from_amount)
 
 	# Calculate TO amount (apply conversion ratio)
 	var to_amount = int(from_amount * rule.conversion_ratio)
-	
+	var visual_rule_placeholder_to = ItemRule.new()
+
 	# Add TO resource
 	var to_entity = _get_target_entity(rule.convert_to_party, source_entity)
 	if rule.convert_to_type == ItemRule.StatOrStatus.STAT:
 		stat_handler.modify_stat(to_entity, rule.convert_to_stat, to_amount, Enums.StatType.CURRENT)
-		visual_rule_placeholder.effect_type = Enums.EffectType.MODIFY_STAT
-		visual_rule_placeholder.target_type = rule.convert_to_party
-		visual_rule_placeholder.target_stat_type = Enums.StatType.CURRENT
-		visual_rule_placeholder.target_stat = rule.convert_to_stat
-		visual_rule_placeholder.effect_of = ItemRule.ConditionValueType.VALUE
-		visual_rule_placeholder.effect_amount = to_amount
-		visual_rule_placeholder.trigger_type = rule.trigger_type		
+		visual_rule_placeholder_to.effect_type = Enums.EffectType.MODIFY_STAT
+		visual_rule_placeholder_to.target_type = rule.convert_to_party
+		visual_rule_placeholder_to.target_stat_type = Enums.StatType.CURRENT
+		visual_rule_placeholder_to.target_stat = rule.convert_to_stat
+		visual_rule_placeholder_to.effect_of = ItemRule.ConditionValueType.VALUE
+		visual_rule_placeholder_to.effect_amount = to_amount
+		visual_rule_placeholder_to.trigger_type = rule.trigger_type		
 	else:  # STATUS
 		status_handler.apply_status(to_entity, rule.convert_to_status, to_amount)
-		visual_rule_placeholder.effect_type = Enums.EffectType.APPLY_STATUS
-		visual_rule_placeholder.target_type = rule.convert_to_party
-		visual_rule_placeholder.target_status = rule.convert_to_status
-		visual_rule_placeholder.effect_of = ItemRule.ConditionValueType.VALUE
-		visual_rule_placeholder.effect_amount = to_amount
-		visual_rule_placeholder.trigger_type = rule.trigger_type		
+		visual_rule_placeholder_to.effect_type = Enums.EffectType.APPLY_STATUS
+		visual_rule_placeholder_to.target_type = rule.convert_to_party
+		visual_rule_placeholder_to.target_status = rule.convert_to_status
+		visual_rule_placeholder_to.effect_of = ItemRule.ConditionValueType.VALUE
+		visual_rule_placeholder_to.effect_amount = to_amount
+		visual_rule_placeholder_to.trigger_type = rule.trigger_type		
 
 	# SPAWN PROC VISUAL FOR CONVERT_TO PART
 	#await CombatSpeed.create_timer(CombatSpeed.get_duration("proc_overlap")) #JDM: Pause should be handled in proc spawn now <-- this line was the pause between the two visual indicators for converting stats fro
-	await combat_manager.proc_item(item, visual_rule_placeholder, source_entity, to_amount)
+	combat_manager.proc_item(item, visual_rule_placeholder_to, source_entity, to_amount)
 
 	combat_manager.add_to_combat_log_string("   %s - Converts %s %s -> %s %s" % [
 			combat_manager.color_item(item.item_name, item),

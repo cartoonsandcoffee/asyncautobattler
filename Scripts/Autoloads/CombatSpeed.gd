@@ -42,7 +42,6 @@ const BASE_DURATIONS = {
 	"milestone_sign": 1.3,        # Battle Start, Turn Start signs
 
 	# ITEM PROCESSING
-	"item_proc": 0.8,              # Item effect proc animation
 	"proc_overlap": 0.66,           # Time before starting next proc (for overlap)
 	
 	# COMBAT PACING
@@ -52,8 +51,8 @@ const BASE_DURATIONS = {
 	# VISUAL FEEDBACK
 	"damage_number": 0.8,          # Damage indicator animation
 	"exposed_wounded": 1.0,        # Timing for these effects
-	"status_effect": 0.8,          # Status effect visual
-
+	"status_effect": 0.1,          # Status effect visual
+	"item_proc": 0.8,              # Item effect proc animation
 	"turn_gap": 0.4,               # Brief pause between turns
 	"phase_transition": 0.3,       # between major sections
 }
@@ -128,7 +127,7 @@ func enter_combat():
 func exit_combat():
 	in_combat = false
 	get_tree().paused = false
-	set_speed(CombatSpeedMode.NORMAL)
+	#set_speed(CombatSpeedMode.NORMAL) # JDM - Don't reset speed per combat (unless pvp)
 
 func create_timer(duration: float) -> SceneTreeTimer:
 	# Then create the actual timer

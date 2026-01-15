@@ -5,12 +5,9 @@ extends Node
 ## Handles application, removal, and turn-start processing of all status effects
 
 # Signals
-signal status_applied(entity, status: Enums.StatusEffects, stacks: int)
-signal status_removed(entity, status: Enums.StatusEffects, stacks: int)
-signal status_gained_triggered(entity, status: Enums.StatusEffects)
-signal status_removed_triggered(entity, status: Enums.StatusEffects)
+signal status_gained_triggered(entity, status: Enums.StatusEffects, stacks: int)
+signal status_removed_triggered(entity, status: Enums.StatusEffects, stacks: int)
 signal overheal_triggered(entity, amount: int)
-signal status_proc_visual_complete(entity)
 
 var combat_manager
 var stat_handler: CombatStatHandler
@@ -38,8 +35,12 @@ func apply_status(entity, status: Enums.StatusEffects, stacks: int):
 	
 	var new_value = get_status_value(entity, status)
 	
+	var combat_panel = combat_manager.get_tree().get_first_node_in_group("combat_panel")
+	if combat_panel:
+		combat_panel.spawn_status_box_update(entity, status, new_value)
+			
 	# Trigger ON_STATUS_GAINED items
-	status_gained_triggered.emit(entity, status)
+	status_gained_triggered.emit(entity, status, new_value)
 
 
 func remove_status(entity, status: Enums.StatusEffects, stacks: int):
@@ -63,6 +64,10 @@ func remove_status(entity, status: Enums.StatusEffects, stacks: int):
 	if status == Enums.StatusEffects.BLESSING:
 		_process_blessing(entity, stacks)
 
+	var combat_panel = combat_manager.get_tree().get_first_node_in_group("combat_panel")
+	if combat_panel:
+		combat_panel.spawn_status_box_update(entity, status, new_value)
+
 	# Log
 	#_log_status_change(entity, status, old_value, new_value, false)
 	if new_value > 0:
@@ -78,7 +83,7 @@ func remove_status(entity, status: Enums.StatusEffects, stacks: int):
 			])
 
 	# Trigger ON_STATUS_REMOVED items (even if partial removal)
-	status_removed_triggered.emit(entity, status)
+	status_removed_triggered.emit(entity, status, new_value)
 
 
 # ===== STATUS GETTERS =====

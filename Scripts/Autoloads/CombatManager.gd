@@ -11,8 +11,6 @@ signal combat_ended(winner, loser)
 
 # --- State change signals (forwarded from sub-systems)
 signal stat_changed(entity, stat: Enums.Stats, old_value: int, new_value: int)
-signal status_applied(entity, status: Enums.StatusEffects, stacks: int)
-signal status_removed(entity, status: Enums.StatusEffects, stacks: int)
 signal status_proc(entity, status: Enums.StatusEffects, stat: Enums.Stats, value: int)
 signal healing_applied(target, amount)
 
@@ -98,8 +96,6 @@ func _connect_subsystem_signals():
 	stat_handler.death_triggered.connect(_on_death_triggered)
 	
 	# Status handler signals
-	#status_handler.status_applied.connect(_on_status_applied)
-	#status_handler.status_removed.connect(_on_status_removed)
 	status_handler.status_gained_triggered.connect(_on_status_gained_triggered)
 	status_handler.status_removed_triggered.connect(_on_status_removed_triggered)
 	
@@ -369,16 +365,16 @@ func process_entity_items_sequentially(entity, trigger_type: Enums.TriggerType, 
 			continue_processing_item = false
 
 		# === STEP 3: Update status boxes if needed ===
-		if success and rule.effect_type in [Enums.EffectType.APPLY_STATUS, Enums.EffectType.REMOVE_STATUS, Enums.EffectType.CONVERT]:
-			if combat_panel:
-				if rule.effect_type == Enums.EffectType.CONVERT:
-					var from_entity = effect_executor._get_target_entity(rule.convert_from_party, entity)
-					var to_entity = effect_executor._get_target_entity(rule.convert_to_party, entity)
-					combat_panel.rebuild_status_boxes(from_entity)
-					if to_entity != from_entity:
-						combat_panel.rebuild_status_boxes(to_entity)
-				else:
-					combat_panel.rebuild_status_boxes(target)
+		#if success and rule.effect_type in [Enums.EffectType.APPLY_STATUS, Enums.EffectType.REMOVE_STATUS, Enums.EffectType.CONVERT]:
+		#	if combat_panel:
+		#		if rule.effect_type == Enums.EffectType.CONVERT:
+		#			var from_entity = effect_executor._get_target_entity(rule.convert_from_party, entity)
+		#			var to_entity = effect_executor._get_target_entity(rule.convert_to_party, entity)
+		#			combat_panel.rebuild_status_boxes(from_entity)
+		#			if to_entity != from_entity:
+		#				combat_panel.rebuild_status_boxes(to_entity)
+		#		else:
+		#			combat_panel.rebuild_status_boxes(target)
 		
 		# === STEP 4: Clear highlight ===
 		if entity == player_entity and combat_panel:
@@ -386,6 +382,7 @@ func process_entity_items_sequentially(entity, trigger_type: Enums.TriggerType, 
 		
 	# Wait for all animations to complete
 	await animation_manager.wait_for_current_sequence()
+
 
 func proc_item(item, rule, entity, amount: int):
 	# -- Get combat panel reference
@@ -534,13 +531,13 @@ func _on_death_triggered(entity):
 	var killer = enemy_entity if entity == player_entity else player_entity
 	await process_entity_items_sequentially(killer, Enums.TriggerType.ON_KILL)
 
-func _on_status_gained_triggered(entity, status: Enums.StatusEffects):
+func _on_status_gained_triggered(entity, status: Enums.StatusEffects, stacks: int):
 	await get_tree().process_frame
 
-	var combat_panel = animation_manager.combat_panel
-	if combat_panel:
-		print("STATUS PROC ANIM TEST: " + Enums.get_status_string(status) + " " + get_entity_name(entity))
-		combat_panel.rebuild_status_boxes(entity)
+	#var combat_panel = animation_manager.combat_panel
+	#if combat_panel:
+		#combat_panel.rebuild_status_boxes(entity)
+	#	combat_panel.spawn_status_box_update(entity, status, stacks) # JDM: New queue system
 
 	if current_status_trigger_depth >= MAX_STATUS_TRIGGER_DEPTH:
 		add_to_combat_log_string("      Status applied trigger recursion limit reached", Color.ORANGE)
@@ -550,13 +547,13 @@ func _on_status_gained_triggered(entity, status: Enums.StatusEffects):
 	await process_entity_items_with_status(entity, Enums.TriggerType.ON_STATUS_GAINED, status)
 	current_status_trigger_depth -= 1
 
-func _on_status_removed_triggered(entity, status: Enums.StatusEffects):
+func _on_status_removed_triggered(entity, status: Enums.StatusEffects, stacks: int):
 	await get_tree().process_frame
 
-	var combat_panel = animation_manager.combat_panel
-	if combat_panel:
-		print("STATUS PROC ANIM TEST: " + Enums.get_status_string(status) + " " + get_entity_name(entity))
-		combat_panel.rebuild_status_boxes(entity)
+	#var combat_panel = animation_manager.combat_panel
+	#if combat_panel:
+		#combat_panel.rebuild_status_boxes(entity)
+	#	combat_panel.spawn_status_box_update(entity, status, stacks) # JDM: New queue system
 
 	if current_status_trigger_depth >= MAX_STATUS_TRIGGER_DEPTH:
 		add_to_combat_log_string("      Status applied trigger recursion limit reached", Color.ORANGE)
