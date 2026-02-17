@@ -1,174 +1,209 @@
 extends Node
 
-signal show_minimap()
-signal room_transition_requested(room_data: RoomData)
-signal minimap_update_requested()
-signal boss_loaded(boss: Enemy)            # Emitted when boss fetched for rank
+## DungeonManager - Simplified Room Currency System
+## - Generates rooms on-demand (no pool)
+## - Player owns room currency
+## - Can load specific room types (dungeon, boss, town)
 
-# ============ ADVANCED DISTRIBUTION RULES ============
+# ============================================================================
+# MODULE
+# ============================================================================
 
-const SHORTCUT_SKIP_RANGES: Dictionary = {
-	Enums.Rarity.UNCOMMON: {"min": 1, "max": 2},       # UNCOMMON: skip 1-2 rooms
-	Enums.Rarity.RARE: {"min": 2, "max": 3},       # RARE: skip 2-3 rooms	
-	Enums.Rarity.LEGENDARY: {"min": 3, "max": 6}   # LEGENDARY: skip 3-6
-}
+var room_generator: DungeonRoomGenerator
 
-# Adjacency rules
-const ADJACENCY_RULES: Dictionary = {
-	Enums.RoomType.CAMPFIRE: {
-		"cannot_be_adjacent_to": [Enums.RoomType.CAMPFIRE],
-		"min_spacing": 3  # At least 3 room between campfires
-	},
-	Enums.RoomType.UTILITY: {
-		"cannot_be_adjacent_to": [Enums.RoomType.UTILITY],
-		"min_spacing": 1  # At least 1 room between utilities
-	}
-}
-
-# Type count limits
-const TYPE_COUNT_LIMITS: Dictionary = {
-	Enums.RoomType.UTILITY: {
-		Enums.Rarity.COMMON: 2,    # Max 2 COMMON utilities
-		Enums.Rarity.UNCOMMON: 3,    # Max 2 UNCOMMON utilities		
-		Enums.Rarity.RARE: 2,      # Max 3 RARE utilities
-		Enums.Rarity.LEGENDARY: 1  # Max 1 LEGENDARY utility
-	},
-	Enums.RoomType.CAMPFIRE: {
-		Enums.Rarity.COMMON: 2,
-		Enums.Rarity.UNCOMMON: 0,		
-		Enums.Rarity.RARE: 0,
-		Enums.Rarity.LEGENDARY: 0  # No legendary campfires
-	},
-	Enums.RoomType.SKIPPED: {  # SKIPPED room just used for minimap, can't generate
-		Enums.Rarity.COMMON: 0,
-		Enums.Rarity.UNCOMMON: 0,
-		Enums.Rarity.RARE: 0,
-		Enums.Rarity.LEGENDARY: 0 
-	}	
-}
-
-# Specific room limits (unique rooms)
-const SPECIFIC_ROOM_LIMITS: Dictionary = {
-	"A strange altar": 1,
-	"another specific room": 1
-}
-
-# Dynamic rarity weights by rank
-const RARITY_WEIGHTS_BY_RANK: Dictionary = {
-	1: {Enums.Rarity.COMMON: 75, Enums.Rarity.UNCOMMON: 25, Enums.Rarity.RARE: 0, Enums.Rarity.LEGENDARY: 0},
-	2: {Enums.Rarity.COMMON: 65, Enums.Rarity.UNCOMMON: 30, Enums.Rarity.RARE: 5, Enums.Rarity.LEGENDARY: 0},
-	3: {Enums.Rarity.COMMON: 60, Enums.Rarity.UNCOMMON: 34, Enums.Rarity.RARE: 5, Enums.Rarity.LEGENDARY: 1},
-	4: {Enums.Rarity.COMMON: 40, Enums.Rarity.UNCOMMON: 40, Enums.Rarity.RARE: 10, Enums.Rarity.LEGENDARY: 5},
-	5: {Enums.Rarity.COMMON: 30, Enums.Rarity.UNCOMMON: 40, Enums.Rarity.RARE: 20, Enums.Rarity.LEGENDARY: 10}
-}
-
-@export_group("Testing")
-@export var testing_force_room_2: bool = false
-@export var testing_room_2_definition: RoomDefinition  # Drag room here!
-
-# Utility subtype tracking (for "max 1 of each COMMON utility type")
-var used_utility_subtypes: Dictionary = {}
-
-var boss_room_position: int = 10  # 0 = disabled, 1-10 = room slot
-const ROOMS_PER_RANK = 10
+# ============================================================================
+# STATE TRACKING
+# ============================================================================
 
 var current_rank: int = 1
-var current_room_index: int = 0  # 0-10 (0 = start, 10 = last room before boss)
-var rooms_cleared_this_rank: int = 0
+var rooms_visited_this_rank: int = 0  # For stats/tracking
 
+# Room history (optional - for achievements/stats)
 var all_visited_rooms: Array[RoomData] = []
-var current_rank_rooms: Array[RoomData] = []  # Predetermined rooms for this rank
 
-var current_boss_data: Dictionary = {}     # Raw opponent data from Supabase
-var current_boss_enemy: Enemy = null       # Enemy object for combat
+# Boss data (fetched from Supabase via existing BossHandler)
+var current_boss_data: Dictionary = {}
+var current_boss_enemy: Enemy = null
 
-func generate_starter_room() -> RoomData:
+var _initialized: bool = false
+
+# ============================================================================
+# SIGNALS
+# ============================================================================
+
+signal boss_loaded(boss: Enemy)
+
+# ============================================================================
+# TESTING/DEBUG
+# ============================================================================
+
+@export var testing_force_next_room: bool = false
+@export var testing_room_definition: RoomDefinition
+
+# ============================================================================
+# INITIALIZATION
+# ============================================================================
+
+func _ready():
+	pass
+
+func initialize():
+	if _initialized:
+		return
+
+	_initialized = true
+
+	# Initialize room generator module
+	room_generator = DungeonRoomGenerator.new()
+	room_generator.dungeon_manager = self
+	
+	reset()
+	print("[DungeonManager] Initialized - on-demand room generation")
+
+
+func reset():
+	current_rank = 5
+	rooms_visited_this_rank = 0
+
+	all_visited_rooms.clear()
+	current_boss_data = {}
+	current_boss_enemy = null	
+# ============================================================================
+# RANK INITIALIZATION
+# ============================================================================
+
+func initialize_rank():
+	"""Initialize the current rank - fetch boss and prepare"""
+	rooms_visited_this_rank = 0
+	if current_rank < 6:
+		await _fetch_and_create_boss()
+	else:
+		await _fetch_champion_opponent()
+		
+	print("[DungeonManager] Rank %d initialized" % current_rank)
+
+# ============================================================================
+# ROOM GENERATION - ON DEMAND
+# ============================================================================
+
+func get_random_dungeon_room() -> RoomData:
+	"""Generate a random dungeon room based on rank and weights"""
+	
+	# TESTING: Override with test room if enabled
+	if testing_force_next_room and testing_room_definition:
+		var debug_room = RoomData.new()
+		debug_room.room_definition = testing_room_definition
+		debug_room.chosen_event_scene = testing_room_definition.get_random_event()
+		room_generator._assign_combat_to_room(debug_room)
+		print("[DungeonManager] TEST: Forced room: %s" % testing_room_definition.room_name)
+		testing_force_next_room = false  # Only once
+		return debug_room
+	
+	# Get available rooms for current rank
+	var available_rooms = RoomRegistry.get_available_rooms_for_rank(current_rank)
+	if available_rooms.is_empty():
+		push_error("[DungeonManager] No rooms available for rank %d!" % current_rank)
+		return _get_fallback_room()
+	
+	# Get rarity weights for this rank
+	var rarity_weights = room_generator._get_rarity_weights_for_rank(current_rank)
+	
+	# Pick weighted random room
+	var room_def = room_generator._pick_weighted_room_with_rarity(available_rooms, rarity_weights)
+	
+	# Create room data
+	var room_data = room_generator._create_room_data(room_def)
+	
+	# Assign combat
+	room_generator._assign_combat_to_room(room_data)
+	
+	print("[DungeonManager] Generated random room: %s (Rank %d)" % [room_def.room_name, current_rank])
+	return room_data
+
+func get_boss_room() -> RoomData:
+	"""Get the boss room for current rank"""
+	var boss_def = RoomRegistry.get_room_definition("boss")
+	
+	if not boss_def:
+		push_error("[DungeonManager] No boss room definition found!")
+		return null
+	
+	var boss_room = RoomData.new()
+	boss_room.room_definition = boss_def
+	boss_room.chosen_event_scene = boss_def.get_random_event()
+	boss_room.has_combat_this_instance = true
+	boss_room.assigned_enemy = current_boss_enemy
+	
+	print("[DungeonManager] Loading boss room for rank %d" % current_rank)
+	return boss_room
+
+func get_town_room() -> RoomData:
+	"""Get the town 'room' - for loading town scene"""
+	# Town will be handled differently (likely a dedicated scene)
+	# This is a placeholder for consistency
+	var town_def = RoomRegistry.get_room_definition("town")
+	
+	if not town_def:
+		print("[DungeonManager] No town room definition - town handled separately")
+		return null
+	
+	var town_room = RoomData.new()
+	town_room.room_definition = town_def
+	town_room.chosen_event_scene = town_def.get_random_event()
+	
+	print("[DungeonManager] Loading town")
+	return town_room
+
+func get_starter_room() -> RoomData:
+	"""Get the starter room for a new game"""
 	var starter_def = RoomRegistry.get_room_definition("starter")
-	if starter_def == null:
-		push_error("Starter room definition not found!")
+	
+	if not starter_def:
+		push_error("[DungeonManager] No starter room found!")
 		return null
 	
 	var room_data = RoomData.new()
 	room_data.room_definition = starter_def
 	room_data.chosen_event_scene = starter_def.get_random_event()
 	
-	# Generate the rooms for rank 1
-	generate_rank_rooms()
-	current_rank_rooms[0] = room_data  # first room always starter room
-
+	print("[DungeonManager] Loading starter room")
 	return room_data
 
-func generate_rank_rooms():
-	# Generate 10 predetermined rooms with guaranteed distributions
-	current_rank_rooms.clear()
-	current_room_index = 0
-	used_utility_subtypes.clear()
-
-	# Create empty array with 10 slots
-	current_rank_rooms.resize(ROOMS_PER_RANK)
-	for i in range(ROOMS_PER_RANK):
-		current_rank_rooms[i] = null
+func _get_fallback_room() -> RoomData:
+	"""Create a basic fallback room if generation fails"""
+	var fallback_rooms = RoomRegistry.get_rooms_by_type_and_rarity(
+		Enums.RoomType.TREASURE,
+		Enums.Rarity.COMMON
+	)
 	
-	# Apply guaranteed room placements
-	place_guaranteed_treasure()
-	place_guaranteed_merchant()
-	place_guaranteed_campfire()
+	if not fallback_rooms.is_empty():
+		return room_generator._create_room_data(fallback_rooms.pick_random())
 	
-	# Rank-specific guarantees
-	if current_rank >= 2:
-		place_guaranteed_utility()
+	# Ultimate fallback
+	push_error("[DungeonManager] No fallback rooms available!")
+	return RoomData.new()
+
+# ============================================================================
+# ROOM COMPLETION
+# ============================================================================
+
+func complete_room(room_data: RoomData):
+	"""Called when player completes a room - track stats and consume currency"""
+	rooms_visited_this_rank += 1
+	all_visited_rooms.append(room_data)
 	
-	if current_rank >= 4:
-		place_guaranteed_merchant()  # 2nd merchant for ranks 4-5
-	
-	# Fill remaining empty slots with weighted random rooms
-	fill_remaining_slots()
-	
-	# Assign combat to all rooms
-	for room_data in current_rank_rooms:
-		if room_data:
-			assign_combat_to_room(room_data)
-	
-	# Placing the boss room at the determined position
-	if boss_room_position > 0 and boss_room_position <= current_rank_rooms.size():
-		var boss_index: int = boss_room_position - 1
-		
-		# Replace room at this position with boss room
-		var boss_room = get_boss_room()
-		current_rank_rooms[boss_index] = boss_room
+	print("[DungeonManager] Room completed: %s. Total this rank: %d, Player rooms: %d" % [
+		room_data.room_definition.room_name if room_data else "Unknown",
+		rooms_visited_this_rank,
+		Player.rooms_left_this_rank
+	])
 
-		print("[DungeonManager]: Boss placed at room %d" % boss_room_position)
-
-	# TESTING: Force room at position 2 (index 1)
-	if testing_force_room_2 and testing_room_2_definition:
-		var debug_room = RoomData.new()
-		debug_room.room_definition = testing_room_2_definition
-		debug_room.chosen_event_scene = testing_room_2_definition.get_random_event()
-		debug_room.room_state = {}
-		assign_combat_to_room(debug_room)
-		current_rank_rooms[1] = debug_room
-		current_rank_rooms[2] = debug_room
-		print("[DungeonManager]  TEST: Forced room at position 2: %s" % testing_room_2_definition.room_name)
-
-		# Fetch boss for this rank
-	await _fetch_and_create_boss()
-	# -------------------------	
-
-	# Verify no null rooms remain
-	var null_count = 0
-	for room_data in current_rank_rooms:
-		if room_data == null:
-			null_count += 1
-
-	if null_count > 0:
-		push_error("generate_rank_rooms() left %d null rooms!" % null_count)
-	
-	print("[DungeonManager] Generated %d rooms for rank %d" % [current_rank_rooms.size(), current_rank])
-	minimap_update_requested.emit()
-
+# ============================================================================
+# BOSS HANDLING
+# ============================================================================
 
 func _fetch_and_create_boss():
-	"""Fetch opponent from Supabase and create boss enemy for this rank."""
+	"""Fetch opponent from Supabase and create boss enemy for this rank"""
 	print("[DungeonManager] Fetching boss for rank %d..." % current_rank)
 	
 	# Check if SupabaseManager exists
@@ -179,122 +214,86 @@ func _fetch_and_create_boss():
 		return
 	
 	# Fetch opponent data
-	var player_id = Player.generate_or_load_uuid()
+	var player_id = Player.load_or_generate_uuid()
 	current_boss_data = await SupabaseManager.fetch_opponent_for_rank(current_rank, player_id)
 	
-	# Create boss enemy
+	# Create boss enemy using existing BossHandler autoload
 	if current_boss_data.is_empty():
 		print("[DungeonManager] No opponents found, using fallback boss")
 		current_boss_enemy = BossHandler.get_fallback_boss(current_rank)
 	else:
 		print("[DungeonManager] Boss data fetched: %s" % current_boss_data.get("username", "Unknown"))
 		current_boss_enemy = BossHandler.create_boss_enemy(current_boss_data)
-		
+	
 	if not current_boss_enemy:
-		push_error("[DungeonManager] Boss creation failed! Boss will be null.")
+		push_error("[DungeonManager] Boss creation failed!")
 		return
+	
+	print("[DungeonManager] Boss ready: %s (HP: %d)" % [
+		current_boss_enemy.enemy_name,
+		current_boss_enemy.stats.hit_points
+	])
+	
+	boss_loaded.emit(current_boss_enemy)
 
-	print("[DungeonManager] Boss ready: %s (HP: %d, Items: %d)" % [
+func _fetch_champion_opponent():
+	"""Fetch a champion from the active_champions table."""
+	print("[DungeonManager] Fetching champion opponent...")
+	
+	if not has_node("/root/SupabaseManager"):
+		push_warning("[DungeonManager] SupabaseManager not found, using fallback boss")
+		current_boss_enemy = BossHandler.get_fallback_boss(6)
+		boss_loaded.emit(current_boss_enemy)
+		return
+	
+	# Fetch champion opponent (excluding player's own champions)
+	var player_id = Player.load_or_generate_uuid()
+	current_boss_data = await SupabaseManager.fetch_champion_opponent(player_id)
+	
+	# Create boss enemy
+	if current_boss_data.is_empty():
+		print("[DungeonManager] No champions found, using fallback boss")
+		current_boss_enemy = BossHandler.get_fallback_boss(6)
+	else:
+		print("[DungeonManager] Champion fetched: %s (Victories: %d)" % [
+			current_boss_data.get("username", "Unknown"),
+			current_boss_data.get("champion_victories", 0)
+		])
+
+		current_boss_enemy = BossHandler.create_boss_enemy(current_boss_data)
+
+		if current_boss_data.get("is_shadow", false):
+			print("Fighting a shadow of %s" % current_boss_data.username)
+			current_boss_enemy.enemy_name += " (Shadow)"
+			
+
+	if not current_boss_enemy:
+		push_error("[DungeonManager] Champion creation failed! Boss will be null.")
+		return
+	
+	print("[DungeonManager] Champion ready: %s (HP: %d, Items: %d)" % [
 		current_boss_enemy.enemy_name,
 		current_boss_enemy.stats.hit_points,
-		_count_boss_items()
+		current_boss_enemy.inventory.get_item_count()
 	])
 	
 	# Emit signal for map zoom panel to update
 	boss_loaded.emit(current_boss_enemy)
 
-func _count_boss_items() -> int:
-	"""Helper to count boss items for debug output."""
-	if not current_boss_enemy or not current_boss_enemy.inventory:
-		return 0
-	
-	var count = 0
-	if current_boss_enemy.inventory.weapon_slot:
-		count += 1
-	for item in current_boss_enemy.inventory.item_slots:
-		if item:
-			count += 1
-	return count
-
-func assign_combat_to_room(room_data: RoomData):
-	# Determine if this room instance will have combat
-	var room_def = room_data.room_definition
-	
-	# Specific enemy always overrides
-	if room_def.specific_enemy:
-		room_data.assigned_enemy = room_def.specific_enemy
-		room_data.has_combat_this_instance = true
-		return
-	
-	# Check random combat roll
-	if room_def.can_have_random_combat and room_def.random_enemy_pool.size() > 0:
-		var roll = randf()
-		if roll < room_def.random_combat_chance:
-			# Combat triggered - pick random enemy from pool
-			var enemy = room_def.random_enemy_pool.pick_random()
-			room_data.assigned_enemy = enemy
-			room_data.has_combat_this_instance = true
-		else:
-			# No combat this time
-			room_data.has_combat_this_instance = false
-	else:
-		# Room cannot have combat
-		room_data.has_combat_this_instance = false
-
-func pick_weighted_room_definition(available_rooms: Array[RoomDefinition]) -> RoomDefinition:
-	# Pick a room definition based on spawn weights
-	var weighted_options: Array[RoomDefinition] = []
-	
-	for room_def in available_rooms:
-		var weight = room_def.spawn_weight
-		for i in weight:
-			weighted_options.append(room_def)
-	
-	return weighted_options.pick_random()
-
-func get_current_room() -> RoomData:
-	"""Get the room player should be entering next"""
-	if current_room_index < current_rank_rooms.size():
-		return current_rank_rooms[current_room_index]
-	return null
-
-# Add method to get boss room data:
-func get_boss_room() -> RoomData:
-	"""Get boss room for current rank"""
-	var boss_def = RoomRegistry.get_room_definition("boss")  # You'll need to create this
-	if boss_def:
-		var boss_room = RoomData.new()
-		boss_room.room_definition = boss_def
-		boss_room.chosen_event_scene = boss_def.get_random_event()
-		boss_room.has_combat_this_instance = true  # Boss always has combat
-		return boss_room
-	return null
-	
-func advance_room():
-	# Move to next room in sequence
-	current_room_index += 1
-	rooms_cleared_this_rank += 1
-	
-	# Update tracking
-	minimap_update_requested.emit()
-	
-	# Check if rank complete (10 rooms cleared = time for boss)
-	if rooms_cleared_this_rank >= ROOMS_PER_RANK:
-		print("Rank %d complete! Time for boss." % current_rank)
-		# Boss fight would trigger here
-	
-	print("Advanced to room %d/%d (rank %d)" % [current_room_index + 1, ROOMS_PER_RANK, current_rank])
+# ============================================================================
+# RANK PROGRESSION
+# ============================================================================
 
 func advance_rank():
+	"""Advance to next rank after boss victory"""
 	current_rank += 1
-	current_room_index = 0
-	rooms_cleared_this_rank = 0
+
+	rooms_visited_this_rank = 0
 	
 	# Increase inventory size: +2 slots per rank (4,6,8,10,12)
 	var current_size = Player.inventory.max_item_slots
 	if current_size < 12:
 		Player.inventory.set_inventory_size(current_size + 2)
-		
 		print("[DungeonManager] Rank %d! Inventory expanded to %d slots" % [
 			current_rank, 
 			Player.inventory.max_item_slots
@@ -304,531 +303,54 @@ func advance_rank():
 	current_boss_data = {}
 	current_boss_enemy = null
 	
-	# Generate new rank (includes fetching new boss)
-	generate_rank_rooms()
+	# Initialize new rank
+	await initialize_rank()
 	
-	# Update UI
-	minimap_update_requested.emit()
-	
-	# Load first room of new rank
-	_load_first_room()
+	print("[DungeonManager] Advanced to rank %d" % current_rank)
 
-func _load_first_room():
-	"""Load the first room after rank advancement."""
-	var first_room = get_current_room()
-	if first_room:
-		# Signal main game to load this room
-		# TODO: How does main_game know to load this room?
-		# Option A: Emit signal that main_game connects to
-		# Option B: main_game calls this function and gets the room
-		# For now, just log:
-		print("[DungeonManager] First room of rank %d ready: %s" % [
-			current_rank,
-			first_room.room_definition.room_name
-		])
-	else:
-		push_error("[DungeonManager] Failed to get first room for rank %d!" % current_rank)
+func is_champion_rank() -> bool:
+	"""Returns true if player is in rank 6 (champion rank)."""
+	return current_rank == 6
+
+# ============================================================================
+# UTILITY FUNCTIONS
+# ============================================================================
+
+func can_enter_dungeon() -> bool:
+	"""Check if player has rooms remaining to enter dungeon"""
+	return Player.has_rooms_remaining()
 
 func get_room_type_display_name(room_data: RoomData) -> String:
-	if room_data.room_definition:
+	if room_data and room_data.room_definition:
 		return room_data.room_definition.room_name
-	else:
-		return "Unknown Room"
+	return "Unknown Room"
 
 func get_room_type_icon(room_data: RoomData) -> Texture2D:
-	if room_data.room_definition:
+	if room_data and room_data.room_definition:
 		return room_data.room_definition.room_icon
-	else:
-		return null
-
-func slide_in_menus():
-	show_minimap.emit()
-
-
-func check_for_shortcuts(completed_room: RoomData) -> Array[ShortcutOption]:
-	"""Called after room complete - should shortcuts appear?"""
-	
-	var room_def = completed_room.room_definition
-	
-	# Check 1: Can this room type spawn shortcuts?
-	if not room_def.can_spawn_shortcuts:
-		return []  # No shortcuts from this room
-	
-	# Check 2: Roll the dice
-	var roll = randf()  # 0.0 to 1.0
-	if roll > room_def.shortcut_chance:
-		return []  # Didn't roll high enough
-	
-	print("[Shortcut] Triggered! Generating options...")
-	
-	# Generate 1-2 shortcut options
-	return generate_shortcut_options(room_def.rarity)
-
-func generate_shortcut_options(source_rarity: Enums.Rarity) -> Array[ShortcutOption]:
-	"""Generate 1-2 shortcut destinations"""
-	
-	var options: Array[ShortcutOption] = []
-	
-	# Get rooms we could shortcut to (same rarity, not on current path)
-	var available = get_shortcut_destinations(source_rarity)
-	
-	if available.is_empty():
-		print("[Shortcut] No valid destinations found")
-		return []
-	
-	# How many options to show? (randomly 1 or 2)
-	var num_options = 2 if randf() < 0.4 else 1  # 40% chance for 2 options
-	num_options = min(num_options, available.size())
-	
-	# Get skip range for this rarity
-	var skip_range = SHORTCUT_SKIP_RANGES.get(source_rarity, {"min": 1, "max": 3})
-	
-	# Create options
-	for i in range(num_options):
-		# Pick random destination
-		var dest_room = available.pop_at(randi() % available.size())
-		
-		# Pick random skip count
-		var skip_count:int = randi_range(skip_range["min"], skip_range["max"])
-		
-		if !can_skip_room(skip_count):
-			return []
-
-		# Will it have combat?
-		var has_combat = will_room_have_combat(dest_room)
-		
-		# Create option
-		var option = ShortcutOption.new(dest_room, skip_count, has_combat)
-		options.append(option)
-	
-	return options
-
-func can_skip_room(skip_count: int) -> bool:
-	#Check if player can use skip functionality.
-	#Cannot skip if it would take you past the boss room.
-	
-	
-	# Calculate how many rooms left in rank (including current)
-	var rooms_left = ROOMS_PER_RANK - current_room_index
-	
-	# Need at least 2 rooms left (current + 1 to skip to)
-	# This ensures you can't skip from room 9 to 11 (boss)
-	if rooms_left <= skip_count:
-		print("[DungeonManager] Cannot skip - too close to boss (rooms left: %d)" % rooms_left)
-		return false
-	
-	# Check if on boss room already
-	if current_room_index >= ROOMS_PER_RANK:
-		print("[DungeonManager] Cannot skip - already on boss")
-		return false
-	
-	return true
-
-
-func get_shortcut_destinations(source_rarity: Enums.Rarity) -> Array[RoomDefinition]:
-	"""Get rooms that can be shortcut targets (same rarity, not on current path)"""
-	
-	var all_available: Array[RoomDefinition] = []
-	
-	# Get all rooms of this rarity for current rank
-	for room_def in RoomRegistry.get_available_rooms_for_rank(current_rank):
-		if room_def.rarity == source_rarity:
-			all_available.append(room_def)
-	
-	# Filter out rooms already on our current path
-	var current_room_defs: Array[RoomDefinition] = []
-	for room_data in current_rank_rooms:
-		if room_data:
-			current_room_defs.append(room_data.room_definition)
-	
-	# Return only rooms NOT on path
-	var destinations: Array[RoomDefinition] = []
-	for room_def in all_available:
-		if room_def not in current_room_defs:
-			destinations.append(room_def)
-	
-	return destinations
-
-func will_room_have_combat(room_def: RoomDefinition) -> bool:
-	"""Pre-roll combat for UI preview"""
-	
-	if room_def.specific_enemy:
-		return true  # Always has combat
-	
-	if room_def.can_have_random_combat and room_def.random_enemy_pool.size() > 0:
-		return randf() < room_def.random_combat_chance
-	
-	return false
-
-func apply_shortcut(option: ShortcutOption):
-	"""Player chose a shortcut - modify the rank rooms"""
-	
-	print("[Shortcut] Applying: %s (skip %d)" % [option.display_name, option.skip_count])
-	
-	# Mark skipped rooms with special flag
-	for i in range(option.skip_count):
-		var skip_index = current_room_index + 1 + i
-		if skip_index < current_rank_rooms.size():
-			mark_room_skipped(skip_index)
-	
-	# Replace destination room
-	var dest_index = option.get_destination_index(current_room_index)
-	if dest_index < current_rank_rooms.size():
-		# Create new room data
-		var new_room = create_room_data(option.destination_room)
-		new_room.has_combat_this_instance = option.has_combat
-		
-		if option.has_combat and option.destination_room.random_enemy_pool.size() > 0:
-			new_room.assigned_enemy = option.destination_room.random_enemy_pool.pick_random()
-		
-		# Replace the room slot
-		current_rank_rooms[dest_index] = new_room
-	
-	# Update minimap
-	minimap_update_requested.emit()
-
-func mark_room_skipped(room_index: int):
-	"""Add skip flag to room (for minimap ❌ icon)"""
-	if room_index >= 0 and room_index < current_rank_rooms.size():
-		var room = current_rank_rooms[room_index]
-		if room:
-			room.room_state["skipped"] = true
-			# JDM: Try making room skipped as well
-			current_rank_rooms[room_index].room_state["skipped"] = true
-
+	return null
 
 # ============================================================================
-# GUARANTEED PLACEMENT HELPERS
+# DEBUG TOOLS
 # ============================================================================
 
-func place_guaranteed_treasure():
-	"""Place 1 RARE treasure in positions 1-3 (indices 0-2)"""
-	var treasure_defs = RoomRegistry.get_rooms_by_type_and_rarity(
-		Enums.RoomType.TREASURE,
-		Enums.Rarity.UNCOMMON
-	)
-	
-	if treasure_defs.size() == 0:
-		push_warning("[DungeonManager] No RARE treasure rooms available for guaranteed placement")
-		return
-	
-	# Find open slot in range 0-2
-	var position = find_open_slot_in_range(0, 2)
-	if position == -1:
-		push_warning("[DungeonManager] No open slots in positions 1-3 for treasure")
-		return
-	
-	var room_def = treasure_defs.pick_random()
-	current_rank_rooms[position] = create_room_data(room_def)
-	print("[DungeonManager] Placed RARE treasure at position %d" % (position + 1))
-
-func place_guaranteed_merchant():
-	"""Place 1 RARE merchant in any open position"""
-	var merchant_defs = RoomRegistry.get_rooms_by_type_and_rarity(
-		Enums.RoomType.MERCHANT,
-		Enums.Rarity.UNCOMMON
-	)
-	
-	if merchant_defs.size() == 0:
-		push_warning("[DungeonManager] No RARE merchant rooms available for guaranteed placement")
-		return
-	
-	# Find any open slot
-	var position = find_open_slot_in_range(0, ROOMS_PER_RANK - 2) # must be 2 because last room always boss
-	if position == -1:
-		push_warning("[DungeonManager] No open slots for merchant")
-		return
-	
-	var room_def = merchant_defs.pick_random()
-	current_rank_rooms[position] = create_room_data(room_def)
-	print("[DungeonManager] Placed RARE merchant at position %d" % (position + 1))
-
-func place_guaranteed_campfire():
-	"""Place 1 RARE campfire in positions 9-10 (indices 8-9)"""
-	var campfire_defs = RoomRegistry.get_rooms_by_type_and_rarity(
-		Enums.RoomType.CAMPFIRE,
-		Enums.Rarity.COMMON
-	)
-	
-	if campfire_defs.size() == 0:
-		push_warning("[DungeonManager] No RARE campfire rooms available for guaranteed placement")
-		return
-	
-	# Find open slot in range 8-9
-	var position = find_open_slot_in_range(7, 8)
-	if position == -1:
-		push_warning("[DungeonManager] No open slots in positions 9-10 for campfire")
-		return
-	
-	var room_def = campfire_defs.pick_random()
-	current_rank_rooms[position] = create_room_data(room_def)
-	print("[DungeonManager] Placed RARE campfire at position %d" % (position + 1))
-
-func place_guaranteed_utility():
-	"""Place 1 RARE utility room in any open position (ranks 2+)"""
-	var utility_defs = RoomRegistry.get_rooms_by_type_and_rarity(
-		Enums.RoomType.UTILITY,
-		Enums.Rarity.UNCOMMON
-	)
-	
-	if utility_defs.size() == 0:
-		push_warning("[DungeonManager] No RARE utility rooms available for guaranteed placement")
-		return
-	
-	# Find any open slot
-	var position = find_open_slot_in_range(0, ROOMS_PER_RANK - 2)
-	if position == -1:
-		push_warning("[DungeonManager] No open slots for utility room")
-		return
-	
-	var room_def = utility_defs.pick_random()
-	current_rank_rooms[position] = create_room_data(room_def)
-	print("[DungeonManager] Placed RARE utility at position %d" % (position + 1))
-
-# ============================================================================
-# HELPER FUNCTIONS
-# ============================================================================
-
-func find_open_slot_in_range(start_idx: int, end_idx: int) -> int:
-	"""Find first null slot in given range. Returns -1 if none found."""
-	var open_slots: Array[int] = []
-	
-	for i in range(start_idx, end_idx + 1):
-		if i < current_rank_rooms.size() and current_rank_rooms[i] == null:
-			open_slots.append(i)
-	
-	if open_slots.size() == 0:
-		return -1
-	
-	# Pick random slot from available options
-	return open_slots.pick_random()
-
-func create_room_data(room_def: RoomDefinition) -> RoomData:
-	"""Create RoomData instance from RoomDefinition"""
-	var room_data = RoomData.new()
-	room_data.room_definition = room_def
-	room_data.chosen_event_scene = room_def.get_random_event()
-	return room_data
-
-func fill_remaining_slots():
-	"""Fill null slots with weighted random rooms, respecting all rules"""
-	var available_rooms = RoomRegistry.get_available_rooms_for_rank(current_rank)
-	var rarity_weights = get_rarity_weights_for_rank(current_rank)
-	
-	if available_rooms.is_empty():
-		push_error("[DungeonManager] No rooms available for rank %d" % current_rank)
-		return
-	
-	for i in range(ROOMS_PER_RANK):
-		if current_rank_rooms[i] != null:
-			continue  # Already filled by guaranteed placement
-		
-		# Try up to 20 times to find valid room
-		var placed = false
-		for attempt in range(20):
-			var room_def = pick_weighted_room_definition_with_rarity(
-				available_rooms,
-				rarity_weights
-			)
-			
-			# Validate against all rules
-			if can_place_room_at_position(room_def, i):
-				current_rank_rooms[i] = create_room_data(room_def)
-				register_placed_utility(room_def)
-				placed = true
-				break
-		
-		# Fallback if all attempts failed
-		if not placed:
-			push_warning("[DungeonManager] Using fallback room at position %d" % i)
-			current_rank_rooms[i] = create_fallback_room(i)
-
-# ============================================================================
-# VALIDATION RULE FUNCS
-# ============================================================================
-
-func can_place_room_at_position(room_def: RoomDefinition, position: int) -> bool:
-	"""Master validation - checks all rules"""
-	if not check_adjacency_rules(room_def, position):
-		return false
-	if not check_type_count_limits(room_def):
-		return false
-	if not check_specific_room_limits(room_def):
-		return false
-	if not check_utility_subtype_limit(room_def):
-		return false
-	return true
-
-func check_adjacency_rules(room_def: RoomDefinition, position: int) -> bool:
-	"""Check spacing between room types"""
-	if not ADJACENCY_RULES.has(room_def.room_type):
-		return true
-	
-	var rule = ADJACENCY_RULES[room_def.room_type]
-	var forbidden_types = rule.get("cannot_be_adjacent_to", [])
-	var min_spacing = rule.get("min_spacing", 0)
-	
-	for offset in range(1, min_spacing + 2):
-		# Check left
-		var left_idx = position - offset
-		if left_idx >= 0 and current_rank_rooms[left_idx] != null:
-			if current_rank_rooms[left_idx].room_definition.room_type in forbidden_types:
-				return false
-		
-		# Check right
-		var right_idx = position + offset
-		if right_idx < ROOMS_PER_RANK and current_rank_rooms[right_idx] != null:
-			if current_rank_rooms[right_idx].room_definition.room_type in forbidden_types:
-				return false
-	
-	return true
-
-func check_type_count_limits(room_def: RoomDefinition) -> bool:
-	"""Check type+rarity limits"""
-	if TYPE_COUNT_LIMITS.has(room_def.room_type):
-		var type_limits = TYPE_COUNT_LIMITS[room_def.room_type]
-		if type_limits.has(room_def.rarity):
-			var max_count = type_limits[room_def.rarity]
-			var current_count = count_rooms_by_type_and_rarity(
-				room_def.room_type,
-				room_def.rarity
-			)
-			if current_count >= max_count:
-				return false
-	return true
-
-func check_specific_room_limits(room_def: RoomDefinition) -> bool:
-	"""Check unique room limits"""
-	if SPECIFIC_ROOM_LIMITS.has(room_def.room_name):
-		var max_count = SPECIFIC_ROOM_LIMITS[room_def.room_name]
-		var current_count = count_rooms_by_name(room_def.room_name)
-		if current_count >= max_count:
-			return false
-	return true
-
-func check_utility_subtype_limit(room_def: RoomDefinition) -> bool:
-	"""Max 1 COMMON utility of each subtype"""
-	if room_def.room_type != Enums.RoomType.UTILITY:
-		return true
-	if room_def.rarity != Enums.Rarity.COMMON:
-		return true
-	
-	var subtype = room_def.utility_subtype
-	if subtype.is_empty():
-		return true
-	
-	return not used_utility_subtypes.has(subtype)
-
-func count_rooms_by_type_and_rarity(type: Enums.RoomType, rarity: Enums.Rarity) -> int:
-	var count = 0
-	for room in current_rank_rooms:
-		if room and room.room_definition.room_type == type and room.room_definition.rarity == rarity:
-			count += 1
-	return count
-
-func count_rooms_by_name(room_name: String) -> int:
-	var count = 0
-	for room in current_rank_rooms:
-		if room and room.room_definition.room_name == room_name:
-			count += 1
-	return count
-
-func register_placed_utility(room_def: RoomDefinition):
-	"""Track utility subtypes"""
-	if room_def.room_type == Enums.RoomType.UTILITY:
-		if room_def.rarity == Enums.Rarity.COMMON:
-			var subtype = room_def.utility_subtype
-			if not subtype.is_empty():
-				used_utility_subtypes[subtype] = 1
-
-func create_fallback_room(position: int) -> RoomData:
-	"""Safe fallback that won't violate rules"""
-	var fallbacks = RoomRegistry.get_rooms_by_type_and_rarity(
-		Enums.RoomType.TREASURE,
-		Enums.Rarity.COMMON
-	)
-	
-	if fallbacks.is_empty():
-		var starter = RoomRegistry.get_room_definition("starter")
-		return create_room_data(starter)
-	
-	return create_room_data(fallbacks.pick_random())
-
-func get_rarity_weights_for_rank(rank: int) -> Dictionary:
-	"""Get rarity distribution for current rank"""
-	if RARITY_WEIGHTS_BY_RANK.has(rank):
-		return RARITY_WEIGHTS_BY_RANK[rank]
-	
-	# Default for ranks beyond 5
-	return {
-		Enums.Rarity.COMMON: 50,
-		Enums.Rarity.RARE: 40,
-		Enums.Rarity.LEGENDARY: 10
-	}
-
-func pick_weighted_room_definition_with_rarity(
-	available_rooms: Array[RoomDefinition],
-	rarity_weights: Dictionary
-) -> RoomDefinition:
-	"""Pick room using spawn_weight AND rarity weight"""
-	var rarity_pool: Array[RoomDefinition] = []
-	
-	for room_def in available_rooms:
-		var rarity_weight = rarity_weights.get(room_def.rarity, 10)
-		var room_weight = room_def.spawn_weight
-		var total_weight = (rarity_weight * room_weight) / 10
-		
-		for i in range(total_weight):
-			rarity_pool.append(room_def)
-	
-	if rarity_pool.is_empty():
-		return available_rooms.pick_random()
-	
-	return rarity_pool.pick_random()
-
-# ============================================================================
-# DEBUG COMMANDS
-# ============================================================================
-
-func debug_print_rank():
-	"""Print detailed rank layout"""
-	print("\n=== RANK %d LAYOUT ===" % current_rank)
-	for i in current_rank_rooms.size():
-		var room = current_rank_rooms[i]
-		if room:
-			var combat_icon = "⚔️" if room.has_combat_this_instance else "  "
-			var rarity_str = Enums.Rarity.keys()[room.room_definition.rarity]
-			print("  [%d] %s %s %s (%s)" % [
-				i + 1,
-				combat_icon,
-				room.room_definition.room_name,
-				room.room_definition.room_type,
-				rarity_str
-			])
-		else:
-			print("  [%d] NULL ROOM" % (i + 1))
+func debug_print_status():
+	"""Print current dungeon status"""
+	print("\n=== DUNGEON STATUS ===")
+	print("Current Rank: %d" % current_rank)
+	print("Rooms visited this rank: %d" % rooms_visited_this_rank)
+	print("Player rooms remaining: %d" % Player.rooms_remaining)
+	print("Boss ready: %s" % (current_boss_enemy != null))
+	if current_boss_enemy:
+		print("  Boss: %s (HP: %d)" % [current_boss_enemy.enemy_name, current_boss_enemy.stats.hit_points])
 	print("===================\n")
 
-func debug_skip_to_boss():
-	"""Jump directly to boss fight"""
-	rooms_cleared_this_rank = ROOMS_PER_RANK
-	current_room_index = ROOMS_PER_RANK - 1
-	minimap_update_requested.emit()
+func debug_add_rooms(amount: int):
+	"""Grant player bonus rooms"""
+	Player.add_rooms(amount)
 
-func debug_regenerate_rank():
-	"""Regenerate current rank rooms"""
-	generate_rank_rooms()
-
-func debug_force_combat_all():
-	"""Set all rooms to 100% combat"""
-	for room in current_rank_rooms:
-		if room:
-			room.has_combat_this_instance = true
-	minimap_update_requested.emit()
-
-func debug_clear_combat_all():
-	"""Remove combat from all rooms"""
-	for room in current_rank_rooms:
-		if room:
-			room.has_combat_this_instance = false
-	minimap_update_requested.emit()
+func debug_set_rank(rank: int):
+	"""Jump to specific rank"""
+	current_rank = rank
+	await initialize_rank()
+	print("[DungeonManager] DEBUG: Jumped to rank %d" % rank)

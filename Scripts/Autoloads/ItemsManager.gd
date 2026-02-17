@@ -6,91 +6,31 @@ var crafting_recipes: Array[CraftingRecipe] = []  # [recipe_key: String] -> Craf
 var golden_item_registry: Dictionary = {}  # [common_item_name: String] -> golden_item_name: String
 var diamond_item_registry: Dictionary = {}  # [golden_item_name: String] -> diamond_item_name: String
 
+var _initialized: bool = false
 
 func _ready():
+	pass
+
+func initialize():
+	if _initialized:
+		return
+
+	_initialized = true
+
+	# MOVED FROM _READY()
 	# Create all your item types
+	crafting_recipes.clear()
+
 	setup_items()
 	setup_crafting_recipes()
 
 
 func setup_crafting_recipes():
-	crafting_recipes.clear()
-
-	add_recipes_golden()
-
-	add_recipes_diamond()
-
-	setup_potion_recipes()
-
-	# --- BUG RECIPES (GOLDEN)
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Bugs/Golden/golden_dark_crawler.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Bugs/Golden/golden_dew_fly.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Bugs/Golden/golden_firefly.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Bugs/Golden/golden_nimble_fly.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Bugs/Golden/golden_termite.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Bugs/Golden/golden_thorn_bug.tres"))
-	
-	# --- BUG RECIPES (DIAMOND)
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Bugs/Diamond/diamond_dark_crawler.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Bugs/Diamond/diamond_dew_fly.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Bugs/Diamond/diamond_firefly.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Bugs/Diamond/diamond_nimble_fly.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Bugs/Diamond/diamond_termite.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Bugs/Diamond/diamond_thorn_bug.tres"))
-
-func setup_potion_recipes():
-	# --- GOLDEN
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Potions/Golden/golden_acrid_potion.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Potions/Golden/golden_limbering_potion.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Potions/Golden/golden_vicious_potion.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Potions/Golden/golden_essence_of_charcoal.tres"))
-
-	# DIAMOND
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Potions/Diamond/diamond_acrid_potion.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Potions/Diamond/diamond_limbering_potion.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Potions/Diamond/diamond_vicious_potion.tres"))	
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Potions/Diamond/diamond_essence_of_charcoal.tres"))	
+	get_all_crafting_recipes_from_directory("res://Resources/CraftingRecipes/", ".tres")
 
 func setup_items():
 	get_all_files_from_directory("res://Resources/Items/", ".tres")
 
-func add_recipes_golden():
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/golden_testing_boots.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/golden_testing_robe.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/golden_testing_shield.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/golden_liferoot_gauntlets.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/golden_thorn_shield.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Golden/golden_battleworn_shield.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Golden/golden_double_plated_armor.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Golden/golden_tower_shield.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Golden/golden_lantern.tres"))
-
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Golden/golden_bronze_barbed_helm.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Golden/golden_livingwood_cloak.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Golden/golden_livingwood_helmet.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Golden/golden_thirsty_helmet.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Golden/golden_nimble_hood.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Golden/golden_peculiar_timepiece.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Golden/golden_purpleskin_gloves.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Golden/golden_purpleskin_vest.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Golden/golden_shafeek_boots.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Golden/golden_shafeek_shield.tres"))
-
-func add_recipes_diamond():
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Diamond/diamond_battleworn_shield.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Diamond/diamond_double_plated_armor.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Diamond/diamond_lantern.tres"))
-
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Diamond/diamond_bronze_barbed_helm.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Diamond/diamond_livingwood_cloak.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Diamond/diamond_livingwood_helmet.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Diamond/diamond_thirsty_helmet.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Diamond/diamond_nimble_hood.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Diamond/diamond_peculiar_timepiece.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Diamond/diamond_purpleskin_gloves.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Diamond/diamond_purpleskin_vest.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Diamond/diamond_shafeek_boots.tres"))
-	crafting_recipes.append(preload("res://Resources/CraftingRecipes/Diamond/diamond_shafeek_shield.tres"))
 
 func can_craft_items(item1: Item, item2: Item) -> bool:
 	"""Check if two items can be crafted together"""
@@ -161,6 +101,10 @@ func get_random_items(count: int, rarity: Enums.Rarity, include_bonus: bool = fa
 			if include_weapons:	
 				if item.item_name == Player.inventory.weapon_slot.item_name:  # Don't offer player weapon they already have.
 					continue
+				if item.has_category("Unique") && Player.inventory.has_unique_item(item.item_id): # Don't offer player multiple copies of unique items
+					continue
+				if item.has_category("Singularity") && Player.inventory.has_any_singularity_item(): # Don't offer player singularity items if they have one
+					continue
 				subset_items.append(item)
 			else:
 				# exclude weapons
@@ -208,7 +152,12 @@ func get_items_by_item_type(count: int, _item_type: Item.ItemType, _limit_rarity
 					continue
 				subset_items.append(item)
 			elif !_limit_rarity:
-				subset_items.append(item)	
+				if item.rarity in [Enums.Rarity.COMMON, Enums.Rarity.UNCOMMON, Enums.Rarity.RARE]:
+					if item.has_category("Unique") && Player.inventory.has_unique_item(item.item_id): # Don't offer player multiple copies of unique items
+						continue
+					if item.has_category("Singularity") && Player.inventory.has_any_singularity_item(): # Don't offer player singularity items if they have one
+						continue					
+					subset_items.append(item)	
 
 	# Pick random items (without duplicates)
 	var selected: Array[Item] = []
@@ -228,8 +177,12 @@ func get_items_by_category(count: int, _category: String):
 	for item in all_items:
 		for cat in item.categories:
 			if cat == _category:
-				item.slot_index = 100 #set a larger slot number so tooltips generate right-side
-				subset_items.append(item)
+				if item.rarity in [Enums.Rarity.COMMON, Enums.Rarity.UNCOMMON, Enums.Rarity.RARE]:
+					if item.has_category("Unique") && Player.inventory.has_unique_item(item.item_id): # Don't offer player multiple copies of unique items
+						continue
+					if item.has_category("Singularity") && Player.inventory.has_any_singularity_item(): # Don't offer player singularity items if they have one
+						continue					
+					subset_items.append(item)
 
 	# Pick random items (without duplicates)
 	var selected: Array[Item] = []
@@ -353,4 +306,23 @@ func get_all_files_from_directory(path : String, file_ext:= "", files := []):
 				#print("[ItemsManager] Loaded item: ", key)
 			else:
 				push_warning("[ItemsManager] Failed to load item: " + res)	
+	return files
+
+func get_all_crafting_recipes_from_directory(path : String, file_ext:= "", files := []):
+	var resources = ResourceLoader.list_directory(path)
+	for res in resources:
+		#print(str(path+res))
+		if res.ends_with("/"): 
+			# recursive for sub-directories
+			get_all_crafting_recipes_from_directory(path+res, file_ext, files)
+		elif file_ext && res.ends_with(file_ext): 
+			files.append(path+res)
+			var recipe = load(path+res) as CraftingRecipe
+			if recipe:
+				var key: String = res.replace(".tres", "")
+				recipe.recipe_id = key
+				crafting_recipes.append(recipe)
+				#print("[ItemsManager] Loaded crafting recipe: ", key)
+			else:
+				push_warning("[ItemsManager] Failed to load crafting recipe: " + res)	
 	return files

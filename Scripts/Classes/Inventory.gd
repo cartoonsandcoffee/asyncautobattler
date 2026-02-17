@@ -67,6 +67,53 @@ func add_item_at_slot(new_item: Item, slot_index: int) -> bool:
 	
 	return false
 
+func has_unique_item(item_id: String) -> bool:
+	# Check if this specific unique item is already equipped.
+	for item in item_slots:
+		if item and item.item_id == item_id:
+			return true
+    
+	# Also check weapon slot
+	if weapon_slot and weapon_slot.item_id == item_id:
+		return true
+    
+	return false
+
+func has_any_singularity_item() -> bool:
+	# Check if any Singularity item is already equipped.
+	for item in item_slots:
+		if item and item.has_category("Singularity"):
+			return true
+    
+	# Also check weapon slot
+	if weapon_slot and weapon_slot.has_category("Singularity"):
+		return true
+    
+	return false
+
+func has_this_singularity_item(item_id: String) -> bool:
+	# Check if any Singularity item is already equipped.
+	for item in item_slots:
+		if item and item.has_category("Singularity"):
+			if item and item.item_id == item_id:
+				return true
+	return false
+
+func can_add_item(new_item: Item) -> bool:
+	# Check if item can be added based on category restrictions.
+
+	# Check UNIQUE restriction
+	if new_item.has_category("Unique"):
+		if has_unique_item(new_item.item_id):
+			return false
+
+	# Check SINGULARITY restriction
+	if new_item.has_category("Singularity"):
+		if has_any_singularity_item():
+			return false
+
+	return true
+
 func replace_item_at_slot(new_item: Item, slot_index: int) -> bool:
 	if slot_index < 0 or slot_index >= item_slots.size():
 		return false
@@ -179,6 +226,21 @@ func get_item_count() -> int:
 	for slot in item_slots:
 		if slot != null:
 			count += 1
+	return count
+
+func count_items_with_category(category: String) -> int:
+	"""Count how many items in inventory have a specific category tag"""
+	var count = 0
+	
+	# Check weapon
+	if weapon_slot and category in weapon_slot.categories:
+		count += 1
+	
+	# Check inventory items
+	for item in item_slots:
+		if item and category in item.categories:
+			count += 1
+	
 	return count
 
 func expand_inventory(additional_slots: int) -> void:

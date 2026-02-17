@@ -40,7 +40,8 @@ enum RoomType {
 	CAMPFIRE,		# Restore player's health, never combat
 	BOSS,			# The Asynchronous multiplayer PVP battles
 	SPECIAL,
-	SKIPPED
+	SKIPPED,
+	TOWN
 }
 
 enum HallwayType {
@@ -73,7 +74,12 @@ enum TriggerType {
 	ON_ITEM_TRIGGERED,
 	ON_KILL,
 	OVERHEAL,
-	TURN_END
+	TURN_END,
+	ENEMY_EXPOSED,
+	ENEMY_WOUNDED,
+	ACID_PROCS_ON_ENEMY,
+	ON_ENEMY_STATUS_GAIN,
+	ON_ENEMY_STATUS_PROC
 }
 
 enum EffectType {
@@ -83,7 +89,8 @@ enum EffectType {
 	DEAL_DAMAGE,
 	HEAL,
 	TRIGGER_OTHER_ITEMS,
-	CONVERT
+	CONVERT,
+	ADD_REPEATS
 }
 
 enum StatusEffects {
@@ -97,7 +104,9 @@ enum StatusEffects {
 	BURN,			# deal BURN_BASE damage for each stack
 	BLEED,			# prefer this be 'damages health not shield' instead of poison
 	RANDOM,			# Randomizes Status
-	NONE
+	NONE,
+	ANY,			# Any status
+	ALL				# All statuses
 }
 
 enum TargetType {
@@ -113,6 +122,15 @@ enum Party {
 	ENEMY,
 	BOTH,
 	RANDOM
+}
+
+enum ItemToRetrigger {
+	NONE,
+	ALL,
+	RANDOM,
+	FIRST,
+	LAST,
+	SPECIFIC
 }
 
 func get_target_string(_target: Enums.TargetType) -> String:
@@ -157,7 +175,7 @@ func get_effect_type_string(_type: Enums.EffectType) -> String:
 		Enums.EffectType.APPLY_STATUS:
 			return "Apply Status"
 		Enums.EffectType.REMOVE_STATUS:
-			return "Apply Status"			
+			return "Remove Status"
 		Enums.EffectType.MODIFY_STAT:
 			return "Modify Stat"
 		Enums.EffectType.DEAL_DAMAGE:
@@ -168,6 +186,8 @@ func get_effect_type_string(_type: Enums.EffectType) -> String:
 			return "Trigger other items"
 		Enums.EffectType.CONVERT:
 			return "Convert"
+		Enums.EffectType.ADD_REPEATS:
+			return "Add additional triggers"
 		_:
 			return "<unknown effect>"
 
@@ -198,7 +218,7 @@ func get_trigger_type_string(_trigger: Enums.TriggerType) -> String:
 		Enums.TriggerType.ON_TAKING_DAMAGE:
 			return "On Taking Damage"
 		Enums.TriggerType.ON_DEALING_DAMAGE:
-			return "On Dealing Damage"
+			return "On Dealing Non-Weapon Damage"
 		Enums.TriggerType.ON_STATUS_GAINED:
 			return "On Status Gained"
 		Enums.TriggerType.ON_STATUS_REMOVED:
@@ -213,6 +233,16 @@ func get_trigger_type_string(_trigger: Enums.TriggerType) -> String:
 			return "Turn End"
 		Enums.TriggerType.OVERHEAL:
 			return "Overheal"
+		Enums.TriggerType.ENEMY_EXPOSED:
+			return "When the Enemy is Exposed"
+		Enums.TriggerType.ENEMY_WOUNDED:
+			return "When the Enemy is Wounded"
+		Enums.TriggerType.ACID_PROCS_ON_ENEMY:
+			return "When Acid removes Enemy shield"
+		Enums.TriggerType.ON_ENEMY_STATUS_GAIN:
+			return "When Enemy gains Status"
+		Enums.TriggerType.ON_ENEMY_STATUS_PROC:
+			return "When status triggers on Enemy"	
 		_:
 			return "<unknown trigger>"
 
@@ -237,6 +267,10 @@ func get_status_string(_status: Enums.StatusEffects) -> String:
 			return "stun"
 		Enums.StatusEffects.RANDOM:
 			return "random status effect"
+		Enums.StatusEffects.ANY:
+			return "any status"
+		Enums.StatusEffects.ALL:
+			return "all statuses"
 		_:
 			return "<unknown status effect>"
 

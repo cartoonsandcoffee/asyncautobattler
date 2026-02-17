@@ -30,11 +30,20 @@ signal settings_changed
 signal volume_changed(bus_name: String, volume: float)
 signal graphics_changed(setting: String, value)
 
+var _initialized: bool = false
+
 ## =============================================================================
 ## INITIALIZATION
 ## =============================================================================
 
 func _ready():
+	pass
+
+func initialize():
+	if _initialized:
+		return
+	_initialized = true
+
 	load_settings()
 	apply_all_settings()
 

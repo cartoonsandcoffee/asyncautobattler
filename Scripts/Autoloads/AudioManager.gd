@@ -95,14 +95,24 @@ const EVENT_SOUND_NAMES = {
 	"fire_01": "res://Assets/Audio/SFX/EVENT/fire_01.ogg",
 	"fire_02": "res://Assets/Audio/SFX/EVENT/fire_02.ogg",
 	"fire_out": "res://Assets/Audio/SFX/EVENT/fire_out.ogg",
+	"cheering": "res://Assets/Audio/SFX/EVENT/cheering.ogg",
 }
 
+var _initialized: bool = false
 
 ## =============================================================================
 ## INITIALIZATION
 ## =============================================================================
 
 func _ready():
+	pass
+
+func initialize():
+	if _initialized:
+		return
+
+	_initialized = true
+
 	# Create music players
 	_create_music_players()
 	

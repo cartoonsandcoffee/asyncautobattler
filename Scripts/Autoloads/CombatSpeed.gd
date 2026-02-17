@@ -46,7 +46,7 @@ const BASE_DURATIONS = {
 	
 	# COMBAT PACING
 	"attack_slide": 1.2,           # Attack slide animation
-	"attack_gap": 0.2,             # between multiple strikes
+	"attack_gap": 0.3,             # between multiple strikes
 
 	# VISUAL FEEDBACK
 	"damage_number": 0.8,          # Damage indicator animation

@@ -30,9 +30,19 @@ var cursor_hotspots: Dictionary = {
 	CursorType.LOADING: Vector2(16, 16)         # Center
 }
 
+var _initialized: bool = false
+
 func _ready():
+	pass
+
+func initialize():
+	if _initialized:
+		return
+	_initialized = true
+
 	_load_cursors()
 	set_cursor(CursorType.DEFAULT)
+
 
 func _load_cursors():
 	"""Load all cursor textures from Resources/Cursors/"""

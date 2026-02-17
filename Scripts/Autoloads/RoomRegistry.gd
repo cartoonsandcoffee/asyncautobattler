@@ -3,9 +3,18 @@ extends Node
 var room_definitions: Dictionary = {}
 var rooms_by_type: Dictionary = {}
 
-func _ready():
-	get_all_files_from_directory("res://Resources/Rooms/", ".tres")
+var _initialized: bool = false
 
+func _ready():
+	pass
+
+func initialize():
+	if _initialized:
+		return
+	
+	_initialized = true
+
+	get_all_files_from_directory("res://Resources/Rooms/", ".tres")
 
 func get_all_files_from_directory(path : String, file_ext:= "", files := []):
 	var resources = ResourceLoader.list_directory(path)

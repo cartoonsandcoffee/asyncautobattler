@@ -5,10 +5,20 @@ var all_set_bonuses: Array[SetBonus] = []
 # Track active sets per entity
 var entity_active_sets: Dictionary = {}  # {entity: Array[SetBonus]}
 
+var _initialized: bool = false
+
 signal set_bonuses_updated(entity)
 
 func _ready():
+	pass
+
+func initialize():
+	if _initialized:
+		return
+	_initialized = true
+
 	load_all_set_bonuses()
+
 
 func load_all_set_bonuses():
 	all_set_bonuses.clear()
@@ -60,7 +70,10 @@ func _has_all_required_items(set_bonus: SetBonus, owned_items: Array[Item]) -> b
 		var found = false
 		for owned_item in owned_items:
 			# Match by item_name (since items are duplicated/instanced)
-			if owned_item.item_name == required_item.item_name:
+			#if owned_item.item_name == required_item.item_name:
+			
+			# Using "base_item_id" variable so gold and diamond items will still activate set bonuses
+			if owned_item.get_base_id() == required_item.get_base_id():
 				found = true
 				break
         

@@ -23,6 +23,8 @@ var hit_points_current: int = 10
 var strikes_current: int = 1
 var burn_damage_current: int = 3
 
+var combat_temp_damage: int = 0
+
 var refresh_cost: int = 1
 
 func _init():
@@ -30,7 +32,7 @@ func _init():
 	reset_to_base_values()
 
 func reset_to_base_values():
-	"""Reset current values to their base values"""
+	# Reset current values to their base values
 	damage_current = damage
 	shield_current = shield
 	agility_current = agility
@@ -68,7 +70,24 @@ func reset_stats_after_combat():
 	agility_current = agility
 	strikes_current = strikes
 	burn_damage_current = burn_damage
+	
+	reset_combat_temp_modifiers()
 	stats_updated.emit()
+
+func reset_combat_temp_modifiers():
+	combat_temp_damage = 0
+
+
+func modify_combat_temp_stat(stat: Enums.Stats, amount: int):
+	# Modify combat-duration temp stat and emit signal.
+	match stat:
+		Enums.Stats.DAMAGE:
+			combat_temp_damage += amount
+		_:
+			push_warning("Attempted to modify combat_temp for non-output stat: %s" % stat)
+	
+	stats_updated.emit()
+
 
 func decrease_stat(_stat: Enums.Stats, value: int):
 	match _stat:
@@ -125,6 +144,25 @@ func set_stat(_stat: Enums.Stats, value: int):
 	
 	stats_updated.emit()
 
+func set_base_stat(_stat: Enums.Stats, value: int):
+	match _stat:
+		Enums.Stats.HITPOINTS:
+			hit_points = value
+		Enums.Stats.DAMAGE:
+			damage = value	
+		Enums.Stats.SHIELD:
+			shield = value
+		Enums.Stats.AGILITY:
+			agility = value
+		Enums.Stats.STRIKES:
+			strikes = value
+		Enums.Stats.BURN_DAMAGE:
+			burn_damage = value				
+		Enums.Stats.GOLD:
+			gold = value
+	
+	stats_updated.emit()
+
 func increase_base_stat(_stat: Enums.Stats, value: int):
 	match _stat:
 		Enums.Stats.HITPOINTS:
@@ -173,6 +211,9 @@ func modify_stat(stat: Enums.Stats, amount: int, stat_type: Enums.StatType = Enu
 				hit_points += amount
 				# Ensure current doesn't exceed new max
 				hit_points_current = mini(hit_points_current, hit_points)
+			elif stat_type == Enums.StatType.MISSING:
+				hit_points_current -= amount
+				hit_points_current = clampi(hit_points_current, 1, hit_points)	# JDM: Modify "Missing" stat to remove the value (can't be less than 1 HP,  can't kill yourself)
 			else:
 				hit_points_current += amount
 				# Clamp to valid range [0, max]
@@ -182,6 +223,9 @@ func modify_stat(stat: Enums.Stats, amount: int, stat_type: Enums.StatType = Enu
 			if stat_type == Enums.StatType.BASE:
 				shield += amount
 				shield_current = mini(shield_current, shield)
+			elif stat_type == Enums.StatType.MISSING:
+				shield_current -= amount
+				shield_current = maxi(shield_current, 0)
 			else:
 				shield_current += amount
 				# Shield can't go negative
@@ -203,8 +247,10 @@ func modify_stat(stat: Enums.Stats, amount: int, stat_type: Enums.StatType = Enu
 				agility_current = maxi(agility_current, 0)
 		
 		Enums.Stats.STRIKES:
-			strikes += amount
-			strikes_current += amount
+			if stat_type == Enums.StatType.BASE:
+				strikes += amount
+			else:
+				strikes_current += amount
 			# Minimum 1 strike
 			strikes = maxi(strikes, 1)
 			strikes_current = maxi(strikes_current, 1)

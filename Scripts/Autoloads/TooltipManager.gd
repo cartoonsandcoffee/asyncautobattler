@@ -6,6 +6,7 @@ extends CanvasLayer
 var current_tooltip: Control = null
 var tooltip_offset := Vector2(0, 10)
 var padding := 10  # Minimum distance from screen edges
+var item_size:= Vector2(100,105)
 
 var item_tooltip_scene = preload("res://Scenes/Elements/item_tooltip.tscn")
 
@@ -28,7 +29,7 @@ func show_item_tooltip(item: Item, anchor_global_pos: Vector2, anchor_size: Vect
 	
 	# Setup the tooltip with item data (uses existing item_tooltip.gd logic)
 	current_tooltip.set_item(item, false)
-
+	
 	# Wait one frame for tooltip to calculate its size
 	await get_tree().process_frame
 	
@@ -54,7 +55,7 @@ func hide_tooltip() -> void:
 ## Falls back to anchoring tooltip top to item bottom (grows downward) if insufficient space
 func _calculate_anchored_position(tooltip: Control, anchor_pos: Vector2, anchor_size: Vector2) -> Vector2:
 	var viewport_size = get_viewport().get_visible_rect().size
-	
+
 	# Get tooltip size
 	var tooltip_size: Vector2
 	if tooltip.has_node("Panel/PanelContainer"):
@@ -62,7 +63,7 @@ func _calculate_anchored_position(tooltip: Control, anchor_pos: Vector2, anchor_
 		tooltip_size = panel.size
 	else:
 		tooltip_size = tooltip.size
-	
+
 	var pos = Vector2.ZERO
 	
 	# VERTICAL: Anchor bottom of tooltip to top of item (grows upward)
@@ -70,7 +71,7 @@ func _calculate_anchored_position(tooltip: Control, anchor_pos: Vector2, anchor_
 	var item_bottom_y = anchor_pos.y + anchor_size.y
 	
 	var pos_above = item_top_y - tooltip_size.y  # Bottom of tooltip at top of item
-	var pos_below = item_bottom_y  # Top of tooltip at bottom of item
+	var pos_below = item_bottom_y + tooltip_size.y # Top of tooltip at bottom of item
 	
 	if pos_above >= padding:
 		# Enough space above - anchor bottom to top (grows upward)
@@ -80,15 +81,27 @@ func _calculate_anchored_position(tooltip: Control, anchor_pos: Vector2, anchor_
 		pos.y = pos_below + tooltip_offset.y
 	
 	# HORIZONTAL: Try right first, then left if that goes offscreen
-	var pos_right = anchor_pos.x + tooltip_offset.x
-	var pos_left = anchor_pos.x - (tooltip_size.x - anchor_size.x) - tooltip_offset.x
+	var item_left_x = anchor_pos.x
+	var item_right_x = anchor_pos.x + anchor_size.x
+
+	var pos_right = item_left_x + tooltip_offset.x
+	var pos_left = item_right_x - (tooltip_size.x) - tooltip_offset.x 
 	
-	if pos_right + tooltip_size.x <= viewport_size.x - padding:
-		# Right fits
+	# Check if right side fits without going offscreen
+	var right_fits = (pos_right + tooltip_size.x <= viewport_size.x - padding)
+	
+	# Check if left side fits without going offscreen
+	var left_fits = (pos_left >= padding)
+
+	if left_fits:
+		# Right doesn't fit but left does
+		pos.x = pos_left
+	elif right_fits:
+		# Right side has room
 		pos.x = pos_right
 	else:
-		# Right goes offscreen, use left
-		pos.x = pos_left
+		# Neither side fits perfectly, prefer right and let horizontal clamp handle it
+		pos.x = pos_right
 	
 	# Final clamp to ensure tooltip stays on screen
 	pos.x = clamp(pos.x, padding, viewport_size.x - tooltip_size.x - padding)

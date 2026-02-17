@@ -6,6 +6,7 @@ extends Resource
 
 
 @export var recipe_name: String = ""
+@export var recipe_id: String = ""
 
 # Result
 @export var result_item: Item:
