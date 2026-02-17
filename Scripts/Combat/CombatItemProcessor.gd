@@ -51,7 +51,7 @@ func process_items(entity, trigger_type: Enums.TriggerType, trigger_stat = Enums
 	
 	return validated_items
 
-func process_items_with_status(entity, trigger_type: Enums.TriggerType, trigger_status: Enums.StatusEffects) -> Array:
+func process_items_with_status(entity, trigger_type: Enums.TriggerType, trigger_status: Enums.StatusEffects, _stacks: int) -> Array:
 	# Process items that trigger based on status effects.
 	# Used for ON_STATUS_GAINED and ON_STATUS_REMOVED.
 
@@ -195,7 +195,7 @@ func collect_triggered_items_with_status(entity, trigger_type: Enums.TriggerType
 				if rule.trigger_type == trigger_type:
 					# Check if rule has status filter
 					if rule.trigger_status != Enums.StatusEffects.NONE:
-						if rule.trigger_status == trigger_status:
+						if rule.trigger_status == trigger_status || rule.trigger_status == Enums.StatusEffects.ANY:
 							if rule.trigger_value_threshold == 0 or abs(status_change_amount) >= rule.trigger_value_threshold:
 								items_to_proc.append({
 									"item": entity.inventory.weapon_slot,
@@ -217,7 +217,7 @@ func collect_triggered_items_with_status(entity, trigger_type: Enums.TriggerType
 				for rule in item.rules:
 					if rule.trigger_type == trigger_type:
 						if rule.trigger_status != Enums.StatusEffects.NONE:
-							if rule.trigger_status == trigger_status:
+							if rule.trigger_status == trigger_status || rule.trigger_status == Enums.StatusEffects.ANY:
 								if rule.trigger_value_threshold == 0 or abs(status_change_amount) >= rule.trigger_value_threshold:
 									items_to_proc.append({
 										"item": item,

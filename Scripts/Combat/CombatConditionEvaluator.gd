@@ -39,7 +39,9 @@ func evaluate_condition(rule: ItemRule, source_entity, target_entity) -> bool:
 		return _evaluate_stat_condition(rule, check_entity)
 	elif rule.condition_type == ItemRule.StatOrStatus.STATUS:
 		return _evaluate_status_condition(rule, check_entity)
-	
+	elif rule.condition_type == ItemRule.StatOrStatus.ITEM_CATEGORY:
+		return _evaluate_item_category(rule, check_entity)
+
 	return false
 
 # ===== STAT CONDITIONS =====
@@ -78,6 +80,19 @@ func _evaluate_status_condition(rule: ItemRule, entity) -> bool:
 	
 	# Perform the comparison
 	return _compare_values(status_value, compare_value, rule.condition_comparison)
+
+# ===== INVENTORY CATEGORY CONDITION
+func _evaluate_item_category(rule: ItemRule, entity) -> bool:
+	# Evaluate the number of items that match a particular category string
+
+	# Get the count of items with that category
+	var item_count = entity.inventory.count_items_with_category(rule.condition_item_category)
+	
+	# Get the comparison value
+	var compare_value = _get_comparison_value(rule, entity)
+	
+	# Perform the comparison
+	return _compare_values(item_count, compare_value, rule.condition_comparison)
 
 # ===== COMPARISON VALUE RESOLUTION =====
 
@@ -127,6 +142,8 @@ func _compare_values(left_value: int, right_value: int, operator: String) -> boo
 		"<=":
 			return left_value <= right_value
 		"==":
+			return left_value == right_value
+		"=":
 			return left_value == right_value
 		"!=":
 			return left_value != right_value

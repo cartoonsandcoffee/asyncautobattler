@@ -3,6 +3,7 @@ extends Node
 
 ## Executes ItemRule effects
 ## Handles dynamic values, conversions, meta-triggers, and all effect types
+signal non_weapon_damage_triggered(entity, amount: int, source_item: Item)
 
 var combat_manager
 var stat_handler: CombatStatHandler
@@ -24,7 +25,7 @@ func _init(manager, stat_handler_ref: CombatStatHandler, status_handler_ref: Com
 
 # ===== MAIN ENTRY POINT =====
 
-func execute_item_rule(item: Item, rule: ItemRule, source_entity, target_entity):
+func execute_item_rule(item: Item, rule: ItemRule, source_entity, target_entity, _amount: int = 0):
 	# Execute a single ItemRule's effect.
 	
 	# IMPORTANT: This function is called for EACH rule in an item's rule list.
@@ -56,7 +57,7 @@ func execute_item_rule(item: Item, rule: ItemRule, source_entity, target_entity)
 	# Execute the effect (possibly multiple times)
 	for i in range(execution_count):
 		# -- EXECUTE THE EFFECT!
-		await _execute_effect_once(item, rule, source_entity, target_entity)
+		await _execute_effect_once(item, rule, source_entity, target_entity, _amount)
 
 		# Small delay between repeats
 		if i < execution_count - 1:
@@ -84,11 +85,60 @@ func _calculate_execution_count(item: Item, rule: ItemRule, source_entity) -> in
 		var category_count = combat_manager.item_processor.count_items_with_category(source_entity, item.repeat_rules_for_category)
 		count += category_count
 	
+	# Check for persistent rules that might increase the repeats
+	count += _check_persistent_repeat_modifiers(source_entity, item)
+
 	return maxi(count, 1)  # At least 1
+
+func _check_persistent_repeat_modifiers(entity, source_item):
+	var count: int = 0
+
+	# Get entity's inventory
+	var inventory = null
+	if entity == combat_manager.player_entity:
+		inventory = Player.inventory
+	elif "inventory" in entity:
+		inventory = entity.inventory
+	
+	if not inventory:
+		return 0
+	
+	# Collect items
+	var all_items = []
+	if inventory.weapon_slot:
+		all_items.append(inventory.weapon_slot)
+	for item in inventory.item_slots:
+		if item:
+			all_items.append(item)
+	
+	# Process persistent rules
+	for item in all_items:
+		for rule in item.rules:
+			# Only check persistent rules
+			if rule.trigger_type != Enums.TriggerType.PERSISTENT:
+				continue
+			
+			# Only check if they modify the repeats value
+			if rule.effect_type not in [Enums.EffectType.ADD_REPEATS]:
+				continue
+			
+			# Evaluate condition
+			if rule.has_condition:
+				if not condition_evaluator.evaluate_condition(rule, entity, entity):
+					continue
+			
+			# make sure the source item's category matches
+			if !source_item.has_category(rule.target_item_category):
+				continue
+
+			# Apply effect
+			count += rule.effect_amount
+	
+	return count
 
 # ===== EFFECT EXECUTION =====
 
-func _execute_effect_once(item: Item, rule: ItemRule, source_entity, target_entity):
+func _execute_effect_once(item: Item, rule: ItemRule, source_entity, target_entity, _trigger_amount: int = 0):
 	# Execute a single instance of the effect.
 	var item_name = item.item_name if item else "Unknown Item"
 
@@ -98,39 +148,58 @@ func _execute_effect_once(item: Item, rule: ItemRule, source_entity, target_enti
 	# Execute based on effect type
 	match rule.effect_type:
 		Enums.EffectType.MODIFY_STAT:
-			await _execute_modify_stat(rule, source_entity, actual_target, item)
+			await _execute_modify_stat(rule, source_entity, actual_target, item, _trigger_amount)
 		
 		Enums.EffectType.APPLY_STATUS:
-			await _execute_apply_status(rule, source_entity, actual_target, item)
+			await _execute_apply_status(rule, source_entity, actual_target, item, _trigger_amount)
 		
 		Enums.EffectType.REMOVE_STATUS:
-			await _execute_remove_status(rule, source_entity, actual_target, item)
+			await _execute_remove_status(rule, source_entity, actual_target, item, _trigger_amount)
 		
 		Enums.EffectType.DEAL_DAMAGE:
-			await _execute_deal_damage(rule, source_entity, actual_target, item)
+			await _execute_deal_damage(rule, source_entity, actual_target, item, _trigger_amount)
+			non_weapon_damage_triggered.emit(source_entity, _trigger_amount, item)
 		
 		Enums.EffectType.HEAL:
-			await _execute_heal(rule, source_entity, actual_target, item)
+			await _execute_heal(rule, source_entity, actual_target, item, _trigger_amount)
 		
 		Enums.EffectType.CONVERT:
 			await _execute_conversion(rule, source_entity, item)
 		
 		Enums.EffectType.TRIGGER_OTHER_ITEMS:
-			await _execute_meta_trigger(rule, source_entity)
+			await _execute_meta_trigger(rule, source_entity, item)
 
 # ===== INDIVIDUAL EFFECT TYPES =====
 
-func _execute_modify_stat(rule: ItemRule, source_entity, target_entity, item: Item):
-	"""Modify a stat (CURRENT or BASE)."""
-	var amount = _calculate_effect_amount(rule, source_entity, target_entity)
+func _execute_modify_stat(rule: ItemRule, source_entity, target_entity, item: Item, _trigger_amount: int = 0):
+	# Execute a MODIFY_STAT effect.
+	# Routes to different handlers based on stat type:
+	# - Currency stats (HP/Shield/Agility): Modified directly
+	# - Output stats (Damage/Strikes/Burn): Modified via temp modifiers, then recalculated
+	
+
+	var amount = _calculate_effect_amount(rule, source_entity, target_entity, _trigger_amount)
 	
 	var old_value:int = stat_handler.get_stat_value(target_entity, rule.target_stat, Enums.StatType.CURRENT)
 
 	# - SPAWN THE VISUAL INDICATOR
 	await combat_manager.proc_item(item, rule, target_entity, amount)
 	
+	# Route based on stat type
+	match rule.target_stat:
+		# CURRENCY STATS: Modify directly via stat_handler
+		Enums.Stats.HITPOINTS, Enums.Stats.SHIELD, Enums.Stats.AGILITY, Enums.Stats.BURN_DAMAGE, Enums.Stats.GOLD, Enums.Stats.STRIKES:
+			stat_handler.change_stat(target_entity, rule.target_stat, amount, rule.target_stat_type, item)
+		
+		# OUTPUT STATS: Modify temp modifiers, then recalculate
+		Enums.Stats.DAMAGE:
+			target_entity.stats.modify_combat_temp_stat(Enums.Stats.DAMAGE, amount)
+			stat_handler.recalculate_damage(target_entity)
+		
+
+	## -- JDM: Commenting this out to try match statement above for temp stat bonuses handling
 	# Apply to stat handler
-	stat_handler.change_stat(target_entity, rule.target_stat, amount, rule.target_stat_type, item)
+	#stat_handler.change_stat(target_entity, rule.target_stat, amount, rule.target_stat_type, item)
 	# Note: stat_handler.change_stat() will emit signals and trigger items automatically
 
 	var new_value:int = stat_handler.get_stat_value(target_entity, rule.target_stat, Enums.StatType.CURRENT)
@@ -157,9 +226,10 @@ func _execute_modify_stat(rule: ItemRule, source_entity, target_entity, item: It
 			old_value, new_value])
 
 
-func _execute_apply_status(rule: ItemRule, source_entity, target_entity, item: Item):
+func _execute_apply_status(rule: ItemRule, source_entity, target_entity, item: Item, _trigger_amount:int = 0):
 	"""Apply a status effect."""
-	var amount = _calculate_effect_amount(rule, source_entity, target_entity)
+	var amount = _calculate_effect_amount(rule, source_entity, target_entity, _trigger_amount)
+	var revert_to_random: bool = false
 
 	# Handle RANDOM status
 	var status_to_apply = rule.target_status
@@ -168,15 +238,16 @@ func _execute_apply_status(rule: ItemRule, source_entity, target_entity, item: I
 		var valid_statuses = []
 		for status_value in Enums.StatusEffects.values():
 			var status: Enums.StatusEffects = status_value
-			if status != Enums.StatusEffects.NONE and status != Enums.StatusEffects.RANDOM:
+			if status not in [Enums.StatusEffects.NONE, Enums.StatusEffects.RANDOM, Enums.StatusEffects.ANY, Enums.StatusEffects.ALL]:
 				valid_statuses.append(status)
 		
 		if valid_statuses.is_empty():
 			return
 		
 		status_to_apply = valid_statuses[randi() % valid_statuses.size()]
+		revert_to_random = true
 
-	# Set the status for RANDOM
+	# Set the status for RANDOM for visual
 	rule.target_status = status_to_apply
 
 	# Queue visuals in correct order
@@ -184,6 +255,10 @@ func _execute_apply_status(rule: ItemRule, source_entity, target_entity, item: I
 	if combat_panel:
 		combat_panel.spawn_item_proc_indicator(item, rule, source_entity, amount)
 
+	#JDM: Revert back to random status when necessary for tooltip
+	if revert_to_random:
+		rule.target_status = Enums.StatusEffects.RANDOM
+		
 	# Apply through status handler
 	status_handler.apply_status(target_entity, status_to_apply, amount)
 
@@ -199,9 +274,10 @@ func _execute_apply_status(rule: ItemRule, source_entity, target_entity, item: I
 			combat_manager.color_status(status_name),
 			new_stacks])
 
-func _execute_remove_status(rule: ItemRule, source_entity, target_entity, item: Item):
+func _execute_remove_status(rule: ItemRule, source_entity, target_entity, item: Item, _trigger_amount: int = 0):
 	"""Remove a status effect."""
-	var amount = _calculate_effect_amount(rule, source_entity, target_entity)
+	var amount = _calculate_effect_amount(rule, source_entity, target_entity, _trigger_amount)
+	var revert_to_random: bool = false
 
 	var status_to_remove = rule.target_status
 	if status_to_remove == Enums.StatusEffects.RANDOM:
@@ -209,7 +285,7 @@ func _execute_remove_status(rule: ItemRule, source_entity, target_entity, item: 
 		var active_statuses = []
 		for status_value in Enums.StatusEffects.values():
 			var status: Enums.StatusEffects = status_value
-			if status != Enums.StatusEffects.NONE and status != Enums.StatusEffects.RANDOM:
+			if status not in [Enums.StatusEffects.NONE, Enums.StatusEffects.RANDOM, Enums.StatusEffects.ANY, Enums.StatusEffects.ALL]:
 				var stacks = status_handler.get_status_value(target_entity, status)
 				if stacks > 0:
 					active_statuses.append(status)
@@ -221,6 +297,7 @@ func _execute_remove_status(rule: ItemRule, source_entity, target_entity, item: 
 			return
 		
 		status_to_remove = active_statuses[randi() % active_statuses.size()]
+		revert_to_random = true
 
 	var old_stacks: int = status_handler.get_status_value(target_entity, status_to_remove)
 	# check if there are stacks to remove
@@ -230,13 +307,17 @@ func _execute_remove_status(rule: ItemRule, source_entity, target_entity, item: 
 
 	var effective_amount: int = max(old_stacks - old_stacks, old_stacks - amount) #old_stacks - new_stacks
 
-	# Overwrite the rule status for RANDOM   ## JDM: This might be where the RANDOM keyword is getting overwritten once a 'remove random' item procs
+	# Overwrite the rule status for RANDOM for visual proc
 	rule.target_status = status_to_remove
 
 	# Queue visuals in correct order
 	var combat_panel = combat_manager.get_tree().get_first_node_in_group("combat_panel")
 	if combat_panel:
 		combat_panel.spawn_item_proc_indicator(item, rule, target_entity, (effective_amount * -1))
+
+	# JDM: Revert rule back to random for rule text
+	if revert_to_random:
+		rule.target_status = Enums.StatusEffects.RANDOM
 
 	# Remove through status handler
 	status_handler.remove_status(target_entity, status_to_remove, amount)
@@ -255,9 +336,9 @@ func _execute_remove_status(rule: ItemRule, source_entity, target_entity, item: 
 		]
 	)
 
-func _execute_deal_damage(rule: ItemRule, source_entity, target_entity, item: Item):
+func _execute_deal_damage(rule: ItemRule, source_entity, target_entity, item: Item, _trigger_amount: int = 0):
 	"""Deal direct damage."""
-	var amount = _calculate_effect_amount(rule, source_entity, target_entity)
+	var amount = _calculate_effect_amount(rule, source_entity, target_entity, _trigger_amount)
 	
 	# LOG before damage
 	combat_manager.add_to_combat_log_string("   %s - %s takes %s damage" % [
@@ -271,9 +352,9 @@ func _execute_deal_damage(rule: ItemRule, source_entity, target_entity, item: It
 	# Deal damage through damage system
 	await damage_system.apply_damage(target_entity, amount, item, "item")
 
-func _execute_heal(rule: ItemRule, source_entity, target_entity, item: Item):
+func _execute_heal(rule: ItemRule, source_entity, target_entity, item: Item, _trigger_amount: int = 0):
 	"""Heal HP."""
-	var amount = _calculate_effect_amount(rule, source_entity, target_entity)
+	var amount = _calculate_effect_amount(rule, source_entity, target_entity, _trigger_amount)
 	var old_hp = target_entity.stats.hit_points_current
 
 	# Heal through damage system
@@ -398,7 +479,7 @@ func _execute_conversion(rule: ItemRule, source_entity, item: Item):
 			combat_manager.color_text(str(to_amount), Color.WHITE),
 			to_name])
 
-func _execute_meta_trigger(rule: ItemRule, source_entity):
+func _execute_meta_trigger(rule: ItemRule, source_entity, item: Item):
 	# Execute a meta-trigger (TRIGGER_OTHER_ITEMS).
 	
 	# This triggers all items of a certain trigger type on a target entity.
@@ -417,13 +498,14 @@ func _execute_meta_trigger(rule: ItemRule, source_entity):
 	combat_manager.add_to_combat_log_string("    🔗 Meta-trigger: Activating %s's %s items" % [_get_entity_name(target_entity), Enums.get_trigger_type_string(rule.retrigger_type)], Color.LIGHT_BLUE)
 	
 	# Process items through CombatManager (which uses ItemProcessor)
-	await combat_manager.process_entity_items_sequentially(target_entity, rule.retrigger_type)
+	await combat_manager.process_entity_items_sequentially(target_entity, rule.retrigger_type, Enums.Stats.NONE, item)
 	
 	current_recursion_depth -= 1
 
+
 # ===== DYNAMIC VALUE CALCULATION =====
 
-func _calculate_effect_amount(rule: ItemRule, source_entity, target_entity) -> int:
+func _calculate_effect_amount(rule: ItemRule, source_entity, target_entity, _trigger_amount: int = 0) -> int:
 	# Calculate the effect amount dynamically.
 	
 	# Can be:
@@ -450,9 +532,17 @@ func _calculate_effect_amount(rule: ItemRule, source_entity, target_entity) -> i
 			var status_entity = _get_target_entity(rule.effect_stat_party, source_entity)
 			base_amount = status_handler.get_status_value(status_entity, rule.effect_status_value)
 	
+		ItemRule.ConditionValueType.TRIGGER_AMOUNT:
+			# Read from the amount of the previous item that caused this effect to trigger
+			base_amount = _trigger_amount
+
 	# TODO: Apply percentage modifiers if needed (future feature)
 	# if rule.has_percentage_modifier:
-	#     base_amount = int(base_amount * rule.percentage_value)
+	var multiplier: float = 1.0
+	if rule.effect_multiplier > 0.0:
+		multiplier = rule.effect_multiplier
+
+	base_amount = int(base_amount * multiplier)
 	
 	return base_amount
 

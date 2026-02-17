@@ -10,9 +10,10 @@ signal invalid_combination()
 signal combiner_closed()
 
 enum CombinerMode {
-	CRAFT,                  # Combine items using recipes
+	COMBINE,                  # Combine items using recipes
 	REPLACE_SAME_RARITY,    # Replace with random item of same rarity
-	REPLACE_HIGHER_TIER     # Replace with random item of higher tier
+	REPLACE_HIGHER_TIER,     # Replace with random item of higher tier
+	CRAFT,
 }
 
 @onready var craft_display: PanelContainer = $Panel/panelBlack/panelCombiner
@@ -40,8 +41,11 @@ enum CombinerMode {
 
 @onready var zoom_altar: ZoomEvent = $zoomAltar
 @onready var zoom_forge: ZoomEvent = $zoomForge
+@onready var zoom_craft: ZoomEvent = $zoomCraftBug
 
-@export var combiner_mode: CombinerMode = CombinerMode.CRAFT
+@onready var anim_player: AnimationPlayer = $AnimationPlayer
+
+@export var combiner_mode: CombinerMode = CombinerMode.COMBINE
 @export var number_of_slots: int = 2:
 	set(value):
 		number_of_slots = clampi(value, 1, 2)
@@ -54,6 +58,10 @@ enum CombinerMode {
 @export var box_name:String = ""
 @export var button_text: String = ""
 @export var crafting_message: String = "Crafting..."
+
+@export_group("Item Requirement")
+@export var has_category_requirement: bool = false
+@export var required_category:String = ""
 
 @export_group("Success Box")
 @export var sb_name: String = ""
@@ -72,10 +80,10 @@ var result: Item = null
 func _ready():
 	zoom_altar.zoom_completed.connect(_on_altar_zoom_completed)
 	zoom_forge.zoom_completed.connect(_on_forge_zoom_completed)
+	zoom_craft.zoom_completed.connect(_on_craft_bug_zoom_completed)
 	result = null
 
 	setup_ui()
-	setup_particles()
 	setup_drop_zones()
 	update_slot_visibility()
 
@@ -107,34 +115,11 @@ func setup_ui():
 	craft_slot_1.mouse_filter = Control.MOUSE_FILTER_STOP
 	craft_slot_2.mouse_filter = Control.MOUSE_FILTER_STOP
 
-func setup_particles():
-	"""Create particle effect for crafting success"""
-	crafting_particles = CPUParticles2D.new()
-	crafting_particles.amount = 50
-	crafting_particles.lifetime = 1.0
-	crafting_particles.explosiveness = 0.8
-	crafting_particles.emission_shape = CPUParticles2D.EMISSION_SHAPE_SPHERE
-	crafting_particles.emission_sphere_radius = 30.0
-	
-	# Golden spark colors
-	var gradient = Gradient.new()
-	gradient.colors = [Color("#FFD700"), Color("#FFA500"), Color("#FFFFFF")]
-	crafting_particles.color_ramp = gradient
-	
-	crafting_particles.gravity = Vector2(0, 200)
-	crafting_particles.initial_velocity_min = 100
-	crafting_particles.initial_velocity_max = 200
-	crafting_particles.scale_amount_min = 2.0
-	crafting_particles.scale_amount_max = 4.0
-	
-	crafting_particles.one_shot = true
-	crafting_particles.emitting = false
-	
-	add_child(crafting_particles)
-	
-	# Position particles at center of crafting area
-	await get_tree().process_frame
-	crafting_particles.position = Vector2(size.x / 2, size.y / 2)
+func player_popup_open():
+	Player.popup_open = true
+
+func player_popup_close():
+	Player.popup_open = false
 
 func setup_drop_zones():
 	"""Set up drag-and-drop zones for inventory items"""
@@ -147,6 +132,11 @@ func add_item_to_slot(item: Item, inventory_index: int, slot_number: int):
 	if is_processing_craft:
 		return  # Don't allow changes during crafting
 	
+	if has_category_requirement:
+		if !item.has_category(required_category):
+			show_error_message("You'd rather not throw that in there.")
+			return
+
 	if slot_number == 1:
 		if inventory_index == slot_2_inventory_index:
 			show_error_message("Can't use the same item twice!")
@@ -170,7 +160,7 @@ func add_item_to_slot(item: Item, inventory_index: int, slot_number: int):
 		slot_2_icon.visible = true
 		slot_2_label.text = item.item_name
 	
-	if combiner_mode == CombinerMode.CRAFT:
+	if combiner_mode == CombinerMode.COMBINE || combiner_mode == CombinerMode.CRAFT:
 		validate_combination(slot_number)
 	else:
 		validate_offering()
@@ -193,34 +183,51 @@ func remove_item_from_slot(slot_number: int):
 		slot_2_icon.visible = false
 		slot_2_label.text = "SLOT 2"
 	
-	if combiner_mode == CombinerMode.CRAFT:
+	if combiner_mode == CombinerMode.COMBINE || combiner_mode == CombinerMode.CRAFT:
 		validate_combination(slot_number)
 	else:
 		validate_offering()
 
 func validate_combination(slot_number: int):
-	"""Check if current items can be crafted and update UI accordingly"""
-	if slot_1_item and slot_2_item:
-		if ItemsManager.can_craft_items(slot_1_item, slot_2_item):
-			craft_button.disabled = false
-			message_label.text = "Hmmm... these will taste good."
-			message_label.modulate = Color.GREEN
-			AudioManager.play_event_sound("mmm")
-
-			# Preview the result
-			#result = ItemsManager.craft_items(slot_1_item, slot_2_item)
-			#if result:
-			#	message_label.text = "Ready to craft: " + result.item_name
-		else:
-			craft_button.disabled = true
-			remove_item_from_slot(slot_number)
-			await show_error_message("These items don't taste right together...")
-			#message_label.text = "These items don't taste right together..."
-			#message_label.modulate = Color.RED
-	else:
-		craft_button.disabled = true
-		message_label.text = instruction_text
-		message_label.modulate = Color.WHITE
+	match combiner_mode:
+		CombinerMode.COMBINE:
+			if slot_1_item and slot_2_item:
+				if slot_1_item.item_name != slot_2_item.item_name:
+					craft_button.disabled = true
+					remove_item_from_slot(slot_number)
+					await show_error_message("These items don't taste the same...")
+				elif ItemsManager.can_craft_items(slot_1_item, slot_2_item):
+					craft_button.disabled = false
+					message_label.text = "Hmmm... these will taste good."
+					message_label.modulate = Color.GREEN
+					AudioManager.play_event_sound("mmm")
+				else:
+					craft_button.disabled = true
+					remove_item_from_slot(slot_number)
+					await show_error_message("These items don't taste right together...")
+			else:
+				craft_button.disabled = true
+				message_label.text = instruction_text
+				message_label.modulate = Color.WHITE
+		CombinerMode.CRAFT:
+			if slot_1_item and slot_2_item:
+				# Check if recipe exists
+				if slot_1_item.item_name == slot_2_item.item_name:
+					craft_button.disabled = true
+					remove_item_from_slot(slot_number)
+					await show_error_message("You can't do that here...")
+				elif ItemsManager.can_craft_items(slot_1_item, slot_2_item):
+					craft_button.disabled = false
+					message_label.text = "A new creature can be formed..."
+					message_label.modulate = Color.GREEN
+				else:
+					craft_button.disabled = true
+					message_label.text = "These bugs cannot be combined yet."
+					message_label.modulate = Color.ORANGE
+			else:
+				craft_button.disabled = true		
+		_:
+			validate_offering()
 
 func validate_offering():
 	if slot_1_item:
@@ -234,7 +241,7 @@ func _on_craft_pressed():
 	if is_processing_craft:
 		return
 	
-	if combiner_mode == CombinerMode.CRAFT:
+	if combiner_mode == CombinerMode.COMBINE || combiner_mode == CombinerMode.CRAFT:
 		if not ItemsManager.can_craft_items(slot_1_item, slot_2_item):
 			show_error_message("Invalid combination!")
 			return
@@ -242,8 +249,10 @@ func _on_craft_pressed():
 	is_processing_craft = true
 	craft_button.disabled = true
 	
-	if combiner_mode == CombinerMode.CRAFT:
+	if combiner_mode == CombinerMode.COMBINE:
 		result = ItemsManager.craft_items(slot_1_item, slot_2_item)
+	if combiner_mode == CombinerMode.CRAFT:
+		result = ItemsManager.craft_items(slot_1_item, slot_2_item)		
 	elif combiner_mode == CombinerMode.REPLACE_SAME_RARITY:
 		result = ItemsManager.get_item_of_same_tier(slot_1_item.rarity, slot_1_item.item_name)
 	elif combiner_mode == CombinerMode.REPLACE_HIGHER_TIER:
@@ -254,12 +263,14 @@ func _on_craft_pressed():
 		is_processing_craft = false
 		return
 
-	if combiner_mode == CombinerMode.CRAFT:
+	if combiner_mode == CombinerMode.COMBINE:
 		zoom_forge.show_popup(result, result)
 	elif combiner_mode == CombinerMode.REPLACE_SAME_RARITY:
 		zoom_altar.show_popup(slot_1_item, result)
 	elif combiner_mode == CombinerMode.REPLACE_HIGHER_TIER:
-		pass
+		show_crafting_result(result)
+	elif combiner_mode == CombinerMode.CRAFT:
+		zoom_craft.show_popup(slot_1_item, slot_2_item, result)
 
 	# Remove consumed items from player inventory
 	var removed_successfully = remove_consumed_items()
@@ -291,14 +302,14 @@ func _on_craft_pressed():
 
 func remove_consumed_items() -> bool:
 	"""Remove the two crafted items from player inventory"""
-	if combiner_mode == CombinerMode.CRAFT:
+	if number_of_slots == 2:
 		if slot_1_inventory_index < 0 or slot_2_inventory_index < 0:
 			return false
 	else:
 		if slot_1_inventory_index < 0:
 			return false
 
-	if combiner_mode == CombinerMode.CRAFT:			
+	if combiner_mode == CombinerMode.COMBINE || combiner_mode == CombinerMode.CRAFT:
 		# Remove in descending order to avoid index shifting issues
 		var indices: Array[int] = [slot_1_inventory_index, slot_2_inventory_index]
 		Player.inventory.remove_multiple_items(indices)
@@ -329,8 +340,8 @@ func _on_continue_pressed():
 		message_label.modulate = Color.WHITE
 	else:
 		# Close the combiner
-		combiner_closed.emit()
 		item_skipped.emit()
+		hide_popup()
 
 func clear_crafting_slots():
 	"""Reset slots for next craft"""
@@ -347,7 +358,7 @@ func clear_crafting_slots():
 	slot_1_label.text = "SLOT 1"
 	slot_2_label.text = "SLOT 2"
 	
-	if combiner_mode == CombinerMode.CRAFT:
+	if combiner_mode == CombinerMode.COMBINE:
 		validate_combination(0)
 	else:
 		validate_offering()
@@ -390,6 +401,7 @@ func _on_btn_craft_pressed() -> void:
 
 
 func _on_btn_skip_pressed() -> void:
+	hide_popup()
 	item_skipped.emit()
 
 
@@ -402,9 +414,26 @@ func _on_altar_zoom_completed():
 func _on_forge_zoom_completed():
 	show_crafting_result(result)
 
+func _on_craft_bug_zoom_completed():
+	show_crafting_result(result)
 
 func _on_btn_craft_mouse_entered() -> void:
 	AudioManager.play_ui_sound("woosh")
 
 func _on_btn_skip_mouse_entered() -> void:
 	AudioManager.play_ui_sound("woosh")
+
+func show_popup():
+	anim_player.play("show_popup")
+	var anim_length = anim_player.get_animation("show_popup").length
+	await CombatSpeed.create_timer(anim_length)
+	Player.popup_open = true
+
+func hide_popup():
+	AudioManager.play_ui_sound("popup_close")
+	anim_player.play("hide_popup")
+	var anim_length = anim_player.get_animation("hide_popup").length
+	await CombatSpeed.create_timer(anim_length)	
+	Player.popup_open = false
+	reset()
+	combiner_closed.emit()

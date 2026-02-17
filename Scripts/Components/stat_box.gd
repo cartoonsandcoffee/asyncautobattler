@@ -3,7 +3,7 @@ class_name StatBoxDisplay
 
 @onready var lbl_name: Label = $Tooltip/NinePatchRect/MarginContainer/VBoxContainer/lbl_name
 @onready var lbl_tooltip: RichTextLabel = $Tooltip/NinePatchRect/MarginContainer/VBoxContainer/lbl_tooltip
-@onready var stat_holder: NinePatchRect = $Panel/stat_holder
+@onready var stat_holder: Control = $Panel/stat_holder
 @onready var tooltip: Panel = $Tooltip
 @onready var lbl_stat: Label = $Panel/stat_holder/MarginContainer/HBoxContainer/lbl_stat
 @onready var icon: TextureRect = $Panel/stat_holder/MarginContainer/HBoxContainer/icon
@@ -38,6 +38,7 @@ func set_visuals(_stat: Enums.Stats):
 	var stat_speed: Texture2D = load("res://Resources/StatIcons/icon_speed.tres")
 	var stat_gold: Texture2D = load("res://Resources/StatIcons/stat_gold.tres")
 	var stat_strikes: Texture2D = load("res://Resources/StatIcons/stat_strikes.tres")
+	var stat_burn_damage: Texture2D = load("res://Resources/StatIcons/stat_burn.tres")
 
 	match _stat:
 		Enums.Stats.DAMAGE:
@@ -69,7 +70,12 @@ func set_visuals(_stat: Enums.Stats):
 			stat_name = "Strikes"
 			stat_color = gamecolors.stats.strikes
 			icon.texture = stat_strikes
-			stat_tooltip = "How many strikes a weapon makes each turn."
+			stat_tooltip = "How many strikes a weapon makes each turn. Refreshes between turns."
+		Enums.Stats.BURN_DAMAGE:
+			stat_name = "Burn Damage"
+			stat_color = gamecolors.stats.burn
+			icon.texture = stat_burn_damage
+			stat_tooltip = "How much damage removing 1 stack of burn causes."
 
 func _set_labels() -> void:
 	lbl_name.text = stat_name
@@ -83,6 +89,15 @@ func _set_labels() -> void:
 		# HP always shows current/max format
 		lbl_stat.text = str(stat_value) + "/" + str(stat_value_base)
 		lbl_stat.add_theme_font_size_override("font_size", 34)
+	elif stat == Enums.Stats.STRIKES:
+		lbl_stat.text = str(stat_value)
+		if stat_value_base > 1:
+			lbl_stat.text += "(Next: " + str(stat_value_base) + ")"
+	elif stat == Enums.Stats.BURN_DAMAGE:
+		if CombatManager.combat_active:
+			lbl_stat.text = str(stat_value)
+		else:
+			lbl_stat.text = str(stat_value_base) 
 	elif CombatManager.combat_active:
 		# In combat: show only current value for non-HP stats
 		lbl_stat.text = str(stat_value)

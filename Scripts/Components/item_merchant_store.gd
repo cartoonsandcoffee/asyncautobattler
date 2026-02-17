@@ -74,6 +74,7 @@ func show_store():
 	var anim_length = anim_player.get_animation("show_store").length
 	await CombatSpeed.create_timer(anim_length)
 	is_store_open = true
+	Player.popup_open = true
 
 func hide_store():
 	AudioManager.play_ui_sound("popup_close")
@@ -81,6 +82,7 @@ func hide_store():
 	var anim_length = anim_player.get_animation("hide_store").length
 	await CombatSpeed.create_timer(anim_length)	
 	is_store_open = false
+	Player.popup_open = false
 	store_closed.emit()
 
 func replace_item_with_empty(target_item: Item):

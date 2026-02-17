@@ -241,6 +241,10 @@ func show_categories(categories: Array[String]):
 			var cat_container = category_item.instantiate()
 			cat_container.get_node("PanelContainer/MarginContainer/lblCategory").text = category
 			cat_container.custom_minimum_size = Vector2(140,40)
+			if category == "Unique":
+				cat_container.get_node("PanelContainer/MarginContainer/Button").tooltip_text = "Can only equip one of this item."
+			if category == "Singularity":
+				cat_container.get_node("PanelContainer/MarginContainer/Button").tooltip_text = "Only one Singularity item equippable at a time."
 			category_grid.add_child(cat_container)
 		category_grid.show()
 	else:
@@ -320,22 +324,32 @@ func create_stacked_definitions():
 		# Get actual viewport and tooltip positions
 		var viewport_size = get_viewport().get_visible_rect().size
 		var tooltip_global_x = global_position.x
-		var panel_right_edge = tooltip_global_x + panel_container.size.x
-		var panel_left_edge = tooltip_global_x
+		var tooltip_width = panel_container.size.x
 		
-		# Calculate positions for both sides
-		var pos_right_x = panel_container.size.x + extra_spacing
+		# Calculate how much space is available on each side
+		var space_on_left = tooltip_global_x  # Distance from left edge of screen to left edge of tooltip
+		var space_on_right = viewport_size.x - (tooltip_global_x + tooltip_width)  # Distance from right edge of tooltip to right edge of screen
+		
+		# Calculate positions for both sides (relative to panel)
+		var pos_right_x = tooltip_width + extra_spacing
 		var pos_left_x = -def_box_width - extra_spacing
 		
-		# Check which side has room in global coordinates
-		var global_right_edge = panel_right_edge + def_box_width + extra_spacing
-		var global_left_edge = panel_left_edge - def_box_width - extra_spacing
+		# Choose side with MORE available space
+		var use_right_side = (space_on_right >= space_on_left)
 		
-		# Decide positioning
-		var use_right_side = true
-		if global_right_edge > viewport_size.x - 10:  # Would go offscreen right
-			if global_left_edge >= 10:  # Left side has room
-				use_right_side = false
+		# Additional check: make sure chosen side actually fits
+		if use_right_side:
+			# Check if definition box would go offscreen on the right
+			if space_on_right < (def_box_width + extra_spacing + 10):
+				# Not enough room on right, try left
+				if space_on_left >= (def_box_width + extra_spacing + 10):
+					use_right_side = false
+		else:
+			# Check if definition box would go offscreen on the left
+			if space_on_left < (def_box_width + extra_spacing + 10):
+				# Not enough room on left, try right
+				if space_on_right >= (def_box_width + extra_spacing + 10):
+					use_right_side = true
 		
 		# Set position and justification
 		if use_right_side:
@@ -393,5 +407,8 @@ func set_rarity():
 	elif current_item.rarity == Enums.Rarity.DIAMOND:
 		lbl_rarity.modulate =  gamecolors.rarity.diamond	
 		lbl_rarity.text = " - Diamond -"
+	elif current_item.rarity == Enums.Rarity.CRAFTED:
+		lbl_rarity.modulate =  Color.WHITE
+		lbl_rarity.text = " - Crafted -"
 	else:
 		lbl_rarity.modulate =  Color.WHITE

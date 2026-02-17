@@ -59,6 +59,7 @@ func change_stat(entity, stat: Enums.Stats, amount: int, _stat_type: Enums.StatT
 	
 	# Check for special thresholds
 	await _check_thresholds(entity, stat, old_value, new_value)
+	recalculate_damage(entity)
 
 # ===== STAT MODIFICATION =====
 
@@ -100,7 +101,12 @@ func get_stat_value(entity, stat: Enums.Stats, stat_type: Enums.StatType = Enums
 				Enums.StatType.BASE:
 					return entity.stats.damage
 				Enums.StatType.MISSING:
-					return 0  # Damage doesn't have "missing"
+					# Missing here is used for "Negative damage" for special items
+					var negative_dmg: int = entity.stats.damage * -1
+					if negative_dmg > 0:
+						return negative_dmg
+					else:
+						return 0
 		
 		Enums.Stats.AGILITY:
 			match stat_type:
@@ -160,6 +166,92 @@ func _check_thresholds(entity, stat: Enums.Stats, old_value: int, new_value: int
 				combat_manager.add_to_combat_log_string("[b][color=orange]%s IS EXPOSED![/color][/b]" % _get_entity_name(entity).to_upper())
 				exposed_triggered.emit(entity)
 
+
+func recalculate_damage(entity):
+	# Recalculate ONLY damage (output stats that user persistent conditionals).
+	# Does NOT recalculate HP/Shield/Agility (currency stats).
+	# Called when conditions change that might affect persistent bonuses.
+
+	if not combat_manager.combat_active:
+		return
+	
+	# Reset to base + temp modifiers
+	var new_damage = entity.stats.damage + entity.stats.combat_temp_damage
+
+	# Set current values (this will emit stats_updated in the final set)
+	entity.stats.damage_current = new_damage
+	
+	# Apply persistent conditional effects (only to output stats)
+	_apply_persistent_to_output_stats(entity)
+	
+	entity.stats.stats_updated.emit()
+
+func _apply_persistent_to_output_stats(entity):
+	# Apply persistent rules to damage/strikes current values only.
+	
+	# Get entity's inventory
+	var inventory = null
+	if entity == combat_manager.player_entity:
+		inventory = Player.inventory
+	elif "inventory" in entity:
+		inventory = entity.inventory
+	
+	if not inventory:
+		return
+	
+	# Collect items
+	var all_items = []
+	if inventory.weapon_slot:
+		all_items.append(inventory.weapon_slot)
+	for item in inventory.item_slots:
+		if item:
+			all_items.append(item)
+	
+	# Process persistent rules
+	for item in all_items:
+		for rule in item.rules:
+			if rule.trigger_type != Enums.TriggerType.PERSISTENT:
+				continue
+			
+			# Only damage allowed in combat recalculation so far
+			if rule.target_stat not in [Enums.Stats.DAMAGE]:
+				continue
+			
+			# Evaluate condition
+			if rule.has_condition:
+				if not combat_manager.condition_evaluator.evaluate_condition(rule, entity, entity):
+					continue
+			
+			# Apply effect
+			_apply_persistent_effect_to_output(entity, rule)
+
+func _apply_persistent_effect_to_output(entity, rule: ItemRule):
+	# Apply persistent effect to damage current values.
+	
+	# Handle special strings (multiplicative)
+	if rule.special_string != "":
+		match rule.special_string:
+			"double_damage":
+				entity.stats.damage_current *= 2
+			"halve_damage", "half_damage":
+				entity.stats.damage_current = int(entity.stats.damage_current * 0.5)
+			"exposed_can_trigger_twice":
+				if _get_entity_name(entity) == "Player":
+					combat_manager.player_can_exposed_twice = true
+				elif _get_entity_name(entity) == "Enemy":
+					combat_manager.enemy_can_exposed_twice = true
+			_:
+				print(" X - Unknown special_string in combat: ", rule.special_string)
+		return
+
+	# Handle standard MODIFY_STAT (additive)
+	if rule.effect_type == Enums.EffectType.MODIFY_STAT:
+		var amount = combat_manager.effect_executor._calculate_effect_amount(rule, entity, entity)
+		
+		match rule.target_stat:
+			Enums.Stats.DAMAGE:
+				entity.stats.damage_current += amount
+
 # ===== HELPER FUNCTIONS =====
 
 func _log_stat_change(entity, stat: Enums.Stats, old_value: int, new_value: int):
@@ -189,16 +281,40 @@ func _get_entity_name(entity) -> String:
 func _is_exposed_triggered(entity) -> bool:
 	# Check if entity has already triggered EXPOSED this combat.
 	if entity == combat_manager.player_entity:
-		return combat_manager.player_exposed_triggered
+		if combat_manager.player_can_exposed_twice:
+			if combat_manager.player_exposed_trigger && combat_manager.player_has_exposed_twice:
+				return true
+			else:
+				return false
+		else:
+			return combat_manager.player_exposed_triggered
 	else:
-		return combat_manager.enemy_exposed_triggered
+		if combat_manager.enemy_can_exposed_twice:
+			if combat_manager.enemy_exposed_triggered && combat_manager.enemy_has_exposed_twice:
+				return true
+			else:
+				return false
+		else:
+			return combat_manager.enemy_exposed_triggered	
 
 func _mark_exposed_triggered(entity, value: bool):
 	# Mark entity as having triggered EXPOSED.
 	if entity == combat_manager.player_entity:
-		combat_manager.player_exposed_triggered = value
+		if combat_manager.player_can_exposed_twice:
+			if combat_manager.player_has_exposed_twice != value:
+				combat_manager.player_has_exposed_twice = value
+			elif combat_manager.player_has_exposed_twice == value:
+				combat_manager.player_exposed_triggered = value
+		else:	
+			combat_manager.player_exposed_triggered = value
 	else:
-		combat_manager.enemy_exposed_triggered = value
+		if combat_manager.enemy_can_exposed_twice:
+			if combat_manager.enemy_has_exposed_twice != value:
+				combat_manager.enemy_has_exposed_twice = value
+			elif combat_manager.enemy_has_exposed_twice == value:
+				combat_manager.enemy_exposed_triggered = value
+		else:	
+			combat_manager.enemy_exposed_triggered = value
 
 func _is_wounded_triggered(entity) -> bool:
 	# Check if entity has already triggered WOUNDED this combat.

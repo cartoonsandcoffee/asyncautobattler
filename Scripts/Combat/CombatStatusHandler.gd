@@ -8,6 +8,9 @@ extends Node
 signal status_gained_triggered(entity, status: Enums.StatusEffects, stacks: int)
 signal status_removed_triggered(entity, status: Enums.StatusEffects, stacks: int)
 signal overheal_triggered(entity, amount: int)
+signal acid_proc_triggered(entity, amount: int)
+signal enemy_status_gained_triggered(entity, status: Enums.StatusEffects, stacks: int)
+signal enemy_status_removed_triggered(entity, status: Enums.StatusEffects, stacks: int)
 
 var combat_manager
 var stat_handler: CombatStatHandler
@@ -41,6 +44,10 @@ func apply_status(entity, status: Enums.StatusEffects, stacks: int):
 			
 	# Trigger ON_STATUS_GAINED items
 	status_gained_triggered.emit(entity, status, new_value)
+
+	var opponent = combat_manager.enemy_entity if entity == combat_manager.player_entity else combat_manager.player_entity
+	enemy_status_gained_triggered.emit(opponent, status, new_value)
+
 
 
 func remove_status(entity, status: Enums.StatusEffects, stacks: int):
@@ -84,6 +91,9 @@ func remove_status(entity, status: Enums.StatusEffects, stacks: int):
 
 	# Trigger ON_STATUS_REMOVED items (even if partial removal)
 	status_removed_triggered.emit(entity, status, new_value)
+
+	var opponent = combat_manager.enemy_entity if entity == combat_manager.player_entity else combat_manager.player_entity
+	enemy_status_removed_triggered.emit(opponent, status, new_value)	
 
 
 # ===== STATUS GETTERS =====
@@ -199,12 +209,44 @@ func _process_burn(entity):
 	var burn_source = combat_manager.enemy_entity if entity == combat_manager.player_entity else combat_manager.player_entity
 	
 	# Calculate burn damage: burn_damage stat * burn stacks
-	var burn_damage_per_stack = burn_source.stats.burn_damage_current if burn_source else 4
+	var burn_damage_per_stack = burn_source.stats.burn_damage_current if burn_source else 3
 	var total_damage = burn_damage_per_stack
 	
 	# LOG the burn proc
 	combat_manager.add_to_combat_log_string("   %s: %s takes %s damage." % [
 			combat_manager.color_status("Burn"),
+			combat_manager.color_entity(_get_entity_name(entity)),
+			combat_manager.color_text(str(total_damage), game_colors.stats.burn)])
+
+	# Apply burn damage through damage system
+	# This respects shield and can trigger EXPOSED
+	if combat_manager.damage_system:
+		await combat_manager.damage_system.apply_damage(entity, total_damage, burn_source, "burn")
+		
+	# Decrement burn by 1
+	remove_status(entity, Enums.StatusEffects.BURN, 1)
+
+	if _check_for_persistent_burn_rule(burn_source): #check if the entity applying the burn has "burn triggers twice" item.
+		_process_burn_second_time(entity)
+
+func _process_burn_second_time(entity):
+	# Copy of other process_burn function for when special rules allow for multiple burn procs
+	
+	if entity.status_effects.burn <= 0:
+		return
+	
+	var burn_stacks = entity.status_effects.burn
+	
+	# Get the source of the burn (opposite entity)
+	var burn_source = combat_manager.enemy_entity if entity == combat_manager.player_entity else combat_manager.player_entity
+	
+	# Calculate burn damage: burn_damage stat * burn stacks
+	var burn_damage_per_stack = burn_source.stats.burn_damage_current if burn_source else 3
+	var total_damage = burn_damage_per_stack
+	
+	# LOG the burn proc
+	combat_manager.add_to_combat_log_string("   %s: %s takes %s damage." % [
+			combat_manager.color_status("Burn (Extra Trigger)"),
 			combat_manager.color_entity(_get_entity_name(entity)),
 			combat_manager.color_text(str(total_damage), game_colors.stats.burn)])
 
@@ -245,13 +287,16 @@ func _process_acid(entity):
 			]
 		)
 
+		# Get the source of the acid (opposite entity)
+		var acid_source = combat_manager.enemy_entity if entity == combat_manager.player_entity else combat_manager.player_entity
+	
 		# Visual feedback
 		var stat_for_visual = Enums.Stats.SHIELD
 		if entity.stats.shield_current == 0:
 			stat_for_visual = Enums.Stats.EXPOSED
 		
 		combat_manager.status_proc.emit(entity, Enums.StatusEffects.ACID, stat_for_visual, -damage_dealt)
-		
+		acid_proc_triggered.emit(acid_source, damage_dealt)
 	else:
 		combat_manager.add_to_combat_log_string("   %s: %s has no shield to damage" % [
 				combat_manager.color_status("Acid"),
@@ -312,7 +357,7 @@ func _process_blessing(entity, _stacks: int):
 	# Blessing: Special behavior on removal (heal 3 and gain 1 damage).
 	var heal_per_stack = 3
 	var damage_per_stack = 1
-    
+	
 	var total_heal = heal_per_stack * _stacks
 	var total_damage = damage_per_stack * _stacks
 
@@ -356,7 +401,6 @@ func _process_blessing(entity, _stacks: int):
 
 func process_turn_end_status_effects(entity):
 	# Process status effects that trigger at turn end.
-	# Currently no status effects proc at turn end (thorns removed on hit instead).
 
 	if not entity.status_effects:
 		return
@@ -365,14 +409,18 @@ func process_turn_end_status_effects(entity):
 	await _process_regeneration(entity)  
 	await _process_blind(entity)  
 
-	#JDM: Thorns should remove on turn_end so that way they proc for each hit/strike as a counter to many strikes
-
 	# New timing code instead of all the CombatSpeed.create_timer(...) calls for visual procs
 	var combat_panel = get_tree().get_first_node_in_group("combat_panel")
 	if combat_panel:
 		await combat_panel.wait_for_indicator_queue_to_finish()
 
 # ===== THORNS REFLECTION =====
+
+func process_thorns_removal(entity):
+	#JDM: Thorn removal should be called after turn_end_status_effects of opponent and only removed if triggered
+	if entity.status_effects.thorns_triggered_for_removal:
+		remove_status(entity, Enums.StatusEffects.THORNS, entity.status_effects.thorns)
+		entity.status_effects.thorns_triggered(false) # Set as "not triggered" for the next turn
 
 func process_thorns_reflection(attacker, target):
 	# Process thorns reflection damage.
@@ -402,8 +450,8 @@ func process_thorns_reflection(attacker, target):
 	if combat_manager.damage_system:
 		await combat_manager.damage_system.apply_damage(attacker, thorns_damage, target, "thorns")
 	
-	# Remove ALL thorns after reflecting
-	remove_status(target, Enums.StatusEffects.THORNS, thorns_damage)
+	# Thorns get removed at opponent's TURN END but only if they've been triggered
+	target.status_effects.thorns_triggered(true)
 
 # ===== HELPER FUNCTIONS =====
 
@@ -431,6 +479,53 @@ func _get_entity_name(entity) -> String:
 			return entity.enemy_name
 		return "Enemy"
 	return "Unknown"
+
+# ==== PERSISTENT RULE FUNCTIONS =====
+func _check_for_persistent_burn_rule(entity) -> bool:
+	# Get entity's inventory
+	var inventory = null
+	if entity == combat_manager.player_entity:
+		inventory = Player.inventory
+	elif "inventory" in entity:
+		inventory = entity.inventory
+	
+	if not inventory:
+		return false
+	
+	# Collect items
+	var all_items = []
+	if inventory.weapon_slot:
+		all_items.append(inventory.weapon_slot)
+	for item in inventory.item_slots:
+		if item:
+			all_items.append(item)
+	
+	# Process persistent rules
+	for item in all_items:
+		for rule in item.rules:
+			if rule.trigger_type != Enums.TriggerType.PERSISTENT:
+				continue
+						
+			# Evaluate condition
+			if rule.has_condition:
+				if not combat_manager.condition_evaluator.evaluate_condition(rule, entity, entity):
+					continue
+			
+			# Apply effect
+			_check_special_rule(rule)
+
+	return false
+
+
+func _check_special_rule(rule: ItemRule) -> bool:
+	# Apply persistent effect to damage/strikes/burn current values.
+	
+	# Handle special strings (multiplicative)
+	if rule.special_string != "":
+		match rule.special_string:
+			"extra_burn_proc":
+				return true
+	return false
 
 # ===== RESET FUNCTIONS =====
 
