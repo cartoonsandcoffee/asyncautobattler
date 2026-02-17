@@ -4,7 +4,6 @@
 [ext_resource type="Script" uid="uid://c6hur1hg25jx" path="res://Scripts/main_game.gd" id="1_73nn6"]
 [ext_resource type="FontFile" uid="uid://cif7u8lvaqla2" path="res://Assets/UI/Enchanted Land.otf" id="2_6j5ir"]
 [ext_resource type="Texture2D" uid="uid://csprhhu3ka3ig" path="res://Assets/Art/Room_03_Background.png" id="2_sgmg2"]
-[ext_resource type="Texture2D" uid="uid://bffx10anckips" path="res://Assets/monochrome-transparent_packed.png" id="4_6j5ir"]
 [ext_resource type="PackedScene" uid="uid://cqhyru53o5wfx" path="res://Scenes/item.tscn" id="4_mgc0q"]
 [ext_resource type="Texture2D" uid="uid://dooobd8odw3lv" path="res://Assets/Art/Player/Player_Skin_0.png" id="6_g6spl"]
 [ext_resource type="Script" uid="uid://tcnxdmjth1da" path="res://Scripts/combat_panel.gd" id="6_tpqse"]
@@ -31,9 +30,11 @@
 [ext_resource type="Animation" uid="uid://b23q3jvw4udeh" path="res://Animations/player_hit.res" id="27_smxg7"]
 [ext_resource type="Animation" uid="uid://cfqeyfhk85w37" path="res://Animations/player_idle.res" id="28_7oxt3"]
 [ext_resource type="Animation" uid="uid://54qf4jilrj53" path="res://Animations/player_ready.res" id="29_n28rm"]
+[ext_resource type="PackedScene" uid="uid://cl30ut35id4py" path="res://Scenes/Elements/stat_box_small.tscn" id="30_evlxa"]
 [ext_resource type="Script" uid="uid://br3v7mdya1l3a" path="res://Scripts/Minimap.gd" id="31_q6b2w"]
 [ext_resource type="FontFile" uid="uid://dbt53hulxegh2" path="res://Assets/UI/Fonts/Imperator.ttf" id="32_g6spl"]
 [ext_resource type="PackedScene" uid="uid://vsf0s3kixuku" path="res://Scenes/UI/pause_menu.tscn" id="34_e2wre"]
+[ext_resource type="Texture2D" uid="uid://du2hnv4nfpp78" path="res://Assets/UI/Cursors/busy_hourglass_outline_detail.png" id="34_evlxa"]
 [ext_resource type="Shader" uid="uid://c5ie878mymsjg" path="res://Shaders/crt_shader.gdshader" id="34_q6b2w"]
 [ext_resource type="PackedScene" uid="uid://cf3ax1fquw2mm" path="res://Scenes/UI/settings_panel.tscn" id="35_evlxa"]
 
@@ -533,7 +534,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.6),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(0.5, 0.5), Vector2(1, 1)]
+"values": [Vector2(0.5, 0.5), Vector2(0.75, 0.75)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -740,7 +741,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.1, 0.3, 0.6, 0.75),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(1, 1), Vector2(0.95, 0.95), Vector2(1.1, 1.1), Vector2(1.1, 1.1), Vector2(1, 1)]
+"values": [Vector2(0.75, 0.75), Vector2(0.7, 0.7), Vector2(0.85, 0.85), Vector2(0.85, 0.85), Vector2(0.75, 0.75)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -825,7 +826,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.05, 0.15, 0.4, 0.5),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(1, 1), Vector2(0.95, 0.95), Vector2(1.1, 1.1), Vector2(1.1, 1.1), Vector2(1, 1)]
+"values": [Vector2(0.75, 0.75), Vector2(0.7, 0.7), Vector2(0.85, 0.85), Vector2(0.85, 0.85), Vector2(0.75, 0.75)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -910,7 +911,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.1, 0.5),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Vector2(1, 1), Vector2(0.95, 0.95), Vector2(0.8, 0.8)]
+"values": [Vector2(0.75, 0.75), Vector2(0.7, 0.7), Vector2(0.55, 0.55)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -1001,7 +1002,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.05, 0.35),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Vector2(1, 1), Vector2(0.95, 0.95), Vector2(0.8, 0.8)]
+"values": [Vector2(0.75, 0.75), Vector2(0.7, 0.7), Vector2(0.55, 0.55)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -1092,7 +1093,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.075, 0.325, 0.5),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(1, 1), Vector2(0.95, 0.95), Vector2(0.95, 0.95), Vector2(1, 1)]
+"values": [Vector2(0.75, 0.75), Vector2(0.7, 0.7), Vector2(0.7, 0.7), Vector2(0.75, 0.75)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -1171,7 +1172,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.05, 0.275, 0.35),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(1, 1), Vector2(0.95, 0.95), Vector2(0.95, 0.95), Vector2(1, 1)]
+"values": [Vector2(0.75, 0.75), Vector2(0.7, 0.7), Vector2(0.7, 0.7), Vector2(0.75, 0.75)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -1251,7 +1252,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.6, 1.5),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Vector2(1, 1), Vector2(1.03, 1.02), Vector2(1, 1)]
+"values": [Vector2(0.75, 0.75), Vector2(0.78, 0.772), Vector2(0.75, 0.75)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -1305,7 +1306,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.3, 0.75),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Vector2(1, 1), Vector2(1.03, 1.02), Vector2(1, 1)]
+"values": [Vector2(0.75, 0.75), Vector2(0.78, 0.772), Vector2(0.75, 0.75)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -1958,10 +1959,6 @@ texture_margin_left = 32.0
 texture_margin_top = 32.0
 texture_margin_right = 32.0
 texture_margin_bottom = 32.0
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_bb2iq"]
-atlas = ExtResource("4_6j5ir")
-region = Rect2(656, 224, 16, 16)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_smxg7"]
 
@@ -2842,12 +2839,17 @@ layout_mode = 2
 stat = 2
 show_tooltip = false
 
-[node name="statStrikes" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/statsContainer" instance=ExtResource("8_6y7pd")]
-visible = false
-custom_minimum_size = Vector2(130, 0)
+[node name="VBoxContainer" type="VBoxContainer" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/statsContainer"]
 layout_mode = 2
-stat = 5
-show_tooltip = false
+size_flags_horizontal = 3
+
+[node name="statBurn" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/statsContainer/VBoxContainer" instance=ExtResource("30_evlxa")]
+custom_minimum_size = Vector2(50, 28)
+layout_mode = 2
+
+[node name="statStrikes" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/statsContainer/VBoxContainer" instance=ExtResource("30_evlxa")]
+custom_minimum_size = Vector2(50, 28)
+layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="CombatPanel/CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats"]
 visible = false
@@ -3033,6 +3035,7 @@ icon = SubResource("AtlasTexture_vc13p")
 [node name="btnInstant" type="Button" parent="CombatPanel/panelCONTROLS/PanelContainer/CombatLogBox/speedControls"]
 process_mode = 3
 layout_mode = 2
+disabled = true
 icon = SubResource("AtlasTexture_g6spl")
 
 [node name="MarginContainer" type="MarginContainer" parent="CombatPanel/panelCONTROLS/PanelContainer/CombatLogBox/speedControls"]
@@ -3391,16 +3394,22 @@ layout_mode = 2
 text = "Quit"
 
 [node name="combatPanelAnim" type="AnimationPlayer" parent="CombatPanel"]
+process_mode = 1
+callback_mode_method = 1
 libraries = {
 &"": SubResource("AnimationLibrary_erobn")
 }
 
 [node name="animEnemy" type="AnimationPlayer" parent="CombatPanel"]
+process_mode = 1
+callback_mode_method = 1
 libraries = {
 &"": SubResource("AnimationLibrary_glqx2")
 }
 
 [node name="animPlayer" type="AnimationPlayer" parent="CombatPanel"]
+process_mode = 1
+callback_mode_method = 1
 libraries = {
 &"": SubResource("AnimationLibrary_sgmg2")
 }
@@ -3637,10 +3646,30 @@ stat = 2
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="boxMiniMap" type="HBoxContainer" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats"]
+[node name="VBoxContainer" type="VBoxContainer" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/MarginContainer"]
+custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
-size_flags_vertical = 0
+
+[node name="statStrikes" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/MarginContainer/VBoxContainer" instance=ExtResource("30_evlxa")]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+
+[node name="statBurnDamage" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/MarginContainer/VBoxContainer" instance=ExtResource("30_evlxa")]
+layout_mode = 2
+
+[node name="boxMiniMap" type="HBoxContainer" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 20
 script = ExtResource("31_q6b2w")
+
+[node name="MarginContainer" type="MarginContainer" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap"]
+visible = false
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap"]
 layout_mode = 2
@@ -3662,48 +3691,29 @@ theme_override_colors/font_pressed_color = Color(0.72, 0.6264, 0.252, 1)
 theme_override_colors/font_hover_color = Color(1, 0.8, 0, 1)
 theme_override_fonts/font = ExtResource("32_g6spl")
 theme_override_font_sizes/font_size = 12
-text = "[ Zoom Out ]"
+text = "[ Check Boss ]"
 underline = 1
 
-[node name="RoomGrid" type="GridContainer" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap"]
+[node name="boxMoves" type="HBoxContainer" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap"]
 layout_mode = 2
-columns = 6
+theme_override_constants/separation = 0
 
-[node name="RoomIcon_1" type="TextureButton" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap/RoomGrid"]
-custom_minimum_size = Vector2(40, 40)
+[node name="picTime" type="TextureRect" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap/boxMoves"]
 layout_mode = 2
-texture_normal = SubResource("AtlasTexture_bb2iq")
-stretch_mode = 0
+texture = ExtResource("34_evlxa")
+expand_mode = 3
 
-[node name="RoomIcon_2" type="TextureButton" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap/RoomGrid"]
-custom_minimum_size = Vector2(50, 50)
+[node name="lblMoves" type="Label" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap/boxMoves"]
 layout_mode = 2
-texture_normal = SubResource("AtlasTexture_bb2iq")
-stretch_mode = 0
+theme = ExtResource("9_r0mdn")
+text = "10"
+vertical_alignment = 1
 
-[node name="RoomIcon_3" type="TextureButton" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap/RoomGrid"]
-custom_minimum_size = Vector2(50, 50)
+[node name="btnTown" type="Button" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap"]
 layout_mode = 2
-texture_normal = SubResource("AtlasTexture_bb2iq")
-stretch_mode = 0
-
-[node name="RoomIcon_4" type="TextureButton" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap/RoomGrid"]
-custom_minimum_size = Vector2(50, 50)
-layout_mode = 2
-texture_normal = SubResource("AtlasTexture_bb2iq")
-stretch_mode = 0
-
-[node name="RoomIcon_5" type="TextureButton" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap/RoomGrid"]
-custom_minimum_size = Vector2(50, 50)
-layout_mode = 2
-texture_normal = SubResource("AtlasTexture_bb2iq")
-stretch_mode = 0
-
-[node name="RoomIcon_6" type="TextureButton" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap/RoomGrid"]
-custom_minimum_size = Vector2(50, 50)
-layout_mode = 2
-texture_normal = SubResource("AtlasTexture_bb2iq")
-stretch_mode = 0
+size_flags_vertical = 4
+theme = ExtResource("9_r0mdn")
+text = "Return to Camp"
 
 [node name="MarginContainer2" type="MarginContainer" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats"]
 layout_mode = 2
@@ -3788,6 +3798,7 @@ anchor_right = 1.0
 offset_top = -61.0
 offset_bottom = -11.0
 grow_horizontal = 2
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_smxg7")
 
 [node name="gridSets" type="GridContainer" parent="BottomPanel/panelSets"]
@@ -3859,3 +3870,4 @@ enabled = false
 [connection signal="pressed" from="ReplaceItemPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/btnCancelReplace" to="." method="_on_btn_cancel_replace_pressed"]
 [connection signal="pressed" from="DropItemPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/HBoxContainer/btnCancelDrop" to="." method="_on_btn_cancel_drop_pressed"]
 [connection signal="pressed" from="DropItemPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/HBoxContainer/btnDrop" to="." method="_on_btn_drop_pressed"]
+[connection signal="pressed" from="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap/btnTown" to="." method="_on_btn_town_pressed"]

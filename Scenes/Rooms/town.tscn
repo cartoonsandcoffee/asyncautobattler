@@ -1,0 +1,320 @@
+[gd_scene load_steps=35 format=3 uid="uid://do4uu0o7e2sx"]
+
+[ext_resource type="Theme" uid="uid://p8sbf2usmdfn" path="res://Themes/invis_buttons.tres" id="1_aeddt"]
+[ext_resource type="Script" uid="uid://plx66byd2blm" path="res://Scripts/RoomEvents/town.gd" id="2_2q7b4"]
+[ext_resource type="Texture2D" uid="uid://cr6vcpo3v735f" path="res://Assets/Art/Events/Town/Town_Placeholder.png" id="3_k2qd8"]
+[ext_resource type="Texture2D" uid="uid://dxt3yb4gkjn6x" path="res://Assets/Art/Particles/smoke_07.png" id="9_2q7b4"]
+[ext_resource type="Texture2D" uid="uid://e2piw1cieed4" path="res://Assets/Art/Events/Town/campfire_dim.png" id="11_aeddt"]
+[ext_resource type="Texture2D" uid="uid://crvkxi26rvrfk" path="res://Assets/Art/Events/Town/campfire_light.png" id="12_2q7b4"]
+[ext_resource type="Shader" uid="uid://c4e2x1kcm6urs" path="res://Shaders/fire_shader.tres" id="13_b2t16"]
+[ext_resource type="Texture2D" uid="uid://48oitsyk7ir4" path="res://Assets/Art/Noise/T_VFX_Noise_465.png" id="14_730ju"]
+[ext_resource type="Texture2D" uid="uid://5hncfitv451a" path="res://Assets/Art/Noise/T_Gradient_circle22.jpg" id="15_k2qd8"]
+[ext_resource type="Texture2D" uid="uid://ejynek1siy2n" path="res://Assets/UI/White.png" id="16_3jgje"]
+[ext_resource type="PackedScene" uid="uid://bb31dt8vvd6f4" path="res://Scenes/Elements/item_merchant_store.tscn" id="22_730ju"]
+[ext_resource type="PackedScene" uid="uid://dfuglhrwpha2" path="res://Scenes/Elements/item_combiner.tscn" id="23_k2qd8"]
+[ext_resource type="PackedScene" uid="uid://be8xuccfxqho7" path="res://Scenes/Elements/button_town.tscn" id="24_3jgje"]
+
+[sub_resource type="Curve" id="Curve_liiim"]
+_limits = [0.3, 3.0, 0.0, 1.0]
+_data = [Vector2(0, 0.3), 0.0, 0.0, 0, 0, Vector2(1, 1.0618), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_a8l27"]
+offsets = PackedFloat32Array(0, 0.625, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="Gradient" id="Gradient_cmhq4"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_bd1y7"]
+gradient = SubResource("Gradient_cmhq4")
+fill_to = Vector2(0, 1)
+
+[sub_resource type="Gradient" id="Gradient_364nj"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_55lkv"]
+gradient = SubResource("Gradient_364nj")
+fill_from = Vector2(1, 1)
+
+[sub_resource type="Gradient" id="Gradient_mp8uq"]
+offsets = PackedFloat32Array(0, 0.20354, 0.513274, 0.787611)
+colors = PackedColorArray(1, 0, 0.0166664, 0, 0.98, 0.00979999, 0.00979999, 1, 0.96, 0.384, 0, 1, 0.99, 0.693, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_rfd6m"]
+gradient = SubResource("Gradient_mp8uq")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yvqa2"]
+shader = ExtResource("13_b2t16")
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed = Vector2(0, 1)
+shader_parameter/Texture_1 = ExtResource("14_730ju")
+shader_parameter/Texture_2 = SubResource("GradientTexture2D_bd1y7")
+shader_parameter/Texture_3 = ExtResource("15_k2qd8")
+shader_parameter/Texture_4 = SubResource("GradientTexture2D_55lkv")
+shader_parameter/Texture_Color_1D = SubResource("GradientTexture1D_rfd6m")
+
+[sub_resource type="Animation" id="Animation_2q7b4"]
+length = 0.001
+
+[sub_resource type="Animation" id="Animation_b2t16"]
+resource_name = "start_hover"
+length = 0.4
+step = 0.025
+
+[sub_resource type="Animation" id="Animation_cmhq4"]
+resource_name = "stop_hover"
+length = 0.4
+step = 0.025
+
+[sub_resource type="Animation" id="Animation_aeddt"]
+resource_name = "tower_hover"
+length = 2.0
+loop_mode = 1
+step = 0.025
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_b2t16"]
+_data = {
+&"RESET": SubResource("Animation_2q7b4"),
+&"start_hover": SubResource("Animation_b2t16"),
+&"stop_hover": SubResource("Animation_cmhq4"),
+&"tower_hover": SubResource("Animation_aeddt")
+}
+
+[sub_resource type="Animation" id="Animation_730ju"]
+length = 0.001
+
+[sub_resource type="Animation" id="Animation_k2qd8"]
+resource_name = "start_hover"
+length = 0.4
+step = 0.025
+
+[sub_resource type="Animation" id="Animation_3jgje"]
+resource_name = "stop_hover"
+length = 0.4
+step = 0.025
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_cmhq4"]
+_data = {
+&"RESET": SubResource("Animation_730ju"),
+&"start_hover": SubResource("Animation_k2qd8"),
+&"stop_hover": SubResource("Animation_3jgje")
+}
+
+[sub_resource type="Animation" id="Animation_mp8uq"]
+length = 0.001
+
+[sub_resource type="Animation" id="Animation_364nj"]
+resource_name = "merchant_idle"
+length = 4.0
+loop_mode = 1
+step = 0.025
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_yvqa2"]
+_data = {
+&"RESET": SubResource("Animation_mp8uq"),
+&"merchant_idle": SubResource("Animation_364nj")
+}
+
+[node name="Town" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_aeddt")
+script = ExtResource("2_2q7b4")
+metadata/_edit_horizontal_guides_ = [-1.0]
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="farBackMountains" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_top = 412.0
+offset_bottom = 412.0
+grow_horizontal = 2
+scale = Vector2(0.53, 0.53)
+texture = ExtResource("3_k2qd8")
+expand_mode = 1
+stretch_mode = 3
+
+[node name="campSmoke" type="CPUParticles2D" parent="."]
+position = Vector2(816.5, 573.9)
+amount = 10
+texture = ExtResource("9_2q7b4")
+lifetime = 2.0
+speed_scale = 0.4
+randomness = 0.3
+direction = Vector2(0, -1)
+spread = 36.43
+gravity = Vector2(0, 0)
+initial_velocity_min = 100.0
+initial_velocity_max = 100.0
+angular_velocity_min = 30.0
+angular_velocity_max = 100.0
+scale_amount_min = 0.1
+scale_amount_max = 0.7
+scale_amount_curve = SubResource("Curve_liiim")
+color = Color(0.637843, 0.637843, 0.637843, 1)
+color_ramp = SubResource("Gradient_a8l27")
+
+[node name="campFire" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 549.5
+offset_top = 385.9
+offset_right = 1049.5
+offset_bottom = 846.9
+scale = Vector2(0.33, 0.33)
+pivot_offset = Vector2(250, 230)
+texture = ExtResource("11_aeddt")
+
+[node name="campHighlight" type="TextureRect" parent="campFire"]
+visible = false
+layout_mode = 0
+offset_right = 500.0
+offset_bottom = 461.0
+pivot_offset = Vector2(250, 230)
+texture = ExtResource("12_2q7b4")
+
+[node name="Fire" type="TextureRect" parent="campFire"]
+material = SubResource("ShaderMaterial_yvqa2")
+layout_mode = 0
+offset_left = 265.151
+offset_top = 45.1515
+offset_right = 347.151
+offset_bottom = 119.152
+scale = Vector2(3, 2.5)
+pivot_offset = Vector2(41, 37)
+texture = ExtResource("16_3jgje")
+expand_mode = 1
+
+[node name="btnCamp" type="Button" parent="campFire"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 89.0
+offset_top = 48.0
+offset_bottom = -189.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="btnStore" parent="." instance=ExtResource("24_3jgje")]
+layout_mode = 1
+offset_left = 140.0
+offset_top = 315.0
+offset_right = -1186.0
+offset_bottom = -238.0
+
+[node name="btnForge" parent="." instance=ExtResource("24_3jgje")]
+layout_mode = 1
+offset_left = 380.0
+offset_top = 315.0
+offset_right = -965.0
+offset_bottom = -290.0
+
+[node name="btnShrine" parent="." instance=ExtResource("24_3jgje")]
+layout_mode = 1
+offset_left = 585.0
+offset_top = 281.0
+offset_right = -833.0
+offset_bottom = -316.0
+
+[node name="btnChampion" parent="." instance=ExtResource("24_3jgje")]
+layout_mode = 1
+offset_left = 773.0
+offset_top = 204.0
+offset_right = -595.0
+offset_bottom = -382.0
+
+[node name="btnBugs" parent="." instance=ExtResource("24_3jgje")]
+layout_mode = 1
+offset_left = 954.0
+offset_top = 342.0
+offset_right = -397.0
+offset_bottom = -246.0
+
+[node name="btnVenture" parent="." instance=ExtResource("24_3jgje")]
+layout_mode = 1
+offset_left = 1272.0
+offset_top = 147.0
+offset_right = -71.0
+offset_bottom = -285.0
+
+[node name="merchant_popup" parent="." instance=ExtResource("22_730ju")]
+layout_mode = 1
+items_offered = 5
+box_name = "A Peddler's Hut"
+box_desc = "Would any of these help you?"
+include_extra_rare = true
+
+[node name="shrine_popup" parent="." instance=ExtResource("23_k2qd8")]
+layout_mode = 1
+combiner_mode = 1
+number_of_slots = 1
+allow_multiple_crafts = false
+instruction_text = "Leave an offering..."
+box_name = "A Crumbling Altar"
+button_text = "Offer this Item?"
+crafting_message = "Praying..."
+sb_name = "Someone Smiled"
+sb_text = "Have your prayers been answered?"
+sb_button = "Done"
+
+[node name="forge_popup" parent="." instance=ExtResource("23_k2qd8")]
+layout_mode = 1
+instruction_text = "Feed me two identical Common  or Golden items..."
+box_name = "The Strange Mouth"
+button_text = "Feed It"
+sb_name = "These taste good."
+sb_text = "The machine spits out something you might like."
+sb_button = "Take Your Creation"
+
+[node name="crafting_popup" parent="." instance=ExtResource("23_k2qd8")]
+layout_mode = 1
+combiner_mode = 3
+instruction_text = "\"I like to breed exotic bugs.\""
+box_name = "Bug Collector"
+button_text = "Trade."
+crafting_message = "Let me see what I've got here..."
+has_category_requirement = true
+required_category = "Bug"
+sb_name = "Something Emerges"
+sb_text = "A new bug crawls out of the cavity."
+sb_button = "Um, thanks."
+
+[node name="animTower" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_b2t16")
+}
+
+[node name="animDungeon" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_cmhq4")
+}
+
+[node name="animMerchant" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_yvqa2")
+}
+
+[node name="animCamp" type="AnimationPlayer" parent="."]
+
+[connection signal="mouse_entered" from="campFire/btnCamp" to="." method="_on_btn_camp_mouse_entered"]
+[connection signal="mouse_exited" from="campFire/btnCamp" to="." method="_on_btn_camp_mouse_exited"]
+[connection signal="pressed" from="campFire/btnCamp" to="." method="_on_btn_camp_pressed"]
+[connection signal="button_clicked" from="btnStore" to="." method="_on_btn_store_button_clicked"]
+[connection signal="button_clicked" from="btnForge" to="." method="_on_btn_forge_button_clicked"]
+[connection signal="button_clicked" from="btnShrine" to="." method="_on_btn_shrine_button_clicked"]
+[connection signal="button_clicked" from="btnChampion" to="." method="_on_btn_champion_button_clicked"]
+[connection signal="button_clicked" from="btnBugs" to="." method="_on_btn_bugs_button_clicked"]
+[connection signal="button_clicked" from="btnVenture" to="." method="_on_btn_venture_button_clicked"]

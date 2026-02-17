@@ -1,0 +1,275 @@
+[gd_scene load_steps=13 format=3 uid="uid://chs2a1fblqd0k"]
+
+[ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="1_eijq0"]
+[ext_resource type="Texture2D" uid="uid://vtf7yfl2710m" path="res://Assets/UI/panel-border-030.png" id="1_mjpdj"]
+[ext_resource type="Script" uid="uid://cok0ul8mual5q" path="res://Scripts/UI/hallof_champions.gd" id="1_t8oay"]
+[ext_resource type="PackedScene" uid="uid://dm35l5es4kole" path="res://Scenes/Elements/stat_box.tscn" id="2_fhirs"]
+[ext_resource type="Texture2D" uid="uid://brkvaqqc37hpf" path="res://Assets/UI/icons.png" id="2_t8oay"]
+[ext_resource type="PackedScene" uid="uid://cqhyru53o5wfx" path="res://Scenes/item.tscn" id="3_eijq0"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t8oay"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rj623"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3pd0r"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rj623"]
+atlas = ExtResource("2_t8oay")
+region = Rect2(150, 450, 150, 150)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3pd0r"]
+texture = ExtResource("1_mjpdj")
+texture_margin_left = 24.0
+texture_margin_top = 24.0
+texture_margin_right = 24.0
+texture_margin_bottom = 24.0
+region_rect = Rect2(0, 0, 96, 96)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rwgm2"]
+texture = ExtResource("1_mjpdj")
+texture_margin_left = 24.0
+texture_margin_top = 24.0
+texture_margin_right = 24.0
+texture_margin_bottom = 24.0
+
+[node name="HallofChampions" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_t8oay")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_t8oay")
+
+[node name="PanelContainer" type="PanelContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_rj623")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="mainBox" type="HBoxContainer" parent="Panel/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="leftBox" type="PanelContainer" parent="Panel/PanelContainer/MarginContainer/mainBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_3pd0r")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/PanelContainer/MarginContainer/mainBox/leftBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="boxButtons" type="HBoxContainer" parent="Panel/PanelContainer/MarginContainer/mainBox/leftBox/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("1_eijq0")
+theme_override_constants/separation = 20
+
+[node name="btnChampions" type="Button" parent="Panel/PanelContainer/MarginContainer/mainBox/leftBox/VBoxContainer/boxButtons"]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+icon = SubResource("AtlasTexture_rj623")
+icon_alignment = 1
+expand_icon = true
+
+[node name="btnHallOfFame" type="Button" parent="Panel/PanelContainer/MarginContainer/mainBox/leftBox/VBoxContainer/boxButtons"]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+icon = SubResource("AtlasTexture_rj623")
+icon_alignment = 1
+expand_icon = true
+
+[node name="btnGlobalHall" type="Button" parent="Panel/PanelContainer/MarginContainer/mainBox/leftBox/VBoxContainer/boxButtons"]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+icon = SubResource("AtlasTexture_rj623")
+icon_alignment = 1
+expand_icon = true
+
+[node name="btnLeaderboard" type="Button" parent="Panel/PanelContainer/MarginContainer/mainBox/leftBox/VBoxContainer/boxButtons"]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+icon = SubResource("AtlasTexture_rj623")
+icon_alignment = 1
+expand_icon = true
+
+[node name="lblMenu" type="Label" parent="Panel/PanelContainer/MarginContainer/mainBox/leftBox/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_eijq0")
+text = "Hall of Champions"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="Panel/PanelContainer/MarginContainer/mainBox/leftBox/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxTexture_3pd0r")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/PanelContainer/MarginContainer/mainBox/leftBox/VBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="Panel/PanelContainer/MarginContainer/mainBox/leftBox/VBoxContainer/PanelContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/PanelContainer/MarginContainer/mainBox/leftBox/VBoxContainer"]
+layout_mode = 2
+
+[node name="btnDone" type="Button" parent="Panel/PanelContainer/MarginContainer/mainBox/leftBox/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(300, 80)
+layout_mode = 2
+theme = ExtResource("1_eijq0")
+text = "DONE"
+
+[node name="rightBox" type="PanelContainer" parent="Panel/PanelContainer/MarginContainer/mainBox"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_styles/panel = SubResource("StyleBoxTexture_rwgm2")
+
+[node name="buildBox" type="HBoxContainer" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox"]
+layout_mode = 2
+
+[node name="boxStats" type="VBoxContainer" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_constants/separation = 10
+
+[node name="weaponUpgrades" type="HBoxContainer" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxStats"]
+custom_minimum_size = Vector2(300, 110)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="statBoxes" type="VBoxContainer" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxStats"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="statHealth" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxStats/statBoxes" instance=ExtResource("2_fhirs")]
+custom_minimum_size = Vector2(125, 60)
+layout_mode = 2
+show_tooltip = false
+
+[node name="statShield" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxStats/statBoxes" instance=ExtResource("2_fhirs")]
+custom_minimum_size = Vector2(125, 60)
+layout_mode = 2
+stat = 2
+show_tooltip = false
+
+[node name="statAttack" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxStats/statBoxes" instance=ExtResource("2_fhirs")]
+custom_minimum_size = Vector2(125, 60)
+layout_mode = 2
+stat = 1
+show_tooltip = false
+
+[node name="statAgility" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxStats/statBoxes" instance=ExtResource("2_fhirs")]
+custom_minimum_size = Vector2(125, 60)
+layout_mode = 2
+stat = 3
+show_tooltip = false
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxStats"]
+layout_mode = 2
+theme_override_constants/margin_top = 40
+
+[node name="setbonusBox" type="GridContainer" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxStats"]
+layout_mode = 2
+size_flags_horizontal = 8
+columns = 2
+
+[node name="Item" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxStats/setbonusBox" instance=ExtResource("3_eijq0")]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+
+[node name="boxInventory" type="VBoxContainer" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="weapon" type="HBoxContainer" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="GridContainer" type="GridContainer" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/weapon"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Item" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/weapon/GridContainer" instance=ExtResource("3_eijq0")]
+clip_contents = true
+custom_minimum_size = Vector2(100, 120)
+layout_mode = 2
+
+[node name="bossInventoryGrid" type="GridContainer" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory"]
+layout_mode = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 2
+
+[node name="Item" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/bossInventoryGrid" instance=ExtResource("3_eijq0")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item2" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/bossInventoryGrid" instance=ExtResource("3_eijq0")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item3" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/bossInventoryGrid" instance=ExtResource("3_eijq0")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item4" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/bossInventoryGrid" instance=ExtResource("3_eijq0")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item5" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/bossInventoryGrid" instance=ExtResource("3_eijq0")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item6" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/bossInventoryGrid" instance=ExtResource("3_eijq0")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item7" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/bossInventoryGrid" instance=ExtResource("3_eijq0")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item8" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/bossInventoryGrid" instance=ExtResource("3_eijq0")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item9" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/bossInventoryGrid" instance=ExtResource("3_eijq0")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item10" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/bossInventoryGrid" instance=ExtResource("3_eijq0")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item11" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/bossInventoryGrid" instance=ExtResource("3_eijq0")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[node name="Item12" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/bossInventoryGrid" instance=ExtResource("3_eijq0")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+
+[connection signal="pressed" from="Panel/PanelContainer/MarginContainer/mainBox/leftBox/VBoxContainer/HBoxContainer/btnDone" to="." method="_on_btn_done_pressed"]

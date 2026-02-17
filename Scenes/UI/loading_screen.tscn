@@ -1,0 +1,387 @@
+[gd_scene load_steps=15 format=3 uid="uid://fa7f7054nthl"]
+
+[ext_resource type="Script" uid="uid://d2xx5u5gtfb8l" path="res://Scripts/UI/loading_screen.gd" id="1_63kij"]
+[ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="2_63kij"]
+[ext_resource type="Texture2D" uid="uid://072s2rxwk6m8" path="res://Assets/UI/panel-border-004.png" id="3_jl8es"]
+[ext_resource type="Texture2D" uid="uid://ccbcslnsifj3o" path="res://Assets/UI/divider-fade-002.png" id="4_46ur2"]
+[ext_resource type="FontFile" uid="uid://dbt53hulxegh2" path="res://Assets/UI/Fonts/Imperator.ttf" id="5_v7pnk"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1ku0f"]
+bg_color = Color(0, 0, 0, 0)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yiwac"]
+atlas = ExtResource("3_jl8es")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ffnnp"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_12h0r"]
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.117681, 0.113398, 0.117586, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.997202, 0.95395, 0.949028, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 20
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_p1qlt"]
+
+[sub_resource type="Animation" id="Animation_cp0ys"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("panelName:theme_override_styles/panel:bg_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("panelName:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("panelName/panelBox:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(465, 275.5)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("panelName/panelBox:pivot_offset")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_opfnp"]
+resource_name = "namebox_flyin"
+length = 0.5
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("panelName:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("panelName:theme_override_styles/panel:bg_color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("panelName/panelBox:position")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.42, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(465, -500), Vector2(465, 320), Vector2(465, 250), Vector2(465, 275.5)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("panelName/panelBox:pivot_offset")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(303, 65)]
+}
+
+[sub_resource type="Animation" id="Animation_jl8es"]
+resource_name = "namebox_flyout"
+length = 0.5
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("panelName:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("panelName:theme_override_styles/panel:bg_color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.2, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("panelName/panelBox:position")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.35),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(465, 275.5), Vector2(465, 250), Vector2(465, 320), Vector2(465, -500)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("panelName/panelBox:pivot_offset")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(303, 65)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_yhxw7"]
+_data = {
+&"RESET": SubResource("Animation_cp0ys"),
+&"namebox_flyin": SubResource("Animation_opfnp"),
+&"namebox_flyout": SubResource("Animation_jl8es")
+}
+
+[node name="LoadingScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_63kij")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -120.5
+offset_top = -28.0
+offset_right = 120.5
+offset_bottom = 28.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_63kij")
+theme_override_colors/font_color = Color(1, 0.909333, 0.32, 1)
+theme_override_colors/font_outline_color = Color(1, 0.266667, 0, 1)
+theme_override_constants/outline_size = 3
+text = "Loading"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="panelName" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 22.0
+offset_top = 14.0
+offset_right = 22.0
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1ku0f")
+
+[node name="panelBox" type="Panel" parent="panelName"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -303.0
+offset_top = -932.0
+offset_right = 303.0
+offset_bottom = -619.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="panelName/panelBox"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="NinePatchRect" type="NinePatchRect" parent="panelName/panelBox"]
+self_modulate = Color(0.65, 0.0585, 0.0585, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_yiwac")
+patch_margin_left = 16
+patch_margin_top = 16
+patch_margin_right = 16
+patch_margin_bottom = 16
+
+[node name="PanelContainer" type="PanelContainer" parent="panelName/panelBox"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_ffnnp")
+
+[node name="MarginContainer" type="MarginContainer" parent="panelName/panelBox/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="panelName/panelBox/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer"]
+modulate = Color(0.65098, 0.0588235, 0.0588235, 1)
+layout_mode = 2
+
+[node name="TextureRect2" type="TextureRect" parent="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("4_46ur2")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_63kij")
+theme_override_font_sizes/font_size = 42
+text = "Enter  Name"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("4_46ur2")
+expand_mode = 1
+stretch_mode = 5
+flip_h = true
+
+[node name="MarginContainer" type="MarginContainer" parent="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="txtName" type="TextEdit" parent="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("5_v7pnk")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_12h0r")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_p1qlt")
+placeholder_text = "Enter your name, Hero..."
+emoji_menu_enabled = false
+drag_and_drop_selection_enabled = false
+
+[node name="MarginContainer2" type="MarginContainer" parent="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="txtError" type="Label" parent="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/MarginContainer2"]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.44, 0.44, 0.44, 1)
+theme_override_fonts/font = ExtResource("5_v7pnk")
+theme_override_font_sizes/font_size = 15
+text = " "
+
+[node name="HBoxContainer" type="HBoxContainer" parent="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="btnName" type="Button" parent="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(250, 75)
+layout_mode = 2
+theme = ExtResource("2_63kij")
+text = "Done"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_yhxw7")
+}
+
+[connection signal="text_changed" from="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/txtName" to="." method="_on_txt_name_text_changed"]
+[connection signal="pressed" from="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/btnName" to="." method="_on_btn_name_pressed"]

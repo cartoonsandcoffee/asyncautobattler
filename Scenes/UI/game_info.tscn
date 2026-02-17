@@ -76,58 +76,11 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="TextureRect2" type="TextureRect" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/boxHeader"]
-_import_path = NodePath("")
-unique_name_in_owner = false
-process_mode = 0
-process_priority = 0
-process_physics_priority = 0
-process_thread_group = 0
-physics_interpolation_mode = 2
-auto_translate_mode = 0
-editor_description = ""
-visible = true
-modulate = Color(1, 1, 1, 1)
-self_modulate = Color(1, 1, 1, 1)
-show_behind_parent = false
-top_level = false
-clip_children = 0
-light_mask = 1
-visibility_layer = 1
-z_index = 0
-z_as_relative = true
-y_sort_enabled = false
-texture_filter = 0
-texture_repeat = 0
-material = null
-use_parent_material = false
-clip_contents = false
-custom_minimum_size = Vector2(0, 0)
-layout_direction = 0
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 1
-size_flags_stretch_ratio = 1.0
-localize_numeral_system = true
-tooltip_text = ""
-tooltip_auto_translate_mode = 0
-focus_neighbor_left = NodePath("")
-focus_neighbor_top = NodePath("")
-focus_neighbor_right = NodePath("")
-focus_neighbor_bottom = NodePath("")
-focus_next = NodePath("")
-focus_previous = NodePath("")
-focus_mode = 0
-mouse_filter = 1
-mouse_force_pass_scroll_events = true
-mouse_default_cursor_shape = 0
-theme = null
-theme_type_variation = &""
 texture = ExtResource("2_ct6pu")
 expand_mode = 1
 stretch_mode = 5
-flip_h = false
-flip_v = false
-script = null
 
 [node name="Label" type="Label" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/boxHeader"]
 layout_mode = 2
@@ -139,58 +92,12 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/boxHeader"]
-_import_path = NodePath("")
-unique_name_in_owner = false
-process_mode = 0
-process_priority = 0
-process_physics_priority = 0
-process_thread_group = 0
-physics_interpolation_mode = 2
-auto_translate_mode = 0
-editor_description = ""
-visible = true
-modulate = Color(1, 1, 1, 1)
-self_modulate = Color(1, 1, 1, 1)
-show_behind_parent = false
-top_level = false
-clip_children = 0
-light_mask = 1
-visibility_layer = 1
-z_index = 0
-z_as_relative = true
-y_sort_enabled = false
-texture_filter = 0
-texture_repeat = 0
-material = null
-use_parent_material = false
-clip_contents = false
-custom_minimum_size = Vector2(0, 0)
-layout_direction = 0
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 1
-size_flags_stretch_ratio = 1.0
-localize_numeral_system = true
-tooltip_text = ""
-tooltip_auto_translate_mode = 0
-focus_neighbor_left = NodePath("")
-focus_neighbor_top = NodePath("")
-focus_neighbor_right = NodePath("")
-focus_neighbor_bottom = NodePath("")
-focus_next = NodePath("")
-focus_previous = NodePath("")
-focus_mode = 0
-mouse_filter = 1
-mouse_force_pass_scroll_events = true
-mouse_default_cursor_shape = 0
-theme = null
-theme_type_variation = &""
 texture = ExtResource("2_ct6pu")
 expand_mode = 1
 stretch_mode = 5
 flip_h = true
-flip_v = false
-script = null
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/boxHeader"]
 layout_mode = 2
@@ -236,58 +143,11 @@ The rooms with red borders are the ones that contain enemies that you will have 
 fit_content = true
 
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent/HBoxContainer"]
-_import_path = NodePath("")
-unique_name_in_owner = false
-process_mode = 0
-process_priority = 0
-process_physics_priority = 0
-process_thread_group = 0
-physics_interpolation_mode = 2
-auto_translate_mode = 0
-editor_description = ""
-visible = true
-modulate = Color(1, 1, 1, 1)
-self_modulate = Color(1, 1, 1, 1)
-show_behind_parent = false
-top_level = false
-clip_children = 0
-light_mask = 1
-visibility_layer = 1
-z_index = 0
-z_as_relative = true
-y_sort_enabled = false
-texture_filter = 0
-texture_repeat = 0
-material = null
-use_parent_material = false
-clip_contents = false
 custom_minimum_size = Vector2(540, 0)
-layout_direction = 0
 layout_mode = 2
-size_flags_horizontal = 1
-size_flags_vertical = 1
-size_flags_stretch_ratio = 1.0
-localize_numeral_system = true
-tooltip_text = ""
-tooltip_auto_translate_mode = 0
-focus_neighbor_left = NodePath("")
-focus_neighbor_top = NodePath("")
-focus_neighbor_right = NodePath("")
-focus_neighbor_bottom = NodePath("")
-focus_next = NodePath("")
-focus_previous = NodePath("")
-focus_mode = 0
-mouse_filter = 1
-mouse_force_pass_scroll_events = true
-mouse_default_cursor_shape = 0
-theme = null
-theme_type_variation = &""
 texture = ExtResource("4_ct6pu")
 expand_mode = 5
 stretch_mode = 3
-flip_h = false
-flip_v = false
-script = null
 
 [node name="lblItems" type="Label" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent"]
 layout_mode = 2
@@ -298,58 +158,8 @@ layout_mode = 2
 theme_override_constants/separation = 15
 
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent/HBoxContainer2"]
-_import_path = NodePath("")
-unique_name_in_owner = false
-process_mode = 0
-process_priority = 0
-process_physics_priority = 0
-process_thread_group = 0
-physics_interpolation_mode = 2
-auto_translate_mode = 0
-editor_description = ""
-visible = true
-modulate = Color(1, 1, 1, 1)
-self_modulate = Color(1, 1, 1, 1)
-show_behind_parent = false
-top_level = false
-clip_children = 0
-light_mask = 1
-visibility_layer = 1
-z_index = 0
-z_as_relative = true
-y_sort_enabled = false
-texture_filter = 0
-texture_repeat = 0
-material = null
-use_parent_material = false
-clip_contents = false
-custom_minimum_size = Vector2(0, 0)
-layout_direction = 0
 layout_mode = 2
-size_flags_horizontal = 1
-size_flags_vertical = 1
-size_flags_stretch_ratio = 1.0
-localize_numeral_system = true
-tooltip_text = ""
-tooltip_auto_translate_mode = 0
-focus_neighbor_left = NodePath("")
-focus_neighbor_top = NodePath("")
-focus_neighbor_right = NodePath("")
-focus_neighbor_bottom = NodePath("")
-focus_next = NodePath("")
-focus_previous = NodePath("")
-focus_mode = 0
-mouse_filter = 1
-mouse_force_pass_scroll_events = true
-mouse_default_cursor_shape = 0
-theme = null
-theme_type_variation = &""
 texture = ExtResource("5_nhtwg")
-expand_mode = 0
-stretch_mode = 0
-flip_h = false
-flip_v = false
-script = null
 
 [node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent/HBoxContainer2"]
 layout_mode = 2
@@ -369,9 +179,12 @@ An item card is comprised of:
 
 [node name="RichTextLabel2" type="RichTextLabel" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent"]
 layout_mode = 2
+bbcode_enabled = true
 text = "So these boots are \"Byzantium Boots\", they are of Common rarity (also denoted by the blue border in the inventory), they passively provide 2 shield and 1 agility, they have a custom rule where at the start of battle they apply 1 stun status to the enemy, and they are in the category of \"Byzantium\"
 
-Passive stats always apply and effect the base/max value of that stat. Custom Item Rules typically apply during combat, and resolve sequentially, so order matters. Categories can show how items are grouped, items can be in multiple categories."
+Passive stats always apply and effect the base/max value of that stat. Custom Item Rules typically apply during combat, and resolve sequentially, so order matters. Categories can show how items are grouped, items can be in multiple categories.
+
+Categories will also let you know which items are [b]\"Unique\"[/b] which means you can only equip one of that exact item, or [b]\"Singularity\"[/b] which means you can only hold one singularity item at a time and will not be offered others until you drop your current."
 fit_content = true
 
 [node name="lblStats" type="Label" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent"]
@@ -383,58 +196,11 @@ custom_minimum_size = Vector2(0, 450)
 layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent/boxStatsMain"]
-_import_path = NodePath("")
-unique_name_in_owner = false
-process_mode = 0
-process_priority = 0
-process_physics_priority = 0
-process_thread_group = 0
-physics_interpolation_mode = 2
-auto_translate_mode = 0
-editor_description = ""
-visible = true
-modulate = Color(1, 1, 1, 1)
-self_modulate = Color(1, 1, 1, 1)
-show_behind_parent = false
-top_level = false
-clip_children = 0
-light_mask = 1
-visibility_layer = 1
-z_index = 0
-z_as_relative = true
-y_sort_enabled = false
-texture_filter = 0
-texture_repeat = 0
-material = null
-use_parent_material = false
-clip_contents = false
 custom_minimum_size = Vector2(150, 0)
-layout_direction = 0
 layout_mode = 2
-size_flags_horizontal = 1
-size_flags_vertical = 1
-size_flags_stretch_ratio = 1.0
-localize_numeral_system = true
-tooltip_text = ""
-tooltip_auto_translate_mode = 0
-focus_neighbor_left = NodePath("")
-focus_neighbor_top = NodePath("")
-focus_neighbor_right = NodePath("")
-focus_neighbor_bottom = NodePath("")
-focus_next = NodePath("")
-focus_previous = NodePath("")
-focus_mode = 0
-mouse_filter = 1
-mouse_force_pass_scroll_events = true
-mouse_default_cursor_shape = 0
-theme = null
-theme_type_variation = &""
 texture = ExtResource("6_fgnkp")
 expand_mode = 1
 stretch_mode = 2
-flip_h = false
-flip_v = false
-script = null
 
 [node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent/boxStatsMain"]
 layout_mode = 2

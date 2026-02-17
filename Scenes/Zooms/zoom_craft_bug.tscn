@@ -1,0 +1,535 @@
+[gd_scene load_steps=27 format=3 uid="uid://dcxqc4kjtonjh"]
+
+[ext_resource type="Texture2D" uid="uid://b1sye7pgku5ek" path="res://Assets/Art/Events/Zooms/bug_crafting_zoom.png" id="1_t7nn1"]
+[ext_resource type="Script" uid="uid://csxosctlp160n" path="res://Scripts/Zooms/zoom_craft_bug.gd" id="1_tkfs2"]
+[ext_resource type="Texture2D" uid="uid://ofqhkq0qfkqk" path="res://Assets/Items/Bugs.png" id="2_tkfs2"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pdiuj"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_05cnq"]
+bg_color = Color(0, 0, 0, 0.996078)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.701961, 0.921569, 0.960784, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gs6mv"]
+atlas = ExtResource("2_tkfs2")
+region = Rect2(750, 150, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bcc6f"]
+atlas = ExtResource("2_tkfs2")
+region = Rect2(300, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6aiyl"]
+atlas = ExtResource("2_tkfs2")
+region = Rect2(0, 150, 150, 150)
+
+[sub_resource type="Gradient" id="Gradient_tkfs2"]
+offsets = PackedFloat32Array(0.670213, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_pdiuj"]
+gradient = SubResource("Gradient_tkfs2")
+
+[sub_resource type="Curve" id="Curve_05cnq"]
+_data = [Vector2(0.0093458, 0.224719), 0.0, 0.0, 0, 0, Vector2(1, 0.88764), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_gs6mv"]
+curve = SubResource("Curve_05cnq")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_85vt7"]
+particle_flag_disable_z = true
+angle_min = -285.7
+angle_max = 165.7
+direction = Vector3(1, -4, 0)
+spread = 90.0
+initial_velocity_max = 476.19
+gravity = Vector3(0, 60, 0)
+scale_min = 0.25
+scale_curve = SubResource("CurveTexture_gs6mv")
+color_ramp = SubResource("GradientTexture1D_pdiuj")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q1824"]
+atlas = ExtResource("2_tkfs2")
+region = Rect2(600, 150, 150, 150)
+
+[sub_resource type="Gradient" id="Gradient_bcc6f"]
+offsets = PackedFloat32Array(0, 0.62234, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_6aiyl"]
+gradient = SubResource("Gradient_bcc6f")
+
+[sub_resource type="Curve" id="Curve_85vt7"]
+_data = [Vector2(0, 0.146068), 0.0, 0.0, 0, 0, Vector2(1, 0.808989), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_q1824"]
+curve = SubResource("Curve_85vt7")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_algrn"]
+particle_flag_disable_z = true
+angle_min = -251.4
+angle_max = 205.7
+direction = Vector3(1, -4, 0)
+spread = 90.0
+initial_velocity_max = 450.0
+gravity = Vector3(0, 60, 0)
+scale_min = 0.25
+scale_curve = SubResource("CurveTexture_q1824")
+color_ramp = SubResource("GradientTexture1D_6aiyl")
+
+[sub_resource type="Animation" id="Animation_pdiuj"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("panelBack:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("panelBack/panelMain:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("panelBack/panelMain:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_05cnq"]
+resource_name = "hide_popup"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("panelBack:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("panelBack/panelMain:scale")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.1, 1.1), Vector2(0.5, 0.5)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("panelBack/panelMain:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_tkfs2"]
+resource_name = "show_popup"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("panelBack:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("panelBack/panelMain:scale")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.5, 0.5), Vector2(1.1, 1.1), Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("panelBack/panelMain:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_gs6mv"]
+_data = {
+&"RESET": SubResource("Animation_pdiuj"),
+&"hide_popup": SubResource("Animation_05cnq"),
+&"show_popup": SubResource("Animation_tkfs2")
+}
+
+[sub_resource type="Animation" id="Animation_qie8r"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("panelBack/panelMain/picBug1:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(306, 463)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("panelBack/panelMain/picBug1:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("panelBack/panelMain/picBug1:self_modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("panelBack/panelMain/picBug2:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(525, 465)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("panelBack/panelMain/picBug2:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("panelBack/panelMain/picBug2:self_modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("panelBack/panelMain/particleBug1:emitting")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("panelBack/panelMain/particleBug2:emitting")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_algrn"]
+resource_name = "throw_bugs"
+length = 2.5
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("panelBack/panelMain/picBug1:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.55, 0.8, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(306, 463), Vector2(360.026, 330), Vector2(387.926, 322.053), Vector2(400, 340)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("panelBack/panelMain/picBug1:scale")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.25, 0.25)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("panelBack/panelMain/picBug1:self_modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.25, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(0, 0, 0, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("panelBack/panelMain/picBug2:position")
+tracks/3/interp = 2
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.5, 1, 1.3, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(525, 465), Vector2(467, 310), Vector2(432.2, 316), Vector2(415, 337)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("panelBack/panelMain/picBug2:scale")
+tracks/4/interp = 2
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.5, 1.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.25, 0.25)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("panelBack/panelMain/picBug2:self_modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.5, 0.75, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(0, 0, 0, 1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("panelBack/panelMain/particleBug1:emitting")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(1.65, 2.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("panelBack/panelMain/particleBug2:emitting")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(1.725, 2.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/8/type = "method"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath(".")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0.15, 0.675, 1.65),
+"transitions": PackedFloat32Array(1, 1, 1),
+"values": [{
+"args": [],
+"method": &"play_woosh"
+}, {
+"args": [],
+"method": &"play_woosh"
+}, {
+"args": [],
+"method": &"play_corpse"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fl5c6"]
+_data = {
+&"RESET": SubResource("Animation_qie8r"),
+&"throw_bugs": SubResource("Animation_algrn")
+}
+
+[node name="zoomCraftBug" type="Control"]
+z_index = 999
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_tkfs2")
+
+[node name="panelBack" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_pdiuj")
+
+[node name="panelMain" type="Panel" parent="panelBack"]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(960, 540)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -480.0
+offset_top = -270.0
+offset_right = 480.0
+offset_bottom = 270.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(480, 270)
+theme_override_styles/panel = SubResource("StyleBoxFlat_05cnq")
+
+[node name="picMain" type="TextureRect" parent="panelBack/panelMain"]
+custom_minimum_size = Vector2(950, 530)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(475, 265)
+texture = ExtResource("1_t7nn1")
+expand_mode = 1
+
+[node name="picBug1" type="TextureRect" parent="panelBack/panelMain"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 306.0
+offset_top = 463.0
+offset_right = 456.0
+offset_bottom = 613.0
+pivot_offset = Vector2(75, 75)
+texture = SubResource("AtlasTexture_gs6mv")
+
+[node name="picBug2" type="TextureRect" parent="panelBack/panelMain"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 525.0
+offset_top = 465.0
+offset_right = 675.0
+offset_bottom = 615.0
+pivot_offset = Vector2(75, 75)
+texture = SubResource("AtlasTexture_bcc6f")
+
+[node name="particleBug1" type="GPUParticles2D" parent="panelBack/panelMain"]
+position = Vector2(479, 411)
+emitting = false
+amount = 70
+texture = SubResource("AtlasTexture_6aiyl")
+one_shot = true
+process_material = SubResource("ParticleProcessMaterial_85vt7")
+
+[node name="particleBug2" type="GPUParticles2D" parent="panelBack/panelMain"]
+position = Vector2(484, 400)
+emitting = false
+amount = 75
+texture = SubResource("AtlasTexture_q1824")
+one_shot = true
+process_material = SubResource("ParticleProcessMaterial_algrn")
+
+[node name="animDisplay" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_gs6mv")
+}
+
+[node name="animBugs" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_fl5c6")
+}

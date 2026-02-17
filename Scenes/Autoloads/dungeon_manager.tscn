@@ -1,9 +1,8 @@
 [gd_scene load_steps=3 format=3 uid="uid://qlqnhc82ni7x"]
 
 [ext_resource type="Script" uid="uid://eootj3nibbxl" path="res://Scripts/Autoloads/DungeonManager.gd" id="1_b86jv"]
-[ext_resource type="Resource" uid="uid://did7j71syeueq" path="res://Resources/Rooms/uncommon_merchant.tres" id="2_mhvtc"]
+[ext_resource type="Resource" uid="uid://d2aik1ynja484" path="res://Resources/Rooms/uncommon_treasure_weapons.tres" id="2_mhvtc"]
 
 [node name="DungeonManager" type="Node2D"]
 script = ExtResource("1_b86jv")
-testing_force_room_2 = true
-testing_room_2_definition = ExtResource("2_mhvtc")
+testing_room_definition = ExtResource("2_mhvtc")

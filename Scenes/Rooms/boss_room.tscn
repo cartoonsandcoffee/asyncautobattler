@@ -1,13 +1,424 @@
-[gd_scene load_steps=4 format=3 uid="uid://bqku84hu1c31k"]
+[gd_scene load_steps=38 format=3 uid="uid://bqku84hu1c31k"]
 
 [ext_resource type="Script" uid="uid://ig7ftnfrlt31" path="res://Scripts/RoomEvents/boss_room_event.gd" id="1_xy2q4"]
+[ext_resource type="Texture2D" uid="uid://dhfumqfd7ynm" path="res://Assets/Art/Backgrounds/Boss Room.png" id="2_rjw12"]
+[ext_resource type="Texture2D" uid="uid://cmyut8hv84qr0" path="res://Assets/UI/Border/panel-border-009.png" id="3_3raan"]
+[ext_resource type="Texture2D" uid="uid://ccbcslnsifj3o" path="res://Assets/UI/divider-fade-002.png" id="4_ksq53"]
+[ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="5_mbpft"]
+[ext_resource type="Theme" uid="uid://od14ccps1daj" path="res://Themes/descriptive_label.tres" id="6_ogh3p"]
+[ext_resource type="Texture2D" uid="uid://cgbaw0ahipa80" path="res://Assets/UI/Border/panel-border-007.png" id="7_ymj7t"]
+[ext_resource type="Texture2D" uid="uid://lufpx811y86r" path="res://Assets/Items/ear.png" id="8_14qk7"]
+[ext_resource type="Texture2D" uid="uid://hl37x7hsnly" path="res://Assets/Items/Helmets.png" id="9_m2dri"]
+[ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="10_ksq53"]
+[ext_resource type="Texture2D" uid="uid://vtf7yfl2710m" path="res://Assets/UI/panel-border-030.png" id="11_mbpft"]
+[ext_resource type="Texture2D" uid="uid://w8xx58x2n851" path="res://Assets/UI/Border/panel-border-025.png" id="12_ogh3p"]
+[ext_resource type="Texture2D" uid="uid://dr6r2a7hiohuw" path="res://Assets/Art/Cutscenes/victory_screen.png" id="13_ymj7t"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q7s3k"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_nvbdl"]
+texture = ExtResource("3_3raan")
+texture_margin_left = 20.0
+texture_margin_top = 20.0
+texture_margin_right = 20.0
+texture_margin_bottom = 20.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btxe2"]
+texture = ExtResource("7_ymj7t")
+texture_margin_left = 28.0
+texture_margin_top = 28.0
+texture_margin_right = 28.0
+texture_margin_bottom = 28.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q7p3b"]
+atlas = ExtResource("9_m2dri")
+region = Rect2(450, 300, 150, 150)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gpmqk"]
+texture = ExtResource("7_ymj7t")
+texture_margin_left = 28.0
+texture_margin_top = 28.0
+texture_margin_right = 28.0
+texture_margin_bottom = 28.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ogh3p"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ymj7t"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_14qk7"]
+texture = ExtResource("11_mbpft")
+texture_margin_left = 24.0
+texture_margin_top = 24.0
+texture_margin_right = 24.0
+texture_margin_bottom = 24.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_14qk7"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m2dri"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_q7s3k"]
+texture = ExtResource("12_ogh3p")
+texture_margin_left = 44.0
+texture_margin_top = 44.0
+texture_margin_right = 44.0
+texture_margin_bottom = 44.0
+
+[sub_resource type="Animation" id="Animation_31hdq"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("panelOnward:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("panelOnward:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_btxe2"]
+resource_name = "blackout"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("panelOnward:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("panelOnward:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_xy2q4"]
 resource_name = "boss_approach"
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_jsnlv"]
 _data = {
+&"RESET": SubResource("Animation_31hdq"),
+&"blackout": SubResource("Animation_btxe2"),
 &"boss_approach": SubResource("Animation_xy2q4")
+}
+
+[sub_resource type="Animation" id="Animation_q7s3k"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("panelOnward:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("panelOnward:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("panelOnward/panelBox:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(273, -800)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("panelFinalVictory:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("panelFinalVictory:self_modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("panelFinalVictory/panelBlack:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(355, -800)]
+}
+
+[sub_resource type="Animation" id="Animation_nvbdl"]
+resource_name = "hide_panel"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("panelOnward:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("panelOnward:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("panelOnward/panelBox:position")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(273, 71.5), Vector2(273, 90), Vector2(273, 90), Vector2(273, -800.5)]
+}
+
+[sub_resource type="Animation" id="Animation_jfvg4"]
+resource_name = "show_final"
+length = 0.5
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("panelFinalVictory:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("panelFinalVictory:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("panelFinalVictory/panelBlack:position")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.325, 0.425, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(355, -800), Vector2(355, 63), Vector2(355, 15), Vector2(355, 43)]
+}
+
+[sub_resource type="Animation" id="Animation_m2dri"]
+resource_name = "show_panel"
+length = 0.5
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("panelOnward:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("panelOnward:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("panelOnward/panelBox:position")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.15, 0.4, 0.45, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(273, -800.5), Vector2(273, 90), Vector2(273, 20), Vector2(273, 71.5)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_btxe2"]
+_data = {
+&"RESET": SubResource("Animation_q7s3k"),
+&"hide_panel": SubResource("Animation_nvbdl"),
+&"show_final": SubResource("Animation_jfvg4"),
+&"show_panel": SubResource("Animation_m2dri")
+}
+
+[sub_resource type="Animation" id="Animation_gpmqk"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("panelFinished:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(748, -300)]
+}
+
+[sub_resource type="Animation" id="Animation_apvks"]
+resource_name = "hide_popup"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("panelFinished:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.166667, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(748, 412), Vector2(748, 440), Vector2(748, 440), Vector2(748, -300)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.0333333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play_popup_close_sfx"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_q7p3b"]
+resource_name = "show_popup"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("panelFinished:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.266667, 0.333333, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(748, -300), Vector2(748, 440), Vector2(748, 390), Vector2(748, 412)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.0666667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play_popup_open_sfx"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_31hdq"]
+_data = {
+&"RESET": SubResource("Animation_gpmqk"),
+&"hide_popup": SubResource("Animation_apvks"),
+&"show_popup": SubResource("Animation_q7p3b")
 }
 
 [node name="BossRoom" type="Control"]
@@ -19,7 +430,481 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_xy2q4")
 
+[node name="TextureRect" type="TextureRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_rjw12")
+expand_mode = 1
+
+[node name="panelOnward" type="Panel" parent="."]
+visible = false
+self_modulate = Color(1, 1, 1, 0)
+z_index = 300
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_q7s3k")
+
+[node name="panelBox" type="PanelContainer" parent="panelOnward"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -495.0
+offset_top = -1232.0
+offset_right = 495.0
+offset_bottom = -680.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_nvbdl")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="panelOnward/panelBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="titleBox" type="HBoxContainer" parent="panelOnward/panelBox/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="MarginContainer" type="MarginContainer" parent="panelOnward/panelBox/VBoxContainer/titleBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect2" type="TextureRect" parent="panelOnward/panelBox/VBoxContainer/titleBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("4_ksq53")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="panelOnward/panelBox/VBoxContainer/titleBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("5_mbpft")
+theme_override_font_sizes/font_size = 42
+text = "Congratulations  Champion"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="panelOnward/panelBox/VBoxContainer/titleBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("4_ksq53")
+expand_mode = 1
+stretch_mode = 5
+flip_h = true
+
+[node name="MarginContainer2" type="MarginContainer" parent="panelOnward/panelBox/VBoxContainer/titleBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="panelOnward/panelBox/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("6_ogh3p")
+text = "You have a choice laid before you... Choose wisely."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="panelOnward/panelBox/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="twoChoices" type="HBoxContainer" parent="panelOnward/panelBox/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("5_mbpft")
+theme_override_constants/separation = 30
+
+[node name="MarginContainer" type="MarginContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices"]
+layout_mode = 2
+
+[node name="panelEnd" type="PanelContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxTexture_btxe2")
+
+[node name="MarginContainer" type="MarginContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelEnd"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelEnd/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelEnd/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Claim Victory"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RichTextLabel" type="RichTextLabel" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelEnd/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "End your run and enjoy your well earned retirement. You will be rewarded..."
+fit_content = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelEnd/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="MarginContainer" type="MarginContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelEnd/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PanelContainer" type="PanelContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelEnd/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelEnd/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelEnd/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture = ExtResource("8_14qk7")
+expand_mode = 2
+
+[node name="Label" type="Label" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelEnd/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "2"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PanelContainer2" type="PanelContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelEnd/MarginContainer/VBoxContainer/HBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelEnd/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer2"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelEnd/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer2/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture = SubResource("AtlasTexture_q7p3b")
+expand_mode = 2
+
+[node name="Label" type="Label" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelEnd/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer2/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer2" type="MarginContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelEnd/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="btnEnd" type="Button" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelEnd"]
+layout_mode = 2
+
+[node name="panelContinue" type="PanelContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxTexture_gpmqk")
+
+[node name="MarginContainer" type="MarginContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelContinue"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelContinue/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelContinue/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Fight for Glory"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RichTextLabel" type="RichTextLabel" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelContinue/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Challenge an undefeated champion. This gives you a chance to sit in the Hall of Champions. If you win you will passively earn these rewards each time a champion loses to you."
+fit_content = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelContinue/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="MarginContainer" type="MarginContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelContinue/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PanelContainer" type="PanelContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelContinue/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelContinue/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelContinue/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture = ExtResource("8_14qk7")
+expand_mode = 2
+
+[node name="Label" type="Label" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelContinue/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "1*"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PanelContainer2" type="PanelContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelContinue/MarginContainer/VBoxContainer/HBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelContinue/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer2"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelContinue/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer2/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture = SubResource("AtlasTexture_q7p3b")
+expand_mode = 2
+
+[node name="Label" type="Label" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelContinue/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer2/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "1*"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer2" type="MarginContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelContinue/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label2" type="Label" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelContinue/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.321728, 0.321728, 0.321728, 1)
+theme_override_fonts/font = ExtResource("10_ksq53")
+theme_override_font_sizes/font_size = 16
+text = "* up to 10 total."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="btnChampion" type="Button" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelContinue"]
+layout_mode = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices"]
+layout_mode = 2
+
+[node name="panelFinished" type="Panel" parent="."]
+z_index = 300
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -732.0
+offset_right = 20.0
+offset_bottom = -692.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_ogh3p")
+
+[node name="panelBlack" type="PanelContainer" parent="panelFinished"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -181.0
+offset_right = 400.0
+offset_bottom = 181.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ymj7t")
+
+[node name="MarginContainer" type="MarginContainer" parent="panelFinished/panelBlack"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="panelBorder" type="PanelContainer" parent="panelFinished/panelBlack/MarginContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_14qk7")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="panelFinished/panelBlack/MarginContainer/panelBorder"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="titleBox" type="HBoxContainer" parent="panelFinished/panelBlack/MarginContainer/panelBorder/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="MarginContainer" type="MarginContainer" parent="panelFinished/panelBlack/MarginContainer/panelBorder/VBoxContainer/titleBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect2" type="TextureRect" parent="panelFinished/panelBlack/MarginContainer/panelBorder/VBoxContainer/titleBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("4_ksq53")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="panelFinished/panelBlack/MarginContainer/panelBorder/VBoxContainer/titleBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("5_mbpft")
+theme_override_font_sizes/font_size = 42
+text = "The  Crowd  is  Pleased"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="panelFinished/panelBlack/MarginContainer/panelBorder/VBoxContainer/titleBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("4_ksq53")
+expand_mode = 1
+stretch_mode = 5
+flip_h = true
+
+[node name="MarginContainer2" type="MarginContainer" parent="panelFinished/panelBlack/MarginContainer/panelBorder/VBoxContainer/titleBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="panelFinished/panelBlack/MarginContainer/panelBorder/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("5_mbpft")
+bbcode_enabled = true
+text = "As cheers fill the air, a magical shroud engulfs you... You can feel your [b]essence[/b] somehow tethered to the room.. Added to the spirits of champions whom fight for sport to keep the unworthy from promotion. "
+fit_content = true
+
+[node name="lblPromo" type="Label" parent="panelFinished/panelBlack/MarginContainer/panelBorder/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("5_mbpft")
+theme_override_colors/font_color = Color(0.85, 0.729017, 0.3315, 1)
+theme_override_colors/font_outline_color = Color(0.88, 0.22528, 0.0616, 1)
+theme_override_constants/outline_size = 3
+text = "You advance to Rank 2!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="btnContinue" type="Button" parent="panelFinished/panelBlack/MarginContainer/panelBorder/VBoxContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme = ExtResource("5_mbpft")
+text = "Um, thanks?"
+
+[node name="panelFinalVictory" type="Panel" parent="."]
+visible = false
+self_modulate = Color(1, 1, 1, 0)
+z_index = 300
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_14qk7")
+
+[node name="panelBlack" type="PanelContainer" parent="panelFinalVictory"]
+top_level = true
+z_index = 400
+custom_minimum_size = Vector2(400, 300)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -413.0
+offset_top = -1232.0
+offset_right = 413.0
+offset_bottom = -454.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_m2dri")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="panelFinalVictory/panelBlack"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="panelBody" type="PanelContainer" parent="panelFinalVictory/panelBlack/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxTexture_q7s3k")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="panelFinalVictory/panelBlack/VBoxContainer/panelBody"]
+layout_mode = 2
+theme = ExtResource("5_mbpft")
+
+[node name="Label" type="Label" parent="panelFinalVictory/panelBlack/VBoxContainer/panelBody/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("5_mbpft")
+theme_override_colors/font_color = Color(0.92976, 0.96, 0.3552, 1)
+theme_override_colors/font_outline_color = Color(0.81, 0.23247, 0.0567, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 48
+text = "Hail, victor!   May you reach the Hall of Champions!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="picVictory" type="TextureRect" parent="panelFinalVictory/panelBlack/VBoxContainer/panelBody/VBoxContainer"]
+self_modulate = Color(0.87, 0.1827, 0.1827, 1)
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 2
+texture = ExtResource("13_ymj7t")
+expand_mode = 5
+stretch_mode = 4
+
+[node name="RichTextLabel" type="RichTextLabel" parent="panelFinalVictory/panelBlack/VBoxContainer/panelBody/VBoxContainer"]
+layout_mode = 2
+bbcode_enabled = true
+text = "You have defeated an undefeated champion, sending their spirit to an early retirement. Now you will live on as an active champion, fighting other hopefuls and passively earning ears for your victories... If you can best 10 other heros without losing, you will retire in glory to the Hall of Champions.
+
+Good Luck..."
+fit_content = true
+
+[node name="btnFinalVictory" type="Button" parent="panelFinalVictory/panelBlack/VBoxContainer/panelBody/VBoxContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+text = "Huzzah!"
+
 [node name="animFlavor" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_jsnlv")
 }
+
+[node name="animOnward" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_btxe2")
+}
+
+[node name="animDone" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_31hdq")
+}
+
+[connection signal="pressed" from="panelOnward/panelBox/VBoxContainer/twoChoices/panelEnd/btnEnd" to="." method="_on_btn_end_pressed"]
+[connection signal="pressed" from="panelOnward/panelBox/VBoxContainer/twoChoices/panelContinue/btnChampion" to="." method="_on_btn_champion_pressed"]
+[connection signal="pressed" from="panelFinished/panelBlack/MarginContainer/panelBorder/VBoxContainer/btnContinue" to="." method="_on_btn_continue_pressed"]
+[connection signal="pressed" from="panelFinalVictory/panelBlack/VBoxContainer/panelBody/VBoxContainer/btnFinalVictory" to="." method="_on_btn_final_victory_pressed"]

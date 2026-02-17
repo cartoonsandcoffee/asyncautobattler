@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://dal4a52ms64j6"]
+[gd_scene load_steps=40 format=3 uid="uid://dal4a52ms64j6"]
 
 [ext_resource type="Script" uid="uid://ddldx468qw34w" path="res://Scripts/main_menu.gd" id="1_n45e2"]
 [ext_resource type="Texture2D" uid="uid://vtf7yfl2710m" path="res://Assets/UI/panel-border-030.png" id="2_ce3w2"]
@@ -10,18 +10,19 @@
 [ext_resource type="Texture2D" uid="uid://dxt3yb4gkjn6x" path="res://Assets/Art/Particles/smoke_07.png" id="4_ujyyl"]
 [ext_resource type="Shader" uid="uid://c4e2x1kcm6urs" path="res://Shaders/fire_shader.tres" id="5_mkpwh"]
 [ext_resource type="Texture2D" uid="uid://48oitsyk7ir4" path="res://Assets/Art/Noise/T_VFX_Noise_465.png" id="6_4nkqq"]
-[ext_resource type="Texture2D" uid="uid://072s2rxwk6m8" path="res://Assets/UI/panel-border-004.png" id="6_opfnp"]
 [ext_resource type="Texture2D" uid="uid://5hncfitv451a" path="res://Assets/Art/Noise/T_Gradient_circle22.jpg" id="7_ehtkc"]
 [ext_resource type="Texture2D" uid="uid://ejynek1siy2n" path="res://Assets/UI/White.png" id="8_6dk6o"]
 [ext_resource type="PackedScene" uid="uid://cf3ax1fquw2mm" path="res://Scenes/UI/settings_panel.tscn" id="12_t1dhk"]
 [ext_resource type="PackedScene" uid="uid://bqe1p63qqfmnw" path="res://Scenes/UI/compendium.tscn" id="13_5egv6"]
+[ext_resource type="Texture2D" uid="uid://lufpx811y86r" path="res://Assets/Items/ear.png" id="13_wyh8j"]
 [ext_resource type="PackedScene" uid="uid://oba2ikwv3ve2" path="res://Scenes/UI/game_info.tscn" id="14_vtepg"]
+[ext_resource type="PackedScene" uid="uid://chs2a1fblqd0k" path="res://Scenes/UI/hallof_champions.tscn" id="17_wyh8j"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_opfnp"]
 
 [sub_resource type="Curve" id="Curve_jr6u5"]
 _limits = [0.3, 3.0, 0.0, 1.0]
-_data = [Vector2(0, 0.3), 0.0, 0.0, 0, 0, Vector2(1, 1.0618), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 0.3), 0.0, 0.0, 0, 0, Vector2(0.996913, 0.749445), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="Gradient" id="Gradient_6m47u"]
@@ -65,180 +66,27 @@ region = Rect2(0, 0, 96, 96)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_trj04"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cp0ys"]
-bg_color = Color(0, 0, 0, 0)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ujyyl"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_trj04"]
-atlas = ExtResource("6_opfnp")
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mkpwh"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_16hvj"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4nkqq"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_opfnp"]
-content_margin_left = 20.0
-content_margin_top = 20.0
-content_margin_right = 10.0
-content_margin_bottom = 10.0
-bg_color = Color(0.117681, 0.113398, 0.117586, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.997202, 0.95395, 0.949028, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-corner_detail = 20
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ehtkc"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yhxw7"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6dk6o"]
 
-[sub_resource type="Animation" id="Animation_cp0ys"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("panelName:theme_override_styles/panel:bg_color")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(0, 0, 0, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("panelName:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("panelName/panelBox:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(465, 275.5)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("panelName/panelBox:scale")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 1)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("panelName/panelBox:pivot_offset")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_opfnp"]
-resource_name = "namebox_flyin"
-length = 0.5
-step = 0.025
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("panelName:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("panelName:theme_override_styles/panel:bg_color")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 1)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("panelName/panelBox:position")
-tracks/2/interp = 2
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.42, 0.5),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(465, -500), Vector2(465, 320), Vector2(465, 250), Vector2(465, 275.5)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = false
-tracks/3/path = NodePath("panelName/panelBox:scale")
-tracks/3/interp = 2
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.5),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector2(1, 1), Vector2(1.05, 1.05), Vector2(1, 1)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("panelName/panelBox:pivot_offset")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(303, 65)]
-}
-tracks/5/type = "method"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("..")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"play_popup_open_sfx"
-}]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_yhxw7"]
-_data = {
-&"RESET": SubResource("Animation_cp0ys"),
-&"namebox_flyin": SubResource("Animation_opfnp")
-}
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jr6u5"]
 
 [sub_resource type="Animation" id="Animation_hkdq0"]
 length = 0.001
@@ -476,6 +324,7 @@ layout_mode = 2
 text = "New Game"
 
 [node name="btnPrivate" type="Button" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer"]
+visible = false
 custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
 disabled = true
@@ -484,7 +333,6 @@ text = "Private Server"
 [node name="btnHeroes" type="Button" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
-disabled = true
 text = "Hall of Heroes"
 
 [node name="btnCompendium" type="Button" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer"]
@@ -509,151 +357,58 @@ custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
 text = "Quit"
 
-[node name="MarginContainer2" type="MarginContainer" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="panelName" type="Panel" parent="Panel"]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 22.0
-offset_top = 14.0
-offset_right = 22.0
-offset_bottom = 14.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_cp0ys")
-
-[node name="panelBox" type="Panel" parent="Panel/panelName"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -303.0
-offset_top = -156.5
-offset_right = 303.0
-offset_bottom = 156.5
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="ColorRect" type="ColorRect" parent="Panel/panelName/panelBox"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 1)
-
-[node name="NinePatchRect" type="NinePatchRect" parent="Panel/panelName/panelBox"]
-self_modulate = Color(0.65, 0.0585, 0.0585, 1)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = SubResource("AtlasTexture_trj04")
-patch_margin_left = 16
-patch_margin_top = 16
-patch_margin_right = 16
-patch_margin_bottom = 16
-
-[node name="PanelContainer" type="PanelContainer" parent="Panel/panelName/panelBox"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxEmpty_16hvj")
-
-[node name="MarginContainer" type="MarginContainer" parent="Panel/panelName/panelBox/PanelContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/panelName/panelBox/PanelContainer/MarginContainer"]
+[node name="playerInfoPanel" type="HBoxContainer" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="Panel/panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer"]
-modulate = Color(0.65098, 0.0588235, 0.0588235, 1)
+[node name="earPanel" type="PanelContainer" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/playerInfoPanel"]
+modulate = Color(1, 0.756333, 0.57, 1)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ujyyl")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/playerInfoPanel/earPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/playerInfoPanel/earPanel/MarginContainer"]
 layout_mode = 2
 
-[node name="TextureRect2" type="TextureRect" parent="Panel/panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="picEar" type="TextureRect" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/playerInfoPanel/earPanel/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
-size_flags_horizontal = 3
-texture = ExtResource("3_1ehe0")
-expand_mode = 1
-stretch_mode = 5
+texture = ExtResource("13_wyh8j")
+expand_mode = 2
 
-[node name="Label" type="Label" parent="Panel/panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="lblEars" type="Label" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/playerInfoPanel/earPanel/MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("3_n45e2")
-theme_override_font_sizes/font_size = 42
-text = "Enter  Name"
+text = "000"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="Panel/panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="btnEars" type="Button" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/playerInfoPanel/earPanel"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_mkpwh")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_4nkqq")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_ehtkc")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_6dk6o")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_jr6u5")
+
+[node name="txtPlayerInfo" type="RichTextLabel" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/playerInfoPanel"]
 layout_mode = 2
 size_flags_horizontal = 3
-texture = ExtResource("3_1ehe0")
-expand_mode = 1
-stretch_mode = 5
-flip_h = true
+theme_override_font_sizes/normal_font_size = 14
+theme_override_font_sizes/bold_font_size = 18
+bbcode_enabled = true
+text = "Justin Moran"
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel/panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_bottom = 20
-
-[node name="txtName" type="TextEdit" parent="Panel/panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("2_opfnp")
-theme_override_font_sizes/font_size = 20
-theme_override_styles/normal = SubResource("StyleBoxFlat_opfnp")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_yhxw7")
-placeholder_text = "Enter your name, Hero..."
-emoji_menu_enabled = false
-drag_and_drop_selection_enabled = false
-
-[node name="MarginContainer2" type="MarginContainer" parent="Panel/panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="txtError" type="Label" parent="Panel/panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/MarginContainer2"]
-layout_mode = 2
-size_flags_vertical = 1
-theme_override_colors/font_color = Color(0.44, 0.44, 0.44, 1)
-theme_override_fonts/font = ExtResource("2_opfnp")
-theme_override_font_sizes/font_size = 15
-text = " "
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="Panel/panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="btnName" type="Button" parent="Panel/panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(250, 75)
-layout_mode = 2
-theme = ExtResource("3_n45e2")
-text = "Done"
 
 [node name="SettingsPanel" parent="Panel" instance=ExtResource("12_t1dhk")]
 visible = false
@@ -667,10 +422,9 @@ layout_mode = 1
 visible = false
 layout_mode = 1
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Panel"]
-libraries = {
-&"": SubResource("AnimationLibrary_yhxw7")
-}
+[node name="HallofChampions" parent="Panel" instance=ExtResource("17_wyh8j")]
+visible = false
+layout_mode = 1
 
 [node name="animBack" type="AnimationPlayer" parent="."]
 libraries = {
@@ -679,9 +433,8 @@ libraries = {
 
 [connection signal="pressed" from="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/btnNewGame" to="." method="_on_btn_new_game_pressed"]
 [connection signal="pressed" from="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/btnPrivate" to="." method="_on_btn_continue_pressed"]
+[connection signal="pressed" from="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/btnHeroes" to="." method="_on_btn_heroes_pressed"]
 [connection signal="pressed" from="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/btnCompendium" to="." method="_on_btn_compendium_pressed"]
 [connection signal="pressed" from="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/btnInfo" to="." method="_on_btn_info_pressed"]
 [connection signal="pressed" from="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/btnSettings" to="." method="_on_btn_settings_pressed"]
 [connection signal="pressed" from="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/btnQuit" to="." method="_on_btn_quit_pressed"]
-[connection signal="text_changed" from="Panel/panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/txtName" to="." method="_on_txt_name_text_changed"]
-[connection signal="pressed" from="Panel/panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/btnName" to="." method="_on_btn_name_pressed"]

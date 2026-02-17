@@ -1,8 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://b0fp41v6klk1o"]
+[gd_scene load_steps=17 format=3 uid="uid://b0fp41v6klk1o"]
 
 [ext_resource type="Script" uid="uid://77hua4ax14yn" path="res://Scripts/Components/upgrade_weapon_stats.gd" id="1_gr881"]
 [ext_resource type="Texture2D" uid="uid://dhi5j8sjiltq7" path="res://Assets/UI/Border/panel-border-006.png" id="1_ixqcq"]
 [ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="2_gr881"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gr881"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_13meu"]
 bg_color = Color(0, 0, 0, 1)
@@ -14,7 +16,196 @@ texture_margin_top = 28.0
 texture_margin_right = 28.0
 texture_margin_bottom = 28.0
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8wee1"]
+bg_color = Color(0.200331, 0.482264, 0.783724, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.0975758, 0.304188, 0.5196, 1)
+corner_radius_top_left = 75
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gr881"]
+bg_color = Color(0.0185003, 0.113449, 0.215203, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.256979, 0.543537, 0.856089, 1)
+corner_radius_top_left = 75
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wc5y1"]
+bg_color = Color(0.949725, 0.298634, 0.271237, 1)
+border_width_left = 3
+border_width_top = 5
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.698455, 0.164006, 0.162534, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8uoxt"]
+bg_color = Color(0.32, 0.0512, 0.0512, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.900537, 0.262895, 0.250103, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mhbtj"]
+bg_color = Color(0.8, 0.679733, 0.144, 1)
+border_width_left = 3
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 3
+border_color = Color(0.467, 0.392234, 0.0734901, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 75
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ylq2e"]
+bg_color = Color(0.137663, 0.109673, 0.00919034, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.698965, 0.590328, 0.123838, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 75
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="Animation" id="Animation_13meu"]
+resource_name = "show_popup"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("panelBack/panelBlack:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.5, 0.5), Vector2(1.1, 1.1), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("panelBack/panelBlack:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_8uoxt"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("panelBack/panelBlack:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("panelBack/panelBlack:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_ylq2e"]
+resource_name = "hide_popup"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("panelBack/panelBlack:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.1, 1.1), Vector2(0.5, 0.5)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("panelBack/panelBlack:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8wee1"]
+_data = {
+&"RESET": SubResource("Animation_8uoxt"),
+&"hide_popup": SubResource("Animation_ylq2e"),
+&"show_popup": SubResource("Animation_13meu")
+}
+
 [node name="UpgradeWeaponStats" type="Control"]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -30,8 +221,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_gr881")
 
 [node name="panelBlack" type="PanelContainer" parent="panelBack"]
+modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(600, 300)
 layout_mode = 1
 anchors_preset = 8
@@ -45,6 +238,7 @@ offset_right = 200.0
 offset_bottom = 100.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset = Vector2(300, 209)
 theme_override_styles/panel = SubResource("StyleBoxFlat_13meu")
 
 [node name="MarginContainer" type="MarginContainer" parent="panelBack/panelBlack"]
@@ -61,6 +255,7 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_8uoxt")
 [node name="VBoxContainer" type="VBoxContainer" parent="panelBack/panelBlack/MarginContainer/panelBox"]
 layout_mode = 2
 theme = ExtResource("2_gr881")
+theme_override_constants/separation = 20
 
 [node name="lblTitle" type="Label" parent="panelBack/panelBlack/MarginContainer/panelBox/VBoxContainer"]
 layout_mode = 2
@@ -71,6 +266,69 @@ vertical_alignment = 1
 [node name="txtDesc" type="RichTextLabel" parent="panelBack/panelBlack/MarginContainer/panelBox/VBoxContainer"]
 layout_mode = 2
 bbcode_enabled = true
-text = "Would you like me to [color=#6699ff][b]spit[/b][/color] on it, [color=#ff4444][b]bleed[/b][/color] on it, or [color=#ffdd44][b]blow[/b][/color] on it?"
+text = "Would you like me to [color=#6699ff][b]spit[/b][/color] on it, [color=#ff4444][b]bleed[/b][/color] on it, or [color=#ffdd44][b]sweat[/b][/color] on it?"
 fit_content = true
 horizontal_alignment = 1
+
+[node name="gridButtons" type="GridContainer" parent="panelBack/panelBlack/MarginContainer/panelBox/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/h_separation = 20
+columns = 3
+
+[node name="btnShield" type="Button" parent="panelBack/panelBlack/MarginContainer/panelBox/VBoxContainer/gridButtons"]
+custom_minimum_size = Vector2(150, 100)
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0.0196078, 0.113725, 0.215686, 1)
+theme_override_colors/font_color = Color(0.258824, 0.545098, 0.854902, 1)
+theme_override_styles/hover = SubResource("StyleBoxFlat_8wee1")
+theme_override_styles/normal = SubResource("StyleBoxFlat_gr881")
+text = "Spit"
+
+[node name="btnDamage" type="Button" parent="panelBack/panelBlack/MarginContainer/panelBox/VBoxContainer/gridButtons"]
+custom_minimum_size = Vector2(150, 100)
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0.317647, 0.0509804, 0.0509804, 1)
+theme_override_colors/font_color = Color(0.940672, 0.342407, 0.317014, 1)
+theme_override_styles/hover = SubResource("StyleBoxFlat_wc5y1")
+theme_override_styles/normal = SubResource("StyleBoxFlat_8uoxt")
+text = "Bleed"
+
+[node name="btnAgility" type="Button" parent="panelBack/panelBlack/MarginContainer/panelBox/VBoxContainer/gridButtons"]
+custom_minimum_size = Vector2(150, 100)
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0.137255, 0.109804, 0.00784314, 1)
+theme_override_colors/font_color = Color(0.839063, 0.713523, 0.156111, 1)
+theme_override_styles/hover = SubResource("StyleBoxFlat_mhbtj")
+theme_override_styles/normal = SubResource("StyleBoxFlat_ylq2e")
+text = "Sweat"
+
+[node name="lblBonus" type="Label" parent="panelBack/panelBlack/MarginContainer/panelBox/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.691357, 0.691357, 0.691357, 1)
+theme_override_font_sizes/font_size = 26
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="btnSkip" type="Button" parent="panelBack/panelBlack/MarginContainer/panelBox/VBoxContainer"]
+custom_minimum_size = Vector2(0, 75)
+layout_mode = 2
+text = "I'm not interested..."
+
+[node name="animPopup" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_8wee1")
+}
+
+[connection signal="mouse_entered" from="panelBack/panelBlack/MarginContainer/panelBox/VBoxContainer/gridButtons/btnShield" to="." method="_on_btn_shield_mouse_entered"]
+[connection signal="mouse_exited" from="panelBack/panelBlack/MarginContainer/panelBox/VBoxContainer/gridButtons/btnShield" to="." method="_on_btn_shield_mouse_exited"]
+[connection signal="pressed" from="panelBack/panelBlack/MarginContainer/panelBox/VBoxContainer/gridButtons/btnShield" to="." method="_on_btn_shield_pressed"]
+[connection signal="mouse_entered" from="panelBack/panelBlack/MarginContainer/panelBox/VBoxContainer/gridButtons/btnDamage" to="." method="_on_btn_damage_mouse_entered"]
+[connection signal="mouse_exited" from="panelBack/panelBlack/MarginContainer/panelBox/VBoxContainer/gridButtons/btnDamage" to="." method="_on_btn_damage_mouse_exited"]
+[connection signal="pressed" from="panelBack/panelBlack/MarginContainer/panelBox/VBoxContainer/gridButtons/btnDamage" to="." method="_on_btn_damage_pressed"]
+[connection signal="mouse_entered" from="panelBack/panelBlack/MarginContainer/panelBox/VBoxContainer/gridButtons/btnAgility" to="." method="_on_btn_agility_mouse_entered"]
+[connection signal="mouse_exited" from="panelBack/panelBlack/MarginContainer/panelBox/VBoxContainer/gridButtons/btnAgility" to="." method="_on_btn_agility_mouse_exited"]
+[connection signal="pressed" from="panelBack/panelBlack/MarginContainer/panelBox/VBoxContainer/gridButtons/btnAgility" to="." method="_on_btn_agility_pressed"]
+[connection signal="mouse_entered" from="panelBack/panelBlack/MarginContainer/panelBox/VBoxContainer/btnSkip" to="." method="_on_btn_skip_mouse_entered"]
+[connection signal="mouse_exited" from="panelBack/panelBlack/MarginContainer/panelBox/VBoxContainer/btnSkip" to="." method="_on_btn_skip_mouse_exited"]
+[connection signal="pressed" from="panelBack/panelBlack/MarginContainer/panelBox/VBoxContainer/btnSkip" to="." method="_on_btn_skip_pressed"]

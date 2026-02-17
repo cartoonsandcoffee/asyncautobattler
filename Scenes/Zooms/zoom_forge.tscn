@@ -74,6 +74,21 @@ colors = PackedColorArray(1, 0.843137, 0, 1, 1, 0.647059, 0, 1, 1, 1, 1, 0)
 atlas = ExtResource("8_x2iem")
 region = Rect2(450, 150, 150, 150)
 
+[sub_resource type="Animation" id="Animation_5v5lk"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("panelBlack/panelMain/colorBack:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.70493, 0.108717, 9.62615e-08, 1)]
+}
+
 [sub_resource type="Animation" id="Animation_l7gfi"]
 resource_name = "back_color"
 loop_mode = 1
@@ -91,25 +106,97 @@ tracks/0/keys = {
 "values": [Color(0.70493, 0.108717, 9.62615e-08, 1), Color(0.947725, 0.511956, 0, 1), Color(0.70493, 0.108717, 9.62615e-08, 1)]
 }
 
-[sub_resource type="Animation" id="Animation_5v5lk"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_eyveo"]
+_data = {
+&"RESET": SubResource("Animation_5v5lk"),
+&"back_color": SubResource("Animation_l7gfi")
+}
+
+[sub_resource type="Animation" id="Animation_eyveo"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("panelBlack/panelMain/colorBack:color")
+tracks/0/path = NodePath("panelBlack/panelMain/picItem:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(0.70493, 0.108717, 9.62615e-08, 1)]
+"values": [Color(1, 1, 1, 0)]
 }
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_eyveo"]
-_data = {
-&"RESET": SubResource("Animation_5v5lk"),
-&"back_color": SubResource("Animation_l7gfi")
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("panelBlack/panelMain/picItem:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.5, 0.5)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("panelBlack/panelMain/particles_crafting:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("panelBlack/panelMain/particles_crafting3:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("panelBlack/panelMain/particles_crafting2:emitting")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("panelBlack/panelMain/particles_crafting4:emitting")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("panelBlack/panelMain/particles_crafting5:emitting")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_www61"]
@@ -201,138 +288,10 @@ tracks/6/keys = {
 "values": [true, false]
 }
 
-[sub_resource type="Animation" id="Animation_eyveo"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("panelBlack/panelMain/picItem:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("panelBlack/panelMain/picItem:scale")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0.5, 0.5)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("panelBlack/panelMain/particles_crafting:emitting")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("panelBlack/panelMain/particles_crafting3:emitting")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("panelBlack/panelMain/particles_crafting2:emitting")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("panelBlack/panelMain/particles_crafting4:emitting")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("panelBlack/panelMain/particles_crafting5:emitting")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_d64w3"]
 _data = {
 &"RESET": SubResource("Animation_eyveo"),
 &"show_item": SubResource("Animation_www61")
-}
-
-[sub_resource type="Animation" id="Animation_o0s2c"]
-resource_name = "show_panel"
-length = 0.4
-step = 0.025
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("panelBlack/panelMain:scale")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector2(0.5, 0.5), Vector2(1.1, 1.1), Vector2(1, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("panelBlack/panelMain:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("panelBlack:visible")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_o2yfc"]
@@ -487,6 +446,47 @@ tracks/5/keys = {
 "values": [Vector2(1, 1), Vector2(1.4, 1.4)]
 }
 
+[sub_resource type="Animation" id="Animation_o0s2c"]
+resource_name = "show_panel"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("panelBlack/panelMain:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.5, 0.5), Vector2(1.1, 1.1), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("panelBlack/panelMain:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("panelBlack:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rveng"]
 _data = {
 &"RESET": SubResource("Animation_o2yfc"),
@@ -563,6 +563,7 @@ color = Color(0.70493, 0.108717, 9.62615e-08, 1)
 
 [node name="Fire" type="TextureRect" parent="panelBlack/panelMain"]
 material = SubResource("ShaderMaterial_rffjl")
+layout_mode = 0
 offset_left = 236.0
 offset_top = 46.0
 offset_right = 418.0
@@ -572,6 +573,7 @@ expand_mode = 1
 
 [node name="Fire2" type="TextureRect" parent="panelBlack/panelMain"]
 material = SubResource("ShaderMaterial_rffjl")
+layout_mode = 0
 offset_left = 357.0
 offset_top = 27.0
 offset_right = 539.0
@@ -581,6 +583,7 @@ expand_mode = 1
 
 [node name="Fire3" type="TextureRect" parent="panelBlack/panelMain"]
 material = SubResource("ShaderMaterial_rffjl")
+layout_mode = 0
 offset_left = 498.0
 offset_top = 2.0
 offset_right = 680.0

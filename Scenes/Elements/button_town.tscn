@@ -1,0 +1,139 @@
+[gd_scene load_steps=10 format=3 uid="uid://be8xuccfxqho7"]
+
+[ext_resource type="Script" uid="uid://bw3qondlhew6" path="res://Scripts/Components/button_town.gd" id="1_afck6"]
+[ext_resource type="Texture2D" uid="uid://1p2fhdhgi3x4" path="res://Assets/UI/Select.png" id="2_vu6b2"]
+[ext_resource type="Theme" uid="uid://p8sbf2usmdfn" path="res://Themes/invis_buttons.tres" id="3_ar64l"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1vfak"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pe2jg"]
+texture = ExtResource("2_vu6b2")
+texture_margin_left = 24.0
+texture_margin_top = 24.0
+texture_margin_right = 23.0
+texture_margin_bottom = 23.0
+
+[sub_resource type="Animation" id="Animation_7wba4"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Panel/PanelContainer:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_x0pl1"]
+resource_name = "hover"
+loop_mode = 1
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.0333333),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Panel/PanelContainer:scale")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.2, 1.2), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_74pac"]
+resource_name = "shop"
+length = 0.01
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_crkfk"]
+_data = {
+&"RESET": SubResource("Animation_7wba4"),
+&"hover": SubResource("Animation_x0pl1"),
+&"shop": SubResource("Animation_74pac")
+}
+
+[node name="ButtonTown" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1386.0
+offset_bottom = -714.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_afck6")
+
+[node name="Panel" type="Panel" parent="."]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_1vfak")
+
+[node name="PanelContainer" type="PanelContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(74.1667, 69.1667)
+theme_override_styles/panel = SubResource("StyleBoxTexture_pe2jg")
+
+[node name="Button" type="Button" parent="Panel/PanelContainer"]
+layout_mode = 2
+theme = ExtResource("3_ar64l")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_crkfk")
+}
+
+[connection signal="mouse_entered" from="Panel/PanelContainer/Button" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/PanelContainer/Button" to="." method="_on_button_mouse_exited"]
+[connection signal="pressed" from="Panel/PanelContainer/Button" to="." method="_on_button_pressed"]

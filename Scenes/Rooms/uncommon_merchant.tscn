@@ -57,6 +57,18 @@ tracks/2/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("merchantControl/merchantLight/Button:disabled")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="Animation" id="Animation_t26a3"]
 resource_name = "merchant_close"
@@ -184,6 +196,18 @@ tracks/1/keys = {
 "args": [],
 "method": &"play_idle"
 }]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("merchantControl/merchantLight/Button:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ebe42"]
@@ -396,6 +420,7 @@ theme_override_styles/disabled = SubResource("StyleBoxEmpty_fgisx")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_ebe42")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_hg87j")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_o0xvr")
+disabled = true
 
 [node name="item_merchant_store" parent="." instance=ExtResource("6_7st5r")]
 layout_mode = 1

@@ -140,11 +140,17 @@ layout_mode = 2
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="lblTypes" type="Label" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="lblTypes" type="Label" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Item Type"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="optTypes" type="OptionButton" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="optTypes" type="OptionButton" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
 custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
 selected = 0
@@ -166,11 +172,17 @@ popup/item_5/id = 5
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 
-[node name="lblRarity" type="Label" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="lblRarity" type="Label" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer2"]
 layout_mode = 2
 text = "Rarity"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="optRarity" type="OptionButton" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="optRarity" type="OptionButton" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer2"]
 custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
 selected = 0
@@ -185,12 +197,18 @@ popup/item_3/text = "Rare"
 popup/item_3/id = 3
 popup/item_4/text = "Legendary"
 popup/item_4/id = 4
-popup/item_5/text = "Crafted"
+popup/item_5/text = "Craftable"
 popup/item_5/id = 5
 
 [node name="MarginContainer2" type="MarginContainer" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
+theme_override_constants/margin_right = 50
+
+[node name="boxCategories" type="HFlowContainer" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
 
 [node name="MarginContainer2" type="MarginContainer" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer"]
 custom_minimum_size = Vector2(0, 20)
@@ -209,7 +227,7 @@ horizontal_scroll_mode = 0
 [node name="gridItems" type="GridContainer" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-columns = 10
+columns = 11
 
 [node name="Item" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelItems/ScrollContainer/gridItems" instance=ExtResource("6_3utmk")]
 custom_minimum_size = Vector2(110, 110)
@@ -411,8 +429,8 @@ custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[connection signal="item_selected" from="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer/optTypes" to="." method="_on_opt_types_item_selected"]
-[connection signal="item_selected" from="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer/optRarity" to="." method="_on_opt_rarity_item_selected"]
+[connection signal="item_selected" from="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/optTypes" to="." method="_on_opt_types_item_selected"]
+[connection signal="item_selected" from="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer2/optRarity" to="." method="_on_opt_rarity_item_selected"]
 [connection signal="mouse_entered" from="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/Buttons/btnDone" to="." method="_on_btn_done_mouse_entered"]
 [connection signal="mouse_exited" from="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/Buttons/btnDone" to="." method="_on_btn_done_mouse_exited"]
 [connection signal="pressed" from="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/Buttons/btnDone" to="." method="_on_btn_done_pressed"]

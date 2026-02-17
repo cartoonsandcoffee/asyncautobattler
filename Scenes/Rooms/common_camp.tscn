@@ -23,13 +23,13 @@ colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
 [sub_resource type="Gradient" id="Gradient_wqj5t"]
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_bd1y7"]
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_owu7u"]
 gradient = SubResource("Gradient_wqj5t")
 fill_to = Vector2(0, 1)
 
 [sub_resource type="Gradient" id="Gradient_i8ton"]
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_55lkv"]
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_n4m1l"]
 gradient = SubResource("Gradient_i8ton")
 fill_from = Vector2(1, 1)
 
@@ -37,7 +37,7 @@ fill_from = Vector2(1, 1)
 offsets = PackedFloat32Array(0, 0.20354, 0.513274, 0.787611)
 colors = PackedColorArray(1, 0, 0.0166664, 0, 0.98, 0.00979999, 0.00979999, 1, 0.96, 0.384, 0, 1, 0.99, 0.693, 0, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_rfd6m"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_g5vxb"]
 gradient = SubResource("Gradient_jay35")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vilh3"]
@@ -45,10 +45,10 @@ shader = ExtResource("6_yicm8")
 shader_parameter/Scale = Vector2(1, 1)
 shader_parameter/Speed = Vector2(0, 1)
 shader_parameter/Texture_1 = ExtResource("7_rs8c2")
-shader_parameter/Texture_2 = SubResource("GradientTexture2D_bd1y7")
+shader_parameter/Texture_2 = SubResource("GradientTexture2D_owu7u")
 shader_parameter/Texture_3 = ExtResource("8_55hwx")
-shader_parameter/Texture_4 = SubResource("GradientTexture2D_55lkv")
-shader_parameter/Texture_Color_1D = SubResource("GradientTexture1D_rfd6m")
+shader_parameter/Texture_4 = SubResource("GradientTexture2D_n4m1l")
+shader_parameter/Texture_Color_1D = SubResource("GradientTexture1D_g5vxb")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xwpmn"]
 

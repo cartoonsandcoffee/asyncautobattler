@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://veyfqa2b4ijn"]
+[gd_scene load_steps=8 format=3 uid="uid://veyfqa2b4ijn"]
 
 [ext_resource type="FontFile" uid="uid://dgwg8mvobk57a" path="res://Assets/UI/Fonts/ImperatorSmallCaps Bold.ttf" id="1_0l88l"]
 
@@ -8,6 +8,16 @@ corner_radius_top_left = 20
 corner_radius_top_right = 20
 corner_radius_bottom_right = 20
 corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0l88l"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_21afa"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vj6u6"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_v74x7"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wrws2"]
 
 [node name="CategoryLabel" type="Control"]
 layout_mode = 3
@@ -38,3 +48,11 @@ theme_override_font_sizes/font_size = 16
 text = "Clearmetal"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Button" type="Button" parent="PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_0l88l")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_21afa")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_vj6u6")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_v74x7")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_wrws2")
