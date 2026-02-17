@@ -1,19 +1,20 @@
 extends Control
 
-@onready var animation_player: AnimationPlayer = $Panel/AnimationPlayer
 @onready var anim_back: AnimationPlayer = $animBack
-@onready var txt_error: Label = $Panel/panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/MarginContainer2/txtError
-@onready var txt_name: TextEdit = $Panel/panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/txtName
-@onready var btn_name: Button = $Panel/panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/btnName
-@onready var panel_name: Panel = $Panel/panelName
 @onready var settings_panel = $Panel/SettingsPanel
 @onready var compendium_panel = $Panel/Compendium
 @onready var info_panel = $Panel/GameInfo
+@onready var hall_of_fame = $Panel/HallofChampions
+
+@onready var lbl_ears: Label = $Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/playerInfoPanel/earPanel/MarginContainer/HBoxContainer/lblEars
+@onready var txt_playerinfo: RichTextLabel = $Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/playerInfoPanel/txtPlayerInfo
 
 const GAME_SCENE = preload("res://Scenes/main_game.tscn")
 var good_name: bool = false
 
 func _ready() -> void:
+	confirm_systems_initialized()
+
 	if not SaveManager.save_exists():
 		#btn_continue.disabled = true
 		pass
@@ -22,6 +23,23 @@ func _ready() -> void:
 	AudioManager.play_general_music()
 	anim_back.play("back_flicker")
 
+	player_loaded()
+
+func confirm_systems_initialized():
+	if not SupabaseManager._initialized:
+		SupabaseManager.initialize()
+	if not AudioManager._initialized:
+		AudioManager.initialize()
+	if not CursorManager._initialized:
+		CursorManager.initialize()
+	if not GameSettings._initialized:
+		GameSettings.initialize()
+
+func player_loaded() -> void:
+	lbl_ears.text = str(Player.ears_balance)
+	txt_playerinfo.text = "[b]" + Player.player_name + "[/b]\n"
+	txt_playerinfo.text += "   - Champion Kills: " + str(Player.champions_killed) + "\n"
+	txt_playerinfo.text += "   - Active Champions: " + str(Player.active_champions_count) + "\n"	
 
 func _on_btn_quit_pressed() -> void:
 	AudioManager.play_ui_sound("button_hover")
@@ -30,47 +48,8 @@ func _on_btn_quit_pressed() -> void:
 
 func _on_btn_new_game_pressed() -> void:
 	AudioManager.play_ui_sound("button_hover")
-	animation_player.play("namebox_flyin")
-	#get_tree().change_scene_to_packed(GAME_SCENE)
-
-func _on_btn_continue_pressed() -> void:
-	AudioManager.play_ui_sound("button_hover")
-	pass # Replace with function body.
-
-
-func _on_btn_name_pressed() -> void:
-	AudioManager.play_ui_sound("button_hover")
-	Player.new_run(txt_name.text)
+	Player.new_run(Player.player_name)
 	get_tree().change_scene_to_packed(GAME_SCENE)
-
-func _process(delta: float) -> void:
-	if panel_name.visible:
-		if txt_name.text.length() < 5:
-			txt_error.text = "Your name must be at least 5 characters."
-			good_name = false
-		elif txt_name.text.length() > 30:
-			txt_error.text = "Your name cannot exceed 30 characters."
-			good_name = false
-		else:
-			good_name = true
-			txt_error.text = ""
-			
-	btn_name.disabled = !good_name
-
-func _on_txt_name_text_changed() -> void:
-	var current_text = txt_name.text
-	var regex = RegEx.new()
-	regex.compile("[a-zA-Z0-9_]+")  # Allows alphanumeric characters and spaces
-	var filtered_text = ""
-	for chr in current_text:
-		if regex.search(chr):  # Check if each character matches the regex
-			filtered_text += chr
-	if filtered_text != current_text:
-		var caret_column = txt_name.get_caret_column()
-		var caret_line = txt_name.get_caret_line()
-		txt_name.text = filtered_text
-		txt_name.set_caret_column(min(caret_column, txt_name.text.length())) # Adjust caret position
-		txt_name.set_caret_line(caret_line)
 
 
 func _on_btn_settings_pressed() -> void:
@@ -120,3 +99,7 @@ func _on_btn_compendium_pressed() -> void:
 
 func _on_btn_info_pressed() -> void:
 	info_panel.visible = true
+
+
+func _on_btn_heroes_pressed() -> void:
+	hall_of_fame.visible = true

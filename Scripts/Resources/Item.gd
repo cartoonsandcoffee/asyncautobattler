@@ -27,6 +27,7 @@ enum ItemType {
 }
 
 @export var item_id: String = ""
+@export var base_item_id: String = ""
 @export var item_name: String = ""
 @export var item_type: ItemType = ItemType.WEAPON:
 	set(value):
@@ -123,6 +124,22 @@ func has_category(_category: String) -> bool:
 			return true 
 	
 	return false
+
+func get_base_id() -> String:
+	# Get the base item ID for set bonus checking.
+	var base_id: String = ""
+
+	if base_item_id != "":
+		base_id = base_item_id
+	elif item_id.find("golden_") != -1:
+		base_id = item_id.replace("golden_", "")
+	elif item_id.find("diamond_") != -1:
+		base_id = item_id.replace("diamond_", "")
+	else:
+		base_id = item_id  # Fallback to regular ID
+
+	#print("item id: " + item_id + "  base_id: " + base_id)
+	return base_id
 
 func set_position(pos: int):
 	slot_index = pos

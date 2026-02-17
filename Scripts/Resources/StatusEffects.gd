@@ -19,10 +19,14 @@ signal status_updated()
 @export var blind: int = 0
 @export var bleed: int = 0
 
+var thorns_triggered_for_removal: bool = false
 
 func _init():
 	pass
 
+func thorns_triggered(_triggered: bool):
+	thorns_triggered_for_removal = _triggered
+	
 func reset_statuses():
 	poison = 0
 	thorns = 0

@@ -1,5 +1,7 @@
 extends Control
 
+signal new_run_requested()
+
 @onready var btn_resume: Button = $Panel/panelBlackBack/panelBorder/VBoxContainer/btnResume
 @onready var btn_newrun: Button = $Panel/panelBlackBack/panelBorder/VBoxContainer/btnNewRun
 @onready var btn_settings: Button = $Panel/panelBlackBack/panelBorder/VBoxContainer/btnSettings
@@ -83,7 +85,7 @@ func _on_quit_pressed():
 	get_tree().change_scene_to_file("res://Scenes/main_menu.tscn")
 
 func _on_new_run_pressed():
-	pass
+	new_run_requested.emit()
 
 func _on_button_hover_on():
 	CursorManager.set_interact_cursor()

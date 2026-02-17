@@ -19,6 +19,12 @@ extends Control
 @onready var stat_shield: Control = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/statShield
 @onready var stat_agility: Control = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/statAgility
 @onready var stat_gold: Control = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/statGold
+@onready var stat_strikes: Control = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/MarginContainer/VBoxContainer/statStrikes
+@onready var stat_burn_damage: Control = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/MarginContainer/VBoxContainer/statBurnDamage
+
+@onready var btn_town: Button = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap/btnTown
+@onready var lbl_moves: Label = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap/boxMoves/lblMoves
+@onready var lbl_rank: Label = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap/VBoxContainer/lblRank
 
 @onready var item_grid: GridContainer = $BottomPanel/MarginContainer/VBoxContainer/HBoxContainer/InventorySlots/ItemSlots
 @onready var weapon_slot: ItemSlot = $BottomPanel/MarginContainer/VBoxContainer/HBoxContainer/Weapon
@@ -49,6 +55,7 @@ var item_proc = preload("res://Scenes/Elements/combat_item_proc.tscn")
 var door_choice_scene = preload("res://Scenes/door_choice.tscn")
 
 var item_slots: Array[ItemSlot] = []
+var current_room_data: RoomData = null
 
 # for reordering your inventory
 var dragging_instance_id: int = -1
@@ -60,6 +67,7 @@ var is_dragging: bool = false
 # for combat
 var awaiting_combat_result: bool = false
 var combat_result_callback: Callable
+var is_attack_sequence_active: bool = false
 
 # for overwriting items when your inventory is full
 var pending_reward_item: Item = null
@@ -67,8 +75,6 @@ var inventory_replacement_mode: bool = false
 
 var pending_drop_item: Item = null
 var pending_drop_slot_index: int = -1
-
-var is_in_combat: bool = false
 
 # -- Full map screen
 var zoom_panel_scene = preload("res://Scenes/Elements/map_zoom_panel.tscn")
@@ -80,25 +86,29 @@ func get_combat_panel() -> CombatPanel:
 
 func _ready():
 	add_to_group("main_game")
+	confirm_systems_initializes()
+
 	Player.stats.stats_updated.connect(_on_stats_updated)
 	Player.inventory.item_added.connect(_on_inventory_updated)
 	Player.inventory.inventory_size_changed.connect(_on_inventory_size_changed)
 	#Player.status_updated.connect(_on_status_effects_updated)
 	SetBonusManager.set_bonuses_updated.connect(setup_bonuses)
 
-	DungeonManager.show_minimap.connect(_show_panels)
+	#DungeonManager.show_minimap.connect(_show_panels)
 
 	# Connect to CombatManager signals for real-time combat stat updates
 	CombatManager.stat_changed.connect(_on_combat_stat_changed)
 	CombatManager.combat_started.connect(_on_combat_started_for_ui)
 	CombatManager.combat_ended.connect(_on_combat_ended_for_ui)
 	CombatManager.item_processor.occurrence_updated.connect(_on_occurrence_updated)
+	CombatManager.strike_ui_update_requested.connect(_strike_ui_update)
 
 	# Connect minimap signals
-	DungeonManager.minimap_update_requested.connect(_on_minimap_update_requested)
-	minimap.room_icon_clicked.connect(_on_minimap_room_clicked)
+	#DungeonManager.minimap_update_requested.connect(_on_minimap_update_requested)
+	#minimap.room_icon_clicked.connect(_on_minimap_room_clicked)
 	minimap.zoom_out_requested.connect(_on_zoom_out_requested)
-
+	pause_menu.new_run_requested.connect(reset_dungeon_for_new_run)
+	
 	combat_panel.main_game = self
 	combat_panel.combat_completed.connect(_on_combat_completed)
 	combat_panel.player_chose_run.connect(_on_player_ran)
@@ -124,6 +134,8 @@ func _ready():
 	zoom_panel.closed.connect(_on_zoom_panel_closed)
 	zoom_panel.boss_rush_pressed.connect(_on_boss_rush_pressed)
 
+	DungeonManager.reset()
+
 	create_test_player()
 	await _ensure_player_profile()
 
@@ -133,8 +145,21 @@ func _ready():
 	var dungeon_ambient = load("res://Assets/Audio/Music/Ambience 01.mp3")
 	AudioManager.play_ambient(dungeon_ambient, true)
 
+	anim_tools.play("setup_toolbars")
 	set_process_input(true) # for drag preview
 	
+func confirm_systems_initializes():
+	if not ItemsManager._initialized:
+		ItemsManager.initialize()
+	if not RoomRegistry._initialized:
+		RoomRegistry.initialize()
+	if not DungeonManager._initialized:
+		DungeonManager.initialize()
+	if not SetBonusManager._initialized:
+		SetBonusManager.initialize()
+	if not CombatManager._initialized:
+		CombatManager.initialize()
+
 func _input(event: InputEvent):
 	# Update drag preview position
 	if dragging_slot and drag_preview:
@@ -148,16 +173,16 @@ func create_test_player():
 
 
 func load_starting_room():
-	var starter_room_data = DungeonManager.generate_starter_room()
-	if starter_room_data:
-		#DungeonManager.all_visited_rooms.append(starter_room_data)
-		DungeonManager.minimap_update_requested.emit()
-		
-		await load_room(starter_room_data)
-	else:
-		push_error("Failed to generate starter room!")
+	# Initialize rank 1
+	await DungeonManager.initialize_rank()
+
+	# Load starter room
+	var starter_room = DungeonManager.get_town_room()
+	load_room(starter_room)
 
 func load_room(room_data: RoomData):
+	btn_town.disabled = true
+
 	# Update background
 	room_background.texture = room_data.room_definition.background_texture
 	room_background.modulate = room_data.room_definition.room_color
@@ -167,6 +192,10 @@ func load_room(room_data: RoomData):
 	
 	# Load new event
 	load_room_event(room_data)
+	current_room_data = room_data
+
+	# Player uses room currency
+	Player.use_room()
 
 	# Fade transition
 	anim_fade.play("fade_in")
@@ -220,12 +249,13 @@ func _on_event_completed():
 	show_continue_button()
 
 	# Check for shortcuts
-	var completed_room = DungeonManager.current_rank_rooms[DungeonManager.current_room_index]
-	var shortcuts = DungeonManager.check_for_shortcuts(completed_room)
-	
-	if shortcuts.size() > 0:
-		# Show doors (normal + shortcuts)
-		show_doors_with_shortcuts(shortcuts)
+	var completed_room = current_room_data  # Store this when loading room
+	DungeonManager.complete_room(completed_room)
+	btn_town.disabled = false
+
+## ==========================================================
+## BOSS ROOM STUFF
+## ==========================================================
 
 func _handle_boss_victory():
 	# Handle rank advancement after boss victory.
@@ -236,21 +266,90 @@ func _handle_boss_victory():
 	
 	# 2. Advance rank (increases inventory, fetches new boss, generates rooms)
 	DungeonManager.advance_rank()
+	Player.complete_rank_boss()
+
+	# 3. Load town for new rank
+	var town_room = DungeonManager.get_town_room()
+	if town_room:
+		load_room(town_room)
+
+func _handle_quit_while_ahead():
+	"""Player chose to quit after rank 5 - show victory screen."""
+	print("[MainGame] Player quit while ahead - showing victory screen")
 	
-	# 3. Load first room of new rank
-	var first_room = DungeonManager.get_current_room()
-	if first_room:
-		print("[MainGame] Loading first room of rank %d" % DungeonManager.current_rank)
+	# Play victory animation
+	await _play_staircase_animation()
+	
+	# Show victory stats screen (TODO: Create this UI)
+	await _show_victory_screen()
+	
+	# Return to main menu
+	get_tree().change_scene_to_file("res://Scenes/main_menu.tscn")
+
+func _handle_challenge_champion():
+	"""Player chose to challenge a champion - advance to rank 6."""
+	print("[MainGame] Player challenging a champion - advancing to rank 6")
+	
+	# Play staircase animation
+	await _play_staircase_animation()
+	
+	# Advance to rank 6 (champion rank)
+	DungeonManager.advance_rank()
+	Player.complete_rank_boss()
+	
+	# Load town for rank 6
+	var town_room = DungeonManager.get_town_room()
+	if town_room:
+		load_room(town_room)
+
+func _handle_champion_victory():
+	"""Handle defeating a champion - player becomes a champion!"""
+	print("[MainGame] Champion defeated! Player becomes champion")
+	
+	# Get the defeated champion's build ID from DungeonManager
+	var defeated_champion_id = DungeonManager.current_boss_data.get("id", "")
+	
+	if not defeated_champion_id.is_empty():
+		# Record the defeat
+		await SupabaseManager.record_champion_defeat(defeated_champion_id)
 		
-		# Fade transition
-		anim_fade.play("fade_out")
-		var anim_length = anim_fade.get_animation("fade_out").length
-		await CombatSpeed.create_timer(anim_length)
-		
-		load_room(first_room)
-		fade_overlay.visible = false
-	else:
-		push_error("[MainGame] Failed to load first room of new rank!")
+		# Increment player's champion kill count
+		var player_id = Player.load_or_generate_uuid()
+		await SupabaseManager.increment_champions_killed(player_id)
+	
+	# Save player's build as a NEW champion
+	# (This happens in boss_room_event already, but we need to ensure it's marked as champion)
+	
+	# Show victory animation
+	await _play_staircase_animation()
+	
+	# Show champion victory screen
+	await _show_champion_victory_screen()
+
+	# Return to main menu
+	get_tree().change_scene_to_file("res://Scenes/main_menu.tscn")
+
+
+func _show_champion_victory_screen():
+	"""Show special victory screen for becoming a champion."""
+	# TODO: Create a special champion victory UI
+	print("[MainGame] CHAMPION VICTORY!")
+	print("  - You are now a champion!")
+	print("  - Your build will defend your honor")
+	print("  - Earn ears when your champion wins")
+	
+	await get_tree().create_timer(3.0).timeout
+
+func _show_victory_screen():
+	"""Show victory stats screen after quitting at rank 5."""
+	# TODO: Create a proper victory screen UI
+	# For now, just a brief message
+	print("[MainGame] VICTORY!")
+	print("  - Run complete!")
+	print("  - Ears earned: Check profile")
+	print("  - Returning to menu...")
+	
+	await get_tree().create_timer(2.0).timeout
 
 func _play_staircase_animation():
 	if anim_promotion:
@@ -262,49 +361,48 @@ func _play_staircase_animation():
 		print("[MainGame] No staircase animation - using brief delay")
 		await get_tree().create_timer(1.5).timeout
 
+func boss_room_completed(_choice: String):
+	if _choice == "continue":
+		await _handle_boss_victory()
+	elif _choice == "end":
+		await _handle_quit_while_ahead()
+	elif _choice == "challenge":
+		await _handle_challenge_champion()
+	elif _choice == "final":
+		await _handle_champion_victory()
+
 func _on_continue_pressed():
 	hide_continue_button()
 
 	# Check if we just completed a boss room
-	var current_room = DungeonManager.current_rank_rooms[DungeonManager.current_room_index]
-	var is_boss_room = false
+	#var is_boss_room = false
 	
-	if current_room and current_room.room_definition:
-		is_boss_room = current_room.room_definition.room_type == Enums.RoomType.BOSS
+	#if current_room_data and current_room_data.room_definition:
+	#	is_boss_room = current_room_data.room_definition.room_type == Enums.RoomType.BOSS
 	
-	if is_boss_room:
-		# Boss victory - play staircase animation and advance rank
-		await _handle_boss_victory()
-		return
+	#if is_boss_room:
+	#	# Boss victory - play staircase animation and advance rank
+	#	await _handle_boss_victory()
+	#	return
 
-	# Advance to next room in sequence
-	DungeonManager.all_visited_rooms.append(current_room)
-	DungeonManager.advance_room()
-	
-	# Check if rank is complete
-	if DungeonManager.rooms_cleared_this_rank >= DungeonManager.ROOMS_PER_RANK:
-		# TODO: Trigger boss fight
-		print("Rank complete! Boss fight would trigger here.")
-		# For now, just advance rank
-		DungeonManager.advance_rank()
-		return
-	
-	# Get next room and load it
-	var next_room = DungeonManager.get_current_room()
+	# Get random dungeon room
+	var next_room = DungeonManager.get_random_dungeon_room()
+
+	if not Player.has_rooms_remaining():
+		next_room = DungeonManager.get_town_room()
+
 	if next_room:
-		# Fade transition
+#		# Fade transition
 		anim_fade.play("fade_out")
 		var anim_length = anim_fade.get_animation("fade_out").length
 		await CombatSpeed.create_timer(anim_length)
-
-		# Clear any old doors
-		for child in door_container.get_children():
-			child.queue_free()
 
 		load_room(next_room)
 		fade_overlay.visible = false
 	else:
 		push_error("No next room found!")
+
+
 
 func show_continue_button():
 	if btn_continue:
@@ -388,6 +486,16 @@ func create_room_data_for_door(option: ShortcutOption) -> RoomData:
 	
 	return room_data
 
+func _strike_ui_update(entity, strikes_remaining: int, strikes_next_turn: int):
+	if not (entity == Player):
+		return
+
+	is_attack_sequence_active = true
+	stat_strikes.update_stat(Enums.Stats.STRIKES, strikes_remaining, strikes_next_turn)
+	# If countdown finished, resume normal updates
+	if strikes_remaining == 0:
+		is_attack_sequence_active = false
+
 func set_player_stats():
 	if CombatManager.combat_active:
 		# During combat: show current/max for HP, current only for others
@@ -401,6 +509,9 @@ func set_player_stats():
 				
 		stat_shield.update_stat(Enums.Stats.SHIELD, Player.stats.shield_current, Player.stats.shield)
 		stat_agility.update_stat(Enums.Stats.AGILITY, Player.stats.agility_current, Player.stats.agility)
+		stat_burn_damage.update_stat(Enums.Stats.BURN_DAMAGE, Player.stats.burn_damage_current, Player.stats.burn_damage)
+		if not is_attack_sequence_active:
+			stat_strikes.update_stat(Enums.Stats.STRIKES, Player.stats.strikes_current, Player.stats.strikes)
 	else:
 		# During exploration: show current/max for HP, base values for others
 		# (since stats reset to base between combats)
@@ -408,9 +519,14 @@ func set_player_stats():
 		stat_damage.update_stat(Enums.Stats.DAMAGE, Player.stats.damage, Player.stats.damage)  # Show base as both current and max
 		stat_shield.update_stat(Enums.Stats.SHIELD, Player.stats.shield, Player.stats.shield)
 		stat_agility.update_stat(Enums.Stats.AGILITY, Player.stats.agility, Player.stats.agility)
+		stat_strikes.update_stat(Enums.Stats.STRIKES, Player.stats.strikes, Player.stats.strikes)
+		stat_burn_damage.update_stat(Enums.Stats.BURN_DAMAGE, Player.stats.burn_damage, Player.stats.burn_damage)
 	
 	# Gold always shows current amount (no max)
 	stat_gold.update_stat(Enums.Stats.GOLD, Player.stats.gold, Player.stats.gold)
+
+	lbl_moves.text = str(Player.rooms_left_this_rank) 
+	lbl_rank.text = "Rank " + str(Player.current_rank) 
 
 func _on_inventory_size_changed(_new_size: int):
 	setup_inventory()
@@ -619,9 +735,18 @@ func get_slot_under_mouse() -> ItemSlot:
 
 func get_current_item_combiner() -> ItemCombiner:
 	# Get the ItemCombiner from current event if it exists
-	if current_event and current_event.has_node("ItemCombiner"):
-		return current_event.get_node("ItemCombiner")
-	return null
+	#if current_event and current_event.has_node("ItemCombiner"):
+	#	return current_event.get_node("ItemCombiner")
+	#return null
+	if current_event:
+		var combiners = current_event.get_tree().get_nodes_in_group("item_combiner")
+		for node in combiners:
+			if node.visible == false:
+				continue
+			# Check if this combiner is a child of current_event
+			if node.is_ancestor_of(current_event) or current_event.is_ancestor_of(node):
+				return node
+	return null	
 
 func get_combiner_slot_under_mouse(combiner: ItemCombiner) -> int:
 	# Check which combiner slot (1 or 2) the mouse is over, or 0 if neither
@@ -738,12 +863,10 @@ func is_in_replacement_mode() -> bool:
 
 # Track when combat starts/ends for proper stat display
 func _on_combat_started_for_ui(player, enemy):
-	is_in_combat = true
 	set_player_stats()  # Refresh to show current values
 	AudioManager.on_combat_started(enemy.enemy_type == Enemy.EnemyType.BOSS_PLAYER)	
 
 func _on_combat_ended_for_ui(winner, loser):
-	is_in_combat = false
 	# Stats will reset to base values, so refresh display
 	await get_tree().process_frame  # Wait for stats to reset
 	set_player_stats()
@@ -800,8 +923,9 @@ func _on_occurrence_updated(entity, item: Item, trigger_type: Enums.TriggerType,
 
 func _on_minimap_update_requested():
 	# Update minimap display when rooms change
-	minimap.current_rank = DungeonManager.current_rank
-	minimap.update_display()
+	#minimap.current_rank = DungeonManager.current_rank
+	#minimap.update_display()
+	pass
 
 func _on_minimap_room_clicked(room_index: int):
 	# Boss room clicked (room index 5)
@@ -819,6 +943,8 @@ func _on_boss_rush_pressed():
 	# TODO: Trigger boss battle early
 	print("Boss Rush pressed!")
 	zoom_panel.hide_panel()
+	var boss_room = DungeonManager.get_boss_room()
+	load_room(boss_room)
 
 func show_boss_panel():
 	# Placeholder for boss room panel
@@ -829,7 +955,7 @@ func _ensure_player_profile():
 	#Create player profile if it doesn't exist.
 	# JDM: Move this to the main menu scene to avoid that weird delay at game start
 
-	var player_id = Player.generate_or_load_uuid()
+	var player_id = Player.load_or_generate_uuid()
 	var username = Player.player_name 
 	
 	print("[Game] Ensuring player profile exists...")
@@ -885,26 +1011,9 @@ func reset_dungeon_for_new_run():
 	"""Reset dungeon manager to rank 1."""
 	print("[MainGame] Resetting dungeon state...")
 	
-	# Reset to rank 1
-	DungeonManager.current_rank = 1
-	DungeonManager.current_room_index = 0
-	DungeonManager.rooms_cleared_this_rank = 0
+	await reset_player_for_new_run()
+	get_tree().change_scene_to_file("res://Scenes/main_game.tscn")
 	
-	# Clear current rooms
-	DungeonManager.current_rank_rooms.clear()
-	DungeonManager.all_visited_rooms.clear()
-
-	# Clear boss data
-	DungeonManager.current_boss_data = {}
-	DungeonManager.current_boss_enemy = null
-	
-	# Generate fresh rank 1 rooms
-	DungeonManager.generate_rank_rooms()
-	
-	# Update minimap
-	DungeonManager.minimap_update_requested.emit()
-	
-	print("[MainGame] Dungeon reset to Rank 1")
 
 func screen_shake(intensity: float = 10.0, duration: float = 0.5):
 	"""Shake the entire UI root instead of camera."""
@@ -938,3 +1047,11 @@ func _on_btn_continue_mouse_entered() -> void:
 
 func _on_btn_cancel_replace_mouse_entered() -> void:
 	AudioManager.play_ui_sound("woosh")
+
+
+func _on_btn_town_pressed() -> void:
+	if Player.town_visits_left_this_rank > 0:
+		var town_room = DungeonManager.get_town_room()
+		if town_room:
+			#Player.town_visits_left_this_rank -= 1
+			load_room(town_room)

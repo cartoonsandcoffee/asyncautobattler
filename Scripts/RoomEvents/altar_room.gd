@@ -5,7 +5,7 @@ extends RoomEvent
 @onready var box_anim: AnimationPlayer = $boxAnim
 @onready var text_anim: AnimationPlayer = $textAnim
 @onready var button: Button = $picEvent/Button
-@onready var item_combiner: ItemCombiner = $ItemCombiner
+@onready var item_combiner: ItemOffering = $FreeItemOffering
 
 func _ready():
 	print("altar_room_event -> ready")
@@ -19,7 +19,8 @@ func initialize_event():
 func _run_room_event():
 	print("altar_room_event -> _run_room_event (post-combat)")
 	item_combiner.item_skipped.connect(_on_item_skipped)
-	item_combiner.combiner_closed.connect(_on_item_skipped)
+	item_combiner.item_selected.connect(_on_item_selected)
+	item_combiner.need_item_replace.connect(_on_item_selected)
 	show_event()
 
 func show_event():
@@ -48,9 +49,10 @@ func disable_button():
 func _on_button_pressed() -> void:
 	disable_button()
 	CursorManager.reset_cursor()
-	AudioManager.play_event_sound("kneel")
+	AudioManager.play_event_sound("corpse")
 	text_anim.play("altar_hide_text")
 	box_anim.play("altar_open_box")
+
 
 func close_box():
 	box_anim.play("altar_close_box")
@@ -79,3 +81,6 @@ func _on_item_skipped():
 	disable_button()
 
 	complete_event()
+
+func _on_item_selected(item: Item):
+	_on_item_skipped()

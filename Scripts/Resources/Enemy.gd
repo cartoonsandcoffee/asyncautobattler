@@ -41,6 +41,14 @@ enum EnemyType {
 	set(value):
 		inventory = value	
 
+# Applied to current weapon (resets on weapon swap)
+var current_weapon_stat_upgrades: Dictionary = {
+	"damage": 0, 
+	"shield": 0, 
+	"agility": 0
+}
+var current_weapon_rule_upgrade: Item = null  # The enchantment item
+
 # Rewards
 @export_group("Rewards")
 @export var gold: int = 3
@@ -143,44 +151,38 @@ func update_stats_from_items():
 	# Reset to base stats first
 	stats.reset_base_stats()
 	
-	# Apply item bonuses from inventory slots
+	# Add regular item bonuses
 	for item in inventory.item_slots:
 		if item:
-			if item.damage_bonus != 0:
-				stats.increase_base_stat(Enums.Stats.DAMAGE, item.damage_bonus)
-			if item.shield_bonus != 0:
-				stats.increase_base_stat(Enums.Stats.SHIELD, item.shield_bonus)
-			if item.hit_points_bonus != 0:
-				stats.increase_base_stat(Enums.Stats.HITPOINTS, item.hit_points_bonus)
-			if item.agility_bonus != 0:
-				stats.increase_base_stat(Enums.Stats.AGILITY, item.agility_bonus)
-			if item.strikes_bonus != 0:
-				stats.increase_base_stat(Enums.Stats.STRIKES, item.strikes_bonus)
-			if item.burn_damage_bonus != 0:
-				stats.increase_base_stat(Enums.Stats.BURN_DAMAGE, item.burn_damage_bonus)
+			_apply_item_stat_bonuses(item)
 	
-	# Apply weapon bonuses
+	# Add weapon bonuses
 	if inventory.weapon_slot:
-		if inventory.weapon_slot.damage_bonus != 0:
-			stats.increase_base_stat(Enums.Stats.DAMAGE, inventory.weapon_slot.damage_bonus)
-		if inventory.weapon_slot.shield_bonus != 0:
-			stats.increase_base_stat(Enums.Stats.SHIELD, inventory.weapon_slot.shield_bonus)
-		if inventory.weapon_slot.hit_points_bonus != 0:
-			stats.increase_base_stat(Enums.Stats.HITPOINTS, inventory.weapon_slot.hit_points_bonus)
-		if inventory.weapon_slot.agility_bonus != 0:
-			stats.increase_base_stat(Enums.Stats.AGILITY, inventory.weapon_slot.agility_bonus)
-		if inventory.weapon_slot.strikes_bonus != 0:
-			stats.increase_base_stat(Enums.Stats.STRIKES, inventory.weapon_slot.strikes_bonus)
-		if inventory.weapon_slot.burn_damage_bonus != 0:
-			stats.increase_base_stat(Enums.Stats.BURN_DAMAGE, inventory.weapon_slot.burn_damage_bonus)
+		_apply_item_stat_bonuses(inventory.weapon_slot)
+
+		# Apply weapon upgrades
+		stats.increase_base_stat(Enums.Stats.DAMAGE, current_weapon_stat_upgrades["damage"])
+		stats.increase_base_stat(Enums.Stats.SHIELD, current_weapon_stat_upgrades["shield"])
+		stats.increase_base_stat(Enums.Stats.AGILITY, current_weapon_stat_upgrades["agility"])
+
+	# Add set bonus item bonuses
+	#for bonus_item in SetBonusManager.get_active_set_bonuses(self):
+	#	_apply_item_stat_bonuses(bonus_item)
 	
 	# Reset current values to match new base values
 	stats.reset_to_base_values()
 	
-	print("[Enemy] Stats updated from items: HP=%d, DMG=%d, Shield=%d, Agi=%d, Strikes=%d" % [
-		stats.hit_points,
-		stats.damage,
-		stats.shield,
-		stats.agility,
-		stats.strikes
-	])
+
+func _apply_item_stat_bonuses(item: Item):
+	if item.damage_bonus != 0:
+		stats.increase_base_stat(Enums.Stats.DAMAGE, item.damage_bonus)
+	if item.shield_bonus != 0:
+		stats.increase_base_stat(Enums.Stats.SHIELD, item.shield_bonus)
+	if item.agility_bonus != 0:
+		stats.increase_base_stat(Enums.Stats.AGILITY, item.agility_bonus)
+	if item.hit_points_bonus != 0:
+		stats.increase_base_stat(Enums.Stats.HITPOINTS, item.hit_points_bonus)
+	if item.strikes_bonus != 0:
+		stats.increase_base_stat(Enums.Stats.STRIKES, item.strikes_bonus)
+	if item.burn_damage_bonus != 0:
+		stats.increase_base_stat(Enums.Stats.BURN_DAMAGE, item.burn_damage_bonus)

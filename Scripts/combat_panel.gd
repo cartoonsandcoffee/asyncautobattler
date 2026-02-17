@@ -35,6 +35,9 @@ enum PanelState {
 @onready var enemy_shield_stat: StatBoxDisplay = $CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/statsContainer/statShield
 @onready var enemy_damage_stat: StatBoxDisplay = $CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/statsContainer/statDamage
 @onready var enemy_agility_stat: StatBoxDisplay = $CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/statsContainer/statAgility
+@onready var enemy_strikes_stat: StatBoxDisplay = $CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/statsContainer/VBoxContainer/statStrikes
+@onready var enemy_burn_stat: StatBoxDisplay = $CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/statsContainer/VBoxContainer/statBurn
+
 @onready var stat_container: PanelContainer = $CombatPanelTop/PanelContainer
 
 @onready var enemy_weapon_slot: ItemSlot = $CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyInventory/Weapon
@@ -74,6 +77,7 @@ var is_visible: bool = false
 var current_player_entity
 var current_enemy_entity: Enemy
 var highlighted_item_slot: ItemSlot = null
+var is_enemy_attack_sequence_active: bool = false
 
 # References to inventory slots for highlighting
 var inventory_item_slots: Array[ItemSlot] = []
@@ -107,6 +111,7 @@ func connect_combat_signals():
 	CombatManager.healing_applied.connect(_on_healing_applied)
 	CombatManager.stat_changed.connect(_on_stat_changed)
 	CombatManager.status_proc.connect(spawn_status_proc_indicator)
+	CombatManager.strike_ui_update_requested.connect(_on_strike_ui_update)
 
 	# --- Item/ability triggers
 	CombatManager.item_rule_triggered.connect(_on_item_rule_triggered)
@@ -203,6 +208,20 @@ func hide_panel():
 	# Clear highlighted items
 	_clear_all_highlights()
 
+func _on_strike_ui_update(entity, strikes_remaining: int, strikes_next_turn: int):
+	# Only handle enemy entity
+	if entity != CombatManager.enemy_entity:
+		return
+	
+	# Flag that enemy is in attack sequence
+	is_enemy_attack_sequence_active = true
+	
+	# Update enemy strike countdown (assuming you have a StatBoxDisplay for enemy strikes)
+	enemy_strikes_stat.update_stat(Enums.Stats.STRIKES, strikes_remaining, strikes_next_turn)
+	# If countdown finished, resume normal updates
+	if strikes_remaining == 0:
+		is_enemy_attack_sequence_active = false
+
 func _update_enemy_stats():
 	if not current_enemy_entity:
 		print("THERE IS NO ENEMY!!!!!!!!!!")
@@ -225,6 +244,9 @@ func _update_enemy_stats():
 	# Agility stat
 	enemy_agility_stat.update_stat(Enums.Stats.AGILITY, current_enemy_entity.stats.agility_current, current_enemy_entity.stats.agility_current)
 
+	if not is_enemy_attack_sequence_active:
+		enemy_strikes_stat.update_stat(Enums.Stats.STRIKES, current_enemy_entity.stats.strikes_current, current_enemy_entity.stats.strikes_current)
+	enemy_burn_stat.update_stat(Enums.Stats.BURN_DAMAGE, current_enemy_entity.stats.burn_damage_current, current_enemy_entity.stats.burn_damage_current)
 
 
 func highlight_item_slot(slot_index: int, is_weapon: bool = false):
@@ -798,24 +820,55 @@ func _populate_enemy_inventory(enemy: Enemy):
 
 
 func _on_btn_quit_pressed() -> void:
+	hide_death_panel()
 	# Optional: Save any stats/progress before quitting
 	# await save_run_stats()
 	
-	# Load main menu scene
+	# Update defeat stats BEFORE resetting
+	await _update_defeat_stats()
+
 	get_tree().change_scene_to_file("res://Scenes/main_menu.tscn")
 
 
 func _on_btn_new_run_pressed() -> void:
 	hide_death_panel()
-	
-	# Reset player state
-	main_game.reset_player_for_new_run()
-	
+
+	# Update defeat stats BEFORE resetting
+	await _update_defeat_stats()
+
 	# Reset dungeon manager
 	main_game.reset_dungeon_for_new_run()
 	
-	# Load starter room
-	main_game.load_starting_room()
+func _update_defeat_stats():
+	"""Update player stats after defeat and record champion victory if applicable."""
+	var player_id = Player.load_or_generate_uuid()
+	var current_rank = DungeonManager.current_rank
+	
+	print("[CombatPanel] Player defeated at rank %d - updating stats..." % current_rank)
+	
+	# 1. Update player's death stats
+	await SupabaseManager.update_player_after_death(player_id, current_rank)
+	
+	# 2. Check if boss was a champion (rank 6 only)
+	if current_rank == 6:
+		var boss_data = DungeonManager.current_boss_data
+		var boss_id = boss_data.get("id", "")
+		var is_shadow = boss_data.get("is_shadow", false)
+		
+		if not boss_id.is_empty() and not is_shadow:
+			# Real champion defeated player - record their victory
+			print("[CombatPanel] Champion %s defeated player - recording victory..." % boss_data.get("username"))
+			await SupabaseManager.record_champion_victory(boss_id)
+			print("[CombatPanel] Champion victory recorded (owner earns +1 ear)")
+		elif is_shadow:
+			print("[CombatPanel] Shadow champion defeated player - no stats updated")
+	
+	# 3. Reload profile to sync updated stats
+	var profile = await SupabaseManager.get_player_profile(player_id)
+	if not profile.is_empty():
+		Player.load_profile_from_supabase(profile)
+	
+	print("[CombatPanel] Defeat stats updated")
 
 func hide_death_panel():
 	if death_panel:

@@ -4,6 +4,12 @@ extends RoomEvent
 ## Boss battle event with comic-book style animations and rank progression
 
 @onready var flavor_animation: AnimationPlayer  = $animFlavor # "A dangerous figure approaches..."
+@onready var anim_done: AnimationPlayer  = $animDone
+@onready var anim_ears: AnimationPlayer  = $animOnward
+
+@onready var lbl_promo: Label  = $panelFinished/panelBlack/MarginContainer/panelBorder/VBoxContainer/lblPromo
+
+
 # Note: Continue button and staircase animation are in main_game, not here
 
 var boss_enemy: Enemy = null
@@ -18,6 +24,9 @@ func _ready():
 	
 	reset_all_animations()
 	
+	# manually increment player room count so battles don't cost room points
+	Player.add_rooms(2)
+
 	# Get animation player if it exists in scene
 	flavor_animation = get_node_or_null("animFlavor")
 	
@@ -50,6 +59,12 @@ func _boss_battle_sequence():
 	# Combat panel will detect boss via enemy_type == BOSS_PLAYER
 	combat_requested.emit(boss_enemy)
 	
+	# log the number of times the boss has been faced.
+	var boss_build_id = DungeonManager.current_boss_data.get("id", "")
+	if not boss_build_id.is_empty():
+		await SupabaseManager.increment_times_faced(boss_build_id)
+		print("[BossRoom] Incremented times_faced for boss %s" % boss_build_id)
+
 	if not main_game_ref.has_method("request_combat"):
 		push_error("[BossRoom] MainGame doesn't have request_combat method!")
 		complete_event()
@@ -65,7 +80,7 @@ func _boss_battle_sequence():
 		await _handle_defeat()
 	
 	# 5. Complete event
-	complete_event()
+	#complete_event()
 
 func _play_flavor_animation():
 	"""Play comic-book panel animation: 'A dangerous figure approaches...'"""
@@ -83,21 +98,18 @@ func _handle_victory():
 	print("[BossRoom] Victory! Handling post-combat sequence")
 	
 	# 1. Boss death animation happens in combat_panel (not here)
-	
+
 	# 2. Victory popup/combat summary appears in combat_panel (existing system)
 	
-	# 3. Save player build to Supabase
-	await _save_player_build()
-	
-	# 4. Wait for player to click continue button in main_game
-	# The continue button will trigger:
-	#   - Staircase animation (in main_game)
-	#   - DungeonManager.advance_rank()
-	#   - Load first room of new rank
-	
-	# NOTE: We don't handle rank advancement here - main_game does it
-	# when player clicks the continue/staircase button
-	
+	# 3. Handle which progress comes next
+	if DungeonManager.current_rank == 5:
+		anim_ears.play("show_panel")
+	elif DungeonManager.current_rank == 6:
+		anim_ears.play("show_final")
+	else:
+		lbl_promo.text = "You  advance  to  Rank " + str(DungeonManager.current_rank + 1) + "!"
+		anim_done.play("show_popup")
+
 	print("[BossRoom] Victory sequence complete, waiting for player to continue")
 
 func _save_player_build():
@@ -135,9 +147,13 @@ func _save_player_build():
 
 	if result and result.status == 201:
 		print("[BossRoom] ! Build saved to rank %d opponent pool!" % DungeonManager.current_rank)
+
+		# Cleanup old builds (keep only 50 per rank) - except for champions
+		if DungeonManager.current_rank < 6:
+			await SupabaseManager.cleanup_old_builds_at_rank(DungeonManager.current_rank)
 		
-		# Check if rank 5 - promote to champion
-		if DungeonManager.current_rank == 5:
+		# If it was rank 6, promote to champion
+		if DungeonManager.current_rank == 6:
 			var build_id = result.data[0].get("id")
 			if build_id:
 				await SupabaseManager.promote_to_champion(build_id)
@@ -150,28 +166,82 @@ func _handle_defeat():
 	"""Handle player defeat - game over or retry."""
 	print("[BossRoom] Defeat. Game over.")
 	
-	# TODO: Implement defeat logic
-	# - Show game over screen?
-	# - Offer retry?
-	# - Return to main menu?
+	## Supabase logging happening in the Combat_Panel.gd for the on_click events of the defeat menu.
+
+### =========================================================================
+### POPUP STUFF
+### =========================================================================
+
+func play_popup_open_sfx():
+	AudioManager.play_synced_sound("popup_open")
+
+func play_popup_close_sfx():
+	AudioManager.play_synced_sound("popup_close")
+
+func _on_btn_champion_pressed() -> void:
+	var player_id = Player.load_or_generate_uuid()
+	await _save_player_build()
+
+	await SupabaseManager.award_ears_simple(player_id, 1, "Challenging for Glory")
 	
-	# For now, just complete the event
-	pass
+	# Update local ears count
+	var profile = await SupabaseManager.get_player_profile(player_id)
+	if not profile.is_empty():
+		Player.update_ears(profile.ears_balance)
+	
+		# Reload profile to sync local stats
+	if not profile.is_empty():
+		Player.load_profile_from_supabase(profile)	
 
-## =============================================================================
-## SCENE STRUCTURE REQUIREMENTS
-## =============================================================================
+	# Show "Quit While Ahead" choice (for Phase 2)
+	print("[Game] Rank 5 complete, continuing to Champions...")
+	main_game_ref.boss_room_completed("challenge")
 
-# Minimal scene structure:
-# BossRoomEvent (Control) + this script
-# └─ FlavorAnimation (AnimationPlayer) - Optional
-#    Create animation named "boss_approach" with:
-#    - Label fade in: "A dangerous figure approaches from the shadows..."
-#    - Comic-book panel effects
-#    - Duration: 2-3 seconds
 
-# Notes:
-# - Continue button is in main_game.tscn, NOT in this scene
-# - Staircase animation is in main_game.tscn, NOT in this scene
-# - Victory popup/combat summary is in combat_panel, NOT in this scene
-# - This scene is MINIMAL - just flavor animation before combat
+func _on_btn_end_pressed() -> void:
+	var player_id = Player.load_or_generate_uuid()
+	await _save_player_build()
+	await SupabaseManager.award_ears_simple(player_id, 2, "Rank 5 Victory")
+	
+	# Update local ears count
+	var profile = await SupabaseManager.get_player_profile(player_id)
+	if not profile.is_empty():
+		Player.update_ears(profile.ears_balance)
+	
+	if not profile.is_empty():
+		Player.load_profile_from_supabase(profile)	
+
+	# Show "Quit While Ahead" choice (for Phase 2)
+	print("[Game] Rank 5 complete! +2 ears earned")
+	main_game_ref.boss_room_completed("end")
+
+
+func _on_btn_continue_pressed() -> void:
+	await _save_player_build()
+	main_game_ref.boss_room_completed("continue")
+	
+
+func _on_btn_final_victory_pressed() -> void:
+	"""Handle victory against a champion (rank 6)."""
+	print("[BossRoom] Champion defeated!")
+	
+	# 1. Record the champion's defeat
+	var defeated_champion_id = DungeonManager.current_boss_data.get("id", "")
+	if not defeated_champion_id.is_empty():
+		await SupabaseManager.record_champion_defeat(defeated_champion_id)
+		print("[BossRoom] Recorded champion defeat")
+	
+	await _save_player_build()
+
+	# 4. Increment player's champion kill count
+	var player_id = Player.load_or_generate_uuid()
+	await SupabaseManager.award_ears_simple(player_id, 1, "First Champion Beat")
+	await SupabaseManager.increment_champions_killed(player_id)
+
+	# 4. Reload profile to sync local stats
+	var profile = await SupabaseManager.get_player_profile(player_id)
+	if not profile.is_empty():
+		Player.load_profile_from_supabase(profile)
+
+	print("[BossRoom] Player is now a champion!")	
+	main_game_ref.boss_room_completed("final")

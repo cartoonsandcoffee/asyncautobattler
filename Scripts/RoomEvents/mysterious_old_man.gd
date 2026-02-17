@@ -144,7 +144,7 @@ func finish_event():
 	await anim_rope.animation_finished
 	anim_rope.play("rope_sway")
 	
-	await DungeonManager.slide_in_menus()
+	#await DungeonManager.slide_in_menus()
 
 	# Complete the event
 	complete_event()

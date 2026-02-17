@@ -8,7 +8,7 @@ extends ZoomEvent
 
 var new_item: Item = null
 
-func show_popup(_item1:Item, _item2:Item):
+func show_popup(_item1:Item, _item2:Item, _item3: Item = null):
 	if _item1:
 		new_item = _item1
 		set_items()
@@ -16,6 +16,7 @@ func show_popup(_item1:Item, _item2:Item):
 		push_warning("[ZoomForge] No item set")
 		return
 
+	visible = true
 	AudioManager.play_synced_sound("popup_open")
 	anim_display.play("show_panel")
 	await anim_display.animation_finished
@@ -29,6 +30,7 @@ func hide_popup():
 	anim_display.play("hide_panel")
 	AudioManager.play_synced_sound("popup_close")
 	await anim_display.animation_finished
+	visible = false
 
 func play_effect():
 	AudioManager.play_event_sound("forge")
