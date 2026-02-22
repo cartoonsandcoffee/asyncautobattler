@@ -62,7 +62,7 @@ func initialize():
 
 
 func reset():
-	current_rank = 5
+	current_rank = 1
 	rooms_visited_this_rank = 0
 
 	all_visited_rooms.clear()

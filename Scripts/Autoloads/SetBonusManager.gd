@@ -84,3 +84,18 @@ func _has_all_required_items(set_bonus: SetBonus, owned_items: Array[Item]) -> b
 
 func get_active_set_bonuses(entity) -> Array[Item]:
 	return entity_active_sets.get(entity, [])
+
+func get_set_bonuses_for_item_array(items: Array[Item]) -> Array[Item]:
+	# Calculate set bonuses for a given array of items (not tied to any entity).
+	# Used for UI displays like Hall of Champions build previews.
+	# 
+	# Returns: Array of SetBonus items that would be active with these items.
+
+	var active_set_items: Array[Item] = []
+	
+	# Check each set bonus
+	for set_bonus in all_set_bonuses:
+		if _has_all_required_items(set_bonus, items):
+			active_set_items.append(set_bonus.setbonus_item)
+	
+	return active_set_items

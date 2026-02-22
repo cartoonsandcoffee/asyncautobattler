@@ -43,6 +43,8 @@ var inventory: Inventory:
 		inventory = value
 
 var skin_id: int = 0
+var skin_color: Color = Color.WHITE
+var item_bundle: int = 0
 
 # Applied to current weapon (resets on weapon swap)
 var current_weapon_stat_upgrades: Dictionary = {
@@ -83,6 +85,7 @@ var popup_open: bool = false
 
 func new_run(nm: String):
 	player_name = nm
+	SkinManager.apply_selected_skin_to_player()
 	stats = GameStats.new()
 	inventory = Inventory.new()
 	status_effects = StatusEffects.new()
@@ -556,7 +559,9 @@ func to_boss_data() -> Dictionary:
 		"inventory": _serialize_inventory(),
 		"weapon": _serialize_weapon(),
 		"weapon_stat_upgrades": current_weapon_stat_upgrades,
-		"weapon_enchantment": _serialize_weapon_enchantment()
+		"weapon_enchantment": _serialize_weapon_enchantment(),
+		"skin_color": skin_color.to_html(),
+		"item_bundle": item_bundle
 	}
 
 func _serialize_inventory() -> Array:
@@ -671,7 +676,10 @@ func from_dict(data: Dictionary):
 	player_uuid = data.get("player_uuid", "")
 	player_name = data.get("player_name", "Player")
 	skin_id = data.get("skin_id", 0)
-	
+	var color_hex:String = data.get("skin_color", "#FFFFFF")
+	skin_color = Color(color_hex)
+	item_bundle = data.get("item_bundle", 0)
+
 	# Run state
 	current_rank = data.get("current_rank", 1)
 	current_room = data.get("current_room", 1)

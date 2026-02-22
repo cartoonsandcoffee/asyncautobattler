@@ -96,6 +96,19 @@ const EVENT_SOUND_NAMES = {
 	"fire_02": "res://Assets/Audio/SFX/EVENT/fire_02.ogg",
 	"fire_out": "res://Assets/Audio/SFX/EVENT/fire_out.ogg",
 	"cheering": "res://Assets/Audio/SFX/EVENT/cheering.ogg",
+	"v1": "res://Assets/Audio/SFX/EVENT/Mmm.ogg",
+	"v2": "res://Assets/Audio/SFX/EVENT/Ooo.ogg",
+	"v3": "res://Assets/Audio/SFX/EVENT/voice_1.ogg",
+	"v4": "res://Assets/Audio/SFX/EVENT/voice_2.ogg",
+	"v5": "res://Assets/Audio/SFX/EVENT/voice_3.ogg",	
+}
+
+const VOICES = {
+	"v1": "res://Assets/Audio/SFX/EVENT/Mmm.ogg",
+	"v2": "res://Assets/Audio/SFX/EVENT/Ooo.ogg",
+	"v3": "res://Assets/Audio/SFX/EVENT/voice_1.ogg",
+	"v4": "res://Assets/Audio/SFX/EVENT/voice_2.ogg",
+	"v5": "res://Assets/Audio/SFX/EVENT/voice_3.ogg",
 }
 
 var _initialized: bool = false
@@ -214,6 +227,21 @@ func _load_sfx_sounds():
 		else:
 			push_warning("[AudioManager] UI sound not found: %s at %s" % [sound_name, path])
 
+func play_random_voice():
+	"""Play a random voice line from the VOICES dictionary."""
+	if VOICES.is_empty():
+		push_warning("[AudioManager] No voices available")
+		return
+	
+	# Get random voice key
+	var voice_keys = VOICES.keys()
+	var random_key = voice_keys[randi() % voice_keys.size()]
+	
+	# Play the voice
+	play_event_sound(random_key)
+	
+	# Optional: return which voice was played for debugging
+	return random_key
 
 ## =============================================================================
 ## MUSIC CONTROL - PUBLIC API

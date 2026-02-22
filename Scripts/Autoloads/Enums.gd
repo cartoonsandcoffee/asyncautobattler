@@ -25,6 +25,13 @@ enum Stats {
 	NONE
 }
 
+enum ItemBundles {
+	ALL,
+	REGENGE,
+	HONOR,
+	GREED
+}
+
 enum StatType {		# Used for item conditions and rules
 	CURRENT,
 	BASE,
@@ -79,7 +86,8 @@ enum TriggerType {
 	ENEMY_WOUNDED,
 	ACID_PROCS_ON_ENEMY,
 	ON_ENEMY_STATUS_GAIN,
-	ON_ENEMY_STATUS_PROC
+	ON_ENEMY_STATUS_PROC,
+	ATTACK_SKIPPED
 }
 
 enum EffectType {
@@ -292,3 +300,16 @@ func get_stat_string(_stat: Enums.Stats) -> String:
 			return "burn damage"
 		_:
 			return "<unknown stat>"
+
+func get_bundle_string(_bundle: Enums.ItemBundles) -> String:
+	match _bundle:
+		Enums.ItemBundles.ALL:
+			return "All Item Bundles"
+		Enums.ItemBundles.REGENGE:
+			return "Revenge"
+		Enums.ItemBundles.GREED:
+			return "Greed"
+		Enums.ItemBundles.HONOR:
+			return "Honor"
+		_:
+			return "<Unknown Item Bundle>"

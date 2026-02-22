@@ -14,6 +14,9 @@ func create_boss_enemy(opponent_data: Dictionary) -> Enemy:
 	boss.description = "A worthy opponent from Rank %d" % opponent_data.get("rank", 1)
 	boss.skin_id = opponent_data.get("skin_id", 0)
 
+	var color_hex: String = opponent_data.get("skin_color", "#FFFFFF")
+	boss.skin_color = Color(color_hex)
+
 	# Load sprite
 	var sprite_path = "res://Assets/Art/Player/PVP/Player_Skin_%d.png" % boss.skin_id 
 	if ResourceLoader.exists(sprite_path):
@@ -21,6 +24,7 @@ func create_boss_enemy(opponent_data: Dictionary) -> Enemy:
 	else:
 		# Fallback to default or enemy sprite if boss skin doesn't exist
 		if boss.sprite:
+			boss.sprite.modulate = boss.skin_color
 			boss.sprite = boss.sprite
 			boss.sprite_attack = boss.sprite
 			boss.sprite_hit = boss.sprite
