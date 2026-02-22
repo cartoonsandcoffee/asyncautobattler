@@ -36,6 +36,8 @@ enum ItemType {
 @export_multiline var item_desc: String = ""
 @export var item_icon: Texture2D
 @export var item_color: Color
+@export var item_bundle: Enums.ItemBundles = Enums.ItemBundles.ALL
+
 @export var rules: Array[ItemRule]:
 	get:
 		if rules == null:
@@ -77,6 +79,7 @@ enum ItemType {
 @export var burn_damage_bonus: int = 0
 ## ONLY applicable to Weapons, specifies whether the weapon is passive and can't attack/strike at all
 @export var cant_attack: bool = false
+@export var keywords: Array[String] = []  # hidden keywords for the filter screen
 
 # Runtime state (reset each combat)
 var has_triggered_this_combat: bool = false

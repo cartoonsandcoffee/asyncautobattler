@@ -575,12 +575,15 @@ func anim_close_panels():
 func anim_player_hit():
 	player_anim.play(CombatSpeed.get_animation_variant("player_hit"))
 
+func anim_enemy_appear():
+	enemy_anim.play(CombatSpeed.get_animation_variant("enemy_appear"))
+
 func anim_enemy_hit():
-	enemy_sprite.texture = current_enemy_entity.sprite_hit
+	#enemy_sprite.texture = current_enemy_entity.sprite_hit
 	enemy_anim.play(CombatSpeed.get_animation_variant("enemy_hit"))
 
 func anim_enemy_die():
-	enemy_sprite.texture = current_enemy_entity.sprite_hit
+	#enemy_sprite.texture = current_enemy_entity.sprite_hit
 	enemy_anim.play(CombatSpeed.get_animation_variant("enemy_die"))
 
 func anim_player_idle():
@@ -588,7 +591,7 @@ func anim_player_idle():
 	attack_sequence_complete.emit()
 
 func anim_enemy_idle():
-	enemy_sprite.texture = current_enemy_entity.sprite
+	#enemy_sprite.texture = current_enemy_entity.sprite
 	enemy_anim.play(CombatSpeed.get_animation_variant("enemy_idle"))
 	attack_sequence_complete.emit()
 

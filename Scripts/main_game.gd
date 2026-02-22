@@ -35,6 +35,7 @@ extends Control
 @onready var drop_panel: Panel = $DropItemPanel
 @onready var drop_item: ItemSlot = $DropItemPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/itemBox/ItemDrop
 
+@onready var pic_player: TextureRect = $CombatPanel/Player/picPlayer
 @onready var anim_promotion: AnimationPlayer  = $animPromotion
 @onready var anim_tools: AnimationPlayer = $animToolbars
 @onready var anim_fade: AnimationPlayer = $animFade
@@ -77,7 +78,7 @@ var pending_drop_item: Item = null
 var pending_drop_slot_index: int = -1
 
 # -- Full map screen
-var zoom_panel_scene = preload("res://Scenes/Elements/map_zoom_panel.tscn")
+var zoom_panel_scene = preload("res://Scenes/UI/map_zoom_panel.tscn")
 var zoom_panel: MapZoomPanel 
 
 func get_combat_panel() -> CombatPanel:
@@ -86,6 +87,8 @@ func get_combat_panel() -> CombatPanel:
 
 func _ready():
 	add_to_group("main_game")
+	await get_tree().process_frame
+
 	confirm_systems_initializes()
 
 	Player.stats.stats_updated.connect(_on_stats_updated)
@@ -139,6 +142,8 @@ func _ready():
 	create_test_player()
 	await _ensure_player_profile()
 
+	load_player_skin()
+
 	load_starting_room()
 
 	#AUDIO
@@ -147,7 +152,50 @@ func _ready():
 
 	anim_tools.play("setup_toolbars")
 	set_process_input(true) # for drag preview
+	call_deferred("_debug_find_oversized_controls")
+	await get_tree().process_frame
 	
+
+func _debug_find_oversized_controls():
+	print("\n=== CHECKING FOR OVERSIZED CONTROLS ===")
+	_check_control_recursive(self, 0)
+	print("=== END CHECK ===\n")
+
+func _check_control_recursive(node: Node, depth: int):
+	if node is Control:
+		var control = node as Control
+		var pos = control.global_position
+		var size = control.size
+		var end_pos = pos + size
+		
+		# Flag anything with extreme positions or sizes
+		var is_problematic = false
+		var issues = []
+		
+		if abs(pos.x) > 5000 or abs(pos.y) > 5000:
+			is_problematic = true
+			issues.append("EXTREME POSITION")
+		
+		if size.x > 3000 or size.y > 3000:
+			is_problematic = true
+			issues.append("HUGE SIZE")
+		
+		if end_pos.x > 3000 or end_pos.y > 3000:
+			is_problematic = true
+			issues.append("EXTENDS FAR OFF SCREEN")
+		
+		if is_problematic:
+			var indent = "  ".repeat(depth)
+			print("%s X %s (%s)" % [indent, node.name, node.get_class()])
+			print("%s   Position: %v" % [indent, pos])
+			print("%s   Size: %v" % [indent, size])
+			print("%s   End Position: %v" % [indent, end_pos])
+			print("%s   Issues: %s" % [indent, ", ".join(issues)])
+	
+	# Recurse through children
+	for child in node.get_children():
+		_check_control_recursive(child, depth + 1)
+
 func confirm_systems_initializes():
 	if not ItemsManager._initialized:
 		ItemsManager.initialize()
@@ -207,6 +255,20 @@ func load_room(room_data: RoomData):
 			if room_event.has_signal("need_item_replace"):
 				room_event.need_item_replace.connect(show_inventory_replacement_mode)
 
+func load_player_skin():
+	var skin_id: int = 0
+	var color_hex:String = "#FFFFFF"
+	
+	skin_id = Player.skin_id
+	color_hex = Player.skin_color.to_html()
+	
+	# Load sprite
+	var sprite_path = "res://Assets/Art/Player/Player_Skin_%d.png" % skin_id
+	if ResourceLoader.exists(sprite_path):
+		pic_player.modulate = Color(color_hex)
+		pic_player.texture = load(sprite_path)
+	else:
+		push_warning("[MainGame] Player skin sprite not found: %s" % sprite_path)	
 
 func show_inventory_replacement_mode(new_item: Item):
 	pending_reward_item = new_item
@@ -1012,7 +1074,12 @@ func reset_dungeon_for_new_run():
 	print("[MainGame] Resetting dungeon state...")
 	
 	await reset_player_for_new_run()
-	get_tree().change_scene_to_file("res://Scenes/main_game.tscn")
+	anim_fade.play("RESET")
+	anim_tools.play("RESET")
+
+	var new_run_scene = preload("res://Scenes/main_game.tscn")
+
+	get_tree().change_scene_to_packed(new_run_scene)
 	
 
 func screen_shake(intensity: float = 10.0, duration: float = 0.5):

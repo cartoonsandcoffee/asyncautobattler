@@ -5,15 +5,21 @@ extends Control
 @onready var compendium_panel = $Panel/Compendium
 @onready var info_panel = $Panel/GameInfo
 @onready var hall_of_fame = $Panel/HallofChampions
+@onready var skin_selector: Control = $Panel/skinPanel
 
-@onready var lbl_ears: Label = $Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/playerInfoPanel/earPanel/MarginContainer/HBoxContainer/lblEars
-@onready var txt_playerinfo: RichTextLabel = $Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/playerInfoPanel/txtPlayerInfo
+@onready var lbl_ears: Label = $Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel/HBoxContainer/lblEars
+@onready var lbl_name: Label = $Panel/CharacterSelectMenu/backPanel/VBoxContainer/panelName/MarginContainer/lblName
+@onready var lbl_champkills: Label = $Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel/lblChampKills
+@onready var lbl_activechamps: Label = $Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel/lblActiveChamps
+
+@onready var pic_skin: TextureRect = $Panel/CharacterSelectMenu/backPanel/picChar
 
 const GAME_SCENE = preload("res://Scenes/main_game.tscn")
 var good_name: bool = false
 
 func _ready() -> void:
 	confirm_systems_initialized()
+	skin_selector.refresh_skin.connect(_refresh_skin)
 
 	if not SaveManager.save_exists():
 		#btn_continue.disabled = true
@@ -24,6 +30,7 @@ func _ready() -> void:
 	anim_back.play("back_flicker")
 
 	player_loaded()
+	_refresh_skin()
 
 func confirm_systems_initialized():
 	if not SupabaseManager._initialized:
@@ -35,11 +42,16 @@ func confirm_systems_initialized():
 	if not GameSettings._initialized:
 		GameSettings.initialize()
 
+func _refresh_skin():
+	var _skin: SkinData = SkinManager.get_selected_skin()
+	if _skin:
+		pic_skin.texture = _skin.sprite
+
 func player_loaded() -> void:
 	lbl_ears.text = str(Player.ears_balance)
-	txt_playerinfo.text = "[b]" + Player.player_name + "[/b]\n"
-	txt_playerinfo.text += "   - Champion Kills: " + str(Player.champions_killed) + "\n"
-	txt_playerinfo.text += "   - Active Champions: " + str(Player.active_champions_count) + "\n"	
+	lbl_name.text = Player.player_name 
+	lbl_champkills.text = "Champion Kills:  " + str(Player.champions_killed) 
+	lbl_activechamps.text = "Active Champions:  " + str(Player.active_champions_count) 
 
 func _on_btn_quit_pressed() -> void:
 	AudioManager.play_ui_sound("button_hover")

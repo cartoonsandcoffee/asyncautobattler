@@ -68,6 +68,12 @@ func _initialize_systems():
 	lbl.text += "."
 
 	await _load_player_profile()
+	lbl.text += "."
+
+	SkinManager.initialize()
+	await get_tree().process_frame
+	lbl.text += "."
+	
 	_load_game()
 
 func _load_game():
@@ -75,7 +81,7 @@ func _load_game():
 	await get_tree().process_frame
 	
 	# Now load your actual main scene
-	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+	get_tree().change_scene_to_file("res://Scenes/main_menu.tscn")
 
 func _on_btn_name_pressed() -> void:
 	AudioManager.play_ui_sound("button_hover")

@@ -6,6 +6,7 @@ extends RoomEvent
 @onready var flavor_animation: AnimationPlayer  = $animFlavor # "A dangerous figure approaches..."
 @onready var anim_done: AnimationPlayer  = $animDone
 @onready var anim_ears: AnimationPlayer  = $animOnward
+@onready var anim_shadow: AnimationPlayer  = $animShadow
 
 @onready var lbl_promo: Label  = $panelFinished/panelBlack/MarginContainer/panelBorder/VBoxContainer/lblPromo
 
@@ -75,8 +76,10 @@ func _boss_battle_sequence():
 	
 	# 4. Handle victory or defeat
 	if victory:
+		anim_shadow.play("hide_shadow")
 		await _handle_victory()
 	else:
+		anim_shadow.play("hide_shadow")
 		await _handle_defeat()
 	
 	# 5. Complete event

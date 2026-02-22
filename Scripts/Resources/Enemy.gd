@@ -17,6 +17,8 @@ enum EnemyType {
 @export var sprite_color: Color = Color.WHITE
 @export var weapon_sprite: Texture2D
 @export var skin_id: int = 0
+@export var skin_color: Color = Color.WHITE
+@export var item_bundle: int = 0
 
 @export_group("Stats")
 @export var stats: GameStats:
