@@ -35,6 +35,7 @@ AudioManager="*res://Scripts/Autoloads/AudioManager.gd"
 CursorManager="*res://Scripts/Autoloads/CursorManager.gd"
 TooltipManager="*res://Scripts/Autoloads/TooltipManager.gd"
 SetBonusManager="*res://Scripts/Autoloads/SetBonusManager.gd"
+SkinManager="*res://Scripts/Autoloads/SkinManager.gd"
 
 [display]
 
