@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="SetBonus" load_steps=6 format=3 uid="uid://dpbygj6k7jhsw"]
+
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="1_ihjvh"]
+[ext_resource type="Resource" uid="uid://cmmxom50llbs8" path="res://Resources/Items/Weapons/Common/hardened_tenticle.tres" id="2_gr5ts"]
+[ext_resource type="Script" uid="uid://drivepk7scvso" path="res://Scripts/Resources/SetBonus.gd" id="2_j3jh1"]
+[ext_resource type="Resource" uid="uid://b027gg28tautn" path="res://Resources/Items/RARE/tentacle_crown.tres" id="3_grssr"]
+[ext_resource type="Resource" uid="uid://difsxfiye7c1g" path="res://Resources/SetBonuses/pitching_tentacles.tres" id="5_e7ekp"]
+
+[resource]
+script = ExtResource("2_j3jh1")
+setbonus_name = "Pitching Tentacles"
+unlocked = true
+discovered = false
+required_items = Array[ExtResource("1_ihjvh")]([ExtResource("2_gr5ts"), ExtResource("3_grssr")])
+setbonus_item = ExtResource("5_e7ekp")
+metadata/_custom_type_script = "uid://drivepk7scvso"

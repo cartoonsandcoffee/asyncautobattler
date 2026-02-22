@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SkinData" load_steps=5 format=3 uid="uid://bghhgv6tisqgq"]
+
+[ext_resource type="Script" uid="uid://k4fgb1rs6ix6" path="res://Scripts/Resources/SkinData.gd" id="1_5v283"]
+[ext_resource type="Texture2D" uid="uid://bffx10anckips" path="res://Assets/monochrome-transparent_packed.png" id="2_btt0x"]
+[ext_resource type="Texture2D" uid="uid://cnupiihdlotj1" path="res://Assets/Art/Player/PVP/Player_Skin_2.png" id="3_gmv5r"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gmv5r"]
+atlas = ExtResource("2_btt0x")
+region = Rect2(384, 16, 16, 16)
+
+[resource]
+script = ExtResource("1_5v283")
+skin_id = 2
+display_name = "Mage"
+cost = 10
+sprite = ExtResource("3_gmv5r")
+skin_icon = SubResource("AtlasTexture_gmv5r")
+is_default = false
+is_unlocked = false
+metadata/_custom_type_script = "uid://k4fgb1rs6ix6"

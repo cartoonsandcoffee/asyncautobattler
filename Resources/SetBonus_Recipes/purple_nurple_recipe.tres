@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="SetBonus" load_steps=7 format=3 uid="uid://bxwdf5xjgbm2x"]
+
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="1_xdyvd"]
+[ext_resource type="Resource" uid="uid://dbcuw51hbph1u" path="res://Resources/Items/UNCOMMON/leather_boots.tres" id="2_27qyy"]
+[ext_resource type="Script" uid="uid://drivepk7scvso" path="res://Scripts/Resources/SetBonus.gd" id="2_pvblp"]
+[ext_resource type="Resource" uid="uid://cn707v74ylpq8" path="res://Resources/Items/COMMON/purple_skin_gloves.tres" id="3_2bbmu"]
+[ext_resource type="Resource" uid="uid://b2vu4l3lbgp0c" path="res://Resources/Items/COMMON/purple_skin_vest.tres" id="4_cq0km"]
+[ext_resource type="Resource" uid="uid://cbpxrkp74sf8d" path="res://Resources/SetBonuses/purple_nurple.tres" id="6_dfmps"]
+
+[resource]
+script = ExtResource("2_pvblp")
+setbonus_name = "Purple Nurple"
+unlocked = true
+discovered = false
+required_items = Array[ExtResource("1_xdyvd")]([ExtResource("2_27qyy"), ExtResource("3_2bbmu"), ExtResource("4_cq0km")])
+setbonus_item = ExtResource("6_dfmps")
+metadata/_custom_type_script = "uid://drivepk7scvso"

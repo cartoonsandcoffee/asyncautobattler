@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="SetBonus" load_steps=6 format=3 uid="uid://cr87pg85h4uok"]
+
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="1_tdf6v"]
+[ext_resource type="Resource" uid="uid://b1ug0l1uq7wgr" path="res://Resources/Items/COMMON/covert_shield.tres" id="2_68r3i"]
+[ext_resource type="Script" uid="uid://drivepk7scvso" path="res://Scripts/Resources/SetBonus.gd" id="2_ewito"]
+[ext_resource type="Resource" uid="uid://6t1clqmhhy80" path="res://Resources/Items/RARE/covert_armor.tres" id="3_28tln"]
+[ext_resource type="Resource" uid="uid://dahmlphtk0dyx" path="res://Resources/SetBonuses/covert_cache.tres" id="5_s113k"]
+
+[resource]
+script = ExtResource("2_ewito")
+setbonus_name = "Covert Cache"
+unlocked = true
+discovered = false
+required_items = Array[ExtResource("1_tdf6v")]([ExtResource("2_68r3i"), ExtResource("3_28tln")])
+setbonus_item = ExtResource("5_s113k")
+metadata/_custom_type_script = "uid://drivepk7scvso"

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="SetBonus" load_steps=6 format=3 uid="uid://bpqjflajw488h"]
+
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="1_6t5ss"]
+[ext_resource type="Resource" uid="uid://djuf7j2ykte8a" path="res://Resources/Items/Weapons/Common/fury_steel.tres" id="2_ydf23"]
+[ext_resource type="Resource" uid="uid://ddovqjk2twhje" path="res://Resources/Items/COMMON/Potions/acrid_potion.tres" id="3_eufid"]
+[ext_resource type="Script" uid="uid://drivepk7scvso" path="res://Scripts/Resources/SetBonus.gd" id="4_gfnao"]
+[ext_resource type="Resource" uid="uid://cp56llexhhihv" path="res://Resources/SetBonuses/sorro_masque.tres" id="5_3n014"]
+
+[resource]
+script = ExtResource("4_gfnao")
+setbonus_name = "Sorro Masque"
+unlocked = true
+discovered = false
+required_items = Array[ExtResource("1_6t5ss")]([ExtResource("2_ydf23"), ExtResource("3_eufid")])
+setbonus_item = ExtResource("5_3n014")
+metadata/_custom_type_script = "uid://drivepk7scvso"

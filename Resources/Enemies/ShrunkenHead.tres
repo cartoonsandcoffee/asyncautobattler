@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="1_yyf2x"]
 [ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="2_2sca4"]
 [ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="2_hwxjh"]
-[ext_resource type="Texture2D" uid="uid://bcwxeokxt4ty0" path="res://Assets/Art/Enemies/Curiosity.png" id="4_hwxjh"]
+[ext_resource type="Texture2D" uid="uid://b64bfh1nxblar" path="res://Assets/Art/Enemies/Enemy_03.png" id="4_hwxjh"]
 [ext_resource type="Script" uid="uid://c461mcmm1ot6v" path="res://Scripts/Classes/GameStats.gd" id="5_o7yx7"]
 
 [sub_resource type="Resource" id="Resource_yfddi"]
@@ -19,6 +19,7 @@ condition_type = 0
 condition_of = 4
 condition_stat = 0
 condition_status = 9
+condition_item_category = ""
 condition_comparison = ">"
 compare_to = 0
 condition_value = 0
@@ -29,6 +30,7 @@ condition_party_status = 9
 effect_type = 1
 target_type = 1
 target_stat_type = 0
+target_item_category = ""
 target_stat = 8
 target_status = 0
 effect_of = 0
@@ -37,6 +39,7 @@ effect_stat_party = 4
 effect_stat_type = 3
 effect_stat_value = 9
 effect_status_value = 9
+effect_multiplier = 1.0
 convert_from_type = 0
 convert_from_party = 0
 convert_from_stat = 9
@@ -50,6 +53,7 @@ conversion_amount_value = 1
 conversion_ratio = 1.0
 retrigger_type = 1
 retrigger_target = 0
+retrigger_item = 0
 special_string = ""
 custom_description = ""
 metadata/_custom_type_script = "uid://dahay7fvi7bik"
@@ -57,10 +61,12 @@ metadata/_custom_type_script = "uid://dahay7fvi7bik"
 [sub_resource type="Resource" id="Resource_ln4yo"]
 script = ExtResource("1_yyf2x")
 item_id = ""
+base_item_id = ""
 item_name = "Dire Anguish"
 item_type = 0
 item_desc = "Battle Start: Give the player 4 poison."
 item_color = Color(0, 0, 0, 1)
+item_bundle = 0
 rules = Array[ExtResource("2_hwxjh")]([SubResource("Resource_yfddi")])
 repeat_rules_X_times = 0
 repeat_rules_for_category = ""
@@ -79,6 +85,8 @@ agility_bonus = 0
 hit_points_bonus = 0
 strikes_bonus = 0
 burn_damage_bonus = 0
+cant_attack = false
+keywords = Array[String]([])
 metadata/_custom_type_script = "uid://dthg27pchm1fm"
 
 [sub_resource type="Resource" id="Resource_c0ysb"]
@@ -94,7 +102,7 @@ metadata/_custom_type_script = "uid://c461mcmm1ot6v"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_h6yy7"]
 atlas = ExtResource("4_hwxjh")
-region = Rect2(500, 300, 400, 400)
+region = Rect2(750, 400, 200, 200)
 
 [resource]
 script = ExtResource("2_2sca4")
@@ -107,6 +115,7 @@ sprite_attack = ExtResource("4_hwxjh")
 sprite_color = Color(1, 1, 1, 1)
 weapon_sprite = SubResource("AtlasTexture_h6yy7")
 skin_id = 0
+skin_color = Color(1, 1, 1, 1)
 stats = SubResource("Resource_c0ysb")
 gold = 3
 item_drop_chance = 0.1

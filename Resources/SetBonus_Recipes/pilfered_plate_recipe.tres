@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="SetBonus" load_steps=6 format=3 uid="uid://dfv3wji7lyl4g"]
+
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="1_vke45"]
+[ext_resource type="Script" uid="uid://drivepk7scvso" path="res://Scripts/Resources/SetBonus.gd" id="2_d2r38"]
+[ext_resource type="Resource" uid="uid://chxv4hogdo02q" path="res://Resources/Items/Weapons/Common/rebounding_club.tres" id="2_pv1ft"]
+[ext_resource type="Resource" uid="uid://bjqxpty15fqtb" path="res://Resources/Items/UNCOMMON/finesse_gloves.tres" id="3_fw8kv"]
+[ext_resource type="Resource" uid="uid://6ncucrs2sl47" path="res://Resources/SetBonuses/pilfered_plate.tres" id="5_kl6no"]
+
+[resource]
+script = ExtResource("2_d2r38")
+setbonus_name = "Pilfered Plate"
+unlocked = true
+discovered = false
+required_items = Array[ExtResource("1_vke45")]([ExtResource("2_pv1ft"), ExtResource("3_fw8kv")])
+setbonus_item = ExtResource("5_kl6no")
+metadata/_custom_type_script = "uid://drivepk7scvso"

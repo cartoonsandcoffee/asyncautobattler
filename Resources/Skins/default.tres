@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SkinData" load_steps=5 format=3 uid="uid://rj5iimpkpug7"]
+
+[ext_resource type="Script" uid="uid://k4fgb1rs6ix6" path="res://Scripts/Resources/SkinData.gd" id="1_ipyx6"]
+[ext_resource type="Texture2D" uid="uid://bffx10anckips" path="res://Assets/monochrome-transparent_packed.png" id="2_tt7pb"]
+[ext_resource type="Texture2D" uid="uid://eb6npl80r4to" path="res://Assets/Art/Player/PVP/Player_Skin_0.png" id="3_1kjso"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1kjso"]
+atlas = ExtResource("2_tt7pb")
+region = Rect2(400, 0, 16, 16)
+
+[resource]
+script = ExtResource("1_ipyx6")
+skin_id = 0
+display_name = "Default"
+cost = 0
+sprite = ExtResource("3_1kjso")
+skin_icon = SubResource("AtlasTexture_1kjso")
+is_default = true
+is_unlocked = true
+metadata/_custom_type_script = "uid://k4fgb1rs6ix6"

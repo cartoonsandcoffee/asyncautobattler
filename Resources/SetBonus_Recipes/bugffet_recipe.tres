@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="SetBonus" load_steps=7 format=3 uid="uid://bwtalqc0w45w2"]
+
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="1_4bxyl"]
+[ext_resource type="Script" uid="uid://drivepk7scvso" path="res://Scripts/Resources/SetBonus.gd" id="2_3togt"]
+[ext_resource type="Resource" uid="uid://dojehh6j2el5u" path="res://Resources/Items/COMMON/Bugs/corpsehopper.tres" id="2_8tupv"]
+[ext_resource type="Resource" uid="uid://dh70w8brjqbph" path="res://Resources/Items/COMMON/Bugs/dew_fly.tres" id="3_mbhjl"]
+[ext_resource type="Resource" uid="uid://cujl5ch1124qt" path="res://Resources/Items/COMMON/Bugs/firefly.tres" id="4_wcdb8"]
+[ext_resource type="Resource" uid="uid://d4lev77ek3bei" path="res://Resources/SetBonuses/bugffet.tres" id="6_lj7a4"]
+
+[resource]
+script = ExtResource("2_3togt")
+setbonus_name = "Bugffet"
+unlocked = true
+discovered = false
+required_items = Array[ExtResource("1_4bxyl")]([ExtResource("2_8tupv"), ExtResource("3_mbhjl"), ExtResource("4_wcdb8")])
+setbonus_item = ExtResource("6_lj7a4")
+metadata/_custom_type_script = "uid://drivepk7scvso"

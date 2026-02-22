@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="SetBonus" load_steps=7 format=3 uid="uid://d1lpep34hovkv"]
+
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="1_a00nm"]
+[ext_resource type="Resource" uid="uid://bnrlehhguu2vj" path="res://Resources/Items/COMMON/shafeek_boots.tres" id="2_srcok"]
+[ext_resource type="Script" uid="uid://drivepk7scvso" path="res://Scripts/Resources/SetBonus.gd" id="2_xifli"]
+[ext_resource type="Resource" uid="uid://bld4mh3u3tlxv" path="res://Resources/Items/COMMON/shafeek_shield.tres" id="3_gnqw7"]
+[ext_resource type="Resource" uid="uid://woctp8dtduwy" path="res://Resources/Items/Weapons/Common/shafeek_sword.tres" id="4_7df8p"]
+[ext_resource type="Resource" uid="uid://c3mriaqo52jsf" path="res://Resources/SetBonuses/shafeeks_blessing.tres" id="6_se5ih"]
+
+[resource]
+script = ExtResource("2_xifli")
+setbonus_name = "Shafeek's Blessing"
+unlocked = true
+discovered = false
+required_items = Array[ExtResource("1_a00nm")]([ExtResource("2_srcok"), ExtResource("3_gnqw7"), ExtResource("4_7df8p")])
+setbonus_item = ExtResource("6_se5ih")
+metadata/_custom_type_script = "uid://drivepk7scvso"

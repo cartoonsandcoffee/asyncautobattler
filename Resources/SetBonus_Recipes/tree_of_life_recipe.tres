@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="SetBonus" load_steps=7 format=3 uid="uid://bx58st4n6qqkw"]
+
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="1_otmpp"]
+[ext_resource type="Script" uid="uid://drivepk7scvso" path="res://Scripts/Resources/SetBonus.gd" id="2_0cep6"]
+[ext_resource type="Resource" uid="uid://6w3s50gnctf0" path="res://Resources/Items/Weapons/Common/living_wood_club.tres" id="2_jrdap"]
+[ext_resource type="Resource" uid="uid://bfl3qx0yp5nlx" path="res://Resources/Items/COMMON/living_wood_helmet.tres" id="3_633jl"]
+[ext_resource type="Resource" uid="uid://c2ut8k04bx14m" path="res://Resources/Items/COMMON/living_wood_cloak.tres" id="4_113ei"]
+[ext_resource type="Resource" uid="uid://cxiwh8xmxw3g7" path="res://Resources/SetBonuses/tree_of_life.tres" id="6_ncm0m"]
+
+[resource]
+script = ExtResource("2_0cep6")
+setbonus_name = "Tree of Life"
+unlocked = true
+discovered = false
+required_items = Array[ExtResource("1_otmpp")]([ExtResource("2_jrdap"), ExtResource("3_633jl"), ExtResource("4_113ei")])
+setbonus_item = ExtResource("6_ncm0m")
+metadata/_custom_type_script = "uid://drivepk7scvso"

@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="Enemy" load_steps=7 format=3 uid="uid://bu2yqpt7pejnm"]
+
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="1_gy5no"]
+[ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="2_y811y"]
+[ext_resource type="Texture2D" uid="uid://m8v0tmmx7n5q" path="res://Assets/Art/Enemies/Enemy_04.png" id="3_psvjx"]
+[ext_resource type="Script" uid="uid://c461mcmm1ot6v" path="res://Scripts/Classes/GameStats.gd" id="4_craip"]
+
+[sub_resource type="Resource" id="Resource_jy7bu"]
+script = ExtResource("4_craip")
+damage = 3
+shield = 8
+agility = 4
+hit_points = 5
+gold = 0
+strikes = 1
+burn_damage = 3
+metadata/_custom_type_script = "uid://c461mcmm1ot6v"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mfpc0"]
+atlas = ExtResource("3_psvjx")
+region = Rect2(150, 550, 150, 150)
+
+[resource]
+script = ExtResource("2_y811y")
+enemy_name = "Unknown Enemy"
+enemy_type = 0
+description = ""
+sprite = ExtResource("3_psvjx")
+sprite_hit = ExtResource("3_psvjx")
+sprite_attack = ExtResource("3_psvjx")
+sprite_color = Color(1, 1, 1, 1)
+weapon_sprite = SubResource("AtlasTexture_mfpc0")
+skin_id = 0
+skin_color = Color(1, 1, 1, 1)
+item_bundle = 0
+stats = SubResource("Resource_jy7bu")
+gold = 1
+item_drop_chance = 0.1
+possible_item_drops = Array[ExtResource("1_gy5no")]([])
+abilities = Array[ExtResource("1_gy5no")]([])
+metadata/_custom_type_script = "uid://relhyqi21ar8"

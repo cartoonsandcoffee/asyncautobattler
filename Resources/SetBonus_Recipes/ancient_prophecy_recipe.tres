@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="SetBonus" load_steps=6 format=3 uid="uid://bycky81w1sv8a"]
+
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="1_kx5ci"]
+[ext_resource type="Script" uid="uid://drivepk7scvso" path="res://Scripts/Resources/SetBonus.gd" id="2_0qtrc"]
+[ext_resource type="Resource" uid="uid://c7jx8dxgeofbs" path="res://Resources/Items/RARE/ancient_armor.tres" id="2_ddmit"]
+[ext_resource type="Resource" uid="uid://bkvjvv4trvgkv" path="res://Resources/Items/Weapons/Rare/ancient_sword.tres" id="3_55osu"]
+[ext_resource type="Resource" uid="uid://nfm74q3uo8dk" path="res://Resources/SetBonuses/ancient_prophecy.tres" id="5_spfjc"]
+
+[resource]
+script = ExtResource("2_0qtrc")
+setbonus_name = "Ancient Prophecy"
+unlocked = true
+discovered = false
+required_items = Array[ExtResource("1_kx5ci")]([ExtResource("2_ddmit"), ExtResource("3_55osu")])
+setbonus_item = ExtResource("5_spfjc")
+metadata/_custom_type_script = "uid://drivepk7scvso"

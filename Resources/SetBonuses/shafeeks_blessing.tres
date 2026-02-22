@@ -1,0 +1,38 @@
+[gd_resource type="Resource" script_class="Item" load_steps=5 format=3 uid="uid://c3mriaqo52jsf"]
+
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_1prbw"]
+[ext_resource type="Texture2D" uid="uid://bffx10anckips" path="res://Assets/monochrome-transparent_packed.png" id="1_klwjh"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_klwjh"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_58i40"]
+atlas = ExtResource("1_klwjh")
+region = Rect2(448, 0, 16, 16)
+
+[resource]
+script = ExtResource("2_klwjh")
+item_id = ""
+item_name = "Shafeeks Blessing"
+item_type = 17
+item_desc = ""
+item_icon = SubResource("AtlasTexture_58i40")
+item_color = Color(0.64, 0.48, 0.482667, 1)
+rules = Array[ExtResource("1_1prbw")]([])
+repeat_rules_X_times = 0
+repeat_rules_for_category = ""
+trigger_priority = 0
+trigger_only_once = false
+trigger_only_first_turn = false
+trigger_on_occurrence_number = 0
+occurrence_resets_per_turn = false
+rarity = 5
+categories = Array[String]([])
+rng_weight = 1.0
+unlocked = true
+damage_bonus = 2
+shield_bonus = 2
+agility_bonus = 2
+hit_points_bonus = 0
+strikes_bonus = 0
+burn_damage_bonus = 0
+cant_attack = false
+metadata/_custom_type_script = "uid://dthg27pchm1fm"

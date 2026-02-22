@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dv4wg0eliyecr" path="res://Assets/Art/Enemies/Hugger.png" id="2_mnldd"]
 [ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="2_n1qiu"]
 [ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="3_2vtmy"]
-[ext_resource type="Texture2D" uid="uid://buoclmp32624c" path="res://Assets/Art/Enemies/Ogle.png" id="5_2vtmy"]
+[ext_resource type="Texture2D" uid="uid://cbplljl2tkk4b" path="res://Assets/Art/Enemies/Enemy_01.png" id="5_2vtmy"]
 [ext_resource type="Script" uid="uid://c461mcmm1ot6v" path="res://Scripts/Classes/GameStats.gd" id="5_u1i2p"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ih78y"]
@@ -24,6 +24,7 @@ condition_type = 0
 condition_of = 4
 condition_stat = 0
 condition_status = 9
+condition_item_category = ""
 condition_comparison = ">"
 compare_to = 0
 condition_value = 0
@@ -34,6 +35,7 @@ condition_party_status = 9
 effect_type = 1
 target_type = 1
 target_stat_type = 0
+target_item_category = ""
 target_stat = 8
 target_status = 1
 effect_of = 0
@@ -42,6 +44,7 @@ effect_stat_party = 4
 effect_stat_type = 3
 effect_stat_value = 9
 effect_status_value = 9
+effect_multiplier = 1.0
 convert_from_type = 0
 convert_from_party = 0
 convert_from_stat = 9
@@ -55,52 +58,57 @@ conversion_amount_value = 1
 conversion_ratio = 1.0
 retrigger_type = 1
 retrigger_target = 0
+retrigger_item = 0
 special_string = ""
 custom_description = ""
 metadata/_custom_type_script = "uid://dahay7fvi7bik"
 
 [sub_resource type="Resource" id="Resource_k7ajg"]
 script = ExtResource("1_yn4yh")
-item_id = ""
+item_id = null
+base_item_id = null
 item_name = "Indigestion"
-item_type = 0
+item_type = null
 item_desc = "On Hit: Give the player 1 acid."
 item_icon = SubResource("AtlasTexture_ih78y")
 item_color = Color(0.3196, 0.68, 0.469767, 1)
+item_bundle = 0
 rules = Array[ExtResource("3_2vtmy")]([SubResource("Resource_xfqlv")])
-repeat_rules_X_times = 0
-repeat_rules_for_category = ""
-trigger_priority = 0
-trigger_only_once = false
-trigger_only_first_turn = false
-trigger_on_occurrence_number = 0
-occurrence_resets_per_turn = false
-rarity = 0
-categories = Array[String]([])
-rng_weight = 1.0
-unlocked = false
-damage_bonus = 0
-shield_bonus = 0
-agility_bonus = 0
-hit_points_bonus = 0
-strikes_bonus = 0
-burn_damage_bonus = 0
+repeat_rules_X_times = null
+repeat_rules_for_category = null
+trigger_priority = null
+trigger_only_once = null
+trigger_only_first_turn = null
+trigger_on_occurrence_number = null
+occurrence_resets_per_turn = null
+rarity = null
+categories = null
+rng_weight = null
+unlocked = null
+damage_bonus = null
+shield_bonus = null
+agility_bonus = null
+hit_points_bonus = null
+strikes_bonus = null
+burn_damage_bonus = null
+cant_attack = null
+keywords = Array[String]([])
 metadata/_custom_type_script = "uid://dthg27pchm1fm"
 
 [sub_resource type="Resource" id="Resource_f84qh"]
 script = ExtResource("5_u1i2p")
 damage = 1
-shield = 0
+shield = 10
 agility = 2
-hit_points = 6
+hit_points = 15
 gold = 1
 strikes = 1
 burn_damage = 3
 metadata/_custom_type_script = "uid://c461mcmm1ot6v"
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_cxui7"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_u1i2p"]
 atlas = ExtResource("5_2vtmy")
-region = Rect2(650, 500, 350, 350)
+region = Rect2(100, 150, 350, 350)
 
 [resource]
 script = ExtResource("2_n1qiu")
@@ -111,8 +119,10 @@ sprite = ExtResource("5_2vtmy")
 sprite_hit = ExtResource("5_2vtmy")
 sprite_attack = ExtResource("5_2vtmy")
 sprite_color = Color(0.2806, 0.61, 0.40138, 1)
-weapon_sprite = SubResource("AtlasTexture_cxui7")
+weapon_sprite = SubResource("AtlasTexture_u1i2p")
 skin_id = 0
+skin_color = Color(1, 1, 1, 1)
+item_bundle = 0
 stats = SubResource("Resource_f84qh")
 gold = 3
 item_drop_chance = 0.1
