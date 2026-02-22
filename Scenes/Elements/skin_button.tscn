@@ -1,0 +1,45 @@
+[gd_scene load_steps=4 format=3 uid="uid://byatbn453qrno"]
+
+[ext_resource type="Script" uid="uid://clput60plqjjq" path="res://Scripts/Components/skin_button.gd" id="1_qdtk2"]
+[ext_resource type="Texture2D" uid="uid://dt06ij8760m2k" path="res://Assets/UI/Locked.png" id="2_8bwac"]
+[ext_resource type="Theme" uid="uid://dgbknxqcoromh" path="res://Themes/skin_button.tres" id="3_8bwac"]
+
+[node name="skinButton" type="Control"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 3
+anchor_right = 0.065
+anchor_bottom = 0.116
+offset_right = 0.159988
+offset_bottom = -0.224007
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qdtk2")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="picButton" type="TextureRect" parent="MarginContainer"]
+layout_mode = 2
+texture = ExtResource("2_8bwac")
+expand_mode = 1
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_8bwac")
+
+[connection signal="mouse_entered" from="Button" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Button" to="." method="_on_button_mouse_exited"]

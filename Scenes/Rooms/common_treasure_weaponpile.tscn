@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cqorbe72ves58" path="res://Scripts/RoomEvents/altar_room.gd" id="1_4qefn"]
 [ext_resource type="Resource" uid="uid://gm0vvksbp7e4" path="res://Resources/Enemies/Anguish.tres" id="2_mtbdh"]
-[ext_resource type="Texture2D" uid="uid://ccbefxbhjge3h" path="res://Assets/Art/Room_04_Background.png" id="3_52iqa"]
+[ext_resource type="Texture2D" uid="uid://ci156s4y1tkxg" path="res://Assets/Art/Backgrounds/Background_04.png" id="3_4qefn"]
 [ext_resource type="Texture2D" uid="uid://cr43ke21qx4hi" path="res://Assets/Art/Events/corpse_pile_sword.png" id="4_q08fy"]
 [ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="5_o4cxg"]
 [ext_resource type="PackedScene" uid="uid://c3h585v8mippc" path="res://Scenes/Elements/free_item_offering.tscn" id="6_k5n7a"]
@@ -316,7 +316,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("3_52iqa")
+texture = ExtResource("3_4qefn")
 expand_mode = 1
 
 [node name="picEvent" type="TextureRect" parent="."]
@@ -328,9 +328,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -279.0
-offset_top = -117.0
+offset_top = -55.0
 offset_right = 403.678
-offset_bottom = 269.0
+offset_bottom = 331.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.5, 0.5)

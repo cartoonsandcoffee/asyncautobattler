@@ -1,10 +1,8 @@
-[gd_scene load_steps=40 format=3 uid="uid://dal4a52ms64j6"]
+[gd_scene load_steps=50 format=3 uid="uid://dal4a52ms64j6"]
 
 [ext_resource type="Script" uid="uid://ddldx468qw34w" path="res://Scripts/main_menu.gd" id="1_n45e2"]
-[ext_resource type="Texture2D" uid="uid://vtf7yfl2710m" path="res://Assets/UI/panel-border-030.png" id="2_ce3w2"]
 [ext_resource type="Texture2D" uid="uid://cuwvv1egt6rpg" path="res://Assets/Art/TitleScreen/title_screen_dark.png" id="2_m3bi6"]
 [ext_resource type="FontFile" uid="uid://dbt53hulxegh2" path="res://Assets/UI/Fonts/Imperator.ttf" id="2_opfnp"]
-[ext_resource type="Texture2D" uid="uid://ccbcslnsifj3o" path="res://Assets/UI/divider-fade-002.png" id="3_1ehe0"]
 [ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="3_n45e2"]
 [ext_resource type="Texture2D" uid="uid://c8c62iwt0buee" path="res://Assets/Art/TitleScreen/title_screen_light.png" id="3_wyh8j"]
 [ext_resource type="Texture2D" uid="uid://dxt3yb4gkjn6x" path="res://Assets/Art/Particles/smoke_07.png" id="4_ujyyl"]
@@ -12,11 +10,22 @@
 [ext_resource type="Texture2D" uid="uid://48oitsyk7ir4" path="res://Assets/Art/Noise/T_VFX_Noise_465.png" id="6_4nkqq"]
 [ext_resource type="Texture2D" uid="uid://5hncfitv451a" path="res://Assets/Art/Noise/T_Gradient_circle22.jpg" id="7_ehtkc"]
 [ext_resource type="Texture2D" uid="uid://ejynek1siy2n" path="res://Assets/UI/White.png" id="8_6dk6o"]
+[ext_resource type="Texture2D" uid="uid://bx6acen5dxj1r" path="res://Assets/UI/CharSelect/FloorBit.png" id="9_mkpwh"]
+[ext_resource type="Texture2D" uid="uid://eb6npl80r4to" path="res://Assets/Art/Player/PVP/Player_Skin_0.png" id="10_4nkqq"]
+[ext_resource type="Texture2D" uid="uid://bujuc6bka60iu" path="res://Assets/UI/banner.png" id="11_5n0dv"]
 [ext_resource type="PackedScene" uid="uid://cf3ax1fquw2mm" path="res://Scenes/UI/settings_panel.tscn" id="12_t1dhk"]
 [ext_resource type="PackedScene" uid="uid://bqe1p63qqfmnw" path="res://Scenes/UI/compendium.tscn" id="13_5egv6"]
+[ext_resource type="Theme" uid="uid://od14ccps1daj" path="res://Themes/descriptive_label.tres" id="13_6dk6o"]
 [ext_resource type="Texture2D" uid="uid://lufpx811y86r" path="res://Assets/Items/ear.png" id="13_wyh8j"]
 [ext_resource type="PackedScene" uid="uid://oba2ikwv3ve2" path="res://Scenes/UI/game_info.tscn" id="14_vtepg"]
+[ext_resource type="Theme" uid="uid://dhmhp1enwr7tp" path="res://Themes/toggle_button.tres" id="15_84iac"]
+[ext_resource type="Script" uid="uid://c1q3maisubj8y" path="res://Scripts/UI/skin_panel.gd" id="15_jr6u5"]
+[ext_resource type="ButtonGroup" uid="uid://doyfencq8j15x" path="res://Themes/bundle_button_group.tres" id="16_5n0dv"]
+[ext_resource type="PackedScene" uid="uid://do70bpwejt4ha" path="res://Scenes/Elements/skin_card.tscn" id="16_6m47u"]
+[ext_resource type="PackedScene" uid="uid://byatbn453qrno" path="res://Scenes/Elements/skin_button.tscn" id="17_84iac"]
 [ext_resource type="PackedScene" uid="uid://chs2a1fblqd0k" path="res://Scenes/UI/hallof_champions.tscn" id="17_wyh8j"]
+[ext_resource type="Theme" uid="uid://dgbknxqcoromh" path="res://Themes/skin_button.tres" id="19_6m47u"]
+[ext_resource type="Texture2D" uid="uid://cwrf3kqbgn5vy" path="res://Assets/UI/MenuButtons.png" id="20_84iac"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_opfnp"]
 
@@ -58,35 +67,34 @@ shader_parameter/Texture_3 = ExtResource("7_ehtkc")
 shader_parameter/Texture_4 = SubResource("GradientTexture2D_55lkv")
 shader_parameter/Texture_Color_1D = SubResource("GradientTexture1D_rfd6m")
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cp0ys"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6m47u"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_yhxw7"]
-atlas = ExtResource("2_ce3w2")
-region = Rect2(0, 0, 96, 96)
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ne6ao"]
+texture = ExtResource("11_5n0dv")
+texture_margin_left = 520.0
+texture_margin_right = 523.0
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_trj04"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_84iac"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ujyyl"]
-bg_color = Color(0, 0, 0, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tt8ml"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mkpwh"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xcoo4"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4nkqq"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hkdq0"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ehtkc"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fmarx"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6dk6o"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_5n0dv"]
+atlas = ExtResource("20_84iac")
+region = Rect2(0, 0, 150, 150)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jr6u5"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_ne6ao"]
+atlas = ExtResource("20_84iac")
+region = Rect2(150, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tt8ml"]
+atlas = ExtResource("20_84iac")
+region = Rect2(300, 0, 150, 150)
 
 [sub_resource type="Animation" id="Animation_hkdq0"]
 length = 0.001
@@ -155,6 +163,7 @@ grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
 [node name="BackgroundImages" type="Control" parent="Panel"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -213,175 +222,132 @@ offset_bottom = 472.0
 texture = ExtResource("8_6dk6o")
 expand_mode = 1
 
-[node name="Label" type="Label" parent="Panel"]
+[node name="CharacterSelectMenu" type="Control" parent="Panel"]
 layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="backPanel" type="Panel" parent="Panel/CharacterSelectMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_6m47u")
+
+[node name="picFloor" type="TextureRect" parent="Panel/CharacterSelectMenu/backPanel"]
+modulate = Color(0.45, 0.35595, 0.3015, 1)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
 anchor_top = 1.0
-anchor_right = 1.0
+anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -62.0
-offset_top = -30.0
-offset_right = -8.0
-offset_bottom = -7.0
-grow_horizontal = 0
+offset_left = -342.0
+offset_top = -280.0
+offset_right = 562.0
+offset_bottom = -71.0
+grow_horizontal = 2
 grow_vertical = 0
-theme_override_colors/font_color = Color(0.485703, 0.485704, 0.485703, 1)
-theme_override_fonts/font = ExtResource("2_opfnp")
-text = "ver 0.0.1"
-horizontal_alignment = 1
-vertical_alignment = 1
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("9_mkpwh")
 
-[node name="panelMenu" type="Panel" parent="Panel"]
+[node name="picChar" type="TextureRect" parent="Panel/CharacterSelectMenu/backPanel"]
 layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 27.0
-offset_top = -735.0
-offset_right = 435.0
-offset_bottom = -30.0
-grow_vertical = 0
-theme_override_styles/panel = SubResource("StyleBoxEmpty_cp0ys")
-
-[node name="ColorRect" type="ColorRect" parent="Panel/panelMenu"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -210.0
+offset_right = 250.0
+offset_bottom = 240.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 1)
+pivot_offset = Vector2(250, 225)
+texture = ExtResource("10_4nkqq")
+expand_mode = 3
 
-[node name="NinePatchRect" type="NinePatchRect" parent="Panel/panelMenu"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/CharacterSelectMenu/backPanel"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 10
 anchor_right = 1.0
-anchor_bottom = 1.0
+offset_bottom = 200.0
 grow_horizontal = 2
-grow_vertical = 2
-texture = SubResource("AtlasTexture_yhxw7")
-patch_margin_left = 32
-patch_margin_top = 32
-patch_margin_right = 32
-patch_margin_bottom = 32
 
-[node name="PanelContainer" type="PanelContainer" parent="Panel/panelMenu/NinePatchRect"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxEmpty_trj04")
-
-[node name="MarginContainer" type="MarginContainer" parent="Panel/panelMenu/NinePatchRect/PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer"]
+[node name="panelName" type="PanelContainer" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer"]
+self_modulate = Color(0.709804, 0.635294, 0.545098, 1)
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
-theme = ExtResource("3_n45e2")
-theme_override_constants/separation = 10
+theme_override_styles/panel = SubResource("StyleBoxTexture_ne6ao")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/panelName"]
 layout_mode = 2
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_bottom = 10
 
-[node name="TextureRect2" type="TextureRect" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-texture = ExtResource("3_1ehe0")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Label" type="Label" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="lblName" type="Label" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/panelName/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("3_n45e2")
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
 theme_override_font_sizes/font_size = 42
 text = " Main Menu "
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="playerInfoPanel" type="HBoxContainer" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="spacer4" type="MarginContainer" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel"]
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-texture = ExtResource("3_1ehe0")
-expand_mode = 1
-stretch_mode = 5
-flip_h = true
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="lblChampKills" type="Label" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel"]
 layout_mode = 2
-size_flags_vertical = 3
+theme = ExtResource("13_6dk6o")
+text = "Champion Kills: 0"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="btnNewGame" type="Button" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 75)
-layout_mode = 2
-text = "New Game"
-
-[node name="btnPrivate" type="Button" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer"]
-visible = false
-custom_minimum_size = Vector2(0, 75)
-layout_mode = 2
-disabled = true
-text = "Private Server"
-
-[node name="btnHeroes" type="Button" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 75)
-layout_mode = 2
-text = "Hall of Heroes"
-
-[node name="btnCompendium" type="Button" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 75)
+[node name="spacer2" type="MarginContainer" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Compendium"
 
-[node name="btnInfo" type="Button" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 75)
+[node name="lblActiveChamps" type="Label" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel"]
 layout_mode = 2
-size_flags_vertical = 3
-text = "  Game Info  "
+theme = ExtResource("13_6dk6o")
+text = "Active Heroes: 1"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="btnSettings" type="Button" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 75)
+[node name="spacer1" type="MarginContainer" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel"]
 layout_mode = 2
-text = "Settings"
+size_flags_horizontal = 3
 
-[node name="btnQuit" type="Button" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 75)
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel"]
 layout_mode = 2
-text = "Quit"
+tooltip_text = "You get \"Ears\" from beating other high level players.  They can be earned passively by beating the Champion after Rank 5."
 
-[node name="playerInfoPanel" type="HBoxContainer" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="earPanel" type="PanelContainer" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/playerInfoPanel"]
-modulate = Color(1, 0.756333, 0.57, 1)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_ujyyl")
-
-[node name="MarginContainer" type="MarginContainer" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/playerInfoPanel/earPanel"]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/playerInfoPanel/earPanel/MarginContainer"]
-layout_mode = 2
-
-[node name="picEar" type="TextureRect" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/playerInfoPanel/earPanel/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(50, 50)
+[node name="picEar" type="TextureRect" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel/HBoxContainer"]
+custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 texture = ExtResource("13_wyh8j")
-expand_mode = 2
+expand_mode = 1
+stretch_mode = 5
 
-[node name="lblEars" type="Label" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/playerInfoPanel/earPanel/MarginContainer/HBoxContainer"]
+[node name="lblEars" type="Label" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("3_n45e2")
@@ -389,26 +355,266 @@ text = "000"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="btnEars" type="Button" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/playerInfoPanel/earPanel"]
-layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_mkpwh")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_4nkqq")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_ehtkc")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_6dk6o")
-theme_override_styles/normal = SubResource("StyleBoxEmpty_jr6u5")
-
-[node name="txtPlayerInfo" type="RichTextLabel" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/playerInfoPanel"]
+[node name="spacer3" type="MarginContainer" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/normal_font_size = 14
-theme_override_font_sizes/bold_font_size = 18
-bbcode_enabled = true
-text = "Justin Moran"
 
-[node name="MarginContainer2" type="MarginContainer" parent="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="btnHeroes" type="Button" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel"]
+custom_minimum_size = Vector2(300, 75)
+layout_mode = 2
+theme = ExtResource("3_n45e2")
+text = "Hall of Heroes"
+
+[node name="spacer5" type="MarginContainer" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="loadoutBox" type="HBoxContainer" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_n45e2")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/loadoutBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="spacer1" type="MarginContainer" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/loadoutBox/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="lblBundles" type="Label" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/loadoutBox/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("13_6dk6o")
+text = "What motivates you?"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="spacer2" type="MarginContainer" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/loadoutBox/HBoxContainer"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
+[node name="toggleBundle" type="HBoxContainer" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/loadoutBox/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Button" type="Button" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/loadoutBox/HBoxContainer/toggleBundle"]
+modulate = Color(0.92, 0.2576, 0.2576, 1)
+layout_mode = 2
+theme = ExtResource("15_84iac")
+toggle_mode = true
+button_pressed = true
+button_group = ExtResource("16_5n0dv")
+text = "   Revenge   "
+
+[node name="Button2" type="Button" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/loadoutBox/HBoxContainer/toggleBundle"]
+modulate = Color(0.2325, 0.6045, 0.93, 1)
+layout_mode = 2
+theme = ExtResource("15_84iac")
+toggle_mode = true
+button_group = ExtResource("16_5n0dv")
+text = "   Honor   "
+
+[node name="Button3" type="Button" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/loadoutBox/HBoxContainer/toggleBundle"]
+modulate = Color(1, 0.546667, 0.15, 1)
+layout_mode = 2
+theme = ExtResource("15_84iac")
+toggle_mode = true
+button_group = ExtResource("16_5n0dv")
+text = "   Greed   "
+
+[node name="spacer3" type="MarginContainer" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/loadoutBox/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="btnCompendium" type="Button" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/loadoutBox/HBoxContainer"]
+custom_minimum_size = Vector2(300, 75)
+layout_mode = 2
+text = "Compendium"
+
+[node name="spacer4" type="MarginContainer" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/loadoutBox/HBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="skinPanel" type="Control" parent="Panel"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_top = 144.0
+offset_bottom = 184.0
+grow_horizontal = 0
+script = ExtResource("15_jr6u5")
+
+[node name="SkinCard" parent="Panel/skinPanel" instance=ExtResource("16_6m47u")]
 visible = false
+offset_left = -592.0
+offset_top = 48.0
+offset_right = -192.0
+offset_bottom = 548.0
+
+[node name="PanelContainer" type="PanelContainer" parent="Panel/skinPanel"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -129.0
+offset_top = 10.0
+offset_right = -29.0
+offset_bottom = 562.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_84iac")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/skinPanel/PanelContainer"]
+layout_mode = 2
+
+[node name="lblSkins" type="Label" parent="Panel/skinPanel/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_n45e2")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 28
+text = "Skins"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/skinPanel/PanelContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+
+[node name="skinGrid" type="GridContainer" parent="Panel/skinPanel/PanelContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="skinButton6" parent="Panel/skinPanel/PanelContainer/VBoxContainer/ScrollContainer/skinGrid" instance=ExtResource("17_84iac")]
+layout_mode = 2
+
+[node name="skinButton5" parent="Panel/skinPanel/PanelContainer/VBoxContainer/ScrollContainer/skinGrid" instance=ExtResource("17_84iac")]
+layout_mode = 2
+
+[node name="skinButton4" parent="Panel/skinPanel/PanelContainer/VBoxContainer/ScrollContainer/skinGrid" instance=ExtResource("17_84iac")]
+layout_mode = 2
+
+[node name="skinButton3" parent="Panel/skinPanel/PanelContainer/VBoxContainer/ScrollContainer/skinGrid" instance=ExtResource("17_84iac")]
+layout_mode = 2
+
+[node name="skinButton2" parent="Panel/skinPanel/PanelContainer/VBoxContainer/ScrollContainer/skinGrid" instance=ExtResource("17_84iac")]
+layout_mode = 2
+
+[node name="skinButton" parent="Panel/skinPanel/PanelContainer/VBoxContainer/ScrollContainer/skinGrid" instance=ExtResource("17_84iac")]
+layout_mode = 2
+
+[node name="panelBottom" type="PanelContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -144.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_tt8ml")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/panelBottom"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="panRight" type="PanelContainer" parent="Panel/panelBottom/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_xcoo4")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/panelBottom/HBoxContainer/panRight"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/panelBottom/HBoxContainer/panRight/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="versionLabel" type="Label" parent="Panel/panelBottom/HBoxContainer/panRight/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.485703, 0.485704, 0.485703, 1)
+theme_override_fonts/font = ExtResource("2_opfnp")
+theme_override_font_sizes/font_size = 14
+text = "    ver 0.0.2     "
+vertical_alignment = 1
+
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/panelBottom/HBoxContainer/panRight/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 20
+
+[node name="panMid" type="PanelContainer" parent="Panel/panelBottom/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_hkdq0")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/panelBottom/HBoxContainer/panMid"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="btnNewGame" type="Button" parent="Panel/panelBottom/HBoxContainer/panMid/MarginContainer"]
+custom_minimum_size = Vector2(300, 75)
+layout_mode = 2
+theme = ExtResource("3_n45e2")
+text = "New Run"
+
+[node name="panLeft" type="PanelContainer" parent="Panel/panelBottom/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_fmarx")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/panelBottom/HBoxContainer/panLeft"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/panelBottom/HBoxContainer/panLeft/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="iconButtons" type="HBoxContainer" parent="Panel/panelBottom/HBoxContainer/panLeft/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme = ExtResource("19_6m47u")
+theme_override_constants/separation = 50
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/panelBottom/HBoxContainer/panLeft/VBoxContainer/iconButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="btnInfo" type="Button" parent="Panel/panelBottom/HBoxContainer/panLeft/VBoxContainer/iconButtons"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+tooltip_text = "Game Info"
+icon = SubResource("AtlasTexture_5n0dv")
+icon_alignment = 1
+expand_icon = true
+
+[node name="btnSettings" type="Button" parent="Panel/panelBottom/HBoxContainer/panLeft/VBoxContainer/iconButtons"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+tooltip_text = "Settings & Options"
+icon = SubResource("AtlasTexture_ne6ao")
+icon_alignment = 1
+expand_icon = true
+
+[node name="btnQuit" type="Button" parent="Panel/panelBottom/HBoxContainer/panLeft/VBoxContainer/iconButtons"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+tooltip_text = "Quit"
+icon = SubResource("AtlasTexture_tt8ml")
+icon_alignment = 1
+expand_icon = true
+
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/panelBottom/HBoxContainer/panLeft/VBoxContainer/iconButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/panelBottom/HBoxContainer/panLeft/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 20
 
 [node name="SettingsPanel" parent="Panel" instance=ExtResource("12_t1dhk")]
 visible = false
@@ -431,10 +637,9 @@ libraries = {
 &"": SubResource("AnimationLibrary_xcoo4")
 }
 
-[connection signal="pressed" from="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/btnNewGame" to="." method="_on_btn_new_game_pressed"]
-[connection signal="pressed" from="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/btnPrivate" to="." method="_on_btn_continue_pressed"]
-[connection signal="pressed" from="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/btnHeroes" to="." method="_on_btn_heroes_pressed"]
-[connection signal="pressed" from="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/btnCompendium" to="." method="_on_btn_compendium_pressed"]
-[connection signal="pressed" from="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/btnInfo" to="." method="_on_btn_info_pressed"]
-[connection signal="pressed" from="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/btnSettings" to="." method="_on_btn_settings_pressed"]
-[connection signal="pressed" from="Panel/panelMenu/NinePatchRect/PanelContainer/MarginContainer/VBoxContainer/btnQuit" to="." method="_on_btn_quit_pressed"]
+[connection signal="pressed" from="Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel/btnHeroes" to="." method="_on_btn_heroes_pressed"]
+[connection signal="pressed" from="Panel/CharacterSelectMenu/backPanel/VBoxContainer/loadoutBox/HBoxContainer/btnCompendium" to="." method="_on_btn_compendium_pressed"]
+[connection signal="pressed" from="Panel/panelBottom/HBoxContainer/panMid/MarginContainer/btnNewGame" to="." method="_on_btn_new_game_pressed"]
+[connection signal="pressed" from="Panel/panelBottom/HBoxContainer/panLeft/VBoxContainer/iconButtons/btnInfo" to="." method="_on_btn_info_pressed"]
+[connection signal="pressed" from="Panel/panelBottom/HBoxContainer/panLeft/VBoxContainer/iconButtons/btnSettings" to="." method="_on_btn_settings_pressed"]
+[connection signal="pressed" from="Panel/panelBottom/HBoxContainer/panLeft/VBoxContainer/iconButtons/btnQuit" to="." method="_on_btn_quit_pressed"]

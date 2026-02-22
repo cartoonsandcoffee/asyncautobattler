@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://chs2a1fblqd0k"]
+[gd_scene load_steps=18 format=3 uid="uid://chs2a1fblqd0k"]
 
 [ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="1_eijq0"]
 [ext_resource type="Texture2D" uid="uid://vtf7yfl2710m" path="res://Assets/UI/panel-border-030.png" id="1_mjpdj"]
@@ -6,6 +6,9 @@
 [ext_resource type="PackedScene" uid="uid://dm35l5es4kole" path="res://Scenes/Elements/stat_box.tscn" id="2_fhirs"]
 [ext_resource type="Texture2D" uid="uid://brkvaqqc37hpf" path="res://Assets/UI/icons.png" id="2_t8oay"]
 [ext_resource type="PackedScene" uid="uid://cqhyru53o5wfx" path="res://Scenes/item.tscn" id="3_eijq0"]
+[ext_resource type="Texture2D" uid="uid://daurw5ppu7ch0" path="res://Assets/UI/button_champions.png" id="3_rwgm2"]
+[ext_resource type="Texture2D" uid="uid://bsl431pk7s6iw" path="res://Assets/UI/button_global.png" id="5_3hnfb"]
+[ext_resource type="Texture2D" uid="uid://d0jt1ktrle1my" path="res://Assets/UI/button_leaderboard.png" id="6_bde15"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t8oay"]
 bg_color = Color(0, 0, 0, 1)
@@ -14,9 +17,15 @@ bg_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3pd0r"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_trygf"]
+atlas = ExtResource("3_rwgm2")
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_rj623"]
 atlas = ExtResource("2_t8oay")
 region = Rect2(150, 450, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bmuj0"]
+atlas = ExtResource("5_3hnfb")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3pd0r"]
 texture = ExtResource("1_mjpdj")
@@ -89,7 +98,7 @@ theme_override_constants/separation = 20
 [node name="btnChampions" type="Button" parent="Panel/PanelContainer/MarginContainer/mainBox/leftBox/VBoxContainer/boxButtons"]
 custom_minimum_size = Vector2(120, 120)
 layout_mode = 2
-icon = SubResource("AtlasTexture_rj623")
+icon = SubResource("AtlasTexture_trygf")
 icon_alignment = 1
 expand_icon = true
 
@@ -103,14 +112,14 @@ expand_icon = true
 [node name="btnGlobalHall" type="Button" parent="Panel/PanelContainer/MarginContainer/mainBox/leftBox/VBoxContainer/boxButtons"]
 custom_minimum_size = Vector2(120, 120)
 layout_mode = 2
-icon = SubResource("AtlasTexture_rj623")
+icon = SubResource("AtlasTexture_bmuj0")
 icon_alignment = 1
 expand_icon = true
 
 [node name="btnLeaderboard" type="Button" parent="Panel/PanelContainer/MarginContainer/mainBox/leftBox/VBoxContainer/boxButtons"]
 custom_minimum_size = Vector2(120, 120)
 layout_mode = 2
-icon = SubResource("AtlasTexture_rj623")
+icon = ExtResource("6_bde15")
 icon_alignment = 1
 expand_icon = true
 
@@ -144,11 +153,13 @@ theme = ExtResource("1_eijq0")
 text = "DONE"
 
 [node name="rightBox" type="PanelContainer" parent="Panel/PanelContainer/MarginContainer/mainBox"]
+custom_minimum_size = Vector2(562, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_styles/panel = SubResource("StyleBoxTexture_rwgm2")
 
 [node name="buildBox" type="HBoxContainer" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox"]
+custom_minimum_size = Vector2(514, 0)
 layout_mode = 2
 
 [node name="boxStats" type="VBoxContainer" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox"]
@@ -218,57 +229,57 @@ clip_contents = true
 custom_minimum_size = Vector2(100, 120)
 layout_mode = 2
 
-[node name="bossInventoryGrid" type="GridContainer" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory"]
+[node name="InventoryGrid" type="GridContainer" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory"]
 layout_mode = 2
 theme_override_constants/h_separation = 10
 theme_override_constants/v_separation = 10
 columns = 2
 
-[node name="Item" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/bossInventoryGrid" instance=ExtResource("3_eijq0")]
+[node name="Item" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/InventoryGrid" instance=ExtResource("3_eijq0")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Item2" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/bossInventoryGrid" instance=ExtResource("3_eijq0")]
+[node name="Item2" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/InventoryGrid" instance=ExtResource("3_eijq0")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Item3" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/bossInventoryGrid" instance=ExtResource("3_eijq0")]
+[node name="Item3" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/InventoryGrid" instance=ExtResource("3_eijq0")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Item4" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/bossInventoryGrid" instance=ExtResource("3_eijq0")]
+[node name="Item4" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/InventoryGrid" instance=ExtResource("3_eijq0")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Item5" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/bossInventoryGrid" instance=ExtResource("3_eijq0")]
+[node name="Item5" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/InventoryGrid" instance=ExtResource("3_eijq0")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Item6" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/bossInventoryGrid" instance=ExtResource("3_eijq0")]
+[node name="Item6" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/InventoryGrid" instance=ExtResource("3_eijq0")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Item7" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/bossInventoryGrid" instance=ExtResource("3_eijq0")]
+[node name="Item7" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/InventoryGrid" instance=ExtResource("3_eijq0")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Item8" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/bossInventoryGrid" instance=ExtResource("3_eijq0")]
+[node name="Item8" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/InventoryGrid" instance=ExtResource("3_eijq0")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Item9" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/bossInventoryGrid" instance=ExtResource("3_eijq0")]
+[node name="Item9" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/InventoryGrid" instance=ExtResource("3_eijq0")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Item10" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/bossInventoryGrid" instance=ExtResource("3_eijq0")]
+[node name="Item10" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/InventoryGrid" instance=ExtResource("3_eijq0")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Item11" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/bossInventoryGrid" instance=ExtResource("3_eijq0")]
+[node name="Item11" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/InventoryGrid" instance=ExtResource("3_eijq0")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Item12" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/bossInventoryGrid" instance=ExtResource("3_eijq0")]
+[node name="Item12" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/InventoryGrid" instance=ExtResource("3_eijq0")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 

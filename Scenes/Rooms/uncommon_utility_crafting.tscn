@@ -1,8 +1,8 @@
 [gd_scene load_steps=29 format=3 uid="uid://dnpww8cmfay1x"]
 
 [ext_resource type="Script" uid="uid://bngvv00tpw67t" path="res://Scripts/RoomEvents/uncommon_utility_crafting.gd" id="1_1vilr"]
-[ext_resource type="Texture2D" uid="uid://csprhhu3ka3ig" path="res://Assets/Art/Room_03_Background.png" id="1_6lpgy"]
 [ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="2_nonn0"]
+[ext_resource type="Texture2D" uid="uid://dnw0mej3amlga" path="res://Assets/Art/Backgrounds/Background_06.png" id="2_oqb6w"]
 [ext_resource type="Texture2D" uid="uid://kjsq8h3wkkqh" path="res://Assets/Art/Events/crafting_cauldron.png" id="3_1vilr"]
 [ext_resource type="Texture2D" uid="uid://rgu723p7kdwu" path="res://Assets/Art/Events/crafting_eyes.png" id="4_6u7kd"]
 [ext_resource type="Texture2D" uid="uid://ofqhkq0qfkqk" path="res://Assets/Items/Bugs.png" id="6_6u7kd"]
@@ -357,47 +357,6 @@ tracks/2/keys = {
 "values": [Vector2(0.5, 0.5)]
 }
 
-[sub_resource type="Animation" id="Animation_xskcj"]
-resource_name = "show_box"
-length = 0.4
-step = 0.025
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("FreeItemOffering:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("FreeItemOffering:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("FreeItemOffering:scale")
-tracks/2/interp = 2
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector2(0.5, 0.5), Vector2(1.1, 1.1), Vector2(1, 1)]
-}
-
 [sub_resource type="Animation" id="Animation_m6ybx"]
 resource_name = "hide_box"
 length = 0.4
@@ -439,6 +398,47 @@ tracks/2/keys = {
 "values": [Vector2(1, 1), Vector2(1.1, 1.1), Vector2(0.5, 0.5)]
 }
 
+[sub_resource type="Animation" id="Animation_xskcj"]
+resource_name = "show_box"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FreeItemOffering:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("FreeItemOffering:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("FreeItemOffering:scale")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.5, 0.5), Vector2(1.1, 1.1), Vector2(1, 1)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_3g0fr"]
 _data = {
 &"RESET": SubResource("Animation_7es7g"),
@@ -463,7 +463,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("1_6lpgy")
+texture = ExtResource("2_oqb6w")
 expand_mode = 1
 
 [node name="Control" type="Control" parent="."]
@@ -474,12 +474,13 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -327.0
-offset_top = -210.0
-offset_right = 327.0
-offset_bottom = 210.0
+offset_left = -99.0
+offset_top = -114.0
+offset_right = 555.0
+offset_bottom = 306.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(0.8, 0.8)
 
 [node name="picCauldron" type="TextureRect" parent="Control"]
 layout_mode = 1

@@ -1,0 +1,56 @@
+[gd_scene load_steps=5 format=3 uid="uid://b075idpvvk1rv"]
+
+[ext_resource type="Script" uid="uid://cryvl45dob6fa" path="res://Scripts/Components/choice_option.gd" id="1_qv0re"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slx65"]
+bg_color = Color(0.74, 0.74, 0.74, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_usty2"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.687215, 0.687215, 0.687215, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ivli0"]
+bg_color = Color(0.43, 0.43, 0.43, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.82, 0.82, 0.82, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="choiceOption" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_qv0re")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 2
+offset_left = -15.0
+offset_top = -19.0
+offset_right = 15.0
+offset_bottom = 19.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/hover = SubResource("StyleBoxFlat_slx65")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_usty2")
+theme_override_styles/normal = SubResource("StyleBoxFlat_ivli0")

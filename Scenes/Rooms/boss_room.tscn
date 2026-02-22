@@ -1,8 +1,9 @@
-[gd_scene load_steps=38 format=3 uid="uid://bqku84hu1c31k"]
+[gd_scene load_steps=42 format=3 uid="uid://bqku84hu1c31k"]
 
 [ext_resource type="Script" uid="uid://ig7ftnfrlt31" path="res://Scripts/RoomEvents/boss_room_event.gd" id="1_xy2q4"]
 [ext_resource type="Texture2D" uid="uid://dhfumqfd7ynm" path="res://Assets/Art/Backgrounds/Boss Room.png" id="2_rjw12"]
 [ext_resource type="Texture2D" uid="uid://cmyut8hv84qr0" path="res://Assets/UI/Border/panel-border-009.png" id="3_3raan"]
+[ext_resource type="Texture2D" uid="uid://dpsjf6us4cwp5" path="res://Assets/Art/FightFade.png" id="3_ymj7t"]
 [ext_resource type="Texture2D" uid="uid://ccbcslnsifj3o" path="res://Assets/UI/divider-fade-002.png" id="4_ksq53"]
 [ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="5_mbpft"]
 [ext_resource type="Theme" uid="uid://od14ccps1daj" path="res://Themes/descriptive_label.tres" id="6_ogh3p"]
@@ -421,6 +422,67 @@ _data = {
 &"show_popup": SubResource("Animation_q7p3b")
 }
 
+[sub_resource type="Animation" id="Animation_p3cmh"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("picShadow:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("picShadow:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_14qk7"]
+resource_name = "hide_shadow"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("picShadow:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("picShadow:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_f0uho"]
+_data = {
+&"RESET": SubResource("Animation_p3cmh"),
+&"hide_shadow": SubResource("Animation_14qk7")
+}
+
 [node name="BossRoom" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -439,6 +501,16 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_rjw12")
+expand_mode = 1
+
+[node name="picShadow" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_ymj7t")
 expand_mode = 1
 
 [node name="panelOnward" type="Panel" parent="."]
@@ -461,9 +533,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -495.0
-offset_top = -1232.0
+offset_top = -3260.0
 offset_right = 495.0
-offset_bottom = -680.0
+offset_bottom = 1348.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_nvbdl")
@@ -839,7 +911,7 @@ anchor_bottom = 0.5
 offset_left = -413.0
 offset_top = -1232.0
 offset_right = 413.0
-offset_bottom = -454.0
+offset_bottom = 6865.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_m2dri")
@@ -902,6 +974,11 @@ libraries = {
 [node name="animDone" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_31hdq")
+}
+
+[node name="animShadow" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_f0uho")
 }
 
 [connection signal="pressed" from="panelOnward/panelBox/VBoxContainer/twoChoices/panelEnd/btnEnd" to="." method="_on_btn_end_pressed"]

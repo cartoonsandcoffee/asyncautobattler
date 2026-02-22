@@ -1,0 +1,223 @@
+[gd_scene load_steps=16 format=3 uid="uid://mld7m0uborin"]
+
+[ext_resource type="Script" uid="uid://cfgt7nr41rtys" path="res://Scripts/Components/player_record.gd" id="1_mickx"]
+[ext_resource type="Texture2D" uid="uid://1p2fhdhgi3x4" path="res://Assets/UI/Select.png" id="2_jp2yu"]
+[ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="3_0xpiu"]
+[ext_resource type="FontFile" uid="uid://dbt53hulxegh2" path="res://Assets/UI/Fonts/Imperator.ttf" id="4_jp2yu"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xch3c"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_vpoee"]
+texture = ExtResource("2_jp2yu")
+texture_margin_left = 24.0
+texture_margin_top = 24.0
+texture_margin_right = 23.0
+texture_margin_bottom = 23.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vpoee"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.925353, 0.925353, 0.925353, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vpoee"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jkk1w"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_letk8"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f0cxr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3k31n"]
+
+[sub_resource type="Animation" id="Animation_letk8"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel/panelHover:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Panel/panelHover:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_jkk1w"]
+resource_name = "hover_start"
+loop_mode = 1
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel/panelHover:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Panel/panelHover:scale")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1.03, 1.1), Vector2(1.06, 1.7), Vector2(1.03, 1.1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_f0cxr"]
+_data = {
+&"RESET": SubResource("Animation_letk8"),
+&"hover_start": SubResource("Animation_jkk1w")
+}
+
+[node name="playerRecord" type="Control"]
+custom_minimum_size = Vector2(850, 60)
+layout_mode = 3
+anchors_preset = 0
+pivot_offset = Vector2(425, 30)
+script = ExtResource("1_mickx")
+
+[node name="Panel" type="Panel" parent="."]
+custom_minimum_size = Vector2(850, 60)
+layout_mode = 0
+offset_right = 850.0
+offset_bottom = 60.0
+pivot_offset = Vector2(425, 30)
+theme_override_styles/panel = SubResource("StyleBoxEmpty_xch3c")
+
+[node name="panelHover" type="PanelContainer" parent="Panel"]
+visible = false
+z_index = 100
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(425, 30)
+theme_override_styles/panel = SubResource("StyleBoxTexture_vpoee")
+
+[node name="PanelContainer" type="PanelContainer" parent="Panel"]
+custom_minimum_size = Vector2(850, 60)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(425, 30)
+theme_override_styles/panel = SubResource("StyleBoxFlat_vpoee")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme = ExtResource("3_0xpiu")
+
+[node name="lblRank" type="Label" parent="Panel/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "#1"
+
+[node name="MarginContainer3" type="MarginContainer" parent="Panel/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="lblName" type="Label" parent="Panel/PanelContainer/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 0.934, 0.34, 1)
+theme_override_colors/font_outline_color = Color(0.86, 0.200667, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 26
+text = "[Player Name]"
+vertical_alignment = 1
+
+[node name="MarginContainer4" type="MarginContainer" parent="Panel/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="lblChampions" type="Label" parent="Panel/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.64, 0.64, 0.64, 1)
+theme_override_fonts/font = ExtResource("4_jp2yu")
+theme_override_font_sizes/font_size = 16
+text = "Hall of Famers:   0"
+vertical_alignment = 1
+
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="lblActive" type="Label" parent="Panel/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("4_jp2yu")
+theme_override_font_sizes/font_size = 16
+text = "Active Champions: 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="lblKilled" type="Label" parent="Panel/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.86, 0, 0, 1)
+theme_override_font_sizes/font_size = 26
+text = "Champions Killed: 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="Panel/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_vpoee")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_jkk1w")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_letk8")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_f0cxr")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_3k31n")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_f0cxr")
+}
+
+[connection signal="mouse_entered" from="Panel/PanelContainer/MarginContainer/Button" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/PanelContainer/MarginContainer/Button" to="." method="_on_button_mouse_exited"]
+[connection signal="pressed" from="Panel/PanelContainer/MarginContainer/Button" to="." method="_on_button_pressed"]

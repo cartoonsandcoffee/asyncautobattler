@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c7016id4jo37y" path="res://Scripts/RoomEvents/basic_merchant_room.gd" id="1_mup82"]
 [ext_resource type="Resource" uid="uid://dg2wcy0kx620y" path="res://Resources/Enemies/Goblin.tres" id="2_ayb8c"]
-[ext_resource type="Texture2D" uid="uid://csprhhu3ka3ig" path="res://Assets/Art/Room_03_Background.png" id="3_y2i8h"]
+[ext_resource type="Texture2D" uid="uid://daeptxxk8jt0v" path="res://Assets/Art/Backgrounds/Background_05.png" id="3_mup82"]
 [ext_resource type="Texture2D" uid="uid://c87udhg7dvjp6" path="res://Assets/Art/Events/Merchant01.png" id="4_7t4nh"]
 [ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="5_qa2ds"]
 [ext_resource type="Texture2D" uid="uid://bknlvkqmfanuc" path="res://Assets/Art/Events/Merchant03_Shadow.png" id="6_4wj6g"]
@@ -667,7 +667,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("3_y2i8h")
+texture = ExtResource("3_mup82")
 expand_mode = 1
 
 [node name="Merchant" type="TextureRect" parent="."]

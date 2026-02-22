@@ -1,9 +1,10 @@
-[gd_scene load_steps=35 format=3 uid="uid://do4uu0o7e2sx"]
+[gd_scene load_steps=37 format=3 uid="uid://do4uu0o7e2sx"]
 
 [ext_resource type="Theme" uid="uid://p8sbf2usmdfn" path="res://Themes/invis_buttons.tres" id="1_aeddt"]
 [ext_resource type="Script" uid="uid://plx66byd2blm" path="res://Scripts/RoomEvents/town.gd" id="2_2q7b4"]
 [ext_resource type="Texture2D" uid="uid://cr6vcpo3v735f" path="res://Assets/Art/Events/Town/Town_Placeholder.png" id="3_k2qd8"]
 [ext_resource type="Texture2D" uid="uid://dxt3yb4gkjn6x" path="res://Assets/Art/Particles/smoke_07.png" id="9_2q7b4"]
+[ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="11_6uq0b"]
 [ext_resource type="Texture2D" uid="uid://e2piw1cieed4" path="res://Assets/Art/Events/Town/campfire_dim.png" id="11_aeddt"]
 [ext_resource type="Texture2D" uid="uid://crvkxi26rvrfk" path="res://Assets/Art/Events/Town/campfire_light.png" id="12_2q7b4"]
 [ext_resource type="Shader" uid="uid://c4e2x1kcm6urs" path="res://Shaders/fire_shader.tres" id="13_b2t16"]
@@ -51,6 +52,8 @@ shader_parameter/Texture_2 = SubResource("GradientTexture2D_bd1y7")
 shader_parameter/Texture_3 = ExtResource("15_k2qd8")
 shader_parameter/Texture_4 = SubResource("GradientTexture2D_55lkv")
 shader_parameter/Texture_Color_1D = SubResource("GradientTexture1D_rfd6m")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wqqg3"]
 
 [sub_resource type="Animation" id="Animation_2q7b4"]
 length = 0.001
@@ -149,6 +152,7 @@ stretch_mode = 3
 
 [node name="campSmoke" type="CPUParticles2D" parent="."]
 position = Vector2(816.5, 573.9)
+emitting = false
 amount = 10
 texture = ExtResource("9_2q7b4")
 lifetime = 2.0
@@ -168,6 +172,7 @@ color = Color(0.637843, 0.637843, 0.637843, 1)
 color_ramp = SubResource("Gradient_a8l27")
 
 [node name="campFire" type="TextureRect" parent="."]
+visible = false
 layout_mode = 0
 offset_left = 549.5
 offset_top = 385.9
@@ -207,6 +212,25 @@ offset_top = 48.0
 offset_bottom = -189.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 117.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_wqqg3")
+
+[node name="lblTip" type="Label" parent="PanelContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.92, 0.87768, 0.2852, 1)
+theme_override_colors/font_outline_color = Color(0.78, 0.338, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("11_6uq0b")
+theme_override_font_sizes/font_size = 46
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="btnStore" parent="." instance=ExtResource("24_3jgje")]
 layout_mode = 1
@@ -309,12 +333,22 @@ libraries = {
 
 [node name="animCamp" type="AnimationPlayer" parent="."]
 
-[connection signal="mouse_entered" from="campFire/btnCamp" to="." method="_on_btn_camp_mouse_entered"]
-[connection signal="mouse_exited" from="campFire/btnCamp" to="." method="_on_btn_camp_mouse_exited"]
 [connection signal="pressed" from="campFire/btnCamp" to="." method="_on_btn_camp_pressed"]
 [connection signal="button_clicked" from="btnStore" to="." method="_on_btn_store_button_clicked"]
+[connection signal="button_entered" from="btnStore" to="." method="_on_btn_store_button_entered"]
+[connection signal="button_exited" from="btnStore" to="." method="generic_unhover"]
 [connection signal="button_clicked" from="btnForge" to="." method="_on_btn_forge_button_clicked"]
+[connection signal="button_entered" from="btnForge" to="." method="_on_btn_forge_button_entered"]
+[connection signal="button_exited" from="btnForge" to="." method="generic_unhover"]
 [connection signal="button_clicked" from="btnShrine" to="." method="_on_btn_shrine_button_clicked"]
+[connection signal="button_entered" from="btnShrine" to="." method="_on_btn_shrine_button_entered"]
+[connection signal="button_exited" from="btnShrine" to="." method="generic_unhover"]
 [connection signal="button_clicked" from="btnChampion" to="." method="_on_btn_champion_button_clicked"]
+[connection signal="button_entered" from="btnChampion" to="." method="_on_btn_champion_button_entered"]
+[connection signal="button_exited" from="btnChampion" to="." method="generic_unhover"]
 [connection signal="button_clicked" from="btnBugs" to="." method="_on_btn_bugs_button_clicked"]
+[connection signal="button_entered" from="btnBugs" to="." method="_on_btn_bugs_button_entered"]
+[connection signal="button_exited" from="btnBugs" to="." method="generic_unhover"]
 [connection signal="button_clicked" from="btnVenture" to="." method="_on_btn_venture_button_clicked"]
+[connection signal="button_entered" from="btnVenture" to="." method="_on_btn_venture_button_entered"]
+[connection signal="button_exited" from="btnVenture" to="." method="generic_unhover"]

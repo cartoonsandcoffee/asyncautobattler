@@ -1,0 +1,123 @@
+[gd_scene load_steps=11 format=3 uid="uid://do70bpwejt4ha"]
+
+[ext_resource type="Script" uid="uid://dkwo6tlb8v6mj" path="res://Scripts/Components/skin_card.gd" id="1_6ykwo"]
+[ext_resource type="Texture2D" uid="uid://bhcovshrkxcxq" path="res://Assets/UI/Border/panel-border-008.png" id="1_wj0l4"]
+[ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="2_o73sq"]
+[ext_resource type="Texture2D" uid="uid://eb6npl80r4to" path="res://Assets/Art/Player/PVP/Player_Skin_0.png" id="3_6ykwo"]
+[ext_resource type="Theme" uid="uid://od14ccps1daj" path="res://Themes/descriptive_label.tres" id="4_cus7h"]
+[ext_resource type="Texture2D" uid="uid://lufpx811y86r" path="res://Assets/Items/ear.png" id="5_qwa6o"]
+[ext_resource type="Texture2D" uid="uid://ba3g0gmvuyxyw" path="res://Assets/UI/Cursors/mouse_left_outline.png" id="7_cus7h"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dstnb"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8s1mh"]
+texture = ExtResource("1_wj0l4")
+texture_margin_left = 20.0
+texture_margin_top = 20.0
+texture_margin_right = 20.0
+texture_margin_bottom = 20.0
+region_rect = Rect2(0, 0, 96, 96)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qwa6o"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 1, 1, 1)
+
+[node name="SkinCard" type="Control"]
+custom_minimum_size = Vector2(400, 500)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 400.0
+offset_bottom = 500.0
+script = ExtResource("1_6ykwo")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_dstnb")
+
+[node name="PanelContainer" type="PanelContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_8s1mh")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/PanelContainer"]
+layout_mode = 2
+
+[node name="lblSkinName" type="Label" parent="Panel/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_o73sq")
+text = "Skin Name"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="picSkin" type="TextureRect" parent="Panel/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(360, 0)
+layout_mode = 2
+texture = ExtResource("3_6ykwo")
+expand_mode = 5
+
+[node name="costBox" type="HBoxContainer" parent="Panel/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_cus7h")
+theme_override_constants/separation = 10
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/PanelContainer/VBoxContainer/costBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="lblLabel" type="Label" parent="Panel/PanelContainer/VBoxContainer/costBox"]
+layout_mode = 2
+theme = ExtResource("2_o73sq")
+text = "Pay"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="picEar" type="TextureRect" parent="Panel/PanelContainer/VBoxContainer/costBox"]
+modulate = Color(1, 0.626, 0.34, 1)
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture = ExtResource("5_qwa6o")
+expand_mode = 3
+
+[node name="lblPrice" type="Label" parent="Panel/PanelContainer/VBoxContainer/costBox"]
+modulate = Color(1, 0.627451, 0.341176, 1)
+layout_mode = 2
+theme = ExtResource("2_o73sq")
+text = "10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/PanelContainer/VBoxContainer/costBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="panelMouse" type="Panel" parent="."]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 0
+offset_left = 179.0
+offset_top = 462.0
+offset_right = 243.0
+offset_bottom = 526.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qwa6o")
+
+[node name="TextureRect" type="TextureRect" parent="panelMouse"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_cus7h")
