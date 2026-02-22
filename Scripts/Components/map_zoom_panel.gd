@@ -138,12 +138,16 @@ func _update_boss_sprite(boss: Enemy):
 	"""Load and display boss sprite based on skin_id from Supabase."""
 	# Get skin_id from boss data (stored in DungeonManager.current_boss_data)
 	var skin_id: int = 0
+	var color_hex:String = "#FFFFFF"
+	
 	if not DungeonManager.current_boss_data.is_empty():
 		skin_id = DungeonManager.current_boss_data.get("skin_id", 0)
+		color_hex = DungeonManager.current_boss_data.get("skin_color", "#FFFFFF")
 	
 	# Load sprite
 	var sprite_path = "res://Assets/Art/Player/PVP/Player_Skin_%d.png" % skin_id
 	if ResourceLoader.exists(sprite_path):
+		boss_pic.modulate = Color(color_hex)
 		boss_pic.texture = load(sprite_path)
 		player_2.texture = load(sprite_path)
 	else:

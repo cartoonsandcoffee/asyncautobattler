@@ -40,6 +40,11 @@ func reset_to_base_values():
 	strikes_current = strikes
 	burn_damage_current = burn_damage
 
+	if hit_points_current > hit_points:
+		hit_points_current = hit_points
+
+	stats_updated.emit()
+
 func reset_base_stats():
 	damage = 0
 	shield = 0
