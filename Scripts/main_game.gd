@@ -41,6 +41,14 @@ extends Control
 @onready var anim_fade: AnimationPlayer = $animFade
 @onready var fade_overlay: ColorRect = $FadeOverlay
 
+## -- Combat Controls
+@onready var box_combatcontrols: PanelContainer = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls
+@onready var box_fighrun: VBoxContainer = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/boxFightRun
+@onready var box_comatspeed: VBoxContainer = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/CombatLogBox
+@onready var lbl_turn: Label = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/CombatLogBox/lblTurn
+@onready var lbl_speed: Label = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/CombatLogBox/speedControls/lblSpeed
+@onready var btn_run: Button = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/boxFightRun/HBoxContainer/btnRun
+
 @onready var crt_shader: CanvasLayer = $CRT_Shader
 
 # Mini-map stuff
@@ -557,6 +565,12 @@ func _strike_ui_update(entity, strikes_remaining: int, strikes_next_turn: int):
 	# If countdown finished, resume normal updates
 	if strikes_remaining == 0:
 		is_attack_sequence_active = false
+
+func play_combat_alert_arrow():
+	anim_tools.play("combat_arrow")
+
+func arrow_sfx():
+	AudioManager.play_ui_sound("combat_player_hit_heavy")
 
 func set_player_stats():
 	if CombatManager.combat_active:

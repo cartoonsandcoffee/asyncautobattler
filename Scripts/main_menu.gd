@@ -14,6 +14,13 @@ extends Control
 
 @onready var pic_skin: TextureRect = $Panel/CharacterSelectMenu/backPanel/picChar
 
+@onready var btn_new_run: Button = $Panel/panelBottom/HBoxContainer/panMid/MarginContainer/btnNewGame
+@onready var btn_compendium: Button = $Panel/CharacterSelectMenu/backPanel/VBoxContainer/loadoutBox/HBoxContainer/btnCompendium
+@onready var btn_hall: Button = $Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel/btnHeroes
+@onready var btn_info: Button = $Panel/panelBottom/HBoxContainer/panLeft/VBoxContainer/iconButtons/btnInfo
+@onready var btn_settings: Button = $Panel/panelBottom/HBoxContainer/panLeft/VBoxContainer/iconButtons/btnSettings
+@onready var btn_quit: Button = $Panel/panelBottom/HBoxContainer/panLeft/VBoxContainer/iconButtons/btnQuit
+
 const GAME_SCENE = preload("res://Scenes/main_game.tscn")
 var good_name: bool = false
 
@@ -31,6 +38,28 @@ func _ready() -> void:
 
 	player_loaded()
 	_refresh_skin()
+	bind_button_hovers()
+
+func bind_button_hovers():
+	btn_new_run.mouse_entered.connect(mouse_entered_info.bind("New Game"))
+	btn_compendium.mouse_entered.connect(mouse_entered_info.bind("Compendium"))
+	btn_hall.mouse_entered.connect(mouse_entered_info.bind("Hall of Champions"))
+	btn_info.mouse_entered.connect(mouse_entered_info.bind("Game Information"))
+	btn_settings.mouse_entered.connect(mouse_entered_info.bind("Settings"))
+	btn_quit.mouse_entered.connect(mouse_entered_info.bind("Quit"))
+
+	btn_new_run.mouse_exited.connect(mouse_exited_info)
+	btn_compendium.mouse_exited.connect(mouse_exited_info)
+	btn_hall.mouse_exited.connect(mouse_exited_info)
+	btn_info.mouse_exited.connect(mouse_exited_info)
+	btn_settings.mouse_exited.connect(mouse_exited_info)
+	btn_quit.mouse_exited.connect(mouse_exited_info)
+
+func mouse_entered_info(_lbl: String):
+	lbl_name.text = _lbl
+
+func mouse_exited_info():
+	lbl_name.text = Player.player_name 
 
 func confirm_systems_initialized():
 	if not SupabaseManager._initialized:
@@ -115,3 +144,16 @@ func _on_btn_info_pressed() -> void:
 
 func _on_btn_heroes_pressed() -> void:
 	hall_of_fame.visible = true
+
+func handle_bundle_selection(_bundle: Enums.ItemBundles):
+	Player.item_bundle = _bundle
+
+
+func _on_bun_greed_pressed() -> void:
+	handle_bundle_selection(Enums.ItemBundles.GREED)
+
+func _on_bun_honor_pressed() -> void:
+	handle_bundle_selection(Enums.ItemBundles.HONOR)
+
+func _on_bun_revenge_pressed() -> void:
+	handle_bundle_selection(Enums.ItemBundles.REVENGE)

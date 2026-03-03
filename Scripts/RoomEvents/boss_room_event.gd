@@ -10,6 +10,10 @@ extends RoomEvent
 
 @onready var lbl_promo: Label  = $panelFinished/panelBlack/MarginContainer/panelBorder/VBoxContainer/lblPromo
 
+@onready var btn_end :Button = $panelOnward/panelBox/VBoxContainer/twoChoices/panelEnd/btnEnd
+@onready var btn_champ :Button = $panelOnward/panelBox/VBoxContainer/twoChoices/panelContinue/btnChampion
+@onready var btn_continue: Button = $panelFinished/panelBlack/MarginContainer/panelBorder/VBoxContainer/btnContinue
+@onready var btn_final:Button = $panelFinalVictory/panelBlack/VBoxContainer/panelBody/VBoxContainer/btnFinalVictory
 
 # Note: Continue button and staircase animation are in main_game, not here
 
@@ -24,7 +28,8 @@ func _ready():
 		return
 	
 	reset_all_animations()
-	
+	_enable_all_buttons()
+
 	# manually increment player room count so battles don't cost room points
 	Player.add_rooms(2)
 
@@ -38,6 +43,18 @@ func _ready():
 func _begin_event_sequence():
 	# Do nothing - we handle our own sequence in _ready()
 	pass
+
+func _disable_all_buttons():
+	btn_end.disabled = true
+	btn_final.disabled = true
+	btn_champ.disabled = true
+	btn_continue.disabled = true
+
+func _enable_all_buttons():
+	btn_end.disabled = false
+	btn_final.disabled = false
+	btn_champ.disabled = false
+	btn_continue.disabled = false
 
 func _boss_battle_sequence():
 	"""Main boss battle flow: flavor -> combat -> victory."""
@@ -182,6 +199,7 @@ func play_popup_close_sfx():
 	AudioManager.play_synced_sound("popup_close")
 
 func _on_btn_champion_pressed() -> void:
+	_disable_all_buttons()
 	var player_id = Player.load_or_generate_uuid()
 	await _save_player_build()
 
@@ -202,6 +220,7 @@ func _on_btn_champion_pressed() -> void:
 
 
 func _on_btn_end_pressed() -> void:
+	_disable_all_buttons()
 	var player_id = Player.load_or_generate_uuid()
 	await _save_player_build()
 	await SupabaseManager.award_ears_simple(player_id, 2, "Rank 5 Victory")
@@ -220,6 +239,7 @@ func _on_btn_end_pressed() -> void:
 
 
 func _on_btn_continue_pressed() -> void:
+	_disable_all_buttons()
 	await _save_player_build()
 	main_game_ref.boss_room_completed("continue")
 	
@@ -227,7 +247,8 @@ func _on_btn_continue_pressed() -> void:
 func _on_btn_final_victory_pressed() -> void:
 	"""Handle victory against a champion (rank 6)."""
 	print("[BossRoom] Champion defeated!")
-	
+	_disable_all_buttons()
+
 	# 1. Record the champion's defeat
 	var defeated_champion_id = DungeonManager.current_boss_data.get("id", "")
 	if not defeated_champion_id.is_empty():

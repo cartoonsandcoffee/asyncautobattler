@@ -47,7 +47,8 @@ enum PanelState {
 
 # Status Effect Boxes
 @onready var player_status_container: HBoxContainer = $CombatPanelTop/panelStatusPlayer/HBoxContainer/statusBox
-@onready var enemy_status_container: HBoxContainer = $CombatPanelTop/panelStatusEnemy/statusBox
+@onready var enemy_status_container: HBoxContainer = $CombatPanelTop/panelStatusEnemy/HBoxContainer/statusBox
+@onready var enemy_set_container: HBoxContainer = $CombatPanelTop/panelStatusEnemy/HBoxContainer/setBox
 @onready var enemy_status_holder: PanelContainer = $CombatPanelTop/panelStatusEnemy
 
 # Victory Panel
@@ -127,7 +128,7 @@ func setup_for_combat(enemy_entity, inventory_slots: Array[ItemSlot], weapon_slo
 	inventory_item_slots = inventory_slots
 	weapon_slot_ref = weapon_slot
 
-	current_enemy_entity = enemy_entity.duplicate()  # Work with a copy
+	current_enemy_entity = enemy_entity #.duplicate()  # Work with a copy  #: JDM: removed the ".duplicate()" since it was causing the upgrades to not load, and no need to worry about persistent changes for boss battles
 	current_enemy_entity.reset_to_base_values()
 
 	# Setup enemy display
@@ -144,6 +145,10 @@ func setup_for_combat(enemy_entity, inventory_slots: Array[ItemSlot], weapon_slo
 	
 	_populate_enemy_inventory(current_enemy_entity)
 
+	# Check and display set bonuses for enemy
+	SetBonusManager.check_set_bonuses(current_enemy_entity)  # Calculate bonuses
+	_populate_enemy_set_bonuses(current_enemy_entity)        # Display them
+
 	_set_state(PanelState.PRE_COMBAT)
 
 	# Reset turn counter
@@ -155,23 +160,51 @@ func setup_for_combat(enemy_entity, inventory_slots: Array[ItemSlot], weapon_slo
 	# Update the RUN button stuff
 	if is_boss_fight:
 		# Boss fight - cannot run
-		btn_run.disabled = true
+		main_game.btn_run.disabled = true
 		enemy_status_holder.position.y = 245
-		btn_run.tooltip_text = "You cannot flee, this is inevitable!"
+		main_game.btn_run.tooltip_text = "You cannot flee, this is inevitable!"
 		enemy_inventory.visible = true
 	else:
 		# Normal fight - can run if fast enough
 		enemy_inventory.visible = false
 		enemy_status_holder.position.y = 135
 		var can_run = current_player_entity.stats.agility > current_enemy_entity.stats.agility
-		btn_run.disabled = !can_run
+		main_game.btn_run.disabled = !can_run
 		if not can_run:
-			btn_run.tooltip_text = "Enemy is too fast to escape!"
+			main_game.btn_run.tooltip_text = "Enemy is too fast to escape!"
 		else:
-			btn_run.tooltip_text = "Flee from combat"
+			main_game.btn_run.tooltip_text = "Flee from combat"
 	
 	# lets see.. i don't know
 	show_panel()
+
+func _populate_enemy_set_bonuses(enemy: Enemy):
+	"""Display active set bonuses for the enemy."""
+	# Clear existing
+	for child in enemy_set_container.get_children():
+		child.queue_free()
+	
+	# Get active set bonuses for this enemy
+	var bonus_items = SetBonusManager.get_active_set_bonuses(enemy)
+	
+	if bonus_items.is_empty():
+		enemy_set_container.visible = false
+		return
+	
+	enemy_set_container.visible = true
+	
+	var item_slot_scene = preload("res://Scenes/item.tscn")
+	
+	for bonus_item in bonus_items:
+		var item_container = item_slot_scene.instantiate()
+		item_container.owner_entity = enemy  # Set entity reference for tooltips
+		item_container.set_item(bonus_item)
+		item_container.slot_index = -3  # Special index for set bonuses
+		item_container.custom_minimum_size = Vector2(50, 50)
+		item_container.set_bonus()  # Apply set bonus styling
+		enemy_set_container.add_child(item_container)
+	
+	print("[CombatPanel] Enemy has %d active set bonuses" % bonus_items.size())
 
 func clear_statuses():
 	# Clear status boxes at combat start
@@ -191,6 +224,12 @@ func show_panel():
 	slide_animation.play("open_Combat")
 	#await slide_animation.animation_finished
 
+	## -- Buttons on the main game
+	main_game.box_combatcontrols.visible = true
+	main_game.minimap.visible = false
+	main_game.box_fighrun.visible = true
+	main_game.box_comatspeed.visible = false
+	main_game.play_combat_alert_arrow()
 
 	combat_ui_ready.emit()
 
@@ -204,6 +243,12 @@ func hide_panel():
 	
 	box_fight_run.visible = true
 	box_combat_log.visible = false
+
+	## -- Buttons on the main game
+	main_game.box_combatcontrols.visible = false
+	main_game.minimap.visible = true
+	main_game.box_fighrun.visible = true
+	main_game.box_comatspeed.visible = false
 
 	# Clear highlighted items
 	_clear_all_highlights()
@@ -284,6 +329,10 @@ func _on_combat_started(player_entity, enemy_entity):
 	box_fight_run.visible = false 
 	box_combat_log.visible = true
 
+	## -- Buttons on the main game
+	main_game.box_fighrun.visible = false
+	main_game.box_comatspeed.visible = true
+
 func _on_combat_ended(winner, loser):
 	var winner_name = CombatManager.get_entity_name(winner)
 	var loser_name = CombatManager.get_entity_name(loser)
@@ -307,6 +356,12 @@ func _on_combat_ended(winner, loser):
 	_clear_all_highlights()
 	clear_all_proc_indicators()
 	clear_indicator_queue()  # Clear any pending indicators when combat ends
+
+	## -- Buttons on the main game
+	main_game.box_combatcontrols.visible = false
+	main_game.minimap.visible = true
+	main_game.box_fighrun.visible = false
+	main_game.box_comatspeed.visible = false
 
 	if winner == current_player_entity:
 		slide_animation.play("show_victory")
@@ -641,6 +696,10 @@ func _on_btn_fight_pressed() -> void:
 	box_fight_run.visible = false
 	box_combat_log.visible = true
 
+	## -- Buttons on the main game
+	main_game.box_fighrun.visible = false
+	main_game.box_comatspeed.visible = true
+
 	# Transition to combat state
 	_set_state(PanelState.IN_COMBAT)
 	
@@ -676,9 +735,11 @@ func _on_btn_very_fast_pressed() -> void:
 
 func set_turn_label(_string: String):
 	lbl_turn.text = _string
+	main_game.lbl_turn.text = _string
 
 func set_speed_label(_string: String):
 	lbl_speed.text = _string
+	main_game.lbl_speed.text = _string
 
 func _on_btn_continue_pressed() -> void:
 	slide_animation.play("hide_victory")
@@ -691,6 +752,10 @@ func _on_btn_continue_pressed() -> void:
 func _on_btn_history_pressed() -> void:
 	txt_history.visible = !txt_history.visible
 	txt_history.text = CombatManager.combat_log
+
+	if death_panel.visible:
+		txt_history_dead.visible = !txt_history_dead.visible
+		txt_history_dead.text = CombatManager.combat_log
 
 func _print_node_tree(node: Node, depth: int):
 	var indent = "  ".repeat(depth)
@@ -806,6 +871,7 @@ func _populate_enemy_inventory(enemy: Enemy):
 	
 	# Add weapon first
 	if enemy.inventory.weapon_slot:
+		enemy_weapon_slot.owner_entity = enemy
 		enemy_weapon_slot.set_item(enemy.inventory.weapon_slot)
 		print("[CombatPanel] Added enemy weapon: %s" % enemy.inventory.weapon_slot.item_name)
 	
@@ -814,6 +880,7 @@ func _populate_enemy_inventory(enemy: Enemy):
 		var item = enemy.inventory.item_slots[i]
 		if item:
 			var item_slot = item_slot_scene.instantiate()
+			item_slot.owner_entity = enemy
 			item_slot.set_item(item)
 			item_slot.custom_minimum_size = Vector2(100, 100)
 			item_slot.slot_index = i + 1

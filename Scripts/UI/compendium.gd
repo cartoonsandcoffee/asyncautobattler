@@ -8,11 +8,20 @@ extends Control
 @onready var category_chips_container: HFlowContainer = $Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer/boxCategories
 @onready var keyword_chips_container: HFlowContainer = $Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer/boxKeywords
 
+@onready var bundle_general: Button = $Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer/boxBundles/bunGeneral
+@onready var bundle_revenge: Button = $Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer/boxBundles/bunRevenge
+@onready var bundle_honor: Button = $Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer/boxBundles/bunHonor
+@onready var bundle_greed: Button = $Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer/boxBundles/bunGreed
+
+@onready var box_bundles: VBoxContainer = $Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer/boxBundles
+
 var selected_keywords: Array[String] = []
 var keyword_buttons: Dictionary = {}
 
 var selected_categories: Array[String] = []
 var category_buttons: Dictionary = {}
+
+var selected_bundles: Array[Enums.ItemBundles] = [Enums.ItemBundles.GENERAL, Enums.ItemBundles.REVENGE, Enums.ItemBundles.HONOR, Enums.ItemBundles.GREED]
 
 var item_scene = preload("res://Scenes/item.tscn")
 var all_item_nodes: Array = []  # Store references to instantiated item nodes
@@ -40,7 +49,22 @@ func populate_all_items():
 	
 	await get_tree().process_frame
 	
-	var all_items = ItemsManager.get_all_items()
+	var all_items = ItemsManager.get_all_items(false)
+
+	# Sort by Rarity, then Type, then Name
+	all_items.sort_custom(func(a: Item, b: Item) -> bool:
+		# First compare rarity
+		if a.rarity != b.rarity:
+			return a.rarity < b.rarity
+		
+		# If rarity is same, compare type
+		if a.item_type != b.item_type:
+			return a.item_type < b.item_type
+		
+		# If both are same, compare name
+		return a.item_name < b.item_name
+	)
+		
 	var batch_size = 15
 	
 	for i in range(0, all_items.size(), batch_size):
@@ -85,6 +109,8 @@ func apply_filters() -> void:
 		check_types = bug_types
 	elif current_type_filter == 5:
 		check_types = potion_types
+	elif current_type_filter == 6:
+		check_types = [Item.ItemType.WEAPON]
 	
 	for item_data in all_item_nodes:
 		var item: Item = item_data.item
@@ -92,7 +118,10 @@ func apply_filters() -> void:
 		var is_visible = true
 		
 		# Type filter
-		if current_type_filter != 0:
+		if current_type_filter == 6:
+			if item.item_type in check_types:
+				is_visible = false			
+		elif current_type_filter != 0:
 			if item.item_type not in check_types:
 				is_visible = false
 		
@@ -109,6 +138,11 @@ func apply_filters() -> void:
 			elif current_rarity_filter == 5 and item.rarity not in [Enums.Rarity.CRAFTED, Enums.Rarity.DIAMOND, Enums.Rarity.GOLDEN]:
 				is_visible = false
 		
+		# Bundle filter (must have ALL selected bundles)
+		if is_visible and selected_bundles.size() > 0:
+			if item.item_bundle not in selected_bundles:
+				is_visible = false
+
 		# Category filter (must have ALL selected categories)
 		if is_visible and selected_categories.size() > 0:
 			for category in selected_categories:
@@ -149,7 +183,15 @@ func show_panel():
 		_setup_category_chips()
 		_setup_keyword_chips()
 		apply_filters()
+		connect_bundle_buttons()
+		box_bundles.visible = true
 		has_loaded = true
+
+func connect_bundle_buttons():
+	bundle_general.pressed.connect(_on_bundle_toggle.bind(Enums.ItemBundles.GENERAL))
+	bundle_revenge.pressed.connect(_on_bundle_toggle.bind(Enums.ItemBundles.REVENGE))
+	bundle_honor.pressed.connect(_on_bundle_toggle.bind(Enums.ItemBundles.HONOR))
+	bundle_greed.pressed.connect(_on_bundle_toggle.bind(Enums.ItemBundles.GREED))
 
 func _on_opt_rarity_item_selected(index: int) -> void:
 	current_rarity_filter = index
@@ -223,6 +265,14 @@ func _on_category_chip_toggled(category: String) -> void:
 		selected_categories.erase(category)
 	else:
 		selected_categories.append(category)
+	
+	apply_filters()
+
+func _on_bundle_toggle(_bundle: Enums.ItemBundles) -> void:
+	if _bundle in selected_bundles:
+		selected_bundles.erase(_bundle)
+	else:
+		selected_bundles.append(_bundle)
 	
 	apply_filters()
 

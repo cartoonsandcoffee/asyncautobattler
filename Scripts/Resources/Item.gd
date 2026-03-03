@@ -23,7 +23,8 @@ enum ItemType {
 	BUG,
 	CRYSTAL,
 	JEWELRY,
-	SET_BONUS
+	SET_BONUS,
+	UPGRADE
 }
 
 @export var item_id: String = ""
@@ -36,7 +37,7 @@ enum ItemType {
 @export_multiline var item_desc: String = ""
 @export var item_icon: Texture2D
 @export var item_color: Color
-@export var item_bundle: Enums.ItemBundles = Enums.ItemBundles.ALL
+@export var item_bundle: Enums.ItemBundles = Enums.ItemBundles.GENERAL
 
 @export var rules: Array[ItemRule]:
 	get:

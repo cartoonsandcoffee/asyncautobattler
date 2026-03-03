@@ -50,6 +50,9 @@ func _on_btn_camp_pressed() -> void:
 			main_game_ref.set_player_stats()
 
 func _on_btn_shrine_button_clicked() -> void:
+	if Player.shrine_uses_left_this_rank <= 0:
+		return 
+	
 	if Player.popup_open == false:
 		CursorManager.reset_cursor()
 		AudioManager.play_ui_sound("popup_open")
@@ -96,7 +99,10 @@ func _on_btn_bugs_button_clicked() -> void:
 
 
 func _on_btn_venture_button_entered() -> void:
-	lbl_tip.text = "Delve the deeps for items and loot."
+	if Player.rooms_left_this_rank <= 0:
+		lbl_tip.text = "Not enough time! You must challenge the Champion."
+	else:
+		lbl_tip.text = "Delve the deeps for items and loot."
 
 func _on_btn_champion_button_entered() -> void:
 	lbl_tip.text = "Challenge the next Champion to advance your Rank."
@@ -107,7 +113,10 @@ func _on_btn_bugs_button_entered() -> void:
 
 func _on_btn_shrine_button_entered() -> void:
 	generic_hover()
-	lbl_tip.text = "Make an offering of an item."
+	if Player.shrine_uses_left_this_rank <= 0:
+		lbl_tip.text = "You can only visit the shrine once per rank."
+	else:
+		lbl_tip.text = "Make an offering at the Shrine."
 
 func _on_btn_forge_button_entered() -> void:
 	generic_hover()

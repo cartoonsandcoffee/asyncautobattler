@@ -184,7 +184,9 @@ func _build_my_champions_rows(data: Array) -> void:
 		var is_active: bool = true if status == "active" else false
 		var strdate = _format_date(build.get("created_at", ""))
 		var strwins = str(build.get("champion_victories", 0))
+		var bundle = int(build.get("item_bundle", 0))
 
+		record.set_bundle(bundle)
 		record.set_active(is_active)
 		record.set_fields_my_champions(strdate,strwins)
 
@@ -203,7 +205,10 @@ func _build_hall_rows(data: Array, show_player: bool) -> void:
 		var date1:String = _format_date(build.get("created_at", ""))
 		var date2:String = _format_date(build.get("hall_of_fame_date", ""))
 		var username:String = build.get("username", "Unknown")
+		var bundle = int(build.get("item_bundle", 0))
 
+		record.set_bundle(bundle)
+		
 		if show_player:
 			record.set_fields_global_hall(date1,date2,username)
 		else:

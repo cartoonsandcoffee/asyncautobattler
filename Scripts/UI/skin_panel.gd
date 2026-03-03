@@ -9,6 +9,7 @@ signal refresh_skin()
 const SKIN_BUTTON = preload("res://Scenes/Elements/skin_button.tscn")
 
 func _ready() -> void:
+	print("[SkinPanel] Loading skin panel.")
 	_refresh()
 	SkinManager.skin_selected.connect(_on_skin_selected)
 	SkinManager.skin_unlocked.connect(_on_skin_unlocked)
