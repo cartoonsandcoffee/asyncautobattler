@@ -20,6 +20,7 @@ var rooms_visited_this_rank: int = 0  # For stats/tracking
 
 # Room history (optional - for achievements/stats)
 var all_visited_rooms: Array[RoomData] = []
+var _last_random_room: RoomData = null
 
 # Boss data (fetched from Supabase via existing BossHandler)
 var current_boss_data: Dictionary = {}
@@ -108,14 +109,24 @@ func get_random_dungeon_room() -> RoomData:
 	# Get rarity weights for this rank
 	var rarity_weights = room_generator._get_rarity_weights_for_rank(current_rank)
 	
-	# Pick weighted random room
-	var room_def = room_generator._pick_weighted_room_with_rarity(available_rooms, rarity_weights)
+	# Filter out same-type/same-rarity repeats for UTILITY and MERCHANT
+	var filtered_rooms = available_rooms
+	if _last_random_room != null:
+		var last_def = _last_random_room.room_definition
+		var restricted_types = [Enums.RoomType.UTILITY, Enums.RoomType.MERCHANT]
+		if last_def.room_type in restricted_types:
+			filtered_rooms = available_rooms.filter(func(rd):
+				return not (rd.room_type == last_def.room_type and rd.rarity == last_def.rarity)
+			)
+			# Only use filter if it leaves valid options
+			if filtered_rooms.is_empty():
+				filtered_rooms = available_rooms
 	
-	# Create room data
+	var room_def = room_generator._pick_weighted_room_with_rarity(filtered_rooms, rarity_weights)
 	var room_data = room_generator._create_room_data(room_def)
-	
-	# Assign combat
 	room_generator._assign_combat_to_room(room_data)
+	
+	_last_random_room = room_data
 	
 	print("[DungeonManager] Generated random room: %s (Rank %d)" % [room_def.room_name, current_rank])
 	return room_data

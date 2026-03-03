@@ -26,10 +26,15 @@ enum Stats {
 }
 
 enum ItemBundles {
-	ALL,
-	REGENGE,
+	GENERAL,
+	REVENGE,
 	HONOR,
-	GREED
+	GREED,
+	CHAOS,
+	DUTY,
+	SHAME,
+	ALL,
+	NONE
 }
 
 enum StatType {		# Used for item conditions and rules
@@ -303,13 +308,23 @@ func get_stat_string(_stat: Enums.Stats) -> String:
 
 func get_bundle_string(_bundle: Enums.ItemBundles) -> String:
 	match _bundle:
-		Enums.ItemBundles.ALL:
-			return "All Item Bundles"
-		Enums.ItemBundles.REGENGE:
+		Enums.ItemBundles.GENERAL:
+			return "General"
+		Enums.ItemBundles.REVENGE:
 			return "Revenge"
 		Enums.ItemBundles.GREED:
 			return "Greed"
 		Enums.ItemBundles.HONOR:
 			return "Honor"
+		Enums.ItemBundles.DUTY:
+			return "Duty"
+		Enums.ItemBundles.SHAME:
+			return "Shame"
+		Enums.ItemBundles.CHAOS:
+			return "Chaos"
+		Enums.ItemBundles.ALL:
+			return "All Bundles"
+		Enums.ItemBundles.NONE:
+			return "No Bundles"
 		_:
 			return "<Unknown Item Bundle>"

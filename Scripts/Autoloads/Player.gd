@@ -44,7 +44,7 @@ var inventory: Inventory:
 
 var skin_id: int = 0
 var skin_color: Color = Color.WHITE
-var item_bundle: int = 0
+var item_bundle: Enums.ItemBundles = Enums.ItemBundles.REVENGE
 
 # Applied to current weapon (resets on weapon swap)
 var current_weapon_stat_upgrades: Dictionary = {
@@ -74,7 +74,7 @@ var items_found_this_run: int = 0
 
 # town usage variables
 var rooms_left_this_rank: int = 0
-var total_rooms_per_rank: int = 10
+var total_rooms_per_rank: int = 15
 var town_visits_left_this_rank: int = 0
 var total_town_visits_per_rank: int = 2
 var shrine_uses_left_this_rank: int = 0
@@ -90,11 +90,13 @@ func new_run(nm: String):
 	inventory = Inventory.new()
 	status_effects = StatusEffects.new()
 	
+	inventory.owner_entity = self
+
 	inventory.item_added.connect(_on_inventory_item_added)
 
 	if stats:
 		stats.reset_base_stats()
-		stats.gold = 50
+		stats.gold = 0
 		stats.reset_to_base_values()
 	
 	if inventory:
@@ -133,12 +135,19 @@ func set_test_inventory():
 	# -- for testing basic rules
 
 	inventory.add_item(ItemsManager.available_items["weapon_fists"])
-	#inventory.add_item(ItemsManager.available_items["test_relic"])
+
+	#inventory.add_item(ItemsManager.available_items["burning_dagger"])
+	#inventory.add_item(ItemsManager.available_items["golden_essence_of_charcoal"])
+
+	#inventory.add_item(ItemsManager.available_items["scabby_ring"])
+	#inventory.add_item(ItemsManager.available_items["Clearmetal_Crown"])	
+	#inventory.add_item(ItemsManager.available_items["diamond_corroded_armor"])
+	
 	#inventory.add_item(ItemsManager.available_items["testing_boots"])
-	inventory.add_item(ItemsManager.available_items["scuttlemite"])
-	inventory.add_item(ItemsManager.available_items["corpsehopper"])
-	inventory.add_item(ItemsManager.available_items["corpsehopper"])
-	inventory.add_item(ItemsManager.available_items["scuttlemite"])
+	#inventory.add_item(ItemsManager.available_items["scuttlemite"])
+	#inventory.add_item(ItemsManager.available_items["corpsehopper"])
+	#inventory.add_item(ItemsManager.available_items["corpsehopper"])
+	#inventory.add_item(ItemsManager.available_items["scuttlemite"])
 	#inventory.add_item(ItemsManager.available_items["testing_robes"])
 	#inventory.add_item(ItemsManager.available_items["testing_shield"])
 	#inventory.add_item(ItemsManager.available_items["bramble_belt"])
@@ -617,10 +626,12 @@ func complete_rank_boss():
 	"""Called after boss victory - advance rank and refill rooms"""
 	current_rank += 1
 
+	shrine_uses_left_this_rank = total_shrine_uses_per_rank
+
 	# Refill rooms for new rank
 	refill_rooms_for_new_rank()
 	stats.stats_updated.emit()
-	
+
 	print("[Player] Rank advanced to %d! Rooms reset to 10" % current_rank)
 
 # ============================================
@@ -695,7 +706,7 @@ func from_dict(data: Dictionary):
 		stats.agility = stats_data.get("agility", 0)
 		stats.strikes = stats_data.get("strikes", 1)
 		stats.burn_damage = stats_data.get("burn_damage", 0)
-		stats.gold = stats_data.get("gold", 50)
+		stats.gold = stats_data.get("gold", 0)
 	
 	# Inventory
 	var inv_data = data.get("inventory", {})

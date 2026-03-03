@@ -49,6 +49,8 @@ var current_stat_trigger_depth = 0
 const MAX_STATUS_TRIGGER_DEPTH = 3
 var current_status_trigger_depth = 0
 
+const MAX_COMBAT_TURNS: int = 30  # Failsafe to prevent infinite combat
+
 # === SUB-SYSTEMS ===
 var animation_manager: AnimationManager
 var stat_handler: CombatStatHandler
@@ -211,6 +213,16 @@ func combat_loop(first_entity, second_entity):
 	# --- Main combat loop - alternates turns until combat ends.
 	while combat_active:
 		turn_number += 1
+
+		# NEW: Check turn limit failsafe
+		if turn_number > MAX_COMBAT_TURNS:
+			add_to_combat_log_string("\n[center][b]--- TURN LIMIT REACHED ---[/b][/center]", Color.YELLOW)
+			add_to_combat_log_string("[center]Combat has gone on too long![/center]", Color.ORANGE)
+			add_to_combat_log_string("[center]%s wins by default![/center]" % color_entity("Player"), Color.GOLD)
+			
+			# Player wins by default
+			combat_active = false 
+			break
 
 		# Recalculate damage with fresh turn-temp values
 		stat_handler.recalculate_damage(player_entity)
@@ -492,11 +504,11 @@ func end_combat_gracefully():
 	add_to_combat_log_string("[center]%s WINS![/center]" % color_entity(get_entity_name(winner).to_upper()))
 	add_to_combat_log_string("[center]%s has been defeated.[/center]" % color_entity(get_entity_name(loser)))
 
-	# Award gold if player won
-	if winner == player_entity:
-		var gold_reward = calculate_gold_reward(loser)
-		player_entity.stats.gold += gold_reward
-		add_to_combat_log_string("\nYou earned %s gold!" % color_text(str(gold_reward), Color.GOLD))
+	# Award gold if player won (JDM: I think this is diplicate code from combat_panel causing double gold earning)
+	#if winner == player_entity:
+	#	var gold_reward = calculate_gold_reward(loser)
+	#	player_entity.add_gold(gold_reward)
+	#	add_to_combat_log_string("\nYou earned %s gold!" % color_text(str(gold_reward), Color.GOLD))
 	
 	# Reset entities
 	player_entity.stats.reset_stats_after_combat()
@@ -504,15 +516,25 @@ func end_combat_gracefully():
 	status_handler.reset_all_statuses(player_entity)
 	status_handler.reset_all_statuses(enemy_entity)
 	
+	# Recalculate their max HP from items
+	Player.update_stats_from_items()
+
 	# Emit combat ended
 	combat_ended.emit(winner, loser)
 	CombatSpeed.exit_combat()
 
 func calculate_gold_reward(loser) -> int:
-	"""Calculate gold reward for defeating an enemy."""
+	# Calculate gold reward for defeating an enemy.
+	var gold_reward: int = 0
+
 	if loser is Enemy:
-		return loser.stats.gold + loser.gold
-	return 0
+		if loser.enemy_type != Enemy.EnemyType.BOSS_PLAYER:
+			gold_reward = loser.gold + Player.current_rank
+
+	if gold_reward > 0:
+		add_to_combat_log_string("\nYou earned %s gold!" % color_text(str(gold_reward), Color.GOLD))
+
+	return gold_reward
 
 func process_countdown_rules(entity):
 	# JDM: NEEDS TO BE FIXED, DOES NOT WORK

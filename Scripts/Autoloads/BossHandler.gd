@@ -47,6 +47,7 @@ func create_boss_enemy(opponent_data: Dictionary) -> Enemy:
 	
 	# Initialize inventory (same as Player)
 	boss.inventory = Inventory.new()
+	boss.inventory.owner_entity = boss
 	boss.inventory.set_inventory_size(12)  # Match player inventory size
 	
 	_load_boss_inventory(boss, opponent_data)
@@ -77,9 +78,11 @@ func _apply_weapon_upgrades(boss: Enemy, opponent_data: Dictionary):
 		# Apply the upgrades (similar to how Player does it)
 		var weapon = boss.inventory.weapon_slot
 		if weapon:
-			# These upgrades are already factored into base_damage, shield, agility
-			# from the saved build, so we don't need to apply them again here
-			# They're just metadata for display purposes
+			boss.current_weapon_stat_upgrades = {
+				"damage": int(weapon_stat_upgrades.get("damage", 0)),
+				"shield": int(weapon_stat_upgrades.get("shield", 0)),
+				"agility": int(weapon_stat_upgrades.get("agility", 0))
+			}
 			print("[BossHandler] Boss has weapon upgrades: %s" % weapon_stat_upgrades)
 	
 	# Apply weapon enchantment

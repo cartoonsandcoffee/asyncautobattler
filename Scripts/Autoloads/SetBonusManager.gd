@@ -22,41 +22,47 @@ func initialize():
 
 func load_all_set_bonuses():
 	all_set_bonuses.clear()
-	var dir = DirAccess.open("res://Resources/SetBonus_Recipes/")
-	if dir:
-		dir.list_dir_begin()
-		var file_name = dir.get_next()
-		while file_name != "":
-			if file_name.ends_with(".tres"):
-				var set_bonus = load("res://Resources/SetBonus_Recipes/" + file_name)
-				if set_bonus is SetBonus:
-					if set_bonus.unlocked:
-						all_set_bonuses.append(set_bonus)
-			file_name = dir.get_next()
+	get_all_files_from_directory("res://Resources/SetBonus_Recipes/", ".tres")
+
+func get_all_files_from_directory(path : String, file_ext:= "", files := []):
+	var resources = ResourceLoader.list_directory(path)
+	for res in resources:
+		#print(str(path+res))
+		if res.ends_with("/"): 
+			# recursive for sub-directories
+			get_all_files_from_directory(path+res, file_ext, files)		
+		elif file_ext && res.ends_with(file_ext): 
+			files.append(path+res)
+			var set_bonus = load(path+res) as SetBonus
+			if set_bonus:
+				all_set_bonuses.append(set_bonus)
+			else:
+				push_warning("[SetBonusManager] Failed to load set: " + res)	
+	return files
+
 
 func check_set_bonuses(entity):
 	# Check which set bonuses are active for this entity.
 
 	var new_active_sets: Array[Item] = []
 	var owned_items: Array[Item] = _get_entity_items(entity)
-    
-    # Check each set bonus
+	
+	# Check each set bonus
 	for set_bonus in all_set_bonuses:
 		if _has_all_required_items(set_bonus, owned_items):
 			new_active_sets.append(set_bonus.setbonus_item)
-    
+	
 	entity_active_sets[entity] = new_active_sets
 	set_bonuses_updated.emit(entity)
 
 func _get_entity_items(entity) -> Array[Item]:
 	# Get all items owned by this entity.
 	var items: Array[Item] = []
-    
-	if entity == Player:
-		# Player inventory
+	
+	if entity:
 		if entity.inventory.weapon_slot:
 			items.append(entity.inventory.weapon_slot)
-        
+		
 		for item in entity.inventory.item_slots:
 			if item:
 				items.append(item)
@@ -76,10 +82,10 @@ func _has_all_required_items(set_bonus: SetBonus, owned_items: Array[Item]) -> b
 			if owned_item.get_base_id() == required_item.get_base_id():
 				found = true
 				break
-        
+		
 		if not found:
 			return false
-    
+	
 	return true
 
 func get_active_set_bonuses(entity) -> Array[Item]:

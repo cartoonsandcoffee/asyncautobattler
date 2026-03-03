@@ -31,16 +31,25 @@ func _ready() -> void:
 
 func load_all_skins():
 	all_skins.clear()
-	var dir = DirAccess.open("res://Resources/Skins/")
-	if dir:
-		dir.list_dir_begin()
-		var file_name = dir.get_next()
-		while file_name != "":
-			if file_name.ends_with(".tres"):
-				var skin = load("res://Resources/Skins/" + file_name)
-				if skin is SkinData:
-					all_skins.append(skin)
-			file_name = dir.get_next()
+	get_all_files_from_directory("res://Resources/Skins/", ".tres")
+	
+	print("[SkinManager] Loaded %d skins" % all_skins.size())
+
+func get_all_files_from_directory(path : String, file_ext:= "", files := []):
+	var resources = ResourceLoader.list_directory(path)
+	for res in resources:
+		#print(str(path+res))
+		if res.ends_with("/"): 
+			# recursive for sub-directories
+			get_all_files_from_directory(path+res, file_ext, files)		
+		elif file_ext && res.ends_with(file_ext): 
+			files.append(path+res)
+			var skin = load(path+res) as SkinData
+			if skin:
+				all_skins.append(skin)
+			else:
+				push_warning("[SkinManager] Failed to load skin: " + res)	
+	return files
 
 # ============================================
 # LOCAL PERSISTENCE

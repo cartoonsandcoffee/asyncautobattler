@@ -43,6 +43,18 @@ func can_craft_items(item1: Item, item2: Item) -> bool:
 		
 	return false
 
+func can_combine_items(item1: Item, item2: Item) -> bool:
+	"""Check if two items can be crafted together"""
+	if not item1 or not item2:
+		return false
+	
+	if item1.item_name == item2.item_name:
+		if item1.rarity == item2.rarity:
+			if item1.rarity == Enums.Rarity.COMMON || item1.rarity == Enums.Rarity.GOLDEN:
+				return true
+
+	return false
+
 func craft_items(item1: Item, item2: Item) -> Item:
 	# Craft two items together and return the result (doesn't modify inventory)
 	if not can_craft_items(item1, item2):
@@ -55,15 +67,33 @@ func craft_items(item1: Item, item2: Item) -> Item:
 	
 	return null
 
+func combine_items(item1: Item, item2: Item) -> Item:
+	# Combine two items together and return the result (doesn't modify inventory)
+	if not can_combine_items(item1, item2):
+		push_error("Cannot combine these items together: " + item1.item_name + " + " + item2.item_name)
+		return null
+	
+	if item1.rarity == Enums.Rarity.COMMON:
+		if get_item("golden_" + item1.item_id):
+			return get_item("golden_" + item1.item_id)
+	
+	if item1.rarity == Enums.Rarity.GOLDEN:
+		if get_item("diamond_" + item1.get_base_id()):
+			return get_item("diamond_" + item1.get_base_id())
+	
+	return null
 
 func get_all_craftable_items() -> Array[Item]:
 	"""Get all items that can be used in crafting"""
 	var craftable: Array[Item] = []
 	for item in available_items.values():
 		if item.rarity == Enums.Rarity.DIAMOND or item.rarity == Enums.Rarity.GOLDEN or item.rarity == Enums.Rarity.CRAFTED:
-			craftable.append(item)
+			if item.unlocked:
+				craftable.append(item)
 	return craftable
 
+func get_available_bundles() -> Array[Enums.ItemBundles]:
+	return [Enums.ItemBundles.GENERAL, Player.item_bundle]
 
 func get_item(item_name: String) -> Item:
 	# Get a specific item by name
@@ -80,12 +110,21 @@ func get_item_picture(item_name: String) -> Texture2D:
 		push_warning("[ItemsManager] Item picture not found: ", item_name)
 		return null
 
-func get_all_items() -> Array[Item]:
+func get_all_items(_filter_by_bundle: bool = true) -> Array[Item]:
 	# Get all available items (useful for shop UI)
 	var items: Array[Item] = []
-	for item in available_items.values():
-		items.append(item)
-		
+
+	if _filter_by_bundle:
+		var allowed_bundles = get_available_bundles()
+		for item in available_items.values():
+			# Only include items from allowed bundles
+			if item.item_bundle in allowed_bundles:
+				items.append(item)
+	else:
+		# Return all items (for compendium)
+		for item in available_items.values():
+			items.append(item)
+
 	# sort by rarity
 	items.sort_custom(func(a, b): return a.rarity < b.rarity)
 	return items
@@ -150,14 +189,16 @@ func get_items_by_item_type(count: int, _item_type: Item.ItemType, _limit_rarity
 			if _limit_rarity and item.rarity == _rarity:
 				if item.item_name == "Bare Fists":
 					continue
-				subset_items.append(item)
+				if item.unlocked:
+					subset_items.append(item)
 			elif !_limit_rarity:
 				if item.rarity in [Enums.Rarity.COMMON, Enums.Rarity.UNCOMMON, Enums.Rarity.RARE]:
 					if item.has_category("Unique") && Player.inventory.has_unique_item(item.item_id): # Don't offer player multiple copies of unique items
 						continue
 					if item.has_category("Singularity") && Player.inventory.has_any_singularity_item(): # Don't offer player singularity items if they have one
-						continue					
-					subset_items.append(item)	
+						continue
+					if item.unlocked:
+						subset_items.append(item)
 
 	# Pick random items (without duplicates)
 	var selected: Array[Item] = []
@@ -181,8 +222,9 @@ func get_items_by_category(count: int, _category: String):
 					if item.has_category("Unique") && Player.inventory.has_unique_item(item.item_id): # Don't offer player multiple copies of unique items
 						continue
 					if item.has_category("Singularity") && Player.inventory.has_any_singularity_item(): # Don't offer player singularity items if they have one
-						continue					
-					subset_items.append(item)
+						continue
+					if item.unlocked:
+						subset_items.append(item)
 
 	# Pick random items (without duplicates)
 	var selected: Array[Item] = []
@@ -303,7 +345,7 @@ func get_all_files_from_directory(path : String, file_ext:= "", files := []):
 				var key: String = res.replace(".tres", "")
 				item.item_id = key
 				available_items[key] = item
-				#print("[ItemsManager] Loaded item: ", key)
+				print("[ItemsManager] Loaded item: ", key)
 			else:
 				push_warning("[ItemsManager] Failed to load item: " + res)	
 	return files
