@@ -143,7 +143,7 @@ func set_stat(_stat: Enums.Stats, value: int):
 		Enums.Stats.STRIKES:
 			strikes_current = value
 		Enums.Stats.BURN_DAMAGE:
-			burn_damage_current = value				
+			burn_damage_current = value	
 		Enums.Stats.GOLD:
 			gold = value
 	

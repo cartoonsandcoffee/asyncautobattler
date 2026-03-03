@@ -11,7 +11,7 @@ const ROOMS_PER_RANK = 10
 
 # Rarity distribution by rank
 const RARITY_WEIGHTS_BY_RANK = {
-	1: {Enums.Rarity.COMMON: 70, Enums.Rarity.RARE: 25, Enums.Rarity.LEGENDARY: 5},
+	1: {Enums.Rarity.COMMON: 70, Enums.Rarity.RARE: 30, Enums.Rarity.LEGENDARY: 0},
 	2: {Enums.Rarity.COMMON: 60, Enums.Rarity.RARE: 30, Enums.Rarity.LEGENDARY: 10},
 	3: {Enums.Rarity.COMMON: 50, Enums.Rarity.RARE: 35, Enums.Rarity.LEGENDARY: 15},
 	4: {Enums.Rarity.COMMON: 40, Enums.Rarity.RARE: 40, Enums.Rarity.LEGENDARY: 20},
@@ -260,9 +260,10 @@ func _pick_weighted_room_with_rarity(available_rooms: Array[RoomDefinition], rar
 	var weighted_pool: Array[RoomDefinition] = []
 	
 	for room_def in available_rooms:
-		var rarity_weight = rarity_weights.get(room_def.rarity, 10)
-		var room_weight = room_def.spawn_weight
-		var total_weight = (rarity_weight * room_weight) / 10
+		# var rarity_weight = rarity_weights.get(room_def.rarity, 10) 	# - Factors in Common/Uncommon/Rare 
+		var room_weight = room_def.spawn_weight							# - Factors in room's Spawn Weight
+		var total_weight = room_weight # JDM: This ignores the percentage rarity weighting for now (the below equation was creating too much variability)
+		# var total_weight = (rarity_weight * room_weight) / 10
 		
 		for i in range(total_weight):
 			weighted_pool.append(room_def)
@@ -279,8 +280,8 @@ func _get_rarity_weights_for_rank(rank: int) -> Dictionary:
 	
 	# Default for ranks beyond 5
 	return {
-		Enums.Rarity.COMMON: 50,
-		Enums.Rarity.RARE: 40,
+		Enums.Rarity.COMMON: 60,
+		Enums.Rarity.RARE: 30,
 		Enums.Rarity.LEGENDARY: 10
 	}
 

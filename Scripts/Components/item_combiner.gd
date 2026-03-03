@@ -196,7 +196,7 @@ func validate_combination(slot_number: int):
 					craft_button.disabled = true
 					remove_item_from_slot(slot_number)
 					await show_error_message("These items don't taste the same...")
-				elif ItemsManager.can_craft_items(slot_1_item, slot_2_item):
+				elif ItemsManager.can_combine_items(slot_1_item, slot_2_item):
 					craft_button.disabled = false
 					message_label.text = "Hmmm... these will taste good."
 					message_label.modulate = Color.GREEN
@@ -241,20 +241,25 @@ func _on_craft_pressed():
 	if is_processing_craft:
 		return
 	
-	if combiner_mode == CombinerMode.COMBINE || combiner_mode == CombinerMode.CRAFT:
+	if combiner_mode == CombinerMode.CRAFT:
 		if not ItemsManager.can_craft_items(slot_1_item, slot_2_item):
+			show_error_message("Invalid recipe!")
+			return
+	elif combiner_mode == CombinerMode.COMBINE:
+		if not ItemsManager.can_combine_items(slot_1_item, slot_2_item):
 			show_error_message("Invalid combination!")
 			return
-		
+
 	is_processing_craft = true
 	craft_button.disabled = true
 	
 	if combiner_mode == CombinerMode.COMBINE:
-		result = ItemsManager.craft_items(slot_1_item, slot_2_item)
+		result = ItemsManager.combine_items(slot_1_item, slot_2_item)
 	if combiner_mode == CombinerMode.CRAFT:
-		result = ItemsManager.craft_items(slot_1_item, slot_2_item)		
+		result = ItemsManager.craft_items(slot_1_item, slot_2_item)	
 	elif combiner_mode == CombinerMode.REPLACE_SAME_RARITY:
 		result = ItemsManager.get_item_of_same_tier(slot_1_item.rarity, slot_1_item.item_name)
+		Player.shrine_uses_left_this_rank -= 1
 	elif combiner_mode == CombinerMode.REPLACE_HIGHER_TIER:
 		result = ItemsManager.get_item_of_higher_tier(slot_1_item.rarity)
 

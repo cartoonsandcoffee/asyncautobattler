@@ -11,13 +11,17 @@ extends Control
 @onready var category_grid: GridContainer
 @onready var txt_upgrades: RichTextLabel
 
+@onready var box_bundle: HBoxContainer
+@onready var panel_bundle: PanelContainer
+@onready var lbl_bundle: Label
+
 var gamecolors: GameColors
 var is_from_compendium: bool = false
 
 const KEYWORDS = {
 	"acid": {
 		"color": "#aaff00",
-		"description": "Removes armor equal to acid at turn start."
+		"description": "Removes shield equal to acid at turn start."
 	},
 	"poison": {
 		"color": "#ff66ff",
@@ -32,13 +36,17 @@ const KEYWORDS = {
 		"description": "Deal damage equal to your thorn stacks when hit, then remove those thorns. "
 	},
 	"regeneration": {
-		"color": "#00ff88",
+		"color": "#4ec78e",
 		"description": "Restore health equal to regeneration at turn end, then remove 1 stack."
 	},
 	"stun": {
 		"color": "#bdb280ff",
 		"description": "When stunned you skip your next strike. Remove 1 stun for each strike you skip."
 	},	
+	"stunned": {
+		"color": "#bdb280ff",
+		"description": "When stunned you skip your next strike. Remove 1 stun for each strike you skip."
+	},		
 	"exposed": {
 		"color": "#96b6c9ff",
 		"description": "Triggered when shield reaches 0 for the first time in combat."
@@ -79,6 +87,7 @@ const TRIGGER_KEYWORDS = {
 }
 
 var current_item: Item = null
+var current_entity = null  # player or enemy (for upgrade displaying on weapons)
 
 var stat_item = preload("res://Scenes/Elements/stat_item.tscn")
 var category_item = preload("res://Scenes/Elements/category_label.tscn")
@@ -99,13 +108,18 @@ func set_references():
 	category_grid = $Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/categoryGrid
 	vbox = $Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer
 	txt_upgrades = $Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/txtUpgrades
+	lbl_bundle = $Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/boxBundle/panelBundle/lblBundle
+	panel_bundle = $Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/boxBundle/panelBundle
+	box_bundle = $Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/boxBundle
 	gamecolors = GameColors.new()
 
-func set_item(this_item: Item, create_definitions: bool = true):
+func set_item(this_item: Item, create_definitions: bool = true, entity = null):
 	set_references()
 	clear_definition_boxes()
 
 	current_item = this_item
+	current_entity = entity
+
 	lbl_name.text = this_item.item_name
 	set_rarity()
 	get_stat_bonuses()
@@ -115,7 +129,8 @@ func set_item(this_item: Item, create_definitions: bool = true):
 	show_description(this_item, create_definitions)
 	show_stats()
 	show_categories(this_item.categories)
-
+	set_bundle()
+	
 	if this_item.item_type == Item.ItemType.SET_BONUS:
 		set_bonus()
 	#update_panel_size()
@@ -127,25 +142,38 @@ func set_bonus():
 func set_tooltip_position(_pos: Vector2):
 	global_position = _pos
 
+func set_bundle():
+	if is_from_compendium:
+		box_bundle.visible = true
+		panel_bundle.modulate = gamecolors.get_bundle_color(current_item.item_bundle)
+		lbl_bundle.text = Enums.get_bundle_string(current_item.item_bundle)
+	else:
+		box_bundle.visible = false
+
 func set_upgrades():
 	var str_upgrades: String = ""
+	
+	var entity_to_check = current_entity if current_entity != null else Player
+
 	if !is_from_compendium:
-		if current_item.item_type == Item.ItemType.WEAPON:
-			if current_item.item_id != Player.inventory.weapon_slot.item_id:
-				return
-			if Player.current_weapon_stat_upgrades["damage"] > 0 :
-				str_upgrades += "[color=#ff4444][b] blood[/b][/color]"
-			if Player.current_weapon_stat_upgrades["shield"] > 0 :
-				if str_upgrades != "":
-					str_upgrades += ","
-				str_upgrades += "[color=#6699ff][b] spit[/b][/color] "
-			if Player.current_weapon_stat_upgrades["agility"] > 0 :
-				if str_upgrades != "":
-					if str_upgrades.contains(","):
-						str_upgrades += ", and"
-					else:
-						str_upgrades += " and"
-				str_upgrades += "[color=#ffdd44][b] sweat[/b][/color]"
+		if entity_to_check.inventory:
+			if current_item.item_type == Item.ItemType.WEAPON:
+				if current_item.item_id != entity_to_check.inventory.weapon_slot.item_id:
+					return
+
+				if entity_to_check.current_weapon_stat_upgrades["damage"] > 0 :
+					str_upgrades += "[color=#ff4444][b] blood[/b][/color]"
+				if entity_to_check.current_weapon_stat_upgrades["shield"] > 0 :
+					if str_upgrades != "":
+						str_upgrades += ","
+					str_upgrades += "[color=#6699ff][b] spit[/b][/color] "
+				if entity_to_check.current_weapon_stat_upgrades["agility"] > 0 :
+					if str_upgrades != "":
+						if str_upgrades.contains(","):
+							str_upgrades += ", and"
+						else:
+							str_upgrades += " and"
+					str_upgrades += "[color=#ffdd44][b] sweat[/b][/color]"
 			
 	if str_upgrades != "":
 		txt_upgrades.visible = true
@@ -155,27 +183,31 @@ func get_stat_bonuses():
 	stats_to_add.clear()
 	var statcount: int = 0
 
+	# Determine which entity to check for upgrades
+	var entity_to_check = current_entity if current_entity != null else Player
+
 	if !is_from_compendium:
-		if current_item.item_type == Item.ItemType.WEAPON && current_item.item_id == Player.inventory.weapon_slot.item_id:
-			if current_item.damage_bonus != 0 || Player.current_weapon_stat_upgrades["damage"] != 0 :
-				stats_to_add[statcount] = {"name": "damage", "value": str(current_item.damage_bonus + Player.current_weapon_stat_upgrades["damage"])}
-				statcount += 1
-			if current_item.shield_bonus != 0 || Player.current_weapon_stat_upgrades["shield"] != 0 :
-				stats_to_add[statcount] = {"name": "shield", "value": str(current_item.shield_bonus + Player.current_weapon_stat_upgrades["shield"])}
-				statcount += 1
-			if current_item.agility_bonus != 0 || Player.current_weapon_stat_upgrades["agility"] != 0 :
-				stats_to_add[statcount] = {"name": "agility", "value": str(current_item.agility_bonus + Player.current_weapon_stat_upgrades["agility"])}
-				statcount += 1
-		else:
-			if current_item.damage_bonus != 0:
-				stats_to_add[statcount] = {"name": "damage", "value": str(current_item.damage_bonus)}
-				statcount += 1
-			if current_item.shield_bonus != 0:
-				stats_to_add[statcount] = {"name": "shield", "value": str(current_item.shield_bonus)}
-				statcount += 1	
-			if current_item.agility_bonus != 0:
-				stats_to_add[statcount] = {"name": "agility", "value": str(current_item.agility_bonus)}
-				statcount += 1	
+		if entity_to_check.inventory:
+			if current_item.item_type == Item.ItemType.WEAPON && current_item.item_id == entity_to_check.inventory.weapon_slot.item_id:
+				if current_item.damage_bonus != 0 || entity_to_check.current_weapon_stat_upgrades["damage"] != 0 :
+					stats_to_add[statcount] = {"name": "damage", "value": str(current_item.damage_bonus + entity_to_check.current_weapon_stat_upgrades["damage"])}
+					statcount += 1
+				if current_item.shield_bonus != 0 || entity_to_check.current_weapon_stat_upgrades["shield"] != 0 :
+					stats_to_add[statcount] = {"name": "shield", "value": str(current_item.shield_bonus + entity_to_check.current_weapon_stat_upgrades["shield"])}
+					statcount += 1
+				if current_item.agility_bonus != 0 || entity_to_check.current_weapon_stat_upgrades["agility"] != 0 :
+					stats_to_add[statcount] = {"name": "agility", "value": str(current_item.agility_bonus + entity_to_check.current_weapon_stat_upgrades["agility"])}
+					statcount += 1
+			else:
+				if current_item.damage_bonus != 0:
+					stats_to_add[statcount] = {"name": "damage", "value": str(current_item.damage_bonus)}
+					statcount += 1
+				if current_item.shield_bonus != 0:
+					stats_to_add[statcount] = {"name": "shield", "value": str(current_item.shield_bonus)}
+					statcount += 1	
+				if current_item.agility_bonus != 0:
+					stats_to_add[statcount] = {"name": "agility", "value": str(current_item.agility_bonus)}
+					statcount += 1	
 	else:
 		if current_item.damage_bonus != 0:
 			stats_to_add[statcount] = {"name": "damage", "value": str(current_item.damage_bonus)}

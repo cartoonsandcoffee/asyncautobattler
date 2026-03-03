@@ -39,6 +39,8 @@ var click_timer: float = 0.0
 var double_click_time: float = 0.3  # Time window for double-click
 
 var is_from_compendium: bool = false
+var owner_entity = null
+
 var gamecolors: GameColors
 
 func _ready() -> void:
@@ -219,7 +221,7 @@ func set_is_from_compendium(_isit: bool):
 func show_tooltip():
 	if current_item:
 		# Use global tooltip manager with item's global position
-		TooltipManager.show_item_tooltip(current_item, global_position, size, is_from_compendium)
+		TooltipManager.show_item_tooltip(current_item, global_position, size, is_from_compendium, owner_entity)
 
 func update_countdown_display(remaining: int):
 	"""Update the countdown label for occurrence-based items"""

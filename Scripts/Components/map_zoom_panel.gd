@@ -5,26 +5,27 @@ signal closed()
 signal boss_rush_pressed()
 
 
-@onready var boss_inventory_grid: GridContainer = $Panel/PanelContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid
-@onready var weapon_container: GridContainer = $Panel/PanelContainer/VBoxContainer/mainContent/bossInventory/weapon/GridContainer
+@onready var boss_inventory_grid: GridContainer = $Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid
+@onready var weapon_container: GridContainer = $Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/weapon/GridContainer
 
-@onready var boss_pic: TextureRect = $Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/boxProfile/vBoxProfile/bossPic
-@onready var lbl_boss: Label = $Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/boxProfile/vBoxProfile/lblBoss
-@onready var lbl_rank: Label = $Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/boxProfile/vBoxProfile/lblRank
-@onready var boss_stat_grid: Container = $Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid
+@onready var boss_pic: TextureRect = $Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/boxProfile/vBoxProfile/bossPic
+@onready var lbl_boss: Label = $Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/boxProfile/vBoxProfile/lblBoss
+@onready var lbl_rank: Label = $Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/boxProfile/vBoxProfile/lblRank
+@onready var boss_stat_grid: Container = $Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid
+@onready var boss_set_bonuses: HBoxContainer = $Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/setBox
 
-@onready var boss_stat_health: StatBoxDisplay = $Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid/statHealth
-@onready var boss_stat_shield: StatBoxDisplay = $Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid/statShield
-@onready var boss_stat_attack: StatBoxDisplay = $Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid/statAttack
-@onready var boss_stat_agility: StatBoxDisplay = $Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid/statAgility
+@onready var boss_stat_health: StatBoxDisplay = $Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid/statHealth
+@onready var boss_stat_shield: StatBoxDisplay = $Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid/statShield
+@onready var boss_stat_attack: StatBoxDisplay = $Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid/statAttack
+@onready var boss_stat_agility: StatBoxDisplay = $Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid/statAgility
 
-@onready var btn_close: Button = $Panel/PanelContainer/VBoxContainer/buttonContainer/btnClose
-@onready var btn_rush: Button = $Panel/PanelContainer/VBoxContainer/buttonContainer/btnRush
+@onready var btn_close: Button = $Panel/PanelContainer/HBoxContainer/VBoxContainer/buttonContainer/btnClose
+@onready var btn_rush: Button = $Panel/PanelContainer/HBoxContainer/VBoxContainer/buttonContainer/btnRush
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 
-@onready var boss_stat_strikes = $Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid/statStrikes
-@onready var boss_stat_burn = $Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid/statBurnDamage
-@onready var boss_stat_gold = $Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid/statGold
+@onready var boss_stat_strikes = $Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid/statStrikes
+@onready var boss_stat_burn = $Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid/statBurnDamage
+@onready var boss_stat_gold = $Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid/statGold
 
 ## == MATCH UP SCREEN ==
 @onready var lbl_fight: Label = $panelMatchup/panelTitle/MarginContainer/VBoxContainer/lblFight
@@ -40,7 +41,6 @@ func _ready():
 
 	if DungeonManager:
 		DungeonManager.boss_loaded.connect(_on_boss_loaded)
-
 
 func _setup_buttons():
 	btn_close.pressed.connect(_on_close_pressed)
@@ -121,6 +121,38 @@ func _update_boss_preview(boss: Enemy = null):
 	
 	# Update boss inventory
 	_update_boss_inventory(boss)
+
+	# Update boss set bonuses
+	SetBonusManager.check_set_bonuses(boss)  
+	_update_boss_set_bonuses(boss)
+
+func _update_boss_set_bonuses(enemy: Enemy):
+	"""Display active set bonuses for the enemy."""
+	# Clear existing
+	for child in boss_set_bonuses.get_children():
+		child.queue_free()
+	
+	# Get active set bonuses for this enemy
+	var bonus_items = SetBonusManager.get_active_set_bonuses(enemy)
+	
+	if bonus_items.is_empty():
+		boss_set_bonuses.visible = false
+		return
+	
+	boss_set_bonuses.visible = true
+	
+	var item_slot_scene = preload("res://Scenes/item.tscn")
+	
+	for bonus_item in bonus_items:
+		var item_container = item_slot_scene.instantiate()
+		item_container.owner_entity = enemy  # Set entity reference for tooltips
+		item_container.set_item(bonus_item)
+		item_container.slot_index = -3  # Special index for set bonuses
+		item_container.custom_minimum_size = Vector2(50, 50)
+		item_container.set_bonus()  # Apply set bonus styling
+		boss_set_bonuses.add_child(item_container)
+	
+	print("[MapZoomPanel] Enemy has %d active set bonuses" % bonus_items.size())
 
 func _show_boss_preview():
 	"""Make boss preview container visible."""
@@ -235,6 +267,7 @@ func _update_boss_inventory(boss: Enemy):
 	if boss.inventory.weapon_slot:
 		var weapon_slot = item_slot_scene.instantiate()
 		weapon_slot.set_item(boss.inventory.weapon_slot)
+		weapon_slot.owner_entity = boss
 		weapon_slot.set_weapon_text_color()
 		weapon_slot.slot_index = 100  # High number for tooltip positioning
 		weapon_slot.custom_minimum_size = Vector2(100, 100)
@@ -245,6 +278,7 @@ func _update_boss_inventory(boss: Enemy):
 		var item = boss.inventory.item_slots[i]
 		if item:
 			var item_slot = item_slot_scene.instantiate()
+			item_slot.owner_entity = boss
 			item_slot.set_item(item)
 			item_slot.set_order(i+1)
 			item_slot.custom_minimum_size = Vector2(100, 100)

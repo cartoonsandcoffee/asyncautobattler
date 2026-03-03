@@ -313,7 +313,7 @@ func _execute_remove_status(rule: ItemRule, source_entity, target_entity, item: 
 	# Queue visuals in correct order
 	var combat_panel = combat_manager.get_tree().get_first_node_in_group("combat_panel")
 	if combat_panel:
-		combat_panel.spawn_item_proc_indicator(item, rule, target_entity, (effective_amount * -1))
+		combat_panel.spawn_item_proc_indicator(item, rule, target_entity, (amount * -1))  # JDM: Used to be 'effective_amount' but that looked wrong.
 
 	# JDM: Revert rule back to random for rule text
 	if revert_to_random:
@@ -423,7 +423,8 @@ func _execute_conversion(rule: ItemRule, source_entity, item: Item):
 	var visual_rule_placeholder:ItemRule = ItemRule.new()
 
 	if rule.convert_from_type == ItemRule.StatOrStatus.STAT:
-		stat_handler.modify_stat(from_entity, rule.convert_from_stat, -from_amount, Enums.StatType.CURRENT)
+		# stat_handler.modify_stat(from_entity, rule.convert_from_stat, -from_amount, Enums.StatType.CURRENT)  # JDM: Using the change_stat() function so it triggers loss/gain
+		stat_handler.change_stat(from_entity, rule.convert_from_stat, -from_amount, Enums.StatType.CURRENT, item)
 		visual_rule_placeholder.effect_type = Enums.EffectType.MODIFY_STAT
 		visual_rule_placeholder.target_type = rule.convert_from_party
 		visual_rule_placeholder.target_stat_type = Enums.StatType.CURRENT
@@ -451,7 +452,8 @@ func _execute_conversion(rule: ItemRule, source_entity, item: Item):
 	# Add TO resource
 	var to_entity = _get_target_entity(rule.convert_to_party, source_entity)
 	if rule.convert_to_type == ItemRule.StatOrStatus.STAT:
-		stat_handler.modify_stat(to_entity, rule.convert_to_stat, to_amount, Enums.StatType.CURRENT)
+		# stat_handler.modify_stat(to_entity, rule.convert_to_stat, to_amount, Enums.StatType.CURRENT)  # JDM: Using the change_stat() function so it triggers loss/gain
+		stat_handler.change_stat(to_entity, rule.convert_to_stat, to_amount, Enums.StatType.CURRENT, item)
 		visual_rule_placeholder_to.effect_type = Enums.EffectType.MODIFY_STAT
 		visual_rule_placeholder_to.target_type = rule.convert_to_party
 		visual_rule_placeholder_to.target_stat_type = Enums.StatType.CURRENT

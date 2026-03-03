@@ -366,7 +366,8 @@ func _process_blessing(entity, _stacks: int):
 	if total_heal > 0:
 		combat_manager.damage_system.heal_entity(entity, total_heal, null)
 	if total_damage > 0:
-		stat_handler.change_stat(entity, Enums.Stats.DAMAGE, total_damage, Enums.StatType.CURRENT)
+		#stat_handler.change_stat(entity, Enums.Stats.DAMAGE, total_damage, Enums.StatType.CURRENT)
+		entity.stats.modify_combat_temp_stat(Enums.Stats.DAMAGE, total_damage)
 
 	var new_hp: int  = entity.stats.hit_points_current
 	var actual_heal: int  = new_hp - old_hp
@@ -435,6 +436,10 @@ func process_thorns_reflection(attacker, target):
 		return
 	
 	var thorns_damage = target.status_effects.thorns
+
+	if _check_for_persistent_thorn_rule(target): #check if the entity applying the burn has "thorn double damage" item.
+		thorns_damage *= 2
+
 	var attacker_name: String = _get_entity_name(attacker)
 	var target_name: String = _get_entity_name(target)
 
@@ -516,6 +521,40 @@ func _check_for_persistent_burn_rule(entity) -> bool:
 
 	return false
 
+func _check_for_persistent_thorn_rule(entity) -> bool:
+	# Get entity's inventory
+	var inventory = null
+	if entity == combat_manager.player_entity:
+		inventory = Player.inventory
+	elif "inventory" in entity:
+		inventory = entity.inventory
+	
+	if not inventory:
+		return false
+	
+	# Collect items
+	var all_items = []
+	if inventory.weapon_slot:
+		all_items.append(inventory.weapon_slot)
+	for item in inventory.item_slots:
+		if item:
+			all_items.append(item)
+	
+	# Process persistent rules
+	for item in all_items:
+		for rule in item.rules:
+			if rule.trigger_type != Enums.TriggerType.PERSISTENT:
+				continue
+						
+			# Evaluate condition
+			if rule.has_condition:
+				if not combat_manager.condition_evaluator.evaluate_condition(rule, entity, entity):
+					continue
+			
+			# Apply effect
+			_check_special_rule_thorns(rule)
+
+	return false
 
 func _check_special_rule(rule: ItemRule) -> bool:
 	# Apply persistent effect to damage/strikes/burn current values.
@@ -524,6 +563,16 @@ func _check_special_rule(rule: ItemRule) -> bool:
 	if rule.special_string != "":
 		match rule.special_string:
 			"extra_burn_proc":
+				return true
+	return false
+
+func _check_special_rule_thorns(rule: ItemRule) -> bool:
+	# Apply persistent effect to damage/strikes/burn current values.
+	
+	# Handle special strings (multiplicative)
+	if rule.special_string != "":
+		match rule.special_string:
+			"double_thorn_damage":
 				return true
 	return false
 

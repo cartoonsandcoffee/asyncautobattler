@@ -18,7 +18,7 @@ func set_references():
 	lbl_wins = $Panel/PanelContainer/MarginContainer/HBoxContainer/lblWins
 	lbl_active = $Panel/PanelContainer/MarginContainer/HBoxContainer/lblActive
 	lbl_defeated = $Panel/PanelContainer/MarginContainer/HBoxContainer/lblDefeated
-	lbl_class = $Panel/PanelContainer/MarginContainer/HBoxContainer/lbl_class
+	lbl_class = $Panel/PanelContainer/MarginContainer/HBoxContainer/lblClass
 	btn_main = $Panel/PanelContainer/MarginContainer/Button
 	anim_player = $AnimationPlayer
 
@@ -43,7 +43,8 @@ func set_fields_global_hall(strdate1:String, strdate2:String, username:String):
 	lbl_active.text = username
 	lbl_defeated.visible = false
 
-
+func set_bundle(_bundle: Enums.ItemBundles):
+	lbl_class.text = Enums.get_bundle_string(_bundle)
 
 func _on_button_mouse_exited() -> void:
 	CursorManager.reset_cursor()

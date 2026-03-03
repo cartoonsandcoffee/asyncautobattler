@@ -23,6 +23,7 @@ signal need_item_replace(Item)
 @export_multiline var box_desc:String = ""
 @export var include_extra_rare: bool = false
 @export var allow_refresh: bool = true
+@export var on_sale: bool = false
 
 var item_choice_scene = preload("res://Scenes/item_choice.tscn")
 var empty_item = preload("res://Scenes/Elements/empty_choice.tscn")
@@ -39,6 +40,7 @@ func _ready() -> void:
 
 func setup_labels():
 	name_label.text = box_name
+	refresh_cost_label()
 	dialogue_label.text = box_desc
 	if box_desc == "" || box_desc == null:
 		dialogue_label.visible = false
@@ -57,7 +59,7 @@ func generate_item_choices():
 		choice_button.custom_minimum_size = Vector2(110, 140)
 		item_choice_container.add_child(choice_button)
 		choice_button.set_item(item)
-		choice_button.setup_for_store()
+		choice_button.setup_for_store(on_sale)
 		choice_button.item_purchased.connect(_on_item_selected)
 	
 	check_affordability()
@@ -150,11 +152,13 @@ func refresh_store_display():
 	if Player.stats.gold >= Player.stats.refresh_cost:
 		Player.subtract_gold(Player.stats.refresh_cost)
 		Player.stats.refresh_cost += 1
-		refresh_cost.text = str(Player.stats.refresh_cost)
+		refresh_cost_label()
 
 		generate_item_choices()
 		check_affordability()
 
+func refresh_cost_label():
+	refresh_cost.text = str(Player.stats.refresh_cost)
 
 func _on_btn_reroll_pressed() -> void:
 	refresh_store_display()

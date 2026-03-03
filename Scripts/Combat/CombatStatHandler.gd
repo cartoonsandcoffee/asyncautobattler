@@ -65,7 +65,10 @@ func change_stat(entity, stat: Enums.Stats, amount: int, _stat_type: Enums.StatT
 
 func modify_stat(entity, stat: Enums.Stats, amount: int, stat_type: Enums.StatType = Enums.StatType.CURRENT):
 	# We pass emit_signal=false because change_stat() emits CombatManager.stat_changed instead
-	entity.stats.modify_stat(stat, amount, stat_type, true)
+	if stat == Enums.Stats.DAMAGE:
+		entity.stats.modify_combat_temp_stat(stat, amount)
+	else:
+		entity.stats.modify_stat(stat, amount, stat_type, true)
 
 # ===== STAT GETTERS =====
 
@@ -118,8 +121,14 @@ func get_stat_value(entity, stat: Enums.Stats, stat_type: Enums.StatType = Enums
 					return 0
 		
 		Enums.Stats.STRIKES:
-			return entity.stats.strikes
-		
+			match stat_type:
+				Enums.StatType.CURRENT:
+					return  entity.stats.strikes_current
+				Enums.StatType.BASE:
+					return entity.stats.strikes
+				Enums.StatType.MISSING:
+					return 0
+
 		Enums.Stats.GOLD:
 			return entity.stats.gold
 	
@@ -199,6 +208,8 @@ func _apply_persistent_to_output_stats(entity):
 	if not inventory:
 		return
 	
+	var opponent = combat_manager.enemy_entity if entity == combat_manager.player_entity else combat_manager.player_entity
+
 	# Collect items
 	var all_items = []
 	if inventory.weapon_slot:
@@ -219,7 +230,7 @@ func _apply_persistent_to_output_stats(entity):
 			
 			# Evaluate condition
 			if rule.has_condition:
-				if not combat_manager.condition_evaluator.evaluate_condition(rule, entity, entity):
+				if not combat_manager.condition_evaluator.evaluate_condition(rule, entity, opponent):
 					continue
 			
 			# Apply effect

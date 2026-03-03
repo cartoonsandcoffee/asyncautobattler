@@ -54,9 +54,38 @@ class Interf:
 	const success = Color("#44ff44")        # Green
 	const disabled = Color("#666666")       # Gray
 
+class Bundles:
+	const revenge = Color("#d32222")         # Red
+	const honor = Color("#6699ff")         # Blue
+	const chaos = Color("#4cc940")     # Green
+	const greed = Color("#ffaa00")           # Gold
+	const shame = Color("#ff66ff")         # Lime
+	const duty = Color("#996633")         # Brown
+	const general = Color("#c7c7c7")   # Teal
+
 # Static references to inner classes
 static var stats = Stats
 static var rarity = Rarity
 static var room = Room
 static var difficulty = Difficulty
 static var ui = Interf
+static var bundles = Bundles
+
+func get_bundle_color(_bundle: Enums.ItemBundles) -> Color:
+	match _bundle:
+		Enums.ItemBundles.GENERAL:
+			return bundles.general
+		Enums.ItemBundles.REVENGE:
+			return bundles.revenge
+		Enums.ItemBundles.GREED:
+			return bundles.greed
+		Enums.ItemBundles.HONOR:
+			return bundles.honor
+		Enums.ItemBundles.DUTY:
+			return bundles.duty
+		Enums.ItemBundles.SHAME:
+			return bundles.shame
+		Enums.ItemBundles.CHAOS:
+			return bundles.chaos
+		_:
+			return Color.WHITE

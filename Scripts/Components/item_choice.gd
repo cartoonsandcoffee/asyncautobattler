@@ -66,10 +66,10 @@ func set_item(item: Item):
 	else:
 		set_empty()
 	
-func setup_for_store():
+func setup_for_store(_on_sale: bool = false):
 	choice_type = ChoiceType.PURCHASE
 	price_container.visible = true
-	set_price()
+	set_price(_on_sale)
 
 func set_empty():
 	current_item = null
@@ -77,7 +77,7 @@ func set_empty():
 	panel_border.self_modulate = Color.WHITE
 	button.disabled = true
 
-func set_price():
+func set_price(_on_sale: bool = false):
 	if current_item:
 		match current_item.rarity:
 			Enums.Rarity.COMMON:
@@ -90,7 +90,13 @@ func set_price():
 				item_cost = 15
 			_:
 				item_cost = (randi_range(3,15))
+
+	if _on_sale:
+		lbl_price.modulate = Color.LIME_GREEN
+		item_cost -= int(item_cost/2)
+
 	lbl_price.text = str(item_cost)
+
 
 func update_visuals():
 	if current_item:

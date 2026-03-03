@@ -16,6 +16,8 @@ var weapon_slot: Item = null
 var item_slots: Array[Item] = []
 var max_item_slots: int = 4
 
+var owner_entity = null  # Store reference to owning entity
+
 func _init():
 	# Initialize empty item slots
 	item_slots.resize(max_item_slots)
@@ -140,7 +142,17 @@ func set_weapon(new_weapon: Item) -> bool:
 	
 	var old_weapon = weapon_slot
 	weapon_slot = new_weapon
-	Player.reset_weapon_bonus()
+
+	print("[Inventory DEBUG] set_weapon called:")
+	print("  - Old weapon: %s" % (old_weapon.item_name if old_weapon else "None"))
+	print("  - New weapon: %s" % new_weapon.item_name)
+	print("  - Current upgrades BEFORE: %s" % Player.current_weapon_stat_upgrades)
+	
+	if owner_entity == Player:
+		if old_weapon == null or old_weapon.item_id != new_weapon.item_id:
+			Player.reset_weapon_bonus()
+
+	print("  - Current upgrades AFTER: %s" % Player.current_weapon_stat_upgrades)
 
 	if old_weapon != null:
 		item_removed.emit(old_weapon, -1)  # -1 indicates weapon slot
