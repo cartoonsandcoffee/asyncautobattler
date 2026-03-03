@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://qlqnhc82ni7x"]
 
 [ext_resource type="Script" uid="uid://eootj3nibbxl" path="res://Scripts/Autoloads/DungeonManager.gd" id="1_b86jv"]
-[ext_resource type="Resource" uid="uid://d2aik1ynja484" path="res://Resources/Rooms/uncommon_treasure_weapons.tres" id="2_mhvtc"]
+[ext_resource type="Resource" uid="uid://dpp7g45v4ye70" path="res://Resources/Rooms/common_utility_upgrade.tres" id="2_mhvtc"]
 
 [node name="DungeonManager" type="Node2D"]
 script = ExtResource("1_b86jv")

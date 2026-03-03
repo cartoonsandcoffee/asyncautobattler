@@ -525,9 +525,10 @@ vertical_alignment = 1
 layout_mode = 1
 items_offered = 2
 item_columns = 2
-box_name = "A Peddler?"
-box_desc = "A mysterious creature slinks toward you..."
+box_name = "A Peddler"
+box_desc = "You can't beat these prices..."
 allow_refresh = false
+on_sale = true
 
 [node name="animLabel" type="AnimationPlayer" parent="."]
 libraries = {

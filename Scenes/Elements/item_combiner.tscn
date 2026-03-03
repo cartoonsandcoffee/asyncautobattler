@@ -350,7 +350,7 @@ theme_override_constants/separation = 10
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Leave this place"
+text = "Nevermind"
 
 [node name="btnCraft" type="Button" parent="Panel/panelBlack/panelCombiner/VBoxContainer/boxButtons"]
 custom_minimum_size = Vector2(0, 80)

@@ -360,7 +360,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="btnHeroes" type="Button" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel"]
-custom_minimum_size = Vector2(300, 75)
+custom_minimum_size = Vector2(300, 40)
 layout_mode = 2
 theme = ExtResource("3_n45e2")
 text = "Hall of Heroes"
@@ -393,12 +393,14 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 
-[node name="toggleBundle" type="HBoxContainer" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/loadoutBox/HBoxContainer"]
+[node name="toggleBundle" type="GridContainer" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/loadoutBox/HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
 size_flags_vertical = 4
+columns = 3
 
-[node name="Button" type="Button" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/loadoutBox/HBoxContainer/toggleBundle"]
-modulate = Color(0.92, 0.2576, 0.2576, 1)
+[node name="bunRevenge" type="Button" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/loadoutBox/HBoxContainer/toggleBundle"]
+modulate = Color(0.827451, 0.133333, 0.133333, 1)
 layout_mode = 2
 theme = ExtResource("15_84iac")
 toggle_mode = true
@@ -406,28 +408,55 @@ button_pressed = true
 button_group = ExtResource("16_5n0dv")
 text = "   Revenge   "
 
-[node name="Button2" type="Button" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/loadoutBox/HBoxContainer/toggleBundle"]
-modulate = Color(0.2325, 0.6045, 0.93, 1)
+[node name="bunHonor" type="Button" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/loadoutBox/HBoxContainer/toggleBundle"]
+modulate = Color(0.4, 0.6, 1, 1)
 layout_mode = 2
 theme = ExtResource("15_84iac")
 toggle_mode = true
 button_group = ExtResource("16_5n0dv")
 text = "   Honor   "
 
-[node name="Button3" type="Button" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/loadoutBox/HBoxContainer/toggleBundle"]
-modulate = Color(1, 0.546667, 0.15, 1)
+[node name="bunGreed" type="Button" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/loadoutBox/HBoxContainer/toggleBundle"]
+modulate = Color(1, 0.666667, 0, 1)
 layout_mode = 2
 theme = ExtResource("15_84iac")
 toggle_mode = true
 button_group = ExtResource("16_5n0dv")
 text = "   Greed   "
 
+[node name="bunDuty" type="Button" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/loadoutBox/HBoxContainer/toggleBundle"]
+visible = false
+modulate = Color(0.6, 0.4, 0.2, 1)
+layout_mode = 2
+theme = ExtResource("15_84iac")
+toggle_mode = true
+button_group = ExtResource("16_5n0dv")
+text = "   Duty   "
+
+[node name="bunShame" type="Button" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/loadoutBox/HBoxContainer/toggleBundle"]
+visible = false
+modulate = Color(1, 0.4, 1, 1)
+layout_mode = 2
+theme = ExtResource("15_84iac")
+toggle_mode = true
+button_group = ExtResource("16_5n0dv")
+text = "   Shame   "
+
+[node name="bunChaos" type="Button" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/loadoutBox/HBoxContainer/toggleBundle"]
+visible = false
+modulate = Color(0.298039, 0.788235, 0.25098, 1)
+layout_mode = 2
+theme = ExtResource("15_84iac")
+toggle_mode = true
+button_group = ExtResource("16_5n0dv")
+text = "   Chaos   "
+
 [node name="spacer3" type="MarginContainer" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/loadoutBox/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="btnCompendium" type="Button" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/loadoutBox/HBoxContainer"]
-custom_minimum_size = Vector2(300, 75)
+custom_minimum_size = Vector2(300, 40)
 layout_mode = 2
 text = "Compendium"
 
@@ -449,9 +478,9 @@ script = ExtResource("15_jr6u5")
 
 [node name="SkinCard" parent="Panel/skinPanel" instance=ExtResource("16_6m47u")]
 visible = false
-offset_left = -592.0
+offset_left = -519.0
 offset_top = 48.0
-offset_right = -192.0
+offset_right = -119.0
 offset_bottom = 548.0
 
 [node name="PanelContainer" type="PanelContainer" parent="Panel/skinPanel"]
@@ -460,7 +489,7 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -129.0
+offset_left = -138.0
 offset_top = 10.0
 offset_right = -29.0
 offset_bottom = 562.0
@@ -486,6 +515,7 @@ size_flags_vertical = 3
 [node name="skinGrid" type="GridContainer" parent="Panel/skinPanel/PanelContainer/VBoxContainer/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
+columns = 2
 
 [node name="skinButton6" parent="Panel/skinPanel/PanelContainer/VBoxContainer/ScrollContainer/skinGrid" instance=ExtResource("17_84iac")]
 layout_mode = 2
@@ -638,6 +668,9 @@ libraries = {
 }
 
 [connection signal="pressed" from="Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel/btnHeroes" to="." method="_on_btn_heroes_pressed"]
+[connection signal="pressed" from="Panel/CharacterSelectMenu/backPanel/VBoxContainer/loadoutBox/HBoxContainer/toggleBundle/bunRevenge" to="." method="_on_bun_revenge_pressed"]
+[connection signal="pressed" from="Panel/CharacterSelectMenu/backPanel/VBoxContainer/loadoutBox/HBoxContainer/toggleBundle/bunHonor" to="." method="_on_bun_honor_pressed"]
+[connection signal="pressed" from="Panel/CharacterSelectMenu/backPanel/VBoxContainer/loadoutBox/HBoxContainer/toggleBundle/bunGreed" to="." method="_on_bun_greed_pressed"]
 [connection signal="pressed" from="Panel/CharacterSelectMenu/backPanel/VBoxContainer/loadoutBox/HBoxContainer/btnCompendium" to="." method="_on_btn_compendium_pressed"]
 [connection signal="pressed" from="Panel/panelBottom/HBoxContainer/panMid/MarginContainer/btnNewGame" to="." method="_on_btn_new_game_pressed"]
 [connection signal="pressed" from="Panel/panelBottom/HBoxContainer/panLeft/VBoxContainer/iconButtons/btnInfo" to="." method="_on_btn_info_pressed"]

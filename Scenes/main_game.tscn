@@ -1,4 +1,4 @@
-[gd_scene load_steps=106 format=3 uid="uid://yfx4f0fwf4vi"]
+[gd_scene load_steps=112 format=3 uid="uid://yfx4f0fwf4vi"]
 
 [ext_resource type="Texture2D" uid="uid://vtf7yfl2710m" path="res://Assets/UI/panel-border-030.png" id="1_0e3vx"]
 [ext_resource type="Script" uid="uid://c6hur1hg25jx" path="res://Scripts/main_game.gd" id="1_73nn6"]
@@ -36,7 +36,9 @@
 [ext_resource type="PackedScene" uid="uid://vsf0s3kixuku" path="res://Scenes/UI/pause_menu.tscn" id="34_e2wre"]
 [ext_resource type="Texture2D" uid="uid://du2hnv4nfpp78" path="res://Assets/UI/Cursors/busy_hourglass_outline_detail.png" id="34_evlxa"]
 [ext_resource type="Shader" uid="uid://c5ie878mymsjg" path="res://Shaders/crt_shader.gdshader" id="34_q6b2w"]
+[ext_resource type="Texture2D" uid="uid://cxcph5ndupuqa" path="res://Assets/UI/arrow_down.png" id="35_7oxt3"]
 [ext_resource type="PackedScene" uid="uid://cf3ax1fquw2mm" path="res://Scenes/UI/settings_panel.tscn" id="35_evlxa"]
+[ext_resource type="Texture2D" uid="uid://c5j822x16yep3" path="res://Assets/Art/Particles/star_08.png" id="36_n28rm"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_g6spl"]
 
@@ -1922,7 +1924,17 @@ texture_margin_top = 32.0
 texture_margin_right = 32.0
 texture_margin_bottom = 32.0
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7oxt3"]
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_smxg7"]
+
+[sub_resource type="Curve" id="Curve_glqx2"]
+_data = [Vector2(0, 0.23481), 0.0, 0.0, 0, 0, Vector2(1, 0.563924), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_gy1md"]
+offsets = PackedFloat32Array(0, 0.67354, 1)
+colors = PackedColorArray(1, 0.901961, 0.509804, 1, 1, 0.901984, 0.509922, 1, 1, 0.902, 0.51, 0)
 
 [sub_resource type="Animation" id="Animation_73nn6"]
 length = 0.001
@@ -2057,6 +2069,144 @@ tracks/10/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector2(0, 0)]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("BottomPanel/picCombatArrow:visible")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("BottomPanel/picCombatArrow:modulate")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 0.15, 0.15, 1)]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("BottomPanel/picCombatArrow:scale")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("BottomPanel/picCombatArrow:position")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(777, -213)]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("BottomPanel/combat_particles:emitting")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_4rx7b"]
+resource_name = "combat_arrow"
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BottomPanel/picCombatArrow:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("BottomPanel/picCombatArrow:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.7, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(0.96, 0.1728, 0.1728, 1), Color(0.96, 0.1728, 0.1728, 1), Color(0.96, 0.1728, 0.1728, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("BottomPanel/picCombatArrow:scale")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1.2, 0.9), Vector2(1, 1), Vector2(1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("BottomPanel/picCombatArrow:position")
+tracks/3/interp = 2
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3, 0.35, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(777, -213), Vector2(777, -187.304), Vector2(777, -140), Vector2(777, -150), Vector2(777, -140)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("BottomPanel/combat_particles:emitting")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath(".")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"arrow_sfx"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_0bxlt"]
@@ -2395,6 +2545,7 @@ tracks/5/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_r0mdn"]
 _data = {
 &"RESET": SubResource("Animation_73nn6"),
+&"combat_arrow": SubResource("Animation_4rx7b"),
 &"hide_drop_item": SubResource("Animation_0bxlt"),
 &"hide_replace_item": SubResource("Animation_vvhy6"),
 &"setup_toolbars": SubResource("Animation_6y7pd"),
@@ -2586,10 +2737,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -88.0
-offset_top = -85.0
-offset_right = 46.0
-offset_bottom = 97.0
+offset_left = -271.0
+offset_top = -145.0
+offset_right = 247.0
+offset_bottom = 134.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_g6spl")
@@ -2903,17 +3054,28 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 2.0
 offset_top = -95.0
-offset_right = -8.0
+offset_right = -2.0
 offset_bottom = -1.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_gpk8t")
 
-[node name="statusBox" type="HBoxContainer" parent="CombatPanel/CombatPanelTop/panelStatusEnemy"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CombatPanel/CombatPanelTop/panelStatusEnemy"]
+layout_mode = 2
+
+[node name="statusBox" type="HBoxContainer" parent="CombatPanel/CombatPanelTop/panelStatusEnemy/HBoxContainer"]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 size_flags_horizontal = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="CombatPanel/CombatPanelTop/panelStatusEnemy/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="setBox" type="HBoxContainer" parent="CombatPanel/CombatPanelTop/panelStatusEnemy/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
 
 [node name="panelStatusPlayer" type="Panel" parent="CombatPanel/CombatPanelTop"]
 layout_mode = 0
@@ -2942,6 +3104,7 @@ size_flags_horizontal = 3
 mouse_filter = 2
 
 [node name="panelCONTROLS" type="Panel" parent="CombatPanel"]
+visible = false
 layout_mode = 0
 offset_left = 1575.0
 offset_top = 478.0
@@ -3606,8 +3769,8 @@ layout_mode = 2
 stat = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats"]
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-size_flags_horizontal = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/MarginContainer"]
 custom_minimum_size = Vector2(0, 16)
@@ -3619,6 +3782,97 @@ layout_mode = 2
 
 [node name="statBurnDamage" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/MarginContainer/VBoxContainer" instance=ExtResource("30_evlxa")]
 layout_mode = 2
+
+[node name="boxCombatControls" type="PanelContainer" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("9_r0mdn")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_7oxt3")
+
+[node name="boxFightRun" type="VBoxContainer" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="lblCombatControls" type="Label" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/boxFightRun"]
+layout_mode = 2
+theme = ExtResource("21_qnvbm")
+text = "An enemy approaches!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/boxFightRun"]
+layout_mode = 2
+
+[node name="btnFight" type="Button" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/boxFightRun/HBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Fight"
+
+[node name="btnRun" type="Button" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/boxFightRun/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Run"
+
+[node name="CombatLogBox" type="VBoxContainer" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls"]
+visible = false
+layout_mode = 2
+theme = ExtResource("21_qnvbm")
+
+[node name="lblTurn" type="Label" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/CombatLogBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("14_erobn")
+theme_override_font_sizes/font_size = 24
+text = "Turn: 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="speedControls" type="HBoxContainer" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/CombatLogBox"]
+layout_mode = 2
+theme = ExtResource("15_erobn")
+
+[node name="btnPause" type="Button" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/CombatLogBox/speedControls"]
+process_mode = 3
+layout_mode = 2
+icon = SubResource("AtlasTexture_qnvbm")
+
+[node name="btnPlay" type="Button" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/CombatLogBox/speedControls"]
+process_mode = 3
+layout_mode = 2
+icon = SubResource("AtlasTexture_ns551")
+icon_alignment = 1
+
+[node name="btnFast" type="Button" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/CombatLogBox/speedControls"]
+process_mode = 3
+layout_mode = 2
+icon = SubResource("AtlasTexture_erobn")
+
+[node name="btnVeryFast" type="Button" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/CombatLogBox/speedControls"]
+process_mode = 3
+layout_mode = 2
+icon = SubResource("AtlasTexture_vc13p")
+
+[node name="btnInstant" type="Button" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/CombatLogBox/speedControls"]
+process_mode = 3
+layout_mode = 2
+disabled = true
+icon = SubResource("AtlasTexture_g6spl")
+
+[node name="MarginContainer" type="MarginContainer" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/CombatLogBox/speedControls"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="lblSpeed" type="Label" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/CombatLogBox/speedControls"]
+process_mode = 3
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("21_qnvbm")
+theme_override_font_sizes/font_size = 24
+text = "1.5x"
 
 [node name="boxMiniMap" type="HBoxContainer" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats"]
 custom_minimum_size = Vector2(400, 0)
@@ -3674,13 +3928,13 @@ vertical_alignment = 1
 
 [node name="btnTown" type="Button" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap"]
 layout_mode = 2
-size_flags_vertical = 4
+size_flags_horizontal = 3
 theme = ExtResource("9_r0mdn")
 text = "Return to Camp"
 
 [node name="MarginContainer2" type="MarginContainer" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats"]
+custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
-size_flags_horizontal = 3
 
 [node name="statGold" parent="BottomPanel/MarginContainer/VBoxContainer/hboxStats" instance=ExtResource("8_6y7pd")]
 custom_minimum_size = Vector2(130, 0)
@@ -3769,6 +4023,38 @@ layout_mode = 2
 size_flags_horizontal = 8
 columns = 6
 
+[node name="picCombatArrow" type="TextureRect" parent="BottomPanel"]
+visible = false
+modulate = Color(1, 0.15, 0.15, 1)
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 0
+offset_left = 777.0
+offset_top = -213.0
+offset_right = 927.0
+offset_bottom = -63.0
+pivot_offset = Vector2(75, 75)
+texture = ExtResource("35_7oxt3")
+expand_mode = 1
+
+[node name="combat_particles" type="CPUParticles2D" parent="BottomPanel"]
+position = Vector2(851, 0)
+emitting = false
+amount = 30
+texture = ExtResource("36_n28rm")
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+direction = Vector2(0, 0)
+spread = 180.0
+gravity = Vector2(0, 200)
+initial_velocity_min = 200.0
+initial_velocity_max = 400.0
+scale_amount_min = 0.1
+scale_amount_max = 0.5
+scale_amount_curve = SubResource("Curve_glqx2")
+color = Color(1, 0.902, 0.51, 1)
+color_ramp = SubResource("Gradient_gy1md")
+
 [node name="FadeOverlay" type="ColorRect" parent="."]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 1
@@ -3831,4 +4117,11 @@ enabled = false
 [connection signal="pressed" from="ReplaceItemPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/btnCancelReplace" to="." method="_on_btn_cancel_replace_pressed"]
 [connection signal="pressed" from="DropItemPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/HBoxContainer/btnCancelDrop" to="." method="_on_btn_cancel_drop_pressed"]
 [connection signal="pressed" from="DropItemPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/HBoxContainer/btnDrop" to="." method="_on_btn_drop_pressed"]
+[connection signal="pressed" from="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/boxFightRun/HBoxContainer/btnFight" to="CombatPanel" method="_on_btn_fight_pressed"]
+[connection signal="pressed" from="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/boxFightRun/HBoxContainer/btnRun" to="CombatPanel" method="_on_btn_run_pressed"]
+[connection signal="pressed" from="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/CombatLogBox/speedControls/btnPause" to="CombatPanel" method="_on_btn_pause_pressed"]
+[connection signal="pressed" from="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/CombatLogBox/speedControls/btnPlay" to="CombatPanel" method="_on_btn_play_pressed"]
+[connection signal="pressed" from="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/CombatLogBox/speedControls/btnFast" to="CombatPanel" method="_on_btn_fast_pressed"]
+[connection signal="pressed" from="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/CombatLogBox/speedControls/btnVeryFast" to="CombatPanel" method="_on_btn_very_fast_pressed"]
+[connection signal="pressed" from="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/CombatLogBox/speedControls/btnInstant" to="CombatPanel" method="_on_btn_instant_pressed"]
 [connection signal="pressed" from="BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap/btnTown" to="." method="_on_btn_town_pressed"]

@@ -355,8 +355,8 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 915.0
-offset_bottom = 915.0
+offset_top = 950.0
+offset_bottom = 950.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_lja66")
@@ -368,43 +368,50 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -311.0
-offset_top = -350.0
-offset_right = 697.0
-offset_bottom = 350.0
+offset_left = -545.0
+offset_top = -388.0
+offset_right = 571.0
+offset_bottom = 395.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_oiv5d")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/PanelContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/PanelContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/PanelContainer/HBoxContainer"]
 layout_mode = 2
 theme = ExtResource("2_8u2o6")
 
-[node name="mainContent" type="HBoxContainer" parent="Panel/PanelContainer/VBoxContainer"]
+[node name="mainContent" type="HBoxContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("2_8u2o6")
 theme_override_constants/separation = 20
 
-[node name="bossContainer" type="VBoxContainer" parent="Panel/PanelContainer/VBoxContainer/mainContent"]
+[node name="bossContainer" type="VBoxContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="boxProfile" type="HBoxContainer" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer"]
+[node name="boxProfile" type="HBoxContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer"]
 layout_mode = 2
 
-[node name="vBoxProfile" type="VBoxContainer" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/boxProfile"]
+[node name="vBoxProfile" type="VBoxContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/boxProfile"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="lblBoss" type="Label" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/boxProfile/vBoxProfile"]
+[node name="lblBoss" type="Label" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/boxProfile/vBoxProfile"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 48
 text = "[Boss Name]"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="lblRank" type="Label" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/boxProfile/vBoxProfile"]
+[node name="lblRank" type="Label" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/boxProfile/vBoxProfile"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
 theme_override_font_sizes/font_size = 32
@@ -412,7 +419,7 @@ text = "Rank Boss"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="bossPic" type="TextureRect" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/boxProfile/vBoxProfile"]
+[node name="bossPic" type="TextureRect" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/boxProfile/vBoxProfile"]
 custom_minimum_size = Vector2(200, 300)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -420,180 +427,190 @@ texture = ExtResource("4_0ltav")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="vBoxStats" type="VBoxContainer" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer"]
+[node name="vBoxStats" type="VBoxContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="bossStatGrid" type="GridContainer" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/vBoxStats"]
+[node name="bossStatGrid" type="GridContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats"]
 layout_mode = 2
 size_flags_horizontal = 4
 columns = 4
 
-[node name="statHealth" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid" instance=ExtResource("4_f3wo3")]
+[node name="statHealth" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid" instance=ExtResource("4_f3wo3")]
 custom_minimum_size = Vector2(125, 60)
 layout_mode = 2
 show_tooltip = false
 
-[node name="statShield" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid" instance=ExtResource("4_f3wo3")]
+[node name="statShield" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid" instance=ExtResource("4_f3wo3")]
 custom_minimum_size = Vector2(125, 60)
 layout_mode = 2
 stat = 2
 show_tooltip = false
 
-[node name="statAttack" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid" instance=ExtResource("4_f3wo3")]
+[node name="statAttack" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid" instance=ExtResource("4_f3wo3")]
 custom_minimum_size = Vector2(125, 60)
 layout_mode = 2
 stat = 1
 show_tooltip = false
 
-[node name="statAgility" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid" instance=ExtResource("4_f3wo3")]
+[node name="statAgility" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid" instance=ExtResource("4_f3wo3")]
 custom_minimum_size = Vector2(125, 60)
 layout_mode = 2
 stat = 3
 show_tooltip = false
 
-[node name="statStrikes" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid" instance=ExtResource("4_f3wo3")]
+[node name="statStrikes" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid" instance=ExtResource("4_f3wo3")]
 layout_mode = 2
 stat = 5
 show_tooltip = false
 
-[node name="statBurnDamage" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid" instance=ExtResource("4_f3wo3")]
+[node name="statBurnDamage" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid" instance=ExtResource("4_f3wo3")]
 layout_mode = 2
 stat = 8
 show_tooltip = false
 
-[node name="statGold" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid" instance=ExtResource("4_f3wo3")]
+[node name="statGold" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid" instance=ExtResource("4_f3wo3")]
 layout_mode = 2
 stat = 4
 show_tooltip = false
 
-[node name="bossInventory" type="VBoxContainer" parent="Panel/PanelContainer/VBoxContainer/mainContent"]
+[node name="bossInventory" type="VBoxContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent"]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="divider" type="HBoxContainer" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossInventory"]
+[node name="divider" type="HBoxContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory"]
 layout_mode = 2
 
-[node name="MarginContainer2" type="MarginContainer" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossInventory/divider"]
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/divider"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="TextureRect2" type="TextureRect" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossInventory/divider"]
+[node name="TextureRect2" type="TextureRect" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/divider"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("5_0ltav")
 stretch_mode = 5
 
-[node name="Label2" type="Label" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossInventory/divider"]
+[node name="Label2" type="Label" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/divider"]
 layout_mode = 2
 text = "  Inventory  "
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossInventory/divider"]
+[node name="TextureRect" type="TextureRect" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/divider"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("5_0ltav")
 stretch_mode = 5
 flip_h = true
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossInventory/divider"]
+[node name="MarginContainer" type="MarginContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/divider"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="weapon" type="HBoxContainer" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossInventory"]
+[node name="setBox" type="HBoxContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="weapon" type="HBoxContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory"]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="GridContainer" type="GridContainer" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossInventory/weapon"]
+[node name="GridContainer" type="GridContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/weapon"]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="Item" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossInventory/weapon/GridContainer" instance=ExtResource("7_s1gig")]
+[node name="Item" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/weapon/GridContainer" instance=ExtResource("7_s1gig")]
 clip_contents = true
 custom_minimum_size = Vector2(100, 120)
 layout_mode = 2
 
-[node name="bossInventoryGrid" type="GridContainer" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossInventory"]
+[node name="bossInventoryGrid" type="GridContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory"]
 layout_mode = 2
 columns = 4
 
-[node name="Item" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+[node name="Item" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Item2" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+[node name="Item2" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Item3" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+[node name="Item3" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Item4" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+[node name="Item4" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Item5" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+[node name="Item5" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Item6" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+[node name="Item6" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Item7" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+[node name="Item7" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Item8" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+[node name="Item8" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Item9" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+[node name="Item9" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Item10" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+[node name="Item10" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Item11" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+[node name="Item11" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Item12" parent="Panel/PanelContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+[node name="Item12" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="buttonContainer" type="HBoxContainer" parent="Panel/PanelContainer/VBoxContainer"]
+[node name="buttonContainer" type="HBoxContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel/PanelContainer/VBoxContainer/buttonContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/buttonContainer"]
 visible = false
 layout_mode = 2
 
-[node name="btnClose" type="Button" parent="Panel/PanelContainer/VBoxContainer/buttonContainer"]
+[node name="btnClose" type="Button" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/buttonContainer"]
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "WAIT... NOT YET"
 
-[node name="MarginContainer2" type="MarginContainer" parent="Panel/PanelContainer/VBoxContainer/buttonContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/buttonContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="btnRush" type="Button" parent="Panel/PanelContainer/VBoxContainer/buttonContainer"]
+[node name="btnRush" type="Button" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/buttonContainer"]
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "READY TO FIGHT"
 
-[node name="MarginContainer3" type="MarginContainer" parent="Panel/PanelContainer/VBoxContainer/buttonContainer"]
+[node name="MarginContainer3" type="MarginContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/buttonContainer"]
 visible = false
 layout_mode = 2
 
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_override_constants/margin_left = 5
+
 [node name="panelTourney" type="PanelContainer" parent="Panel"]
+visible = false
 custom_minimum_size = Vector2(0, 700)
 layout_mode = 1
 anchors_preset = 4
@@ -695,8 +712,8 @@ self_modulate = Color(0.71, 0.633793, 0.5467, 1)
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 25.0
-offset_bottom = 171.0
+offset_top = -200.0
+offset_bottom = -54.0
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_gkt0m")
 
@@ -762,4 +779,4 @@ libraries = {
 &"": SubResource("AnimationLibrary_bvg5d")
 }
 
-[connection signal="pressed" from="Panel/PanelContainer/VBoxContainer/buttonContainer/btnRush" to="." method="_on_btn_rush_pressed"]
+[connection signal="pressed" from="Panel/PanelContainer/HBoxContainer/VBoxContainer/buttonContainer/btnRush" to="." method="_on_btn_rush_pressed"]

@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://7ygdm4ameglb"]
+[gd_scene load_steps=10 format=3 uid="uid://7ygdm4ameglb"]
 
 [ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="1_hixa8"]
 [ext_resource type="Script" uid="uid://1rv57854mprd" path="res://Scripts/Components/item_tooltip.gd" id="1_tiwhd"]
 [ext_resource type="PackedScene" uid="uid://bj1txoqo06q6n" path="res://Scenes/Elements/stat_item.tscn" id="2_y7em6"]
 [ext_resource type="FontFile" uid="uid://dcuypk4h1r4ff" path="res://Assets/UI/Fonts/ImperatorSmallCaps.ttf" id="3_f5dut"]
+[ext_resource type="Theme" uid="uid://od14ccps1daj" path="res://Themes/descriptive_label.tres" id="5_s2rdf"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tiwhd"]
 
@@ -17,6 +18,16 @@ border_width_top = 5
 border_width_right = 5
 border_width_bottom = 5
 border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_laa7n"]
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+expand_margin_left = 20.0
+expand_margin_top = 5.0
+expand_margin_right = 20.0
+expand_margin_bottom = 5.0
 
 [node name="ItemTooltip" type="Control"]
 layout_mode = 3
@@ -144,3 +155,25 @@ custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_vertical = 0
 columns = 3
+
+[node name="boxBundle" type="HBoxContainer" parent="Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme = ExtResource("5_s2rdf")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/boxBundle"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="panelBundle" type="PanelContainer" parent="Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/boxBundle"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_laa7n")
+
+[node name="lblBundle" type="Label" parent="Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/boxBundle/panelBundle"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Revenge"
+
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/boxBundle"]
+layout_mode = 2
+size_flags_horizontal = 3

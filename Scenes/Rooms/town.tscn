@@ -296,10 +296,10 @@ sb_button = "Done"
 
 [node name="forge_popup" parent="." instance=ExtResource("23_k2qd8")]
 layout_mode = 1
-instruction_text = "Feed me two identical Common  or Golden items..."
-box_name = "The Strange Mouth"
-button_text = "Feed It"
-sb_name = "These taste good."
+instruction_text = "Give me two identical Common  or Golden items..."
+box_name = "A Forge"
+button_text = "Upgrade"
+sb_name = "Success!"
 sb_text = "The machine spits out something you might like."
 sb_button = "Take Your Creation"
 

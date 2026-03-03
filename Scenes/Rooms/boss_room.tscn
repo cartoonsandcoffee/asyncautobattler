@@ -533,15 +533,16 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -495.0
-offset_top = -3260.0
+offset_top = -1232.0
 offset_right = 495.0
-offset_bottom = 1348.0
+offset_bottom = -641.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_nvbdl")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="panelOnward/panelBox"]
 layout_mode = 2
+size_flags_vertical = 0
 theme_override_constants/separation = 10
 
 [node name="titleBox" type="HBoxContainer" parent="panelOnward/panelBox/VBoxContainer"]
@@ -593,6 +594,7 @@ layout_mode = 2
 
 [node name="twoChoices" type="HBoxContainer" parent="panelOnward/panelBox/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 0
 theme = ExtResource("5_mbpft")
 theme_override_constants/separation = 30
 
@@ -604,8 +606,12 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxTexture_btxe2")
 
+[node name="btnEnd" type="Button" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelEnd"]
+layout_mode = 2
+
 [node name="MarginContainer" type="MarginContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelEnd"]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
@@ -613,6 +619,7 @@ theme_override_constants/margin_bottom = 20
 
 [node name="VBoxContainer" type="VBoxContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelEnd/MarginContainer"]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 20
 
 [node name="Label" type="Label" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelEnd/MarginContainer/VBoxContainer"]
@@ -623,28 +630,34 @@ vertical_alignment = 1
 
 [node name="RichTextLabel" type="RichTextLabel" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelEnd/MarginContainer/VBoxContainer"]
 layout_mode = 2
+mouse_filter = 2
 text = "End your run and enjoy your well earned retirement. You will be rewarded..."
 fit_content = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelEnd/MarginContainer/VBoxContainer"]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 20
 
 [node name="MarginContainer" type="MarginContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelEnd/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelEnd/MarginContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelEnd/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer"]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="TextureRect" type="TextureRect" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelEnd/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer/HBoxContainer"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("8_14qk7")
 expand_mode = 2
 
@@ -660,9 +673,11 @@ visible = false
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelEnd/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer2"]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="TextureRect" type="TextureRect" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelEnd/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer2/HBoxContainer"]
 custom_minimum_size = Vector2(50, 50)
@@ -680,17 +695,19 @@ vertical_alignment = 1
 [node name="MarginContainer2" type="MarginContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelEnd/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-
-[node name="btnEnd" type="Button" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelEnd"]
-layout_mode = 2
+mouse_filter = 2
 
 [node name="panelContinue" type="PanelContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxTexture_gpmqk")
 
+[node name="btnChampion" type="Button" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelContinue"]
+layout_mode = 2
+
 [node name="MarginContainer" type="MarginContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelContinue"]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
@@ -698,6 +715,7 @@ theme_override_constants/margin_bottom = 20
 
 [node name="VBoxContainer" type="VBoxContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelContinue/MarginContainer"]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 20
 
 [node name="Label" type="Label" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelContinue/MarginContainer/VBoxContainer"]
@@ -708,28 +726,34 @@ vertical_alignment = 1
 
 [node name="RichTextLabel" type="RichTextLabel" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelContinue/MarginContainer/VBoxContainer"]
 layout_mode = 2
+mouse_filter = 2
 text = "Challenge an undefeated champion. This gives you a chance to sit in the Hall of Champions. If you win you will passively earn these rewards each time a champion loses to you."
 fit_content = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelContinue/MarginContainer/VBoxContainer"]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 20
 
 [node name="MarginContainer" type="MarginContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelContinue/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelContinue/MarginContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelContinue/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer"]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="TextureRect" type="TextureRect" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelContinue/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer/HBoxContainer"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("8_14qk7")
 expand_mode = 2
 
@@ -765,6 +789,7 @@ vertical_alignment = 1
 [node name="MarginContainer2" type="MarginContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelContinue/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 2
 
 [node name="Label2" type="Label" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelContinue/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -774,9 +799,6 @@ theme_override_font_sizes/font_size = 16
 text = "* up to 10 total."
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="btnChampion" type="Button" parent="panelOnward/panelBox/VBoxContainer/twoChoices/panelContinue"]
-layout_mode = 2
 
 [node name="MarginContainer2" type="MarginContainer" parent="panelOnward/panelBox/VBoxContainer/twoChoices"]
 layout_mode = 2
@@ -884,7 +906,7 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 theme = ExtResource("5_mbpft")
-text = "Um, thanks?"
+text = "ONWARD!"
 
 [node name="panelFinalVictory" type="Panel" parent="."]
 visible = false
@@ -911,13 +933,14 @@ anchor_bottom = 0.5
 offset_left = -413.0
 offset_top = -1232.0
 offset_right = 413.0
-offset_bottom = 6865.0
+offset_bottom = -454.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_m2dri")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="panelFinalVictory/panelBlack"]
 layout_mode = 2
+size_flags_vertical = 0
 theme_override_constants/separation = 20
 
 [node name="panelBody" type="PanelContainer" parent="panelFinalVictory/panelBlack/VBoxContainer"]
@@ -927,6 +950,7 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_q7s3k")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="panelFinalVictory/panelBlack/VBoxContainer/panelBody"]
 layout_mode = 2
+size_flags_vertical = 0
 theme = ExtResource("5_mbpft")
 
 [node name="Label" type="Label" parent="panelFinalVictory/panelBlack/VBoxContainer/panelBody/VBoxContainer"]
