@@ -5,9 +5,9 @@ extends RoomEvent
 @onready var shrine_popup: ItemCombiner = $shrine_popup
 @onready var forge_popup: ItemCombiner = $forge_popup
 @onready var crafting_popup: ItemCombiner = $crafting_popup
-@onready var merchant_popup: ItemStore = $merchant_popup
+@onready var merchant_popup: ItemTownStore = $merchant_popup
+@onready var banish_popup: ItemCombiner = $banish_popup
 
-@onready var anim_camp: AnimationPlayer = $animCamp
 @onready var lbl_tip: Label = $PanelContainer/lblTip
 
 
@@ -20,9 +20,10 @@ func initialize_event():
 
 func _run_room_event():
 	print("town -> _run_room_event (post-combat)")
-	#item_combiner.item_skipped.connect(_on_item_skipped)
-	#item_combiner.combiner_closed.connect(_on_item_skipped)
+	Player.popup_open = false
+	AudioManager.play_general_music()
 	heal_player()
+	Player.is_in_town = true
 
 func heal_player():
 	Player.stats.hit_points_current = Player.stats.hit_points
@@ -71,11 +72,12 @@ func _on_btn_venture_button_clicked() -> void:
 		next_room = DungeonManager.get_random_dungeon_room()
 
 	# Load it
+	Player.is_in_town = false
 	main_game_ref.load_room(next_room)
 
 
 func _on_btn_champion_button_clicked() -> void:
-	main_game_ref.zoom_panel.show_panel()
+	main_game_ref.check_boss_panel.show_panel()
 
 
 func _on_btn_forge_button_clicked() -> void:
@@ -125,3 +127,21 @@ func _on_btn_forge_button_entered() -> void:
 func _on_btn_store_button_entered() -> void:
 	generic_hover()
 	lbl_tip.text = "Buy items and weapons from the Merchant."
+
+
+func _on_btn_banish_button_clicked() -> void:
+	if Player.banishes_left_this_rank <= 0:
+		return 
+
+	if Player.popup_open == false:
+		CursorManager.reset_cursor()
+		AudioManager.play_ui_sound("popup_open")
+		banish_popup.show_popup()
+
+
+func _on_btn_banish_button_entered() -> void:
+	if Player.banishes_left_this_rank <= 0:
+		lbl_tip.text = "You can only banish " + str(Player.total_banishes_per_rank) + " items per rank."
+	else:
+		lbl_tip.text = "Banish an item into the abyss."
+	

@@ -9,7 +9,7 @@ signal refresh_skin()
 const SKIN_BUTTON = preload("res://Scenes/Elements/skin_button.tscn")
 
 func _ready() -> void:
-	print("[SkinPanel] Loading skin panel.")
+	#print("[SkinPanel] Loading skin panel.")
 	_refresh()
 	SkinManager.skin_selected.connect(_on_skin_selected)
 	SkinManager.skin_unlocked.connect(_on_skin_unlocked)
@@ -41,7 +41,7 @@ func _show_hover_card(skin: SkinData):
 
 func _on_buy_pressed(skin: SkinData) -> void:
 	if Player.ears_balance < skin.cost:
-		_show_feedback("Not enough ears! Need %d." % skin.cost, false)
+		_show_feedback("Not enough ears!", false)
 		return
 	
 	var player_id = Player.load_or_generate_uuid()

@@ -78,4 +78,7 @@ func _on_room_icon_clicked(room_index: int):
 	room_icon_clicked.emit(room_index)
 
 func _on_zoom_out_pressed():
-	zoom_out_requested.emit()
+	if Player.is_in_town:
+		zoom_out_requested.emit()
+	elif !Player.popup_open && !Player.is_in_town:
+		zoom_out_requested.emit()

@@ -13,6 +13,7 @@ extends Control
 @onready var btn_my_hall: Button = $Panel/PanelContainer/MarginContainer/mainBox/leftBox/VBoxContainer/boxButtons/btnHallOfFame
 @onready var btn_global_hall: Button = $Panel/PanelContainer/MarginContainer/mainBox/leftBox/VBoxContainer/boxButtons/btnGlobalHall
 @onready var btn_leaderboard: Button = $Panel/PanelContainer/MarginContainer/mainBox/leftBox/VBoxContainer/boxButtons/btnLeaderboard
+@onready var btn_current_champs: Button = $Panel/PanelContainer/MarginContainer/mainBox/leftBox/VBoxContainer/boxButtons/btnGlobalChamps
 
 # Stats Controls
 @onready var stat_health: Control = $Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxStats/statBoxes/statHealth
@@ -25,7 +26,8 @@ const TAB_DESC = {
 	"my_champions": "Your active and fallen champions.",
 	"my_hall": "Your undefeated Hall of Fame legends (10-0).",
 	"global_hall": "The 100 most recent 10-0 champions across all players.",
-	"leaderboard": "Top 50 players ranked by champions killed."
+	"leaderboard": "Top 50 players ranked by champions killed.",
+	"active_champions": "The current undefeated champions awaiting challengers."
 }
 
 var champion_record = preload("res://Scenes/Elements/champion_record.tscn")
@@ -45,16 +47,19 @@ func set_buttons():
 	btn_my_hall.pressed.connect(_switch_tab.bind("my_hall"))
 	btn_global_hall.pressed.connect(_switch_tab.bind("global_hall"))
 	btn_leaderboard.pressed.connect(_switch_tab.bind("leaderboard"))
+	btn_current_champs.pressed.connect(_switch_tab.bind("active_champions"))
 
 	btn_champions.mouse_entered.connect(button_hover.bind("my_champions"))
 	btn_my_hall.mouse_entered.connect(button_hover.bind("my_hall"))
 	btn_global_hall.mouse_entered.connect(button_hover.bind("global_hall"))
 	btn_leaderboard.mouse_entered.connect(button_hover.bind("leaderboard"))
+	btn_current_champs.mouse_entered.connect(button_hover.bind("active_champions"))
 
 	btn_champions.mouse_exited.connect(button_exit)
 	btn_my_hall.mouse_exited.connect(button_exit)
 	btn_global_hall.mouse_exited.connect(button_exit)
 	btn_leaderboard.mouse_exited.connect(button_exit)
+	btn_current_champs.mouse_exited.connect(button_exit)
 
 func _switch_tab(tab: String) -> void:
 	if _current_tab == tab:
@@ -93,7 +98,23 @@ func _fetch_and_populate(tab: String) -> void:
 			data = await SupabaseManager.get_global_hall_of_fame(100)
 		"leaderboard":
 			var r = await SupabaseManager._supabase_get(
-				"/rest/v1/player_profiles?select=*&order=champions_killed.desc,ears_balance.desc&limit=50"
+				"/rest/v1/player_profiles?select=*,player_champion_stats(*)"
+				+ "&order=champions_killed.desc,ears_balance.desc&limit=50"
+			)
+			# Then flatten the joined data
+			for player in r.data:
+				var stats = player.get("player_champion_stats", [])
+				if stats.size() > 0:
+					player["hall_champions_count"] = stats[0].get("hall_champions_count", 0)
+					player["active_champions_count"] = stats[0].get("active_champions_count", 0)
+				else:
+					player["hall_champions_count"] = 0
+					player["active_champions_count"] = 0
+			data = r.data if r.status == 200 else []
+		"active_champions":
+			# NEW: Get all active champions (current champion pool)
+			var r = await SupabaseManager._supabase_get(
+				"/rest/v1/active_champions?limit=100"
 			)
 			data = r.data if r.status == 200 else []
 
@@ -173,6 +194,46 @@ func _populate_list(tab: String, data: Array) -> void:
 		"my_hall":         _build_hall_rows(data, false)
 		"global_hall":     _build_hall_rows(data, true)
 		"leaderboard":     _build_leaderboard_rows(data)
+		"active_champions": _build_active_champions_rows(data)
+
+func _build_active_champions_rows(data: Array) -> void:
+	"""Display active champions (current pool)."""
+	for build in data:
+		var record = champion_record.instantiate()
+		record.set_references()
+		record.custom_minimum_size.y = 70
+		
+		var date_created = _format_date(build.get("created_at", ""))
+		var username = build.get("username", "Unknown")
+		var wins = build.get("champion_victories", 0)
+
+		# Parse bundle array
+		var bundle = _parse_bundle_array(build.get("item_bundles", [0, 0, 0]))
+		
+		record.set_bundle(bundle)
+		# Use the global_hall format but with record instead of 2nd date
+		record.set_fields_current_champs(date_created, int(wins), username)
+		
+		# Hover to show build details
+		record.record_mouse_entered.connect(_show_build_details.bind(build))
+		record.record_clicked.connect(_show_build_details.bind(build))
+		record.mouse_filter = Control.MOUSE_FILTER_STOP
+		list_container.add_child(record)
+
+func _parse_bundle_array(bundle_data) -> Array[int]:
+	var result: Array[int] = [0, 0, 0]
+	
+	var source: Array = []
+	if bundle_data is String:
+		var parsed = JSON.parse_string(bundle_data)
+		source = parsed if parsed is Array else []
+	elif bundle_data is Array:
+		source = bundle_data
+	
+	for i in range(min(3, source.size())):
+		result[i] = int(source[i])
+	
+	return result
 
 func _build_my_champions_rows(data: Array) -> void:
 	for build in data:
@@ -184,7 +245,7 @@ func _build_my_champions_rows(data: Array) -> void:
 		var is_active: bool = true if status == "active" else false
 		var strdate = _format_date(build.get("created_at", ""))
 		var strwins = str(build.get("champion_victories", 0))
-		var bundle = int(build.get("item_bundle", 0))
+		var bundle = _parse_bundle_array(build.get("item_bundles", [0, 0, 0]))
 
 		record.set_bundle(bundle)
 		record.set_active(is_active)
@@ -205,7 +266,7 @@ func _build_hall_rows(data: Array, show_player: bool) -> void:
 		var date1:String = _format_date(build.get("created_at", ""))
 		var date2:String = _format_date(build.get("hall_of_fame_date", ""))
 		var username:String = build.get("username", "Unknown")
-		var bundle = int(build.get("item_bundle", 0))
+		var bundle = _parse_bundle_array(build.get("item_bundles", [0, 0, 0]))
 
 		record.set_bundle(bundle)
 		
@@ -235,10 +296,11 @@ func _build_leaderboard_rows(data: Array) -> void:
 			
 		var champs:int = p.get("hall_champions_count", 0)
 		var actives:int = p.get("active_champions_count", 0)
+		var runs:int = p.get("total_runs", 0)
 		var kills:int = p.get("champions_killed", 0)
 		var username:String = p.get("username", "Unknown")
 
-		player.set_fields(username, champs, actives, kills, (i + 1))
+		player.set_fields(username, runs, champs, actives, kills, (i + 1))
 
 		list_container.add_child(player)
 

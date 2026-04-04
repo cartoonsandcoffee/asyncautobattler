@@ -3,7 +3,6 @@ extends RoomEvent
 
 ## Boss battle event with comic-book style animations and rank progression
 
-@onready var flavor_animation: AnimationPlayer  = $animFlavor # "A dangerous figure approaches..."
 @onready var anim_done: AnimationPlayer  = $animDone
 @onready var anim_ears: AnimationPlayer  = $animOnward
 @onready var anim_shadow: AnimationPlayer  = $animShadow
@@ -22,20 +21,20 @@ var boss_enemy: Enemy = null
 func _ready():
 	# Get main game reference
 	main_game_ref = get_tree().get_root().get_node_or_null("MainGame")
+	if main_game_ref:
+		main_game_ref.btn_instant.visible = false
+
 	CombatSpeed.set_speed(CombatSpeed.CombatSpeedMode.NORMAL) #Always default to normal speed for boss battles
 	if not main_game_ref:
 		push_error("[BossRoom] Could not find MainGame node!")
 		return
-	
+
 	reset_all_animations()
 	_enable_all_buttons()
 
 	# manually increment player room count so battles don't cost room points
 	Player.add_rooms(2)
 
-	# Get animation player if it exists in scene
-	flavor_animation = get_node_or_null("animFlavor")
-	
 	# Don't call super._ready() - we have custom flow
 	await _boss_battle_sequence()
 
@@ -70,9 +69,6 @@ func _boss_battle_sequence():
 	
 	print("[BossRoom] Boss: %s (HP: %d)" % [boss_enemy.enemy_name, boss_enemy.stats.hit_points])
 	
-	# 2. Play flavor animation
-	await _play_flavor_animation()
-	
 	# 3. Start combat (uses existing combat panel)
 	# Combat panel will detect boss via enemy_type == BOSS_PLAYER
 	combat_requested.emit(boss_enemy)
@@ -99,19 +95,11 @@ func _boss_battle_sequence():
 		anim_shadow.play("hide_shadow")
 		await _handle_defeat()
 	
+	if main_game_ref:
+		main_game_ref.btn_instant.show_me()
+		
 	# 5. Complete event
 	#complete_event()
-
-func _play_flavor_animation():
-	"""Play comic-book panel animation: 'A dangerous figure approaches...'"""
-	if flavor_animation:
-		print("[BossRoom] Playing flavor animation")
-		flavor_animation.play("boss_approach")
-		await flavor_animation.animation_finished
-	else:
-		# No animation in scene - brief delay for testing
-		print("[BossRoom] No flavor animation - using brief delay")
-		await get_tree().create_timer(1.0).timeout
 
 func _handle_victory():
 	"""Handle boss defeat: save build, wait for continue, trigger rank advancement."""
@@ -123,10 +111,13 @@ func _handle_victory():
 	
 	# 3. Handle which progress comes next
 	if DungeonManager.current_rank == 5:
+		Player.popup_open = true
 		anim_ears.play("show_panel")
 	elif DungeonManager.current_rank == 6:
+		Player.popup_open = true
 		anim_ears.play("show_final")
 	else:
+		Player.popup_open = true
 		lbl_promo.text = "You  advance  to  Rank " + str(DungeonManager.current_rank + 1) + "!"
 		anim_done.play("show_popup")
 
@@ -214,6 +205,7 @@ func _on_btn_champion_pressed() -> void:
 	if not profile.is_empty():
 		Player.load_profile_from_supabase(profile)	
 
+	Player.popup_open = false
 	# Show "Quit While Ahead" choice (for Phase 2)
 	print("[Game] Rank 5 complete, continuing to Champions...")
 	main_game_ref.boss_room_completed("challenge")
@@ -235,12 +227,14 @@ func _on_btn_end_pressed() -> void:
 
 	# Show "Quit While Ahead" choice (for Phase 2)
 	print("[Game] Rank 5 complete! +2 ears earned")
+	Player.popup_open = false
 	main_game_ref.boss_room_completed("end")
 
 
 func _on_btn_continue_pressed() -> void:
 	_disable_all_buttons()
 	await _save_player_build()
+	Player.popup_open = false
 	main_game_ref.boss_room_completed("continue")
 	
 
@@ -267,5 +261,6 @@ func _on_btn_final_victory_pressed() -> void:
 	if not profile.is_empty():
 		Player.load_profile_from_supabase(profile)
 
+	Player.popup_open = false
 	print("[BossRoom] Player is now a champion!")	
 	main_game_ref.boss_room_completed("final")

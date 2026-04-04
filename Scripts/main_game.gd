@@ -48,18 +48,26 @@ extends Control
 @onready var lbl_turn: Label = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/CombatLogBox/lblTurn
 @onready var lbl_speed: Label = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/CombatLogBox/speedControls/lblSpeed
 @onready var btn_run: Button = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/boxFightRun/HBoxContainer/btnRun
+@onready var btn_instant: Control = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/boxFightRun/HBoxContainer/instant_combat_toggle
+
+## -- Version Popup
+@onready var version_popup: Control = $versionPopup
+@onready var version_label: RichTextLabel = $versionPopup/PanelContainer/panelBlack/panelBorder/VBoxContainer/txtVersionMsg
 
 @onready var crt_shader: CanvasLayer = $CRT_Shader
 
 # Mini-map stuff
 @onready var minimap: Minimap = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap
 
+@onready var check_boss_panel: MapZoomPanel = $CheckBossPanel
 @onready var pause_menu: Control = $PauseMenu
 @onready var settings_menu: Control = $SettingsPanel
+@onready var compendium: Control = $Compendium
 
 var current_event
 
 var item_slot = preload("res://Scenes/item.tscn")
+var set_slot = preload("res://Scenes/Elements/set_bonus_display.tscn")
 var item_proc = preload("res://Scenes/Elements/combat_item_proc.tscn")
 var door_choice_scene = preload("res://Scenes/door_choice.tscn")
 
@@ -85,9 +93,7 @@ var inventory_replacement_mode: bool = false
 var pending_drop_item: Item = null
 var pending_drop_slot_index: int = -1
 
-# -- Full map screen
-var zoom_panel_scene = preload("res://Scenes/UI/map_zoom_panel.tscn")
-var zoom_panel: MapZoomPanel 
+var gamecolors: GameColors
 
 func get_combat_panel() -> CombatPanel:
 	# Get reference to the combat panel for room events to use
@@ -98,6 +104,10 @@ func _ready():
 	await get_tree().process_frame
 
 	confirm_systems_initializes()
+	gamecolors = GameColors.new()
+
+	print("----- TEST PERFORMANCE MONITOR: ")
+	print(Performance.get_monitor(Performance.OBJECT_COUNT))
 
 	Player.stats.stats_updated.connect(_on_stats_updated)
 	Player.inventory.item_added.connect(_on_inventory_updated)
@@ -114,12 +124,20 @@ func _ready():
 	CombatManager.item_processor.occurrence_updated.connect(_on_occurrence_updated)
 	CombatManager.strike_ui_update_requested.connect(_strike_ui_update)
 
+	# Signals to drag and drop "Replacement" items when inventory full
+	replacement_item.drag_started.connect(_on_drag_started)
+	replacement_item.drag_ended.connect(_on_drag_ended)
+
+	# Version check signal
+	DungeonManager.version_outdated.connect(_on_version_outdated)
+	
 	# Connect minimap signals
 	#DungeonManager.minimap_update_requested.connect(_on_minimap_update_requested)
 	#minimap.room_icon_clicked.connect(_on_minimap_room_clicked)
 	minimap.zoom_out_requested.connect(_on_zoom_out_requested)
 	pause_menu.new_run_requested.connect(reset_dungeon_for_new_run)
-	
+	pause_menu.menu_closed.connect(check_crt_filter)
+
 	combat_panel.main_game = self
 	combat_panel.combat_completed.connect(_on_combat_completed)
 	combat_panel.player_chose_run.connect(_on_player_ran)
@@ -127,23 +145,20 @@ func _ready():
 	if pause_menu and settings_menu:
 		pause_menu.settings_panel = settings_menu
 
+	if pause_menu and compendium:
+		pause_menu.compendium_panel = compendium
+
 	if btn_continue:
 		btn_continue.pressed.connect(_on_continue_pressed)
 		btn_continue.disabled = true
 		btn_continue.visible = false 
 
 	# CRT SHADER SETTING
-	if GameSettings.crt_effect_enabled:
-		crt_shader.visible = true
-	else:
-		crt_shader.visible = false
+	check_crt_filter()
 
 	# -- Add Map Zoom Panel
-	zoom_panel = MapZoomPanel.new()
-	zoom_panel = zoom_panel_scene.instantiate()
-	add_child(zoom_panel)
-	zoom_panel.closed.connect(_on_zoom_panel_closed)
-	zoom_panel.boss_rush_pressed.connect(_on_boss_rush_pressed)
+	check_boss_panel.closed.connect(_on_zoom_panel_closed)
+	check_boss_panel.boss_rush_pressed.connect(_on_boss_rush_pressed)
 
 	DungeonManager.reset()
 
@@ -155,14 +170,20 @@ func _ready():
 	load_starting_room()
 
 	#AUDIO
-	var dungeon_ambient = load("res://Assets/Audio/Music/Ambience 01.mp3")
+	var dungeon_ambient = load("res://Assets/Audio/Ambient/Ambience 01.mp3")
 	AudioManager.play_ambient(dungeon_ambient, true)
 
 	anim_tools.play("setup_toolbars")
 	set_process_input(true) # for drag preview
-	call_deferred("_debug_find_oversized_controls")
+	#call_deferred("_debug_find_oversized_controls")
 	await get_tree().process_frame
 	
+func check_crt_filter():
+	# CRT SHADER SETTING
+	if GameSettings.crt_effect_enabled:
+		crt_shader.visible = true
+	else:
+		crt_shader.visible = false
 
 func _debug_find_oversized_controls():
 	print("\n=== CHECKING FOR OVERSIZED CONTROLS ===")
@@ -224,6 +245,7 @@ func _input(event: InputEvent):
 			update_combiner_slot_highlights()
 
 func create_test_player():
+	ItemsManager.clear_banished_items()
 	setup_inventory()
 	Player.update_stats_from_items()
 
@@ -241,7 +263,11 @@ func load_room(room_data: RoomData):
 
 	# Update background
 	room_background.texture = room_data.room_definition.background_texture
-	room_background.modulate = room_data.room_definition.room_color
+
+	if room_data.get_rarity() == Enums.Rarity.COMMON || room_data.get_rarity() == Enums.Rarity.UNCOMMON:
+		room_background.modulate = gamecolors.get_rank_color(Player.current_rank)
+	else:
+		room_background.modulate = room_data.room_definition.room_color
 
 	# Clear previous event
 	clear_current_event()
@@ -294,6 +320,7 @@ func clear_current_event():
 
 func load_room_event(room_data: RoomData):
 	var event_scene = room_data.chosen_event_scene
+
 	if event_scene:
 		current_event = event_scene.instantiate()
 
@@ -467,8 +494,13 @@ func _on_continue_pressed():
 		var anim_length = anim_fade.get_animation("fade_out").length
 		await CombatSpeed.create_timer(anim_length)
 
+		var cp = get_tree().get_first_node_in_group("combat_panel")
+		if cp:
+			cp.slide_animation.play("RESET")
+			cp.enemy_anim.play("RESET")
+
 		load_room(next_room)
-		fade_overlay.visible = false
+		#fade_overlay.visible = false
 	else:
 		push_error("No next room found!")
 
@@ -621,6 +653,7 @@ func setup_inventory():
 		var item = Player.inventory.item_slots[i]
 		var item_container = item_slot.instantiate()
 
+		item_container.owner_entity = Player
 		item_container.set_item(item)
 		item_container.custom_minimum_size = Vector2(100, 100)
 		item_container.slot_index = i
@@ -636,6 +669,7 @@ func setup_inventory():
 		item_grid.add_child(item_container)
 	
 	SetBonusManager.check_set_bonuses(Player)
+	_reapply_crafting_slot_dims()
 
 func setup_bonuses(entity):
 	if not (entity == Player):
@@ -648,13 +682,12 @@ func setup_bonuses(entity):
 		child.queue_free()
 
 	for bonus_item in SetBonusManager.get_active_set_bonuses(Player):
-		var item_container = item_slot.instantiate()
+		var set_container = set_slot.instantiate()
 
-		item_container.set_item(bonus_item)
-		item_container.slot_index = -3
-		item_container.custom_minimum_size = Vector2(100, 100)
-		item_container.set_bonus() 
-		sets_grid.add_child(item_container)
+		set_container.set_bonus(bonus_item)
+		set_container.custom_minimum_size = Vector2(100, 100)
+
+		sets_grid.add_child(set_container)
 
 
 func show_item_replacement_overlay():
@@ -695,7 +728,14 @@ func loop_through_player_items_for_position(item: Item) -> Vector2:
 
 
 func setup_weapon():
+	weapon_slot.owner_entity = Player
 	weapon_slot.set_item(Player.inventory.weapon_slot)
+
+	if not weapon_slot.drag_started.is_connected(_on_drag_started):
+		weapon_slot.drag_started.connect(_on_drag_started)
+	if not weapon_slot.drag_ended.is_connected(_on_weapon_drag_ended):
+		weapon_slot.drag_ended.connect(_on_weapon_drag_ended)	
+		
 
 func _on_stats_updated():
 	set_player_stats()
@@ -716,30 +756,77 @@ func _on_drag_started(slot: ItemSlot):
 	TooltipManager.hide_tooltip()
 
 func _on_drag_ended(slot: ItemSlot):
-	# Check if dragging over ItemCombiner
+	## ---- JDM: All the functionality for the different places items can be dropped
+
+	## -- DROPPING INTO AN ITEM COMBINER
 	var combiner = get_current_item_combiner()
 	if combiner:
 		var target_slot = get_combiner_slot_under_mouse(combiner)
 		if target_slot > 0:
+			slot.is_in_crafting_slot = true
 			# Add item to combiner slot
-			combiner.add_item_to_slot(
-				slot.current_item,
-				slot.slot_index,
-				target_slot
-			)
+			await combiner.add_item_to_slot(slot.current_item, target_slot)
+			if slot.is_in_crafting_slot:
+				var was_accepted = slot.current_item.instance_id == combiner.slot_1_instance_id or \
+								slot.current_item.instance_id == combiner.slot_2_instance_id
+				if was_accepted:
+					slot.modulate.a = 0.4
+					slot.button.disabled = true
+				else:
+					slot.is_in_crafting_slot = false  # early return path, restore
+					slot.modulate.a = 1.0
+					slot.button.disabled = false
 			clear_dragging_vars()
 			return  # Don't process normal inventory drop
 
+	## -- DRAG AND DROP FROM REPLACEMENT MODAL
+	if inventory_replacement_mode and dragging_slot == replacement_item:
+		var target_slot = get_slot_under_mouse()
+		if target_slot:
+			Player.inventory.replace_item_at_slot(pending_reward_item, target_slot.slot_index)
+			setup_inventory()
+			Player.update_stats_from_items()
+			hide_item_replacement_overlay()
+		clear_dragging_vars()
+		return  # Don't process normal inventory drop
+
+	## -- NORAML INVENTORY REORDERING
 	# Find what slot we're over
-	var target_slot = get_slot_under_mouse()
+	var _target_slot = get_slot_under_mouse()
 	
-	if target_slot and target_slot != slot:
+	if _target_slot and _target_slot != slot:
 		# Perform the swap or move
-		perform_item_move(slot, target_slot)
+		perform_item_move(slot, _target_slot)
 
 	clear_dragging_vars()
 	slot.modulate.a = 1.0
 	
+func _on_weapon_drag_ended(slot: ItemSlot):
+	# Only allow weapon dragging to crafting combiner, NOT to inventory slots
+	var combiner = get_current_item_combiner()
+	if combiner:
+		var target_slot = get_combiner_slot_under_mouse(combiner)
+		if target_slot > 0:
+			slot.is_in_crafting_slot = true
+			# Add weapon to combiner slot
+			combiner.add_item_to_slot(slot.current_item, target_slot)
+			if slot.is_in_crafting_slot:
+				var was_accepted = slot.current_item.instance_id == combiner.slot_1_instance_id or \
+								slot.current_item.instance_id == combiner.slot_2_instance_id
+				if was_accepted:
+					slot.modulate.a = 0.4
+					slot.button.disabled = true
+				else:
+					slot.is_in_crafting_slot = false  # early return path, restore
+					slot.modulate.a = 1.0
+					slot.button.disabled = false
+				clear_dragging_vars()
+			return
+	
+	# If not over combiner, do nothing (weapon stays in weapon slot)
+	clear_dragging_vars()
+	slot.modulate.a = 1.0
+
 func clear_dragging_vars():
 	# Clean up drag state
 	if drag_preview:
@@ -755,18 +842,17 @@ func _on_slot_dropped_on(target_slot: ItemSlot, dragged_item: Item):
 		perform_item_move(dragging_slot, target_slot)
 
 func _on_slot_clicked(_item: ItemSlot):
-	if not inventory_replacement_mode or not pending_reward_item:
-		return
+	## JDM: This is OLD CODE from when you had to click-to-replace (testing drag-and-drop)
+	#if not inventory_replacement_mode or not pending_reward_item:
+	#	return
 
-	# Get the item being replaced
-	#var old_item = Player.inventory.item_slots[_item.slot_index]
-	
-	# Replace the item
-	var success = Player.inventory.replace_item_at_slot(pending_reward_item, _item.slot_index)
+	## Replace the item
+	#Player.inventory.replace_item_at_slot(pending_reward_item, _item.slot_index)
 
-	setup_inventory()
-	Player.update_stats_from_items()
-	hide_item_replacement_overlay()
+	#setup_inventory()
+	#Player.update_stats_from_items()
+	#hide_item_replacement_overlay()
+	pass
 
 func _on_slot_double_clicked(slot_index: int):
 	if inventory_replacement_mode:
@@ -788,16 +874,24 @@ func perform_item_move(from_slot: ItemSlot, to_slot: ItemSlot):
 	var from_index = from_slot.slot_index
 	var to_index = to_slot.slot_index
 	
-	# If moving to empty slot, just move
+	## --------- JDM: This is the code for swapping item positions,
+	## If moving to empty slot, just move
+	#if not to_slot.current_item:
+	#	Player.inventory.move_item_to_slot(from_index, to_index)
+	#else:
+	#	# Swap items
+	#	Player.inventory.swap_items(from_index, to_index)
+	
+	## Compact to remove gaps
+	#Player.inventory.compact_items()
+	
+	# JDM: New code to just insert item and move all items left.
 	if not to_slot.current_item:
 		Player.inventory.move_item_to_slot(from_index, to_index)
 	else:
 		# Swap items
-		Player.inventory.swap_items(from_index, to_index)
-	
-	# Compact to remove gaps
-	Player.inventory.compact_items()
-	
+		Player.inventory.insert_item_at(from_index, to_index)
+
 	# Refresh display
 	setup_inventory()
 	Player.update_stats_from_items()
@@ -823,6 +917,24 @@ func get_current_item_combiner() -> ItemCombiner:
 			if node.is_ancestor_of(current_event) or current_event.is_ancestor_of(node):
 				return node
 	return null	
+
+func _reapply_crafting_slot_dims():
+	var combiner = get_current_item_combiner()
+	if not combiner:
+		return
+	for slot in item_slots:
+		if slot == null:
+			continue
+		if slot.current_item and (slot.current_item.instance_id == combiner.slot_1_instance_id or slot.current_item.instance_id == combiner.slot_2_instance_id):
+			slot.is_in_crafting_slot = true
+			slot.modulate.a = 0.4
+			slot.button.disabled = true
+
+	# Check weapon slot
+	if weapon_slot and weapon_slot.current_item and (weapon_slot.current_item.instance_id == combiner.slot_1_instance_id or weapon_slot.current_item.instance_id == combiner.slot_2_instance_id):
+		weapon_slot.is_in_crafting_slot = true
+		weapon_slot.modulate.a = 0.4
+		weapon_slot.button.disabled = true
 
 func get_combiner_slot_under_mouse(combiner: ItemCombiner) -> int:
 	# Check which combiner slot (1 or 2) the mouse is over, or 0 if neither
@@ -860,14 +972,16 @@ func create_drag_preview(item: Item):
 	drag_preview = Control.new()
 	drag_preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	drag_preview.size = Vector2(100, 100)
-	
+	drag_preview.z_index = 100
+	drag_preview.z_as_relative = false
+
 	var icon = TextureRect.new()
 	icon.texture = item.item_icon
 	icon.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon.size = Vector2(100, 100)
 	icon.modulate = item.item_color
-	icon.modulate.a = 0.7
+	icon.modulate.a = 0.8
 	
 	drag_preview.add_child(icon)
 	get_tree().root.add_child(drag_preview)
@@ -878,6 +992,7 @@ func _show_panels():
 
 func request_combat(enemy: Enemy) -> bool:
 	# Called by room events to initiate combat. Returns true if player won, false if lost or ran
+
 	print("main_game -> request combat")
 	
 	if not combat_panel:
@@ -940,7 +1055,7 @@ func is_in_replacement_mode() -> bool:
 # Track when combat starts/ends for proper stat display
 func _on_combat_started_for_ui(player, enemy):
 	set_player_stats()  # Refresh to show current values
-	AudioManager.on_combat_started(enemy.enemy_type == Enemy.EnemyType.BOSS_PLAYER)	
+	AudioManager.on_combat_started(enemy.enemy_type == Enemy.EnemyType.BOSS_PLAYER, enemy)	
 
 func _on_combat_ended_for_ui(winner, loser):
 	# Stats will reset to base values, so refresh display
@@ -1009,16 +1124,29 @@ func _on_minimap_room_clicked(room_index: int):
 		show_boss_panel()
 
 func _on_zoom_out_requested():
-	zoom_panel.show_panel()
+	if !Player.popup_open || Player.is_in_town:
+		check_boss_panel.visible = true
+		check_boss_panel.show_panel()
 
 func _on_zoom_panel_closed():
-	# Panel closed, nothing else needed
-	pass
+	check_boss_panel.visible = false
+	Player.popup_open = false
 
 func _on_boss_rush_pressed():
-	# TODO: Trigger boss battle early
-	print("Boss Rush pressed!")
-	zoom_panel.hide_panel()
+	anim_fade.play("fade_out_retry")
+	var anim_length = anim_fade.get_animation("fade_out_retry").length
+	await CombatSpeed.create_timer(anim_length)
+
+	if combat_panel:
+		combat_panel.slide_animation.play("RESET")
+		combat_panel.player_anim.play("RESET")
+		combat_panel.enemy_anim.play("RESET")
+		combat_panel.combat_shadow.visible = true
+		combat_panel.combat_shadow.modulate.a = 1.0
+
+	check_boss_panel.hide_panel()
+	_on_zoom_panel_closed()
+
 	var boss_room = DungeonManager.get_boss_room()
 	load_room(boss_room)
 
@@ -1095,6 +1223,8 @@ func reset_dungeon_for_new_run():
 
 	get_tree().change_scene_to_packed(new_run_scene)
 	
+func fade_out():
+	anim_fade.play("fade_out_retry")
 
 func screen_shake(intensity: float = 10.0, duration: float = 0.5):
 	"""Shake the entire UI root instead of camera."""
@@ -1131,8 +1261,21 @@ func _on_btn_cancel_replace_mouse_entered() -> void:
 
 
 func _on_btn_town_pressed() -> void:
-	if Player.town_visits_left_this_rank > 0:
-		var town_room = DungeonManager.get_town_room()
-		if town_room:
-			#Player.town_visits_left_this_rank -= 1
-			load_room(town_room)
+	var town_room = DungeonManager.get_town_room()
+	if town_room:
+		#Player.town_visits_left_this_rank -= 1
+		load_room(town_room)
+
+func _on_version_outdated(latest_version: String):
+	# Show popup when client is outdated.
+	print("[MainGame] Version outdated! Latest: %s, Current: %s" % [latest_version, Player.GAME_VERSION])
+	
+	# Show popup (use your existing popup system)
+	var popup_text = "A newer version (v%s) is available!\nYou are running version %s.\n\nPlease update to ensure the best experience." % [latest_version, Player.GAME_VERSION]
+	
+	version_popup.visible = true
+	version_label.text = popup_text
+
+func _on_btn_return_pressed() -> void:
+	get_tree().paused = false
+	get_tree().change_scene_to_file("res://Scenes/main_menu.tscn")

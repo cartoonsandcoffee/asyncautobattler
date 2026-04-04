@@ -1,5 +1,7 @@
 extends Control
 
+signal settings_menu_closed()
+
 ## =============================================================================
 ## UI REFERENCES - UPDATE PATHS TO MATCH YOUR SCENE
 ## =============================================================================
@@ -195,6 +197,7 @@ func _on_apply_pressed():
 	"""Apply settings and close panel."""
 	apply_settings()
 	hide_panel()
+	settings_menu_closed.emit()
 
 func _on_cancel_pressed():
 	"""Cancel changes and close panel."""
@@ -202,6 +205,7 @@ func _on_cancel_pressed():
 	load_current_settings()
 	GameSettings.apply_all_settings()
 	hide_panel()
+	settings_menu_closed.emit()
 
 func _on_reset_pressed():
 	"""Reset all settings to defaults."""

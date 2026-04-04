@@ -9,6 +9,8 @@ signal username_confirmed(username: String)
 @onready var btn_name: Button = $panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/btnName
 @onready var panel_name: Panel = $panelName
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var main_menu: Panel = $panelMainMenu
+@onready var info_panel: Control = $GameInfo
 
 var good_name: bool = false
 var uuid: String = ""
@@ -73,6 +75,13 @@ func _initialize_systems():
 	SkinManager.initialize()
 	await get_tree().process_frame
 	lbl.text += "."
+
+	SupabaseManager.initialize()
+	AudioManager.initialize()
+	CursorManager.initialize()
+	GameSettings.initialize()
+	await get_tree().process_frame
+	lbl.text += "."
 	
 	_load_game()
 
@@ -81,10 +90,12 @@ func _load_game():
 	await get_tree().process_frame
 	
 	# Now load your actual main scene
-	get_tree().change_scene_to_file("res://Scenes/main_menu.tscn")
+	AudioManager.play_general_music()
+	main_menu.visible = true
+	
 
 func _on_btn_name_pressed() -> void:
-	AudioManager.play_ui_sound("button_hover")
+	AudioManager.play_ui_sound("button_click")
 	# Emit the signal to continue profile loading
 	var username = txt_name.text.strip_edges()
 	username_confirmed.emit(username)
@@ -151,6 +162,19 @@ func _load_player_profile():
 			txt_error.text = "Server error! Please try again."
 			# Could loop back to try again, or use default name
 		
+
+
+
+func _on_btn_info_pressed() -> void:
+	info_panel.visible = true
+
+func _on_btn_quit_pressed() -> void:
+	get_tree().quit()
+
+
+func _on_btn_play_pressed() -> void:
+	get_tree().change_scene_to_file("res://Scenes/main_menu.tscn")
+
 
 func enter_new_player():
 	animation_player.play("namebox_flyin")

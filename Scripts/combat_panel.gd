@@ -21,14 +21,7 @@ enum PanelState {
 @onready var enemy_name_label: Label = $CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/VBoxContainer/HBoxContainer/boxEnemyName/lblEnemy
 @onready var enemy_desc_label: RichTextLabel = $CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/VBoxContainer/lblEnemyDesc
 @onready var enemy_sprite: TextureRect = $picEnemy
-
-# CONTROL BOX
-@onready var box_fight_run: VBoxContainer = $panelCONTROLS/PanelContainer/FightRunBox
-@onready var box_combat_log: VBoxContainer = $panelCONTROLS/PanelContainer/CombatLogBox
-@onready var btn_run: Button = $panelCONTROLS/PanelContainer/FightRunBox/HBoxContainer/btnRun
-@onready var lbl_turn: Label = $panelCONTROLS/PanelContainer/CombatLogBox/lblTurn
-@onready var lbl_speed: Label = $panelCONTROLS/PanelContainer/CombatLogBox/speedControls/lblSpeed
-
+@onready var btn_enemy:Button = $picEnemy/btnEnemy
 
 # Enemy stat displays
 @onready var enemy_health_stat: StatBoxDisplay = $CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/statsContainer/statHealth
@@ -55,13 +48,19 @@ enum PanelState {
 @onready var victory_panel: Panel = $VictoryPanel
 @onready var death_panel: Panel = $DeathPanel
 @onready var reward_label: Label = $VictoryPanel/PanelContainer/MarginContainer/VBoxContainer/boxReward/panelReward/MarginContainer/HBoxContainer/lblRewardAmt
+@onready var reward_box: HBoxContainer = $VictoryPanel/PanelContainer/MarginContainer/VBoxContainer/boxReward/panelReward/MarginContainer/HBoxContainer
+
+@onready var btn_copy: LinkButton = $VictoryPanel/PanelContainer/MarginContainer/VBoxContainer/boxHistory/HBoxContainer/btnCopy
+@onready var btn_copy_dead: LinkButton = $DeathPanel/PanelContainer/MarginContainer/VBoxContainer/boxHistory/HBoxContainer/btnCopy
 @onready var txt_history: RichTextLabel = $VictoryPanel/PanelContainer/MarginContainer/VBoxContainer/boxHistory/txtHistory
 @onready var txt_history_dead: RichTextLabel =$DeathPanel/PanelContainer/MarginContainer/VBoxContainer/boxHistory/txtHistoryDead
 
 # Animation
+@onready var combat_shadow: TextureRect = $combatShadow 
 @onready var slide_animation: AnimationPlayer = $combatPanelAnim
 @onready var player_anim: AnimationPlayer = $animPlayer
 @onready var enemy_anim: AnimationPlayer = $animEnemy
+@onready var anim_instant: AnimationPlayer = $animInstant
 
 # Main Game Controller
 var main_game: MainGameController 
@@ -130,6 +129,9 @@ func setup_for_combat(enemy_entity, inventory_slots: Array[ItemSlot], weapon_slo
 
 	current_enemy_entity = enemy_entity #.duplicate()  # Work with a copy  #: JDM: removed the ".duplicate()" since it was causing the upgrades to not load, and no need to worry about persistent changes for boss battles
 	current_enemy_entity.reset_to_base_values()
+
+	btn_enemy.disabled = false
+	btn_enemy.mouse_filter = Control.MOUSE_FILTER_STOP
 
 	# Setup enemy display
 	if current_enemy_entity is Enemy:
@@ -241,9 +243,6 @@ func hide_panel():
 	is_visible = false
 	visible = false
 	
-	box_fight_run.visible = true
-	box_combat_log.visible = false
-
 	## -- Buttons on the main game
 	main_game.box_combatcontrols.visible = false
 	main_game.minimap.visible = true
@@ -325,9 +324,8 @@ func _clear_all_highlights():
 
 # Signal handlers
 func _on_combat_started(player_entity, enemy_entity):
-	print("IS THIS FUNCTION CALL UNNECESSARY????")
-	box_fight_run.visible = false 
-	box_combat_log.visible = true
+	btn_enemy.disabled = true
+	btn_enemy.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 	## -- Buttons on the main game
 	main_game.box_fighrun.visible = false
@@ -336,12 +334,16 @@ func _on_combat_started(player_entity, enemy_entity):
 func _on_combat_ended(winner, loser):
 	var winner_name = CombatManager.get_entity_name(winner)
 	var loser_name = CombatManager.get_entity_name(loser)
-	
+
 	if winner == current_player_entity:
-		var gold_earned = CombatManager.calculate_gold_reward(loser) if loser is Enemy else 0
-		if gold_earned > 0:
-			reward_label.text = str(gold_earned)
-			Player.add_gold(gold_earned)
+		if loser.enemy_type != Enemy.EnemyType.BOSS_PLAYER:
+			reward_label.text = str(0)
+			var gold_earned = CombatManager.calculate_gold_reward(loser) if loser is Enemy else 0
+			if gold_earned > 0:
+				reward_label.text = str(gold_earned)
+				Player.add_gold(gold_earned)
+		else:
+			reward_label.text = str(0)
 	
 	# Wait a moment before hiding
 	for child in player_status_container.get_children():
@@ -363,12 +365,21 @@ func _on_combat_ended(winner, loser):
 	main_game.box_fighrun.visible = false
 	main_game.box_comatspeed.visible = false
 
+	update_history_text()
+	AudioManager.play_combat_sound("gong")
+	Player.popup_open = true
+
 	if winner == current_player_entity:
 		slide_animation.play("show_victory")
-		#await slide_animation.animation_finished
+		#AudioManager.play_ui_sound("pappas")
+		await slide_animation.animation_finished
 	else:
+		AudioManager.clear_room_override()
+		AudioManager.play_defeat_music()
 		death_panel.visible = true
 
+	print("----- TEST PERFORMANCE MONITOR: ")
+	print(Performance.get_monitor(Performance.OBJECT_COUNT))
 
 func clear_all_proc_indicators():
 	for child in get_children():
@@ -387,8 +398,8 @@ func create_timed_message(msg: String) -> CombatTurnSign:
 	return box_label
 
 func _on_turn_started(entity, turn_number):
-	var entity_name = CombatManager.get_entity_name(entity)
-	set_turn_label("Turn: " + str(turn_number) + " (" + entity_name + "'s turn)")
+	var entity_name = CombatManager.get_entity_name(entity).left(20)
+	set_turn_label("Turn: " + str(turn_number) + "/" + str(CombatManager.MAX_COMBAT_TURNS) + " (" + entity_name + "'s turn)")
 
 func _on_turn_ended(entity):
 	_clear_all_highlights()
@@ -534,7 +545,7 @@ func _on_status_removed(entity, status: Enums.StatusEffects, stacks: int):
 func _on_item_rule_triggered(item: Item, rule: ItemRule, entity):
 	pass
 
-func _spawn_item_proc_indicator_immediate(item: Item, rule: ItemRule, entity, amount: int = 0):
+func _spawn_item_proc_indicator_immediate(item: Item, rule: ItemRule, entity, amount: int = 0, resolved_status: Enums.StatusEffects = Enums.StatusEffects.NONE):
 	var combat_item_proc = item_proc.instantiate()
 	var _pos = Vector2(0,0)
 	var offset = Vector2(45, -50)
@@ -564,10 +575,10 @@ func _spawn_item_proc_indicator_immediate(item: Item, rule: ItemRule, entity, am
 		combat_item_proc._done() 
 		return # JDM: This goes through combat damage, does not need status proc
 	elif rule.effect_type == Enums.EffectType.APPLY_STATUS:
-		combat_item_proc.set_status_visuals(rule.target_status)
+		combat_item_proc.set_status_visuals(resolved_status)
 		_pos = main_game.loop_through_player_items_for_position(item)
 	elif rule.effect_type == Enums.EffectType.REMOVE_STATUS:
-		combat_item_proc.set_status_visuals(rule.target_status)
+		combat_item_proc.set_status_visuals(resolved_status)
 		_pos = main_game.loop_through_player_items_for_position(item)
 
 	add_child(combat_item_proc)
@@ -627,10 +638,14 @@ func anim_player_walk_to_door():
 func anim_close_panels():
 	slide_animation.play("close_combat")
 
+func anim_close_panels_instant():
+	slide_animation.play("close_combat_instant")
+
 func anim_player_hit():
 	player_anim.play(CombatSpeed.get_animation_variant("player_hit"))
 
 func anim_enemy_appear():
+	AudioManager.play_enemy_approach(current_enemy_entity)
 	enemy_anim.play(CombatSpeed.get_animation_variant("enemy_appear"))
 
 func anim_enemy_hit():
@@ -642,11 +657,14 @@ func anim_enemy_die():
 	enemy_anim.play(CombatSpeed.get_animation_variant("enemy_die"))
 
 func anim_player_idle():
+	if CombatSpeed.is_instant_mode():
+		return
 	player_anim.play(CombatSpeed.get_animation_variant("player_idle"))
 	attack_sequence_complete.emit()
 
 func anim_enemy_idle():
-	#enemy_sprite.texture = current_enemy_entity.sprite
+	if CombatSpeed.is_instant_mode():
+		return
 	enemy_anim.play(CombatSpeed.get_animation_variant("enemy_idle"))
 	attack_sequence_complete.emit()
 
@@ -693,26 +711,34 @@ func _on_btn_run_pressed() -> void:
 	combat_completed.emit(false)
 
 func _on_btn_fight_pressed() -> void:
-	box_fight_run.visible = false
-	box_combat_log.visible = true
+	if !CombatManager.combat_active:
+		## -- Buttons on the main game
+		main_game.box_fighrun.visible = false
+		main_game.box_comatspeed.visible = true
 
-	## -- Buttons on the main game
-	main_game.box_fighrun.visible = false
-	main_game.box_comatspeed.visible = true
-
-	# Transition to combat state
 	_set_state(PanelState.IN_COMBAT)
-	
-	# Emit signal for room event
 	player_chose_fight.emit()
-	
-	# Start the actual combat
-	CombatManager.start_combat(current_player_entity, current_enemy_entity)
+	CombatSpeed.enter_combat()
+
+	if CombatSpeed.is_instant_mode():
+		# Hide speed controls — combat will be over before they matter
+		main_game.box_comatspeed.visible = false
+		player_anim.stop()
+		enemy_anim.stop()
+		AudioManager.play_event_sound("quick_fight")
+		anim_instant.play("instant_combat")
+		var anim_length = anim_instant.get_animation("instant_combat").length
+		await CombatSpeed.create_timer(anim_length)
+		player_anim.play("RESET")
+
+		CombatManager.start_combat(current_player_entity, current_enemy_entity)
+	else:
+		main_game.box_comatspeed.visible = true
+		CombatManager.start_combat(current_player_entity, current_enemy_entity)
 
 func _set_state(new_state: PanelState):
 	current_state = new_state
 	
-
 func _on_btn_pause_pressed() -> void:
 	pause_all_combat_animations(true)
 	CombatSpeed.set_speed(CombatSpeed.CombatSpeedMode.PAUSE)
@@ -734,15 +760,14 @@ func _on_btn_very_fast_pressed() -> void:
 	_update_speed_label(CombatSpeed.CombatSpeedMode.VERY_FAST)
 
 func set_turn_label(_string: String):
-	lbl_turn.text = _string
 	main_game.lbl_turn.text = _string
 
 func set_speed_label(_string: String):
-	lbl_speed.text = _string
 	main_game.lbl_speed.text = _string
 
 func _on_btn_continue_pressed() -> void:
 	slide_animation.play("hide_victory")
+	Player.popup_open = false
 	#await slide_animation.animation_finished
 
 	await hide_panel()
@@ -751,11 +776,21 @@ func _on_btn_continue_pressed() -> void:
 
 func _on_btn_history_pressed() -> void:
 	txt_history.visible = !txt_history.visible
+	btn_copy.visible = txt_history.visible
 	txt_history.text = CombatManager.combat_log
+	txt_history.get_v_scroll_bar().custom_minimum_size.x = 20
 
 	if death_panel.visible:
 		txt_history_dead.visible = !txt_history_dead.visible
+		txt_history_dead.get_v_scroll_bar().custom_minimum_size.x = 20
+		btn_copy_dead.visible = txt_history_dead.visible
 		txt_history_dead.text = CombatManager.combat_log
+
+func update_history_text():
+	txt_history.text = CombatManager.combat_log
+	txt_history_dead.text = CombatManager.combat_log
+	txt_history_dead.get_v_scroll_bar().custom_minimum_size.x = 20
+	txt_history.get_v_scroll_bar().custom_minimum_size.x = 20
 
 func _print_node_tree(node: Node, depth: int):
 	var indent = "  ".repeat(depth)
@@ -891,6 +926,7 @@ func _populate_enemy_inventory(enemy: Enemy):
 
 func _on_btn_quit_pressed() -> void:
 	hide_death_panel()
+	main_game.fade_out()
 	# Optional: Save any stats/progress before quitting
 	# await save_run_stats()
 	
@@ -902,6 +938,8 @@ func _on_btn_quit_pressed() -> void:
 
 func _on_btn_new_run_pressed() -> void:
 	hide_death_panel()
+	main_game.fade_out()
+	AudioManager.play_ui_sound("new_run_click")
 
 	# Update defeat stats BEFORE resetting
 	await _update_defeat_stats()
@@ -909,6 +947,9 @@ func _on_btn_new_run_pressed() -> void:
 	# Reset dungeon manager
 	main_game.reset_dungeon_for_new_run()
 	
+func _on_btn_new_run_mouse_entered() -> void:
+	AudioManager.play_ui_sound("new_run_hover")
+
 func _update_defeat_stats():
 	"""Update player stats after defeat and record champion victory if applicable."""
 	var player_id = Player.load_or_generate_uuid()
@@ -968,6 +1009,7 @@ func spawn_item_proc_indicator(item: Item, rule: ItemRule, entity, amount: int =
 		"type": "item",
 		"item": item,
 		"rule": rule,
+		"resolved_status": rule.target_status,
 		"entity": entity,
 		"amount": amount
 	})
@@ -1025,7 +1067,7 @@ func _process_indicator_queue():
 				_spawn_status_proc_indicator_immediate(request.entity, request.status, request.stat, request.value)
 				timer_duration = CombatSpeed.get_duration("item_proc")
 			"item":
-				_spawn_item_proc_indicator_immediate(request.item,request.rule,request.entity,request.amount)
+				_spawn_item_proc_indicator_immediate(request.item,request.rule,request.entity,request.amount, request.get("resolved_status", request.rule.target_status))
 				timer_duration = CombatSpeed.get_duration("item_proc")
 			"damage":
 				_spawn_damage_indicator_immediate(request.target,request.amount,request.damage_stat,request.visual_info)
@@ -1035,15 +1077,16 @@ func _process_indicator_queue():
 				timer_duration = CombatSpeed.get_duration("status_effect")
 
 		# Wait for readability - but check pause state
-		var elapsed = 0.0
-		while elapsed < timer_duration:
-			# If paused or scene changing, stop processing
-			if get_tree().paused or not is_inside_tree():
-				is_processing_indicator_queue = false
-				return
-			
-			await get_tree().create_timer(0.1, false).timeout  # false = doesn't pause
-			elapsed += 0.1
+		if not CombatSpeed.is_instant_mode():
+			var elapsed = 0.0
+			while elapsed < timer_duration:
+				# If paused or scene changing, stop processing
+				if get_tree().paused or not is_inside_tree():
+					is_processing_indicator_queue = false
+					return
+				
+				await get_tree().create_timer(0.1, false).timeout  # false = doesn't pause
+				elapsed += 0.1
 
 	is_processing_indicator_queue = false
 
@@ -1068,3 +1111,34 @@ func _exit_tree():
 	# Clear the queue to prevent processing in wrong scene
 	indicator_spawn_queue.clear()
 	is_processing_indicator_queue = false
+
+
+func _on_btn_enemy_mouse_exited() -> void:
+	CursorManager.reset_cursor()
+
+func _on_btn_enemy_mouse_entered() -> void:
+	if !CombatManager.combat_active:
+		#if current_enemy_entity.enemy_type == Enemy.EnemyType.REGULAR:
+			#AudioManager.play_event_sound("monster_roar_1")
+		CursorManager.set_combat_cursor()
+
+
+func _on_btn_copy_pressed() -> void:
+	var plain_text = CombatManager.combat_log
+
+	# Strip img tags including their content (the resource path between tags)
+	var img_regex = RegEx.new()
+	img_regex.compile("\\[img[^\\]]*\\].*?\\[/img\\]")
+	plain_text = img_regex.sub(plain_text, "", true)
+
+	# Strip all remaining BBCode tags
+	var tag_regex = RegEx.new()
+	tag_regex.compile("\\[.*?\\]")
+	plain_text = tag_regex.sub(plain_text, "", true)
+
+	DisplayServer.clipboard_set(plain_text)
+
+	# Brief visual feedback
+	btn_copy.text = "COPIED!"
+	await get_tree().create_timer(1.0).timeout
+	btn_copy.text = "[Copy Log]"
