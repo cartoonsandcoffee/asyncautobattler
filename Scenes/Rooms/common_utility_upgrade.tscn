@@ -1,6 +1,6 @@
 [gd_scene load_steps=23 format=3 uid="uid://dt0g5ekhrghn3"]
 
-[ext_resource type="Texture2D" uid="uid://ccbefxbhjge3h" path="res://Assets/Art/Room_04_Background.png" id="1_6m87v"]
+[ext_resource type="Texture2D" uid="uid://ccbefxbhjge3h" path="res://Assets/Art/Backgrounds/Room_04_Background.png" id="1_6m87v"]
 [ext_resource type="Script" uid="uid://c5n4q837qkmdb" path="res://Scripts/RoomEvents/common_utility_upgrade.gd" id="1_of6sx"]
 [ext_resource type="Texture2D" uid="uid://bu7mymmyyfan2" path="res://Assets/Art/Events/merch_upgrade_back.png" id="2_of6sx"]
 [ext_resource type="Texture2D" uid="uid://2kh6snshkwr5" path="res://Assets/Art/Events/merch_upgrade_fore.png" id="3_r0kne"]
@@ -377,7 +377,7 @@ theme_override_constants/shadow_offset_y = 2
 theme_override_constants/outline_size = 5
 theme_override_fonts/font = ExtResource("4_6nhqd")
 theme_override_font_sizes/font_size = 55
-text = "Talk?"
+text = "Talk..."
 horizontal_alignment = 1
 vertical_alignment = 1
 

@@ -538,7 +538,7 @@ theme_override_constants/shadow_offset_y = 2
 theme_override_constants/outline_size = 5
 theme_override_fonts/font = ExtResource("2_b5h87")
 theme_override_font_sizes/font_size = 55
-text = "Investigate?"
+text = "Investigate."
 horizontal_alignment = 1
 vertical_alignment = 1
 

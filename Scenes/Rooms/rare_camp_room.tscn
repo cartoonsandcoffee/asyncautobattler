@@ -1,0 +1,137 @@
+[gd_scene load_steps=7 format=3 uid="uid://cn4372wtxolqu"]
+
+[ext_resource type="Texture2D" uid="uid://c1b8ns4ggyjst" path="res://Assets/Art/Events/Town/Town_Placeholder_2.png" id="1_18n7k"]
+[ext_resource type="Script" uid="uid://bjgnp46hy47f5" path="res://Scripts/RoomEvents/rare_camp_room.gd" id="1_77ref"]
+[ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="2_i7hyn"]
+[ext_resource type="PackedScene" uid="uid://bb31dt8vvd6f4" path="res://Scenes/Elements/item_merchant_store.tscn" id="4_1aoui"]
+[ext_resource type="PackedScene" uid="uid://be8xuccfxqho7" path="res://Scenes/Elements/button_town.tscn" id="4_ox6dg"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_77ref"]
+
+[node name="RareCampRoom" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_77ref")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="picBack" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_18n7k")
+expand_mode = 3
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 117.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_77ref")
+
+[node name="lblTip" type="Label" parent="PanelContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.92, 0.87768, 0.2852, 1)
+theme_override_colors/font_outline_color = Color(0.78, 0.338, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("2_i7hyn")
+theme_override_font_sizes/font_size = 46
+text = "An Improvised Encampment"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="btnStore" parent="." instance=ExtResource("4_ox6dg")]
+layout_mode = 1
+offset_left = 121.0
+offset_top = 340.0
+offset_right = -1154.0
+offset_bottom = -183.0
+
+[node name="btnBugs" parent="." instance=ExtResource("4_ox6dg")]
+layout_mode = 1
+offset_left = 1108.0
+offset_top = 323.0
+offset_right = -142.0
+offset_bottom = -227.0
+
+[node name="btnPotions" parent="." instance=ExtResource("4_ox6dg")]
+layout_mode = 1
+offset_left = 442.0
+offset_top = 350.0
+offset_right = -903.0
+offset_bottom = -263.0
+
+[node name="btnWell" parent="." instance=ExtResource("4_ox6dg")]
+layout_mode = 1
+offset_left = 872.0
+offset_top = 399.0
+offset_right = -554.0
+offset_bottom = -310.0
+
+[node name="btnVenture" parent="." instance=ExtResource("4_ox6dg")]
+layout_mode = 1
+offset_left = 657.0
+offset_top = 110.0
+offset_right = -662.0
+offset_bottom = -398.0
+
+[node name="potion_store" parent="." instance=ExtResource("4_1aoui")]
+layout_mode = 1
+item_rarity = 8
+items_offered = 1
+item_columns = 1
+box_name = "The Potion Dealer"
+box_desc = "\"I've got a rare one today!\""
+allow_refresh = false
+category_string = "Elixir"
+
+[node name="store_fancy" parent="." instance=ExtResource("4_1aoui")]
+layout_mode = 1
+item_rarity = 6
+items_offered = 3
+item_columns = 4
+box_name = "A Purveyor of Fine Goods"
+include_extra_rare = true
+allow_refresh = false
+
+[node name="store_bug" parent="." instance=ExtResource("4_1aoui")]
+layout_mode = 1
+item_rarity = 8
+items_offered = 1
+item_columns = 1
+box_name = "Collector of Rare Bugs"
+box_desc = "This is the prize of my collection, but I [b]could[/b] part with it."
+allow_refresh = false
+category_string = "Bug"
+
+[connection signal="button_clicked" from="btnStore" to="." method="_on_btn_store_button_clicked"]
+[connection signal="button_entered" from="btnStore" to="." method="_on_btn_store_button_entered"]
+[connection signal="button_exited" from="btnStore" to="." method="generic_unhover"]
+[connection signal="button_clicked" from="btnBugs" to="." method="_on_btn_bugs_button_clicked"]
+[connection signal="button_entered" from="btnBugs" to="." method="_on_btn_bugs_button_entered"]
+[connection signal="button_exited" from="btnBugs" to="." method="generic_unhover"]
+[connection signal="button_clicked" from="btnPotions" to="." method="_on_btn_potions_button_clicked"]
+[connection signal="button_entered" from="btnPotions" to="." method="_on_btn_potions_button_entered"]
+[connection signal="button_exited" from="btnPotions" to="." method="generic_unhover"]
+[connection signal="button_clicked" from="btnWell" to="." method="_on_btn_well_button_clicked"]
+[connection signal="button_entered" from="btnWell" to="." method="_on_btn_well_button_entered"]
+[connection signal="button_exited" from="btnWell" to="." method="generic_unhover"]
+[connection signal="button_clicked" from="btnVenture" to="." method="_on_btn_venture_button_clicked"]
+[connection signal="button_entered" from="btnVenture" to="." method="_on_btn_venture_button_entered"]
+[connection signal="button_exited" from="btnVenture" to="." method="generic_unhover"]

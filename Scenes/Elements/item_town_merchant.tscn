@@ -1,0 +1,600 @@
+[gd_scene load_steps=31 format=3 uid="uid://m1r75x06jjg7"]
+
+[ext_resource type="Script" uid="uid://ccygtflndiwpr" path="res://Scripts/Components/item_town_merchant.gd" id="1_xbjtt"]
+[ext_resource type="Texture2D" uid="uid://vtf7yfl2710m" path="res://Assets/UI/panel-border-030.png" id="2_ijfa3"]
+[ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="3_bq8pf"]
+[ext_resource type="PackedScene" uid="uid://bhutmb7ud57lk" path="res://Scenes/item_choice.tscn" id="4_dngwc"]
+[ext_resource type="Texture2D" uid="uid://bf5l3mn4r31le" path="res://Assets/UI/Item_Border_Small_Test.png" id="5_5yjbs"]
+[ext_resource type="Texture2D" uid="uid://7gybg0pei0fk" path="res://Resources/StatIcons/stat_gold.tres" id="6_umkgw"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xggb2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xggb2"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k1i5n"]
+atlas = ExtResource("2_ijfa3")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_es5x0"]
+texture = SubResource("AtlasTexture_k1i5n")
+texture_margin_left = 32.0
+texture_margin_top = 32.0
+texture_margin_right = 32.0
+texture_margin_bottom = 32.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ebopx"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hdyn3"]
+atlas = ExtResource("5_5yjbs")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_k3smq"]
+texture = SubResource("AtlasTexture_hdyn3")
+texture_margin_left = 25.0
+texture_margin_top = 25.0
+texture_margin_right = 25.0
+texture_margin_bottom = 25.0
+region_rect = Rect2(0, 0, 75, 75)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_es5x0"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hdyn3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_k3smq"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bhv48"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_advby"]
+
+[sub_resource type="Animation" id="Animation_hdyn3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Panel:pivot_offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(275, 132)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Panel:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Panel:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_advby"]
+resource_name = "hide_store"
+length = 0.4
+step = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Panel:pivot_offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(275, 132)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Panel:scale")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.07, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.15, 1.15), Vector2(0.5, 0.5)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Panel:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_es5x0"]
+resource_name = "show_store"
+length = 0.5
+step = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Panel:pivot_offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(275, 132)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Panel:scale")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.35, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.5, 0.5), Vector2(1.2, 1.2), Vector2(1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Panel:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_of0g0"]
+_data = {
+&"RESET": SubResource("Animation_hdyn3"),
+&"hide_store": SubResource("Animation_advby"),
+&"show_store": SubResource("Animation_es5x0")
+}
+
+[sub_resource type="Animation" id="Animation_xggb2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel/sidePanelBlack:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_k3smq"]
+resource_name = "reroll_hide"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel/sidePanelBlack:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1.1, 1.1), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_ebopx"]
+resource_name = "reroll_show"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel/sidePanelBlack:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.1, 1.1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_bhv48"]
+_data = {
+&"RESET": SubResource("Animation_xggb2"),
+&"reroll_hide": SubResource("Animation_k3smq"),
+&"reroll_show": SubResource("Animation_ebopx")
+}
+
+[sub_resource type="Animation" id="Animation_bq8pf"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel/sidePanelUpgrade:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_dngwc"]
+resource_name = "hide_upgrade"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel/sidePanelUpgrade:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1.1, 1.1), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_ijfa3"]
+resource_name = "show_upgrade"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel/sidePanelUpgrade:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.1, 1.1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_5yjbs"]
+_data = {
+&"RESET": SubResource("Animation_bq8pf"),
+&"hide_upgrade": SubResource("Animation_dngwc"),
+&"show_upgrade": SubResource("Animation_ijfa3")
+}
+
+[node name="item_town_merchant" type="Control"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_xbjtt")
+
+[node name="Panel" type="Panel" parent="."]
+visible = false
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -275.0
+offset_top = -132.0
+offset_right = 275.0
+offset_bottom = 132.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(275, 132)
+theme_override_styles/panel = SubResource("StyleBoxEmpty_xggb2")
+
+[node name="BlackBack" type="PanelContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_xggb2")
+
+[node name="PanelContainer" type="PanelContainer" parent="Panel/BlackBack"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_es5x0")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/BlackBack/PanelContainer"]
+layout_mode = 2
+mouse_filter = 0
+theme = ExtResource("3_bq8pf")
+theme_override_constants/separation = 10
+
+[node name="lblName" type="Label" parent="Panel/BlackBack/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Title of Menu"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/BlackBack/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="txtDesc" type="RichTextLabel" parent="Panel/BlackBack/PanelContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+bbcode_enabled = true
+text = "This is where it goes when it exists..."
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="itemsContainer" type="GridContainer" parent="Panel/BlackBack/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+columns = 6
+
+[node name="ItemChoice" parent="Panel/BlackBack/PanelContainer/VBoxContainer/itemsContainer" instance=ExtResource("4_dngwc")]
+custom_minimum_size = Vector2(110, 140)
+layout_mode = 2
+
+[node name="ItemChoice2" parent="Panel/BlackBack/PanelContainer/VBoxContainer/itemsContainer" instance=ExtResource("4_dngwc")]
+custom_minimum_size = Vector2(110, 140)
+layout_mode = 2
+
+[node name="ItemChoice3" parent="Panel/BlackBack/PanelContainer/VBoxContainer/itemsContainer" instance=ExtResource("4_dngwc")]
+custom_minimum_size = Vector2(110, 140)
+layout_mode = 2
+
+[node name="ItemChoice4" parent="Panel/BlackBack/PanelContainer/VBoxContainer/itemsContainer" instance=ExtResource("4_dngwc")]
+custom_minimum_size = Vector2(110, 140)
+layout_mode = 2
+
+[node name="ItemChoice5" parent="Panel/BlackBack/PanelContainer/VBoxContainer/itemsContainer" instance=ExtResource("4_dngwc")]
+custom_minimum_size = Vector2(110, 140)
+layout_mode = 2
+
+[node name="ItemChoice6" parent="Panel/BlackBack/PanelContainer/VBoxContainer/itemsContainer" instance=ExtResource("4_dngwc")]
+custom_minimum_size = Vector2(110, 140)
+layout_mode = 2
+
+[node name="btnCancel" type="Button" parent="Panel/BlackBack/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+text = "I'm done here..."
+
+[node name="sidePanelBlack" type="PanelContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -91.0
+offset_top = -131.0
+offset_right = 180.0
+offset_bottom = -39.0
+grow_horizontal = 0
+pivot_offset = Vector2(135, 46)
+theme_override_styles/panel = SubResource("StyleBoxEmpty_ebopx")
+
+[node name="panelReroll" type="PanelContainer" parent="Panel/sidePanelBlack"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_k3smq")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/sidePanelBlack/panelReroll"]
+layout_mode = 2
+theme = ExtResource("3_bq8pf")
+
+[node name="Label" type="Label" parent="Panel/sidePanelBlack/panelReroll/HBoxContainer"]
+layout_mode = 2
+text = "Restock Shop"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Panel/sidePanelBlack/panelReroll/HBoxContainer"]
+modulate = Color(1, 0.733333, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("3_bq8pf")
+theme_override_constants/separation = 10
+
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/sidePanelBlack/panelReroll/HBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect" type="TextureRect" parent="Panel/sidePanelBlack/panelReroll/HBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture = ExtResource("6_umkgw")
+expand_mode = 3
+
+[node name="lblRerollCost" type="Label" parent="Panel/sidePanelBlack/panelReroll/HBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "1"
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/sidePanelBlack/panelReroll/HBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="btnReroll" type="Button" parent="Panel/sidePanelBlack"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_es5x0")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hdyn3")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_k3smq")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_bhv48")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_advby")
+
+[node name="sidePanelUpgrade" type="PanelContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -105.0
+offset_top = -35.0
+offset_right = 180.0
+offset_bottom = 57.0
+grow_horizontal = 0
+pivot_offset = Vector2(135, 46)
+theme_override_styles/panel = SubResource("StyleBoxEmpty_ebopx")
+
+[node name="panelUpgrade" type="PanelContainer" parent="Panel/sidePanelUpgrade"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_k3smq")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/sidePanelUpgrade/panelUpgrade"]
+layout_mode = 2
+theme = ExtResource("3_bq8pf")
+
+[node name="Label" type="Label" parent="Panel/sidePanelUpgrade/panelUpgrade/HBoxContainer"]
+layout_mode = 2
+text = "Upgrade Shop"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Panel/sidePanelUpgrade/panelUpgrade/HBoxContainer"]
+modulate = Color(1, 0.733333, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("3_bq8pf")
+theme_override_constants/separation = 10
+
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/sidePanelUpgrade/panelUpgrade/HBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect" type="TextureRect" parent="Panel/sidePanelUpgrade/panelUpgrade/HBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture = ExtResource("6_umkgw")
+expand_mode = 3
+
+[node name="lblUpgradeCost" type="Label" parent="Panel/sidePanelUpgrade/panelUpgrade/HBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "20"
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/sidePanelUpgrade/panelUpgrade/HBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="btnUpgrade" type="Button" parent="Panel/sidePanelUpgrade"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_es5x0")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hdyn3")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_k3smq")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_bhv48")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_advby")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_of0g0")
+}
+
+[node name="animReroll" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_bhv48")
+}
+
+[node name="animUpgrade" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_5yjbs")
+}
+
+[connection signal="pressed" from="Panel/BlackBack/PanelContainer/VBoxContainer/btnCancel" to="." method="_on_btn_cancel_pressed"]
+[connection signal="mouse_entered" from="Panel/sidePanelBlack/btnReroll" to="." method="_on_btn_reroll_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/sidePanelBlack/btnReroll" to="." method="_on_btn_reroll_mouse_exited"]
+[connection signal="pressed" from="Panel/sidePanelBlack/btnReroll" to="." method="_on_btn_reroll_pressed"]
+[connection signal="mouse_entered" from="Panel/sidePanelUpgrade/btnUpgrade" to="." method="_on_btn_upgrade_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/sidePanelUpgrade/btnUpgrade" to="." method="_on_btn_upgrade_mouse_exited"]
+[connection signal="pressed" from="Panel/sidePanelUpgrade/btnUpgrade" to="." method="_on_btn_upgrade_pressed"]

@@ -1,184 +1,58 @@
-[gd_scene load_steps=26 format=3 uid="uid://c127vn167w5k8"]
+[gd_scene load_steps=28 format=3 uid="uid://b5fdhc5sfpir1"]
 
-[ext_resource type="Script" uid="uid://hs4xhk5aag7r" path="res://Scripts/HallwayEvents/hallway_treasure.gd" id="1_dp2er"]
-[ext_resource type="Texture2D" uid="uid://cr5mucfkmo2k4" path="res://Assets/Art/Backgrounds/Hallway_01.png" id="2_ssvrx"]
-[ext_resource type="Texture2D" uid="uid://0iqhm24jpnqh" path="res://Assets/Art/Events/Grave.png" id="2_wuomh"]
-[ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="4_wsc3q"]
-[ext_resource type="Texture2D" uid="uid://dxw4wnrx37lmp" path="res://Assets/Art/Particles/magic_05.png" id="5_3bg5k"]
-[ext_resource type="PackedScene" uid="uid://c3h585v8mippc" path="res://Scenes/Elements/free_item_offering.tscn" id="6_wg1yh"]
+[ext_resource type="Script" uid="uid://bje6td3bsyn5b" path="res://Scripts/RoomEvents/rare_treasure_elite_bug.gd" id="1_srtqs"]
+[ext_resource type="Texture2D" uid="uid://d27de30ukdp3e" path="res://Assets/Art/Backgrounds/Chamber_01.png" id="2_rpvuc"]
+[ext_resource type="Texture2D" uid="uid://dxw4wnrx37lmp" path="res://Assets/Art/Particles/magic_05.png" id="3_hbka7"]
+[ext_resource type="Texture2D" uid="uid://cjfknxrt7nsap" path="res://Assets/Art/Events/cocoon.png" id="4_pl85s"]
+[ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="5_hbka7"]
+[ext_resource type="PackedScene" uid="uid://c3h585v8mippc" path="res://Scenes/Elements/free_item_offering.tscn" id="6_pl85s"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="7_rpvuc"]
+[ext_resource type="Resource" uid="uid://gwtkjhno3cxa" path="res://Resources/Items/RARE/Bugs/pit_scorpion.tres" id="8_1rbu2"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_adbuy"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qkems"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_k4ton"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4iit6"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dp2er"]
-
-[sub_resource type="Curve" id="Curve_1tpv4"]
+[sub_resource type="Curve" id="Curve_rpvuc"]
 _limits = [0.3, 3.0, 0.0, 1.0]
 _data = [Vector2(0, 0.3), 0.0, 0.0, 0, 0, Vector2(1, 1.0618), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="Gradient" id="Gradient_qkems"]
+[sub_resource type="Gradient" id="Gradient_1rbu2"]
 offsets = PackedFloat32Array(0, 0.625, 1)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
-[sub_resource type="Animation" id="Animation_ac2k8"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ke3fl"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7v73r"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5ugpi"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_oplpu"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ncrpm"]
+
+[sub_resource type="Animation" id="Animation_pl85s"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("picEvent/lblEvent:scale")
+tracks/0/path = NodePath("picEvent:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0.5, 0.5)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("picEvent/lblEvent:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(99, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("picEvent/lblEvent:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_854vh"]
-resource_name = "hide_label"
-length = 0.4
-step = 0.025
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("picEvent/lblEvent:scale")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(1, 1), Vector2(0.5, 0.5)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("picEvent/lblEvent:position")
-tracks/1/interp = 2
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(100, 0), Vector2(99, 77.5)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("picEvent/lblEvent:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_ki0au"]
-resource_name = "show_label"
-length = 0.4
-step = 0.025
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("picEvent/lblEvent:scale")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(0.5, 0.5), Vector2(1, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("picEvent/lblEvent:position")
-tracks/1/interp = 2
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(99, 77.5), Vector2(100, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("picEvent/lblEvent:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_tf3i0"]
-_data = {
-&"RESET": SubResource("Animation_ac2k8"),
-&"hide_label": SubResource("Animation_854vh"),
-&"show_label": SubResource("Animation_ki0au")
-}
-
-[sub_resource type="Animation" id="Animation_wsc3q"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("picEvent/particles:emitting")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("picEvent:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Color(0, 0, 0, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("picEvent:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -192,8 +66,20 @@ tracks/2/keys = {
 "update": 1,
 "values": [true]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Particles:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
-[sub_resource type="Animation" id="Animation_3bg5k"]
+[sub_resource type="Animation" id="Animation_rpvuc"]
 resource_name = "hide_event"
 length = 0.4
 step = 0.025
@@ -204,15 +90,15 @@ tracks/0/path = NodePath("picEvent:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 1), Color(0, 0, 0, 0)]
+"values": [Color(1, 1, 1, 1), Color(0.75, 0.75, 0.75, 0.75), Color(0, 0, 0, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("picEvent/particles:emitting")
+tracks/1/path = NodePath("picEvent:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -228,13 +114,25 @@ tracks/2/path = NodePath("picEvent/btnEvent:disabled")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false, true]
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Particles:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
-[sub_resource type="Animation" id="Animation_dp2er"]
+[sub_resource type="Animation" id="Animation_hbka7"]
 resource_name = "show_event"
 length = 0.4
 step = 0.025
@@ -253,14 +151,14 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("picEvent/particles:emitting")
+tracks/1/path = NodePath("picEvent:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false, true]
+"values": [true]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -274,15 +172,155 @@ tracks/2/keys = {
 "update": 1,
 "values": [true, false]
 }
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_wg1yh"]
-_data = {
-&"RESET": SubResource("Animation_wsc3q"),
-&"hide_event": SubResource("Animation_3bg5k"),
-&"show_event": SubResource("Animation_dp2er")
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Particles:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
-[sub_resource type="Animation" id="Animation_2jh8b"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1rbu2"]
+_data = {
+&"RESET": SubResource("Animation_pl85s"),
+&"hide_event": SubResource("Animation_rpvuc"),
+&"show_event": SubResource("Animation_hbka7")
+}
+
+[sub_resource type="Animation" id="Animation_ke3fl"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("picEvent/lblAction:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("picEvent/lblAction:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("picEvent/lblAction:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(101.5, 58)]
+}
+
+[sub_resource type="Animation" id="Animation_7v73r"]
+resource_name = "hide_label"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("picEvent/lblAction:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("picEvent/lblAction:scale")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(2, 2), Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("picEvent/lblAction:position")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(101.5, -50), Vector2(101.5, 58)]
+}
+
+[sub_resource type="Animation" id="Animation_1rbu2"]
+resource_name = "show_label"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("picEvent/lblAction:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("picEvent/lblAction:scale")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(2, 2)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("picEvent/lblAction:position")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(101.5, 58), Vector2(101.5, -50)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_5ugpi"]
+_data = {
+&"RESET": SubResource("Animation_ke3fl"),
+&"hide_label": SubResource("Animation_7v73r"),
+&"show_label": SubResource("Animation_1rbu2")
+}
+
+[sub_resource type="Animation" id="Animation_ncrpm"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -318,11 +356,11 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(1, 1)]
+"values": [Vector2(0.5, 0.5)]
 }
 
-[sub_resource type="Animation" id="Animation_hhy2t"]
-resource_name = "hide_items"
+[sub_resource type="Animation" id="Animation_g6l54"]
+resource_name = "hide_box"
 length = 0.4
 step = 0.025
 tracks/0/type = "value"
@@ -362,8 +400,8 @@ tracks/2/keys = {
 "values": [Vector2(1, 1), Vector2(1.1, 1.1), Vector2(0.5, 0.5)]
 }
 
-[sub_resource type="Animation" id="Animation_ssvrx"]
-resource_name = "show_items"
+[sub_resource type="Animation" id="Animation_oplpu"]
+resource_name = "show_box"
 length = 0.4
 step = 0.025
 tracks/0/type = "value"
@@ -403,21 +441,21 @@ tracks/2/keys = {
 "values": [Vector2(0.5, 0.5), Vector2(1.1, 1.1), Vector2(1, 1)]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_etoxu"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_j7jeq"]
 _data = {
-&"RESET": SubResource("Animation_2jh8b"),
-&"hide_items": SubResource("Animation_hhy2t"),
-&"show_items": SubResource("Animation_ssvrx")
+&"RESET": SubResource("Animation_ncrpm"),
+&"hide_box": SubResource("Animation_g6l54"),
+&"show_box": SubResource("Animation_oplpu")
 }
 
-[node name="HallwayTreasure" type="Control"]
+[node name="rare_treasure_elite_bug" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_dp2er")
+script = ExtResource("1_srtqs")
 
 [node name="picBack" type="TextureRect" parent="."]
 visible = false
@@ -427,8 +465,30 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_ssvrx")
+texture = ExtResource("2_rpvuc")
 expand_mode = 1
+
+[node name="Particles" type="CPUParticles2D" parent="."]
+position = Vector2(812, 464)
+emitting = false
+amount = 10
+texture = ExtResource("3_hbka7")
+speed_scale = 0.3
+randomness = 0.3
+emission_shape = 3
+emission_rect_extents = Vector2(50, 20)
+direction = Vector2(0, 0)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 100.0
+initial_velocity_max = 300.0
+angular_velocity_min = 30.0
+angular_velocity_max = 200.0
+scale_amount_min = 0.1
+scale_amount_max = 0.2
+scale_amount_curve = SubResource("Curve_rpvuc")
+color = Color(0.745813, 0.5472, 0.76, 1)
+color_ramp = SubResource("Gradient_1rbu2")
 
 [node name="picEvent" type="TextureRect" parent="."]
 modulate = Color(0, 0, 0, 1)
@@ -438,19 +498,17 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -147.0
-offset_top = -84.0
-offset_right = 147.0
-offset_bottom = 129.0
+offset_left = -160.0
+offset_top = -162.0
+offset_right = 160.0
+offset_bottom = 162.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(1.1, 1.1)
-pivot_offset = Vector2(147, 106)
-texture = ExtResource("2_wuomh")
+pivot_offset = Vector2(160, 162)
+texture = ExtResource("4_pl85s")
 expand_mode = 1
-stretch_mode = 5
 
-[node name="lblEvent" type="Label" parent="picEvent"]
+[node name="lblAction" type="Label" parent="picEvent"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 8
@@ -458,22 +516,19 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -48.0
-offset_top = -106.5
-offset_right = 48.0
-offset_bottom = -48.5
+offset_left = -58.5
+offset_top = -104.0
+offset_right = 58.5
+offset_bottom = -54.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(0.5, 0.5)
-pivot_offset = Vector2(48, 29)
-theme_override_colors/font_color = Color(1, 0.866667, 0, 1)
-theme_override_colors/font_outline_color = Color(0.51, 0.306, 0, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 2
+pivot_offset = Vector2(58, 25)
+theme = ExtResource("5_hbka7")
+theme_override_colors/font_color = Color(1, 0.954667, 0.32, 1)
+theme_override_colors/font_outline_color = Color(0.61, 0.0671, 0.0671, 1)
 theme_override_constants/outline_size = 5
-theme_override_fonts/font = ExtResource("4_wsc3q")
-theme_override_font_sizes/font_size = 46
-text = "Dig!"
+theme_override_font_sizes/font_size = 42
+text = "Reach  in!"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -484,36 +539,14 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_adbuy")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_qkems")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_k4ton")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_4iit6")
-theme_override_styles/normal = SubResource("StyleBoxEmpty_dp2er")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ke3fl")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_7v73r")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_5ugpi")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_oplpu")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ncrpm")
 disabled = true
 
-[node name="particles" type="CPUParticles2D" parent="picEvent"]
-position = Vector2(173, 140)
-emitting = false
-amount = 10
-texture = ExtResource("5_3bg5k")
-speed_scale = 0.3
-randomness = 0.3
-emission_shape = 3
-emission_rect_extents = Vector2(100, 20)
-direction = Vector2(0, 0)
-spread = 180.0
-gravity = Vector2(0, 0)
-initial_velocity_min = 100.0
-initial_velocity_max = 300.0
-angular_velocity_min = 30.0
-angular_velocity_max = 200.0
-scale_amount_min = 0.1
-scale_amount_max = 0.2
-scale_amount_curve = SubResource("Curve_1tpv4")
-color = Color(0.760379, 0.640721, 0.605235, 1)
-color_ramp = SubResource("Gradient_qkems")
-
-[node name="FreeItemOffering" parent="." instance=ExtResource("6_wg1yh")]
+[node name="FreeItemOffering" parent="." instance=ExtResource("6_pl85s")]
 visible = false
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
@@ -522,28 +555,28 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-items_offered = 2
-box_name = "Someone's Grave"
-box_desc = "Well... it's no longer of use to the dead."
-include_weapons = false
-max_1_weapon = false
-rerolls = 1
-reroll_button_text = "Keep Digging"
-reroll_sound_name = "dig_grave"
-
-[node name="animLabel" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_tf3i0")
-}
+scale = Vector2(0.5, 0.5)
+filter_by = 4
+item_rarity = 2
+items_offered = 1
+box_name = "Some  Giant  Cocoon"
+box_desc = "You can see something moving in there..."
+category_string = "Cocooned"
+items = Array[ExtResource("7_rpvuc")]([ExtResource("8_1rbu2")])
 
 [node name="animEvent" type="AnimationPlayer" parent="."]
 libraries = {
-&"": SubResource("AnimationLibrary_wg1yh")
+&"": SubResource("AnimationLibrary_1rbu2")
 }
 
-[node name="animItems" type="AnimationPlayer" parent="."]
+[node name="animLabel" type="AnimationPlayer" parent="."]
 libraries = {
-&"": SubResource("AnimationLibrary_etoxu")
+&"": SubResource("AnimationLibrary_5ugpi")
+}
+
+[node name="animItem" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_j7jeq")
 }
 
 [connection signal="mouse_entered" from="picEvent/btnEvent" to="." method="_on_btn_event_mouse_entered"]

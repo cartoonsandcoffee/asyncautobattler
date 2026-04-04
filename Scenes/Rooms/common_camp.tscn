@@ -1,7 +1,7 @@
 [gd_scene load_steps=36 format=3 uid="uid://dl7fby7lsklkk"]
 
 [ext_resource type="Script" uid="uid://biptebupq216e" path="res://Scripts/HallwayEvents/hallway_camp.gd" id="1_hyja3"]
-[ext_resource type="Texture2D" uid="uid://ccbefxbhjge3h" path="res://Assets/Art/Room_04_Background.png" id="2_owu7u"]
+[ext_resource type="Texture2D" uid="uid://cr5mucfkmo2k4" path="res://Assets/Art/Backgrounds/Hallway_01.png" id="2_owu7u"]
 [ext_resource type="Texture2D" uid="uid://dxt3yb4gkjn6x" path="res://Assets/Art/Particles/smoke_07.png" id="3_n4m1l"]
 [ext_resource type="Texture2D" uid="uid://c2lunpve1ax4w" path="res://Assets/Art/Events/campfire_dim.png" id="4_g5vxb"]
 [ext_resource type="Texture2D" uid="uid://37b2fi5slcla" path="res://Assets/Art/Events/campfire_light.png" id="5_do143"]

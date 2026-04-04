@@ -1,8 +1,8 @@
 [gd_scene load_steps=20 format=3 uid="uid://m163y3gcbfc4"]
 
-[ext_resource type="Texture2D" uid="uid://ccbefxbhjge3h" path="res://Assets/Art/Room_04_Background.png" id="1_pciut"]
 [ext_resource type="Script" uid="uid://cfmjnc8rb4xmi" path="res://Scripts/HallwayEvents/hallway_peddler.gd" id="1_po35g"]
 [ext_resource type="Texture2D" uid="uid://c87udhg7dvjp6" path="res://Assets/Art/Events/Merchant01.png" id="2_c0g1i"]
+[ext_resource type="Texture2D" uid="uid://cr5mucfkmo2k4" path="res://Assets/Art/Backgrounds/Hallway_01.png" id="2_ytue0"]
 [ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="3_po35g"]
 [ext_resource type="PackedScene" uid="uid://bb31dt8vvd6f4" path="res://Scenes/Elements/item_merchant_store.tscn" id="5_74n3r"]
 
@@ -462,7 +462,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("1_pciut")
+texture = ExtResource("2_ytue0")
 expand_mode = 1
 
 [node name="picEvent" type="TextureRect" parent="."]

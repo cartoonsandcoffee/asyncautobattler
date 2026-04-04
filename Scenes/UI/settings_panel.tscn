@@ -30,6 +30,7 @@ border_width_top = 1
 
 [node name="SettingsPanel" type="Control"]
 process_mode = 3
+z_index = 20
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -242,7 +243,7 @@ text = "Screen Shake"
 [node name="checkVSYNC" type="CheckBox" parent="Panel/pnlBlackBack/pnlBorder/VBoxContainer/panelGraphics/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 button_pressed = true
-text = "V-Sycn"
+text = "V-Sync"
 
 [node name="checkFullscreen" type="CheckBox" parent="Panel/pnlBlackBack/pnlBorder/VBoxContainer/panelGraphics/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2

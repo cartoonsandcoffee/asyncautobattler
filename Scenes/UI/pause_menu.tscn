@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://vsf0s3kixuku"]
+[gd_scene load_steps=8 format=3 uid="uid://vsf0s3kixuku"]
 
 [ext_resource type="Script" uid="uid://cii4qy0wlkljr" path="res://Scripts/UI/pause_menu.gd" id="1_oykix"]
 [ext_resource type="Texture2D" uid="uid://derrdt27xagod" path="res://Assets/UI/panel-border-007.png" id="1_r2i2h"]
 [ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="2_oykix"]
 [ext_resource type="Texture2D" uid="uid://ccbcslnsifj3o" path="res://Assets/UI/divider-fade-002.png" id="3_kdnb7"]
+[ext_resource type="PackedScene" uid="uid://ca0klxte1xuax" path="res://Scenes/Elements/confirm_box.tscn" id="5_kdnb7"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_702e2"]
 bg_color = Color(0, 0, 0, 1)
@@ -56,10 +57,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
+offset_left = -250.0
+offset_top = -303.0
+offset_right = 250.0
+offset_bottom = 303.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_702e2")
@@ -105,7 +106,7 @@ custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
 [node name="btnResume" type="Button" parent="Panel/panelBlackBack/panelBorder/VBoxContainer"]
-custom_minimum_size = Vector2(0, 80)
+custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
 text = "Resume"
 
@@ -114,16 +115,25 @@ custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
 [node name="btnNewRun" type="Button" parent="Panel/panelBlackBack/panelBorder/VBoxContainer"]
-custom_minimum_size = Vector2(0, 80)
+custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
 text = "New Run"
 
+[node name="btnCompendium" type="Button" parent="Panel/panelBlackBack/panelBorder/VBoxContainer"]
+custom_minimum_size = Vector2(0, 75)
+layout_mode = 2
+text = "Compendium"
+
 [node name="btnSettings" type="Button" parent="Panel/panelBlackBack/panelBorder/VBoxContainer"]
-custom_minimum_size = Vector2(0, 80)
+custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
 text = "Settings"
 
 [node name="btnQuit" type="Button" parent="Panel/panelBlackBack/panelBorder/VBoxContainer"]
-custom_minimum_size = Vector2(0, 80)
+custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
 text = "Return to Main Menu"
+
+[node name="ConfirmBox" parent="." instance=ExtResource("5_kdnb7")]
+visible = false
+layout_mode = 1

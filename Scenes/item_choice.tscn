@@ -1,12 +1,14 @@
-[gd_scene load_steps=23 format=3 uid="uid://bhutmb7ud57lk"]
+[gd_scene load_steps=27 format=3 uid="uid://bhutmb7ud57lk"]
 
 [ext_resource type="Script" uid="uid://d0pbs8dnvje5l" path="res://Scripts/Components/item_choice.gd" id="1_4pu7h"]
 [ext_resource type="Texture2D" uid="uid://7h1qtewfvmnq" path="res://Assets/Items/Blank.png" id="2_32j57"]
 [ext_resource type="FontFile" uid="uid://dgwg8mvobk57a" path="res://Assets/UI/Fonts/ImperatorSmallCaps Bold.ttf" id="3_5por3"]
+[ext_resource type="Texture2D" uid="uid://cfj380cj5wikn" path="res://Assets/UI/web_back_test.png" id="4_5jpqp"]
 [ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="4_5por3"]
 [ext_resource type="Texture2D" uid="uid://1p2fhdhgi3x4" path="res://Assets/UI/Select.png" id="4_50rcf"]
 [ext_resource type="PackedScene" uid="uid://7ygdm4ameglb" path="res://Scenes/Elements/item_tooltip.tscn" id="5_5jpqp"]
 [ext_resource type="Texture2D" uid="uid://7gybg0pei0fk" path="res://Resources/StatIcons/stat_gold.tres" id="5_50rcf"]
+[ext_resource type="Texture2D" uid="uid://2edhx1a70b00" path="res://Resources/Rarity/common.tres" id="8_4sdkt"]
 [ext_resource type="Theme" uid="uid://od14ccps1daj" path="res://Themes/descriptive_label.tres" id="8_50rcf"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tnst4"]
@@ -14,12 +16,17 @@
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5jpqp"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jmixh"]
-bg_color = Color(0.118581, 0.118581, 0.118581, 1)
+bg_color = Color(0, 0, 0, 1)
 border_width_left = 3
 border_width_top = 3
 border_width_right = 3
 border_width_bottom = 3
 border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4sdkt"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4sdkt"]
+bg_color = Color(0, 0, 0, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_btogu"]
 atlas = ExtResource("2_32j57")
@@ -218,6 +225,51 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_jmixh")
 
+[node name="wep_indicator" type="TextureRect" parent="Panel/VBoxContainer/itemContainer"]
+visible = false
+layout_mode = 2
+texture = ExtResource("4_5jpqp")
+
+[node name="ColorRect" type="ColorRect" parent="Panel/VBoxContainer/itemContainer/wep_indicator"]
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -20.5
+offset_top = -3.0
+offset_right = 2.5
+offset_bottom = 20.0
+grow_horizontal = 0
+color = Color(0, 0, 0, 1)
+
+[node name="pnlRare" type="Panel" parent="Panel/VBoxContainer/itemContainer"]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_4sdkt")
+
+[node name="picRarity" type="TextureRect" parent="Panel/VBoxContainer/itemContainer/pnlRare"]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -20.0
+offset_bottom = 20.0
+grow_horizontal = 0
+texture = ExtResource("8_4sdkt")
+expand_mode = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="Panel/VBoxContainer/itemContainer/pnlRare/picRarity"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4sdkt")
+
 [node name="MarginContainer" type="MarginContainer" parent="Panel/VBoxContainer/itemContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 5
@@ -299,7 +351,7 @@ theme_override_styles/panel = SubResource("StyleBoxEmpty_66iod")
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
-anchor_right = 0.0
+anchor_bottom = 1.0
 grow_horizontal = 1
 grow_vertical = 0
 

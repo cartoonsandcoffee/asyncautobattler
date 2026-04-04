@@ -1,13 +1,10 @@
-[gd_scene load_steps=21 format=3 uid="uid://dfuglhrwpha2"]
+[gd_scene load_steps=17 format=3 uid="uid://cm7ix0rhv3v3h"]
 
-[ext_resource type="Texture2D" uid="uid://vtf7yfl2710m" path="res://Assets/UI/panel-border-030.png" id="1_ml8qj"]
-[ext_resource type="Script" uid="uid://c3jpimlh4u1c0" path="res://Scripts/Components/item_combiner.gd" id="1_s2t3v"]
-[ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="2_s2t3v"]
-[ext_resource type="Theme" uid="uid://od14ccps1daj" path="res://Themes/descriptive_label.tres" id="4_d4lnh"]
-[ext_resource type="Texture2D" uid="uid://8npufy4nk401" path="res://Assets/Art/Particles/circle_03.png" id="5_7co36"]
-[ext_resource type="PackedScene" uid="uid://cpl3ovqtw13ok" path="res://Scenes/Zooms/zoom_forge.tscn" id="6_2dfb1"]
-[ext_resource type="PackedScene" uid="uid://bxrbkkqe0pd1u" path="res://Scenes/Zooms/zoom_altar.tscn" id="6_sxq1v"]
-[ext_resource type="PackedScene" uid="uid://dcxqc4kjtonjh" path="res://Scenes/Zooms/zoom_craft_bug.tscn" id="7_0b8cs"]
+[ext_resource type="Script" uid="uid://bgqahtth2we4t" path="res://Scripts/Components/item_banisher.gd" id="1_sty7n"]
+[ext_resource type="Texture2D" uid="uid://vtf7yfl2710m" path="res://Assets/UI/panel-border-030.png" id="2_cbuyy"]
+[ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="3_na4ta"]
+[ext_resource type="Theme" uid="uid://od14ccps1daj" path="res://Themes/descriptive_label.tres" id="4_1xl71"]
+[ext_resource type="Texture2D" uid="uid://8npufy4nk401" path="res://Assets/Art/Particles/circle_03.png" id="5_3sm2s"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_d4lnh"]
 
@@ -15,7 +12,7 @@
 bg_color = Color(0, 0, 0, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k1i5n"]
-atlas = ExtResource("1_ml8qj")
+atlas = ExtResource("2_cbuyy")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_sxq1v"]
 texture = SubResource("AtlasTexture_k1i5n")
@@ -157,32 +154,14 @@ tracks/2/keys = {
 "values": [Vector2(0.5, 0.5), Vector2(1.1, 1.1), Vector2(1, 1)]
 }
 
-[sub_resource type="Animation" id="Animation_snk66"]
-resource_name = "show_refresh"
-length = 0.4
-step = 0.025
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Panel:scale")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector2(1, 1), Vector2(1.1, 1.1), Vector2(1, 1)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_snk66"]
 _data = {
 &"RESET": SubResource("Animation_stwcu"),
 &"hide_popup": SubResource("Animation_u4xu3"),
-&"show_popup": SubResource("Animation_0b8cs"),
-&"show_refresh": SubResource("Animation_snk66")
+&"show_popup": SubResource("Animation_0b8cs")
 }
 
-[node name="ItemCombiner" type="Control" groups=["item_combiner"]]
+[node name="ItemBanisher" type="Control"]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -190,7 +169,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_s2t3v")
+script = ExtResource("1_sty7n")
 
 [node name="Panel" type="Panel" parent="."]
 modulate = Color(1, 1, 1, 0)
@@ -227,56 +206,18 @@ grow_vertical = 2
 pivot_offset = Vector2(300, 180)
 theme_override_styles/panel = SubResource("StyleBoxFlat_7co36")
 
-[node name="panelInvalid" type="PanelContainer" parent="Panel/panelBlack"]
-visible = false
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_sxq1v")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/panelBlack/panelInvalid"]
-layout_mode = 2
-theme = ExtResource("2_s2t3v")
-theme_override_constants/separation = 10
-
-[node name="lblName" type="Label" parent="Panel/panelBlack/panelInvalid/VBoxContainer"]
-layout_mode = 2
-text = "Nothing happens..."
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="MarginContainer" type="MarginContainer" parent="Panel/panelBlack/panelInvalid/VBoxContainer"]
-custom_minimum_size = Vector2(0, 20)
-layout_mode = 2
-
-[node name="txtDesc" type="RichTextLabel" parent="Panel/panelBlack/panelInvalid/VBoxContainer/MarginContainer"]
-layout_mode = 2
-bbcode_enabled = true
-text = "What a let down."
-fit_content = true
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="itemsContainer" type="GridContainer" parent="Panel/panelBlack/panelInvalid/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 4
-columns = 5
-
-[node name="btnBack" type="Button" parent="Panel/panelBlack/panelInvalid/VBoxContainer"]
-custom_minimum_size = Vector2(0, 80)
-layout_mode = 2
-text = "Try Again."
-
 [node name="panelCombiner" type="PanelContainer" parent="Panel/panelBlack"]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_sxq1v")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel/panelBlack/panelCombiner"]
 layout_mode = 2
-theme = ExtResource("2_s2t3v")
+theme = ExtResource("3_na4ta")
 theme_override_constants/separation = 10
 
 [node name="lblName" type="Label" parent="Panel/panelBlack/panelCombiner/VBoxContainer"]
 layout_mode = 2
-text = "Title of Menu"
+text = "Banish Item"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -287,7 +228,7 @@ layout_mode = 2
 [node name="txtDesc" type="RichTextLabel" parent="Panel/panelBlack/panelCombiner/VBoxContainer/MarginContainer"]
 layout_mode = 2
 bbcode_enabled = true
-text = "This is where it goes when it exists..."
+text = "Disgard an item down the hole and you won't see it again this run."
 fit_content = true
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -323,13 +264,14 @@ anchor_bottom = 1.0
 offset_top = -19.0
 grow_horizontal = 2
 grow_vertical = 0
-theme = ExtResource("4_d4lnh")
+theme = ExtResource("4_1xl71")
 theme_override_font_sizes/font_size = 14
-text = "Slot 1"
+text = "Place Item"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="CraftSlot2" type="Panel" parent="Panel/panelBlack/panelCombiner/VBoxContainer/itemsContainer"]
+visible = false
 custom_minimum_size = Vector2(120, 120)
 layout_mode = 2
 
@@ -354,7 +296,7 @@ anchor_bottom = 1.0
 offset_top = -19.0
 grow_horizontal = 2
 grow_vertical = 0
-theme = ExtResource("4_d4lnh")
+theme = ExtResource("4_1xl71")
 theme_override_font_sizes/font_size = 14
 text = "Slot 2"
 horizontal_alignment = 1
@@ -374,7 +316,7 @@ text = "Nevermind"
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Throw 'em in!"
+text = "Throw it in!"
 
 [node name="panelReward" type="PanelContainer" parent="Panel/panelBlack"]
 visible = false
@@ -383,20 +325,22 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_sxq1v")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel/panelBlack/panelReward"]
 layout_mode = 2
-theme = ExtResource("2_s2t3v")
+theme = ExtResource("3_na4ta")
 theme_override_constants/separation = 10
 
 [node name="lblName" type="Label" parent="Panel/panelBlack/panelReward/VBoxContainer"]
 layout_mode = 2
-text = "Yum!"
+text = "Done!"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel/panelBlack/panelReward/VBoxContainer"]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
+size_flags_vertical = 3
 
 [node name="txtDesc" type="RichTextLabel" parent="Panel/panelBlack/panelReward/VBoxContainer/MarginContainer"]
+visible = false
 layout_mode = 2
 bbcode_enabled = true
 text = "Look what I've made for you..."
@@ -434,7 +378,7 @@ anchor_bottom = 1.0
 offset_top = -19.0
 grow_horizontal = 2
 grow_vertical = 0
-theme = ExtResource("4_d4lnh")
+theme = ExtResource("4_1xl71")
 theme_override_font_sizes/font_size = 14
 text = "Slot 1"
 horizontal_alignment = 1
@@ -464,7 +408,7 @@ color_ramp = SubResource("Gradient_d4lnh")
 position = Vector2(774, 431)
 emitting = false
 amount = 10
-texture = ExtResource("5_7co36")
+texture = ExtResource("5_3sm2s")
 one_shot = true
 speed_scale = 0.4
 emission_shape = 1
@@ -483,24 +427,13 @@ scale_amount_curve = SubResource("Curve_sxq1v")
 color = Color(0.4785, 0.80475, 0.87, 1)
 color_ramp = SubResource("Gradient_2dfb1")
 
-[node name="zoomForge" parent="." instance=ExtResource("6_2dfb1")]
-visible = false
-layout_mode = 1
-
-[node name="zoomCraftBug" parent="." instance=ExtResource("7_0b8cs")]
-visible = false
-layout_mode = 1
-
-[node name="zoomAltar" parent="." instance=ExtResource("6_sxq1v")]
-visible = false
-layout_mode = 1
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_snk66")
 }
 
-[connection signal="pressed" from="Panel/panelBlack/panelInvalid/VBoxContainer/btnBack" to="." method="_on_btn_back_pressed"]
 [connection signal="mouse_entered" from="Panel/panelBlack/panelCombiner/VBoxContainer/boxButtons/btnSkip" to="." method="_on_btn_skip_mouse_entered"]
 [connection signal="pressed" from="Panel/panelBlack/panelCombiner/VBoxContainer/boxButtons/btnSkip" to="." method="_on_btn_skip_pressed"]
 [connection signal="mouse_entered" from="Panel/panelBlack/panelCombiner/VBoxContainer/boxButtons/btnCraft" to="." method="_on_btn_craft_mouse_entered"]
+[connection signal="pressed" from="Panel/panelBlack/panelCombiner/VBoxContainer/boxButtons/btnCraft" to="." method="_on_btn_craft_pressed"]
+[connection signal="pressed" from="Panel/panelBlack/panelReward/VBoxContainer/btnDone" to="." method="_on_btn_done_pressed"]

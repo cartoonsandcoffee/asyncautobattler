@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cqorbe72ves58" path="res://Scripts/RoomEvents/altar_room.gd" id="1_4qefn"]
 [ext_resource type="Resource" uid="uid://gm0vvksbp7e4" path="res://Resources/Enemies/Anguish.tres" id="2_mtbdh"]
-[ext_resource type="Texture2D" uid="uid://ci156s4y1tkxg" path="res://Assets/Art/Backgrounds/Background_04.png" id="3_4qefn"]
+[ext_resource type="Texture2D" uid="uid://cr5mucfkmo2k4" path="res://Assets/Art/Backgrounds/Hallway_01.png" id="3_4qefn"]
 [ext_resource type="Texture2D" uid="uid://cr43ke21qx4hi" path="res://Assets/Art/Events/corpse_pile_sword.png" id="4_q08fy"]
 [ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="5_o4cxg"]
 [ext_resource type="PackedScene" uid="uid://c3h585v8mippc" path="res://Scenes/Elements/free_item_offering.tscn" id="6_k5n7a"]
@@ -327,14 +327,14 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -279.0
-offset_top = -55.0
-offset_right = 403.678
-offset_bottom = 331.0
+offset_left = -341.5
+offset_top = -165.0
+offset_right = 341.5
+offset_bottom = 200.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(0.5, 0.5)
-pivot_offset = Vector2(215, 193)
+scale = Vector2(0.66, 0.66)
+pivot_offset = Vector2(341, 182)
 texture = ExtResource("4_q08fy")
 expand_mode = 3
 stretch_mode = 5
@@ -377,7 +377,7 @@ theme_override_colors/font_outline_color = Color(0.631053, 0.435967, 0, 1)
 theme_override_constants/outline_size = 3
 theme_override_fonts/font = ExtResource("5_o4cxg")
 theme_override_font_sizes/font_size = 46
-text = "Reach in?"
+text = "Reach in!"
 horizontal_alignment = 1
 vertical_alignment = 1
 

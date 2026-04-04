@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bqe1p63qqfmnw"]
+[gd_scene load_steps=17 format=3 uid="uid://bqe1p63qqfmnw"]
 
 [ext_resource type="Script" uid="uid://dh7un1alskdo3" path="res://Scripts/UI/compendium.gd" id="1_i31vm"]
 [ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="1_q7jf6"]
@@ -6,7 +6,9 @@
 [ext_resource type="Texture2D" uid="uid://ccbcslnsifj3o" path="res://Assets/UI/divider-fade-002.png" id="3_i31vm"]
 [ext_resource type="Texture2D" uid="uid://vtf7yfl2710m" path="res://Assets/UI/panel-border-030.png" id="4_iay8p"]
 [ext_resource type="Theme" uid="uid://od14ccps1daj" path="res://Themes/descriptive_label.tres" id="5_3ohpy"]
+[ext_resource type="Theme" uid="uid://b3mgkpy6wmwks" path="res://Themes/compendium_buttons.tres" id="5_dd1gw"]
 [ext_resource type="PackedScene" uid="uid://cqhyru53o5wfx" path="res://Scenes/item.tscn" id="6_3utmk"]
+[ext_resource type="ButtonGroup" uid="uid://81gxifisslgq" path="res://Themes/compendium_toggle.tres" id="6_ahmr2"]
 [ext_resource type="Theme" uid="uid://dhmhp1enwr7tp" path="res://Themes/toggle_button.tres" id="7_iay8p"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dd1gw"]
@@ -28,6 +30,13 @@ texture_margin_top = 24.0
 texture_margin_right = 24.0
 texture_margin_bottom = 24.0
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_dd1gw"]
+texture = ExtResource("4_iay8p")
+texture_margin_left = 24.0
+texture_margin_top = 24.0
+texture_margin_right = 24.0
+texture_margin_bottom = 24.0
+
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_f4ijw"]
 texture = ExtResource("4_iay8p")
 texture_margin_left = 24.0
@@ -36,6 +45,7 @@ texture_margin_right = 24.0
 texture_margin_bottom = 24.0
 
 [node name="Compendium" type="Control"]
+process_mode = 3
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -81,8 +91,8 @@ layout_mode = 2
 theme_override_constants/separation = 10
 
 [node name="menuTitle" type="HBoxContainer" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer"]
-visible = false
 layout_mode = 2
+theme_override_constants/separation = 10
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/menuTitle"]
 layout_mode = 2
@@ -95,13 +105,27 @@ texture = ExtResource("3_i31vm")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="lblTitle" type="Label" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/menuTitle"]
+[node name="btnItems" type="Button" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/menuTitle"]
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 48
-text = "Compendium"
-horizontal_alignment = 1
-vertical_alignment = 1
+theme = ExtResource("5_dd1gw")
+toggle_mode = true
+button_pressed = true
+button_group = ExtResource("6_ahmr2")
+text = "All  Items"
+
+[node name="Label" type="Label" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/menuTitle"]
+layout_mode = 2
+text = "  or  "
+
+[node name="btnSets" type="Button" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/menuTitle"]
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+theme = ExtResource("5_dd1gw")
+theme_override_constants/outline_size = 0
+toggle_mode = true
+button_group = ExtResource("6_ahmr2")
+text = "Set  Bonuses"
 
 [node name="TextureRect" type="TextureRect" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/menuTitle"]
 layout_mode = 2
@@ -176,7 +200,7 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
 selected = 0
-item_count = 6
+item_count = 7
 popup/item_0/text = "All"
 popup/item_0/id = 0
 popup/item_1/text = "Common"
@@ -189,30 +213,23 @@ popup/item_4/text = "Legendary"
 popup/item_4/id = 4
 popup/item_5/text = "Craftable"
 popup/item_5/id = 5
+popup/item_6/text = "Non-Craftable"
+popup/item_6/id = 6
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 
-[node name="boxBundles" type="VBoxContainer" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="boxBundles" type="GridContainer" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer"]
 visible = false
 layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="bunGeneral" type="Button" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer/boxBundles"]
-modulate = Color(0.692548, 0.673584, 0.712202, 1)
-layout_mode = 2
-theme = ExtResource("7_iay8p")
-toggle_mode = true
-button_pressed = true
-text = "   General   "
+columns = 2
 
 [node name="bunRevenge" type="Button" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer/boxBundles"]
 modulate = Color(0.92, 0.2576, 0.2576, 1)
 layout_mode = 2
 theme = ExtResource("7_iay8p")
 toggle_mode = true
-button_pressed = true
 text = "   Revenge   "
 
 [node name="bunHonor" type="Button" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer/boxBundles"]
@@ -220,7 +237,6 @@ modulate = Color(0.2325, 0.6045, 0.93, 1)
 layout_mode = 2
 theme = ExtResource("7_iay8p")
 toggle_mode = true
-button_pressed = true
 text = "   Honor   "
 
 [node name="bunGreed" type="Button" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer/boxBundles"]
@@ -228,8 +244,35 @@ modulate = Color(1, 0.546667, 0.15, 1)
 layout_mode = 2
 theme = ExtResource("7_iay8p")
 toggle_mode = true
-button_pressed = true
 text = "   Greed   "
+
+[node name="bunDuty" type="Button" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer/boxBundles"]
+modulate = Color(0.6, 0.4, 0.2, 1)
+layout_mode = 2
+theme = ExtResource("7_iay8p")
+toggle_mode = true
+text = "   Duty   "
+
+[node name="bunShame" type="Button" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer/boxBundles"]
+modulate = Color(1, 0.4, 1, 1)
+layout_mode = 2
+theme = ExtResource("7_iay8p")
+toggle_mode = true
+text = "   Shame   "
+
+[node name="bunChaos" type="Button" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer/boxBundles"]
+modulate = Color(0.298039, 0.788235, 0.25098, 1)
+layout_mode = 2
+theme = ExtResource("7_iay8p")
+toggle_mode = true
+text = "   Chaos   "
+
+[node name="bunGeneral" type="Button" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer/boxBundles"]
+modulate = Color(0.692548, 0.673584, 0.712202, 1)
+layout_mode = 2
+theme = ExtResource("7_iay8p")
+toggle_mode = true
+text = "   General   "
 
 [node name="MarginContainer3" type="MarginContainer" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(50, 0)
@@ -259,6 +302,39 @@ theme = ExtResource("1_q7jf6")
 text = "Loading  Items..."
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="panelSets" type="PanelContainer" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxTexture_dd1gw")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelSets"]
+layout_mode = 2
+
+[node name="gridSets" type="GridContainer" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelSets/ScrollContainer"]
+layout_mode = 2
+columns = 13
+
+[node name="Item" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelSets/ScrollContainer/gridSets" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(105, 120)
+layout_mode = 2
+
+[node name="Item2" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelSets/ScrollContainer/gridSets" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(105, 120)
+layout_mode = 2
+
+[node name="Item3" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelSets/ScrollContainer/gridSets" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(105, 120)
+layout_mode = 2
+
+[node name="Item4" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelSets/ScrollContainer/gridSets" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(105, 120)
+layout_mode = 2
+
+[node name="Item5" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelSets/ScrollContainer/gridSets" instance=ExtResource("6_3utmk")]
+custom_minimum_size = Vector2(105, 120)
+layout_mode = 2
 
 [node name="panelItems" type="PanelContainer" parent="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer"]
 layout_mode = 2
@@ -476,6 +552,8 @@ custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
+[connection signal="pressed" from="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/menuTitle/btnItems" to="." method="_on_btn_items_pressed"]
+[connection signal="pressed" from="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/menuTitle/btnSets" to="." method="_on_btn_sets_pressed"]
 [connection signal="item_selected" from="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/optTypes" to="." method="_on_opt_types_item_selected"]
 [connection signal="item_selected" from="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/optRarity" to="." method="_on_opt_rarity_item_selected"]
 [connection signal="mouse_entered" from="Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/Buttons/btnDone" to="." method="_on_btn_done_mouse_entered"]

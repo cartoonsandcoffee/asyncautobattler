@@ -1,8 +1,8 @@
 [gd_scene load_steps=14 format=3 uid="uid://c0ojk8fs0jxr2"]
 
-[ext_resource type="Texture2D" uid="uid://w21umqcnpemn" path="res://Assets/Art/Room_02_Background.png" id="1_rdqa8"]
-[ext_resource type="Script" uid="uid://c10ivfyjdj5no" path="res://Scripts/combat_scene.gd" id="1_vtehv"]
-[ext_resource type="Texture2D" uid="uid://cew5nim0iupkf" path="res://Assets/Art/Enemies/Melter.png" id="2_7uj85"]
+[ext_resource type="Texture2D" uid="uid://w21umqcnpemn" path="res://Assets/Art/Backgrounds/Room_02_Background.png" id="1_rdqa8"]
+[ext_resource type="Script" path="res://Scripts/combat_scene.gd" id="1_vtehv"]
+[ext_resource type="Texture2D" path="res://Assets/Art/Enemies/Melter.png" id="2_7uj85"]
 [ext_resource type="Texture2D" uid="uid://dodv4eqs1sxcl" path="res://Assets/Art/Enemies/Player.png" id="3_2ip8y"]
 [ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="4_7uj85"]
 [ext_resource type="Texture2D" uid="uid://2wdcqaowp0fe" path="res://Assets/UI/Buttons/sheet_white1x.png" id="6_loea4"]

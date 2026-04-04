@@ -1,0 +1,76 @@
+[gd_scene load_steps=8 format=3 uid="uid://v3oowft6rjc0"]
+
+[ext_resource type="Texture2D" uid="uid://dnw0mej3amlga" path="res://Assets/Art/Backgrounds/Background_06.png" id="1_6leoo"]
+[ext_resource type="Texture2D" uid="uid://cp8vc07ch0spx" path="res://Assets/Art/Events/MapMan.png" id="2_xeyao"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mxfl3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lodas"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_y3yo0"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1st12"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_n2mm3"]
+
+[node name="rare_utility_mapmaker" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="picBack" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_6leoo")
+expand_mode = 1
+
+[node name="Event" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="picEvent" type="TextureRect" parent="Event"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -858.0
+offset_top = -685.0
+offset_right = 858.0
+offset_bottom = 782.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.15, 0.15)
+pivot_offset = Vector2(858, 733)
+texture = ExtResource("2_xeyao")
+
+[node name="Button" type="Button" parent="Event/picEvent"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_mxfl3")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_lodas")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_y3yo0")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_1st12")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_n2mm3")

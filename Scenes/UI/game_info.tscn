@@ -142,20 +142,22 @@ text = "Explain the Venturing through the Ruins..."
 custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
 
-[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-bbcode_enabled = true
-text = "This icon is the \"Time Points\" icon, exploring a single room costs 1 point. There are 3 different main types of rooms in the ancient ruins: Treasures, Utilities, and Merchants. Treasure rooms are any rooms that let you select free items to add to your inventory. Utility Rooms are any rooms that can modify your items. Merchant Rooms are where you can spend your gold to buy new items. Each room type has several different events that can happen therein, and there are different rarities among them: Common, Uncommon, and Rare.
-
-Some rooms contain enemies that you will have to fight. Death is permanent, tread carefully."
-fit_content = true
-
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent/HBoxContainer"]
 custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 texture = ExtResource("5_wv8bj")
 stretch_mode = 4
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+bbcode_enabled = true
+text = "This icon is the \"Time Points\" icon, exploring a single room costs 1 point. If you challenge and kill a rank boss with Time Points left, those points carry over into the next rank. This is a good tactic to accumulate extra time on later ranks where items are rarer, but challenging a boss too early has its risks. 
+
+There are 3 different main types of rooms in the ancient ruins: Treasures, Utilities, and Merchants. Treasure rooms are any rooms that let you select free items to add to your inventory. Utility Rooms are any rooms that can modify your items. Merchant Rooms are where you can spend your gold to buy new items. Each room type has several different events that can happen therein, and there are different rarities among them: Common, Uncommon, and Rare.
+
+Some rooms contain enemies that you will have to fight. Death is permanent, tread carefully."
+fit_content = true
 
 [node name="lblItems" type="Label" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent"]
 layout_mode = 2
@@ -253,12 +255,18 @@ vertical_alignment = 1
 
 [node name="GridContainer" type="GridContainer" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent"]
 layout_mode = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 20
 columns = 6
 
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent/GridContainer"]
 modulate = Color(0.666667, 1, 0, 1)
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
 texture = ExtResource("8_j68jd")
+expand_mode = 3
 
 [node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent/GridContainer"]
 layout_mode = 2
@@ -267,10 +275,12 @@ text = "ACID.  Removes shield equal to acid at turn start."
 
 [node name="TextureRect2" type="TextureRect" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent/GridContainer"]
 modulate = Color(0.6, 0.87451, 1, 1)
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 size_flags_horizontal = 4
+size_flags_vertical = 0
 texture = ExtResource("9_tbfho")
-stretch_mode = 2
+expand_mode = 3
 
 [node name="RichTextLabel2" type="RichTextLabel" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent/GridContainer"]
 layout_mode = 2
@@ -279,8 +289,13 @@ text = "BLESSING.  When removed, gain 1 attack per stack and 3 health."
 
 [node name="TextureRect3" type="TextureRect" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent/GridContainer"]
 modulate = Color(1, 0.960784, 0.811765, 1)
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
 texture = ExtResource("10_6pclo")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="RichTextLabel3" type="RichTextLabel" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent/GridContainer"]
 layout_mode = 2
@@ -289,8 +304,12 @@ text = "BLIND.  Your attack is halved as long as you have blind stacks. Remove 1
 
 [node name="TextureRect4" type="TextureRect" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent/GridContainer"]
 modulate = Color(1, 0.4, 0, 1)
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
 texture = ExtResource("11_g0rah")
+expand_mode = 3
 
 [node name="RichTextLabel4" type="RichTextLabel" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent/GridContainer"]
 layout_mode = 2
@@ -299,20 +318,27 @@ text = "BURN.  At turn end, remove 1 burn stack and take 3 damage. (Burn damage 
 
 [node name="TextureRect5" type="TextureRect" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent/GridContainer"]
 modulate = Color(1, 0.4, 1, 1)
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 size_flags_horizontal = 4
+size_flags_vertical = 0
 texture = ExtResource("12_8mnsn")
-stretch_mode = 2
+expand_mode = 3
 
 [node name="RichTextLabel5" type="RichTextLabel" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "POISON.  If you have no shield, take damage equal to poison at turn start, then remove 1 stack."
+fit_content = true
 
 [node name="TextureRect6" type="TextureRect" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent/GridContainer"]
 modulate = Color(0, 1, 0.533333, 1)
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
 texture = ExtResource("13_wuu3u")
+expand_mode = 3
 
 [node name="RichTextLabel6" type="RichTextLabel" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent/GridContainer"]
 layout_mode = 2
@@ -321,8 +347,12 @@ text = "REGENERATION.  Restore health equal to regeneration at turn end, then re
 
 [node name="TextureRect7" type="TextureRect" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent/GridContainer"]
 modulate = Color(0.741176, 0.698039, 0.501961, 1)
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
 texture = ExtResource("14_w3qt2")
+expand_mode = 3
 
 [node name="RichTextLabel7" type="RichTextLabel" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent/GridContainer"]
 layout_mode = 2
@@ -330,14 +360,17 @@ text = "STUN.  When stunned you skip your next strike. Remove 1 stun for each st
 
 [node name="TextureRect8" type="TextureRect" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent/GridContainer"]
 modulate = Color(0.6, 0.4, 0.2, 1)
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
-size_flags_horizontal = 6
+size_flags_horizontal = 4
+size_flags_vertical = 0
 texture = ExtResource("15_cktr2")
-stretch_mode = 2
+expand_mode = 3
 
 [node name="RichTextLabel8" type="RichTextLabel" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer/ScrollContainer/helpContent/GridContainer"]
 layout_mode = 2
 text = "THORNS.  Deal damage equal to your thorn stacks to the attacker when hit, then remove those thorns at the end of the attackers turn. If thorns do not proc, they are not removed."
+fit_content = true
 
 [node name="boxButtons" type="HBoxContainer" parent="MarginContainer/panelBlack/panelBorder/VBoxContainer"]
 layout_mode = 2

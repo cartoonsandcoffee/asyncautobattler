@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://chs2a1fblqd0k"]
+[gd_scene load_steps=20 format=3 uid="uid://chs2a1fblqd0k"]
 
 [ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="1_eijq0"]
 [ext_resource type="Texture2D" uid="uid://vtf7yfl2710m" path="res://Assets/UI/panel-border-030.png" id="1_mjpdj"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://brkvaqqc37hpf" path="res://Assets/UI/icons.png" id="2_t8oay"]
 [ext_resource type="PackedScene" uid="uid://cqhyru53o5wfx" path="res://Scenes/item.tscn" id="3_eijq0"]
 [ext_resource type="Texture2D" uid="uid://daurw5ppu7ch0" path="res://Assets/UI/button_champions.png" id="3_rwgm2"]
+[ext_resource type="Texture2D" uid="uid://7nqjnbxf8y46" path="res://Assets/UI/trophy.png" id="4_3hnfb"]
 [ext_resource type="Texture2D" uid="uid://bsl431pk7s6iw" path="res://Assets/UI/button_global.png" id="5_3hnfb"]
 [ext_resource type="Texture2D" uid="uid://d0jt1ktrle1my" path="res://Assets/UI/button_leaderboard.png" id="6_bde15"]
 
@@ -19,6 +20,9 @@ bg_color = Color(0, 0, 0, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_trygf"]
 atlas = ExtResource("3_rwgm2")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bde15"]
+atlas = ExtResource("4_3hnfb")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rj623"]
 atlas = ExtResource("2_t8oay")
@@ -102,6 +106,11 @@ icon = SubResource("AtlasTexture_trygf")
 icon_alignment = 1
 expand_icon = true
 
+[node name="btnGlobalChamps" type="Button" parent="Panel/PanelContainer/MarginContainer/mainBox/leftBox/VBoxContainer/boxButtons"]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+icon = SubResource("AtlasTexture_bde15")
+
 [node name="btnHallOfFame" type="Button" parent="Panel/PanelContainer/MarginContainer/mainBox/leftBox/VBoxContainer/boxButtons"]
 custom_minimum_size = Vector2(120, 120)
 layout_mode = 2
@@ -137,6 +146,7 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_3pd0r")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Panel/PanelContainer/MarginContainer/mainBox/leftBox/VBoxContainer/PanelContainer"]
 layout_mode = 2
+theme = ExtResource("1_eijq0")
 
 [node name="GridContainer" type="GridContainer" parent="Panel/PanelContainer/MarginContainer/mainBox/leftBox/VBoxContainer/PanelContainer/ScrollContainer"]
 layout_mode = 2

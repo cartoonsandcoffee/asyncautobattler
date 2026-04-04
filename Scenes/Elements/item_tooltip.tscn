@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://7ygdm4ameglb"]
+[gd_scene load_steps=11 format=3 uid="uid://7ygdm4ameglb"]
 
 [ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="1_hixa8"]
 [ext_resource type="Script" uid="uid://1rv57854mprd" path="res://Scripts/Components/item_tooltip.gd" id="1_tiwhd"]
 [ext_resource type="PackedScene" uid="uid://bj1txoqo06q6n" path="res://Scenes/Elements/stat_item.tscn" id="2_y7em6"]
 [ext_resource type="FontFile" uid="uid://dcuypk4h1r4ff" path="res://Assets/UI/Fonts/ImperatorSmallCaps.ttf" id="3_f5dut"]
+[ext_resource type="Texture2D" uid="uid://2edhx1a70b00" path="res://Resources/Rarity/common.tres" id="4_laa7n"]
 [ext_resource type="Theme" uid="uid://od14ccps1daj" path="res://Themes/descriptive_label.tres" id="5_s2rdf"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tiwhd"]
@@ -97,13 +98,40 @@ text = "Item Name"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="lblRarity" type="Label" parent="Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/VBoxContainer"]
+[node name="rarityBox" type="HBoxContainer" parent="Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
+
+[node name="spacerLeft" type="MarginContainer" parent="Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/VBoxContainer/rarityBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="lblThing" type="Label" parent="Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/VBoxContainer/rarityBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("3_f5dut")
-theme_override_font_sizes/font_size = 10
-text = "- Common -"
+theme_override_font_sizes/font_size = 12
+text = "- "
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="picRarity" type="TextureRect" parent="Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/VBoxContainer/rarityBox"]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+texture = ExtResource("4_laa7n")
+expand_mode = 1
+
+[node name="lblRarity" type="Label" parent="Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/VBoxContainer/rarityBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("3_f5dut")
+theme_override_font_sizes/font_size = 12
+text = "Common  -"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="spacerRight" type="MarginContainer" parent="Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/VBoxContainer/rarityBox"]
+layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="statsGrid" type="GridContainer" parent="Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer"]
 visible = false
@@ -148,6 +176,12 @@ text = "This is where the description goes... And it can also be two lines"
 fit_content = true
 scroll_active = false
 vertical_alignment = 1
+
+[node name="setIngredients" type="GridContainer" parent="Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+columns = 4
 
 [node name="categoryGrid" type="GridContainer" parent="Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer"]
 visible = false

@@ -1,0 +1,822 @@
+[gd_scene load_steps=39 format=3 uid="uid://bpal56sqfw4wl"]
+
+[ext_resource type="Script" uid="uid://dh06jc8uy1xdx" path="res://Scripts/RoomEvents/rare_merchant_room.gd" id="1_l3q0s"]
+[ext_resource type="Resource" uid="uid://gm0vvksbp7e4" path="res://Resources/Enemies/Anguish.tres" id="2_dd8dd"]
+[ext_resource type="Texture2D" uid="uid://cr5mucfkmo2k4" path="res://Assets/Art/Backgrounds/Hallway_01.png" id="3_l3q0s"]
+[ext_resource type="Texture2D" uid="uid://dbclbklsxjo03" path="res://Assets/Art/Events/Merchant02_Dark.png" id="4_1a4tn"]
+[ext_resource type="Texture2D" uid="uid://dqi6l36fb53pn" path="res://Assets/Art/Events/Merchant02_Light.png" id="5_ib6pp"]
+[ext_resource type="PackedScene" uid="uid://bb31dt8vvd6f4" path="res://Scenes/Elements/item_merchant_store.tscn" id="6_p32wl"]
+[ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="7_j5fkq"]
+[ext_resource type="Texture2D" uid="uid://dxt3yb4gkjn6x" path="res://Assets/Art/Particles/smoke_07.png" id="8_nlwpb"]
+[ext_resource type="Texture2D" uid="uid://7bekcj5gp5gw" path="res://Assets/UI/Border/panel-border-005.png" id="9_tw1e7"]
+[ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="10_1a4tn"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u3e5k"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fgisx"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ebe42"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hg87j"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o0xvr"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ib6pp"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_p32wl"]
+texture = ExtResource("9_tw1e7")
+texture_margin_left = 28.0
+texture_margin_top = 28.0
+texture_margin_right = 28.0
+texture_margin_bottom = 28.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j5fkq"]
+bg_color = Color(0.729412, 0.411765, 0.976471, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.42749, 0.1178, 0.62, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nlwpb"]
+bg_color = Color(0.209577, 0.0564541, 0.300837, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.727646, 0.413345, 0.976251, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8l54f"]
+bg_color = Color(0.969475, 0.631224, 0.586851, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.411765, 0.0823529, 0.0823529, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yfai5"]
+bg_color = Color(0.41, 0.082, 0.082, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.44, 0.4, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nvavc"]
+bg_color = Color(0.388235, 0.717647, 0.498039, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.1085, 0.31, 0.179025, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dojlb"]
+bg_color = Color(0.200615, 0.340256, 0.247271, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.388127, 0.717264, 0.496985, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="Animation" id="Animation_jlqs5"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("merchantControl/merchantDark:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("merchantControl/merchantLight:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("smoke:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("merchantControl/merchantLight/Button:disabled")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_t26a3"]
+resource_name = "merchant_close"
+length = 0.5
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("merchantControl/merchantDark:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("merchantControl/merchantLight:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("smoke:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_ugds1"]
+resource_name = "merchant_idle"
+length = 4.0
+loop_mode = 1
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("merchantControl/merchantDark:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("merchantControl/merchantLight:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.65, 1.05, 1.525, 2.65, 4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0.866667), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("smoke:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.65, 1.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.65),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"pipe_sfx"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_fgisx"]
+resource_name = "show_merchant"
+length = 0.5
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("merchantControl/merchantDark:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play_idle"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("merchantControl/merchantLight/Button:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ebe42"]
+_data = {
+&"RESET": SubResource("Animation_jlqs5"),
+&"merchant_close": SubResource("Animation_t26a3"),
+&"merchant_idle": SubResource("Animation_ugds1"),
+&"show_merchant": SubResource("Animation_fgisx")
+}
+
+[sub_resource type="Animation" id="Animation_inb5p"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("merchantControl/lblAction:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("merchantControl/lblAction:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(385, 190)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("merchantControl/lblAction:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_0p0f4"]
+resource_name = "hide_label"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("merchantControl/lblAction:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(2.5, 2.5), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("merchantControl/lblAction:position")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(389, -91), Vector2(385, 190)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("merchantControl/lblAction:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_yiccd"]
+resource_name = "show_label"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("merchantControl/lblAction:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(2.5, 2.5)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("merchantControl/lblAction:position")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(385, 190), Vector2(389, -91)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("merchantControl/lblAction:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ytph8"]
+_data = {
+&"RESET": SubResource("Animation_inb5p"),
+&"hide_label": SubResource("Animation_0p0f4"),
+&"show_label": SubResource("Animation_yiccd")
+}
+
+[sub_resource type="Curve" id="Curve_fgisx"]
+_limits = [0.3, 3.0, 0.0, 1.0]
+_data = [Vector2(0, 0.3), 0.0, 0.0, 0, 0, Vector2(0.751244, 0.694382), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_ebe42"]
+offsets = PackedFloat32Array(0, 0.625, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="Animation" id="Animation_tw1e7"]
+resource_name = "show_choice"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("panelChoice:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("panelChoice:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("panelChoice/panelBlack:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.5, 0.5), Vector2(1.1, 1.1), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_1a4tn"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("panelChoice:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("panelChoice:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("panelChoice/panelBlack:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.5, 0.5)]
+}
+
+[sub_resource type="Animation" id="Animation_ib6pp"]
+resource_name = "hide_choice"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("panelChoice:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("panelChoice:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.1, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("panelChoice/panelBlack:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.1, 1.1), Vector2(0.5, 0.5)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_p32wl"]
+_data = {
+&"RESET": SubResource("Animation_1a4tn"),
+&"hide_choice": SubResource("Animation_ib6pp"),
+&"show_choice": SubResource("Animation_tw1e7")
+}
+
+[node name="RareMerchantRoom" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_l3q0s")
+event_description = "You catch the scent of tobacco in the air..."
+enemy_resource = ExtResource("2_dd8dd")
+
+[node name="picBack" type="TextureRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_l3q0s")
+expand_mode = 3
+
+[node name="merchantControl" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -632.0
+offset_top = -736.0
+offset_right = -632.0
+offset_bottom = -736.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.33, 0.33)
+pivot_offset = Vector2(663.636, 606.061)
+
+[node name="merchantDark" type="TextureRect" parent="merchantControl"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 0
+offset_right = 1253.0
+offset_bottom = 1660.0
+texture = ExtResource("4_1a4tn")
+
+[node name="merchantLight" type="TextureRect" parent="merchantControl"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_right = 1253.0
+offset_bottom = 1660.0
+texture = ExtResource("5_ib6pp")
+
+[node name="Button" type="Button" parent="merchantControl/merchantLight"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_u3e5k")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_fgisx")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_ebe42")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hg87j")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_o0xvr")
+disabled = true
+
+[node name="lblAction" type="Label" parent="merchantControl"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 385.0
+offset_top = 190.0
+offset_right = 881.0
+offset_bottom = 260.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(248.485, 33.3333)
+theme_override_colors/font_color = Color(0.899266, 0.805079, 0.264486, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.458824)
+theme_override_colors/font_outline_color = Color(0.50771, 0.241023, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("7_j5fkq")
+theme_override_font_sizes/font_size = 55
+text = "Shop"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="panelChoice" type="Panel" parent="."]
+visible = false
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="panelBlack" type="PanelContainer" parent="panelChoice"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+pivot_offset = Vector2(250, 166)
+theme_override_styles/panel = SubResource("StyleBoxFlat_ib6pp")
+
+[node name="panelBorder" type="PanelContainer" parent="panelChoice/panelBlack"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_p32wl")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="panelChoice/panelBlack/panelBorder"]
+layout_mode = 2
+theme = ExtResource("10_1a4tn")
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="panelChoice/panelBlack/panelBorder/VBoxContainer"]
+layout_mode = 2
+text = "What are you interested in?"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RichTextLabel" type="RichTextLabel" parent="panelChoice/panelBlack/panelBorder/VBoxContainer"]
+layout_mode = 2
+text = "\"I can show you a variety of wares.\""
+fit_content = true
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="panelChoice/panelBlack/panelBorder/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="btnBugs" type="Button" parent="panelChoice/panelBlack/panelBorder/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_hover_color = Color(0.31717, 0.0874, 0.46, 1)
+theme_override_colors/font_color = Color(0.729412, 0.411765, 0.976471, 1)
+theme_override_styles/hover = SubResource("StyleBoxFlat_j5fkq")
+theme_override_styles/normal = SubResource("StyleBoxFlat_nlwpb")
+text = "Bugs"
+
+[node name="btnWeapons" type="Button" parent="panelChoice/panelBlack/panelBorder/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_hover_color = Color(0.285146, 0.0451411, 0.0451263, 1)
+theme_override_colors/font_color = Color(0.9, 0.6327, 0.603, 1)
+theme_override_styles/hover = SubResource("StyleBoxFlat_8l54f")
+theme_override_styles/normal = SubResource("StyleBoxFlat_yfai5")
+text = "Weapons"
+
+[node name="btnPotions" type="Button" parent="panelChoice/panelBlack/panelBorder/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_hover_color = Color(0.0744, 0.24, 0.13236, 1)
+theme_override_colors/font_color = Color(0.503275, 0.848493, 0.613655, 1)
+theme_override_styles/hover = SubResource("StyleBoxFlat_nvavc")
+theme_override_styles/normal = SubResource("StyleBoxFlat_dojlb")
+text = "Potions"
+
+[node name="btnLeave" type="Button" parent="panelChoice/panelBlack/panelBorder/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+text = "I'm not interested."
+
+[node name="store_bugs" parent="." instance=ExtResource("6_p32wl")]
+layout_mode = 1
+item_rarity = 0
+items_offered = 2
+item_columns = 3
+box_name = "A Peddler's Hut"
+box_desc = "I've got some bugs in stock."
+include_extra_rare = true
+allow_refresh = false
+category_string = "Bug"
+
+[node name="store_potions" parent="." instance=ExtResource("6_p32wl")]
+layout_mode = 1
+item_rarity = 0
+items_offered = 2
+item_columns = 3
+box_name = "A Peddler's Hut"
+box_desc = "Look at all these potions..."
+include_extra_rare = true
+allow_refresh = false
+category_string = "Potion"
+
+[node name="store_weapons" parent="." instance=ExtResource("6_p32wl")]
+layout_mode = 1
+items_offered = 2
+item_columns = 3
+box_name = "A Peddler's Hut"
+box_desc = "Careful, these are sharp..."
+include_extra_rare = true
+allow_refresh = false
+category_string = "Weapon"
+
+[node name="animMerchant" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_ebe42")
+}
+
+[node name="animLabel" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_ytph8")
+}
+
+[node name="smoke" type="CPUParticles2D" parent="."]
+position = Vector2(760, 441)
+emitting = false
+amount = 3
+texture = ExtResource("8_nlwpb")
+speed_scale = 0.75
+randomness = 0.2
+direction = Vector2(-20, -10)
+gravity = Vector2(0, -1)
+initial_velocity_min = 50.0
+initial_velocity_max = 100.0
+angular_velocity_min = 30.0
+angular_velocity_max = 100.0
+scale_amount_min = 0.1
+scale_amount_max = 0.5
+scale_amount_curve = SubResource("Curve_fgisx")
+color = Color(0.637843, 0.637843, 0.637843, 1)
+color_ramp = SubResource("Gradient_ebe42")
+
+[node name="animChoice" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_p32wl")
+}
+
+[connection signal="mouse_entered" from="merchantControl/merchantLight/Button" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="merchantControl/merchantLight/Button" to="." method="_on_button_mouse_exited"]
+[connection signal="pressed" from="merchantControl/merchantLight/Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="panelChoice/panelBlack/panelBorder/VBoxContainer/HBoxContainer/btnBugs" to="." method="_on_btn_bugs_pressed"]
+[connection signal="pressed" from="panelChoice/panelBlack/panelBorder/VBoxContainer/HBoxContainer/btnWeapons" to="." method="_on_btn_weapons_pressed"]
+[connection signal="pressed" from="panelChoice/panelBlack/panelBorder/VBoxContainer/HBoxContainer/btnPotions" to="." method="_on_btn_potions_pressed"]
+[connection signal="pressed" from="panelChoice/panelBlack/panelBorder/VBoxContainer/btnLeave" to="." method="_on_btn_leave_pressed"]

@@ -1,11 +1,13 @@
-[gd_scene load_steps=26 format=3 uid="uid://b0vi56n2ciwg6"]
+[gd_scene load_steps=29 format=3 uid="uid://du7g8vv71gm88"]
 
-[ext_resource type="Script" uid="uid://n5v64n1jeto2" path="res://Scripts/HallwayEvents/hallway_chest.gd" id="1_7xgip"]
-[ext_resource type="Texture2D" uid="uid://cr5mucfkmo2k4" path="res://Assets/Art/Backgrounds/Hallway_01.png" id="2_mdhwb"]
-[ext_resource type="Texture2D" uid="uid://qm7nwph2d80" path="res://Assets/Art/Events/TreasureChest.png" id="2_x57kp"]
-[ext_resource type="Texture2D" uid="uid://c6uhtg2telr2f" path="res://Assets/Art/Particles/circle_05.png" id="3_x57kp"]
-[ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="4_bqoxt"]
-[ext_resource type="PackedScene" uid="uid://c3h585v8mippc" path="res://Scenes/Elements/free_item_offering.tscn" id="5_o16tn"]
+[ext_resource type="Script" uid="uid://bvrjwxhxhxpir" path="res://Scripts/RoomEvents/common_treasure_gold.gd" id="1_6ujqc"]
+[ext_resource type="Texture2D" uid="uid://cr5mucfkmo2k4" path="res://Assets/Art/Backgrounds/Hallway_01.png" id="2_gfw5h"]
+[ext_resource type="Texture2D" uid="uid://dlkbx5t1ok6f5" path="res://Assets/Art/Events/treasure_pile.png" id="3_18qgg"]
+[ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="4_18qgg"]
+[ext_resource type="Texture2D" uid="uid://c6uhtg2telr2f" path="res://Assets/Art/Particles/circle_05.png" id="6_oerrk"]
+[ext_resource type="Texture2D" uid="uid://derrdt27xagod" path="res://Assets/UI/panel-border-007.png" id="6_swgkd"]
+[ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="7_oerrk"]
+[ext_resource type="Animation" uid="uid://c3i266wq8xrth" path="res://Animations/itembox_show.res" id="8_l38tp"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xcab8"]
 
@@ -26,6 +28,17 @@ point_count = 2
 offsets = PackedFloat32Array(0, 0.625, 1)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cqyu2"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_l38tp"]
+texture = ExtResource("6_swgkd")
+texture_margin_left = 28.0
+texture_margin_top = 28.0
+texture_margin_right = 28.0
+texture_margin_bottom = 28.0
+region_rect = Rect2(0, 0, 96, 96)
+
 [sub_resource type="Animation" id="Animation_1qr6a"]
 length = 0.001
 tracks/0/type = "value"
@@ -38,7 +51,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(161.17, 131.5)]
+"values": [Vector2(-12.5, 67.5)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -79,7 +92,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(250, 50), Vector2(161, 131)]
+"values": [Vector2(10, -40), Vector2(-12.5, 67.5)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -120,7 +133,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(161, 131), Vector2(250, 50)]
+"values": [Vector2(-12.5, 67.5), Vector2(10, -40)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -281,12 +294,13 @@ _data = {
 &"show_event": SubResource("Animation_7e1au")
 }
 
-[sub_resource type="Animation" id="Animation_tj6ii"]
+[sub_resource type="Animation" id="Animation_qyy0y"]
+resource_name = "RESET"
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("FreeItemOffering:scale")
+tracks/0/path = NodePath("panelDone:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -298,7 +312,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("FreeItemOffering:modulate")
+tracks/1/path = NodePath("panelDone:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -310,7 +324,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("FreeItemOffering:visible")
+tracks/2/path = NodePath("panelDone:visible")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -320,15 +334,15 @@ tracks/2/keys = {
 "values": [false]
 }
 
-[sub_resource type="Animation" id="Animation_cnfgk"]
+[sub_resource type="Animation" id="Animation_gfw5h"]
 resource_name = "hide_items"
 length = 0.4
 step = 0.025
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("FreeItemOffering:scale")
-tracks/0/interp = 1
+tracks/0/path = NodePath("panelDone:scale")
+tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.1, 0.4),
@@ -339,7 +353,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("FreeItemOffering:modulate")
+tracks/1/path = NodePath("panelDone:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -351,7 +365,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("FreeItemOffering:visible")
+tracks/2/path = NodePath("panelDone:visible")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -361,62 +375,21 @@ tracks/2/keys = {
 "values": [true, false]
 }
 
-[sub_resource type="Animation" id="Animation_mdhwb"]
-resource_name = "show_items"
-length = 0.4
-step = 0.025
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("FreeItemOffering:scale")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector2(0.5, 0.5), Vector2(1.1, 1.1), Vector2(1, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("FreeItemOffering:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("FreeItemOffering:visible")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_mt1g3"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_rq07n"]
 _data = {
-&"RESET": SubResource("Animation_tj6ii"),
-&"hide_items": SubResource("Animation_cnfgk"),
-&"show_items": SubResource("Animation_mdhwb")
+&"RESET": SubResource("Animation_qyy0y"),
+&"hide_items": SubResource("Animation_gfw5h"),
+&"show_items": ExtResource("8_l38tp")
 }
 
-[node name="HallwayChest" type="Control"]
+[node name="HallwayGold" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_7xgip")
+script = ExtResource("1_6ujqc")
 
 [node name="picBack" type="TextureRect" parent="."]
 visible = false
@@ -426,18 +399,26 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_mdhwb")
+texture = ExtResource("2_gfw5h")
 expand_mode = 1
 
 [node name="picEvent" type="TextureRect" parent="."]
 modulate = Color(0, 0, 0, 1)
-layout_mode = 0
-offset_left = 524.0
-offset_top = 224.0
-offset_right = 1052.34
-offset_bottom = 545.0
-texture = ExtResource("2_x57kp")
-expand_mode = 3
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -179.0
+offset_top = -86.0
+offset_right = 179.0
+offset_bottom = 107.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("3_18qgg")
+expand_mode = 1
 
 [node name="lblEvent" type="Label" parent="picEvent"]
 modulate = Color(1, 1, 1, 0)
@@ -447,22 +428,22 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -103.0
+offset_left = -191.5
 offset_top = -29.0
-offset_right = 103.0
+offset_right = 191.5
 offset_bottom = 29.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.5, 0.5)
-pivot_offset = Vector2(103, 29)
+pivot_offset = Vector2(191, 29)
 theme_override_colors/font_color = Color(1, 0.866667, 0, 1)
 theme_override_colors/font_outline_color = Color(0.51, 0.306, 0, 1)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_constants/outline_size = 5
-theme_override_fonts/font = ExtResource("4_bqoxt")
+theme_override_fonts/font = ExtResource("4_18qgg")
 theme_override_font_sizes/font_size = 46
-text = "Open It..."
+text = "Take some gold..."
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -471,10 +452,6 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 278.0
-offset_top = 157.0
-offset_right = -70.34
-offset_bottom = -38.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_xcab8")
@@ -484,23 +461,12 @@ theme_override_styles/pressed = SubResource("StyleBoxEmpty_rq07n")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_01rsx")
 disabled = true
 
-[node name="FreeItemOffering" parent="." instance=ExtResource("5_o16tn")]
-visible = false
-modulate = Color(1, 1, 1, 0)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-scale = Vector2(0.5, 0.5)
-box_name = "A Gnarled Chest"
-
 [node name="particles" type="CPUParticles2D" parent="."]
-position = Vector2(892, 446)
+visible = false
+position = Vector2(828, 547)
 emitting = false
 amount = 15
-texture = ExtResource("3_x57kp")
+texture = ExtResource("6_oerrk")
 speed_scale = 0.5
 emission_shape = 3
 emission_rect_extents = Vector2(50, 1)
@@ -515,6 +481,49 @@ scale_amount_curve = SubResource("Curve_7xgip")
 color = Color(1, 0.8, 0, 1)
 color_ramp = SubResource("Gradient_1xwjt")
 
+[node name="panelDone" type="PanelContainer" parent="."]
+visible = false
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(500, 200)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -100.0
+offset_right = 250.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+pivot_offset = Vector2(250, 100)
+theme_override_styles/panel = SubResource("StyleBoxFlat_cqyu2")
+
+[node name="PanelContainer" type="PanelContainer" parent="panelDone"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_l38tp")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="panelDone/PanelContainer"]
+layout_mode = 2
+theme = ExtResource("7_oerrk")
+
+[node name="Label" type="Label" parent="panelDone/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "You find 6 gold!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="panelDone/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Button" type="Button" parent="panelDone/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 75)
+layout_mode = 2
+text = "Done"
+
 [node name="animLabel" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_ip8wj")
@@ -527,9 +536,10 @@ libraries = {
 
 [node name="animItems" type="AnimationPlayer" parent="."]
 libraries = {
-&"": SubResource("AnimationLibrary_mt1g3")
+&"": SubResource("AnimationLibrary_rq07n")
 }
 
 [connection signal="mouse_entered" from="picEvent/btnEvent" to="." method="_on_btn_event_mouse_entered"]
 [connection signal="mouse_exited" from="picEvent/btnEvent" to="." method="_on_btn_event_mouse_exited"]
 [connection signal="pressed" from="picEvent/btnEvent" to="." method="_on_btn_event_pressed"]
+[connection signal="pressed" from="panelDone/PanelContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]

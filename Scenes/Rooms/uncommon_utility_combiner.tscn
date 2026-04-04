@@ -1,22 +1,12 @@
-[gd_scene load_steps=30 format=3 uid="uid://ce4v0pt2qw5lh"]
+[gd_scene load_steps=25 format=3 uid="uid://ce4v0pt2qw5lh"]
 
 [ext_resource type="Script" uid="uid://cahuuukphkgmu" path="res://Scripts/RoomEvents/forge_room.gd" id="1_gycxu"]
-[ext_resource type="Texture2D" uid="uid://ocudf82hv1wj" path="res://Assets/Art/Events/Forge.png" id="2_gycxu"]
 [ext_resource type="Resource" uid="uid://conkutd8s2s2s" path="res://Resources/Enemies/ShrunkenHead.tres" id="2_v48r5"]
-[ext_resource type="Texture2D" uid="uid://csprhhu3ka3ig" path="res://Assets/Art/Room_03_Background.png" id="3_7ymnc"]
-[ext_resource type="Texture2D" uid="uid://bwrq1vaa2bvi2" path="res://Assets/Art/Events/Forge_Glow.png" id="3_v48r5"]
+[ext_resource type="Texture2D" uid="uid://oxqk3dgpm00q" path="res://Assets/Art/Backgrounds/Background_10.png" id="3_pty56"]
 [ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="4_7ymnc"]
-[ext_resource type="PackedScene" uid="uid://dfuglhrwpha2" path="res://Scenes/Elements/item_combiner.tscn" id="5_amt8f"]
+[ext_resource type="Texture2D" uid="uid://d154ok6bmavw3" path="res://Assets/Art/Events/weapon_imbue.png" id="4_nf2la"]
 [ext_resource type="Texture2D" uid="uid://dxt3yb4gkjn6x" path="res://Assets/Art/Particles/smoke_07.png" id="6_5iesb"]
-
-[sub_resource type="Curve" id="Curve_kct4p"]
-_limits = [0.3, 3.0, 0.0, 1.0]
-_data = [Vector2(0, 0.3), 0.0, 0.0, 0, 0, Vector2(1, 1.0618), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="Gradient" id="Gradient_x5nv0"]
-offsets = PackedFloat32Array(0, 0.625, 1)
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+[ext_resource type="PackedScene" uid="uid://bj06ih42236js" path="res://Scenes/Elements/weapon_upgrader.tscn" id="8_nf2la"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5mci1"]
 
@@ -28,169 +18,14 @@ colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_np0uq"]
 
-[sub_resource type="Animation" id="Animation_ckt4l"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../ItemCombiner:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("../ItemCombiner:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("../ItemCombiner:pivot_offset")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0, 0)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("../ItemCombiner:scale")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 1)]
-}
+[sub_resource type="Curve" id="Curve_kct4p"]
+_limits = [0.3, 3.0, 0.0, 1.0]
+_data = [Vector2(0, 0.3), 0.0, 0.0, 0, 0, Vector2(1, 1.0618), 0.0, 0.0, 0, 0]
+point_count = 2
 
-[sub_resource type="Animation" id="Animation_gycxu"]
-resource_name = "closeBox"
-length = 0.4
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../ItemCombiner:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, false]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("../ItemCombiner:pivot_offset")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("../ItemCombiner:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("../ItemCombiner:scale")
-tracks/3/interp = 2
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector2(1, 1), Vector2(1.1, 1.1), Vector2(0.5, 0.5)]
-}
-
-[sub_resource type="Animation" id="Animation_3q1ay"]
-resource_name = "openBox"
-length = 0.4
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../ItemCombiner:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("../ItemCombiner:pivot_offset")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("../ItemCombiner:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("../ItemCombiner:scale")
-tracks/3/interp = 2
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector2(0.5, 0.5), Vector2(1.1, 1.1), Vector2(1, 1)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_sixyl"]
-_data = {
-&"RESET": SubResource("Animation_ckt4l"),
-&"closeBox": SubResource("Animation_gycxu"),
-&"openBox": SubResource("Animation_3q1ay")
-}
+[sub_resource type="Gradient" id="Gradient_x5nv0"]
+offsets = PackedFloat32Array(0, 0.625, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
 [sub_resource type="Animation" id="Animation_ooyyh"]
 length = 0.001
@@ -242,48 +77,12 @@ tracks/3/keys = {
 "update": 1,
 "values": [true]
 }
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("picAnimator:modulate")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("picAnimator:visible")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
 
 [sub_resource type="Animation" id="Animation_aix3x"]
 resource_name = "jars_bounce"
 length = 2.0
 loop_mode = 1
 step = 0.01
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("picAnimator:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1.01, 2),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0.541176), Color(1, 1, 1, 1)]
-}
 
 [sub_resource type="Animation" id="Animation_q4k6o"]
 resource_name = "jars_done"
@@ -320,30 +119,6 @@ tracks/2/path = NodePath("picTreasure:visible")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, false]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("picAnimator:modulate")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("picAnimator:visible")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
 "times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
@@ -401,44 +176,6 @@ tracks/3/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("picAnimator:modulate")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("picAnimator:visible")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/6/type = "method"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath(".")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(0.5),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"jar_bounce"
-}]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_3q1ay"]
@@ -627,40 +364,19 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("3_7ymnc")
+texture = ExtResource("3_pty56")
 expand_mode = 1
-
-[node name="jar_particles" type="CPUParticles2D" parent="."]
-position = Vector2(887, 415)
-emitting = false
-amount = 10
-texture = ExtResource("6_5iesb")
-lifetime = 2.0
-speed_scale = 0.5
-randomness = 0.3
-direction = Vector2(0, 0)
-spread = 36.43
-gravity = Vector2(0, 0)
-initial_velocity_min = 100.0
-initial_velocity_max = 100.0
-angular_velocity_min = 30.0
-angular_velocity_max = 100.0
-scale_amount_min = 0.1
-scale_amount_max = 0.7
-scale_amount_curve = SubResource("Curve_kct4p")
-color = Color(0.637843, 0.637843, 0.637843, 1)
-color_ramp = SubResource("Gradient_x5nv0")
 
 [node name="picTreasure" type="TextureRect" parent="."]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 0
-offset_left = 512.0
-offset_top = 211.0
-offset_right = 962.0
-offset_bottom = 691.0
-scale = Vector2(0.8, 0.8)
+offset_left = 504.0
+offset_top = 212.0
+offset_right = 954.0
+offset_bottom = 692.0
+scale = Vector2(0.75, 0.75)
 pivot_offset = Vector2(225, 240)
-texture = ExtResource("2_gycxu")
+texture = ExtResource("4_nf2la")
 expand_mode = 1
 
 [node name="Button" type="Button" parent="picTreasure"]
@@ -680,19 +396,6 @@ theme_override_styles/hover = SubResource("StyleBoxEmpty_yadr2")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_070eq")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_np0uq")
 disabled = true
-
-[node name="picAnimator" type="TextureRect" parent="."]
-modulate = Color(1, 1, 1, 0)
-layout_mode = 0
-offset_left = 509.0
-offset_top = 215.0
-offset_right = 959.0
-offset_bottom = 695.0
-scale = Vector2(0.8, 0.8)
-pivot_offset = Vector2(240, 255)
-mouse_filter = 2
-texture = ExtResource("3_v48r5")
-expand_mode = 1
 
 [node name="lblOpen" type="Label" parent="."]
 modulate = Color(1, 1, 1, 0)
@@ -718,28 +421,35 @@ theme_override_constants/shadow_offset_y = 2
 theme_override_constants/outline_size = 5
 theme_override_fonts/font = ExtResource("4_7ymnc")
 theme_override_font_sizes/font_size = 46
-text = "Examine?"
+text = "Examine."
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ItemCombiner" parent="." instance=ExtResource("5_amt8f")]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-box_name = "The Strange Mouth"
-button_text = "Feed it"
-sb_name = "These tasted good..."
-sb_text = "The machine spits out something you might like."
-sb_button = "Take Your Creation"
+[node name="jar_particles" type="CPUParticles2D" parent="."]
+position = Vector2(732.75, 564.5)
+scale = Vector2(0.9375, 0.9375)
+emitting = false
+amount = 10
+texture = ExtResource("6_5iesb")
+lifetime = 2.0
+speed_scale = 0.5
+randomness = 0.3
+direction = Vector2(0, 0)
+spread = 36.43
+gravity = Vector2(0, 0)
+initial_velocity_min = 100.0
+initial_velocity_max = 100.0
+angular_velocity_min = 30.0
+angular_velocity_max = 100.0
+scale_amount_min = 0.1
+scale_amount_max = 0.7
+scale_amount_curve = SubResource("Curve_kct4p")
+color = Color(0.637843, 0.637843, 0.637843, 1)
+color_ramp = SubResource("Gradient_x5nv0")
 
-[node name="animBox" type="AnimationPlayer" parent="."]
-root_node = NodePath("../animJars")
-libraries = {
-&"": SubResource("AnimationLibrary_sixyl")
-}
+[node name="WeaponUpgrader" parent="." instance=ExtResource("8_nf2la")]
+layout_mode = 1
+box_desc = "Would you like to imbue your weapon with an additional ability? "
 
 [node name="animJars" type="AnimationPlayer" parent="."]
 libraries = {

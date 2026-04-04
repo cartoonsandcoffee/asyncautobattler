@@ -1,11 +1,14 @@
-[gd_scene load_steps=34 format=3 uid="uid://cqhyru53o5wfx"]
+[gd_scene load_steps=39 format=3 uid="uid://cqhyru53o5wfx"]
 
 [ext_resource type="Script" uid="uid://c60g0xugsdgdl" path="res://Scripts/Components/item_slot.gd" id="1_tnst4"]
+[ext_resource type="Texture2D" uid="uid://cfj380cj5wikn" path="res://Assets/UI/web_back_test.png" id="2_jmixh"]
 [ext_resource type="FontFile" uid="uid://dgwg8mvobk57a" path="res://Assets/UI/Fonts/ImperatorSmallCaps Bold.ttf" id="3_66iod"]
+[ext_resource type="Shader" uid="uid://dms2cy767su3j" path="res://Shaders/detailed_shine.gdshader" id="3_fif6b"]
 [ext_resource type="Texture2D" uid="uid://1p2fhdhgi3x4" path="res://Assets/UI/Select.png" id="4_btogu"]
 [ext_resource type="Texture2D" uid="uid://7h1qtewfvmnq" path="res://Assets/Items/Blank.png" id="4_tnst4"]
 [ext_resource type="Texture2D" uid="uid://bwo3qldtbc8u6" path="res://Assets/Items/Items.png" id="6_66iod"]
 [ext_resource type="PackedScene" uid="uid://7ygdm4ameglb" path="res://Scenes/Elements/item_tooltip.tscn" id="6_renmp"]
+[ext_resource type="Texture2D" uid="uid://2edhx1a70b00" path="res://Resources/Rarity/common.tres" id="7_5r5i4"]
 [ext_resource type="Texture2D" uid="uid://bn24rd5ycn41x" path="res://Assets/UI/rarity_icons.png" id="7_jmixh"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tnst4"]
@@ -18,15 +21,30 @@ border_width_right = 3
 border_width_bottom = 3
 border_color = Color(1, 1, 1, 1)
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jrdc7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jrdc7"]
+bg_color = Color(0, 0, 0, 1)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_btogu"]
 atlas = ExtResource("4_tnst4")
 region = Rect2(528, 0, 16, 16)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fif6b"]
+shader = ExtResource("3_fif6b")
+shader_parameter/Line_Smoothness = 0.045
+shader_parameter/Line_Width = 0.15
+shader_parameter/Brightness = 5.0
+shader_parameter/Rotation_deg = 45.0
+shader_parameter/Distortion = 1.8
+shader_parameter/Speed = 0.6
+shader_parameter/Position = 0.0
+shader_parameter/Position_Min = 0.25
+shader_parameter/Position_Max = 0.5
+shader_parameter/Alpha = 1.0
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fif6b"]
 bg_color = Color(0.199101, 0.198613, 0.189857, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_66iod"]
-bg_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_renmp"]
 
@@ -290,6 +308,51 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_jmixh")
 
+[node name="wepIndicator" type="TextureRect" parent="Panel/VBoxContainer/itemContainer"]
+visible = false
+layout_mode = 2
+texture = ExtResource("2_jmixh")
+
+[node name="ColorRect" type="ColorRect" parent="Panel/VBoxContainer/itemContainer/wepIndicator"]
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -20.0
+offset_top = -3.0
+offset_right = 3.0
+offset_bottom = 21.0
+grow_horizontal = 0
+color = Color(0, 0, 0, 1)
+
+[node name="pnlRare" type="Panel" parent="Panel/VBoxContainer/itemContainer"]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_jrdc7")
+
+[node name="picRarity" type="TextureRect" parent="Panel/VBoxContainer/itemContainer/pnlRare"]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -20.0
+offset_bottom = 20.0
+grow_horizontal = 0
+texture = ExtResource("7_5r5i4")
+expand_mode = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="Panel/VBoxContainer/itemContainer/pnlRare/picRarity"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_jrdc7")
+
 [node name="MarginContainer" type="MarginContainer" parent="Panel/VBoxContainer/itemContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 5
@@ -298,10 +361,20 @@ theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
 [node name="item_icon" type="TextureRect" parent="Panel/VBoxContainer/itemContainer/MarginContainer"]
+clip_children = 2
 custom_minimum_size = Vector2(75, 75)
 layout_mode = 2
 texture = SubResource("AtlasTexture_btogu")
 expand_mode = 1
+
+[node name="shaderRect" type="ColorRect" parent="Panel/VBoxContainer/itemContainer/MarginContainer/item_icon"]
+material = SubResource("ShaderMaterial_fif6b")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="lblCountdown" type="Label" parent="Panel/VBoxContainer/itemContainer"]
 visible = false
@@ -350,28 +423,6 @@ patch_margin_left = 25
 patch_margin_top = 25
 patch_margin_right = 25
 patch_margin_bottom = 25
-
-[node name="pnlRare" type="Panel" parent="Panel"]
-visible = false
-custom_minimum_size = Vector2(20, 20)
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -20.0
-offset_bottom = 20.0
-grow_horizontal = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_66iod")
-
-[node name="picRarity" type="TextureRect" parent="Panel/pnlRare"]
-custom_minimum_size = Vector2(20, 20)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-expand_mode = 1
 
 [node name="Button" type="Button" parent="Panel"]
 layout_mode = 1

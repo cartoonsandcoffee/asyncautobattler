@@ -1,9 +1,10 @@
-[gd_scene load_steps=17 format=3 uid="uid://cmp4ac3etmu3i"]
+[gd_scene load_steps=19 format=3 uid="uid://cmp4ac3etmu3i"]
 
 [ext_resource type="Script" uid="uid://bd1nxyqm5h1n4" path="res://Scripts/Components/champion_record.gd" id="1_f82dm"]
 [ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="1_kwici"]
 [ext_resource type="Theme" uid="uid://od14ccps1daj" path="res://Themes/descriptive_label.tres" id="2_f82dm"]
 [ext_resource type="Texture2D" uid="uid://1p2fhdhgi3x4" path="res://Assets/UI/Select.png" id="2_xch3c"]
+[ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="4_vpoee"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xch3c"]
 
@@ -25,6 +26,20 @@ corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_letk8"]
+bg_color = Color(0.169245, 0.169245, 0.169245, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+expand_margin_left = 10.0
+expand_margin_right = 10.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jkk1w"]
 bg_color = Color(0.106, 0.53, 0.1272, 1)
@@ -207,7 +222,51 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="classBox" type="HBoxContainer" parent="Panel/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 25
+
+[node name="pnlMotive1" type="PanelContainer" parent="Panel/PanelContainer/MarginContainer/HBoxContainer/classBox"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_letk8")
+
+[node name="lblMotive1" type="Label" parent="Panel/PanelContainer/MarginContainer/HBoxContainer/classBox/pnlMotive1"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_vpoee")
+theme_override_font_sizes/font_size = 18
+text = "Shame"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="pnlMotive2" type="PanelContainer" parent="Panel/PanelContainer/MarginContainer/HBoxContainer/classBox"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_letk8")
+
+[node name="lblMotive2" type="Label" parent="Panel/PanelContainer/MarginContainer/HBoxContainer/classBox/pnlMotive2"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_vpoee")
+theme_override_font_sizes/font_size = 18
+text = "Revenge"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="pnlMotive3" type="PanelContainer" parent="Panel/PanelContainer/MarginContainer/HBoxContainer/classBox"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_letk8")
+
+[node name="lblMotive3" type="Label" parent="Panel/PanelContainer/MarginContainer/HBoxContainer/classBox/pnlMotive3"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_vpoee")
+theme_override_font_sizes/font_size = 18
+text = "Duty"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="lblClass" type="Label" parent="Panel/PanelContainer/MarginContainer/HBoxContainer"]
+visible = false
 layout_mode = 2
 theme = ExtResource("2_f82dm")
 theme_override_colors/font_color = Color(0, 0, 0, 1)

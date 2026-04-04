@@ -1,0 +1,92 @@
+[gd_scene load_steps=6 format=3 uid="uid://ca0klxte1xuax"]
+
+[ext_resource type="Script" uid="uid://dcfj3a8m1an54" path="res://Scripts/Components/confirm_box.gd" id="1_hcfjd"]
+[ext_resource type="Texture2D" uid="uid://boqt3dfmd851g" path="res://Assets/UI/Border/panel-border-013.png" id="1_q7adh"]
+[ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="2_hcfjd"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vvib3"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_jf1na"]
+texture = ExtResource("1_q7adh")
+texture_margin_left = 24.0
+texture_margin_top = 24.0
+texture_margin_right = 24.0
+texture_margin_bottom = 24.0
+region_rect = Rect2(0, 0, 96, 96)
+
+[node name="ConfirmBox" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_hcfjd")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="blackBox" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_vvib3")
+
+[node name="panelBorder" type="PanelContainer" parent="blackBox"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_jf1na")
+
+[node name="MarginContainer" type="MarginContainer" parent="blackBox/panelBorder"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="blackBox/panelBorder/MarginContainer"]
+layout_mode = 2
+theme = ExtResource("2_hcfjd")
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="blackBox/panelBorder/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Are You Sure?"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RichTextLabel" type="RichTextLabel" parent="blackBox/panelBorder/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "This will abandon your current run and you will lose all progress."
+fit_content = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="blackBox/panelBorder/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="btnCancel" type="Button" parent="blackBox/panelBorder/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Cancel"
+
+[node name="btnProceed" type="Button" parent="blackBox/panelBorder/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Proceed"

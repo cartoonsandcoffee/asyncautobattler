@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://bngvv00tpw67t" path="res://Scripts/RoomEvents/uncommon_utility_crafting.gd" id="1_1vilr"]
 [ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="2_nonn0"]
-[ext_resource type="Texture2D" uid="uid://dnw0mej3amlga" path="res://Assets/Art/Backgrounds/Background_06.png" id="2_oqb6w"]
-[ext_resource type="Texture2D" uid="uid://kjsq8h3wkkqh" path="res://Assets/Art/Events/crafting_cauldron.png" id="3_1vilr"]
+[ext_resource type="Texture2D" uid="uid://cr5mucfkmo2k4" path="res://Assets/Art/Backgrounds/Hallway_01.png" id="2_oqb6w"]
+[ext_resource type="Texture2D" uid="uid://krj6t4onxp2l" path="res://Assets/Art/Events/infested_mound.png" id="3_oqb6w"]
 [ext_resource type="Texture2D" uid="uid://rgu723p7kdwu" path="res://Assets/Art/Events/crafting_eyes.png" id="4_6u7kd"]
 [ext_resource type="Texture2D" uid="uid://ofqhkq0qfkqk" path="res://Assets/Items/Bugs.png" id="6_6u7kd"]
 [ext_resource type="PackedScene" uid="uid://c3h585v8mippc" path="res://Scenes/Elements/free_item_offering.tscn" id="7_oqb6w"]
@@ -60,22 +60,10 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Control/picEyes:rotation")
+tracks/2/path = NodePath("Control/gut_particles:emitting")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0698132]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Control/gut_particles:emitting")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
@@ -87,18 +75,6 @@ resource_name = "event_idle"
 length = 1.5
 loop_mode = 2
 step = 0.025
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Control/picEyes:rotation")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [0.0698132, -0.10472]
-}
 
 [sub_resource type="Animation" id="Animation_jfigw"]
 resource_name = "hide_animation"
@@ -474,13 +450,13 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -99.0
-offset_top = -114.0
-offset_right = 555.0
-offset_bottom = 306.0
+offset_left = -327.0
+offset_top = -272.0
+offset_right = 327.0
+offset_bottom = 148.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(0.8, 0.8)
+pivot_offset = Vector2(327, 210)
 
 [node name="picCauldron" type="TextureRect" parent="Control"]
 layout_mode = 1
@@ -489,15 +465,16 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -682.0
-offset_top = -203.0
-offset_right = 683.0
-offset_bottom = 482.0
+offset_left = -618.25
+offset_top = -201.25
+offset_right = 510.75
+offset_bottom = 364.75
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.4, 0.4)
 pivot_offset = Vector2(682, 342)
-texture = ExtResource("3_1vilr")
+texture = ExtResource("3_oqb6w")
+expand_mode = 1
 
 [node name="Button" type="Button" parent="Control/picCauldron"]
 layout_mode = 1
@@ -541,47 +518,50 @@ theme_override_constants/shadow_offset_y = 2
 theme_override_constants/outline_size = 5
 theme_override_fonts/font = ExtResource("2_nonn0")
 theme_override_font_sizes/font_size = 46
-text = "Examine?"
+text = "Examine."
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="picEyes" type="TextureRect" parent="Control"]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -209.0
-offset_top = -358.0
-offset_right = 142.0
-offset_bottom = 456.0
+offset_left = -159.5
+offset_top = -411.25
+offset_right = 101.5
+offset_bottom = 194.75
 grow_horizontal = 2
 grow_vertical = 2
 rotation = 0.0698132
 scale = Vector2(0.4, 0.4)
 pivot_offset = Vector2(217.5, 55.75)
 texture = ExtResource("4_6u7kd")
+expand_mode = 1
 
 [node name="gut_particles" type="CPUParticles2D" parent="Control"]
-position = Vector2(321, 377)
+position = Vector2(357.5, 281.25)
 emitting = false
 amount = 30
 texture = SubResource("AtlasTexture_oqb6w")
 lifetime = 4.0
+one_shot = true
 explosiveness = 0.7
 randomness = 0.3
 direction = Vector2(0, -1)
 spread = 90.0
-gravity = Vector2(0, 250)
-initial_velocity_min = 80.0
-initial_velocity_max = 110.0
+gravity = Vector2(0, 200)
+initial_velocity_min = 120.0
+initial_velocity_max = 200.0
 orbit_velocity_min = 0.01
 orbit_velocity_max = 0.04
 angle_max = 20.0
 angle_curve = SubResource("Curve_2jla6")
 scale_amount_curve = SubResource("Curve_xskcj")
-color = Color(0.78, 0.19734, 0.1326, 1)
+color = Color(0.35448, 0.2562, 0.42, 1)
 
 [node name="FreeItemOffering" parent="." instance=ExtResource("7_oqb6w")]
 visible = false

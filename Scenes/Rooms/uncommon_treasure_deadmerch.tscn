@@ -2,12 +2,20 @@
 
 [ext_resource type="Script" uid="uid://n5n1guxmpsrw" path="res://Scripts/RoomEvents/treasure_chest_room.gd" id="1_8haid"]
 [ext_resource type="Resource" uid="uid://dg2wcy0kx620y" path="res://Resources/Enemies/Goblin.tres" id="2_hxlt1"]
-[ext_resource type="Texture2D" uid="uid://csprhhu3ka3ig" path="res://Assets/Art/Room_03_Background.png" id="3_mgjqs"]
+[ext_resource type="Texture2D" uid="uid://csprhhu3ka3ig" path="res://Assets/Art/Backgrounds/Room_03_Background.png" id="3_mgjqs"]
 [ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="4_7b6al"]
 [ext_resource type="Texture2D" uid="uid://chpq5ee7yt7u0" path="res://Assets/Art/Events/MerchantCorpse.png" id="5_ujq0u"]
 [ext_resource type="PackedScene" uid="uid://c3h585v8mippc" path="res://Scenes/Elements/free_item_offering.tscn" id="6_rscnt"]
 [ext_resource type="Texture2D" uid="uid://c6uhtg2telr2f" path="res://Assets/Art/Particles/circle_05.png" id="7_hxlt1"]
 [ext_resource type="Texture2D" uid="uid://dxw4wnrx37lmp" path="res://Assets/Art/Particles/magic_05.png" id="7_obps0"]
+
+[sub_resource type="Curve" id="Curve_mgjqs"]
+_data = [Vector2(0, 0.480378), 0.0, 0.124358, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_7b6al"]
+offsets = PackedFloat32Array(0, 0.680934, 1)
+colors = PackedColorArray(1, 0, 0.116667, 1, 0.68, 0, 0.0793334, 1, 0.95, 0.00949999, 0.00949999, 0)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_q4k6o"]
 
@@ -18,14 +26,6 @@
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ps6k6"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ooyyh"]
-
-[sub_resource type="Curve" id="Curve_mgjqs"]
-_data = [Vector2(0, 0.480378), 0.0, 0.124358, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="Gradient" id="Gradient_7b6al"]
-offsets = PackedFloat32Array(0, 0.680934, 1)
-colors = PackedColorArray(1, 0, 0.116667, 1, 0.68, 0, 0.0793334, 1, 0.95, 0.00949999, 0.00949999, 0)
 
 [sub_resource type="Curve" id="Curve_02na4"]
 _limits = [0.5, 3.0, 0.0, 1.0]
@@ -181,31 +181,31 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("picTreasure:pivot_offset")
+tracks/1/path = NodePath("picTreasure:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 0)]
+"values": [0.0]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("picTreasure:rotation")
+tracks/2/path = NodePath("picTreasure:visible")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
+"update": 1,
+"values": [true]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("picTreasure:visible")
+tracks/3/path = NodePath("picTreasure/Button:disabled")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -217,22 +217,10 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("picTreasure/Button:disabled")
+tracks/4/path = NodePath("particleBlood:emitting")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("particleBlood:emitting")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
@@ -259,34 +247,10 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("picTreasure:scale")
+tracks/1/path = NodePath("picTreasure:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.07, 0.15, 0.22, 0.29, 0.35, 1),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(1, 1), Vector2(1, 1.051), Vector2(1.03, 0.97), Vector2(0.906, 1.03), Vector2(1.05, 1), Vector2(1, 1), Vector2(1, 1)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("picTreasure:pivot_offset")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(140, 240)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("picTreasure:modulate")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -433,18 +397,6 @@ tracks/2/keys = {
 "update": 0,
 "values": [Vector2(569, 463)]
 }
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("lblOpen:pivot_offset")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(182, 33)]
-}
 
 [sub_resource type="Animation" id="Animation_taixv"]
 resource_name = "hide_text"
@@ -472,7 +424,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(569, 400), Vector2(569, 463)]
+"values": [Vector2(452, 346), Vector2(441, 422)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -513,7 +465,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(569, 463), Vector2(569, 400)]
+"values": [Vector2(441, 422), Vector2(452, 346)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -623,14 +575,38 @@ text = "Search the Corpse"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="particleBlood" type="CPUParticles2D" parent="."]
+visible = false
+position = Vector2(791, 479)
+emitting = false
+amount = 10
+texture = ExtResource("7_hxlt1")
+lifetime = 0.75
+speed_scale = 0.4
+explosiveness = 0.6
+randomness = 0.5
+direction = Vector2(0, -1)
+spread = 47.9
+gravity = Vector2(0, 800)
+initial_velocity_min = 150.0
+initial_velocity_max = 300.0
+linear_accel_min = 50.0
+linear_accel_max = 100.0
+scale_amount_min = 0.03
+scale_amount_max = 0.05
+scale_amount_curve = SubResource("Curve_mgjqs")
+color = Color(0.505882, 0.188235, 0.188235, 1)
+color_ramp = SubResource("Gradient_7b6al")
+
 [node name="picTreasure" type="TextureRect" parent="."]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 0
-offset_left = 574.0
-offset_top = 434.0
-offset_right = 1098.84
-offset_bottom = 744.0
-scale = Vector2(0.65, 0.65)
+offset_left = 479.0
+offset_top = 393.0
+offset_right = 1003.84
+offset_bottom = 703.0
+scale = Vector2(0.6, 0.6)
+pivot_offset = Vector2(262, 155)
 texture = ExtResource("5_ujq0u")
 expand_mode = 3
 
@@ -657,31 +633,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-items_offered = 4
 box_name = "He's dead..."
 box_desc = "Whelp... no use letting it all go to waste."
-
-[node name="particleBlood" type="CPUParticles2D" parent="."]
-position = Vector2(762, 532)
-emitting = false
-amount = 10
-texture = ExtResource("7_hxlt1")
-lifetime = 0.75
-speed_scale = 0.4
-explosiveness = 0.6
-randomness = 0.5
-direction = Vector2(0, -1)
-spread = 47.9
-gravity = Vector2(0, 800)
-initial_velocity_min = 150.0
-initial_velocity_max = 300.0
-linear_accel_min = 50.0
-linear_accel_max = 100.0
-scale_amount_min = 0.03
-scale_amount_max = 0.05
-scale_amount_curve = SubResource("Curve_mgjqs")
-color = Color(0.505882, 0.188235, 0.188235, 1)
-color_ramp = SubResource("Gradient_7b6al")
+include_extra_rare = true
 
 [node name="jar_particles" type="CPUParticles2D" parent="."]
 visible = false
