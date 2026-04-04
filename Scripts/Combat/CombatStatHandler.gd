@@ -44,9 +44,6 @@ func change_stat(entity, stat: Enums.Stats, amount: int, _stat_type: Enums.StatT
 	# Emit the stat_changed signal
 	stat_changed.emit(entity, stat, old_value, new_value)
 	
-	# Log the change -- JDM: Commenting this out for now because logs handled elsewhere in most cases?
-	#_log_stat_change(entity, stat, old_value, new_value)
-	
 	# Determine if this was a gain or loss
 	var delta = new_value - old_value
 	
@@ -129,6 +126,15 @@ func get_stat_value(entity, stat: Enums.Stats, stat_type: Enums.StatType = Enums
 				Enums.StatType.MISSING:
 					return 0
 
+		Enums.Stats.BURN_DAMAGE:
+			match stat_type:
+				Enums.StatType.CURRENT:
+					return entity.stats.burn_damage_current
+				Enums.StatType.BASE:
+					return entity.stats.burn_damage
+				_:
+					return 0
+					
 		Enums.Stats.GOLD:
 			return entity.stats.gold
 	
@@ -149,10 +155,6 @@ func _check_thresholds(entity, stat: Enums.Stats, old_value: int, new_value: int
 			if not _is_wounded_triggered(entity):
 				_mark_wounded_triggered(entity, true)
 
-				# Wait for damage animation to complete before showing wounded
-				#await CombatSpeed.create_timer(CombatSpeed.get_duration("item_proc")) # JDM: pause now handled in proc spawn
-
-				combat_manager.add_to_combat_log_string("[b][color=orange]%s IS WOUNDED![/color][/b]" % _get_entity_name(entity).to_upper())
 				wounded_triggered.emit(entity)
 		
 		# Check for ONE_HITPOINT_LEFT
@@ -168,11 +170,7 @@ func _check_thresholds(entity, stat: Enums.Stats, old_value: int, new_value: int
 		if old_value > 0 and new_value == 0:
 			if not _is_exposed_triggered(entity):
 				_mark_exposed_triggered(entity, true)
-				
-				# Wait for damage animation to complete before showing exposed
-				#await CombatSpeed.create_timer(CombatSpeed.get_duration("item_proc")) # JDM: Pause now handled in proc spawn
 
-				combat_manager.add_to_combat_log_string("[b][color=orange]%s IS EXPOSED![/color][/b]" % _get_entity_name(entity).to_upper())
 				exposed_triggered.emit(entity)
 
 
@@ -265,18 +263,6 @@ func _apply_persistent_effect_to_output(entity, rule: ItemRule):
 
 # ===== HELPER FUNCTIONS =====
 
-func _log_stat_change(entity, stat: Enums.Stats, old_value: int, new_value: int):
-	"""Log stat changes to combat log."""
-	var entity_name:String  = _get_entity_name(entity)
-	var stat_name: String = Enums.get_stat_string(stat)
-	var change:int  = new_value - old_value
-	var change_str:String = ("+" + str(change)) if change > 0 else str(change)
-	
-	#var log_msg:String = "    %s %s: %d -> %d (%s)" % [entity_name, stat_name, old_value, new_value, change_str]
-	var log_msg:String = "    %s %s for %s. (%d -> %d)" % [change_str, stat_name, entity_name, old_value, new_value]
-
-	combat_manager.add_to_combat_log_string(log_msg)
-
 func _get_entity_name(entity) -> String:
 	"""Get the display name of an entity."""
 	if entity == combat_manager.player_entity:
@@ -349,3 +335,8 @@ func reset_combat_state():
 	combat_manager.enemy_exposed_triggered = false
 	combat_manager.player_wounded_triggered = false
 	combat_manager.enemy_wounded_triggered = false
+	combat_manager.player_can_exposed_twice = false
+	combat_manager.enemy_can_exposed_twice = false
+	combat_manager.player_has_exposed_twice = false
+	combat_manager.enemy_has_exposed_twice = false
+	combat_manager.death_processing = false

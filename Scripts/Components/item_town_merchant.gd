@@ -1,5 +1,6 @@
-class_name ItemStore
+class_name ItemTownStore
 extends Control
+
 
 signal item_selected(Item)
 signal store_closed()
@@ -10,39 +11,46 @@ signal need_item_replace(Item)
 @onready var dialogue_label: RichTextLabel = $Panel/BlackBack/PanelContainer/VBoxContainer/MarginContainer/txtDesc
 @onready var btn_cancel: Button = $Panel/BlackBack/PanelContainer/VBoxContainer/btnCancel
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
+
 @onready var refresh_panel: PanelContainer = $Panel/sidePanelBlack
 @onready var refresh_cost: Label = $Panel/sidePanelBlack/panelReroll/HBoxContainer/HBoxContainer2/lblRerollCost
 @onready var btn_refresh: Button = $Panel/sidePanelBlack/btnReroll
 @onready var anim_reroll: AnimationPlayer = $animReroll
 
-@export var item_rarity: Enums.Rarity = Enums.Rarity.UNCOMMON
-@export var items_offered: int = 6
-@export var item_columns: int = 3
+@onready var upgrade_panel: PanelContainer = $Panel/sidePanelUpgrade
+@onready var upgrade_cost: Label = $Panel/sidePanelUpgrade/panelUpgrade/HBoxContainer/HBoxContainer2/lblUpgradeCost
+@onready var btn_upgrade: Button = $Panel/sidePanelUpgrade/btnUpgrade
+@onready var anim_upgrade: AnimationPlayer = $animUpgrade
 
 @export var box_name:String = ""
 @export_multiline var box_desc:String = ""
-@export var include_extra_rare: bool = false
-@export var allow_refresh: bool = true
-@export var on_sale: bool = false
-## Category string (Leave blank to not limit by category) 
-@export var category_string: String = ""
-## Shop will be saved and must be manually rerolled
-@export var persistent: bool = false 
 
 var item_choice_scene = preload("res://Scenes/item_choice.tscn")
 var empty_item = preload("res://Scenes/Elements/empty_choice.tscn")
 
-var offered_items: Array[Item] = []
 var is_store_open: bool = false
 
+var base_items_offered: int = 3
+
+var offered_items: Array[Item] = []	# the combined array of offerings
+
+var common_items: Array[Item] = []
+var uncommon_items: Array[Item] = []
+var rare_items: Array[Item] = []
+
 func _ready() -> void:
-	item_choice_container.columns = item_columns
-	refresh_panel.visible = allow_refresh
+	item_choice_container.columns = 6
+	refresh_panel.visible = true
+
+	if Player.stats.shop_upgrades < 3:
+		upgrade_panel.visible = true
+	else:
+		upgrade_panel.visible = false
+
 	add_to_group("item_selection_events") 
 	setup_labels()
 
-	if not persistent:
-		generate_item_choices()
+	generate_item_choices()
 
 func setup_labels():
 	name_label.text = box_name
@@ -58,24 +66,36 @@ func generate_item_choices():
 		child.queue_free()
 		
 	# Get 3 random items
-	if category_string && category_string != "":
-		if category_string == "weapon" || category_string == "Weapon":
-			offered_items = ItemsManager.get_random_weapons_by_rarity(items_offered, item_rarity, include_extra_rare)
-		else:
-			offered_items = ItemsManager.get_random_items_by_categry_and_rarity(items_offered, item_rarity, include_extra_rare, category_string)
+	if Player.current_rank < 3:
+		common_items = ItemsManager.get_random_items(2, Enums.Rarity.COMMON, false, true)
+		uncommon_items = ItemsManager.get_random_items(3, Enums.Rarity.UNCOMMON, false, true)
 	else:
-		offered_items = ItemsManager.get_random_items(items_offered, item_rarity, include_extra_rare, true)
-	
+		common_items = []
+		uncommon_items = ItemsManager.get_random_items(5, Enums.Rarity.UNCOMMON, false, true)
+
+	rare_items = ItemsManager.get_random_items(1, Enums.Rarity.RARE, false, true)
+
+	offered_items = common_items + uncommon_items + rare_items
+
+	var itm_count: int = 0
+
 	# Create choice buttons for each item
 	for item in offered_items:
+		itm_count += 1
+
 		var choice_button = item_choice_scene.instantiate()
 		choice_button.custom_minimum_size = Vector2(110, 140)
 		item_choice_container.add_child(choice_button)
+		if itm_count > (base_items_offered + Player.stats.shop_upgrades):
+			choice_button.visible = false
+		else:
+			choice_button.visible = true
 		choice_button.set_item(item)
-		choice_button.setup_for_store(on_sale)
+		choice_button.setup_for_store(false)
 		choice_button.item_purchased.connect(_on_item_selected)
 	
 	check_affordability()
+
 
 func _on_item_selected(item: ItemChoice):
 	purchase_item_from_store(item)
@@ -85,17 +105,15 @@ func _on_btn_cancel_pressed() -> void:
 
 
 func show_store():
-	if persistent:
-		for child in item_choice_container.get_children():
-			item_choice_container.remove_child(child)
-			child.free()
-		if Player.town_shop_inventory.is_empty():
-			generate_item_choices()
-			_save_persistent_inventory()
-		else:
-			_restore_persistent_inventory()	
+	for child in item_choice_container.get_children():
+		item_choice_container.remove_child(child)
+		child.free()
+	if Player.town_shop_inventory.is_empty():
+		generate_item_choices()
+		_save_persistent_inventory()
+	else:
+		_restore_persistent_inventory()	
 
-	check_affordability()
 	anim_player.play("show_store")
 	var anim_length = anim_player.get_animation("show_store").length
 	await CombatSpeed.create_timer(anim_length)
@@ -132,8 +150,7 @@ func replace_item_with_empty(target_item: Item):
 			item_choice_container.move_child(empty_slot, i)
 			break
 
-	if persistent:
-		_save_persistent_inventory()
+	_save_persistent_inventory()
 
 func check_affordability():
 	var children = item_choice_container.get_children()
@@ -171,7 +188,7 @@ func purchase_item_from_store(purchased_item: ItemChoice):
 				need_item_replace.emit(purchased_item.current_item)
 				replace_item_with_empty(purchased_item.current_item)
 
-			check_affordability()
+	check_affordability()
 
 # Alternative approach if you want to rebuild the entire grid:
 func refresh_store_display():
@@ -182,19 +199,47 @@ func refresh_store_display():
 		refresh_cost_label()
 		generate_item_choices()
 		
-		if persistent:
-			_save_persistent_inventory()
+		_save_persistent_inventory()
 
 		check_affordability()
 
+func refresh_after_upgrade():
+	# Clear all existing children
+	if Player.stats.gold >= Player.stats.upgrade_cost:
+		Player.subtract_gold(Player.stats.upgrade_cost)
+		Player.stats.upgrade_cost *= 2
+		Player.stats.shop_upgrades += 1
+
+		refresh_cost_label()
+		generate_item_choices()
+		_save_persistent_inventory()
+	
+	if Player.stats.shop_upgrades >= 3:
+		upgrade_panel.visible = false
+
+
 func refresh_cost_label():
 	refresh_cost.text = str(Player.stats.refresh_cost)
+	upgrade_cost.text = str(Player.stats.upgrade_cost)
+
+func _on_btn_upgrade_pressed() -> void:
+	refresh_after_upgrade()
+	AudioManager.play_event_sound("coins_02")
+
+
+func _on_btn_upgrade_mouse_exited() -> void:
+	CursorManager.reset_cursor()
+	anim_upgrade.play("hide_upgrade")
+
+func _on_btn_upgrade_mouse_entered() -> void:
+	CursorManager.set_interact_cursor()
+	AudioManager.play_ui_sound("woosh")
+	anim_upgrade.play("show_upgrade")
+	
 
 func _on_btn_reroll_pressed() -> void:
 	refresh_store_display()
 	AudioManager.play_event_sound("coins_01")
-
-
 
 func _on_btn_reroll_mouse_exited() -> void:
 	CursorManager.reset_cursor()
@@ -206,9 +251,6 @@ func _on_btn_reroll_mouse_entered() -> void:
 	anim_reroll.play("reroll_show")
 
 func _save_persistent_inventory():
-	if not persistent:
-		return
-
 	Player.town_shop_inventory.clear()
 
 	for child in item_choice_container.get_children():
@@ -220,28 +262,50 @@ func _save_persistent_inventory():
 			Player.town_shop_inventory.append("")  # empty slot
 
 func _restore_persistent_inventory():
-	if not persistent:
-		return
-
 	for child in item_choice_container.get_children():
 		item_choice_container.remove_child(child)
 		child.free()
 	
 	offered_items.clear()
+
+	var itm_count: int = 0
+
 	for item_id in Player.town_shop_inventory:
+		itm_count += 1
+
 		if item_id == "":
 			var empty_slot = empty_item.instantiate()
 			empty_slot.custom_minimum_size = Vector2(110, 140)
+			if itm_count > (base_items_offered + Player.stats.shop_upgrades):
+				empty_slot.visible = false
+			else:
+				empty_slot.visible = true
 			item_choice_container.add_child(empty_slot)
 		else:
 			var item = ItemsManager.get_item_by_id(item_id)
 			if item:
-				offered_items.append(item)
-				var choice_button = item_choice_scene.instantiate()
-				choice_button.custom_minimum_size = Vector2(110, 140)
-				item_choice_container.add_child(choice_button)
-				choice_button.set_item(item)
-				choice_button.setup_for_store(on_sale)
-				choice_button.item_purchased.connect(_on_item_selected)
+				# Silently replace with empty slot if item is now invalid for player
+				var is_invalid = item == null \
+					or (item.has_category("Unique") and Player.inventory.has_unique_item(item_id)) \
+					or (item.has_category("Singularity") and Player.inventory.has_any_singularity_item())
+
+				if is_invalid:
+					var empty_slot = empty_item.instantiate()
+					empty_slot.custom_minimum_size = Vector2(110, 140)
+					if itm_count > (base_items_offered + Player.stats.shop_upgrades):
+						empty_slot.visible = false
+					item_choice_container.add_child(empty_slot)
+				else:
+					offered_items.append(item)
+					var choice_button = item_choice_scene.instantiate()
+					choice_button.custom_minimum_size = Vector2(110, 140)
+					if itm_count > (base_items_offered + Player.stats.shop_upgrades):
+						choice_button.visible = false
+					else:
+						choice_button.visible = true
+					item_choice_container.add_child(choice_button)
+					choice_button.set_item(item)
+					choice_button.setup_for_store(false)
+					choice_button.item_purchased.connect(_on_item_selected)
 	
 	check_affordability()

@@ -7,6 +7,7 @@ extends Resource
 	set(value):
 		room_type = value
 		notify_property_list_changed()
+## THIS RARITY UNUSED (in favor of Weight system)
 @export var rarity: Enums.Rarity  = Enums.Rarity.COMMON:
 	set(value):
 		rarity = value
@@ -19,6 +20,7 @@ extends Resource
 @export var background_texture: Texture2D
 @export var door_texture: Texture2D
 @export var room_icon: Texture2D  # abstract icon type for minimap
+## The Enums rank colors are used unless room rarity >= Rare
 @export var room_color: Color = Color.WHITE
 @export var music_override: AudioStream 
 
@@ -43,9 +45,7 @@ extends Resource
 
 @export_group("Generation Rules")
 # Generation Rules
-@export var spawn_weight: int = 1	# RNG weight for door generation (higher = more likely)
-@export var min_rank: int = 1		# Lowest rank this room can appear in
-@export var max_rank: int = 5		# highest rank this room can appear in
+@export var rank_weights: Array[int] = [0, 0, 0, 0, 0, 0, 0]
 
 # This function controls which properties are visible in the inspector
 func _validate_property(property: Dictionary) -> void:
@@ -64,6 +64,10 @@ func _validate_property(property: Dictionary) -> void:
 		if room_type not in [Enums.RoomType.UTILITY]:
 			property.usage = PROPERTY_USAGE_NO_EDITOR
 
+func get_weight_for_rank(rank: int) -> int:
+	if rank_weights.size() > rank and rank_weights[rank] > 0:
+		return rank_weights[rank]
+	return 0  # fallback
 
 func get_random_event() -> PackedScene:
 	if possible_events.size() > 0:
@@ -71,7 +75,4 @@ func get_random_event() -> PackedScene:
 	else:
 		push_warning("No events defined for room: " + room_name)
 		return null
-
-func can_appear_at_rank(rank: int) -> bool:
-	return rank >= min_rank and rank <= max_rank
 

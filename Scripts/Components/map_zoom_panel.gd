@@ -75,9 +75,13 @@ func update_display():
 
 func show_matchup():
 	AudioManager.play_event_sound("cheering")
+	AudioManager.clear_room_override()
+	AudioManager.play_combat_music(true, null) 
+	
 	anim_matchup.play("show_players")
 	var anim_length = anim_matchup.get_animation("show_players").length + 1.5
 	await CombatSpeed.create_timer(anim_length)
+	Player.is_in_town = false
 	boss_rush_pressed.emit()
 
 func _update_boss_info():

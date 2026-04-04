@@ -49,19 +49,12 @@ func apply_damage(target, amount: int, source, damage_type: String) -> int:
 		var visual_stat = Enums.Stats.EXPOSED if will_expose else Enums.Stats.SHIELD
 		await _create_damage_visual(target, shield_damage, visual_stat, source, damage_type)
 
+		# THIS IS THE SHIELD LOGGING:
+		var shield_after: int = max(0, shield_before - shield_damage)
+		combat_manager.add_to_combat_log_string(CombatLog.fmt_damage_shield(combat_manager.get_entity_name(target), shield_damage, shield_before, shield_after))
+
 		# Apply shield damage
 		stat_handler.change_stat(target, Enums.Stats.SHIELD, -shield_damage)
-
-		var shield_after: int = target.stats.shield_current
-
-		# THIS IS THE SHIELD LOGGING:
-		combat_manager.add_to_combat_log_string("   %s's %s decreased by %s (%d -> %d)." % [
-				combat_manager.color_entity(combat_manager.get_entity_name(target)),
-				combat_manager.color_stat("shield"),
-				combat_manager.color_text(str(shield_damage), Color.RED),
-				shield_before,
-				shield_after
-			])
 
 		total_damage_dealt += shield_damage
 		remaining_damage -= shield_damage
@@ -76,19 +69,13 @@ func apply_damage(target, amount: int, source, damage_type: String) -> int:
 		var visual_stat = Enums.Stats.WOUNDED if will_wound else Enums.Stats.HITPOINTS
 		await _create_damage_visual(target, hp_damage, visual_stat, source, damage_type)
 
+		# THIS IS THE HP LOGGING:
+		var hp_after:int = max(0, hp_before - hp_damage)
+		combat_manager.add_to_combat_log_string(CombatLog.fmt_damage_hp(combat_manager.get_entity_name(target), hp_damage, hp_before, hp_after))
+		
 		# Apply HP damage
 		stat_handler.change_stat(target, Enums.Stats.HITPOINTS, -hp_damage)
-		var hp_after:int = target.stats.hit_points_current
 
-		# THIS IS THE HP LOGGING:
-		combat_manager.add_to_combat_log_string("   %s's %s decreased by %s (%d -> %d)." % [
-				combat_manager.color_entity(combat_manager.get_entity_name(target)),
-				combat_manager.color_stat("hitpoints"),
-				combat_manager.color_text(str(hp_damage), Color.RED),
-				hp_before,
-				hp_after
-			])
-		
 		total_damage_dealt += hp_damage
 	
 	# STEP 3: Process thorns reflection (if source exists and target has thorns)
@@ -102,7 +89,7 @@ func apply_damage(target, amount: int, source, damage_type: String) -> int:
 
 # ===== HEALING =====
 
-func heal_entity(entity, amount: int, source):
+func heal_entity(entity, amount: int, source, log_heal: bool = true):
 	# Heal an entity's HP.
 	# Automatically clamps to max HP.
 
@@ -123,7 +110,8 @@ func heal_entity(entity, amount: int, source):
 		# Emit signal
 		healing_applied.emit(entity, actual_healing)
 		
-		combat_manager.add_to_combat_log_string("  %s heals for %d HP" % [_get_entity_name(entity), actual_healing], Color.GREEN)
+		if log_heal:
+			combat_manager.add_to_combat_log_string(CombatLog.fmt_heal(_get_entity_name(entity), actual_healing, old_hp, old_hp + actual_healing))
 	
 
 # ===== DAMAGE VISUALS =====
@@ -132,6 +120,9 @@ func _create_damage_visual(target, amount: int, damage_stat: Enums.Stats, source
 	# Create visual feedback for damage/healing.
 	# Routes through AnimationManager to create damage indicators.
 	
+	if CombatSpeed.is_instant_mode():
+		return  # No visuals in instant mode
+
 	# Prepare visual info based on damage type
 	var visual_info = _get_visual_info_for_damage_type(damage_type, source)
 	
@@ -157,9 +148,12 @@ func _get_visual_info_for_damage_type(damage_type: String, source) -> Dictionary
 						info.color = source.inventory.weapon_slot.item_color
 						info.source_name = "Attack"
 				else:
-					# Enemy attack
-					if source == combat_manager.enemy_entity and source is Enemy:
-						info.icon = source.weapon_sprite  # Enemy weapon
+					# Enemy attack — check inventory first (PvP boss), fall back to weapon_sprite
+					if "inventory" in source and source.inventory and source.inventory.weapon_slot:
+						info.icon = source.inventory.weapon_slot.item_icon
+						info.color = source.inventory.weapon_slot.item_color
+					elif source is Enemy and source.weapon_sprite:
+						info.icon = source.weapon_sprite
 						info.color = game_colors.stats.damage
 					info.source_name = "Attack"
 		

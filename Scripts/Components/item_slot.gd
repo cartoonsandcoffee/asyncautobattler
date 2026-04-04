@@ -20,11 +20,12 @@ enum ItemType {
 @onready var item_icon: TextureRect 
 @onready var anim_hover: AnimationPlayer
 @onready var anim_highlight: AnimationPlayer
-#@onready var tooltip: Control
-#@onready var tooltip_panel: Panel
+@onready var set_shader: ColorRect
 @onready var button: Button
 @onready var pic_rarity: TextureRect
+@onready var wep_indicator: TextureRect
 @onready var pnl_rarity: Panel
+
 @export var item_type: ItemType = ItemType.OTHER
 @export var current_item: Item = null
 
@@ -32,6 +33,7 @@ var item_instance_id: int = -1  # Track the specific instance
 var slot_index: int = -1  # to track position
 var is_dragging: bool = false  
 var is_combat_highlighted: bool = false
+var is_in_crafting_slot: bool = false
 
 # stuff for double click
 var click_count: int = 0
@@ -40,6 +42,8 @@ var double_click_time: float = 0.3  # Time window for double-click
 
 var is_from_compendium: bool = false
 var owner_entity = null
+
+var default_grey: Color = Color("#9b9b9b")
 
 var gamecolors: GameColors
 
@@ -55,9 +59,11 @@ func set_references():
 	anim_hover = $animSelect
 	button = $Panel/Button
 	anim_highlight = $animHighlight
-	pic_rarity = $Panel/pnlRare/picRarity
-	pnl_rarity = $Panel/pnlRare
+	pic_rarity = $Panel/VBoxContainer/itemContainer/pnlRare/picRarity
+	pnl_rarity = $Panel/VBoxContainer/itemContainer/pnlRare
 	lbl_countdown = $Panel/VBoxContainer/itemContainer/lblCountdown
+	wep_indicator = $Panel/VBoxContainer/itemContainer/wepIndicator
+	set_shader = $Panel/VBoxContainer/itemContainer/MarginContainer/item_icon/shaderRect
 
 	if !button.button_down.is_connected(_on_button_down):
 		button.button_down.connect(_on_button_down)
@@ -73,6 +79,7 @@ func set_references():
 
 func set_item(item: Item):
 	set_references()
+	set_shader.visible = false
 
 	if item:
 		current_item = item
@@ -80,7 +87,7 @@ func set_item(item: Item):
 		update_visuals()
 		set_item_type_desc()	
 		button.disabled = false
-		pnl_rarity.visible = false
+		pnl_rarity.visible = true
 
 		# Initialize countdown display
 		if item.trigger_on_occurrence_number > 0:
@@ -161,36 +168,50 @@ func set_rarity_color():
 	var rarity_rare: Texture2D = load("res://Resources/Rarity/rare.tres")
 	var rarity_legendary: Texture2D = load("res://Resources/Rarity/legendary.tres")
 	var rarity_mystic: Texture2D = load("res://Resources/Rarity/mystic.tres")
-
+	var rarity_golden: Texture2D = load("res://Resources/Rarity/golden.tres")
+	var rarity_diamond: Texture2D = load("res://Resources/Rarity/diamond.tres")
+	var rarity_crafted: Texture2D = load("res://Resources/Rarity/crafted.tres")
 
 	if current_item.rarity == Enums.Rarity.COMMON:
 		pic_rarity.texture = rarity_common
 		pic_rarity.self_modulate = gamecolors.rarity.common
 		panel_border.self_modulate = gamecolors.rarity.common
+		wep_indicator.modulate = gamecolors.rarity.common
 	elif current_item.rarity == Enums.Rarity.UNCOMMON:
 		pic_rarity.texture = rarity_uncommon
 		pic_rarity.self_modulate = gamecolors.rarity.uncommon
 		panel_border.self_modulate = gamecolors.rarity.uncommon
+		wep_indicator.modulate = gamecolors.rarity.uncommon
 	elif current_item.rarity == Enums.Rarity.RARE:
 		pic_rarity.texture = rarity_rare
 		pic_rarity.self_modulate = gamecolors.rarity.rare
 		panel_border.self_modulate = gamecolors.rarity.rare
+		wep_indicator.modulate = gamecolors.rarity.rare
 	elif current_item.rarity == Enums.Rarity.LEGENDARY:
 		pic_rarity.texture = rarity_legendary
 		pic_rarity.self_modulate = gamecolors.rarity.legendary
 		panel_border.self_modulate = gamecolors.rarity.legendary
+		wep_indicator.modulate = gamecolors.rarity.legendary
 	elif current_item.rarity == Enums.Rarity.MYSTERIOUS:
 		pic_rarity.texture = rarity_mystic
 		pic_rarity.self_modulate = gamecolors.rarity.mysterious
 		panel_border.self_modulate = gamecolors.rarity.mysterious
+		wep_indicator.modulate = gamecolors.rarity.mysterious
 	elif current_item.rarity == Enums.Rarity.GOLDEN:
-		pic_rarity.texture = rarity_common
+		pic_rarity.texture = rarity_golden
 		pic_rarity.self_modulate = gamecolors.rarity.golden
 		panel_border.self_modulate = gamecolors.rarity.golden
+		wep_indicator.modulate = gamecolors.rarity.golden
 	elif current_item.rarity == Enums.Rarity.DIAMOND:
-		pic_rarity.texture = rarity_common
+		pic_rarity.texture = rarity_diamond
 		pic_rarity.self_modulate = gamecolors.rarity.diamond
 		panel_border.self_modulate = gamecolors.rarity.diamond
+		wep_indicator.modulate = gamecolors.rarity.diamond
+	elif current_item.rarity == Enums.Rarity.CRAFTED:
+		pic_rarity.texture = rarity_crafted
+		pic_rarity.self_modulate = gamecolors.rarity.crafted
+		panel_border.self_modulate = gamecolors.rarity.crafted
+		wep_indicator.modulate = gamecolors.rarity.crafted
 
 func set_order(order: int):
 	set_references()
@@ -201,13 +222,17 @@ func set_bonus():
 	set_references()
 	lbl_order.text = "Set Bonus"
 	order_container.visible = false
-	panel_border.self_modulate = Color.BLACK
-	$Panel.scale = Vector2(0.5, 0.5)
+	panel_border.self_modulate = Color.WHITE
+	$Panel.scale = Vector2(0.75, 0.75)
+	set_shader.visible = true 
+	pnl_rarity.visible = false
 
 func set_weapon_text_color():
 	lbl_order.text = "weapon"
 	lbl_order.set("theme_override_colors/font_color", Color("#D9A5A5"))
 	order_container.self_modulate = Color("#8a1d1dff")
+	wep_indicator.visible = true
+	
 
 func get_item_instance() -> Item:
 	# Return the specific instance, not just any item
@@ -273,6 +298,9 @@ func _on_button_down():
 	if is_dragging:
 		return
 
+	if get_tree().get_first_node_in_group("main_game").is_dragging:
+		return
+
 	if current_item:
 		if current_item.item_type == Item.ItemType.SET_BONUS:
 			return
@@ -280,7 +308,7 @@ func _on_button_down():
 		drag_started.emit(self)
 		CursorManager.set_item_grab_cursor()
 		AudioManager.play_ui_sound("item_pickup")
-		modulate.a = 0.5  # Make semi-transparent while dragging
+		modulate.a = 0.4  # Make semi-transparent while dragging
 
 func _on_button_up():
 	if is_dragging:
@@ -288,7 +316,8 @@ func _on_button_up():
 		drag_ended.emit(self)
 		CursorManager.reset_cursor()
 		AudioManager.play_ui_sound("item_drop")
-		modulate.a = 1.0
+		if not is_in_crafting_slot:
+			modulate.a = 1.0
 
 func _on_button_pressed():
 	click_count += 1

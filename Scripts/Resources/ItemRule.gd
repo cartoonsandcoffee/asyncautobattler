@@ -47,6 +47,11 @@ enum ConversionAmountType {
 
 @export var condition_of: Enums.TargetType = Enums.TargetType.NONE  # for when comparing "PLAYERS/ENEMYS missing health"
 @export var condition_stat: Enums.Stats = Enums.Stats.NONE  # "agility", "damage", "shield", etc.
+## The stat type of the party you are comparing FROM
+@export var condition_party_stat_type: Enums.StatType = Enums.StatType.CURRENT:
+	set(value):
+		condition_party_stat_type = value
+		notify_property_list_changed()
 @export var condition_status: Enums.StatusEffects = Enums.StatusEffects.NONE  # "poison", "acid", "thorns", etc.
 @export var condition_item_category: String = ""
 @export var condition_comparison: String = ">"  # ">", "<", ">=", "<=", "=="
@@ -57,6 +62,7 @@ enum ConversionAmountType {
 
 @export var condition_value: int = 0
 @export var condition_to_party: Enums.TargetType = Enums.TargetType.NONE  # for when comparing TO "PLAYERS/ENEMYS missing health"
+## The stat type of the party you are comparing TO
 @export var condition_stat_type: Enums.StatType = Enums.StatType.NONE # for like if "players MISSING health"
 @export var condition_party_stat: Enums.Stats = Enums.Stats.NONE  # for like if "players missing HEALTH"
 @export var condition_party_status: Enums.StatusEffects = Enums.StatusEffects.NONE 
@@ -128,6 +134,7 @@ enum ConversionAmountType {
 @export var retrigger_type: Enums.TriggerType = Enums.TriggerType.BATTLE_START
 @export var retrigger_target: Enums.TargetType = Enums.TargetType.SELF
 @export var retrigger_item: Enums.ItemToRetrigger = Enums.ItemToRetrigger.NONE
+@export var retrigger_category: String = ""
 
 @export_group("Special")
 @export var special_string: String = "" # for special edge-case instructions for persistant rules, like: "exposed-triggers-twice"
@@ -170,13 +177,17 @@ func _validate_property(property: Dictionary) -> void:
 	
 	# === CONDITIONS GROUP ===
 	# Hide all condition properties if has_condition is false
-	if prop_name in ["condition_type", "condition_of", "condition_stat", "condition_status", "condition_comparison", "compare_to", "condition_value", "condition_to_party", "condition_stat_type", "condition_party_stat", "condition_party_status", "condition_item_category"]:
+	if prop_name in ["condition_type", "condition_of", "condition_stat", "condition_status", "condition_comparison", "compare_to", "condition_value", "condition_to_party", "condition_stat_type", "condition_party_stat", "condition_party_status", "condition_item_category", "condition_party_stat_type"]:
 		if not has_condition:
 			property.usage = PROPERTY_USAGE_NO_EDITOR
 			return
 	
 	# Show condition_stat only for STAT condition type
 	if prop_name == "condition_stat":
+		if has_condition and condition_type != StatOrStatus.STAT:
+			property.usage = PROPERTY_USAGE_NO_EDITOR
+	
+	if prop_name == "condition_party_stat_type":
 		if has_condition and condition_type != StatOrStatus.STAT:
 			property.usage = PROPERTY_USAGE_NO_EDITOR
 	
@@ -278,7 +289,7 @@ func _validate_property(property: Dictionary) -> void:
 			property.usage = PROPERTY_USAGE_NO_EDITOR
 	  
 	# === META TRIGGERS GROUP ===
-	if prop_name in ["retrigger_type", "retrigger_target", "retrigger_item"]:
+	if prop_name in ["retrigger_type", "retrigger_target", "retrigger_item", "retrigger_category"]:
 		if effect_type != Enums.EffectType.TRIGGER_OTHER_ITEMS:
 			property.usage = PROPERTY_USAGE_NO_EDITOR
 

@@ -15,8 +15,7 @@ var damage_system: CombatDamageSystem
 const MAX_RECURSION_DEPTH = 3
 var current_recursion_depth = 0
 
-func _init(manager, stat_handler_ref: CombatStatHandler, status_handler_ref: CombatStatusHandler, 
-		   condition_eval: CombatConditionEvaluator, damage_sys: CombatDamageSystem):
+func _init(manager, stat_handler_ref: CombatStatHandler, status_handler_ref: CombatStatusHandler, condition_eval: CombatConditionEvaluator, damage_sys: CombatDamageSystem):
 	combat_manager = manager
 	stat_handler = stat_handler_ref
 	status_handler = status_handler_ref
@@ -45,9 +44,9 @@ func execute_item_rule(item: Item, rule: ItemRule, source_entity, target_entity,
 	var condition_passes: bool = condition_evaluator.evaluate_condition(rule, source_entity, target_entity)
 	if not condition_passes:
 		var item_name = item.item_name if item else "Unknown Item"
-		combat_manager.add_to_combat_log_string("   %s - [color=gray]Condition not met (skipped): %s [/color]" % [
-			combat_manager.color_item(item_name, item), 
-			condition_evaluator.condition_to_string(rule)
+		combat_manager.add_to_combat_log_string("   %s - %s" % [
+			CombatLog.color_item(item_name, item),
+			CombatLog.color(("Condition not met (skipped): " + condition_evaluator.condition_to_string(rule)), Color.GRAY)
 		])
 		return false  # Condition failed - signal to stop processing this item's rules
 
@@ -56,8 +55,16 @@ func execute_item_rule(item: Item, rule: ItemRule, source_entity, target_entity,
 	
 	# Execute the effect (possibly multiple times)
 	for i in range(execution_count):
+		# Safeguard against triggering after combat is over
+		if not combat_manager.combat_active and not combat_manager.is_processing_on_kill():
+			return true
+
 		# -- EXECUTE THE EFFECT!
 		await _execute_effect_once(item, rule, source_entity, target_entity, _amount)
+
+		# check to see if that one execute killed enemy
+		if not combat_manager.combat_active and not combat_manager.is_processing_on_kill():
+			return true
 
 		# Small delay between repeats
 		if i < execution_count - 1:
@@ -180,10 +187,12 @@ func _execute_modify_stat(rule: ItemRule, source_entity, target_entity, item: It
 
 	var amount = _calculate_effect_amount(rule, source_entity, target_entity, _trigger_amount)
 	
-	var old_value:int = stat_handler.get_stat_value(target_entity, rule.target_stat, Enums.StatType.CURRENT)
+	var read_type = rule.target_stat_type if rule.target_stat_type == Enums.StatType.BASE else Enums.StatType.CURRENT
+	var old_value:int = stat_handler.get_stat_value(target_entity, rule.target_stat, read_type)
 
 	# - SPAWN THE VISUAL INDICATOR
-	await combat_manager.proc_item(item, rule, target_entity, amount)
+	if not CombatSpeed.is_instant_mode():
+		await combat_manager.proc_item(item, rule, target_entity, amount)
 	
 	# Route based on stat type
 	match rule.target_stat:
@@ -202,7 +211,7 @@ func _execute_modify_stat(rule: ItemRule, source_entity, target_entity, item: It
 	#stat_handler.change_stat(target_entity, rule.target_stat, amount, rule.target_stat_type, item)
 	# Note: stat_handler.change_stat() will emit signals and trigger items automatically
 
-	var new_value:int = stat_handler.get_stat_value(target_entity, rule.target_stat, Enums.StatType.CURRENT)
+	var new_value:int = stat_handler.get_stat_value(target_entity, rule.target_stat, read_type)
 
 	var verb:String = ""
 	var effective_amount: int = 0
@@ -216,14 +225,17 @@ func _execute_modify_stat(rule: ItemRule, source_entity, target_entity, item: It
 	
 	#combat_manager.proc_item(item, rule, target_entity, effective_amount)
 
-	var stat_name = Enums.get_stat_string(rule.target_stat)
+	var max_prefix: String = "Max " if rule.target_stat_type == Enums.StatType.BASE else ""
 
-	combat_manager.add_to_combat_log_string("   %s - %s %s %s %s (%d -> %d)" % [combat_manager.color_item(item.item_name, item),
-			combat_manager.color_entity(combat_manager.get_entity_name(target_entity)),
-			verb,
-			combat_manager.color_text(str(abs(effective_amount)), Color.WHITE),
-			combat_manager.color_stat(stat_name),
-			old_value, new_value])
+	combat_manager.add_to_combat_log_string("   %s - %s %s %s %s%s (%d → %d)" % [
+		combat_manager.color_item(item.item_name, item),
+		combat_manager.color_entity(combat_manager.get_entity_name(target_entity)),
+		verb,
+		combat_manager.color_text(str(abs(effective_amount)), Color.WHITE),
+		max_prefix,
+		CombatLog.color_stat(rule.target_stat),
+		old_value, new_value
+	])
 
 
 func _execute_apply_status(rule: ItemRule, source_entity, target_entity, item: Item, _trigger_amount:int = 0):
@@ -252,26 +264,25 @@ func _execute_apply_status(rule: ItemRule, source_entity, target_entity, item: I
 
 	# Queue visuals in correct order
 	var combat_panel = combat_manager.get_tree().get_first_node_in_group("combat_panel")
-	if combat_panel:
-		combat_panel.spawn_item_proc_indicator(item, rule, source_entity, amount)
+	if not CombatSpeed.is_instant_mode():
+		if combat_panel:
+			combat_panel.spawn_item_proc_indicator(item, rule, source_entity, amount)
 
 	#JDM: Revert back to random status when necessary for tooltip
 	if revert_to_random:
 		rule.target_status = Enums.StatusEffects.RANDOM
 		
 	# Apply through status handler
-	status_handler.apply_status(target_entity, status_to_apply, amount)
+	status_handler.apply_status(target_entity, status_to_apply, amount, false, item)  # JDM: The last paramater "log_gain" is passed as false here so that it doesnt add status gains from items twice to the combat_log
 
 	var new_stacks = status_handler.get_status_value(target_entity, status_to_apply)
 
-	# LOG with colors
-	var status_name = Enums.get_status_string(status_to_apply)
-	combat_manager.add_to_combat_log_string(
-		"   %s - %s gains %s %s (total: %d)" % [
-			combat_manager.color_item(item.item_name, item),
-			combat_manager.color_entity(combat_manager.get_entity_name(target_entity)),
-			combat_manager.color_text(str(amount), Color.WHITE),
-			combat_manager.color_status(status_name),
+	# LOG with colors — note: apply_status also logs gain; this adds the item source context
+	combat_manager.add_to_combat_log_string("   %s - %s gains %s %s (total: %d)" % [
+			CombatLog.color_item(item.item_name, item),
+			CombatLog.color_entity(combat_manager.get_entity_name(target_entity)),
+			CombatLog.color(str(amount), Color.WHITE),
+			CombatLog.color_status(status_to_apply),
 			new_stacks])
 
 func _execute_remove_status(rule: ItemRule, source_entity, target_entity, item: Item, _trigger_amount: int = 0):
@@ -292,8 +303,9 @@ func _execute_remove_status(rule: ItemRule, source_entity, target_entity, item: 
 		
 		if active_statuses.is_empty():
 			# No active statuses to remove
-			combat_manager.add_to_combat_log_string("   %s - [color=gray]No statuses to remove[/color]" % 
-				combat_manager.color_item(item.item_name, item))
+			combat_manager.add_to_combat_log_string("   %s - %s" % [
+				CombatLog.color_item(item.item_name, item),
+				CombatLog.color("No statuses to remove", Color.GRAY)])
 			return
 		
 		status_to_remove = active_statuses[randi() % active_statuses.size()]
@@ -312,8 +324,9 @@ func _execute_remove_status(rule: ItemRule, source_entity, target_entity, item: 
 
 	# Queue visuals in correct order
 	var combat_panel = combat_manager.get_tree().get_first_node_in_group("combat_panel")
-	if combat_panel:
-		combat_panel.spawn_item_proc_indicator(item, rule, target_entity, (amount * -1))  # JDM: Used to be 'effective_amount' but that looked wrong.
+	if not CombatSpeed.is_instant_mode():
+		if combat_panel:
+			combat_panel.spawn_item_proc_indicator(item, rule, target_entity, (amount * -1))  # JDM: Used to be 'effective_amount' but that looked wrong.
 
 	# JDM: Revert rule back to random for rule text
 	if revert_to_random:
@@ -325,16 +338,13 @@ func _execute_remove_status(rule: ItemRule, source_entity, target_entity, item: 
 	var new_stacks: int = status_handler.get_status_value(target_entity, status_to_remove)
 
 	# LOG with colors
-	var status_name = Enums.get_status_string(status_to_remove)	
-	combat_manager.add_to_combat_log_string(
-		"   %s - %s loses %s %s (remaining: %d)" % [
-			combat_manager.color_item(item.item_name, item),
-			combat_manager.color_entity(combat_manager.get_entity_name(target_entity)),
-			combat_manager.color_text(str(amount), Color.WHITE),
-			combat_manager.color_status(status_name),
+	combat_manager.add_to_combat_log_string("   %s - %s loses %s %s (remaining: %d)" % [
+			CombatLog.color_item(item.item_name, item),
+			CombatLog.color_entity(combat_manager.get_entity_name(target_entity)),
+			CombatLog.color(str(amount), Color.WHITE),
+			CombatLog.color_status(status_to_remove),
 			new_stacks
-		]
-	)
+		])
 
 func _execute_deal_damage(rule: ItemRule, source_entity, target_entity, item: Item, _trigger_amount: int = 0):
 	"""Deal direct damage."""
@@ -342,9 +352,9 @@ func _execute_deal_damage(rule: ItemRule, source_entity, target_entity, item: It
 	
 	# LOG before damage
 	combat_manager.add_to_combat_log_string("   %s - %s takes %s damage" % [
-			combat_manager.color_item(item.item_name, item),
-			combat_manager.color_entity(combat_manager.get_entity_name(target_entity)),
-			combat_manager.color_text(str(amount), Color.RED)
+			CombatLog.color_item(item.item_name, item),
+			CombatLog.color_entity(combat_manager.get_entity_name(target_entity)),
+			CombatLog.color(str(amount), Color.RED)
 		])
 
 	# VISUAL INDICATOR SPAWNED THROUGH DAMAGE SYSTEM
@@ -356,28 +366,33 @@ func _execute_heal(rule: ItemRule, source_entity, target_entity, item: Item, _tr
 	"""Heal HP."""
 	var amount = _calculate_effect_amount(rule, source_entity, target_entity, _trigger_amount)
 	var old_hp = target_entity.stats.hit_points_current
+	var max_hp = target_entity.stats.hit_points
 
 	# Heal through damage system
 	await damage_system.heal_entity(target_entity, amount, item)
 
 	var new_hp = target_entity.stats.hit_points_current
 	var actual_heal = new_hp - old_hp
+	var overheal = amount - actual_heal  # Amount that was wasted above max HP
+
 	# LOG with colors
 	if actual_heal > 0:
 		# SPAWN VISUAL INDICATOR
-		await combat_manager.proc_item(item, rule, target_entity, actual_heal)
-		combat_manager.add_to_combat_log_string("   %s - %s heals %s HP (%d -> %d)" % [
-				combat_manager.color_item(item.item_name, item),
-				combat_manager.color_entity(combat_manager.get_entity_name(target_entity)),
-				combat_manager.color_text(str(actual_heal), Color.GREEN),
-				old_hp,
-				new_hp
+		if not CombatSpeed.is_instant_mode():
+			await combat_manager.proc_item(item, rule, target_entity, actual_heal)
+		combat_manager.add_to_combat_log_string("   %s - %s" % [
+				CombatLog.color_item(item.item_name, item),
+				CombatLog.fmt_heal(combat_manager.get_entity_name(target_entity), actual_heal, old_hp, new_hp)
 			])
 	else:
 		combat_manager.add_to_combat_log_string("   %s - %s already at full HP" % [
-				combat_manager.color_item(item.item_name, item),
-				combat_manager.color_entity(combat_manager.get_entity_name(target_entity))
+				CombatLog.color_item(item.item_name, item),
+				CombatLog.color_entity(combat_manager.get_entity_name(target_entity))
 			])
+
+	if overheal > 0:
+		combat_manager.add_to_combat_log_string(CombatLog.fmt_overheal(combat_manager.get_entity_name(target_entity), overheal))
+		status_handler.overheal_triggered.emit(target_entity, overheal)
 
 func _execute_conversion(rule: ItemRule, source_entity, item: Item):
 	# Execute a CONVERT effect.
@@ -392,38 +407,54 @@ func _execute_conversion(rule: ItemRule, source_entity, item: Item):
 
 	# Determine FROM amount
 	var from_amount = _calculate_conversion_amount(rule, source_entity)
-	
-	if from_amount <= 0:
-		combat_manager.add_to_combat_log_string("   %s - [color=gray]Conversion failed: No source resource[/color]" % combat_manager.color_item(item.item_name))
-		return
-
 	var from_name: String = ""
 	var to_name:String = ""
 
 	# GET TO/FROM NAMES
 	if rule.convert_from_type == ItemRule.StatOrStatus.STAT:
-		from_name = combat_manager.color_stat(Enums.get_stat_string(rule.convert_from_stat))
+		from_name = CombatLog.color_stat_str(Enums.get_stat_string(rule.convert_from_stat))
 	else:
-		from_name = combat_manager.color_status(Enums.get_status_string(rule.convert_from_status))
+		from_name = CombatLog.color_status_str(Enums.get_status_string(rule.convert_from_status))
 	
 	if rule.convert_to_type == ItemRule.StatOrStatus.STAT:
-		to_name = combat_manager.color_stat(Enums.get_stat_string(rule.convert_to_stat))
+		to_name = CombatLog.color_stat_str(Enums.get_stat_string(rule.convert_to_stat))
 	else:
-		to_name = combat_manager.color_status(Enums.get_status_string(rule.convert_to_status))
+		to_name = CombatLog.color_status_str(Enums.get_status_string(rule.convert_to_status))
 
 	# Validate we have enough source resource
+	# If we DON'T display the appropriate message
+	if from_amount <= 0:
+		combat_manager.add_to_combat_log_string("   %s - Conversion failed: no %s to convert." % [
+			combat_manager.color_item(item.item_name, item),
+			from_name
+		])
+		return
+
 	if not _validate_conversion_source(rule, source_entity, from_amount):
-		combat_manager.add_to_combat_log_string("   %s - [color=gray]Conversion failed: Not enough[/color] %s [color=gray](need %d)[/color]" % [
-				combat_manager.color_item(item.item_name, item),
-				from_name, from_amount])
+		combat_manager.add_to_combat_log_string("   %s - %s %s %s" % [
+				CombatLog.color_item(item.item_name, item),
+				CombatLog.color("Conversion failed: Not enough", Color.GRAY),
+				from_name,
+				CombatLog.color("(need %d)" % from_amount, Color.GRAY)])
 		return
 	
-	# Remove FROM resource
 	var from_entity = _get_target_entity(rule.convert_from_party, source_entity)
-	var visual_rule_placeholder:ItemRule = ItemRule.new()
+	var to_entity = _get_target_entity(rule.convert_to_party, source_entity)
+	var to_amount = int(from_amount * rule.conversion_ratio) 	# Calculate TO amount (apply conversion ratio)
 
+	combat_manager.add_to_combat_log_string("   %s - %s's %s %s converted to %s %s for %s" % [
+		combat_manager.color_item(item.item_name, item),
+		combat_manager.color_entity(combat_manager.get_entity_name(from_entity)),
+		combat_manager.color_text(str(from_amount), Color.WHITE),
+		from_name,
+		combat_manager.color_text(str(to_amount), Color.WHITE),
+		to_name,
+		combat_manager.color_entity(combat_manager.get_entity_name(to_entity))
+	])
+
+	# Remove FROM resource
+	var visual_rule_placeholder:ItemRule = ItemRule.new()
 	if rule.convert_from_type == ItemRule.StatOrStatus.STAT:
-		# stat_handler.modify_stat(from_entity, rule.convert_from_stat, -from_amount, Enums.StatType.CURRENT)  # JDM: Using the change_stat() function so it triggers loss/gain
 		stat_handler.change_stat(from_entity, rule.convert_from_stat, -from_amount, Enums.StatType.CURRENT, item)
 		visual_rule_placeholder.effect_type = Enums.EffectType.MODIFY_STAT
 		visual_rule_placeholder.target_type = rule.convert_from_party
@@ -442,17 +473,13 @@ func _execute_conversion(rule: ItemRule, source_entity, item: Item):
 		visual_rule_placeholder.trigger_type = rule.trigger_type
 
 	# SPAWN PROC VISUAL FOR CONVERT_FROM PART
-	print("\n\n\n stat:" + Enums.get_stat_string(visual_rule_placeholder.target_stat) + " \n\n\n ")
-	combat_manager.proc_item(item, visual_rule_placeholder, source_entity, -from_amount)
+	if not CombatSpeed.is_instant_mode():
+		combat_manager.proc_item(item, visual_rule_placeholder, source_entity, -from_amount)
 
-	# Calculate TO amount (apply conversion ratio)
-	var to_amount = int(from_amount * rule.conversion_ratio)
-	var visual_rule_placeholder_to = ItemRule.new()
 
 	# Add TO resource
-	var to_entity = _get_target_entity(rule.convert_to_party, source_entity)
+	var visual_rule_placeholder_to = ItemRule.new()
 	if rule.convert_to_type == ItemRule.StatOrStatus.STAT:
-		# stat_handler.modify_stat(to_entity, rule.convert_to_stat, to_amount, Enums.StatType.CURRENT)  # JDM: Using the change_stat() function so it triggers loss/gain
 		stat_handler.change_stat(to_entity, rule.convert_to_stat, to_amount, Enums.StatType.CURRENT, item)
 		visual_rule_placeholder_to.effect_type = Enums.EffectType.MODIFY_STAT
 		visual_rule_placeholder_to.target_type = rule.convert_to_party
@@ -462,7 +489,7 @@ func _execute_conversion(rule: ItemRule, source_entity, item: Item):
 		visual_rule_placeholder_to.effect_amount = to_amount
 		visual_rule_placeholder_to.trigger_type = rule.trigger_type		
 	else:  # STATUS
-		status_handler.apply_status(to_entity, rule.convert_to_status, to_amount)
+		status_handler.apply_status(to_entity, rule.convert_to_status, to_amount, true, item)
 		visual_rule_placeholder_to.effect_type = Enums.EffectType.APPLY_STATUS
 		visual_rule_placeholder_to.target_type = rule.convert_to_party
 		visual_rule_placeholder_to.target_status = rule.convert_to_status
@@ -471,15 +498,8 @@ func _execute_conversion(rule: ItemRule, source_entity, item: Item):
 		visual_rule_placeholder_to.trigger_type = rule.trigger_type		
 
 	# SPAWN PROC VISUAL FOR CONVERT_TO PART
-	#await CombatSpeed.create_timer(CombatSpeed.get_duration("proc_overlap")) #JDM: Pause should be handled in proc spawn now <-- this line was the pause between the two visual indicators for converting stats fro
-	combat_manager.proc_item(item, visual_rule_placeholder_to, source_entity, to_amount)
-
-	combat_manager.add_to_combat_log_string("   %s - Converts %s %s -> %s %s" % [
-			combat_manager.color_item(item.item_name, item),
-			combat_manager.color_text(str(from_amount), Color.WHITE),
-			from_name,
-			combat_manager.color_text(str(to_amount), Color.WHITE),
-			to_name])
+	if not CombatSpeed.is_instant_mode():
+		combat_manager.proc_item(item, visual_rule_placeholder_to, source_entity, to_amount)
 
 func _execute_meta_trigger(rule: ItemRule, source_entity, item: Item):
 	# Execute a meta-trigger (TRIGGER_OTHER_ITEMS).
@@ -489,21 +509,55 @@ func _execute_meta_trigger(rule: ItemRule, source_entity, item: Item):
 
 	# Check recursion depth
 	if current_recursion_depth >= MAX_RECURSION_DEPTH:
-		combat_manager.add_to_combat_log_string("     Meta-trigger recursion limit reached", Color.ORANGE)
+		combat_manager.add_to_combat_log_string(CombatLog.fmt_recursion_limit())
 		return
 	
 	current_recursion_depth += 1
 	
-	# Get target entity
 	var target_entity = _get_target_entity(rule.retrigger_target, source_entity)
 	
-	combat_manager.add_to_combat_log_string("    🔗 Meta-trigger: Activating %s's %s items" % [_get_entity_name(target_entity), Enums.get_trigger_type_string(rule.retrigger_type)], Color.LIGHT_BLUE)
+	combat_manager.add_to_combat_log_string("     Meta-trigger: Activating %s's %s items [%s]" % [
+		CombatLog.color_entity(_get_entity_name(target_entity)),
+		CombatLog.color(Enums.get_trigger_type_string(rule.retrigger_type), Color.LIGHT_BLUE),
+		CombatLog.color(Enums.get_item_to_retrigger_string(rule.retrigger_item), Color.LIGHT_BLUE)])
 	
-	# Process items through CombatManager (which uses ItemProcessor)
-	await combat_manager.process_entity_items_sequentially(target_entity, rule.retrigger_type, Enums.Stats.NONE, item)
+	var candidates: Array = _get_retrigger_candidates(target_entity, rule)
+	
+	for item_data in candidates:
+		for r in item_data.item.rules:
+			if r.trigger_type == rule.retrigger_type:
+				await execute_item_rule(item_data.item, r, target_entity, target_entity)
 	
 	current_recursion_depth -= 1
 
+
+func _get_retrigger_candidates(entity, rule: ItemRule) -> Array:
+	var all_matching: Array = combat_manager.item_processor.collect_triggered_items(entity, rule.retrigger_type)
+	
+	var seen: Array = []
+	var unique_items: Array = []
+	for item_data in all_matching:
+		if item_data.item not in seen:
+			# Apply category filter if specified
+			if rule.retrigger_category != "" and not item_data.item.has_category(rule.retrigger_category):
+				continue
+			seen.append(item_data.item)
+			unique_items.append(item_data)
+	
+	match rule.retrigger_item:
+		Enums.ItemToRetrigger.NONE, Enums.ItemToRetrigger.ALL:
+			return unique_items
+		Enums.ItemToRetrigger.RANDOM:
+			if unique_items.is_empty(): return []
+			return [unique_items[randi() % unique_items.size()]]
+		Enums.ItemToRetrigger.FIRST:
+			if unique_items.is_empty(): return []
+			return [unique_items[0]]
+		Enums.ItemToRetrigger.LAST:
+			if unique_items.is_empty(): return []
+			return [unique_items[unique_items.size() - 1]]
+	
+	return unique_items
 
 # ===== DYNAMIC VALUE CALCULATION =====
 

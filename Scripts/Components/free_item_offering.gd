@@ -10,13 +10,17 @@ enum FilterItemsBy {
 	RARITY,
 	TYPE,
 	CATEGORY,
-	NONE
+	NONE,
+	ITEM_LIST
 }
 
 @onready var item_choice_container: GridContainer = $Panel/panelBlack/PanelContainer/VBoxContainer/itemsContainer
 @onready var name_label: Label = $Panel/panelBlack/PanelContainer/VBoxContainer/lblName
-@onready var dialogue_label: RichTextLabel = $Panel/panelBlack/PanelContainer/VBoxContainer/MarginContainer/txtDesc
-@onready var btn_skip: Button = $Panel/panelBlack/PanelContainer/VBoxContainer/btnSkip
+@onready var dialogue_label: RichTextLabel = $Panel/panelBlack/PanelContainer/VBoxContainer/marginDesc/txtDesc
+@onready var dialogue_margin: MarginContainer = $Panel/panelBlack/PanelContainer/VBoxContainer/marginDesc
+@onready var btn_skip: Button = $Panel/panelBlack/PanelContainer/VBoxContainer/HBoxContainer/btnSkip
+@onready var btn_reroll: Button = $Panel/panelBlack/PanelContainer/VBoxContainer/HBoxContainer/btnReroll
+@onready var anim_reroll: AnimationPlayer = $animReroll
 
 ## Filter by what item criteria for selection
 @export var filter_by: ItemOffering.FilterItemsBy = ItemOffering.FilterItemsBy.RARITY:
@@ -29,17 +33,26 @@ enum FilterItemsBy {
 @export var box_name:String = ""
 @export_multiline var box_desc:String = ""
 
-
 ## Includes an extra item of one rarity higher than selected above.
 @export var include_extra_rare: bool = false
+
+@export_group("Weapon Stuff")
 ## Have choices include weapons or just items
 @export var include_weapons: bool = true
 ## Don't show more than 1 weapon in choices (requires "Include_Weapons" be selected)
 @export var max_1_weapon: bool = true
+
+@export_group("Filter Options")
 ## Category string 
 @export var category_string: String = ""
 @export var item_type: Item.ItemType
+@export var items: Array[Item] = []
 
+@export_group("Rerolls")
+## if 0 reroll button won't appear
+@export var rerolls: int = 0
+@export var reroll_button_text:String = ""
+@export var reroll_sound_name: String = ""
 
 var item_choice_scene = preload("res://Scenes/item_choice.tscn")
 var offered_items: Array[Item] = []
@@ -67,6 +80,9 @@ func _validate_property(property: Dictionary) -> void:
 		if filter_by not in [ItemOffering.FilterItemsBy.TYPE, ItemOffering.FilterItemsBy.NONE]:
 			property.usage = PROPERTY_USAGE_NO_EDITOR
 
+	if prop_name in ["items"]:
+		if filter_by not in [ItemOffering.FilterItemsBy.ITEM_LIST]:
+			property.usage = PROPERTY_USAGE_NO_EDITOR
 
 func _ready() -> void:
 	add_to_group("item_selection_events") 
@@ -74,14 +90,30 @@ func _ready() -> void:
 	if include_extra_rare: item_choice_container.columns = items_offered + 1
 	generate_item_choices()
 	setup_labels()
+	setup_rerolls()
 
+func setup_rerolls():
+	if rerolls > 0:
+		btn_reroll.visible = true
+		btn_reroll.text = reroll_button_text
+	else:
+		btn_reroll.visible = false
+		
 func setup_labels():
 	name_label.text = box_name
 	dialogue_label.text = box_desc
 	if box_desc == "" || box_desc == null:
-		dialogue_label.visible = false
+		dialogue_margin.visible = false
+	else:
+		dialogue_margin.visible = true
 
 func generate_item_choices():
+	for child in item_choice_container.get_children():
+		item_choice_container.remove_child(child)
+		child.free()
+	
+	offered_items.clear()
+	
 	# Get 3 random common items
 	if filter_by == ItemOffering.FilterItemsBy.RARITY:
 		offered_items = ItemsManager.get_random_items(items_offered, item_rarity, include_extra_rare, include_weapons, max_1_weapon)
@@ -89,6 +121,8 @@ func generate_item_choices():
 		offered_items = ItemsManager.get_items_by_category(items_offered, category_string)
 	elif filter_by == ItemOffering.FilterItemsBy.TYPE:
 		offered_items = ItemsManager.get_items_by_item_type(items_offered, item_type)
+	elif filter_by == ItemOffering.FilterItemsBy.ITEM_LIST:
+		offered_items = items
 	else:
 		offered_items = ItemsManager.get_items_by_item_type(items_offered, item_type, true, item_rarity)
 
@@ -125,10 +159,24 @@ func _on_item_selected(item: Item):
 func _on_btn_skip_pressed() -> void:
 	item_skipped.emit()
 
-
-
 func _on_btn_skip_mouse_exited() -> void:
 	pass # Replace with function body.
 
 func _on_btn_skip_mouse_entered() -> void:
+	AudioManager.play_ui_sound("woosh")
+
+func _on_btn_reroll_pressed() -> void:
+	rerolls -= 1
+	anim_reroll.play("reroll")
+	if reroll_sound_name &&  reroll_sound_name != "":
+		AudioManager.play_event_sound(reroll_sound_name)
+	setup_rerolls()
+	generate_item_choices()
+	
+
+func _on_btn_reroll_mouse_exited() -> void:
+	CursorManager.reset_cursor()
+
+func _on_btn_reroll_mouse_entered() -> void:
+	CursorManager.set_interact_cursor()
 	AudioManager.play_ui_sound("woosh")

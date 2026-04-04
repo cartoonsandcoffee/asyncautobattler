@@ -30,6 +30,8 @@ func show_event():
 
 	# -- Heal the player
 	Player.stats.hit_points_current = Player.stats.hit_points
+	Player.add_rooms(5)
+	Player.campfires_left_this_rank -= 1
 	if main_game_ref and main_game_ref.has_method("set_player_stats"):
 		main_game_ref.set_player_stats()
 		

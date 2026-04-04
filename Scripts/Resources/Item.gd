@@ -54,7 +54,7 @@ enum ItemType {
 @export_group("Trigger Limits")
 ## UNUSED! RESOLVES WITH ORDER. Higher = earlier
 @export var trigger_priority: int = 0   
-## Item can only trigger once per combat.
+## Item can only trigger once per combat. (If used with occurrence_resets_per_turn it triggers only once per turn)
 @export var trigger_only_once: bool = false 
 ## Item can trigger every hit, but only during turn 1
 @export var trigger_only_first_turn: bool = false  
@@ -62,7 +62,7 @@ enum ItemType {
 @export_group("Occurrence")
 ## 0 = every, 2 = every other, 3 = every 3  (can be conbined with trigger_only_once to know if resets)
 @export var trigger_on_occurrence_number: int = 0 
-## Does counter reset each turn? 
+## Does counter reset each turn? (if coupled wih Trigger_Only_Once it will make the item trigger only once per turn)
 @export var occurrence_resets_per_turn: bool = false  
 
 @export_group("Stats")

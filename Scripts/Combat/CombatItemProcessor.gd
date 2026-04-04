@@ -129,7 +129,28 @@ func collect_triggered_items(entity, trigger_type: Enums.TriggerType, trigger_st
 							"rule": rule,
 							"slot_index": -1
 						})
-		
+
+		# Check weapon upgrade rule second
+		if entity.current_weapon_rule_upgrade:
+			for rule in entity.current_weapon_rule_upgrade.rules:
+				if rule.trigger_type == trigger_type:
+					# If trigger has a stat filter, check it
+					if trigger_stat != Enums.Stats.NONE and rule.trigger_stat != Enums.Stats.NONE:
+						if rule.trigger_stat == trigger_stat:
+							if rule.trigger_value_threshold == 0 or abs(stat_change_amount) >= rule.trigger_value_threshold:
+								items_to_proc.append({
+									"item": entity.current_weapon_rule_upgrade,
+									"rule": rule,
+									"slot_index": -1  # -1 indicates weapon
+								})
+					else:
+						# No stat filter, just add it
+						items_to_proc.append({
+							"item": entity.current_weapon_rule_upgrade,
+							"rule": rule,
+							"slot_index": -1
+						})
+
 		# Then check inventory items in order
 		for i in range(entity.inventory.item_slots.size()):
 			var item = entity.inventory.item_slots[i]
@@ -210,6 +231,27 @@ func collect_triggered_items_with_status(entity, trigger_type: Enums.TriggerType
 							"slot_index": -1
 						})
 		
+		# Check weapon ugprade rule
+		if entity.current_weapon_rule_upgrade:
+			for rule in entity.current_weapon_rule_upgrade.rules:
+				if rule.trigger_type == trigger_type:
+					# Check if rule has status filter
+					if rule.trigger_status != Enums.StatusEffects.NONE:
+						if rule.trigger_status == trigger_status || rule.trigger_status == Enums.StatusEffects.ANY:
+							if rule.trigger_value_threshold == 0 or abs(status_change_amount) >= rule.trigger_value_threshold:
+								items_to_proc.append({
+									"item": entity.current_weapon_rule_upgrade,
+									"rule": rule,
+									"slot_index": -1
+								})
+					else:
+						# No status filter, triggers on any status change
+						items_to_proc.append({
+							"item": entity.current_weapon_rule_upgrade,
+							"rule": rule,
+							"slot_index": -1
+						})
+
 		# Check inventory
 		for i in range(entity.inventory.item_slots.size()):
 			var item = entity.inventory.item_slots[i]
@@ -367,6 +409,25 @@ func _reset_item_occurrences(entity, item: Item):
 			if item.trigger_on_occurrence_number > 0:
 				occurrence_updated.emit(entity, item, trigger_type, 0, item.trigger_on_occurrence_number)
 
+func _reset_only_once_per_turn_itmes(entity):
+	# JDM: This SHOULD use the "Trigger_only_once" and "Occurrence_resets_per_turn" variables in conjunction
+	#      for the end result of "Triggers only once per turn" - test with thorny vest
+
+	# UNIVERSAL INVENTORY CHECK
+	if "inventory" in entity and entity.inventory:
+		# Check weapon
+		if entity.inventory.weapon_slot:
+			if entity.inventory.weapon_slot.trigger_only_once and entity.inventory.weapon_slot.occurrence_resets_per_turn:
+				if triggered_once_items.has(entity) and triggered_once_items[entity].has(entity.inventory.weapon_slot):
+					triggered_once_items[entity].erase(entity.inventory.weapon_slot)
+		
+		# Check inventory items
+		for item in entity.inventory.item_slots:
+			if item:
+				if item.trigger_only_once and item.occurrence_resets_per_turn:
+					if triggered_once_items.has(entity) and triggered_once_items[entity].has(item):
+						triggered_once_items[entity].erase(item)
+
 
 # ===== TRIGGER TRACKING =====
 
@@ -383,6 +444,7 @@ func has_item_triggered(entity, item: Item) -> bool:
 		return false
 	
 	return triggered_once_items[entity].get(item, false)
+
 
 # ===== RESET FUNCTIONS =====
 
@@ -403,6 +465,7 @@ func reset_per_turn_items(entity):
 	# Called at the start of each turn.
 
 	reset_occurrence_counters_per_turn(entity)
+	_reset_only_once_per_turn_itmes(entity)
 
 # ===== UTILITY FUNCTIONS =====
 

@@ -24,12 +24,12 @@ func set_references():
 	anim_player = $AnimationPlayer
 	main_box = $Panel/PanelContainer
 
-func set_fields(strName, champs, actives, killed, rank):
+func set_fields(strName, runs, champs, actives, killed, rank):
 	lbl_name.text = strName
 	lbl_rank.text = "#" + str(rank)
-	lbl_champions.text = "Hall of Famers:  " + str(champs)
+	lbl_champions.text = "Runs: " + str(runs) + "    Legends:  " + str(champs)
 	lbl_active.text = "Active Champions:  " + str(actives)
-	lbl_killed.text = "Players Killed:  " + str(killed)
+	lbl_killed.text = "Champion Kills:  " + str(killed)
 
 func its_me():
 	main_box.self_modulate = Color.SLATE_BLUE

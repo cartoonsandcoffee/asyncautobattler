@@ -13,6 +13,15 @@ signal record_mouse_exited()
 @onready var btn_main: Button
 @onready var anim_player: AnimationPlayer
 
+@onready var pnl_motive1: PanelContainer
+@onready var pnl_motive2: PanelContainer
+@onready var pnl_motive3: PanelContainer
+
+@onready var lbl_motive1: Label
+@onready var lbl_motive2: Label
+@onready var lbl_motive3: Label
+
+
 func set_references():
 	lbl_date = $Panel/PanelContainer/MarginContainer/HBoxContainer/lblDate
 	lbl_wins = $Panel/PanelContainer/MarginContainer/HBoxContainer/lblWins
@@ -21,6 +30,14 @@ func set_references():
 	lbl_class = $Panel/PanelContainer/MarginContainer/HBoxContainer/lblClass
 	btn_main = $Panel/PanelContainer/MarginContainer/Button
 	anim_player = $AnimationPlayer
+
+	pnl_motive1 = $Panel/PanelContainer/MarginContainer/HBoxContainer/classBox/pnlMotive1
+	pnl_motive2 = $Panel/PanelContainer/MarginContainer/HBoxContainer/classBox/pnlMotive2
+	pnl_motive3 = $Panel/PanelContainer/MarginContainer/HBoxContainer/classBox/pnlMotive3
+
+	lbl_motive1 = $Panel/PanelContainer/MarginContainer/HBoxContainer/classBox/pnlMotive1/lblMotive1
+	lbl_motive2 = $Panel/PanelContainer/MarginContainer/HBoxContainer/classBox/pnlMotive2/lblMotive2
+	lbl_motive3 = $Panel/PanelContainer/MarginContainer/HBoxContainer/classBox/pnlMotive3/lblMotive3
 
 func set_active(is_active: bool):
 	lbl_active.visible = is_active
@@ -43,8 +60,41 @@ func set_fields_global_hall(strdate1:String, strdate2:String, username:String):
 	lbl_active.text = username
 	lbl_defeated.visible = false
 
-func set_bundle(_bundle: Enums.ItemBundles):
-	lbl_class.text = Enums.get_bundle_string(_bundle)
+func set_fields_current_champs(strdate1:String, wins: int, username:String):
+	lbl_date.text = strdate1 
+	lbl_wins.visible = true
+	lbl_wins.text = str(wins)
+	lbl_active.visible = true
+	lbl_active.text = username
+	lbl_defeated.visible = false
+
+func set_bundle(_bundle: Array[Enums.ItemBundles]):
+	lbl_class.text = get_bundle_strings(_bundle)
+
+	if !_bundle:
+		return
+
+	lbl_motive1.text = Enums.get_bundle_string(_bundle[0])
+	lbl_motive2.text = Enums.get_bundle_string(_bundle[1])
+	lbl_motive3.text = Enums.get_bundle_string(_bundle[2])
+
+	var gc = GameColors.new()
+	pnl_motive1.modulate = gc.get_bundle_color(_bundle[0])
+	pnl_motive2.modulate = gc.get_bundle_color(_bundle[1])
+	pnl_motive3.modulate = gc.get_bundle_color(_bundle[2])
+
+func get_bundle_strings(_bundles: Array[Enums.ItemBundles]) -> String:
+	var final_string: String = ""
+	var cnt: int = 0
+
+	for bundle in _bundles:
+		final_string += Enums.get_bundle_string(bundle)
+		cnt += 1
+
+		if cnt <= 2:
+			final_string += ", "
+
+	return final_string
 
 func _on_button_mouse_exited() -> void:
 	CursorManager.reset_cursor()

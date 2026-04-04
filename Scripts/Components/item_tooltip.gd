@@ -5,11 +5,15 @@ extends Control
 @onready var vbox: VBoxContainer 
 
 @onready var lbl_name: Label 
-@onready var lbl_rarity: Label
 @onready var lbl_desc: RichTextLabel 
 @onready var stats_grid: GridContainer 
 @onready var category_grid: GridContainer
 @onready var txt_upgrades: RichTextLabel
+@onready var set_ingredients: GridContainer
+
+@onready var lbl_rarity: Label
+@onready var pic_rarity: TextureRect
+@onready var box_rarity: HBoxContainer
 
 @onready var box_bundle: HBoxContainer
 @onready var panel_bundle: PanelContainer
@@ -18,52 +22,7 @@ extends Control
 var gamecolors: GameColors
 var is_from_compendium: bool = false
 
-const KEYWORDS = {
-	"acid": {
-		"color": "#aaff00",
-		"description": "Removes shield equal to acid at turn start."
-	},
-	"poison": {
-		"color": "#ff66ff",
-		"description": "If you have no shield, take damage equal to poison at turn start. Remove 1 stack at turn start."
-	},
-	"burn": {
-		"color": "#ff6600",
-		"description": "At turn end, remove 1 burn stack and take 3 damage."
-	},
-	"thorns": {
-		"color": "#996633",
-		"description": "Deal damage equal to your thorn stacks when hit, then remove those thorns. "
-	},
-	"regeneration": {
-		"color": "#4ec78e",
-		"description": "Restore health equal to regeneration at turn end, then remove 1 stack."
-	},
-	"stun": {
-		"color": "#bdb280ff",
-		"description": "When stunned you skip your next strike. Remove 1 stun for each strike you skip."
-	},	
-	"stunned": {
-		"color": "#bdb280ff",
-		"description": "When stunned you skip your next strike. Remove 1 stun for each strike you skip."
-	},		
-	"exposed": {
-		"color": "#96b6c9ff",
-		"description": "Triggered when shield reaches 0 for the first time in combat."
-	},
-	"wounded": {
-		"color": "#af4545ff",
-		"description": "Triggered when HP reaches 50% or lower for the first time each combat."
-	},
-	"blind": {
-		"color": "#fff5cf",
-		"description": "Your attack is halved as long as you have blind stacks. Remove 1 at turn end."
-	},
-	"blessing": {
-		"color": "#99dfffff",
-		"description": "When removed, gain 1 attack per stack and 3 health."
-	}		
-}
+var KEYWORDS: Dictionary = {}
 
 # Trigger keywords (for special formatting)
 const TRIGGER_KEYWORDS = {
@@ -78,9 +37,9 @@ const TRIGGER_KEYWORDS = {
 	"attack": "#ff4444",	
 	"agility": "#ffdd44",
 	"speed": "#ffdd44",
-	"strikes": "#d0db9eff",	
 	"hit points": "#44ff44",
 	"hitpoints": "#44ff44",
+	"hitpoint": "#44ff44",	
 	"health": "#44ff44",
 	"gold": "#ffaa00",
 	"burn damage": "#ff6600"
@@ -92,17 +51,98 @@ var current_entity = null  # player or enemy (for upgrade displaying on weapons)
 var stat_item = preload("res://Scenes/Elements/stat_item.tscn")
 var category_item = preload("res://Scenes/Elements/category_label.tscn")
 var definition_box_scene = preload("res://Scenes/Elements/definition_box.tscn")
+var set_ingredient_item = preload("res://Scenes/Elements/set_bonus_display.tscn")
 
 var stats_to_add: Dictionary = {}
 var definition_boxes: Array[Control] = []
 var found_keywords = []
 
+func _init_keywords():
+	KEYWORDS = {
+		"acid": {
+			"color": GameColors.stats.acid,
+			"description": "Removes shield equal to acid at turn start.",
+			"icon": CombatLog.ICON_ACID
+		},
+		"poison": {
+			"color": GameColors.stats.poison,
+			"description": "If you have no shield, take damage equal to poison at turn start. Remove 1 stack at turn start.",
+			"icon": CombatLog.ICON_POISON
+		},
+		"burn": {
+			"color": GameColors.stats.burn,
+			"description": "At turn end, take damage equal to enemy's burn damage stat and remove 1 burn stack.",
+			"icon": CombatLog.ICON_BURN
+		},
+		"thorns": {
+			"color": GameColors.stats.thorns,
+			"description": "Deal damage equal to your thorn stacks when hit, then remove those thorns at turn end. ",
+			"icon": CombatLog.ICON_THORNS
+		},
+		"regeneration": {
+			"color": GameColors.stats.regeneration,
+			"description": "Restore health equal to regeneration at turn end, then remove 1 stack.",
+			"icon": CombatLog.ICON_REGEN
+		},
+		"stun": {
+			"color": GameColors.stats.stun,
+			"description": "When stunned you cannot strike with your weapon. Remove 1 stun each time a strike is skipped.",
+			"icon": CombatLog.ICON_STUN
+		},	
+		"stunned": {
+			"color": GameColors.stats.stun,
+			"description": "When stunned you cannot strike with your weapon. Remove 1 stun each time a strike is skipped.",
+			"icon": CombatLog.ICON_STUN
+		},		
+		"exposed": {
+			"color": GameColors.stats.exposed,
+			"description": "Triggered when shield reaches 0 for the first time in battle.",
+			"icon": CombatLog.ICON_EXPOSED
+		},
+		"wounded": {
+			"color": GameColors.stats.wounded,
+			"description": "Triggered when HP reaches 50% or lower for the first time each battle.",
+			"icon": CombatLog.ICON_WOUNDED
+		},
+		"blind": {
+			"color": GameColors.stats.blind,
+			"description": "Your attack is halved as long as you have blind stacks. Remove 1 stack at turn end.",
+			"icon": CombatLog.ICON_BLIND
+		},
+		"blessing": {
+			"color": GameColors.stats.blessing,
+			"description": "Gain 1 attack and heal 3 hitpoints per stack removed. Only removable via items.",
+			"icon": CombatLog.ICON_BLESSING
+		},
+		"strikes": {
+			"color": GameColors.stats.strikes,
+			"description": "How many times you hit with your weapon in a single turn.",
+			"icon": CombatLog.ICON_STRIKES
+		},
+		"strike": {
+			"color": GameColors.stats.strikes,
+			"description": "How many times you hit with your weapon in a single turn.",
+			"icon": CombatLog.ICON_STRIKES
+		},
+		"singularity": {
+			"color": GameColors.stats.singularity,
+			"description": "While you have a 'Singularity' item, no others will appear in the shop.",
+			"icon": null
+		},
+		"overheal": {
+			"color": GameColors.stats.hit_points,
+			"description": "Triggers whenever you would gain hitpoints but are already full.",
+			"icon": null
+		}	
+	}
 
 func set_references():
 	panel = $Panel
 	panel_container = $Panel/PanelContainer
 	lbl_name = $Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/VBoxContainer/lblName
-	lbl_rarity = $Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/VBoxContainer/lblRarity	
+	lbl_rarity = $Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/VBoxContainer/rarityBox/lblRarity
+	pic_rarity = $Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/VBoxContainer/rarityBox/picRarity
+	box_rarity = $Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/VBoxContainer/rarityBox
 	lbl_desc = $Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/lblDesc
 	stats_grid = $Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/statsGrid
 	category_grid = $Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/categoryGrid
@@ -111,7 +151,10 @@ func set_references():
 	lbl_bundle = $Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/boxBundle/panelBundle/lblBundle
 	panel_bundle = $Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/boxBundle/panelBundle
 	box_bundle = $Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/boxBundle
+	set_ingredients = $Panel/PanelContainer/MarginContainer2/PanelContainer/MarginContainer/VBoxContainer/setIngredients
 	gamecolors = GameColors.new()
+	if KEYWORDS.is_empty():
+		_init_keywords()
 
 func set_item(this_item: Item, create_definitions: bool = true, entity = null):
 	set_references()
@@ -121,12 +164,17 @@ func set_item(this_item: Item, create_definitions: bool = true, entity = null):
 	current_entity = entity
 
 	lbl_name.text = this_item.item_name
+
+	if entity:
+		if entity.current_weapon_rule_upgrade && this_item.item_type == Item.ItemType.WEAPON:
+			lbl_name.text = entity.current_weapon_rule_upgrade.item_name + " " + this_item.item_name
+
 	set_rarity()
 	get_stat_bonuses()
 
 	set_upgrades()
 
-	show_description(this_item, create_definitions)
+	show_description(this_item, create_definitions, entity)
 	show_stats()
 	show_categories(this_item.categories)
 	set_bundle()
@@ -136,11 +184,31 @@ func set_item(this_item: Item, create_definitions: bool = true, entity = null):
 	#update_panel_size()
 	
 func set_bonus():
-	lbl_rarity.visible = false
+	lbl_rarity.text = " Set Bonus  - "
+	box_rarity.modulate = Color.WHITE
+	pic_rarity.visible = false
 	category_grid.visible = false
 
 func set_tooltip_position(_pos: Vector2):
 	global_position = _pos
+
+func set_bonus_ingredients(_items: Array[Item]):
+	for child in set_ingredients.get_children():
+		child.queue_free()
+
+	if _items.is_empty():
+		return
+
+	for item in _items:
+		var item_slot = set_ingredient_item.instantiate()
+		item_slot.set_bonus(item)
+		item_slot.turn_off_shader()
+		#item_slot.custom_minimum_size = Vector2(90, 90) 
+		item_slot.scale = Vector2(0.5, 0.5)
+
+		set_ingredients.add_child(item_slot)
+
+	set_ingredients.visible = true
 
 func set_bundle():
 	if is_from_compendium:
@@ -234,8 +302,14 @@ func get_stat_bonuses():
 	else:
 		stats_grid.show()
 
-func show_description(this_item: Item, create_definitions: bool = true):
+func show_description(this_item: Item, create_definitions: bool = true, entity = null):
 	var desc: String = this_item.get_description()
+
+	if entity:
+		if entity.current_weapon_rule_upgrade && this_item.item_type == Item.ItemType.WEAPON:
+			if desc.length() > 0:
+				desc += "\n\n"
+			desc += entity.current_weapon_rule_upgrade.get_description()
 
 	if desc and desc.length() > 0:
 		lbl_desc.text = process_description(desc)
@@ -327,7 +401,8 @@ func process_description(text: String) -> String:
 			var match = matches[i]
 			var original = match.get_string()
 			# Add URL meta tag for tooltip functionality
-			var replacement = "[color=%s][b][url=%s]%s[/url][/b][/color]" % [color, keyword.to_lower(), original]
+			#var replacement = "[color=%s][b][url=%s]%s[/url][/b][/color]" % [color, keyword.to_lower(), original]
+			var replacement = "[color=#%s][b][url=%s]%s[/url][/b][/color]" % [data.color.to_html(false), keyword.to_lower(), original]
 			processed_text = processed_text.substr(0, match.get_start()) + replacement + processed_text.substr(match.get_end())
 	
 	found_keywords = keywords_in_text
@@ -335,7 +410,7 @@ func process_description(text: String) -> String:
 
 func create_stacked_definitions():
 	var extra_spacing: int = 5
-	var def_box_width: float = 420.0
+	var def_box_width: float = 460.0
 	
 	# Start at bottom of tooltip (y=0 since Panel is bottom-anchored)
 	# First definition box bottom should be flush with tooltip bottom
@@ -348,8 +423,12 @@ func create_stacked_definitions():
 		
 		var def_box = definition_box_scene.instantiate()
 		panel.add_child(def_box)
-		def_box.setup(keyword, KEYWORDS[keyword].description, Color(KEYWORDS[keyword].color))
+		def_box.setup(keyword, KEYWORDS[keyword].description, KEYWORDS[keyword].color)
 		
+		var icon_path = KEYWORDS[keyword].get("icon", null)
+		if icon_path:
+			def_box.show_pic(load(icon_path), Color(KEYWORDS[keyword].color))
+
 		# Wait one frame for def_box size to be calculated
 		await get_tree().process_frame
 		
@@ -421,26 +500,44 @@ func set_rarity_color() -> Color:
 		return Color.WHITE
 
 func set_rarity():
+	var rarity_common: Texture2D = load("res://Resources/Rarity/common.tres")
+	var rarity_uncommon: Texture2D = load("res://Resources/Rarity/uncommon.tres")
+	var rarity_rare: Texture2D = load("res://Resources/Rarity/rare.tres")
+	var rarity_legendary: Texture2D = load("res://Resources/Rarity/legendary.tres")
+	var rarity_mystic: Texture2D = load("res://Resources/Rarity/mystic.tres")
+	var rarity_golden: Texture2D = load("res://Resources/Rarity/golden.tres")
+	var rarity_diamond: Texture2D = load("res://Resources/Rarity/diamond.tres")
+	var rarity_crafted: Texture2D = load("res://Resources/Rarity/crafted.tres")
+
 	if current_item.rarity == Enums.Rarity.COMMON:
-		lbl_rarity.modulate = gamecolors.rarity.common
-		lbl_rarity.text = " - Common -"
+		box_rarity.modulate = gamecolors.rarity.common
+		pic_rarity.texture = rarity_common
+		lbl_rarity.text = " Common  -"
 	elif current_item.rarity == Enums.Rarity.UNCOMMON:
-		lbl_rarity.modulate =  gamecolors.rarity.uncommon
-		lbl_rarity.text = " - Uncommon -"
+		box_rarity.modulate =  gamecolors.rarity.uncommon
+		pic_rarity.texture = rarity_uncommon
+		lbl_rarity.text = " Uncommon  -"
 	elif current_item.rarity == Enums.Rarity.RARE:
-		lbl_rarity.modulate =  gamecolors.rarity.rare
-		lbl_rarity.text = " - Rare -"
+		box_rarity.modulate =  gamecolors.rarity.rare
+		pic_rarity.texture = rarity_rare
+		lbl_rarity.text = " Rare  -"
 	elif current_item.rarity == Enums.Rarity.LEGENDARY:
-		lbl_rarity.modulate =  gamecolors.rarity.legendary	
-		lbl_rarity.text = " - Legendary -"
+		box_rarity.modulate =  gamecolors.rarity.legendary
+		pic_rarity.texture = rarity_legendary
+		lbl_rarity.text = " Legendary  -"
 	elif current_item.rarity == Enums.Rarity.GOLDEN:
-		lbl_rarity.modulate =  gamecolors.rarity.golden	
-		lbl_rarity.text = " - Golden -"
+		box_rarity.modulate =  gamecolors.rarity.golden
+		pic_rarity.texture = rarity_golden
+		lbl_rarity.text = " Golden  -"
 	elif current_item.rarity == Enums.Rarity.DIAMOND:
-		lbl_rarity.modulate =  gamecolors.rarity.diamond	
-		lbl_rarity.text = " - Diamond -"
+		box_rarity.modulate =  gamecolors.rarity.diamond
+		pic_rarity.texture = rarity_diamond
+		lbl_rarity.text = " Diamond  -"
 	elif current_item.rarity == Enums.Rarity.CRAFTED:
-		lbl_rarity.modulate =  Color.WHITE
-		lbl_rarity.text = " - Crafted -"
+		box_rarity.modulate =  gamecolors.rarity.crafted
+		pic_rarity.texture = rarity_crafted
+		lbl_rarity.text = " Crafted  -"
 	else:
-		lbl_rarity.modulate =  Color.WHITE
+		box_rarity.modulate =  Color.GRAY
+		lbl_rarity.text = " Unknown Rarity  -"
+		pic_rarity.visible = false

@@ -55,7 +55,7 @@ func _evaluate_stat_condition(rule: ItemRule, entity) -> bool:
 	# - "If your shield < enemy's damage"
 
 	# Get the stat value to check
-	var stat_value = stat_handler.get_stat_value(entity, rule.condition_stat, Enums.StatType.CURRENT)
+	var stat_value = stat_handler.get_stat_value(entity, rule.condition_stat, rule.condition_party_stat_type)
 	
 	# Get the comparison value
 	var compare_value = _get_comparison_value(rule, entity)

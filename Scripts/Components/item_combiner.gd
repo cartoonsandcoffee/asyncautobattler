@@ -10,10 +10,13 @@ signal invalid_combination()
 signal combiner_closed()
 
 enum CombinerMode {
-	COMBINE,                  # Combine items using recipes
-	REPLACE_SAME_RARITY,    # Replace with random item of same rarity
-	REPLACE_HIGHER_TIER,     # Replace with random item of higher tier
+	COMBINE,                  	# Combine items using recipes
+	REPLACE_SAME_RARITY,		# Replace with random item of same rarity
+	REPLACE_HIGHER_TIER,     	# Replace with random item of higher tier
 	CRAFT,
+	BANISH,						# Banish an item from the game
+	SINGLE_UPGRADE,				# Rare version of Combine
+	POTION,						# Upgrade a potion to the rarer version
 }
 
 @onready var craft_display: PanelContainer = $Panel/panelBlack/panelCombiner
@@ -68,10 +71,12 @@ enum CombinerMode {
 @export var sb_text: String = ""
 @export var sb_button: String = ""
 
+const EMPTY_SLOT = -2
+
 var slot_1_item: Item = null
 var slot_2_item: Item = null
-var slot_1_inventory_index: int = -1
-var slot_2_inventory_index: int = -1
+var slot_1_instance_id: int = EMPTY_SLOT
+var slot_2_instance_id: int = EMPTY_SLOT
 
 var crafting_particles: CPUParticles2D
 var is_processing_craft: bool = false
@@ -127,40 +132,52 @@ func setup_drop_zones():
 	# The main_game will call add_item_to_slot() when items are dragged here
 	pass
 
-func add_item_to_slot(item: Item, inventory_index: int, slot_number: int):
+func add_item_to_slot(item: Item, slot_number: int):
 	"""Add an item to one of the crafting slots (called by drag-drop system)"""
 	if is_processing_craft:
 		return  # Don't allow changes during crafting
 	
 	if has_category_requirement:
 		if !item.has_category(required_category):
-			show_error_message("You'd rather not throw that in there.")
+			if slot_number == 1:
+				_restore_inventory_slot_opacity(slot_1_instance_id)
+			elif slot_number == 2:
+				_restore_inventory_slot_opacity(slot_2_instance_id)
+			show_error_message("I can't do anything with that.")
+			return
+
+	if item.item_type == Item.ItemType.WEAPON && combiner_mode != CombinerMode.CRAFT:
+			if slot_number == 1:
+				_restore_inventory_slot_opacity(slot_1_instance_id)
+			elif slot_number == 2:
+				_restore_inventory_slot_opacity(slot_2_instance_id)
+			show_error_message("Weapons cannot be upgraded here.")
 			return
 
 	if slot_number == 1:
-		if inventory_index == slot_2_inventory_index:
+		if item.instance_id == slot_2_instance_id:
 			show_error_message("Can't use the same item twice!")
 			return
-
+		_restore_inventory_slot_opacity(slot_1_instance_id)
 		slot_1_item = item
-		slot_1_inventory_index = inventory_index
+		slot_1_instance_id  = item.instance_id
 		slot_1_icon.texture = item.item_icon
 		slot_1_icon.modulate = item.item_color
 		slot_1_icon.visible = true
 		slot_1_label.text = item.item_name
 	elif slot_number == 2:
-		if inventory_index == slot_1_inventory_index:
+		if item.instance_id == slot_1_instance_id:
 			show_error_message("Can't use the same item twice!")
 			return
-
+		_restore_inventory_slot_opacity(slot_2_instance_id)
 		slot_2_item = item
-		slot_2_inventory_index = inventory_index
+		slot_2_instance_id = item.instance_id
 		slot_2_icon.texture = item.item_icon
 		slot_2_icon.modulate = item.item_color
 		slot_2_icon.visible = true
 		slot_2_label.text = item.item_name
 	
-	if combiner_mode == CombinerMode.COMBINE || combiner_mode == CombinerMode.CRAFT:
+	if combiner_mode == CombinerMode.COMBINE || combiner_mode == CombinerMode.CRAFT || combiner_mode == CombinerMode.SINGLE_UPGRADE || combiner_mode == CombinerMode.POTION:
 		validate_combination(slot_number)
 	else:
 		validate_offering()
@@ -171,14 +188,16 @@ func remove_item_from_slot(slot_number: int):
 		return
 	
 	if slot_number == 1:
+		_restore_inventory_slot_opacity(slot_1_instance_id) 
 		slot_1_item = null
-		slot_1_inventory_index = -1
+		slot_1_instance_id  = EMPTY_SLOT
 		slot_1_icon.texture = null
 		slot_1_icon.visible = false
 		slot_1_label.text = "SLOT 1"
 	elif slot_number == 2:
+		_restore_inventory_slot_opacity(slot_2_instance_id)
 		slot_2_item = null
-		slot_2_inventory_index = -1
+		slot_2_instance_id  = EMPTY_SLOT
 		slot_2_icon.texture = null
 		slot_2_icon.visible = false
 		slot_2_label.text = "SLOT 2"
@@ -195,16 +214,16 @@ func validate_combination(slot_number: int):
 				if slot_1_item.item_name != slot_2_item.item_name:
 					craft_button.disabled = true
 					remove_item_from_slot(slot_number)
-					await show_error_message("These items don't taste the same...")
+					await show_error_message("These items aren't the same...")
 				elif ItemsManager.can_combine_items(slot_1_item, slot_2_item):
 					craft_button.disabled = false
-					message_label.text = "Hmmm... these will taste good."
+					message_label.text = "Hmmm... these will go well together."
 					message_label.modulate = Color.GREEN
 					AudioManager.play_event_sound("mmm")
 				else:
 					craft_button.disabled = true
 					remove_item_from_slot(slot_number)
-					await show_error_message("These items don't taste right together...")
+					await show_error_message("These items don't go together...")
 			else:
 				craft_button.disabled = true
 				message_label.text = instruction_text
@@ -215,17 +234,45 @@ func validate_combination(slot_number: int):
 				if slot_1_item.item_name == slot_2_item.item_name:
 					craft_button.disabled = true
 					remove_item_from_slot(slot_number)
-					await show_error_message("You can't do that here...")
+					await show_error_message("Inbreeding bugs doesn't work, try upgrading those...")
 				elif ItemsManager.can_craft_items(slot_1_item, slot_2_item):
 					craft_button.disabled = false
 					message_label.text = "A new creature can be formed..."
 					message_label.modulate = Color.GREEN
 				else:
 					craft_button.disabled = true
-					message_label.text = "These bugs cannot be combined yet."
+					message_label.text = "These bugs don't have compatible genes."
 					message_label.modulate = Color.ORANGE
 			else:
-				craft_button.disabled = true		
+				craft_button.disabled = true
+		CombinerMode.SINGLE_UPGRADE:
+			if slot_1_item:
+				if slot_1_item.rarity == Enums.Rarity.COMMON || slot_1_item.rarity == Enums.Rarity.GOLDEN:
+					craft_button.disabled = false
+					message_label.text = "I can do something with this."
+					message_label.modulate = Color.GREEN
+					AudioManager.play_event_sound("mmm")
+				else:
+					craft_button.disabled = true
+					remove_item_from_slot(slot_number)
+					await show_error_message("I can't do anything with this one...")
+			else:
+				craft_button.disabled = true
+				message_label.text = instruction_text
+				message_label.modulate = Color.WHITE
+		CombinerMode.POTION:
+			if slot_1_item:
+				# Check if recipe exists
+				if ItemsManager.can_craft_potion(slot_1_item):
+					craft_button.disabled = false
+					message_label.text = "This Potion can be mixed in the fountain..."
+					message_label.modulate = Color.GREEN
+				else:
+					craft_button.disabled = true
+					message_label.text = "This potion cannot be enhanced here."
+					message_label.modulate = Color.ORANGE
+			else:
+				craft_button.disabled = true
 		_:
 			validate_offering()
 
@@ -249,6 +296,10 @@ func _on_craft_pressed():
 		if not ItemsManager.can_combine_items(slot_1_item, slot_2_item):
 			show_error_message("Invalid combination!")
 			return
+	elif combiner_mode == CombinerMode.POTION:
+		if not ItemsManager.can_craft_potion(slot_1_item):
+			show_error_message("Nope, sorry!")
+			return
 
 	is_processing_craft = true
 	craft_button.disabled = true
@@ -262,8 +313,16 @@ func _on_craft_pressed():
 		Player.shrine_uses_left_this_rank -= 1
 	elif combiner_mode == CombinerMode.REPLACE_HIGHER_TIER:
 		result = ItemsManager.get_item_of_higher_tier(slot_1_item.rarity)
+	elif combiner_mode == CombinerMode.SINGLE_UPGRADE:
+		Player.super_upgrades_left -= 1
+		result = ItemsManager.combine_items(slot_1_item, slot_1_item)
+	if combiner_mode == CombinerMode.POTION:
+		result = ItemsManager.craft_potion(slot_1_item)
+	elif combiner_mode == CombinerMode.BANISH:
+		Player.banishes_left_this_rank -= 1
+		result = null
 
-	if not result:
+	if not result && combiner_mode != CombinerMode.BANISH:
 		show_error_message("Offering failed!")
 		is_processing_craft = false
 		return
@@ -274,8 +333,14 @@ func _on_craft_pressed():
 		zoom_altar.show_popup(slot_1_item, result)
 	elif combiner_mode == CombinerMode.REPLACE_HIGHER_TIER:
 		show_crafting_result(result)
+	elif combiner_mode == CombinerMode.SINGLE_UPGRADE:
+		show_crafting_result(result)
+	elif combiner_mode == CombinerMode.POTION:
+		show_crafting_result(result)
 	elif combiner_mode == CombinerMode.CRAFT:
 		zoom_craft.show_popup(slot_1_item, slot_2_item, result)
+	elif combiner_mode == CombinerMode.BANISH:
+		ItemsManager.banish_item(slot_1_item.item_id)
 
 	# Remove consumed items from player inventory
 	var removed_successfully = remove_consumed_items()
@@ -284,42 +349,61 @@ func _on_craft_pressed():
 		is_processing_craft = false
 		return
 	
-	# Add result to player inventory
-	var added = Player.inventory.add_item(result)
-	if not added:
-		# Inventory full - restore items and show error
-		show_error_message("Inventory full! Make space and try again.")
-		# TODO: Handle inventory full case better
-		is_processing_craft = false
-		return
+	if combiner_mode == CombinerMode.BANISH:
+		show_banished_done()
+
+	#if combiner_mode != CombinerMode.BANISH:
+		# Add result to player inventory
+	#	var added = Player.inventory.add_item(result)
+	#	if not added:
+			# Inventory full - restore items and show error
+	#		show_error_message("Inventory full! Make space and try again.")
+			# TODO: Handle inventory full case better
+	#		is_processing_craft = false
+	#		return
+	#else:
+	#	show_banished_done()
 	
-	Player.update_stats_from_items()
+	#Player.update_stats_from_items()
 		
 	# Emit signal
-	item_crafted.emit(result)
+	#item_crafted.emit(result)
 	
-	is_processing_craft = false
+	#is_processing_craft = false
 	
 	# Auto-close if configured
-	if auto_close_on_craft:
-		await get_tree().create_timer(2.0).timeout
-		combiner_closed.emit()
+	#if auto_close_on_craft:
+	#	await get_tree().create_timer(2.0).timeout
+	#	combiner_closed.emit()
 
 func remove_consumed_items() -> bool:
 	"""Remove the two crafted items from player inventory"""
 	if number_of_slots == 2:
-		if slot_1_inventory_index < 0 or slot_2_inventory_index < 0:
+		if slot_1_instance_id <= EMPTY_SLOT or slot_2_instance_id <= EMPTY_SLOT:
 			return false
 	else:
-		if slot_1_inventory_index < 0:
+		if slot_1_instance_id <= EMPTY_SLOT:
 			return false
 
 	if combiner_mode == CombinerMode.COMBINE || combiner_mode == CombinerMode.CRAFT:
+		var idx1 = Player.inventory.get_slot_by_instance_id(slot_1_instance_id)
+		var idx2 = Player.inventory.get_slot_by_instance_id(slot_2_instance_id)
+		if idx1 <= EMPTY_SLOT or idx2 <= EMPTY_SLOT:
+			return false
+
 		# Remove in descending order to avoid index shifting issues
-		var indices: Array[int] = [slot_1_inventory_index, slot_2_inventory_index]
+		var indices: Array[int] = [idx1, idx2]
 		Player.inventory.remove_multiple_items(indices)
+		Player.inventory.item_added.emit(slot_1_item,idx1)
 	else:
-		Player.inventory.remove_item(slot_1_inventory_index)
+		if slot_1_instance_id < 0:
+			return false
+		var idx1 = Player.inventory.get_slot_by_instance_id(slot_1_instance_id)
+		if idx1 < 0:
+			return false
+		Player.inventory.remove_item(idx1)
+		Player.inventory.compact_items()
+		Player.inventory.item_added.emit(slot_1_item,idx1)
 
 	return true
 
@@ -335,9 +419,32 @@ func show_crafting_result(result_item: Item):
 	
 	#var gamecolors = GameColors.new()
 	result_label.modulate = result_item.item_color
+	anim_player.play("show_refresh")
 
+func show_banished_done():
+	result_display.visible = true
+	craft_display.visible = false
+
+	result_icon.texture = slot_1_item.item_icon
+	result_icon.modulate = slot_1_item.item_color
+	result_label.text = slot_1_item.item_name 
+	continue_button.visible = !auto_close_on_craft
+	
+	#var gamecolors = GameColors.new()
+	result_label.modulate = slot_1_item.item_color
 
 func _on_continue_pressed():
+	reset()
+	if combiner_mode != CombinerMode.BANISH:
+		var added = Player.inventory.add_item(result)
+		if not added:
+			show_error_message("Inventory full! Make space and try again.")
+			return
+	
+	Player.update_stats_from_items()
+	item_crafted.emit(result)
+	is_processing_craft = false
+
 	if allow_multiple_crafts:
 		# Clear slots for next craft
 		reset()
@@ -349,11 +456,13 @@ func _on_continue_pressed():
 		hide_popup()
 
 func clear_crafting_slots():
-	"""Reset slots for next craft"""
+	_restore_inventory_slot_opacity(slot_1_instance_id)
+	_restore_inventory_slot_opacity(slot_2_instance_id)
+
 	slot_1_item = null
 	slot_2_item = null
-	slot_1_inventory_index = -1
-	slot_2_inventory_index = -1
+	slot_1_instance_id  = EMPTY_SLOT
+	slot_2_instance_id  = EMPTY_SLOT
 	
 	slot_1_icon.texture = null
 	slot_1_icon.visible = false
@@ -368,13 +477,35 @@ func clear_crafting_slots():
 	else:
 		validate_offering()
 
+func _restore_inventory_slot_opacity(instance_id: int):
+	if instance_id < 0:
+		return
+	var main_game = get_tree().get_first_node_in_group("main_game")
+	if not main_game:
+		return
+	
+	# Check inventory slots
+	for slot in main_game.item_slots:
+		if slot.current_item and slot.current_item.instance_id == instance_id:
+			slot.is_in_crafting_slot = false
+			slot.modulate.a = 1.0
+			slot.button.disabled = false
+			return
+		
+	# Check weapon slot
+	var ws = main_game.weapon_slot
+	if ws and ws.current_item and ws.current_item.instance_id == instance_id:
+		ws.is_in_crafting_slot = false
+		ws.modulate.a = 1.0
+		ws.button.disabled = false
+
 func show_error_message(error_text: String):
 	"""Display error message with flash effect"""
 	message_label.text = error_text
 	message_label.modulate = Color.RED
 	
 	invalid_combination.emit()
-	AudioManager.play_event_sound("forge_bad")
+	AudioManager.play_random_voice_no()
 
 	# Flash the message
 	var tween = create_tween()
@@ -401,17 +532,10 @@ func _on_btn_back_pressed() -> void:
 	reset()
 
 
-func _on_btn_craft_pressed() -> void:
-	pass # Replace with function body.
-
-
 func _on_btn_skip_pressed() -> void:
+	reset()
 	hide_popup()
 	item_skipped.emit()
-
-
-func _on_btn_done_pressed() -> void:
-	_on_continue_pressed()
 
 func _on_altar_zoom_completed():
 	show_crafting_result(result)

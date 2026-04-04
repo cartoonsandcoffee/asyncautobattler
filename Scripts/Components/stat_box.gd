@@ -7,7 +7,7 @@ class_name StatBoxDisplay
 @onready var tooltip: Panel = $Tooltip
 @onready var lbl_stat: Label = $Panel/stat_holder/MarginContainer/HBoxContainer/lbl_stat
 @onready var icon: TextureRect = $Panel/stat_holder/MarginContainer/HBoxContainer/icon
-
+@onready var anim_wounded: AnimationPlayer = $animWounded 
 
 @export var stat: Enums.Stats = Enums.Stats.HITPOINTS
 @export var show_tooltip: bool = true
@@ -42,7 +42,7 @@ func set_visuals(_stat: Enums.Stats):
 
 	match _stat:
 		Enums.Stats.DAMAGE:
-			stat_name = "Damage"
+			stat_name = "Attack Damage"
 			stat_color = gamecolors.stats.damage
 			icon.texture = stat_attack
 			stat_tooltip = "The amount you take away from the enemy's shield or hit points each turn in combat."
@@ -70,12 +70,12 @@ func set_visuals(_stat: Enums.Stats):
 			stat_name = "Strikes"
 			stat_color = gamecolors.stats.strikes
 			icon.texture = stat_strikes
-			stat_tooltip = "How many strikes a weapon makes each turn. Refreshes between turns."
+			stat_tooltip = "How many times you hit with your weapon in a single turn. Resets between turns."
 		Enums.Stats.BURN_DAMAGE:
 			stat_name = "Burn Damage"
 			stat_color = gamecolors.stats.burn
 			icon.texture = stat_burn_damage
-			stat_tooltip = "How much damage removing 1 stack of burn causes."
+			stat_tooltip = "How much damage 1 stack of burn deals to the enemy."
 
 func _set_labels() -> void:
 	lbl_name.text = stat_name
@@ -89,6 +89,10 @@ func _set_labels() -> void:
 		# HP always shows current/max format
 		lbl_stat.text = str(stat_value) + "/" + str(stat_value_base)
 		lbl_stat.add_theme_font_size_override("font_size", 34)
+		if stat_value <= ((stat_value_base/2)-1):
+			anim_wounded.play("show_wounded")
+		else:
+			anim_wounded.play("RESET")
 	elif stat == Enums.Stats.STRIKES:
 		lbl_stat.text = str(stat_value)
 		if stat_value_base > 1:
