@@ -67,7 +67,7 @@ func get_animation_variant(base_name: String) -> String:
 		CombatSpeed.CombatSpeedMode.VERY_FAST:
 			return base_name + "_very_fast"
 		CombatSpeed.CombatSpeedMode.INSTANT:
-			return base_name + "_instant"  # Doesn't matter, won't play
+			return base_name + "_very_fast"  # Doesn't matter, won't play
 		_:
 			return base_name
 

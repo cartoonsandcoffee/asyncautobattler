@@ -21,6 +21,7 @@ var skip_opening: bool = false
 var combat_speed: int = 1  # 0=slow, 1=normal, 2=fast
 var show_damage_numbers: bool = true
 var show_combat_log: bool = true
+var item_bundles: Array[int] = []
 
 # Save file path
 const SETTINGS_FILE = "user://game_settings.cfg"
@@ -166,11 +167,13 @@ func save_settings():
 	config.set_value("gameplay", "combat_speed", combat_speed)
 	config.set_value("gameplay", "show_damage_numbers", show_damage_numbers)
 	config.set_value("gameplay", "show_combat_log", show_combat_log)
-	
+	config.set_value("gameplay", "item_bundles", Player.item_bundles)
+
 	var error = config.save(SETTINGS_FILE)
 	
 	if error == OK:
-		print("[GameSettings] Settings saved to %s" % SETTINGS_FILE)
+		pass
+		#print("[GameSettings] Settings saved to %s" % SETTINGS_FILE)
 	else:
 		push_error("[GameSettings] Failed to save settings: %d" % error)
 
@@ -180,7 +183,7 @@ func load_settings():
 	var error = config.load(SETTINGS_FILE)
 	
 	if error != OK:
-		print("[GameSettings] No settings file found, using defaults")
+		push_warning("[GameSettings] No settings file found, using defaults")
 		return
 	
 	# Audio settings
@@ -201,8 +204,10 @@ func load_settings():
 	combat_speed = config.get_value("gameplay", "combat_speed", 1)
 	show_damage_numbers = config.get_value("gameplay", "show_damage_numbers", true)
 	show_combat_log = config.get_value("gameplay", "show_combat_log", true)
-	
-	print("[GameSettings] Settings loaded from file")
+	var raw = config.get_value("gameplay", "item_bundles", [])
+	item_bundles.assign(raw)
+
+	#print("[GameSettings] Settings loaded from file")
 
 func apply_all_settings():
 	"""Apply all settings to the game."""

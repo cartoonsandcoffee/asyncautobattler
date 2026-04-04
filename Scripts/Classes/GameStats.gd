@@ -7,13 +7,15 @@ extends Resource
 
 signal stats_updated()
 
+const BASE_BURN_DAMAGE: int = 4  
+
 @export var damage: int = 0
 @export var shield: int = 0
 @export var agility: int = 0
 @export var hit_points: int = 10
 @export var gold: int = 0
 @export var strikes: int = 1
-@export var burn_damage: int = 3
+@export var burn_damage: int = BASE_BURN_DAMAGE
 
 # Current values that can differ from base values
 var damage_current: int = 0
@@ -21,11 +23,13 @@ var shield_current: int = 0
 var agility_current: int = 0
 var hit_points_current: int = 10
 var strikes_current: int = 1
-var burn_damage_current: int = 3
+var burn_damage_current: int = BASE_BURN_DAMAGE
 
 var combat_temp_damage: int = 0
 
 var refresh_cost: int = 1
+var upgrade_cost: int = 10
+var shop_upgrades = 0
 
 func _init():
 	# Initialize current values to base values
@@ -51,7 +55,7 @@ func reset_base_stats():
 	agility = 0
 	hit_points = 10
 	strikes = 1
-	burn_damage = 3
+	burn_damage = BASE_BURN_DAMAGE
 
 func reset_stat_to_base(_stat: Enums.Stats):
 	match _stat:

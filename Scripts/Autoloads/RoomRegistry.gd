@@ -50,7 +50,7 @@ func get_available_rooms_for_rank(rank: int) -> Array[RoomDefinition]:
 	var available_rooms: Array[RoomDefinition] = []
 	
 	for room_def in room_definitions.values():
-		if room_def.can_appear_at_rank(rank):
+		if room_def.get_weight_for_rank(rank) > 0:
 			available_rooms.append(room_def)
 	
 	return available_rooms
@@ -101,7 +101,14 @@ func get_rooms_by_type_rarity_and_rank(type: Enums.RoomType, rarity: Enums.Rarit
 	
 	for room_def in room_definitions.values():
 		if room_def.room_type == type and room_def.rarity == rarity:
-			if room_def.can_appear_at_rank(rank):
+			if room_def.get_weight_for_rank(rank) > 0:
 				results.append(room_def)
 	
+	return results
+
+func get_rooms_by_type_and_rank(type: Enums.RoomType, rank: int) -> Array[RoomDefinition]:
+	var results: Array[RoomDefinition] = []
+	for room_def in room_definitions.values():
+		if room_def.room_type == type and room_def.get_weight_for_rank(rank) > 0:
+			results.append(room_def)
 	return results

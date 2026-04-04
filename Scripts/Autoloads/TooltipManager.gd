@@ -41,6 +41,34 @@ func show_item_tooltip(item: Item, anchor_global_pos: Vector2, anchor_size: Vect
 	if current_tooltip and current_tooltip.has_method("create_stacked_definitions"):
 		current_tooltip.create_stacked_definitions()
 		
+func show_setbonus_tooltip(item: Item, anchor_global_pos: Vector2, anchor_size: Vector2 = Vector2(100, 100), is_from_compendium: bool = false, recipe = null) -> void:
+	hide_tooltip()
+	
+	if not item:
+		return
+	
+	# Instantiate the existing tooltip scene
+	current_tooltip = item_tooltip_scene.instantiate()
+	current_tooltip.is_from_compendium = is_from_compendium
+	add_child(current_tooltip)
+
+	# Setup the tooltip with item data (uses existing item_tooltip.gd logic)
+	current_tooltip.set_item(item, false, null)
+
+	if recipe:
+		current_tooltip.set_bonus_ingredients(recipe.required_items)
+	
+	# Wait one frame for tooltip to calculate its size
+	await get_tree().process_frame
+	
+	# Position with bottom of tooltip anchored to top of item
+	var positioned = _calculate_anchored_position(current_tooltip, anchor_global_pos, anchor_size)
+	current_tooltip.global_position = positioned
+
+	await get_tree().process_frame
+	if current_tooltip and current_tooltip.has_method("create_stacked_definitions"):
+		current_tooltip.create_stacked_definitions()
+
 ## Hide current tooltip
 func hide_tooltip() -> void:
 	if current_tooltip:
@@ -58,11 +86,12 @@ func _calculate_anchored_position(tooltip: Control, anchor_pos: Vector2, anchor_
 
 	# Get tooltip size
 	var tooltip_size: Vector2
-	if tooltip.has_node("Panel/PanelContainer"):
-		var panel = tooltip.get_node("Panel/PanelContainer")
-		tooltip_size = panel.size
-	else:
-		tooltip_size = tooltip.size
+	if tooltip:
+		if tooltip.has_node("Panel/PanelContainer"):
+			var panel = tooltip.get_node("Panel/PanelContainer")
+			tooltip_size = panel.size
+		else:
+			tooltip_size = tooltip.size
 
 	var pos = Vector2.ZERO
 	

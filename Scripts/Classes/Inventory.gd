@@ -12,8 +12,8 @@ signal item_removed(item: Item, slot_index: int)
 signal inventory_full(item: Item)
 signal inventory_size_changed(_new_size: int)
 
-var weapon_slot: Item = null
-var item_slots: Array[Item] = []
+@export var weapon_slot: Item = null
+@export var item_slots: Array[Item] = []
 var max_item_slots: int = 4
 
 var owner_entity = null  # Store reference to owning entity
@@ -74,11 +74,11 @@ func has_unique_item(item_id: String) -> bool:
 	for item in item_slots:
 		if item and item.item_id == item_id:
 			return true
-    
+	
 	# Also check weapon slot
 	if weapon_slot and weapon_slot.item_id == item_id:
 		return true
-    
+	
 	return false
 
 func has_any_singularity_item() -> bool:
@@ -86,11 +86,11 @@ func has_any_singularity_item() -> bool:
 	for item in item_slots:
 		if item and item.has_category("Singularity"):
 			return true
-    
+	
 	# Also check weapon slot
 	if weapon_slot and weapon_slot.has_category("Singularity"):
 		return true
-    
+	
 	return false
 
 func has_this_singularity_item(item_id: String) -> bool:
@@ -136,23 +136,23 @@ func replace_item(new_item: Item, slot_index: int) -> Item:
 	
 	return old_item  # Return the replaced item
 
+func set_weapon_upgrade(upgrade: Item) -> bool:
+	if upgrade.item_type != Item.ItemType.UPGRADE:
+		return false
+
+	Player.current_weapon_rule_upgrade = upgrade
+	return true
+
 func set_weapon(new_weapon: Item) -> bool:
 	if new_weapon.item_type != Item.ItemType.WEAPON:
 		return false
 	
 	var old_weapon = weapon_slot
 	weapon_slot = new_weapon
-
-	print("[Inventory DEBUG] set_weapon called:")
-	print("  - Old weapon: %s" % (old_weapon.item_name if old_weapon else "None"))
-	print("  - New weapon: %s" % new_weapon.item_name)
-	print("  - Current upgrades BEFORE: %s" % Player.current_weapon_stat_upgrades)
 	
 	if owner_entity == Player:
 		if old_weapon == null or old_weapon.item_id != new_weapon.item_id:
 			Player.reset_weapon_bonus()
-
-	print("  - Current upgrades AFTER: %s" % Player.current_weapon_stat_upgrades)
 
 	if old_weapon != null:
 		item_removed.emit(old_weapon, -1)  # -1 indicates weapon slot
@@ -300,12 +300,35 @@ func move_item_to_slot(from_index: int, to_index: int):
 	item.slot_index = to_index
 
 func shift_items_left(start_index: int):
+	# Important for when you drop an item
+
 	for i in range(start_index, item_slots.size() - 1):
 		if item_slots[i] == null and item_slots[i + 1] != null:
 			item_slots[i] = item_slots[i + 1]
 			item_slots[i + 1] = null
 			if item_slots[i]:
 				item_slots[i].slot_index = i
+
+func insert_item_at(from_index: int, to_index: int):
+	var item = item_slots[from_index]
+	if not item:
+		return
+	
+	item_slots[from_index] = null
+	
+	if from_index < to_index:
+		for i in range(from_index, to_index):
+			item_slots[i] = item_slots[i + 1]
+			if item_slots[i]:
+				item_slots[i].slot_index = i
+	else:
+		for i in range(from_index, to_index, -1):
+			item_slots[i] = item_slots[i - 1]
+			if item_slots[i]:
+				item_slots[i].slot_index = i
+	
+	item_slots[to_index] = item
+	item.slot_index = to_index
 
 # For saving/loading
 func get_save_data() -> Dictionary:

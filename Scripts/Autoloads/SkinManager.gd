@@ -33,7 +33,9 @@ func load_all_skins():
 	all_skins.clear()
 	get_all_files_from_directory("res://Resources/Skins/", ".tres")
 	
-	print("[SkinManager] Loaded %d skins" % all_skins.size())
+	all_skins.sort_custom(func(a, b): return a.skin_id < b.skin_id)
+
+	#print("[SkinManager] Loaded %d skins" % all_skins.size())
 
 func get_all_files_from_directory(path : String, file_ext:= "", files := []):
 	var resources = ResourceLoader.list_directory(path)
@@ -85,7 +87,7 @@ func _load_local_data() -> void:
 	if not 0 in unlocked_skin_ids:
 		unlocked_skin_ids.append(0)
 	
-	print("[SkinManager] Loaded - selected: %d, unlocked: %s" % [selected_skin_id, str(unlocked_skin_ids)])
+	#print("[SkinManager] Loaded - selected: %d, unlocked: %s" % [selected_skin_id, str(unlocked_skin_ids)])
 
 func _save_local_data() -> void:
 	var data := {
@@ -109,7 +111,7 @@ func unlock_skin(skin_id: int) -> void:
 		unlocked_skin_ids.append(skin_id)
 		_save_local_data()
 		skin_unlocked.emit(skin_id)
-		print("[SkinManager] Unlocked skin %d" % skin_id)
+		#print("[SkinManager] Unlocked skin %d" % skin_id)
 
 func select_skin(skin_id: int) -> bool:
 	"""Select a skin by id. Updates Player.skin_id and saves locally. Returns false if not unlocked."""
@@ -121,7 +123,7 @@ func select_skin(skin_id: int) -> bool:
 	Player.skin_id = skin_id
 	_save_local_data()
 	skin_selected.emit(skin_id)
-	print("[SkinManager] Selected skin %d" % skin_id)
+	#print("[SkinManager] Selected skin %d" % skin_id)
 	return true
 
 func get_skin(skin_id: int) -> SkinData:

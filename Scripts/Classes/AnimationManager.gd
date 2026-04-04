@@ -76,8 +76,11 @@ func play_milestone(milestone_name: String, data: Dictionary = {}):
 func _execute_milestone(milestone_name: String, data: Dictionary):
 	"""Execute a milestone animation"""
 	current_milestone = milestone_name
-	print("=== MILESTONE: ", milestone_name, " ===")
 	
+	if CombatSpeed.is_instant_mode():
+		milestone_complete.emit(milestone_name)  # Still emit so awaits don't hang
+		return
+		
 	match milestone_name:
 		"Battle Start":
 			await _play_battle_start()
@@ -134,6 +137,7 @@ func _play_battle_end(winner, loser):
 	if combat_panel:
 		if loser == CombatManager.enemy_entity:
 			# Enemy death animation
+			AudioManager.play_enemy_death(loser)
 			var anim_name = _get_animation_variant("enemy_die")
 			if combat_panel.enemy_anim.has_animation(anim_name):
 				combat_panel.enemy_anim.speed_scale = 1.0
@@ -226,7 +230,9 @@ func _execute_attack_animation(attacker, target):
 	"""Execute attack animation"""
 	if not combat_panel:
 		return
-	
+	if CombatSpeed.is_instant_mode():
+		return
+
 	var is_player_attacking = (attacker == CombatManager.player_entity)
 	
 	# Play appropriate attack animation
@@ -383,7 +389,10 @@ func clear_all_animations():
 # ===== PUBLIC INTERFACE =====
 
 func wait_for_attack_animation():
-	"""Wait for current attack animation to complete"""
+	# Wait for current attack animation to complete
+	if CombatSpeed.is_instant_mode():
+		return
+		
 	if combat_panel and combat_panel.slide_animation and combat_panel.slide_animation.is_playing():
 		var current_anim = combat_panel.slide_animation.current_animation
 		if current_anim:

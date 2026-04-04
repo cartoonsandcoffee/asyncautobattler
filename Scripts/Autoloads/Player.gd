@@ -5,6 +5,8 @@ signal inventory_updated(item: Item, slot_index: int)
 signal profile_loaded()
 signal ears_changed(new_balance: int)
 
+const GAME_VERSION = "0.1.02" 
+
 # ============================================
 # PERSISTENT PROFILE DATA (Synced with Supabase)
 # ============================================
@@ -44,7 +46,7 @@ var inventory: Inventory:
 
 var skin_id: int = 0
 var skin_color: Color = Color.WHITE
-var item_bundle: Enums.ItemBundles = Enums.ItemBundles.REVENGE
+var item_bundles: Array[Enums.ItemBundles] = [Enums.ItemBundles.REVENGE, Enums.ItemBundles.HONOR, Enums.ItemBundles.DUTY]
 
 # Applied to current weapon (resets on weapon swap)
 var current_weapon_stat_upgrades: Dictionary = {
@@ -72,20 +74,32 @@ var run_start_time: float = 0.0
 var max_gold_this_run: int = 0
 var items_found_this_run: int = 0
 
+var super_upgrades_left: int = 1
+var scorpion_encounters_left: int = 1
+var rare_camp_events_left: int = 1
+var potion_makers_left: int = 1
+var tinker_events_left: int = 1
+var crystal_events_left: int = 1
+var town_shop_inventory: Array[String] = [] # item IDs, "" = purchased/empty slot
+
 # town usage variables
 var rooms_left_this_rank: int = 0
 var total_rooms_per_rank: int = 15
-var town_visits_left_this_rank: int = 0
-var total_town_visits_per_rank: int = 2
 var shrine_uses_left_this_rank: int = 0
 var total_shrine_uses_per_rank: int = 1
+var banishes_left_this_rank: int = 0
+var total_banishes_per_rank: int = 3
+var campfires_left_this_rank: int = 0
+var total_campfires_per_rank: int = 1
+
 var is_in_town: bool = false
 var popup_open: bool = false
-
 
 func new_run(nm: String):
 	player_name = nm
 	SkinManager.apply_selected_skin_to_player()
+	ItemsManager.clear_banished_items()
+
 	stats = GameStats.new()
 	inventory = Inventory.new()
 	status_effects = StatusEffects.new()
@@ -117,14 +131,25 @@ func new_run(nm: String):
 	damage_dealt_this_run = 0
 	damage_taken_this_run = 0
 
+	super_upgrades_left = 1
+	scorpion_encounters_left = 1
+	rare_camp_events_left = 1
+	potion_makers_left = 1
+	tinker_events_left = 1
+	crystal_events_left = 1
+	town_shop_inventory = []
+
 	# Run state tracking
 	run_start_time = Time.get_ticks_msec() / 1000.0
 	max_gold_this_run = stats.gold
 	items_found_this_run = 0
+	stats.shop_upgrades = 0
+	stats.refresh_cost = 1
 
 	rooms_left_this_rank = total_rooms_per_rank + 1  # JDM: Adding 1 to offset the first time town is loaded
-	town_visits_left_this_rank = total_town_visits_per_rank
+	banishes_left_this_rank = total_banishes_per_rank
 	shrine_uses_left_this_rank = total_shrine_uses_per_rank
+	campfires_left_this_rank = total_campfires_per_rank
 
 func set_test_inventory():
 	if !inventory:
@@ -136,14 +161,27 @@ func set_test_inventory():
 
 	inventory.add_item(ItemsManager.available_items["weapon_fists"])
 
-	#inventory.add_item(ItemsManager.available_items["burning_dagger"])
-	#inventory.add_item(ItemsManager.available_items["golden_essence_of_charcoal"])
+	#inventory.add_item(ItemsManager.available_items["blessed_talisman"])
+	#inventory.add_item(ItemsManager.available_items["golden_helmet_of_the_old_gods"])
+	#inventory.add_item(ItemsManager.available_items["dew_fly"])
 
-	#inventory.add_item(ItemsManager.available_items["scabby_ring"])
-	#inventory.add_item(ItemsManager.available_items["Clearmetal_Crown"])	
 	#inventory.add_item(ItemsManager.available_items["diamond_corroded_armor"])
+	#inventory.add_item(ItemsManager.available_items["diamond_ring_of_life"])
+	#inventory.add_item(ItemsManager.available_items["diamond_corroded_armor"])
+
+	#inventory.add_item(ItemsManager.available_items["diamond_ring_of_power"])
+	#inventory.add_item(ItemsManager.available_items["clearmetal_spear"])
+	#inventory.add_item(ItemsManager.available_items["essence_of_charcoal"])
+
+	#inventory.add_item(ItemsManager.available_items["chitinous_tibia"])
+	#inventory.add_item(ItemsManager.available_items["test_relic"])	
+	#inventory.add_item(ItemsManager.available_items["thorny_vest"])
 	
-	#inventory.add_item(ItemsManager.available_items["testing_boots"])
+	#inventory.add_item(ItemsManager.available_items["golden_corroded_armor"])
+	#inventory.add_item(ItemsManager.available_items["corroded_pauldrons"])
+	#inventory.add_item(ItemsManager.available_items["stinky_shield"])
+	#inventory.add_item(ItemsManager.available_items["cleansing_axe"])
+	
 	#inventory.add_item(ItemsManager.available_items["scuttlemite"])
 	#inventory.add_item(ItemsManager.available_items["corpsehopper"])
 	#inventory.add_item(ItemsManager.available_items["corpsehopper"])
@@ -384,7 +422,7 @@ func _execute_persistent_effect(rule: ItemRule, item: Item):
 	
 	# Handle standard persistent effects (stat modifications)
 	if rule.effect_type == Enums.EffectType.MODIFY_STAT:
-		var amount = _calculate_effect_amount(rule)
+		var amount = _calculate_effect_amount(rule) * _calculate_execution_count(item)
 		
 		if rule.target_stat_type == Enums.StatType.BASE:
 			# Apply to base stat
@@ -444,6 +482,29 @@ func _calculate_effect_amount(rule: ItemRule) -> int:
 	
 	return amount
 
+func _calculate_execution_count(item: Item) -> int:
+	# Calculate how many times to execute this effect.
+	
+	# Factors:
+	# - Base: 1 time
+	# - repeat_effect_X_times: Add X
+	# - repeat_effect_for_category: Add count of items with that category
+
+	var count = 1
+	
+	# Add fixed repeats
+	count += item.repeat_rules_X_times
+	
+	# Add category-based repeats
+	if item.repeat_rules_for_category != "":
+		var category_count = inventory.count_items_with_category(item.repeat_rules_for_category)
+		count += category_count
+	
+	# Check for persistent rules that might increase the repeats
+	#count += _check_persistent_repeat_modifiers(source_entity, item)
+
+	return maxi(count, 1)  # At least 1
+
 # ============================================
 # INVENTORY & STATS HELPERS
 # ============================================
@@ -464,6 +525,10 @@ func subtract_gold(value: int):
 		stats.stats_updated.emit()
 	else:	
 		return false
+
+func all_weapon_upgrades_maxed() -> bool:
+	var u = current_weapon_stat_upgrades
+	return u["damage"] >= 1 and u["shield"] >= 1 and u["agility"] >= 1
 
 # ============================================
 # PERSISTENT UUID & PROFILE MANAGEMENT
@@ -570,7 +635,8 @@ func to_boss_data() -> Dictionary:
 		"weapon_stat_upgrades": current_weapon_stat_upgrades,
 		"weapon_enchantment": _serialize_weapon_enchantment(),
 		"skin_color": skin_color.to_html(),
-		"item_bundle": item_bundle
+		"item_bundles": item_bundles,
+		"game_version": GAME_VERSION 
 	}
 
 func _serialize_inventory() -> Array:
@@ -625,8 +691,11 @@ func refill_rooms_for_new_rank():
 func complete_rank_boss():
 	"""Called after boss victory - advance rank and refill rooms"""
 	current_rank += 1
+	town_shop_inventory = [] # refresh the merchant's inventory after you beat a boss
 
 	shrine_uses_left_this_rank = total_shrine_uses_per_rank
+	banishes_left_this_rank = total_banishes_per_rank
+	campfires_left_this_rank = total_campfires_per_rank
 
 	# Refill rooms for new rank
 	refill_rooms_for_new_rank()
@@ -689,7 +758,6 @@ func from_dict(data: Dictionary):
 	skin_id = data.get("skin_id", 0)
 	var color_hex:String = data.get("skin_color", "#FFFFFF")
 	skin_color = Color(color_hex)
-	item_bundle = data.get("item_bundle", 0)
 
 	# Run state
 	current_rank = data.get("current_rank", 1)
@@ -733,3 +801,26 @@ func from_dict(data: Dictionary):
 	damage_taken_this_run = data.get("damage_taken", 0)
 	
 	print("[Player] Loaded save data for: %s (Rank %d)" % [player_name, current_rank])
+
+static func compare_versions(v1: String, v2: String) -> int:
+	# Compare two semantic version strings.
+	# Returns: -1 if v1 < v2, 0 if equal, 1 if v1 > v2
+
+	var parts1 = v1.split(".")
+	var parts2 = v2.split(".")
+	
+	# Compare major, minor, patch in order
+	for i in range(3):
+		var p1 = int(parts1[i]) if i < parts1.size() else 0
+		var p2 = int(parts2[i]) if i < parts2.size() else 0
+		
+		if p1 < p2:
+			return -1
+		elif p1 > p2:
+			return 1
+	
+	return 0  # Equal
+
+static func is_version_outdated(current: String, required: String) -> bool:
+	# Check if current version is older than required version.
+	return compare_versions(current, required) < 0

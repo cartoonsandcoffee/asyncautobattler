@@ -50,6 +50,21 @@ func validate_ingredients(item1: Item, item2: Item) -> bool:
 						item2.item_name == ingredient_1.item_name)
 	return match_order_1 or match_order_2
 
+func validate_single_upgrade(item1: Item) -> bool:
+	"""Check if these two items can be crafted with this recipe"""
+	if not item1:
+		return false
+	
+	if not ingredient_1:
+		return false
+		
+	if ingredient_2 != null:
+		return false
+
+	var match_order_1 = (item1.item_name == ingredient_1.item_name)
+
+	return match_order_1
+
 
 func get_result_item() -> Item:
 	return result_item

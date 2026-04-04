@@ -54,7 +54,8 @@ func create_boss_enemy(opponent_data: Dictionary) -> Enemy:
 	
 	# Apply weapon upgrades if they exist
 	_apply_weapon_upgrades(boss, opponent_data)
-	
+	SetBonusManager.check_set_bonuses(boss)
+
 	# update stats from all the items (might not need to save any stats at all for the players really, just their items.)
 	boss.update_stats_from_items()
 	
@@ -90,7 +91,7 @@ func _apply_weapon_upgrades(boss: Enemy, opponent_data: Dictionary):
 	if not weapon_enchantment.is_empty() and weapon_enchantment.has("id"):
 		var enchantment_id = weapon_enchantment.get("id", "")
 		if not enchantment_id.is_empty():
-			var enchantment_item = ItemsManager.get_item_by_id(enchantment_id)
+			var enchantment_item = ItemsManager.get_upgrade_by_id(enchantment_id)
 			if enchantment_item:
 				boss.current_weapon_rule_upgrade = enchantment_item.create_instance()
 				print("[BossHandler] Applied weapon enchantment: %s" % enchantment_item.item_name)
@@ -171,7 +172,7 @@ func get_fallback_boss(rank: int) -> Enemy:
 	fallback.stats.shield = (rank * 5)
 	fallback.stats.agility = rank
 	fallback.stats.strikes = 1
-	fallback.stats.burn_damage = 3
+	fallback.stats.burn_damage = GameStats.BASE_BURN_DAMAGE
 	fallback.stats.gold = 10	
 	fallback.status_effects = StatusEffects.new()
 	#fallback.abilities = []

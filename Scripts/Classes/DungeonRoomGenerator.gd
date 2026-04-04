@@ -9,15 +9,6 @@ var dungeon_manager: Node  # Reference back to DungeonManager
 
 const ROOMS_PER_RANK = 10
 
-# Rarity distribution by rank
-const RARITY_WEIGHTS_BY_RANK = {
-	1: {Enums.Rarity.COMMON: 70, Enums.Rarity.RARE: 30, Enums.Rarity.LEGENDARY: 0},
-	2: {Enums.Rarity.COMMON: 60, Enums.Rarity.RARE: 30, Enums.Rarity.LEGENDARY: 10},
-	3: {Enums.Rarity.COMMON: 50, Enums.Rarity.RARE: 35, Enums.Rarity.LEGENDARY: 15},
-	4: {Enums.Rarity.COMMON: 40, Enums.Rarity.RARE: 40, Enums.Rarity.LEGENDARY: 20},
-	5: {Enums.Rarity.COMMON: 30, Enums.Rarity.RARE: 45, Enums.Rarity.LEGENDARY: 25}
-}
-
 # Utility subtype tracking (for "max 1 of each COMMON utility type")
 var used_utility_subtypes: Dictionary = {}
 
@@ -79,9 +70,8 @@ func generate_rank_rooms(current_rank: int) -> Array[RoomData]:
 
 func _place_guaranteed_treasure(rooms: Array[RoomData], available_rooms: Array[RoomDefinition], rank: int):
 	"""Place guaranteed treasure room in positions 1-3"""
-	var treasure_rooms = RoomRegistry.get_rooms_by_type_rarity_and_rank(
+	var treasure_rooms = RoomRegistry.get_rooms_by_type_and_rank(
 		Enums.RoomType.TREASURE,
-		Enums.Rarity.RARE,
 		rank
 	)
 	
@@ -96,9 +86,8 @@ func _place_guaranteed_treasure(rooms: Array[RoomData], available_rooms: Array[R
 
 func _place_guaranteed_merchant(rooms: Array[RoomData], available_rooms: Array[RoomDefinition], rank: int):
 	"""Place guaranteed merchant room"""
-	var merchant_rooms = RoomRegistry.get_rooms_by_type_rarity_and_rank(
+	var merchant_rooms = RoomRegistry.get_rooms_by_type_and_rank(
 		Enums.RoomType.MERCHANT,
-		Enums.Rarity.RARE,
 		rank
 	)
 	
@@ -130,8 +119,7 @@ func _place_guaranteed_utility(rooms: Array[RoomData], available_rooms: Array[Ro
 
 func _fill_remaining_slots(rooms: Array[RoomData], available_rooms: Array[RoomDefinition], rank: int):
 	"""Fill null slots with weighted random rooms, respecting all rules"""
-	var rarity_weights = _get_rarity_weights_for_rank(rank)
-	
+
 	for i in range(ROOMS_PER_RANK):
 		if rooms[i] != null:
 			continue  # Already filled by guaranteed placement
@@ -139,7 +127,7 @@ func _fill_remaining_slots(rooms: Array[RoomData], available_rooms: Array[RoomDe
 		# Try up to 20 times to find valid room
 		var placed = false
 		for attempt in range(20):
-			var room_def = _pick_weighted_room_with_rarity(available_rooms, rarity_weights)
+			var room_def = _pick_weighted_room(available_rooms)
 			
 			# Validate against all rules
 			if _can_place_room_at_position(rooms, room_def, i):
@@ -248,42 +236,45 @@ func _assign_combat_to_room(room_data: RoomData):
 	if room_def.can_have_random_combat and room_def.random_enemy_pool.size() > 0:
 		var roll = randf()
 		if roll < room_def.random_combat_chance:
-			room_data.assigned_enemy = room_def.random_enemy_pool.pick_random()
+			var base_enemy = room_def.random_enemy_pool.pick_random()
+			room_data.assigned_enemy = _resolve_enemy_for_rank(base_enemy, Player.current_rank)
+			#room_data.assigned_enemy = room_def.random_enemy_pool.pick_random()
 			room_data.has_combat_this_instance = true
 		else:
 			room_data.has_combat_this_instance = false
 	else:
 		room_data.has_combat_this_instance = false
 
-func _pick_weighted_room_with_rarity(available_rooms: Array[RoomDefinition], rarity_weights: Dictionary) -> RoomDefinition:
+func _resolve_enemy_for_rank(base_enemy: Enemy, rank: int) -> Enemy:
+	var name = base_enemy.enemy_id
+	var suffix = ""
+	
+	if rank > 3: suffix = "_med" # Only additional tier made yet
+	
+	#if rank >= 5: suffix = "_hard"
+	#elif rank >= 3: suffix = "_med"
+	
+	if suffix.is_empty():
+		return base_enemy
+	var path = "res://Resources/Enemies/%s%s.tres" % [name, suffix]
+	if ResourceLoader.exists(path):
+		return load(path)
+	return base_enemy
+
+func _pick_weighted_room(available_rooms: Array[RoomDefinition]) -> RoomDefinition:
 	"""Pick room using spawn_weight AND rarity weight"""
 	var weighted_pool: Array[RoomDefinition] = []
 	
 	for room_def in available_rooms:
-		# var rarity_weight = rarity_weights.get(room_def.rarity, 10) 	# - Factors in Common/Uncommon/Rare 
-		var room_weight = room_def.spawn_weight							# - Factors in room's Spawn Weight
-		var total_weight = room_weight # JDM: This ignores the percentage rarity weighting for now (the below equation was creating too much variability)
-		# var total_weight = (rarity_weight * room_weight) / 10
-		
-		for i in range(total_weight):
+		var room_weight = room_def.get_weight_for_rank(Player.current_rank)
+
+		for i in range(room_weight):
 			weighted_pool.append(room_def)
 	
 	if weighted_pool.is_empty():
 		return available_rooms.pick_random()
 	
 	return weighted_pool.pick_random()
-
-func _get_rarity_weights_for_rank(rank: int) -> Dictionary:
-	"""Get rarity distribution for current rank"""
-	if RARITY_WEIGHTS_BY_RANK.has(rank):
-		return RARITY_WEIGHTS_BY_RANK[rank]
-	
-	# Default for ranks beyond 5
-	return {
-		Enums.Rarity.COMMON: 60,
-		Enums.Rarity.RARE: 30,
-		Enums.Rarity.LEGENDARY: 10
-	}
 
 func _create_fallback_room() -> RoomData:
 	"""Create a basic fallback treasure room if generation fails"""

@@ -92,7 +92,8 @@ enum TriggerType {
 	ACID_PROCS_ON_ENEMY,
 	ON_ENEMY_STATUS_GAIN,
 	ON_ENEMY_STATUS_PROC,
-	ATTACK_SKIPPED
+	ATTACK_SKIPPED,
+	NONE
 }
 
 enum EffectType {
@@ -142,8 +143,7 @@ enum ItemToRetrigger {
 	ALL,
 	RANDOM,
 	FIRST,
-	LAST,
-	SPECIFIC
+	LAST
 }
 
 func get_target_string(_target: Enums.TargetType) -> String:
@@ -292,7 +292,7 @@ func get_stat_string(_stat: Enums.Stats) -> String:
 		Enums.Stats.HITPOINTS:
 			return "hitpoints"
 		Enums.Stats.DAMAGE:
-			return "damage"
+			return "attack"
 		Enums.Stats.SHIELD:
 			return "shield"
 		Enums.Stats.AGILITY:
@@ -328,3 +328,12 @@ func get_bundle_string(_bundle: Enums.ItemBundles) -> String:
 			return "No Bundles"
 		_:
 			return "<Unknown Item Bundle>"
+
+func get_item_to_retrigger_string(_type: Enums.ItemToRetrigger) -> String:
+	match _type:
+		Enums.ItemToRetrigger.NONE: return "None"
+		Enums.ItemToRetrigger.ALL: return "All"
+		Enums.ItemToRetrigger.RANDOM: return "Random"
+		Enums.ItemToRetrigger.FIRST: return "First"
+		Enums.ItemToRetrigger.LAST: return "Last"
+		_: return "All"

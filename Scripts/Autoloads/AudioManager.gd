@@ -27,10 +27,11 @@ var music_tracks: Dictionary = {}
 # Music contexts (priority order: higher = more important)
 enum MusicContext {
 	NONE = 0,
-	GENERAL = 1,      # Default exploration music
-	COMBAT_NPC = 2,   # Fighting regular enemies
-	COMBAT_PVP = 3,   # Fighting boss (player builds)
-	ROOM_OVERRIDE = 4 # Room-specific music (highest priority)
+	GENERAL = 1,        # Default exploration music
+	COMBAT_NPC = 2,     # Fighting regular enemies
+	COMBAT_PVP = 3,     # Fighting boss (player builds)
+	ROOM_OVERRIDE = 4,  # Room-specific music (higher priority)
+	ENEMY_OVERRIDE = 5  # Enemy-specific music (highest priority)
 }
 
 # Current music state
@@ -39,7 +40,7 @@ var room_override_track: String = ""  # Set by rooms for special music
 var current_track_name: String = ""
 
 # Crossfade settings
-var crossfade_duration: float = 2.0  # Seconds for music transition
+var crossfade_duration: float = 1.0  # Seconds for music transition
 
 ## =============================================================================
 ## UI SOUND EFFECTS
@@ -53,7 +54,7 @@ var is_ready: bool = false
 # UI sound names (define all your UI sounds here)
 const UI_SOUND_NAMES = {
 	"button_hover": "res://Assets/Audio/SFX/UI/drop_001.ogg",
-	"button_click": "res://Assets/Audio/SFX/UI/glass_003.ogg",
+	"button_click": "res://Assets/Audio/SFX/UI/glass_006.ogg",
 	"item_hover": "res://Assets/Audio/SFX/UI/glass_002.ogg",
 	"item_pickup": "res://Assets/Audio/SFX/UI/drop_001.ogg",
 	"item_drop": "res://Assets/Audio/SFX/UI/drop_003.ogg",
@@ -69,6 +70,13 @@ const UI_SOUND_NAMES = {
 	"item_proc": "res://Assets/Audio/SFX/COMBAT/impactPlank_medium_003.ogg",
 	"campfire": "res://Assets/Audio/SFX/COMBAT/campfire.ogg",
 	"woosh": "res://Assets/Audio/SFX/UI/woosh2.ogg",
+	"new_run_hover": "res://Assets/Audio/SFX/UI/new_run_hover.ogg",
+	"new_run_click": "res://Assets/Audio/SFX/UI/new_run_click.ogg",
+	"pappas": "res://Assets/Audio/SFX/UI/uwin.mp3",	
+}
+
+const COMBAT_SOUND_NAMES = {
+	"gong": "res://Assets/Audio/SFX/COMBAT/gong.ogg",
 }
 
 const EVENT_SOUND_NAMES = {
@@ -100,7 +108,14 @@ const EVENT_SOUND_NAMES = {
 	"v2": "res://Assets/Audio/SFX/EVENT/Ooo.ogg",
 	"v3": "res://Assets/Audio/SFX/EVENT/voice_1.ogg",
 	"v4": "res://Assets/Audio/SFX/EVENT/voice_2.ogg",
-	"v5": "res://Assets/Audio/SFX/EVENT/voice_3.ogg",	
+	"v5": "res://Assets/Audio/SFX/EVENT/voice_3.ogg",
+	"monster_roar_1": "res://Assets/Audio/SFX/EVENT/monster_roar.ogg",
+	"no1": "res://Assets/Audio/SFX/EVENT/voice_nope.ogg",
+	"no2": "res://Assets/Audio/SFX/EVENT/voice_cant.ogg",
+	"no3": "res://Assets/Audio/SFX/EVENT/voice_nuhuh.ogg",
+	"no4": "res://Assets/Audio/SFX/EVENT/voice_nhm.ogg",
+	"trumpet": "res://Assets/Audio/SFX/EVENT/trumpet1.ogg",
+	"quick_fight": "res://Assets/Audio/SFX/EVENT/quick_fight.ogg"
 }
 
 const VOICES = {
@@ -109,6 +124,13 @@ const VOICES = {
 	"v3": "res://Assets/Audio/SFX/EVENT/voice_1.ogg",
 	"v4": "res://Assets/Audio/SFX/EVENT/voice_2.ogg",
 	"v5": "res://Assets/Audio/SFX/EVENT/voice_3.ogg",
+}
+
+const VOICES_NO = {
+	"no1": "res://Assets/Audio/SFX/EVENT/voice_nope.ogg",
+	"no2": "res://Assets/Audio/SFX/EVENT/voice_cant.ogg",
+	"no3": "res://Assets/Audio/SFX/EVENT/voice_nuhuh.ogg",
+	"no4": "res://Assets/Audio/SFX/EVENT/voice_nhm.ogg"
 }
 
 var _initialized: bool = false
@@ -144,6 +166,9 @@ func initialize():
 	# Load Event SFX
 	_load_sfx_sounds()
 	
+	# Load Combat SFX
+	_load_combat_sounds()
+
 	# Connect to GameSettings for volume changes
 	if GameSettings:
 		GameSettings.volume_changed.connect(_on_volume_changed)
@@ -194,7 +219,7 @@ func _load_music_tracks():
 	music_tracks["general_exploration"] = "res://Assets/Audio/Music/Main Theme (Dark - OGG).ogg"
 	music_tracks["combat_npc"] = "res://Assets/Audio/Music/Combat Theme.mp3"
 	music_tracks["combat_pvp"] = "res://Assets/Audio/Music/Main Theme (Epic).mp3"
-	music_tracks["boss_victory"] = "res://Assets/Audio/Music/Piano Theme OGG.ogg"
+	music_tracks["defeat"] = "res://Assets/Audio/Music/Piano Theme OGG.ogg"
 	
 	# Room-specific tracks (examples)
 	music_tracks["starter_room"] = "res://Assets/Audio/Music/Piano Theme OGG.ogg"
@@ -225,7 +250,15 @@ func _load_sfx_sounds():
 		if ResourceLoader.exists(path):
 			sfx_sounds[sound_name] = load(path)
 		else:
-			push_warning("[AudioManager] UI sound not found: %s at %s" % [sound_name, path])
+			push_warning("[AudioManager] EVENT/SFX sound not found: %s at %s" % [sound_name, path])
+
+func _load_combat_sounds():
+	for sound_name in COMBAT_SOUND_NAMES.keys():
+		var path = COMBAT_SOUND_NAMES[sound_name]
+		if ResourceLoader.exists(path):
+			sfx_sounds[sound_name] = load(path)
+		else:
+			push_warning("[AudioManager] COMBAT sound not found: %s at %s" % [sound_name, path])
 
 func play_random_voice():
 	"""Play a random voice line from the VOICES dictionary."""
@@ -243,6 +276,35 @@ func play_random_voice():
 	# Optional: return which voice was played for debugging
 	return random_key
 
+func play_random_voice_no():
+	if VOICES_NO.is_empty():
+		push_warning("[AudioManager] No Negative-voices available")
+		return
+	
+	# Get random voice key
+	var voice_keys = VOICES_NO.keys()
+	var random_key = voice_keys[randi() % voice_keys.size()]
+	
+	# Play the voice
+	play_event_sound(random_key)
+	
+	# Optional: return which voice was played for debugging
+	return random_key
+
+func play_enemy_approach(enemy: Enemy):
+	if enemy and enemy.approach_sound:
+		_play_stream_on_sfx_pool(enemy.approach_sound)
+
+func play_enemy_death(enemy: Enemy):
+	if enemy and enemy.death_sound:
+		_play_stream_on_sfx_pool(enemy.death_sound)
+
+func _play_stream_on_sfx_pool(stream: AudioStream):
+	var player = _get_available_ui_player()
+	if player:
+		player.stream = stream
+		player.play()
+
 ## =============================================================================
 ## MUSIC CONTROL - PUBLIC API
 ## =============================================================================
@@ -259,9 +321,26 @@ func play_general_music():
 
 	_switch_music_context(MusicContext.GENERAL, "general_exploration")
 
-func play_combat_music(is_pvp: bool = false):
+func play_defeat_music():
 	if not is_ready:
 		push_warning("[AudioManager] Not ready yet, deferring music")
+		call_deferred("play_defeat_music")
+		return
+
+	if not music_tracks.has("defeat"):
+		push_warning("[AudioManager] General music not loaded yet")
+		return
+
+	_switch_music_context(MusicContext.GENERAL, "defeat")
+
+func play_combat_music(is_pvp: bool = false, enemy: Enemy = null):
+	if not is_ready:
+		push_warning("[AudioManager] Not ready yet, deferring music")
+		return
+
+    # Enemy-specific music overrides everything
+	if enemy and enemy.combat_music:
+		_switch_music_context_stream(MusicContext.ENEMY_OVERRIDE, enemy.combat_music)
 		return
 
 	var track_name = "combat_pvp" if is_pvp else "combat_npc"
@@ -352,6 +431,14 @@ func stop_music(fade_out: bool = true):
 ## =============================================================================
 ## MUSIC CONTROL - INTERNAL
 ## =============================================================================
+
+func _switch_music_context_stream(new_context: MusicContext, stream: AudioStream):
+	# crossfade to a raw AudioStream (not a named track):
+	if current_context >= new_context and current_context == new_context:
+		return
+	current_context = new_context
+	current_track_name = "enemy_override"
+	_crossfade_to_track(stream)
 
 func _switch_music_context(new_context: MusicContext, track_name: String, stream: AudioStream = null):
 	# Check priority
@@ -487,6 +574,21 @@ func play_event_sound(sound_name: String):
 	player.stream = sfx_sounds[sound_name]
 	player.play()
 
+func play_combat_sound(sound_name: String):
+	if not sfx_sounds.has(sound_name):
+		push_warning("[AudioManager] SFX COMBAT sound not found: %s" % sound_name)
+		return
+	
+	# Find available player
+	var player = _get_available_ui_player()
+	if not player:
+		push_warning("[AudioManager] No available SFX sound players!")
+		return
+	
+	player.stream = sfx_sounds[sound_name]
+	player.play()
+
+
 func play_synced_sound(sound_name: String):
 	"""Play sound synced with animation (call from AnimationPlayer)."""
 	play_ui_sound(sound_name)
@@ -558,15 +660,15 @@ func stop_ambient(fade_out: bool = true):
 ## COMBAT INTEGRATION
 ## =============================================================================
 
-func on_combat_started(is_boss_fight: bool):
+func on_combat_started(is_boss_fight: bool, enemy: Enemy):
 	"""Called when combat starts - switch to combat music."""
-	play_combat_music(is_boss_fight)
+	play_combat_music(is_boss_fight, enemy)
 
 func on_combat_ended():
 	#print("[AudioManager] Combat ended, restoring music...")
 	
 	# Reset combat context
-	if current_context == MusicContext.COMBAT_NPC or current_context == MusicContext.COMBAT_PVP:
+	if current_context in [MusicContext.COMBAT_NPC, MusicContext.COMBAT_PVP, MusicContext.ENEMY_OVERRIDE] :
 		current_context = MusicContext.NONE
 	
 	# Check if we have a room override to return to

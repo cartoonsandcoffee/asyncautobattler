@@ -49,7 +49,10 @@ var current_stat_trigger_depth = 0
 const MAX_STATUS_TRIGGER_DEPTH = 3
 var current_status_trigger_depth = 0
 
-const MAX_COMBAT_TURNS: int = 30  # Failsafe to prevent infinite combat
+var death_processing: bool = false
+var trigger_type_stack: Array[Enums.TriggerType] = []
+
+const MAX_COMBAT_TURNS: int = 25  # Failsafe to prevent infinite combat
 
 # === SUB-SYSTEMS ===
 var animation_manager: AnimationManager
@@ -120,7 +123,8 @@ func _connect_subsystem_signals():
 	status_handler.enemy_status_gained_triggered.connect(_on_enemy_status_gained_triggered)
 	status_handler.enemy_status_removed_triggered.connect(_on_enemy_status_removed_triggered)
 	status_handler.acid_proc_triggered.connect(_on_acid_proc_triggered)
-
+	status_handler.overheal_triggered.connect(_on_overheal_triggered)
+	
 	effect_executor.non_weapon_damage_triggered.connect(_on_non_weapon_damage_triggered)
 
 	# Damage system signals
@@ -130,9 +134,9 @@ func _connect_subsystem_signals():
 
 func start_combat(player, enemy):
 	# ---- Initialize and begin combat between player and enemy.
-	CombatSpeed.enter_combat()
+
 	combat_log = ""
-	add_to_combat_log_string("[center]=== COMBAT STARTED ===[/center]\n", Color.WHITE, true)
+	add_to_combat_log_string(CombatLog.fmt_combat_alert("=== BATTLE STARTED ==="))
 	
 	# Store combat entities
 	player_entity = player
@@ -173,14 +177,15 @@ func start_combat(player, enemy):
 	combat_started.emit(player_entity, enemy_entity)
 	
 	# MILESTONE: Battle Start
-	animation_manager.play_milestone("Battle Start")
-	await animation_manager.milestone_complete
+	if not CombatSpeed.is_instant_mode():
+		animation_manager.play_milestone("Battle Start")
+		await animation_manager.milestone_complete
 	
 	# Determine turn order
 	var first_entity = player_entity if player_entity.stats.agility >= enemy_entity.stats.agility else enemy_entity
 	var second_entity = enemy_entity if first_entity == player_entity else player_entity
 	
-	add_to_combat_log_string("Turn order: " + color_entity(get_entity_name(first_entity)) + " goes first.")
+	add_to_combat_log_string(CombatLog.center("(Turn order: " + CombatLog.color_entity(get_entity_name(first_entity)) + " goes first.)"))
 	
 	# Process battle start events
 	await process_battle_start_events(first_entity, second_entity)
@@ -190,10 +195,8 @@ func start_combat(player, enemy):
 
 func process_battle_start_events(first_entity, second_entity):
 	# -- Process BATTLE_START trigger for both entities in turn order.
-	add_to_combat_log_string("\n--- Battle Start Events ---", Color.CYAN)
-	
+
 	# First entity's battle start items
-	add_to_combat_log_string("\n%s's Battle Start items triggered:" % color_entity(get_entity_name(first_entity)))
 	await process_entity_items_sequentially(first_entity, Enums.TriggerType.BATTLE_START)
 	
 	# - Wait for first wave of BATTLE START items to proc
@@ -201,7 +204,6 @@ func process_battle_start_events(first_entity, second_entity):
 		await animation_manager.combat_panel.wait_for_indicator_queue_to_finish()
 
 	# Second entity's battle start items
-	add_to_combat_log_string("\n%s's Battle Start items triggered:" % color_entity(get_entity_name(second_entity)))
 	await process_entity_items_sequentially(second_entity, Enums.TriggerType.BATTLE_START)
 
 	# - Wait for second wave of BATTLE START items to proc
@@ -253,22 +255,28 @@ func execute_turn(entity):
 	#await animation_manager.milestone_complete
 	
 	turn_started.emit(entity, turn_number)
-	add_to_combat_log_string("\n--- %s's Turn %d ---" % [color_entity(get_entity_name(entity)), turn_number], Color.YELLOW)
-	
+	add_to_combat_log_string(CombatLog.fmt_turn_start(get_entity_name(entity),turn_number))
+
 	# Reset per-turn item states
 	item_processor.reset_per_turn_items(entity)
 	
 	# Process turn-start status effects
-	add_to_combat_log_string("%s's status effects:" % color_entity(get_entity_name(entity)))
 	await status_handler.process_turn_start_status_effects(entity)
 	
+	# CHECK 1: Did entity die from status effects?
+	if not combat_active:
+		return
+		
 	# Process countdown/charge rules for items
 	await process_countdown_rules(entity)
 
 	# Process TURN_START items
-	add_to_combat_log_string("\n%s's Turn Start items triggered:" % color_entity(get_entity_name(entity)))
 	await process_entity_items_sequentially(entity, Enums.TriggerType.TURN_START)
 	
+	# CHECK 2: Still alive?
+	if not combat_active:
+		return
+
 	# JDM - timing wait for all turn start procs to finish
 	if animation_manager and animation_manager.combat_panel:
 		await animation_manager.combat_panel.wait_for_indicator_queue_to_finish()
@@ -276,6 +284,10 @@ func execute_turn(entity):
 	# Execute attacks
 	await execute_attack_sequence(entity)
 	
+	# CHECK 5: Did attacks kill someone?
+	if not combat_active:
+		return
+			
 	# Process turn-end status effects
 	await status_handler.process_turn_end_status_effects(entity)
 	# Remove opponent's thorns if they were triggered
@@ -299,8 +311,12 @@ func execute_attack_sequence(attacker):
 	# Capture strikes for THIS attack sequence
 	var strikes_this_turn = attacker.stats.strikes_current
 	
-	add_to_combat_log_string("%s attacks with %s strike(s)!" % [color_entity(get_entity_name(attacker)), color_text(str(strikes_this_turn), Color.WHITE)])
-	
+	add_to_combat_log_string(CombatLog.bold("%s ATTACKS with %s (for %s per)" % [
+		color_entity(get_entity_name(attacker)),
+		color_text(str(strikes_this_turn), Color.WHITE) + " " + CombatLog.color_stat(Enums.Stats.STRIKES),
+		color_text(str(attacker.stats.damage_current), Color.WHITE) + " " + CombatLog.color_stat(Enums.Stats.DAMAGE)
+	]))
+
 	# Reset strikes to base (ready to accumulate next turn bonuses from ON_HIT)
 	attacker.stats.strikes_current = attacker.stats.strikes
 	# Local countdown for UI display
@@ -318,7 +334,7 @@ func execute_attack_sequence(attacker):
 
 		if attacker.status_effects.stun > 0:
 			# If they're stunned, skip attack
-			add_to_combat_log_string(color_entity(get_entity_name(attacker)) + " is stunned! Attack skipped.")
+			add_to_combat_log_string(color_entity(get_entity_name(attacker)) + " is STUNNED! Attack skipped.")
 			status_handler.remove_status(attacker, Enums.StatusEffects.STUN, 1)
 			status_proc.emit(attacker, Enums.StatusEffects.STUN, Enums.Stats.STRIKES, -1)
 			await CombatSpeed.create_timer(CombatSpeed.get_duration("attack_gap"))  # -- just to make sure the anim shows turn_start procs
@@ -341,15 +357,20 @@ func execute_attack_sequence(attacker):
 		await damage_system.apply_damage(target, damage, attacker, "attack")
 		
 		# Process ON_HIT items
-		add_to_combat_log_string("   -> On Hit items triggered:")
 		await process_entity_items_sequentially(attacker, Enums.TriggerType.ON_HIT)
 		
+		if not combat_active:
+			break
+
 		# JDM: wait for items to finish procing at strike end?
 		if animation_manager and animation_manager.combat_panel:
 			await animation_manager.combat_panel.wait_for_indicator_queue_to_finish()
 		else:
 			# Small gap between strikes
 			await CombatSpeed.create_timer(CombatSpeed.get_duration("attack_gap"))
+
+	if not combat_active:
+		return
 
 	# Final UI update: 0 remaining, show next turn total
 	strike_ui_update_requested.emit(attacker, 0, attacker.stats.strikes_current)
@@ -369,6 +390,11 @@ func process_entity_items_sequentially(entity, trigger_type: Enums.TriggerType, 
 	#   Rule 3: Apply 2 poison
 	#   If Rule 1's condition fails, Rules 2 and 3 won't execute
 
+	# Make sure nothing triggers afte combat ends except one final ON KILL
+	if not combat_active and trigger_type != Enums.TriggerType.ON_KILL:
+		return
+	trigger_type_stack.push_back(trigger_type)
+
 	# Collect triggered items through item processor
 	var triggered_items = item_processor.process_items(entity, trigger_type, trigger_stat, stat_amount)
 	
@@ -377,9 +403,14 @@ func process_entity_items_sequentially(entity, trigger_type: Enums.TriggerType, 
 		triggered_items = triggered_items.filter(func(item_data): return item_data.item != source_item)
 
 	if triggered_items.is_empty():
-		add_to_combat_log_string("   (no %s items.)" % [Enums.get_trigger_type_string(trigger_type)])
+		#add_to_combat_log_string("\n(%s has no %s items!)" % [color_entity(get_entity_name(entity)), Enums.get_trigger_type_string(trigger_type)])
 		return
 	
+	add_to_combat_log_string("\n%s's %s items:" % [
+		color_entity(get_entity_name(entity)),
+		Enums.get_trigger_type_string(trigger_type)
+	])
+
 	# -- Get combat panel reference
 	var combat_panel = animation_manager.combat_panel
 	
@@ -391,7 +422,11 @@ func process_entity_items_sequentially(entity, trigger_type: Enums.TriggerType, 
 		var item = item_data.item
 		var rule = item_data.rule
 		var slot_index = item_data.slot_index
-		
+	
+		# GUARD: Abort remaining items if combat ended mid-chain
+		if not combat_active and not is_processing_on_kill():
+			break
+
 		# Check if this is a new item (reset continuation flag)
 		if item != current_item:
 			current_item = item
@@ -399,27 +434,9 @@ func process_entity_items_sequentially(entity, trigger_type: Enums.TriggerType, 
 		
 		# Skip if previous rule on this item failed its condition
 		if not continue_processing_item:
-			add_to_combat_log_string("     Skipping rule due to failed condition in chain", Color.GRAY)
+			#add_to_combat_log_string("     Skipping rule due to failed condition in chain", Color.GRAY)
 			continue
 		
-		# === INSTANT MODE:
-		if CombatSpeed.is_instant_mode():
-			# === INSTANT MODE: Skip all animations ===
-			item_rule_triggered.emit(item, rule, entity)
-			var target = _get_rule_target(entity, rule.target_type)
-			var success = await effect_executor.execute_item_rule(item, rule, entity, target, stat_amount)
-			
-			# Update status boxes immediately
-			if success and rule.effect_type in [Enums.EffectType.APPLY_STATUS, Enums.EffectType.REMOVE_STATUS, Enums.EffectType.CONVERT]:
-				if combat_panel:
-					combat_panel.rebuild_status_boxes(target)
-			
-			if not success:
-				continue_processing_item = false
-			
-			# No waits in instant mode
-			continue
-
 		# ======= NORMAL MODE:
 		# === STEP 1: Highlight the item slot ===   JDM: Removed combat item highlighting
 		#if entity == player_entity and combat_panel:
@@ -428,6 +445,7 @@ func process_entity_items_sequentially(entity, trigger_type: Enums.TriggerType, 
 		# === STEP 2: Execute effect (DATA CHANGES) (This checks permissions and procs animation)===
 		var target = _get_rule_target(entity, rule.target_type)
 		var success = await effect_executor.execute_item_rule(item, rule, entity, target, stat_amount)
+
 		if success:
 			# Emit trigger signal
 			item_rule_triggered.emit(item, rule, entity)
@@ -453,6 +471,8 @@ func process_entity_items_sequentially(entity, trigger_type: Enums.TriggerType, 
 	# Wait for all animations to complete
 	await animation_manager.wait_for_current_sequence()
 
+	trigger_type_stack.pop_back()
+
 
 func proc_item(item, rule, entity, amount: int):
 	# -- Get combat panel reference
@@ -462,54 +482,60 @@ func proc_item(item, rule, entity, amount: int):
 			combat_panel.spawn_item_proc_indicator(item, rule, entity, amount)
 			#await CombatSpeed.create_timer(CombatSpeed.get_duration("item_proc")) # JDM - timer pause now handled in spawn function
 
-func process_entity_items_with_status(entity, trigger_type: Enums.TriggerType, trigger_status: Enums.StatusEffects, _stacks: int):
+func process_entity_items_with_status(entity, trigger_type: Enums.TriggerType, trigger_status: Enums.StatusEffects, _stacks: int, source_item: Item = null):
 	"""Process items that trigger based on status effects."""
 	var triggered_items = item_processor.process_items_with_status(entity, trigger_type, trigger_status, _stacks)
 	
 	if triggered_items.is_empty():
 		return
 	
-	add_to_combat_log_string("  %s (%s) items triggered:" % [Enums.get_trigger_type_string(trigger_type), Enums.get_status_string(trigger_status)], Color.LIGHT_BLUE)
+	add_to_combat_log_string("    %s (%s) items triggered:" % [Enums.get_trigger_type_string(trigger_type), Enums.get_status_string(trigger_status)], Color.LIGHT_BLUE)
 	
 	var item_list = triggered_items.map(func(data): return data.item)
-	animation_manager.play_item_sequence(item_list, entity, Enums.get_trigger_type_string(trigger_type))
+
+	if not CombatSpeed.is_instant_mode():
+		animation_manager.play_item_sequence(item_list, entity, Enums.get_trigger_type_string(trigger_type))
 	
 	for item_data in triggered_items:
+		if not combat_active and not is_processing_on_kill():
+					break
+
 		var item = item_data.item
 		var rule = item_data.rule
-		
-		item_rule_triggered.emit(item, rule, entity)
-		
-		var target = _get_rule_target(entity, rule.target_type)
-		await effect_executor.execute_item_rule(item, rule, entity, target)
 
-	await animation_manager.wait_for_current_sequence()
+		# Don't let an item trigger from status it just applied
+		if source_item != null and item == source_item:
+			continue
+			
+		item_rule_triggered.emit(item, rule, entity)
+
+		var target = _get_rule_target(entity, rule.target_type)
+		await effect_executor.execute_item_rule(item, rule, entity, target, _stacks)
+
+	if not CombatSpeed.is_instant_mode():
+		await animation_manager.wait_for_current_sequence()
 
 # ===== COMBAT END =====
 
 func end_combat_gracefully():
 	"""Clean up and end combat properly."""
-	await animation_manager.wait_for_current_sequence()
-	await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap"))
+	if not CombatSpeed.is_instant_mode():
+		await animation_manager.wait_for_current_sequence()
+		await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap"))
 	
 	# Determine winner/loser
 	var winner = player_entity if player_entity.stats.hit_points_current > 0 else enemy_entity
 	var loser = enemy_entity if winner == player_entity else player_entity
 	
 	# MILESTONE: Battle End
-	animation_manager.play_milestone("Battle End", {"winner": winner, "loser": loser})
-	await animation_manager.milestone_complete
+	if not CombatSpeed.is_instant_mode():
+		animation_manager.play_milestone("Battle End", {"winner": winner, "loser": loser})
+		await animation_manager.milestone_complete
 	
-	add_to_combat_log_string("\n[center][b][color=yellow]=== COMBAT ENDED ===[/color][/b][/center]")
+	add_to_combat_log_string(CombatLog.fmt_combat_alert("=== BATTLE ENDED ==="))
 	add_to_combat_log_string("[center]%s WINS![/center]" % color_entity(get_entity_name(winner).to_upper()))
 	add_to_combat_log_string("[center]%s has been defeated.[/center]" % color_entity(get_entity_name(loser)))
 
-	# Award gold if player won (JDM: I think this is diplicate code from combat_panel causing double gold earning)
-	#if winner == player_entity:
-	#	var gold_reward = calculate_gold_reward(loser)
-	#	player_entity.add_gold(gold_reward)
-	#	add_to_combat_log_string("\nYou earned %s gold!" % color_text(str(gold_reward), Color.GOLD))
-	
 	# Reset entities
 	player_entity.stats.reset_stats_after_combat()
 	enemy_entity.stats.reset_stats_after_combat()
@@ -566,7 +592,7 @@ func _on_acid_proc_triggered(entity, amount: int):
 func _on_stat_gain_triggered(entity, stat: Enums.Stats, amount: int, source_item: Item):
 	# == Handle ON_STAT_GAIN trigger.
 	if current_stat_trigger_depth >= MAX_STAT_TRIGGER_DEPTH:
-		add_to_combat_log_string("     Stat gain trigger recursion limit reached", Color.ORANGE)
+		add_to_combat_log_string("     Stat (" + Enums.get_stat_string(stat) + ") gain trigger recursion limit reached", Color.ORANGE)
 		return	
 	
 	current_stat_trigger_depth += 1
@@ -576,7 +602,7 @@ func _on_stat_gain_triggered(entity, stat: Enums.Stats, amount: int, source_item
 func _on_stat_loss_triggered(entity, stat: Enums.Stats, amount: int, source_item: Item):
 	# == Handle ON_STAT_LOSS trigger.
 	if current_stat_trigger_depth >= MAX_STAT_TRIGGER_DEPTH:
-		add_to_combat_log_string("      Stat loss trigger recursion limit reached", Color.ORANGE)
+		add_to_combat_log_string("      Stat (" + Enums.get_stat_string(stat) + ") loss trigger recursion limit reached", Color.ORANGE)
 		return
 
 	current_stat_trigger_depth += 1
@@ -595,7 +621,8 @@ func _on_non_weapon_damage_triggered(entity, amount: int, source_item: Item):
 
 func _on_wounded_triggered(entity):
 	"""Handle WOUNDED trigger."""
-	add_to_combat_log_string(get_entity_name(entity) + " is WOUNDED!", Color.RED)
+	add_to_combat_log_string(CombatLog.fmt_wounded(get_entity_name(entity)))
+
 	entity_wounded.emit(entity)
 	await process_entity_items_sequentially(entity, Enums.TriggerType.WOUNDED)
 
@@ -606,7 +633,8 @@ func _on_wounded_triggered(entity):
 
 func _on_exposed_triggered(entity):
 	"""Handle EXPOSED trigger."""
-	add_to_combat_log_string(get_entity_name(entity) + " is EXPOSED!", Color.DODGER_BLUE)
+	add_to_combat_log_string(CombatLog.fmt_exposed(get_entity_name(entity)))
+
 	entity_exposed.emit(entity)
 	await process_entity_items_sequentially(entity, Enums.TriggerType.EXPOSED)
 
@@ -617,12 +645,18 @@ func _on_exposed_triggered(entity):
 
 func _on_one_hitpoint_left_triggered(entity):
 	"""Handle ONE_HITPOINT_LEFT trigger."""
-	add_to_combat_log_string(get_entity_name(entity) + " is at ONE HITPOINT!", Color.ORANGE)
+	add_to_combat_log_string(CombatLog.fmt_one_hp(get_entity_name(entity)))
+
 	await process_entity_items_sequentially(entity, Enums.TriggerType.ONE_HITPOINT_LEFT)
 
 func _on_death_triggered(entity):
-	"""Handle entity death."""
-	add_to_combat_log_string(get_entity_name(entity) + " has died!", Color.RED)
+	## Handle entity death.
+	if death_processing:
+		return
+	death_processing = true
+
+	add_to_combat_log_string(CombatLog.fmt_death(get_entity_name(entity)))
+	
 	combat_active = false  # End combat
 	
 	# Clear the statuses as soon as someone dies.
@@ -688,7 +722,7 @@ func _on_enemy_status_gained_triggered(entity, status: Enums.StatusEffects, stac
 	await get_tree().process_frame
 
 	if current_status_trigger_depth >= MAX_STATUS_TRIGGER_DEPTH:
-		add_to_combat_log_string("      Status applied trigger recursion limit reached", Color.ORANGE)
+		add_to_combat_log_string("      Enemy Status (" + Enums.get_status_string(status) + ") applied trigger recursion limit reached", Color.ORANGE)
 		return
 
 	current_status_trigger_depth += 1
@@ -699,14 +733,14 @@ func _on_enemy_status_removed_triggered(entity, status: Enums.StatusEffects, sta
 	await get_tree().process_frame
 
 	if current_status_trigger_depth >= MAX_STATUS_TRIGGER_DEPTH:
-		add_to_combat_log_string("      Status applied trigger recursion limit reached", Color.ORANGE)
+		add_to_combat_log_string("      Enemy Status (" + Enums.get_status_string(status) + ") removed trigger recursion limit reached", Color.ORANGE)
 		return
 
 	current_status_trigger_depth += 1
 	await process_entity_items_with_status(entity, Enums.TriggerType.ON_ENEMY_STATUS_PROC, status, stacks)
 	current_status_trigger_depth -= 1
 
-func _on_status_gained_triggered(entity, status: Enums.StatusEffects, stacks: int):
+func _on_status_gained_triggered(entity, status: Enums.StatusEffects, stacks: int, source_item: Item = null):
 	await get_tree().process_frame
 
 	#var combat_panel = animation_manager.combat_panel
@@ -715,18 +749,23 @@ func _on_status_gained_triggered(entity, status: Enums.StatusEffects, stacks: in
 	#	combat_panel.spawn_status_box_update(entity, status, stacks) # JDM: New queue system
 
 	if current_status_trigger_depth >= MAX_STATUS_TRIGGER_DEPTH:
-		add_to_combat_log_string("      Status applied trigger recursion limit reached", Color.ORANGE)
+		add_to_combat_log_string("      Status (" + Enums.get_status_string(status) + ") applied trigger recursion limit reached", Color.ORANGE)
 		return
 
 	current_status_trigger_depth += 1
-	await process_entity_items_with_status(entity, Enums.TriggerType.ON_STATUS_GAINED, status, stacks)
+	await process_entity_items_with_status(entity, Enums.TriggerType.ON_STATUS_GAINED, status, stacks, source_item)
 	current_status_trigger_depth -= 1
+
+func _on_overheal_triggered(entity, stacks: int):
+	await get_tree().process_frame
+
+	await process_entity_items_sequentially(entity, Enums.TriggerType.OVERHEAL, Enums.Stats.NONE, null, stacks)
 
 func _on_status_removed_triggered(entity, status: Enums.StatusEffects, stacks: int):
 	await get_tree().process_frame
 
 	if current_status_trigger_depth >= MAX_STATUS_TRIGGER_DEPTH:
-		add_to_combat_log_string("      Status applied trigger recursion limit reached", Color.ORANGE)
+		add_to_combat_log_string("      Status (" + Enums.get_status_string(status) + ") removed trigger recursion limit reached", Color.ORANGE)
 		return
 
 	current_status_trigger_depth += 1
@@ -736,6 +775,9 @@ func _on_status_removed_triggered(entity, status: Enums.StatusEffects, stacks: i
 func _on_healing_applied(target, amount):
 	"""Forward healing_applied signal."""
 	healing_applied.emit(target, amount)
+
+func is_processing_on_kill() -> bool:
+	return Enums.TriggerType.ON_KILL in trigger_type_stack
 
 # ===== UTILITY FUNCTIONS =====
 
@@ -763,75 +805,25 @@ func get_entity_name(entity) -> String:
 	return "Unknown"
 
 func add_to_combat_log_string(_string: String, _color: Color = Color.GRAY, is_bold: bool = false):
-	# -- COMBAT LOG
-	#print(_string)
-	# JDM Below is commented out to try keyword coloring
-	#var color_str: String = _color.to_html()
-	#var final_string: String = "[color=#" + color_str + "]" + _string + "[/color]"
-
-	var final_string: String = _string 
+	# _color param retained for call-site compatibility but is no longer used —
+	# all coloring is handled by CombatLog helpers before this is called.
+	var final_string: String = _string
 	if is_bold:
-		final_string = "[b]" + final_string + "[/b]"
-
+		final_string = CombatLog.bold(final_string)
 	combat_log += final_string + "\n"
 
-
-func color_text(text: String, color: Color) -> String:
-	return "[color=#%s]%s[/color]" % [color.to_html(false), text]
+func color_text(text: String, c: Color) -> String:
+	return CombatLog.color(text, c)
 
 func color_stat(stat_name: String) -> String:
-	"""Color a stat name based on its type"""
-	var lower = stat_name.to_lower()
-	if "damage" in lower or "attack" in lower:
-		return color_text(stat_name, game_colors.stats.damage)
-	elif "shield" in lower or "armor" in lower:
-		return color_text(stat_name, game_colors.stats.shield)
-	elif "hitpoint" in lower or "health" in lower or "hp" in lower:
-		return color_text(stat_name, game_colors.stats.hit_points)
-	elif "agility" in lower or "speed" in lower:
-		return color_text(stat_name, game_colors.stats.agility)
-	elif "strike" in lower or "strikes" in lower:
-		return color_text(stat_name, game_colors.stats.strikes)
-	elif "gold" in lower:
-		return color_text(stat_name, game_colors.stats.gold)
-	else:
-		return stat_name
+	return CombatLog.color_stat_str(stat_name)
 
 func color_status(status_name: String) -> String:
-	var lower = status_name.to_lower()
-	if "poison" in lower:
-		return color_text(status_name, game_colors.stats.poison)
-	elif "burn" in lower:
-		return color_text(status_name, game_colors.stats.burn)
-	elif "acid" in lower:
-		return color_text(status_name, game_colors.stats.acid)
-	elif "regen" in lower || "regeneration" in lower:
-		return color_text(status_name, game_colors.stats.regeneration)
-	elif "thorns" in lower:
-		return color_text(status_name, game_colors.stats.thorns)
-	elif "stun" in lower || "stunned" in lower:
-		return color_text(status_name, game_colors.stats.stun)
-	elif "blind" in lower:
-		return color_text(status_name, game_colors.stats.blind)
-	elif "blessing" in lower:
-		return color_text(status_name, game_colors.stats.blessing)
-	elif "gold" in lower:
-		return color_text(status_name, game_colors.stats.gold)
-	else:
-		return status_name
+	return CombatLog.color_status_str(status_name)
 
 func color_entity(entity_name: String) -> String:
-	if "Player" in entity_name:
-		return color_text(entity_name, Color.LIGHT_GREEN)
-	else:
-		return color_text(entity_name, Color.LIGHT_CORAL)
+	return CombatLog.color_entity(entity_name)
 
 func color_item(item_name: String, item_obj = null) -> String:
-	var item_color = Color.GOLD  # Default fallback
-	
-	# If we have the actual item object, use its color
-	if item_obj:
-		if item_obj is Item and item_obj.item_color:
-			item_color = item_obj.item_color
-	
-	return color_text(item_name, item_color)
+	return CombatLog.color_item(item_name, item_obj)
+
