@@ -3,13 +3,13 @@
 [ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="1_eijq0"]
 [ext_resource type="Texture2D" uid="uid://vtf7yfl2710m" path="res://Assets/UI/panel-border-030.png" id="1_mjpdj"]
 [ext_resource type="Script" uid="uid://cok0ul8mual5q" path="res://Scripts/UI/hallof_champions.gd" id="1_t8oay"]
-[ext_resource type="PackedScene" uid="uid://dm35l5es4kole" path="res://Scenes/Elements/stat_box.tscn" id="2_fhirs"]
 [ext_resource type="Texture2D" uid="uid://brkvaqqc37hpf" path="res://Assets/UI/icons.png" id="2_t8oay"]
 [ext_resource type="PackedScene" uid="uid://cqhyru53o5wfx" path="res://Scenes/item.tscn" id="3_eijq0"]
 [ext_resource type="Texture2D" uid="uid://daurw5ppu7ch0" path="res://Assets/UI/button_champions.png" id="3_rwgm2"]
 [ext_resource type="Texture2D" uid="uid://7nqjnbxf8y46" path="res://Assets/UI/trophy.png" id="4_3hnfb"]
 [ext_resource type="Texture2D" uid="uid://bsl431pk7s6iw" path="res://Assets/UI/button_global.png" id="5_3hnfb"]
 [ext_resource type="Texture2D" uid="uid://d0jt1ktrle1my" path="res://Assets/UI/button_leaderboard.png" id="6_bde15"]
+[ext_resource type="PackedScene" uid="uid://ct6jer1f0brbb" path="res://Scenes/Elements/stat_box2.tscn" id="9_3hnfb"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t8oay"]
 bg_color = Color(0, 0, 0, 1)
@@ -186,25 +186,25 @@ size_flags_horizontal = 4
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="statHealth" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxStats/statBoxes" instance=ExtResource("2_fhirs")]
-custom_minimum_size = Vector2(125, 60)
-layout_mode = 2
-show_tooltip = false
-
-[node name="statShield" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxStats/statBoxes" instance=ExtResource("2_fhirs")]
-custom_minimum_size = Vector2(125, 60)
+[node name="statShield" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxStats/statBoxes" instance=ExtResource("9_3hnfb")]
+custom_minimum_size = Vector2(130, 45)
 layout_mode = 2
 stat = 2
 show_tooltip = false
 
-[node name="statAttack" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxStats/statBoxes" instance=ExtResource("2_fhirs")]
-custom_minimum_size = Vector2(125, 60)
+[node name="statHealth" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxStats/statBoxes" instance=ExtResource("9_3hnfb")]
+custom_minimum_size = Vector2(130, 45)
+layout_mode = 2
+show_tooltip = false
+
+[node name="statAttack" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxStats/statBoxes" instance=ExtResource("9_3hnfb")]
+custom_minimum_size = Vector2(130, 45)
 layout_mode = 2
 stat = 1
 show_tooltip = false
 
-[node name="statAgility" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxStats/statBoxes" instance=ExtResource("2_fhirs")]
-custom_minimum_size = Vector2(125, 60)
+[node name="statAgility" parent="Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxStats/statBoxes" instance=ExtResource("9_3hnfb")]
+custom_minimum_size = Vector2(130, 45)
 layout_mode = 2
 stat = 3
 show_tooltip = false

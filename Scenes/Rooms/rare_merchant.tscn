@@ -149,7 +149,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("lblAction:pivot_offset")
+tracks/0/path = NodePath("Control/lblAction:pivot_offset")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -161,19 +161,19 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("lblAction:position")
+tracks/1/path = NodePath("Control/lblAction:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(549, 156)]
+"values": [Vector2(252, 0)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("lblAction:scale")
+tracks/2/path = NodePath("Control/lblAction:scale")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -185,7 +185,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("lblAction:modulate")
+tracks/3/path = NodePath("Control/lblAction:modulate")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -202,7 +202,7 @@ step = 0.025
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("lblAction:pivot_offset")
+tracks/0/path = NodePath("Control/lblAction:pivot_offset")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -214,19 +214,19 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("lblAction:position")
+tracks/1/path = NodePath("Control/lblAction:position")
 tracks/1/interp = 2
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(549, 90), Vector2(549, 156)]
+"values": [Vector2(252, -20), Vector2(252, 0)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("lblAction:scale")
+tracks/2/path = NodePath("Control/lblAction:scale")
 tracks/2/interp = 2
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -238,7 +238,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("lblAction:modulate")
+tracks/3/path = NodePath("Control/lblAction:modulate")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -255,7 +255,7 @@ step = 0.025
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("lblAction:pivot_offset")
+tracks/0/path = NodePath("Control/lblAction:pivot_offset")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -267,19 +267,19 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("lblAction:position")
+tracks/1/path = NodePath("Control/lblAction:position")
 tracks/1/interp = 2
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(549, 156), Vector2(549, 90)]
+"values": [Vector2(252, 0), Vector2(252, -20)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("lblAction:scale")
+tracks/2/path = NodePath("Control/lblAction:scale")
 tracks/2/interp = 2
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -291,7 +291,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("lblAction:modulate")
+tracks/3/path = NodePath("Control/lblAction:modulate")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -313,7 +313,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("picEvent:pivot_offset")
+tracks/0/path = NodePath("Control/picEvent:pivot_offset")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -325,7 +325,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("picEvent:rotation")
+tracks/1/path = NodePath("Control/picEvent:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -337,19 +337,19 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("picShadow:position")
+tracks/2/path = NodePath("Control/picShadow:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(610, -50)]
+"values": [Vector2(100, 170)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("picEvent:scale")
+tracks/3/path = NodePath("Control/picEvent:scale")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -361,19 +361,19 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("picEvent:position")
+tracks/4/path = NodePath("Control/picEvent:position")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(548, -50)]
+"values": [Vector2(286, -596)]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("picEvent:modulate")
+tracks/5/path = NodePath("Control/picEvent:modulate")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -385,7 +385,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("picShadow:modulate")
+tracks/6/path = NodePath("Control/picShadow:modulate")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -397,7 +397,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("picShadow:scale")
+tracks/7/path = NodePath("Control/picShadow:scale")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -409,22 +409,10 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("picShadow:pivot_offset")
+tracks/8/path = NodePath("Control/picEvent/Button:disabled")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(232, 363)]
-}
-tracks/9/type = "value"
-tracks/9/imported = false
-tracks/9/enabled = true
-tracks/9/path = NodePath("picEvent/Button:disabled")
-tracks/9/interp = 1
-tracks/9/loop_wrap = true
-tracks/9/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
@@ -439,7 +427,7 @@ step = 0.025
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("picEvent:pivot_offset")
+tracks/0/path = NodePath("Control/picEvent:pivot_offset")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -451,7 +439,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("picEvent:rotation")
+tracks/1/path = NodePath("Control/picEvent:rotation")
 tracks/1/interp = 2
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -463,14 +451,14 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("picShadow:position")
+tracks/2/path = NodePath("Control/picShadow:position")
 tracks/2/interp = 2
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0, 2, 4),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Vector2(590, 0), Vector2(500, 0), Vector2(590, 0)]
+"values": [Vector2(150, 230), Vector2(100, 230), Vector2(150, 230)]
 }
 
 [sub_resource type="Animation" id="Animation_a4075"]
@@ -480,7 +468,7 @@ step = 0.025
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("picEvent:modulate")
+tracks/0/path = NodePath("Control/picEvent:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -492,7 +480,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("picShadow:modulate")
+tracks/1/path = NodePath("Control/picShadow:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -508,7 +496,7 @@ step = 0.025
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("picEvent:pivot_offset")
+tracks/0/path = NodePath("Control/picEvent:pivot_offset")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -520,7 +508,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("picEvent:scale")
+tracks/1/path = NodePath("Control/picEvent:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -532,7 +520,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("picEvent:rotation")
+tracks/2/path = NodePath("Control/picEvent:rotation")
 tracks/2/interp = 2
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -544,19 +532,19 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("picEvent:position")
+tracks/3/path = NodePath("Control/picEvent:position")
 tracks/3/interp = 2
 tracks/3/loop_wrap = true
 tracks/3/keys = {
 "times": PackedFloat32Array(0, 1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(548, -50), Vector2(548, 9)]
+"values": [Vector2(286, -596), Vector2(286, -150)]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("picEvent:modulate")
+tracks/4/path = NodePath("Control/picEvent:modulate")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -568,7 +556,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("picShadow:modulate")
+tracks/5/path = NodePath("Control/picShadow:modulate")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -580,19 +568,19 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("picShadow:position")
+tracks/6/path = NodePath("Control/picShadow:position")
 tracks/6/interp = 2
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(0, 0.5, 1),
-"transitions": PackedFloat32Array(1, 1, 1),
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(610, -50), Vector2(500, 0), Vector2(590, 0)]
+"values": [Vector2(100, 170), Vector2(150, 230)]
 }
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("picShadow:scale")
+tracks/7/path = NodePath("Control/picShadow:scale")
 tracks/7/interp = 2
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -604,34 +592,22 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("picShadow:pivot_offset")
+tracks/8/path = NodePath("Control/picEvent/Button:disabled")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(232, 363)]
-}
-tracks/9/type = "value"
-tracks/9/imported = false
-tracks/9/enabled = true
-tracks/9/path = NodePath("picEvent/Button:disabled")
-tracks/9/interp = 1
-tracks/9/loop_wrap = true
-tracks/9/keys = {
 "times": PackedFloat32Array(0, 1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
 }
-tracks/10/type = "method"
-tracks/10/imported = false
-tracks/10/enabled = true
-tracks/10/path = NodePath(".")
-tracks/10/interp = 1
-tracks/10/loop_wrap = true
-tracks/10/keys = {
+tracks/9/type = "method"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath(".")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
 "times": PackedFloat32Array(1),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -689,13 +665,31 @@ scale = Vector2(0.3, 0.3)
 pivot_offset = Vector2(942.5, 1152.5)
 texture = ExtResource("4_7t4nh")
 
-[node name="lblAction" type="Label" parent="."]
+[node name="Control" type="Control" parent="."]
+custom_minimum_size = Vector2(1000, 700)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="lblAction" type="Label" parent="Control"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
-offset_left = 549.0
-offset_top = 156.0
-offset_right = 1045.0
-offset_bottom = 226.0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -248.0
+offset_right = 248.0
+offset_bottom = 70.0
+grow_horizontal = 2
 scale = Vector2(0.5, 0.5)
 pivot_offset = Vector2(248, 35)
 theme_override_colors/font_color = Color(0.899266, 0.805079, 0.264486, 1)
@@ -710,37 +704,44 @@ text = "Shop"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="picShadow" type="TextureRect" parent="."]
+[node name="picShadow" type="TextureRect" parent="Control"]
 modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(800, 200)
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 610.0
-offset_top = -50.0
-offset_right = -462.0
-offset_bottom = -187.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -180.0
+offset_right = 400.0
+offset_bottom = 180.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(1.2, 1.2)
-pivot_offset = Vector2(232, 363)
+pivot_offset = Vector2(400, 180)
 texture = ExtResource("6_4wj6g")
-expand_mode = 1
+expand_mode = 3
 
-[node name="picEvent" type="TextureRect" parent="."]
+[node name="picEvent" type="TextureRect" parent="Control"]
 modulate = Color(0, 0, 0, 1)
 custom_minimum_size = Vector2(200, 0)
-layout_mode = 0
-offset_left = 548.0
-offset_top = -50.0
-offset_right = 1012.0
-offset_bottom = 677.0
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -214.0
+offset_top = -596.0
+offset_right = 250.0
+offset_bottom = 131.0
+grow_horizontal = 2
 rotation = -0.0698132
 pivot_offset = Vector2(195, -56)
 texture = ExtResource("7_xe8gq")
 expand_mode = 3
 
-[node name="Button" type="Button" parent="picEvent"]
+[node name="Button" type="Button" parent="Control/picEvent"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 1
 anchors_preset = 15
@@ -782,6 +783,6 @@ libraries = {
 &"": SubResource("AnimationLibrary_a4075")
 }
 
-[connection signal="mouse_entered" from="picEvent/Button" to="." method="_on_button_mouse_entered"]
-[connection signal="mouse_exited" from="picEvent/Button" to="." method="_on_button_mouse_exited"]
-[connection signal="pressed" from="picEvent/Button" to="." method="_on_button_pressed"]
+[connection signal="mouse_entered" from="Control/picEvent/Button" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Control/picEvent/Button" to="." method="_on_button_mouse_exited"]
+[connection signal="pressed" from="Control/picEvent/Button" to="." method="_on_button_pressed"]

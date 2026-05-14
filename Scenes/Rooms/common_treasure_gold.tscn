@@ -9,6 +9,15 @@
 [ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="7_oerrk"]
 [ext_resource type="Animation" uid="uid://c3i266wq8xrth" path="res://Animations/itembox_show.res" id="8_l38tp"]
 
+[sub_resource type="Curve" id="Curve_7xgip"]
+_limits = [0.3, 3.0, 0.0, 1.0]
+_data = [Vector2(0, 0.3), 0.0, 0.0, 0, 0, Vector2(1, 0.542696), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_1xwjt"]
+offsets = PackedFloat32Array(0, 0.625, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xcab8"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nhd8p"]
@@ -18,15 +27,6 @@
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rq07n"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_01rsx"]
-
-[sub_resource type="Curve" id="Curve_7xgip"]
-_limits = [0.3, 3.0, 0.0, 1.0]
-_data = [Vector2(0, 0.3), 0.0, 0.0, 0, 0, Vector2(1, 0.542696), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="Gradient" id="Gradient_1xwjt"]
-offsets = PackedFloat32Array(0, 0.625, 1)
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cqyu2"]
 bg_color = Color(0, 0, 0, 1)
@@ -184,7 +184,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("particles:emitting")
+tracks/1/path = NodePath("picEvent/particles:emitting")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -225,7 +225,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("particles:emitting")
+tracks/1/path = NodePath("picEvent/particles:emitting")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -265,7 +265,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("particles:emitting")
+tracks/1/path = NodePath("picEvent/particles:emitting")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -411,9 +411,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -179.0
-offset_top = -86.0
+offset_top = -96.5
 offset_right = 179.0
-offset_bottom = 107.0
+offset_bottom = 96.5
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(1.1, 1.1)
@@ -447,23 +447,10 @@ text = "Take some gold..."
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="btnEvent" type="Button" parent="picEvent"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_xcab8")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_nhd8p")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_qyy0y")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_rq07n")
-theme_override_styles/normal = SubResource("StyleBoxEmpty_01rsx")
-disabled = true
-
-[node name="particles" type="CPUParticles2D" parent="."]
+[node name="particles" type="CPUParticles2D" parent="picEvent"]
 visible = false
-position = Vector2(828, 547)
+position = Vector2(170.909, 72.2727)
+scale = Vector2(0.909091, 0.909091)
 emitting = false
 amount = 15
 texture = ExtResource("6_oerrk")
@@ -480,6 +467,20 @@ scale_amount_max = 0.2
 scale_amount_curve = SubResource("Curve_7xgip")
 color = Color(1, 0.8, 0, 1)
 color_ramp = SubResource("Gradient_1xwjt")
+
+[node name="btnEvent" type="Button" parent="picEvent"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_xcab8")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_nhd8p")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_qyy0y")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_rq07n")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_01rsx")
+disabled = true
 
 [node name="panelDone" type="PanelContainer" parent="."]
 visible = false

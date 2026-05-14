@@ -1,0 +1,626 @@
+[gd_scene load_steps=36 format=3 uid="uid://bxt3gw8tbuhng"]
+
+[ext_resource type="Texture2D" uid="uid://cr5mucfkmo2k4" path="res://Assets/Art/Backgrounds/Hallway_01.png" id="1_43jgt"]
+[ext_resource type="Script" uid="uid://di0ectgguy1g1" path="res://Scripts/UI/onward_button.gd" id="1_wyb8q"]
+[ext_resource type="Texture2D" uid="uid://cccuv2txq7vb7" path="res://Assets/Art/Doors/distant_dooryway.png" id="2_m0tsg"]
+[ext_resource type="Texture2D" uid="uid://c5j822x16yep3" path="res://Assets/Art/Particles/star_08.png" id="3_v2wv2"]
+[ext_resource type="Texture2D" uid="uid://8leke20b8j7" path="res://Assets/UI/button_Camp_Color.png" id="4_1kytp"]
+[ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="5_wyb8q"]
+
+[sub_resource type="Curve" id="Curve_1kytp"]
+_data = [Vector2(0, 0.0562806), 0.0, 0.0, 0, 0, Vector2(0.996124, 0.469821), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_wyb8q"]
+offsets = PackedFloat32Array(0, 0.62931, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gttab"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ekwnn"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_iecob"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dxcfo"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nkh1o"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0n7h5"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_k047g"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tl1lb"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0q73c"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vrwl3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_k5fio"]
+
+[sub_resource type="Animation" id="Animation_thg3e"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("OnwardControl:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("OnwardControl/picOnward/DoorCenterPoint/CPUParticles2D:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("OnwardControl/picOnward/btnOnward:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_gttab"]
+resource_name = "onward_hover"
+length = 0.01
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("OnwardControl/picOnward/DoorCenterPoint/CPUParticles2D:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_ig0tu"]
+resource_name = "show_onward"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("OnwardControl:modulate")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("OnwardControl/picOnward/DoorCenterPoint/CPUParticles2D:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("OnwardControl/picOnward/btnOnward:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_uq1eo"]
+_data = {
+&"RESET": SubResource("Animation_thg3e"),
+&"onward_hover": SubResource("Animation_gttab"),
+&"show_onward": SubResource("Animation_ig0tu")
+}
+
+[sub_resource type="Animation" id="Animation_mb56c"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CampControl/controlMain:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.9, 0.9)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CampControl/controlMain:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CampControl/controlMain/PanelContainer/picButton/btnCamp:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("CampControl/controlMain:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1500, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_0ub4s"]
+resource_name = "hide_hover"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CampControl/controlMain:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.9, 0.9)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CampControl/controlMain:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_1kytp"]
+resource_name = "show_camp"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CampControl/controlMain/PanelContainer/picButton/btnCamp:disabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CampControl/controlMain:position")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1500, 0), Vector2(1280, 0), Vector2(1336, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_02cvq"]
+resource_name = "show_hover"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CampControl/controlMain:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.9, 0.9), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CampControl/controlMain:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play_camp_idle"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_uftrg"]
+_data = {
+&"RESET": SubResource("Animation_mb56c"),
+&"hide_hover": SubResource("Animation_0ub4s"),
+&"show_camp": SubResource("Animation_1kytp"),
+&"show_hover": SubResource("Animation_02cvq")
+}
+
+[sub_resource type="Animation" id="Animation_dly7x"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CampControl/controlMain:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_y0ljo"]
+resource_name = "camp_idle"
+loop_mode = 2
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CampControl/controlMain:rotation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, -0.174533]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_rjx5u"]
+_data = {
+&"RESET": SubResource("Animation_dly7x"),
+&"camp_idle": SubResource("Animation_y0ljo")
+}
+
+[sub_resource type="Animation" id="Animation_iecob"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_dxcfo"]
+resource_name = "hide_popup"
+length = 0.15
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_ekwnn"]
+resource_name = "show_popup"
+length = 0.2
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_nkh1o"]
+_data = {
+&"RESET": SubResource("Animation_iecob"),
+&"hide_popup": SubResource("Animation_dxcfo"),
+&"show_popup": SubResource("Animation_ekwnn")
+}
+
+[node name="OnwardButton" type="Control"]
+visible = false
+modulate = Color(1, 1, 1, 0)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_wyb8q")
+
+[node name="picBack" type="TextureRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_43jgt")
+expand_mode = 1
+
+[node name="OnwardControl" type="Control" parent="."]
+modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(700, 400)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -350.0
+offset_top = -200.0
+offset_right = 350.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(350, 200)
+
+[node name="picOnward" type="TextureRect" parent="OnwardControl"]
+self_modulate = Color(0.912289, 0.912289, 0.912289, 1)
+custom_minimum_size = Vector2(300, 200)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -150.0
+offset_top = -6.0
+offset_right = 150.0
+offset_bottom = 214.0
+grow_horizontal = 2
+texture = ExtResource("2_m0tsg")
+expand_mode = 3
+stretch_mode = 4
+
+[node name="DoorCenterPoint" type="Control" parent="OnwardControl/picOnward"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="OnwardControl/picOnward/DoorCenterPoint"]
+position = Vector2(14, 29)
+emitting = false
+amount = 5
+texture = ExtResource("3_v2wv2")
+one_shot = true
+explosiveness = 1.0
+randomness = 0.22
+lifetime_randomness = 0.58
+direction = Vector2(0, 0)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 200.0
+initial_velocity_max = 400.0
+angular_velocity_max = 200.0
+scale_amount_curve = SubResource("Curve_1kytp")
+color_ramp = SubResource("Gradient_wyb8q")
+
+[node name="btnOnward" type="Button" parent="OnwardControl/picOnward"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_gttab")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_ekwnn")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_iecob")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_dxcfo")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_nkh1o")
+disabled = true
+
+[node name="CampControl" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="controlMain" type="Control" parent="CampControl"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -36.0
+offset_right = 164.0
+offset_bottom = 200.0
+grow_horizontal = 0
+scale = Vector2(0.9, 0.9)
+pivot_offset = Vector2(100, 100)
+
+[node name="PanelContainer" type="PanelContainer" parent="CampControl/controlMain"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_0n7h5")
+
+[node name="picButton" type="TextureRect" parent="CampControl/controlMain/PanelContainer"]
+layout_mode = 2
+texture = ExtResource("4_1kytp")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="MarginContainer" type="MarginContainer" parent="CampControl/controlMain/PanelContainer/picButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 50
+
+[node name="Label" type="Label" parent="CampControl/controlMain/PanelContainer/picButton/MarginContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.199732, 0.338728, 0.344566, 1)
+theme_override_colors/font_shadow_color = Color(0.68, 0.8415, 0.85, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("5_wyb8q")
+theme_override_font_sizes/font_size = 22
+text = "Return to
+Camp"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="btnCamp" type="Button" parent="CampControl/controlMain/PanelContainer/picButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_k047g")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_tl1lb")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_0q73c")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_vrwl3")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_k5fio")
+disabled = true
+
+[node name="animOnward" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_uq1eo")
+}
+
+[node name="animCampHover" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_uftrg")
+}
+
+[node name="animCampIdle" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_rjx5u")
+}
+
+[node name="animPopup" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_nkh1o")
+}

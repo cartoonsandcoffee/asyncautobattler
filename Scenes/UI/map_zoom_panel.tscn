@@ -4,8 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://derrdt27xagod" path="res://Assets/UI/panel-border-007.png" id="1_dlfjx"]
 [ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="2_8u2o6"]
 [ext_resource type="Texture2D" uid="uid://eb6npl80r4to" path="res://Assets/Art/Player/PVP/Player_Skin_0.png" id="4_0ltav"]
-[ext_resource type="PackedScene" uid="uid://dm35l5es4kole" path="res://Scenes/Elements/stat_box.tscn" id="4_f3wo3"]
 [ext_resource type="Texture2D" uid="uid://ccbcslnsifj3o" path="res://Assets/UI/divider-fade-002.png" id="5_0ltav"]
+[ext_resource type="PackedScene" uid="uid://ct6jer1f0brbb" path="res://Scenes/Elements/stat_box2.tscn" id="5_wjcpn"]
 [ext_resource type="PackedScene" uid="uid://cqhyru53o5wfx" path="res://Scenes/item.tscn" id="7_s1gig"]
 [ext_resource type="Texture2D" uid="uid://cf5b8qtetu7b8" path="res://Assets/Art/Events/Zooms/boss_battle.png" id="8_cr0pl"]
 [ext_resource type="PackedScene" uid="uid://s4uxiifbera4" path="res://Scenes/Elements/progression_box.tscn" id="8_mj34i"]
@@ -437,41 +437,58 @@ layout_mode = 2
 size_flags_horizontal = 4
 columns = 4
 
-[node name="statHealth" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid" instance=ExtResource("4_f3wo3")]
-custom_minimum_size = Vector2(125, 60)
+[node name="statHealth" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid" instance=ExtResource("5_wjcpn")]
+custom_minimum_size = Vector2(130, 40)
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 show_tooltip = false
 
-[node name="statShield" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid" instance=ExtResource("4_f3wo3")]
-custom_minimum_size = Vector2(125, 60)
+[node name="statShield" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid" instance=ExtResource("5_wjcpn")]
+custom_minimum_size = Vector2(130, 40)
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 stat = 2
 show_tooltip = false
 
-[node name="statAttack" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid" instance=ExtResource("4_f3wo3")]
-custom_minimum_size = Vector2(125, 60)
+[node name="statAttack" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid" instance=ExtResource("5_wjcpn")]
+custom_minimum_size = Vector2(130, 40)
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 stat = 1
 show_tooltip = false
 
-[node name="statAgility" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid" instance=ExtResource("4_f3wo3")]
-custom_minimum_size = Vector2(125, 60)
+[node name="statAgility" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid" instance=ExtResource("5_wjcpn")]
+custom_minimum_size = Vector2(130, 40)
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 stat = 3
 show_tooltip = false
 
-[node name="statStrikes" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid" instance=ExtResource("4_f3wo3")]
+[node name="statBurnDamage" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid" instance=ExtResource("5_wjcpn")]
+custom_minimum_size = Vector2(130, 40)
 layout_mode = 2
-stat = 5
-show_tooltip = false
-
-[node name="statBurnDamage" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid" instance=ExtResource("4_f3wo3")]
-layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 stat = 8
 show_tooltip = false
 
-[node name="statGold" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid" instance=ExtResource("4_f3wo3")]
+[node name="statStrikes" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid" instance=ExtResource("5_wjcpn")]
+custom_minimum_size = Vector2(130, 40)
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+stat = 5
+show_tooltip = false
+
+[node name="statGold" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid" instance=ExtResource("5_wjcpn")]
+custom_minimum_size = Vector2(130, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 stat = 4
 show_tooltip = false
 
@@ -683,11 +700,15 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_hd1fi")
 [node name="Player1" type="TextureRect" parent="panelMatchup"]
 visible = false
 modulate = Color(0, 0, 0, 1)
-layout_mode = 0
-offset_left = 71.0
-offset_top = 221.0
-offset_right = 677.0
-offset_bottom = 767.0
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 96.0
+offset_top = -224.0
+offset_right = 702.0
+offset_bottom = 322.0
+grow_vertical = 2
 scale = Vector2(0.8, 0.8)
 pivot_offset = Vector2(303, 273)
 texture = ExtResource("4_0ltav")
@@ -697,11 +718,18 @@ stretch_mode = 5
 [node name="Player2" type="TextureRect" parent="panelMatchup"]
 visible = false
 modulate = Color(0, 0, 0, 1)
-layout_mode = 0
-offset_left = 854.0
-offset_top = 220.0
-offset_right = 1460.67
-offset_bottom = 766.0
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -693.0
+offset_top = -224.0
+offset_right = -86.33
+offset_bottom = 322.0
+grow_horizontal = 0
+grow_vertical = 2
 scale = Vector2(0.8, 0.8)
 pivot_offset = Vector2(303, 273)
 texture = ExtResource("4_0ltav")

@@ -1,9 +1,8 @@
-[gd_scene load_steps=42 format=3 uid="uid://bqku84hu1c31k"]
+[gd_scene load_steps=41 format=3 uid="uid://bqku84hu1c31k"]
 
 [ext_resource type="Script" uid="uid://ig7ftnfrlt31" path="res://Scripts/RoomEvents/boss_room_event.gd" id="1_xy2q4"]
 [ext_resource type="Texture2D" uid="uid://dhfumqfd7ynm" path="res://Assets/Art/Backgrounds/Boss Room.png" id="2_rjw12"]
 [ext_resource type="Texture2D" uid="uid://cmyut8hv84qr0" path="res://Assets/UI/Border/panel-border-009.png" id="3_3raan"]
-[ext_resource type="Texture2D" uid="uid://dpsjf6us4cwp5" path="res://Assets/Art/FightFade.png" id="3_ymj7t"]
 [ext_resource type="Texture2D" uid="uid://ccbcslnsifj3o" path="res://Assets/UI/divider-fade-002.png" id="4_ksq53"]
 [ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="5_mbpft"]
 [ext_resource type="Theme" uid="uid://od14ccps1daj" path="res://Themes/descriptive_label.tres" id="6_ogh3p"]
@@ -424,58 +423,10 @@ _data = {
 
 [sub_resource type="Animation" id="Animation_p3cmh"]
 length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("picShadow:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("picShadow:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
 
 [sub_resource type="Animation" id="Animation_14qk7"]
 resource_name = "hide_shadow"
 length = 0.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("picShadow:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("picShadow:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, false]
-}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_f0uho"]
 _data = {
@@ -501,17 +452,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_rjw12")
-expand_mode = 1
-
-[node name="picShadow" type="TextureRect" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("3_ymj7t")
 expand_mode = 1
 
 [node name="panelOnward" type="Panel" parent="."]

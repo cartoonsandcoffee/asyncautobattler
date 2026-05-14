@@ -1,26 +1,64 @@
-[gd_scene load_steps=22 format=3 uid="uid://fa7f7054nthl"]
+[gd_scene load_steps=64 format=3 uid="uid://fa7f7054nthl"]
 
 [ext_resource type="Script" uid="uid://d2xx5u5gtfb8l" path="res://Scripts/UI/loading_screen.gd" id="1_63kij"]
+[ext_resource type="Texture2D" uid="uid://5a5v7w7gi8so" path="res://Assets/Art/StarField.png" id="2_12h0r"]
 [ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="2_63kij"]
 [ext_resource type="Texture2D" uid="uid://072s2rxwk6m8" path="res://Assets/UI/panel-border-004.png" id="3_jl8es"]
-[ext_resource type="Texture2D" uid="uid://cgbaw0ahipa80" path="res://Assets/UI/Border/panel-border-007.png" id="3_v7pnk"]
-[ext_resource type="Texture2D" uid="uid://c8c62iwt0buee" path="res://Assets/Art/TitleScreen/title_screen_light.png" id="4_1ku0f"]
+[ext_resource type="Texture2D" uid="uid://ddr8bdx6j5htm" path="res://Assets/Art/Planet_Estab.png" id="3_p1qlt"]
 [ext_resource type="Texture2D" uid="uid://ccbcslnsifj3o" path="res://Assets/UI/divider-fade-002.png" id="4_46ur2"]
+[ext_resource type="Texture2D" uid="uid://b62e1ujg46ham" path="res://Assets/Art/Titlescreen_Back.png" id="5_ge5rm"]
 [ext_resource type="FontFile" uid="uid://dbt53hulxegh2" path="res://Assets/UI/Fonts/Imperator.ttf" id="5_v7pnk"]
 [ext_resource type="PackedScene" uid="uid://oba2ikwv3ve2" path="res://Scenes/UI/game_info.tscn" id="8_1ku0f"]
+[ext_resource type="Texture2D" uid="uid://dxt3yb4gkjn6x" path="res://Assets/Art/Particles/smoke_07.png" id="8_p1qlt"]
+[ext_resource type="Theme" uid="uid://dgbknxqcoromh" path="res://Themes/skin_button.tres" id="9_gg4iq"]
+[ext_resource type="Texture2D" uid="uid://cwrf3kqbgn5vy" path="res://Assets/UI/MenuButtons.png" id="10_wb71o"]
+[ext_resource type="Texture2D" uid="uid://c2d22fj1ar85q" path="res://Assets/UI/Button_PLAY.png" id="11_ohckc"]
+[ext_resource type="Texture2D" uid="uid://diftfqlpp3i7i" path="res://Assets/UI/BUTTON_Hall.png" id="12_ujr70"]
+[ext_resource type="PackedScene" uid="uid://chs2a1fblqd0k" path="res://Scenes/UI/hallof_champions.tscn" id="15_wb71o"]
+[ext_resource type="PackedScene" uid="uid://cf3ax1fquw2mm" path="res://Scenes/UI/settings_panel.tscn" id="16_ohckc"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jl8es"]
+[sub_resource type="Curve" id="Curve_ge5rm"]
+_limits = [0.3, 3.0, 0.0, 1.0]
+_data = [Vector2(0, 0.3), 0.0, 0.0, 0, 0, Vector2(1, 1.0618), 0.0, 0.0, 0, 0]
+point_count = 2
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yiwac"]
+[sub_resource type="Gradient" id="Gradient_gg4iq"]
+offsets = PackedFloat32Array(0, 0.625, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ffnnp"]
-texture = ExtResource("3_v7pnk")
-texture_margin_left = 28.0
-texture_margin_top = 28.0
-texture_margin_right = 28.0
-texture_margin_bottom = 28.0
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ohckc"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_12h0r"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_ujr70"]
+atlas = ExtResource("10_wb71o")
+region = Rect2(0, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_snpke"]
+atlas = ExtResource("10_wb71o")
+region = Rect2(150, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u5t30"]
+atlas = ExtResource("10_wb71o")
+region = Rect2(300, 0, 150, 150)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_snpke"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u5t30"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qa0xh"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_24gq6"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c4e84"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ujr70"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_46wup"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2d47g"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_agpcf"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u2gw2"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1ku0f"]
 bg_color = Color(0, 0, 0, 0)
@@ -213,6 +251,384 @@ _data = {
 &"namebox_flyout": SubResource("Animation_jl8es")
 }
 
+[sub_resource type="Animation" id="Animation_ohckc"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("controlLoading/picPlanet:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_wb71o"]
+resource_name = "planet_idle"
+length = 3.0
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("controlLoading/picPlanet:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.25, 1.25)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ujr70"]
+_data = {
+&"RESET": SubResource("Animation_ohckc"),
+&"planet_idle": SubResource("Animation_wb71o")
+}
+
+[sub_resource type="Animation" id="Animation_2d47g"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("controlMainMenu/controlPlay:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("controlMainMenu/controlPlay:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -450)]
+}
+
+[sub_resource type="Animation" id="Animation_u2gw2"]
+resource_name = "hide_hover"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("controlMainMenu/controlPlay:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1.1, 1.1), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_agpcf"]
+resource_name = "show_hover"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("controlMainMenu/controlPlay:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.1, 1.1)]
+}
+
+[sub_resource type="Animation" id="Animation_46wup"]
+resource_name = "show_play"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("controlMainMenu/controlPlay:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.1, 1.1), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("controlMainMenu/controlPlay:position")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, -450), Vector2(0, 30), Vector2(0, 0)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.05),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play_sound_drop"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_a4cgd"]
+_data = {
+&"RESET": SubResource("Animation_2d47g"),
+&"hide_hover": SubResource("Animation_u2gw2"),
+&"show_hover": SubResource("Animation_agpcf"),
+&"show_play": SubResource("Animation_46wup")
+}
+
+[sub_resource type="Animation" id="Animation_gbd4q"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("controlMainMenu/controlHall:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(545, -400)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("controlMainMenu/controlHall:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_oh422"]
+resource_name = "hide_hover"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("controlMainMenu/controlHall:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1.1, 1.1), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_cfl86"]
+resource_name = "show_hall"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("controlMainMenu/controlHall:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(545, -400), Vector2(545, 50), Vector2(545, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("controlMainMenu/controlHall:scale")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.1, 1.1), Vector2(1, 1)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.05),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play_sound_drop"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_a4cgd"]
+resource_name = "show_hover"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("controlMainMenu/controlHall:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.1, 1.1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_oh422"]
+_data = {
+&"RESET": SubResource("Animation_gbd4q"),
+&"hide_hover": SubResource("Animation_oh422"),
+&"show_hall": SubResource("Animation_cfl86"),
+&"show_hover": SubResource("Animation_a4cgd")
+}
+
+[sub_resource type="Animation" id="Animation_snpke"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("controlMainMenu/controlPlay:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [-0.0523599]
+}
+
+[sub_resource type="Animation" id="Animation_ujr70"]
+resource_name = "play_idle"
+length = 3.0
+loop_mode = 2
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("controlMainMenu/controlPlay:rotation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [-0.0523599, 0.0523599]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_u5t30"]
+_data = {
+&"RESET": SubResource("Animation_snpke"),
+&"play_idle": SubResource("Animation_ujr70")
+}
+
+[sub_resource type="Animation" id="Animation_24gq6"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("controlMainMenu/controlHall:rotation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0523599]
+}
+
+[sub_resource type="Animation" id="Animation_qa0xh"]
+resource_name = "hall_idle"
+length = 3.0
+loop_mode = 2
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("controlMainMenu/controlHall:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0523599, -0.0523599]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_c4e84"]
+_data = {
+&"RESET": SubResource("Animation_24gq6"),
+&"hall_idle": SubResource("Animation_qa0xh")
+}
+
+[sub_resource type="Animation" id="Animation_u5t30"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Fader:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_gg4iq"]
+resource_name = "fade_out"
+length = 0.5
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Fader:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_qa0xh"]
+_data = {
+&"RESET": SubResource("Animation_u5t30"),
+&"fade_out": SubResource("Animation_gg4iq")
+}
+
 [node name="LoadingScreen" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -231,7 +647,44 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="panelMainMenu" type="Panel" parent="."]
+[node name="controlLoading" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="picStars" type="TextureRect" parent="controlLoading"]
+modulate = Color(0.47, 0.47, 0.47, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_12h0r")
+expand_mode = 3
+
+[node name="picPlanet" type="TextureRect" parent="controlLoading"]
+custom_minimum_size = Vector2(500, 500)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(250, 250)
+texture = ExtResource("3_p1qlt")
+expand_mode = 3
+
+[node name="controlMainMenu" type="Control" parent="."]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -239,26 +692,83 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxEmpty_jl8es")
+theme = ExtResource("2_63kij")
 
-[node name="PanelContainer" type="PanelContainer" parent="panelMainMenu"]
+[node name="picMenu" type="TextureRect" parent="controlMainMenu"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+texture = ExtResource("5_ge5rm")
+expand_mode = 3
+
+[node name="lblShip" type="Label" parent="controlMainMenu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -262.0
+offset_top = 129.0
+offset_right = -24.0
+offset_bottom = 171.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -0.575959
 theme = ExtResource("2_63kij")
-theme_override_styles/panel = SubResource("StyleBoxEmpty_yiwac")
+theme_override_colors/font_outline_color = Color(0.134935, 0.240844, 0.245301, 1)
+theme_override_constants/outline_size = 3
+text = "Test the Name of the Ship"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="panelMainMenu/PanelContainer"]
+[node name="smoke" type="CPUParticles2D" parent="controlMainMenu"]
+position = Vector2(405, 576)
+emitting = false
+amount = 10
+texture = ExtResource("8_p1qlt")
+lifetime = 2.0
+speed_scale = 0.4
+randomness = 0.3
+direction = Vector2(0, -1)
+spread = 36.43
+gravity = Vector2(0, 0)
+initial_velocity_min = 100.0
+initial_velocity_max = 100.0
+angular_velocity_min = 30.0
+angular_velocity_max = 100.0
+scale_amount_min = 0.1
+scale_amount_max = 0.7
+scale_amount_curve = SubResource("Curve_ge5rm")
+color = Color(0.637843, 0.637843, 0.637843, 1)
+color_ramp = SubResource("Gradient_gg4iq")
+
+[node name="smallButtonHolder" type="PanelContainer" parent="controlMainMenu"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_ohckc")
+
+[node name="MarginContainer" type="MarginContainer" parent="controlMainMenu/smallButtonHolder"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="controlMainMenu/smallButtonHolder/MarginContainer"]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="panelMainMenu/PanelContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 100)
-layout_mode = 2
-
-[node name="lblTitle" type="Label" parent="panelMainMenu/PanelContainer/VBoxContainer"]
+[node name="lblTitle" type="Label" parent="controlMainMenu/smallButtonHolder/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.976667, 0.3, 1)
 theme_override_colors/font_shadow_color = Color(1, 0.72, 0.72, 0.227451)
@@ -270,88 +780,145 @@ text = "Title Goes Here!"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="panelMainMenu/PanelContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="controlMainMenu/smallButtonHolder/MarginContainer/VBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 3
-theme_override_constants/separation = 50
-
-[node name="MarginContainer" type="MarginContainer" parent="panelMainMenu/PanelContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 50
-theme_override_constants/margin_right = 50
-theme_override_constants/margin_bottom = 50
-
-[node name="VBoxContainer" type="VBoxContainer" parent="panelMainMenu/PanelContainer/VBoxContainer/HBoxContainer/MarginContainer"]
-layout_mode = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="panelMainMenu/PanelContainer/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="panelMenu" type="PanelContainer" parent="panelMainMenu/PanelContainer/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_ffnnp")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="panelMainMenu/PanelContainer/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/panelMenu"]
-layout_mode = 2
+size_flags_horizontal = 8
+theme = ExtResource("9_gg4iq")
 theme_override_constants/separation = 20
 
-[node name="btnPlay" type="Button" parent="panelMainMenu/PanelContainer/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/panelMenu/VBoxContainer"]
-custom_minimum_size = Vector2(0, 75)
+[node name="lblMenu" type="Label" parent="controlMainMenu/smallButtonHolder/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
-text = "Play"
+theme = ExtResource("2_63kij")
+horizontal_alignment = 2
+vertical_alignment = 1
 
-[node name="btnInfo" type="Button" parent="panelMainMenu/PanelContainer/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/panelMenu/VBoxContainer"]
-custom_minimum_size = Vector2(0, 75)
+[node name="btnInfo" type="Button" parent="controlMainMenu/smallButtonHolder/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
-text = "Game Info"
+tooltip_text = "Game Info"
+icon = SubResource("AtlasTexture_ujr70")
+icon_alignment = 1
+expand_icon = true
 
-[node name="btnSettings" type="Button" parent="panelMainMenu/PanelContainer/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/panelMenu/VBoxContainer"]
-visible = false
-custom_minimum_size = Vector2(0, 75)
+[node name="btnSettings" type="Button" parent="controlMainMenu/smallButtonHolder/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
-text = "Settings"
+tooltip_text = "Settings & Options"
+icon = SubResource("AtlasTexture_snpke")
+icon_alignment = 1
+expand_icon = true
 
-[node name="btnQuit" type="Button" parent="panelMainMenu/PanelContainer/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/panelMenu/VBoxContainer"]
-custom_minimum_size = Vector2(300, 75)
+[node name="btnQuit" type="Button" parent="controlMainMenu/smallButtonHolder/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
-text = "Quit"
+tooltip_text = "Quit"
+icon = SubResource("AtlasTexture_u5t30")
+icon_alignment = 1
+expand_icon = true
 
-[node name="panelImage" type="PanelContainer" parent="panelMainMenu/PanelContainer/VBoxContainer/HBoxContainer"]
-visible = false
+[node name="MarginContainer" type="MarginContainer" parent="controlMainMenu/smallButtonHolder/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxEmpty_12h0r")
 
-[node name="picBack" type="TextureRect" parent="panelMainMenu/PanelContainer/VBoxContainer/HBoxContainer/panelImage"]
-visible = false
-layout_mode = 2
-texture = ExtResource("4_1ku0f")
-expand_mode = 1
+[node name="controlPlay" type="Control" parent="controlMainMenu"]
+custom_minimum_size = Vector2(477, 540)
+anchors_preset = 0
+offset_top = -450.0
+offset_right = 477.0
+offset_bottom = 90.0
+rotation = -0.0523599
+pivot_offset = Vector2(238, 0)
+
+[node name="picPlay" type="TextureRect" parent="controlMainMenu/controlPlay"]
+layout_mode = 0
+offset_left = 45.0
+offset_right = 522.0
+offset_bottom = 540.0
+pivot_offset = Vector2(238, 270)
+texture = ExtResource("11_ohckc")
+expand_mode = 5
 stretch_mode = 5
 
-[node name="MarginContainer2" type="MarginContainer" parent="panelMainMenu/PanelContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 100)
-layout_mode = 2
+[node name="btnPlay" type="Button" parent="controlMainMenu/controlPlay/picPlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 145.0
+offset_top = 188.0
+offset_right = -130.0
+offset_bottom = -105.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_snpke")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_u5t30")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_qa0xh")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_24gq6")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_c4e84")
+disabled = true
+
+[node name="controlHall" type="Control" parent="controlMainMenu"]
+custom_minimum_size = Vector2(446, 495)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -223.0
+offset_top = -400.0
+offset_right = 223.0
+offset_bottom = 95.0
+grow_horizontal = 2
+rotation = 0.0523599
+pivot_offset = Vector2(223, 0)
+
+[node name="picHall" type="TextureRect" parent="controlMainMenu/controlHall"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -377.0
+offset_right = 69.0
+offset_bottom = 495.0
+grow_horizontal = 2
+pivot_offset = Vector2(223, 247)
+texture = ExtResource("12_ujr70")
+expand_mode = 5
+stretch_mode = 5
+
+[node name="btnHall" type="Button" parent="controlMainMenu/controlHall/picHall"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 135.0
+offset_top = 175.0
+offset_right = -143.0
+offset_bottom = -96.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ujr70")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_46wup")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_2d47g")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_agpcf")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_u2gw2")
+disabled = true
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 1
-anchors_preset = 8
+anchors_preset = 7
 anchor_left = 0.5
-anchor_top = 0.5
+anchor_top = 1.0
 anchor_right = 0.5
-anchor_bottom = 0.5
+anchor_bottom = 1.0
 offset_left = -120.5
-offset_top = -142.0
+offset_top = -56.0
 offset_right = 120.5
-offset_bottom = -86.0
 grow_horizontal = 2
-grow_vertical = 2
+grow_vertical = 0
 theme = ExtResource("2_63kij")
 theme_override_colors/font_color = Color(1, 0.909333, 0.32, 1)
 theme_override_colors/font_outline_color = Color(1, 0.266667, 0, 1)
 theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 28
 text = "Loading"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -496,9 +1063,29 @@ size_flags_horizontal = 3
 custom_minimum_size = Vector2(250, 75)
 layout_mode = 2
 theme = ExtResource("2_63kij")
+action_mode = 0
 text = "Done"
 
+[node name="Fader" type="ColorRect" parent="."]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
 [node name="GameInfo" parent="." instance=ExtResource("8_1ku0f")]
+visible = false
+layout_mode = 1
+
+[node name="HallofChampions" parent="." instance=ExtResource("15_wb71o")]
+visible = false
+layout_mode = 1
+
+[node name="SettingsPanel" parent="." instance=ExtResource("16_ohckc")]
 visible = false
 layout_mode = 1
 
@@ -507,8 +1094,35 @@ libraries = {
 &"": SubResource("AnimationLibrary_yhxw7")
 }
 
-[connection signal="pressed" from="panelMainMenu/PanelContainer/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/panelMenu/VBoxContainer/btnPlay" to="." method="_on_btn_play_pressed"]
-[connection signal="pressed" from="panelMainMenu/PanelContainer/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/panelMenu/VBoxContainer/btnInfo" to="." method="_on_btn_info_pressed"]
-[connection signal="pressed" from="panelMainMenu/PanelContainer/VBoxContainer/HBoxContainer/MarginContainer/VBoxContainer/panelMenu/VBoxContainer/btnQuit" to="." method="_on_btn_quit_pressed"]
+[node name="animPlanet" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_ujr70")
+}
+
+[node name="animPlay" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_a4cgd")
+}
+
+[node name="animHall" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_oh422")
+}
+
+[node name="animPlayIdle" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_u5t30")
+}
+
+[node name="animHallIdle" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_c4e84")
+}
+
+[node name="animFade" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_qa0xh")
+}
+
 [connection signal="text_changed" from="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/txtName" to="." method="_on_txt_name_text_changed"]
 [connection signal="pressed" from="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/btnName" to="." method="_on_btn_name_pressed"]

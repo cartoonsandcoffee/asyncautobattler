@@ -113,7 +113,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("smoke:emitting")
+tracks/4/path = NodePath("picEvent/smoke:emitting")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -220,7 +220,7 @@ step = 0.025
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("smoke:emitting")
+tracks/0/path = NodePath("picEvent/smoke:emitting")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -384,8 +384,25 @@ grow_vertical = 2
 texture = ExtResource("2_owu7u")
 expand_mode = 1
 
-[node name="smoke" type="CPUParticles2D" parent="."]
-position = Vector2(759, 496)
+[node name="picEvent" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -224.0
+offset_top = 6.0
+offset_right = 224.0
+offset_bottom = 182.16
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_g5vxb")
+expand_mode = 5
+
+[node name="smoke" type="CPUParticles2D" parent="picEvent"]
+position = Vector2(100, 48)
 amount = 10
 texture = ExtResource("3_n4m1l")
 lifetime = 2.0
@@ -403,23 +420,6 @@ scale_amount_max = 0.7
 scale_amount_curve = SubResource("Curve_i8ton")
 color = Color(0.637843, 0.637843, 0.637843, 1)
 color_ramp = SubResource("Gradient_55lkv")
-
-[node name="picEvent" type="TextureRect" parent="."]
-custom_minimum_size = Vector2(50, 50)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -109.0
-offset_top = 16.0
-offset_right = 339.0
-offset_bottom = 192.16
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("4_g5vxb")
-expand_mode = 5
 
 [node name="picHighlight" type="TextureRect" parent="picEvent"]
 layout_mode = 1

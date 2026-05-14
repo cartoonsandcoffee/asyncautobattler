@@ -217,7 +217,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("particleBlood:emitting")
+tracks/4/path = NodePath("picTreasure/particleBlood:emitting")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -288,7 +288,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("particleBlood:emitting")
+tracks/2/path = NodePath("picTreasure/particleBlood:emitting")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -341,7 +341,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("particleBlood:emitting")
+tracks/3/path = NodePath("picTreasure/particleBlood:emitting")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -575,9 +575,30 @@ text = "Search the Corpse"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="particleBlood" type="CPUParticles2D" parent="."]
+[node name="picTreasure" type="TextureRect" parent="."]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -262.423
+offset_top = -28.0
+offset_right = 262.417
+offset_bottom = 282.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.6, 0.6)
+pivot_offset = Vector2(262, 155)
+texture = ExtResource("5_ujq0u")
+expand_mode = 3
+
+[node name="particleBlood" type="CPUParticles2D" parent="picTreasure"]
 visible = false
-position = Vector2(791, 479)
+show_behind_parent = true
+position = Vector2(301.041, 21.6667)
+scale = Vector2(1.66667, 1.66667)
 emitting = false
 amount = 10
 texture = ExtResource("7_hxlt1")
@@ -597,18 +618,6 @@ scale_amount_max = 0.05
 scale_amount_curve = SubResource("Curve_mgjqs")
 color = Color(0.505882, 0.188235, 0.188235, 1)
 color_ramp = SubResource("Gradient_7b6al")
-
-[node name="picTreasure" type="TextureRect" parent="."]
-modulate = Color(0, 0, 0, 1)
-layout_mode = 0
-offset_left = 479.0
-offset_top = 393.0
-offset_right = 1003.84
-offset_bottom = 703.0
-scale = Vector2(0.6, 0.6)
-pivot_offset = Vector2(262, 155)
-texture = ExtResource("5_ujq0u")
-expand_mode = 3
 
 [node name="Button" type="Button" parent="picTreasure"]
 layout_mode = 1

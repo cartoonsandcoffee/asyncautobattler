@@ -1,16 +1,24 @@
-[gd_scene load_steps=41 format=3 uid="uid://ccn7le6eky01v"]
+[gd_scene load_steps=40 format=3 uid="uid://ccn7le6eky01v"]
 
 [ext_resource type="Script" uid="uid://d3frxexh2thsb" path="res://Scripts/RoomEvents/mysterious_old_man.gd" id="1_06che"]
-[ext_resource type="Texture2D" uid="uid://bu1mkenrfhi7i" path="res://Assets/Art/Backgrounds/Starter Room.png" id="2_erqm4"]
-[ext_resource type="Texture2D" uid="uid://b1xbdan673ynx" path="res://Assets/Art/Events/Rope.png" id="3_b2aq1"]
+[ext_resource type="Texture2D" uid="uid://cpvpcykg6mt2x" path="res://Assets/Art/Backgrounds/Starter_New.png" id="2_b2aq1"]
+[ext_resource type="Texture2D" uid="uid://kas6w4h5ckvr" path="res://Assets/Art/Backgrounds/Starter_Farback.png" id="2_m0hn6"]
 [ext_resource type="Texture2D" uid="uid://dl3r0x1cxu6vs" path="res://Assets/Art/Events/acid_drip.png" id="4_cprod"]
-[ext_resource type="Texture2D" uid="uid://cr43ke21qx4hi" path="res://Assets/Art/Events/corpse_pile_sword.png" id="4_erqm4"]
-[ext_resource type="Texture2D" uid="uid://ikw4bshr7vot" path="res://Assets/Art/Particles/light_03.png" id="5_b2aq1"]
 [ext_resource type="Texture2D" uid="uid://c6uhtg2telr2f" path="res://Assets/Art/Particles/circle_05.png" id="5_qbqed"]
 [ext_resource type="Texture2D" uid="uid://072s2rxwk6m8" path="res://Assets/UI/panel-border-004.png" id="5_rvg6h"]
+[ext_resource type="Texture2D" uid="uid://cp3p7omychwb5" path="res://Assets/Art/Events/SpaceCorpse.png" id="6_erqm4"]
 [ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="6_pg0oh"]
 [ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="8_erqm4"]
-[ext_resource type="Texture2D" uid="uid://du7p61lar6ili" path="res://Assets/Art/Events/ogle_corpse.png" id="8_wmllw"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_b2aq1"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_88pph"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0i04h"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_p3ala"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_x0om5"]
 
 [sub_resource type="Curve" id="Curve_88pph"]
 _data = [Vector2(0, 0.480378), 0.0, 0.124358, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -39,74 +47,6 @@ texture_margin_left = 16.0
 texture_margin_top = 16.0
 texture_margin_right = 16.0
 texture_margin_bottom = 16.0
-
-[sub_resource type="Animation" id="Animation_0i04h"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("picRope:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0523599]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("picRope:self_modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(0, 0, 0, 1)]
-}
-
-[sub_resource type="Animation" id="Animation_88pph"]
-resource_name = "rope_sway"
-length = 3.0
-loop_mode = 1
-step = 0.025
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("picRope:rotation")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 2, 3),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [0.0523599, -0.0523599, 0.0523599]
-}
-
-[sub_resource type="Animation" id="Animation_p3ala"]
-resource_name = "show_rope"
-length = 0.3
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("picRope:self_modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(0, 0, 0, 1), Color(1, 1, 1, 1)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_x0om5"]
-_data = {
-&"RESET": SubResource("Animation_0i04h"),
-&"rope_sway": SubResource("Animation_88pph"),
-&"show_rope": SubResource("Animation_p3ala")
-}
 
 [sub_resource type="Animation" id="Animation_ffkdy"]
 length = 0.001
@@ -265,7 +205,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("picEvent:modulate")
+tracks/0/path = NodePath("eventHolder1/picEvent:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -277,7 +217,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("picEvent/btnEvent:disabled")
+tracks/1/path = NodePath("eventHolder1/picEvent/btnEvent:disabled")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -289,7 +229,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("picEnemy:modulate")
+tracks/2/path = NodePath("picFarBack:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -298,39 +238,14 @@ tracks/2/keys = {
 "update": 0,
 "values": [Color(0, 0, 0, 1)]
 }
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("picBlood:modulate")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("picBlood:visible")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
 
 [sub_resource type="Animation" id="Animation_r7jkv"]
 resource_name = "hide_event"
-length = 0.4
 step = 0.025
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("picEvent:modulate")
+tracks/0/path = NodePath("eventHolder1/picEvent:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -342,7 +257,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("picEvent/btnEvent:disabled")
+tracks/1/path = NodePath("eventHolder1/picEvent/btnEvent:disabled")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -354,38 +269,14 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("picBlood:modulate")
+tracks/2/path = NodePath("picFarBack:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("picEnemy:modulate")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.4),
+"times": PackedFloat32Array(0.4, 1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 1), Color(0, 0, 0, 0)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("picBlood:visible")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"values": [Color(0, 0, 0, 1), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_x0om5"]
@@ -395,7 +286,7 @@ step = 0.025
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("picEvent:modulate")
+tracks/0/path = NodePath("eventHolder1/picEvent:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -407,7 +298,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("picEvent/btnEvent:disabled")
+tracks/1/path = NodePath("eventHolder1/picEvent/btnEvent:disabled")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -416,25 +307,13 @@ tracks/1/keys = {
 "update": 1,
 "values": [true, false]
 }
-tracks/2/type = "value"
+tracks/2/type = "method"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("picEnemy:modulate")
+tracks/2/path = NodePath(".")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(0, 0, 0, 1), Color(1, 1, 1, 1)]
-}
-tracks/3/type = "method"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath(".")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
 "times": PackedFloat32Array(0.4),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -455,7 +334,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("picEvent/lblEvent:scale")
+tracks/0/path = NodePath("eventHolder1/picEvent/lblEvent:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -467,19 +346,19 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("picEvent/lblEvent:position")
+tracks/1/path = NodePath("eventHolder1/picEvent/lblEvent:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(306.5, 213)]
+"values": [Vector2(423, 166)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("picEvent/lblEvent:modulate")
+tracks/2/path = NodePath("eventHolder1/picEvent/lblEvent:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -496,31 +375,31 @@ step = 0.025
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("picEvent/lblEvent:scale")
+tracks/0/path = NodePath("eventHolder1/picEvent/lblEvent:scale")
 tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(1.25, 1.25), Vector2(0.5, 0.5)]
+"values": [Vector2(1.5, 1.5), Vector2(0.5, 0.5)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("picEvent/lblEvent:position")
+tracks/1/path = NodePath("eventHolder1/picEvent/lblEvent:position")
 tracks/1/interp = 2
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(306.5, 0), Vector2(306.5, 213)]
+"values": [Vector2(423, -100), Vector2(423, 166)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("picEvent/lblEvent:modulate")
+tracks/2/path = NodePath("eventHolder1/picEvent/lblEvent:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -537,31 +416,31 @@ step = 0.025
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("picEvent/lblEvent:scale")
+tracks/0/path = NodePath("eventHolder1/picEvent/lblEvent:scale")
 tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(0.5, 0.5), Vector2(1.25, 1.25)]
+"values": [Vector2(0.5, 0.5), Vector2(1.5, 1.5)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("picEvent/lblEvent:position")
+tracks/1/path = NodePath("eventHolder1/picEvent/lblEvent:position")
 tracks/1/interp = 2
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(306.5, 213), Vector2(306.5, 0)]
+"values": [Vector2(423, 166), Vector2(423, -100)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("picEvent/lblEvent:modulate")
+tracks/2/path = NodePath("eventHolder1/picEvent/lblEvent:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -583,7 +462,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("picBlood:scale")
+tracks/0/path = NodePath("Control/picBlood:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -595,19 +474,19 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("picBlood:position")
+tracks/1/path = NodePath("Control/picBlood:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(677, 97)]
+"values": [Vector2(417, 44)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("picBlood:modulate")
+tracks/2/path = NodePath("Control/picBlood:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -619,7 +498,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("particleAcid:emitting")
+tracks/3/path = NodePath("Control/particleAcid:emitting")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -636,7 +515,7 @@ step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("picBlood:modulate")
+tracks/0/path = NodePath("Control/picBlood:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -648,7 +527,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("particleAcid:emitting")
+tracks/1/path = NodePath("Control/particleAcid:emitting")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -666,7 +545,7 @@ step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("picBlood:scale")
+tracks/0/path = NodePath("Control/picBlood:scale")
 tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -678,19 +557,19 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("picBlood:position")
+tracks/1/path = NodePath("Control/picBlood:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.5, 1.15, 4),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(677, 97), Vector2(677, 97), Vector2(677, 550), Vector2(677, 550)]
+"values": [Vector2(417, 44), Vector2(417, 44), Vector2(417, 500), Vector2(417, 500)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("picBlood:modulate")
+tracks/2/path = NodePath("Control/picBlood:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -702,7 +581,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("particleAcid:emitting")
+tracks/3/path = NodePath("Control/particleAcid:emitting")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -746,45 +625,87 @@ grow_vertical = 2
 script = ExtResource("1_06che")
 event_description = "You can vaguely hear a muttering sound emenating from darkness..."
 
-[node name="picBack" type="TextureRect" parent="."]
-visible = false
+[node name="picFarBack" type="TextureRect" parent="."]
+modulate = Color(0, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+texture = ExtResource("2_m0hn6")
+expand_mode = 3
+
+[node name="centerPoint" type="Control" parent="picFarBack"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="btnNext" type="Button" parent="picFarBack/centerPoint"]
+custom_minimum_size = Vector2(300, 300)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -174.0
+offset_top = -202.0
+offset_right = 426.0
+offset_bottom = 98.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(300, 150)
+theme_override_styles/focus = SubResource("StyleBoxEmpty_b2aq1")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_88pph")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_0i04h")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_p3ala")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_x0om5")
+disabled = true
+
+[node name="Control" type="Control" parent="."]
+custom_minimum_size = Vector2(1000, 700)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -500.0
+offset_top = -350.0
+offset_right = 500.0
+offset_bottom = 350.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
-texture = ExtResource("2_erqm4")
-expand_mode = 1
 
-[node name="picRope" type="TextureRect" parent="."]
+[node name="picBlood" type="TextureRect" parent="Control"]
 visible = false
-modulate = Color(0.53, 0.428947, 0.2968, 1)
-self_modulate = Color(0, 0, 0, 1)
-layout_mode = 0
-offset_left = 674.0
-offset_top = 78.0
-offset_right = 812.0
-offset_bottom = 1041.0
-rotation = 0.0523599
-scale = Vector2(0.5, 0.5)
-pivot_offset = Vector2(60, 30)
-texture = ExtResource("3_b2aq1")
-
-[node name="picBlood" type="TextureRect" parent="."]
 modulate = Color(1, 1, 1, 0)
-layout_mode = 0
-offset_left = 677.0
-offset_top = 97.0
-offset_right = 777.0
-offset_bottom = 177.0
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -83.0
+offset_top = 44.0
+offset_right = 17.0
+offset_bottom = 124.0
+grow_horizontal = 2
 scale = Vector2(0.3, 0.3)
 pivot_offset = Vector2(50, 40)
 texture = ExtResource("4_cprod")
 
-[node name="particleAcid" type="CPUParticles2D" parent="."]
-position = Vector2(726, 551)
+[node name="particleAcid" type="CPUParticles2D" parent="Control"]
+position = Vector2(458, 469)
 emitting = false
 amount = 6
 texture = ExtResource("5_qbqed")
@@ -804,7 +725,34 @@ scale_amount_max = 0.09
 scale_amount_curve = SubResource("Curve_88pph")
 color_ramp = SubResource("Gradient_erqm4")
 
-[node name="picEvent" type="TextureRect" parent="."]
+[node name="picBack" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_b2aq1")
+expand_mode = 3
+
+[node name="eventHolder1" type="Control" parent="."]
+custom_minimum_size = Vector2(800, 500)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="picEvent" type="TextureRect" parent="eventHolder1"]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 8
@@ -812,18 +760,18 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -425.0
-offset_top = -98.0
-offset_right = 265.0
-offset_bottom = 292.0
+offset_left = -476.0
+offset_top = -38.0
+offset_right = 614.0
+offset_bottom = 352.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(0.5, 0.5)
-pivot_offset = Vector2(428, 242)
-texture = ExtResource("4_erqm4")
-expand_mode = 1
+scale = Vector2(0.4, 0.4)
+pivot_offset = Vector2(545, 195)
+texture = ExtResource("6_erqm4")
+expand_mode = 3
 
-[node name="lblEvent" type="Label" parent="picEvent"]
+[node name="lblEvent" type="Label" parent="eventHolder1/picEvent"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 8
@@ -831,13 +779,13 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -38.5
-offset_top = 18.0
-offset_right = 204.5
-offset_bottom = 76.0
+offset_left = -122.0
+offset_top = -29.0
+offset_right = 121.0
+offset_bottom = 29.0
 grow_horizontal = 2
 grow_vertical = 2
-pivot_offset = Vector2(48, 29)
+pivot_offset = Vector2(121, 29)
 theme_override_colors/font_color = Color(1, 0.866667, 0, 1)
 theme_override_colors/font_outline_color = Color(0.51, 0.306, 0, 1)
 theme_override_constants/shadow_offset_x = 2
@@ -849,7 +797,7 @@ text = "Investigate?"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="btnEvent" type="Button" parent="picEvent"]
+[node name="btnEvent" type="Button" parent="eventHolder1/picEvent"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -863,46 +811,10 @@ theme_override_styles/pressed = SubResource("StyleBoxEmpty_qbqed")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_wmllw")
 disabled = true
 
-[node name="picEnemy" type="TextureRect" parent="."]
-modulate = Color(0, 0, 0, 1)
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -206.0
-offset_top = -32.0
-offset_right = 221.0
-offset_bottom = 324.0
-grow_horizontal = 2
-scale = Vector2(0.4, 0.4)
-pivot_offset = Vector2(213, 178)
-texture = ExtResource("8_wmllw")
-
-[node name="particleBlood" type="CPUParticles2D" parent="."]
-visible = false
-position = Vector2(744, 568)
-emitting = false
-amount = 10
-texture = ExtResource("5_b2aq1")
-speed_scale = 0.4
-explosiveness = 0.6
-randomness = 1.0
-direction = Vector2(0, -1)
-spread = 47.9
-gravity = Vector2(0, 600)
-initial_velocity_min = 150.0
-initial_velocity_max = 400.0
-linear_accel_min = 50.0
-linear_accel_max = 100.0
-scale_amount_min = 0.02
-scale_amount_max = 0.03
-scale_amount_curve = SubResource("Curve_88pph")
-color = Color(0.505882, 0.188235, 0.188235, 1)
-color_ramp = SubResource("Gradient_erqm4")
-
 [node name="panelOffer" type="Panel" parent="."]
 visible = false
 modulate = Color(1, 1, 1, 0)
+z_index = 10
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -942,7 +854,7 @@ theme_override_constants/separation = 10
 [node name="lblName" type="Label" parent="panelOffer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 42
-text = "A  Pile  of  old  Corpses."
+text = "Your  Dead  Partner."
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -951,7 +863,7 @@ clip_contents = false
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 bbcode_enabled = true
-text = "You can feel some old weapons among the bones..."
+text = "Good old Williams... always had a weapon or three handy."
 fit_content = true
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -966,11 +878,6 @@ columns = 3
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 text = "Don't grab anything..."
-
-[node name="animRope" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_x0om5")
-}
 
 [node name="animBox" type="AnimationPlayer" parent="."]
 unique_name_in_owner = true
@@ -993,8 +900,11 @@ libraries = {
 &"": SubResource("AnimationLibrary_36ye4")
 }
 
-[connection signal="mouse_entered" from="picEvent/btnEvent" to="." method="_on_btn_event_mouse_entered"]
-[connection signal="mouse_exited" from="picEvent/btnEvent" to="." method="_on_btn_event_mouse_exited"]
-[connection signal="pressed" from="picEvent/btnEvent" to="." method="_on_btn_event_pressed"]
+[connection signal="mouse_entered" from="picFarBack/centerPoint/btnNext" to="." method="_on_btn_next_mouse_entered"]
+[connection signal="mouse_exited" from="picFarBack/centerPoint/btnNext" to="." method="_on_btn_next_mouse_exited"]
+[connection signal="pressed" from="picFarBack/centerPoint/btnNext" to="." method="_on_dungeon_button_clicked"]
+[connection signal="mouse_entered" from="eventHolder1/picEvent/btnEvent" to="." method="_on_btn_event_mouse_entered"]
+[connection signal="mouse_exited" from="eventHolder1/picEvent/btnEvent" to="." method="_on_btn_event_mouse_exited"]
+[connection signal="pressed" from="eventHolder1/picEvent/btnEvent" to="." method="_on_btn_event_pressed"]
 [connection signal="mouse_entered" from="panelOffer/PanelContainer/MarginContainer/VBoxContainer/btnSkip" to="." method="_on_btn_skip_mouse_entered"]
 [connection signal="pressed" from="panelOffer/PanelContainer/MarginContainer/VBoxContainer/btnSkip" to="." method="_on_btn_skip_pressed"]

@@ -235,27 +235,32 @@ theme = ExtResource("4_24wwl")
 button_pressed = true
 text = "CRT Effect"
 
+[node name="checkFog" type="CheckBox" parent="Panel/pnlBlackBack/pnlBorder/VBoxContainer/panelGraphics/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+button_pressed = true
+text = "In Game Fog"
+
 [node name="checkShake" type="CheckBox" parent="Panel/pnlBlackBack/pnlBorder/VBoxContainer/panelGraphics/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 button_pressed = true
 text = "Screen Shake"
 
-[node name="checkVSYNC" type="CheckBox" parent="Panel/pnlBlackBack/pnlBorder/VBoxContainer/panelGraphics/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+[node name="checkSkipOpening" type="CheckBox" parent="Panel/pnlBlackBack/pnlBorder/VBoxContainer/panelGraphics/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
-button_pressed = true
-text = "V-Sync"
-
-[node name="checkFullscreen" type="CheckBox" parent="Panel/pnlBlackBack/pnlBorder/VBoxContainer/panelGraphics/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-text = "Fullscreen"
+text = "Skip Opening"
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="Panel/pnlBlackBack/pnlBorder/VBoxContainer/panelGraphics/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="checkSkipOpening" type="CheckBox" parent="Panel/pnlBlackBack/pnlBorder/VBoxContainer/panelGraphics/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer2"]
+[node name="checkVSYNC" type="CheckBox" parent="Panel/pnlBlackBack/pnlBorder/VBoxContainer/panelGraphics/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer2"]
 layout_mode = 2
-text = "Skip Opening"
+button_pressed = true
+text = "V-Sync"
+
+[node name="checkFullscreen" type="CheckBox" parent="Panel/pnlBlackBack/pnlBorder/VBoxContainer/panelGraphics/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "Fullscreen"
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel/pnlBlackBack/pnlBorder/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)

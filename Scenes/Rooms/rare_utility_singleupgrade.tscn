@@ -1,11 +1,22 @@
-[gd_scene load_steps=22 format=3 uid="uid://bpbr2fjgpoo4q"]
+[gd_scene load_steps=31 format=3 uid="uid://bpbr2fjgpoo4q"]
 
 [ext_resource type="Texture2D" uid="uid://dgtyfe7u507wx" path="res://Assets/Art/Backgrounds/Background_Chamber_1.png" id="1_2leqs"]
 [ext_resource type="Script" uid="uid://dt5ct7fbpd4jn" path="res://Scripts/RoomEvents/rare_utility_singleupgrade.gd" id="1_qnuek"]
 [ext_resource type="Texture2D" uid="uid://dxw4wnrx37lmp" path="res://Assets/Art/Particles/magic_05.png" id="3_hw3yl"]
+[ext_resource type="Texture2D" uid="uid://dlb5016vgje33" path="res://Assets/Art/Doors/special_peddler_room_door.png" id="3_lti4h"]
 [ext_resource type="Texture2D" uid="uid://c0oywc6dgy08l" path="res://Assets/Art/Events/Merchant04.png" id="4_lti4h"]
 [ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="5_rsdh4"]
 [ext_resource type="PackedScene" uid="uid://dfuglhrwpha2" path="res://Scenes/Elements/item_combiner.tscn" id="6_8xi0c"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rsdh4"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8xi0c"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sqebn"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0x7xd"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_iu5kk"]
 
 [sub_resource type="Curve" id="Curve_sqebn"]
 _limits = [0.3, 3.0, 0.0, 1.0]
@@ -318,6 +329,68 @@ _data = {
 &"show_label": SubResource("Animation_1rbu2")
 }
 
+[sub_resource type="Animation" id="Animation_6fo00"]
+resource_name = "show_door"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("centerPoint/picDoor:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("centerPoint/picDoor/btnDoor:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_c5i5w"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("centerPoint/picDoor:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("centerPoint/picDoor/btnDoor:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_q4cns"]
+_data = {
+&"RESET": SubResource("Animation_c5i5w"),
+&"show_door": SubResource("Animation_6fo00")
+}
+
 [node name="rare_utility_singleupgrade" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -337,6 +410,50 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("1_2leqs")
 expand_mode = 1
+
+[node name="centerPoint" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="picDoor" type="TextureRect" parent="centerPoint"]
+modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(155.2, 216)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 157.0
+offset_top = -143.0
+offset_right = 351.051
+offset_bottom = 73.0
+grow_vertical = 2
+texture = ExtResource("3_lti4h")
+expand_mode = 3
+
+[node name="btnDoor" type="Button" parent="centerPoint/picDoor"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_rsdh4")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_8xi0c")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_sqebn")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_0x7xd")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_iu5kk")
+disabled = true
 
 [node name="Particles" type="CPUParticles2D" parent="."]
 position = Vector2(931, 478)
@@ -436,6 +553,11 @@ libraries = {
 [node name="animLabel" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_5ugpi")
+}
+
+[node name="animDoor" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_q4cns")
 }
 
 [connection signal="mouse_entered" from="picEvent/btnEvent" to="." method="_on_btn_event_mouse_entered"]

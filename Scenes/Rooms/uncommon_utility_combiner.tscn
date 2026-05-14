@@ -2,11 +2,20 @@
 
 [ext_resource type="Script" uid="uid://cahuuukphkgmu" path="res://Scripts/RoomEvents/forge_room.gd" id="1_gycxu"]
 [ext_resource type="Resource" uid="uid://conkutd8s2s2s" path="res://Resources/Enemies/ShrunkenHead.tres" id="2_v48r5"]
-[ext_resource type="Texture2D" uid="uid://oxqk3dgpm00q" path="res://Assets/Art/Backgrounds/Background_10.png" id="3_pty56"]
+[ext_resource type="Texture2D" uid="uid://daeptxxk8jt0v" path="res://Assets/Art/Backgrounds/Background_05.png" id="3_pty56"]
 [ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="4_7ymnc"]
 [ext_resource type="Texture2D" uid="uid://d154ok6bmavw3" path="res://Assets/Art/Events/weapon_imbue.png" id="4_nf2la"]
 [ext_resource type="Texture2D" uid="uid://dxt3yb4gkjn6x" path="res://Assets/Art/Particles/smoke_07.png" id="6_5iesb"]
 [ext_resource type="PackedScene" uid="uid://bj06ih42236js" path="res://Scenes/Elements/weapon_upgrader.tscn" id="8_nf2la"]
+
+[sub_resource type="Curve" id="Curve_kct4p"]
+_limits = [0.3, 3.0, 0.0, 1.0]
+_data = [Vector2(0, 0.3), 0.0, 0.0, 0, 0, Vector2(1, 1.0618), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_x5nv0"]
+offsets = PackedFloat32Array(0, 0.625, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5mci1"]
 
@@ -17,15 +26,6 @@
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_070eq"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_np0uq"]
-
-[sub_resource type="Curve" id="Curve_kct4p"]
-_limits = [0.3, 3.0, 0.0, 1.0]
-_data = [Vector2(0, 0.3), 0.0, 0.0, 0, 0, Vector2(1, 1.0618), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="Gradient" id="Gradient_x5nv0"]
-offsets = PackedFloat32Array(0, 0.625, 1)
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
 [sub_resource type="Animation" id="Animation_ooyyh"]
 length = 0.001
@@ -44,7 +44,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("jar_particles:emitting")
+tracks/1/path = NodePath("picTreasure/jar_particles:emitting")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -91,7 +91,7 @@ step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("jar_particles:emitting")
+tracks/0/path = NodePath("picTreasure/jar_particles:emitting")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -156,7 +156,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("jar_particles:emitting")
+tracks/2/path = NodePath("picTreasure/jar_particles:emitting")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -222,7 +222,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(495, 307)]
+"values": [Vector2(520, 323)]
 }
 
 [sub_resource type="Animation" id="Animation_taixv"]
@@ -263,7 +263,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(495, 230), Vector2(495, 307)]
+"values": [Vector2(520, 230), Vector2(520, 323)]
 }
 
 [sub_resource type="Animation" id="Animation_sixyl"]
@@ -318,7 +318,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(495, 307), Vector2(495, 230)]
+"values": [Vector2(520, 323), Vector2(520, 230)]
 }
 
 [sub_resource type="Animation" id="Animation_0y74d"]
@@ -369,15 +369,44 @@ expand_mode = 1
 
 [node name="picTreasure" type="TextureRect" parent="."]
 modulate = Color(0, 0, 0, 1)
-layout_mode = 0
-offset_left = 504.0
-offset_top = 212.0
-offset_right = 954.0
-offset_bottom = 692.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -225.0
+offset_top = -240.0
+offset_right = 225.0
+offset_bottom = 240.0
+grow_horizontal = 2
+grow_vertical = 2
 scale = Vector2(0.75, 0.75)
 pivot_offset = Vector2(225, 240)
 texture = ExtResource("4_nf2la")
 expand_mode = 1
+
+[node name="jar_particles" type="CPUParticles2D" parent="picTreasure"]
+position = Vector2(230.333, 380)
+scale = Vector2(1.25, 1.25)
+emitting = false
+amount = 10
+texture = ExtResource("6_5iesb")
+lifetime = 2.0
+speed_scale = 0.5
+randomness = 0.3
+direction = Vector2(0, 0)
+spread = 36.43
+gravity = Vector2(0, 0)
+initial_velocity_min = 100.0
+initial_velocity_max = 100.0
+angular_velocity_min = 30.0
+angular_velocity_max = 100.0
+scale_amount_min = 0.1
+scale_amount_max = 0.7
+scale_amount_curve = SubResource("Curve_kct4p")
+color = Color(0.637843, 0.637843, 0.637843, 1)
+color_ramp = SubResource("Gradient_x5nv0")
 
 [node name="Button" type="Button" parent="picTreasure"]
 layout_mode = 1
@@ -405,10 +434,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -273.0
-offset_top = -125.0
-offset_right = 223.0
-offset_bottom = -55.0
+offset_left = -248.0
+offset_top = -109.0
+offset_right = 248.0
+offset_bottom = -39.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.5, 0.5)
@@ -424,28 +453,6 @@ theme_override_font_sizes/font_size = 46
 text = "Examine."
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="jar_particles" type="CPUParticles2D" parent="."]
-position = Vector2(732.75, 564.5)
-scale = Vector2(0.9375, 0.9375)
-emitting = false
-amount = 10
-texture = ExtResource("6_5iesb")
-lifetime = 2.0
-speed_scale = 0.5
-randomness = 0.3
-direction = Vector2(0, 0)
-spread = 36.43
-gravity = Vector2(0, 0)
-initial_velocity_min = 100.0
-initial_velocity_max = 100.0
-angular_velocity_min = 30.0
-angular_velocity_max = 100.0
-scale_amount_min = 0.1
-scale_amount_max = 0.7
-scale_amount_curve = SubResource("Curve_kct4p")
-color = Color(0.637843, 0.637843, 0.637843, 1)
-color_ramp = SubResource("Gradient_x5nv0")
 
 [node name="WeaponUpgrader" parent="." instance=ExtResource("8_nf2la")]
 layout_mode = 1

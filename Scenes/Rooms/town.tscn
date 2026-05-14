@@ -1,15 +1,154 @@
-[gd_scene load_steps=10 format=3 uid="uid://do4uu0o7e2sx"]
+[gd_scene load_steps=23 format=3 uid="uid://do4uu0o7e2sx"]
 
 [ext_resource type="Theme" uid="uid://p8sbf2usmdfn" path="res://Themes/invis_buttons.tres" id="1_aeddt"]
 [ext_resource type="Script" uid="uid://plx66byd2blm" path="res://Scripts/RoomEvents/town.gd" id="2_2q7b4"]
 [ext_resource type="Texture2D" uid="uid://cr6vcpo3v735f" path="res://Assets/Art/Events/Town/Town_Placeholder.png" id="3_k2qd8"]
 [ext_resource type="Texture2D" uid="uid://3xbcf1mjb8l3" path="res://Assets/Art/Events/Town/FloorHole.png" id="4_wqqg3"]
+[ext_resource type="Texture2D" uid="uid://dmcucdkba7iag" path="res://Assets/Art/Events/PetFamiliar2.png" id="6_16y64"]
+[ext_resource type="Texture2D" uid="uid://cxcph5ndupuqa" path="res://Assets/UI/arrow_down.png" id="7_quwg7"]
+[ext_resource type="Texture2D" uid="uid://cu26bt7hayy3a" path="res://Resources/Rarity/golden.tres" id="8_6a6an"]
+[ext_resource type="Texture2D" uid="uid://chqkiec8p5s" path="res://Resources/Rarity/diamond.tres" id="9_16y64"]
 [ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="11_6uq0b"]
 [ext_resource type="PackedScene" uid="uid://m1r75x06jjg7" path="res://Scenes/Elements/item_town_merchant.tscn" id="15_wqqg3"]
 [ext_resource type="PackedScene" uid="uid://dfuglhrwpha2" path="res://Scenes/Elements/item_combiner.tscn" id="23_k2qd8"]
 [ext_resource type="PackedScene" uid="uid://be8xuccfxqho7" path="res://Scenes/Elements/button_town.tscn" id="24_3jgje"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wqqg3"]
+
+[sub_resource type="Curve" id="Curve_16y64"]
+_data = [Vector2(0, 0.1888), 0.0, 0.0, 0, 0, Vector2(0.740458, 0.7192), 0.0, 0.0, 0, 0, Vector2(1, 0.8024), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_l6xf1"]
+offsets = PackedFloat32Array(0, 0.584746, 1)
+colors = PackedColorArray(0.878431, 0.701961, 0, 1, 0.879109, 0.702842, 0, 0.567797, 0.88, 0.704, 0, 0)
+
+[sub_resource type="Curve" id="Curve_6uq0b"]
+_data = [Vector2(0, 0.0640001), 0.0, 0.0, 0, 0, Vector2(1, 0.7816), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_wqqg3"]
+offsets = PackedFloat32Array(0, 0.618644, 1)
+colors = PackedColorArray(0.568627, 0.921569, 1, 1, 0.56911, 0.921427, 1, 0.648305, 0.57, 0.921167, 1, 0)
+
+[sub_resource type="Animation" id="Animation_6a6an"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("btnForge/forgeUpgrade:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("btnForge/forgeUpgrade:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("btnForge/upgDiamond:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("btnForge/upgGold:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_xb5pl"]
+resource_name = "show_diamond"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("btnForge/upgDiamond:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_p3pau"]
+resource_name = "show_gold"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("btnForge/upgGold:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_06q3i"]
+resource_name = "upgrade_ready"
+length = 2.0
+loop_mode = 1
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("btnForge/forgeUpgrade:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(2, 2)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("btnForge/forgeUpgrade:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_16y64"]
+_data = {
+&"RESET": SubResource("Animation_6a6an"),
+&"show_diamond": SubResource("Animation_xb5pl"),
+&"show_gold": SubResource("Animation_p3pau"),
+&"upgrade_ready": SubResource("Animation_06q3i")
+}
 
 [node name="Town" type="Control"]
 layout_mode = 3
@@ -66,6 +205,18 @@ offset_top = -47.0
 offset_right = 199.0
 offset_bottom = 73.0
 
+[node name="picFamiliar" type="TextureRect" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 573.0
+offset_top = 22.0
+offset_right = 850.778
+offset_bottom = 272.0
+pivot_offset = Vector2(139, 125)
+texture = ExtResource("6_16y64")
+expand_mode = 3
+stretch_mode = 5
+
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 1
 anchors_preset = 10
@@ -98,6 +249,56 @@ offset_left = 380.0
 offset_top = 315.0
 offset_right = -965.0
 offset_bottom = -290.0
+mouse_filter = 2
+
+[node name="forgeUpgrade" type="TextureRect" parent="btnForge"]
+modulate = Color(1, 0.633333, 0, 1)
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -19.5
+offset_top = -50.0
+offset_right = 20.5
+offset_bottom = -10.0
+grow_horizontal = 2
+pivot_offset = Vector2(20, 20)
+texture = ExtResource("7_quwg7")
+expand_mode = 1
+flip_v = true
+
+[node name="upgGold" type="CPUParticles2D" parent="btnForge"]
+position = Vector2(100, -1)
+emitting = false
+amount = 3
+texture = ExtResource("8_6a6an")
+speed_scale = 0.4
+emission_shape = 3
+emission_rect_extents = Vector2(40, 1)
+direction = Vector2(0, -1)
+spread = 0.0
+gravity = Vector2(0, -50)
+initial_velocity_min = 5.0
+initial_velocity_max = 20.0
+scale_amount_curve = SubResource("Curve_16y64")
+color_ramp = SubResource("Gradient_l6xf1")
+
+[node name="upgDiamond" type="CPUParticles2D" parent="btnForge"]
+position = Vector2(101, 0)
+emitting = false
+amount = 3
+texture = ExtResource("9_16y64")
+speed_scale = 0.3
+emission_shape = 3
+emission_rect_extents = Vector2(40, 1)
+direction = Vector2(0, -1)
+spread = 0.0
+gravity = Vector2(0, -50)
+initial_velocity_min = 5.0
+initial_velocity_max = 20.0
+scale_amount_curve = SubResource("Curve_6uq0b")
+color_ramp = SubResource("Gradient_wqqg3")
 
 [node name="btnShrine" parent="." instance=ExtResource("24_3jgje")]
 layout_mode = 1
@@ -179,6 +380,11 @@ required_category = "Bug"
 sb_name = "Beautiful Offspring"
 sb_text = "Here's an exotic bug for you!"
 sb_button = "Um, thanks."
+
+[node name="animUpgrade" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_16y64")
+}
 
 [connection signal="button_clicked" from="picBanish/btnBanish" to="." method="_on_btn_banish_button_clicked"]
 [connection signal="button_entered" from="picBanish/btnBanish" to="." method="_on_btn_banish_button_entered"]

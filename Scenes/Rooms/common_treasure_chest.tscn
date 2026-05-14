@@ -7,6 +7,15 @@
 [ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="4_bqoxt"]
 [ext_resource type="PackedScene" uid="uid://c3h585v8mippc" path="res://Scenes/Elements/free_item_offering.tscn" id="5_o16tn"]
 
+[sub_resource type="Curve" id="Curve_7xgip"]
+_limits = [0.3, 3.0, 0.0, 1.0]
+_data = [Vector2(0, 0.3), 0.0, 0.0, 0, 0, Vector2(1, 0.542696), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_1xwjt"]
+offsets = PackedFloat32Array(0, 0.625, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xcab8"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nhd8p"]
@@ -16,15 +25,6 @@
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rq07n"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_01rsx"]
-
-[sub_resource type="Curve" id="Curve_7xgip"]
-_limits = [0.3, 3.0, 0.0, 1.0]
-_data = [Vector2(0, 0.3), 0.0, 0.0, 0, 0, Vector2(1, 0.542696), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="Gradient" id="Gradient_1xwjt"]
-offsets = PackedFloat32Array(0, 0.625, 1)
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
 [sub_resource type="Animation" id="Animation_1qr6a"]
 length = 0.001
@@ -171,7 +171,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("particles:emitting")
+tracks/1/path = NodePath("picEvent/particles:emitting")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -212,7 +212,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("particles:emitting")
+tracks/1/path = NodePath("picEvent/particles:emitting")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -252,7 +252,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("particles:emitting")
+tracks/1/path = NodePath("picEvent/particles:emitting")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -431,11 +431,18 @@ expand_mode = 1
 
 [node name="picEvent" type="TextureRect" parent="."]
 modulate = Color(0, 0, 0, 1)
-layout_mode = 0
-offset_left = 524.0
-offset_top = 224.0
-offset_right = 1052.34
-offset_bottom = 545.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -264.17
+offset_top = -160.5
+offset_right = 264.17
+offset_bottom = 160.5
+grow_horizontal = 2
+grow_vertical = 2
 texture = ExtResource("2_x57kp")
 expand_mode = 3
 
@@ -466,6 +473,25 @@ text = "Open It..."
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="particles" type="CPUParticles2D" parent="picEvent"]
+position = Vector2(385.171, 218.5)
+emitting = false
+amount = 15
+texture = ExtResource("3_x57kp")
+speed_scale = 0.5
+emission_shape = 3
+emission_rect_extents = Vector2(50, 1)
+direction = Vector2(0, -1)
+spread = 38.3
+gravity = Vector2(0, 400)
+initial_velocity_min = 100.0
+initial_velocity_max = 300.0
+scale_amount_min = 0.1
+scale_amount_max = 0.2
+scale_amount_curve = SubResource("Curve_7xgip")
+color = Color(1, 0.8, 0, 1)
+color_ramp = SubResource("Gradient_1xwjt")
+
 [node name="btnEvent" type="Button" parent="picEvent"]
 layout_mode = 1
 anchors_preset = 15
@@ -495,25 +521,6 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 scale = Vector2(0.5, 0.5)
 box_name = "A Gnarled Chest"
-
-[node name="particles" type="CPUParticles2D" parent="."]
-position = Vector2(892, 446)
-emitting = false
-amount = 15
-texture = ExtResource("3_x57kp")
-speed_scale = 0.5
-emission_shape = 3
-emission_rect_extents = Vector2(50, 1)
-direction = Vector2(0, -1)
-spread = 38.3
-gravity = Vector2(0, 400)
-initial_velocity_min = 100.0
-initial_velocity_max = 300.0
-scale_amount_min = 0.1
-scale_amount_max = 0.2
-scale_amount_curve = SubResource("Curve_7xgip")
-color = Color(1, 0.8, 0, 1)
-color_ramp = SubResource("Gradient_1xwjt")
 
 [node name="animLabel" type="AnimationPlayer" parent="."]
 libraries = {

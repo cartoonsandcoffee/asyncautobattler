@@ -8,6 +8,15 @@
 [ext_resource type="Texture2D" uid="uid://dvag4ctmsp38b" path="res://Assets/Art/Events/Sarcophagus.png" id="5_0h2n3"]
 [ext_resource type="Texture2D" uid="uid://dxw4wnrx37lmp" path="res://Assets/Art/Particles/magic_05.png" id="5_m4yyy"]
 
+[sub_resource type="Curve" id="Curve_rwip8"]
+_limits = [0.3, 3.0, 0.0, 1.0]
+_data = [Vector2(0, 0.3), 0.0, 0.0, 0, 0, Vector2(1, 1.0618), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_j1cei"]
+offsets = PackedFloat32Array(0, 0.625, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fh2em"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5hy7u"]
@@ -17,15 +26,6 @@
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xe641"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_h0lw6"]
-
-[sub_resource type="Curve" id="Curve_rwip8"]
-_limits = [0.3, 3.0, 0.0, 1.0]
-_data = [Vector2(0, 0.3), 0.0, 0.0, 0, 0, Vector2(1, 1.0618), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="Gradient" id="Gradient_j1cei"]
-offsets = PackedFloat32Array(0, 0.625, 1)
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
 [sub_resource type="Animation" id="Animation_rqccd"]
 length = 0.001
@@ -332,7 +332,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("jar_particles:emitting")
+tracks/1/path = NodePath("picTreasure/jar_particles:emitting")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -373,7 +373,7 @@ step = 0.01
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("jar_particles:emitting")
+tracks/0/path = NodePath("picTreasure/jar_particles:emitting")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -438,7 +438,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("jar_particles:emitting")
+tracks/2/path = NodePath("picTreasure/jar_particles:emitting")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -497,15 +497,39 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -156.0
-offset_top = -182.0
-offset_right = 200.248
-offset_bottom = 308.0
+offset_left = -178.124
+offset_top = -245.0
+offset_right = 178.124
+offset_bottom = 245.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.8, 0.8)
+pivot_offset = Vector2(178, 245)
 texture = ExtResource("5_0h2n3")
 expand_mode = 3
+
+[node name="jar_particles" type="CPUParticles2D" parent="picTreasure"]
+position = Vector2(191.251, 210)
+scale = Vector2(1.25, 1.25)
+emitting = false
+amount = 10
+texture = ExtResource("5_m4yyy")
+speed_scale = 0.3
+randomness = 0.3
+emission_shape = 3
+emission_rect_extents = Vector2(50, 20)
+direction = Vector2(0, 0)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 100.0
+initial_velocity_max = 300.0
+angular_velocity_min = 30.0
+angular_velocity_max = 200.0
+scale_amount_min = 0.1
+scale_amount_max = 0.2
+scale_amount_curve = SubResource("Curve_rwip8")
+color = Color(0.745813, 0.5472, 0.76, 1)
+color_ramp = SubResource("Gradient_j1cei")
 
 [node name="Button" type="Button" parent="picTreasure"]
 layout_mode = 1
@@ -554,28 +578,6 @@ anchor_bottom = 0.5
 item_rarity = 2
 box_name = "A Hero's Grave"
 box_desc = "Someone special must be laid to rest here. Oh well..."
-
-[node name="jar_particles" type="CPUParticles2D" parent="."]
-position = Vector2(765, 418)
-emitting = false
-amount = 10
-texture = ExtResource("5_m4yyy")
-speed_scale = 0.3
-randomness = 0.3
-emission_shape = 3
-emission_rect_extents = Vector2(50, 20)
-direction = Vector2(0, 0)
-spread = 180.0
-gravity = Vector2(0, 0)
-initial_velocity_min = 100.0
-initial_velocity_max = 300.0
-angular_velocity_min = 30.0
-angular_velocity_max = 200.0
-scale_amount_min = 0.1
-scale_amount_max = 0.2
-scale_amount_curve = SubResource("Curve_rwip8")
-color = Color(0.745813, 0.5472, 0.76, 1)
-color_ramp = SubResource("Gradient_j1cei")
 
 [node name="animOpen" type="AnimationPlayer" parent="."]
 libraries = {

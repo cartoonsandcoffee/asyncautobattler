@@ -1,0 +1,386 @@
+[gd_scene load_steps=26 format=3 uid="uid://dbkadwlk4fth4"]
+
+[ext_resource type="Texture2D" uid="uid://cs8cwwngwet46" path="res://Assets/Art/Events/Town/MainCamp_Back.png" id="1_d4jcf"]
+[ext_resource type="Script" uid="uid://cgwj47xss31u4" path="res://Scripts/RoomEvents/main_camp.gd" id="1_r85n3"]
+[ext_resource type="PackedScene" uid="uid://buxce5lbtm4xq" path="res://Scenes/Elements/MainCamp/camp_shrine.tscn" id="2_dc4a7"]
+[ext_resource type="PackedScene" uid="uid://csq4h351vvvh7" path="res://Scenes/Elements/MainCamp/camp_store.tscn" id="2_grllx"]
+[ext_resource type="PackedScene" uid="uid://dmholyo4ckhkg" path="res://Scenes/Elements/MainCamp/camp_champion.tscn" id="2_hx2i5"]
+[ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="2_pdmyp"]
+[ext_resource type="PackedScene" uid="uid://cu6h7sivns50v" path="res://Scenes/Elements/MainCamp/camp_dungeon.tscn" id="2_q1w84"]
+[ext_resource type="PackedScene" uid="uid://co7xji8qkuesd" path="res://Scenes/Elements/MainCamp/camp_banish.tscn" id="2_w4c2v"]
+[ext_resource type="PackedScene" uid="uid://d0prlrshjeu3f" path="res://Scenes/Elements/MainCamp/camp_combiner.tscn" id="3_5ihta"]
+[ext_resource type="Texture2D" uid="uid://cu26bt7hayy3a" path="res://Resources/Rarity/golden.tres" id="7_n3qum"]
+[ext_resource type="PackedScene" uid="uid://kdftirsmd8bq" path="res://Scenes/Elements/MainCamp/camp_bug.tscn" id="7_w4c2v"]
+[ext_resource type="Texture2D" uid="uid://chqkiec8p5s" path="res://Resources/Rarity/diamond.tres" id="8_rxmm4"]
+[ext_resource type="PackedScene" uid="uid://c1apkhjh04c5f" path="res://Scenes/Elements/MainCamp/camp_pet.tscn" id="11_u40g7"]
+[ext_resource type="PackedScene" uid="uid://dfuglhrwpha2" path="res://Scenes/Elements/item_combiner.tscn" id="12_vpagu"]
+[ext_resource type="PackedScene" uid="uid://m1r75x06jjg7" path="res://Scenes/Elements/item_town_merchant.tscn" id="13_r85n3"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grllx"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cfxqc"]
+
+[sub_resource type="Curve" id="Curve_vpagu"]
+_data = [Vector2(0, 0.1888), 0.0, 0.0, 0, 0, Vector2(0.740458, 0.7192), 0.0, 0.0, 0, 0, Vector2(1, 0.8024), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_r85n3"]
+offsets = PackedFloat32Array(0, 0.584746, 1)
+colors = PackedColorArray(0.878431, 0.701961, 0, 1, 0.879109, 0.702842, 0, 0.567797, 0.88, 0.704, 0, 0)
+
+[sub_resource type="Curve" id="Curve_u40g7"]
+_data = [Vector2(0, 0.0640001), 0.0, 0.0, 0, 0, Vector2(1, 0.7816), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_05jbj"]
+offsets = PackedFloat32Array(0, 0.618644, 1)
+colors = PackedColorArray(0.568627, 0.921569, 1, 1, 0.56911, 0.921427, 1, 0.648305, 0.57, 0.921167, 1, 0)
+
+[sub_resource type="Animation" id="Animation_05jbj"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FullScreenBlack/CenterButtons/CampCombiner/upgDiamond:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("FullScreenBlack/CenterButtons/CampCombiner/upgGold:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_u40g7"]
+resource_name = "show_diamond"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FullScreenBlack/CenterButtons/CampCombiner/upgDiamond:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_jobms"]
+resource_name = "show_gold"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FullScreenBlack/CenterButtons/CampCombiner/upgGold:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_jrobx"]
+_data = {
+&"RESET": SubResource("Animation_05jbj"),
+&"show_diamond": SubResource("Animation_u40g7"),
+&"show_gold": SubResource("Animation_jobms")
+}
+
+[node name="MainCamp" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_r85n3")
+
+[node name="FullScreenBlack" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_grllx")
+
+[node name="picBack" type="TextureRect" parent="FullScreenBlack"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_d4jcf")
+expand_mode = 3
+
+[node name="LabelContainer" type="PanelContainer" parent="FullScreenBlack"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 150.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_cfxqc")
+
+[node name="lblTip" type="Label" parent="FullScreenBlack/LabelContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.92, 0.87768, 0.2852, 1)
+theme_override_colors/font_outline_color = Color(0.78, 0.338, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("2_pdmyp")
+theme_override_font_sizes/font_size = 34
+text = "A small camp, outside some kind of arena."
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="CenterButtons" type="Control" parent="FullScreenBlack"]
+custom_minimum_size = Vector2(1000, 600)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CampBanish" parent="FullScreenBlack/CenterButtons" instance=ExtResource("2_w4c2v")]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+offset_left = -23.0
+offset_top = -161.0
+offset_right = -23.0
+offset_bottom = -161.0
+grow_vertical = 0
+scale = Vector2(0.8, 0.75)
+
+[node name="CampChampion" parent="FullScreenBlack/CenterButtons" instance=ExtResource("2_hx2i5")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 46.0
+offset_top = -95.0
+offset_right = 46.0
+offset_bottom = -95.0
+scale = Vector2(0.75, 0.75)
+
+[node name="CampShrine" parent="FullScreenBlack/CenterButtons" instance=ExtResource("2_dc4a7")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -129.0
+offset_right = -129.0
+scale = Vector2(0.5, 0.5)
+
+[node name="CampCombiner" parent="FullScreenBlack/CenterButtons" instance=ExtResource("3_5ihta")]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_right = 0.0
+anchor_bottom = 0.5
+offset_left = 176.0
+offset_top = 6.0
+offset_right = 176.0
+offset_bottom = 6.0
+grow_horizontal = 1
+scale = Vector2(0.7, 0.7)
+
+[node name="upgGold" type="CPUParticles2D" parent="FullScreenBlack/CenterButtons/CampCombiner"]
+position = Vector2(22.8571, -151.429)
+emitting = false
+amount = 3
+texture = ExtResource("7_n3qum")
+speed_scale = 0.4
+emission_shape = 3
+emission_rect_extents = Vector2(40, 1)
+direction = Vector2(0, -1)
+spread = 0.0
+gravity = Vector2(0, -50)
+initial_velocity_min = 5.0
+initial_velocity_max = 20.0
+scale_amount_curve = SubResource("Curve_vpagu")
+color_ramp = SubResource("Gradient_r85n3")
+
+[node name="upgDiamond" type="CPUParticles2D" parent="FullScreenBlack/CenterButtons/CampCombiner"]
+position = Vector2(27.1428, -147.143)
+emitting = false
+amount = 3
+texture = ExtResource("8_rxmm4")
+speed_scale = 0.3
+emission_shape = 3
+emission_rect_extents = Vector2(40, 1)
+direction = Vector2(0, -1)
+spread = 0.0
+gravity = Vector2(0, -50)
+initial_velocity_min = 5.0
+initial_velocity_max = 20.0
+scale_amount_curve = SubResource("Curve_u40g7")
+color_ramp = SubResource("Gradient_05jbj")
+
+[node name="CampStore" parent="FullScreenBlack/CenterButtons" instance=ExtResource("2_grllx")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -566.0
+offset_top = 29.0
+offset_right = -566.0
+offset_bottom = 29.0
+scale = Vector2(1, 0.9)
+
+[node name="CampPet" parent="FullScreenBlack/CenterButtons" instance=ExtResource("11_u40g7")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 207.0
+offset_top = 5.0
+offset_right = 207.0
+offset_bottom = 5.0
+scale = Vector2(0.45, 0.45)
+
+[node name="CampBug" parent="FullScreenBlack/CenterButtons" instance=ExtResource("7_w4c2v")]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -130.0
+offset_top = 3.0
+offset_right = -130.0
+offset_bottom = 3.0
+grow_horizontal = 0
+scale = Vector2(0.8, 0.847)
+
+[node name="CampDungeon" parent="FullScreenBlack" instance=ExtResource("2_q1w84")]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -152.0
+offset_top = -16.0
+offset_right = -152.0
+offset_bottom = -16.0
+grow_horizontal = 0
+scale = Vector2(1.1, 1.1)
+
+[node name="banish_popup" parent="." instance=ExtResource("12_vpagu")]
+layout_mode = 1
+combiner_mode = 4
+number_of_slots = 1
+allow_multiple_crafts = false
+instruction_text = "Disgard an item down the hole and you won't see it again this run."
+box_name = "Banish An Item"
+button_text = "Throw it in."
+crafting_message = "Banishing!"
+sb_name = "It is Gone!"
+sb_text = "You will not see it again this run."
+sb_button = "Done!"
+
+[node name="merchant_popup" parent="." instance=ExtResource("13_r85n3")]
+layout_mode = 1
+box_name = "A Peddler's Hut"
+box_desc = "Would any of these help you?"
+
+[node name="shrine_popup" parent="." instance=ExtResource("12_vpagu")]
+layout_mode = 1
+combiner_mode = 1
+number_of_slots = 1
+allow_multiple_crafts = false
+instruction_text = "Leave an offering..."
+box_name = "A Crumbling Altar"
+button_text = "Offer this Item?"
+crafting_message = "Praying..."
+sb_name = "Someone Smiled"
+sb_text = "Have your prayers been answered?"
+sb_button = "Done"
+
+[node name="forge_popup" parent="." instance=ExtResource("12_vpagu")]
+layout_mode = 1
+instruction_text = "Give me two identical Common  or Golden items..."
+box_name = "A Forge"
+button_text = "Upgrade"
+sb_name = "Success!"
+sb_text = "I've combined them into something stronger!"
+sb_button = "Take Your New Item"
+
+[node name="crafting_popup" parent="." instance=ExtResource("12_vpagu")]
+layout_mode = 1
+combiner_mode = 3
+instruction_text = "\"I like to breed exotic bugs.\""
+box_name = "Bug Collector"
+button_text = "Breed Them"
+crafting_message = "Look what they're doing!"
+has_category_requirement = true
+required_category = "Bug"
+sb_name = "Beautiful Offspring"
+sb_text = "Here's an exotic bug for you!"
+sb_button = "Um, thanks."
+
+[node name="animUpgrade" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_jrobx")
+}
+
+[connection signal="button_clicked" from="FullScreenBlack/CenterButtons/CampBanish" to="." method="_on_camp_banish_button_clicked"]
+[connection signal="button_entered" from="FullScreenBlack/CenterButtons/CampBanish" to="." method="_on_camp_banish_button_entered"]
+[connection signal="button_exited" from="FullScreenBlack/CenterButtons/CampBanish" to="." method="_on_camp_banish_button_exited"]
+[connection signal="button_clicked" from="FullScreenBlack/CenterButtons/CampChampion" to="." method="_on_camp_champion_button_clicked"]
+[connection signal="button_entered" from="FullScreenBlack/CenterButtons/CampChampion" to="." method="_on_camp_champion_button_entered"]
+[connection signal="button_exited" from="FullScreenBlack/CenterButtons/CampChampion" to="." method="_on_camp_champion_button_exited"]
+[connection signal="button_clicked" from="FullScreenBlack/CenterButtons/CampShrine" to="." method="_on_camp_shrine_button_clicked"]
+[connection signal="button_entered" from="FullScreenBlack/CenterButtons/CampShrine" to="." method="_on_camp_shrine_button_entered"]
+[connection signal="button_exited" from="FullScreenBlack/CenterButtons/CampShrine" to="." method="_on_camp_shrine_button_exited"]
+[connection signal="button_clicked" from="FullScreenBlack/CenterButtons/CampCombiner" to="." method="_on_camp_combiner_button_clicked"]
+[connection signal="button_entered" from="FullScreenBlack/CenterButtons/CampCombiner" to="." method="_on_camp_combiner_button_entered"]
+[connection signal="button_exited" from="FullScreenBlack/CenterButtons/CampCombiner" to="." method="_on_camp_combiner_button_exited"]
+[connection signal="button_clicked" from="FullScreenBlack/CenterButtons/CampStore" to="." method="_on_camp_store_button_clicked"]
+[connection signal="button_entered" from="FullScreenBlack/CenterButtons/CampStore" to="." method="_on_camp_store_button_entered"]
+[connection signal="button_exited" from="FullScreenBlack/CenterButtons/CampStore" to="." method="_on_camp_store_button_exited"]
+[connection signal="button_clicked" from="FullScreenBlack/CenterButtons/CampPet" to="." method="_on_camp_pet_button_clicked"]
+[connection signal="button_entered" from="FullScreenBlack/CenterButtons/CampPet" to="." method="_on_camp_pet_button_entered"]
+[connection signal="button_exited" from="FullScreenBlack/CenterButtons/CampPet" to="." method="generic_unhover"]
+[connection signal="button_clicked" from="FullScreenBlack/CenterButtons/CampBug" to="." method="_on_camp_bug_button_clicked"]
+[connection signal="button_entered" from="FullScreenBlack/CenterButtons/CampBug" to="." method="_on_camp_bug_button_entered"]
+[connection signal="button_exited" from="FullScreenBlack/CenterButtons/CampBug" to="." method="_on_camp_bug_button_exited"]
+[connection signal="button_clicked" from="FullScreenBlack/CampDungeon" to="." method="_on_camp_dungeon_button_clicked"]
+[connection signal="button_entered" from="FullScreenBlack/CampDungeon" to="." method="_on_camp_dungeon_button_entered"]
+[connection signal="button_exited" from="FullScreenBlack/CampDungeon" to="." method="_on_camp_dungeon_button_exited"]
