@@ -1,42 +1,42 @@
-[gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://d4m487yugghgc"]
+[gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://rjcbvccvqvki"]
 
-[ext_resource type="Texture2D" uid="uid://c673mfqdoecpa" path="res://Assets/Items/Armor.png" id="1_f07ca"]
-[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="2_20wjs"]
-[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="3_pkp0i"]
+[ext_resource type="Texture2D" uid="uid://cjqv5mk8ht5lb" path="res://Assets/Items/Weapons.png" id="1_k0k8d"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_xrunx"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_k0k8d"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_8h3kw"]
-atlas = ExtResource("1_f07ca")
-region = Rect2(150, 450, 150, 150)
+[sub_resource type="AtlasTexture" id="AtlasTexture_cr05w"]
+atlas = ExtResource("1_k0k8d")
+region = Rect2(900, 900, 150, 150)
 
-[sub_resource type="Resource" id="Resource_f07ca"]
-script = ExtResource("2_20wjs")
-trigger_type = 22
+[sub_resource type="Resource" id="Resource_o7fy4"]
+script = ExtResource("1_xrunx")
+trigger_type = 0
 trigger_stat = 9
 trigger_status = 10
 trigger_value_threshold = 0
 countdown_value = 0
 countdown_recurs = false
-has_condition = false
+has_condition = true
 condition_type = 0
-condition_of = 4
-condition_stat = 9
+condition_of = 0
+condition_stat = 0
 condition_party_stat_type = 0
 condition_status = 10
 condition_item_category = ""
-condition_comparison = ">"
-compare_to = 0
+condition_comparison = "<"
+compare_to = 1
 condition_value = 0
-condition_to_party = 4
-condition_stat_type = 3
-condition_party_stat = 9
+condition_to_party = 0
+condition_stat_type = 1
+condition_party_stat = 0
 condition_party_status = 10
 effect_type = 0
 target_type = 0
 target_stat_type = 0
 target_item_category = ""
-target_stat = 2
+target_stat = 1
 target_status = 10
-effect_of = 3
+effect_of = 0
 effect_amount = 0
 effect_stat_party = 4
 effect_stat_type = 3
@@ -58,21 +58,21 @@ retrigger_type = 1
 retrigger_target = 0
 retrigger_item = 0
 retrigger_category = ""
-special_string = ""
+special_string = "double_damage"
 custom_description = ""
 metadata/_custom_type_script = "uid://dahay7fvi7bik"
 
 [resource]
-script = ExtResource("3_pkp0i")
+script = ExtResource("2_k0k8d")
 item_id = ""
 base_item_id = ""
-item_name = "Dripping Carapace"
-item_type = 1
-item_desc = "Whenever the enemy loses shield to acid, gain that shield."
-item_icon = SubResource("AtlasTexture_8h3kw")
-item_color = Color(0.33287, 0.593084, 0.339722, 1)
+item_name = "Moran Sword"
+item_type = 0
+item_desc = "While your hitpoints are not full, your attack damage is doubled."
+item_icon = SubResource("AtlasTexture_cr05w")
+item_color = Color(0.72, 0.3816, 0.3816, 1)
 item_bundle = 0
-rules = Array[ExtResource("2_20wjs")]([SubResource("Resource_f07ca")])
+rules = Array[ExtResource("1_xrunx")]([SubResource("Resource_o7fy4")])
 repeat_rules_X_times = 0
 repeat_rules_for_category = ""
 trigger_priority = 0
@@ -80,16 +80,16 @@ trigger_only_once = false
 trigger_only_first_turn = false
 trigger_on_occurrence_number = 0
 occurrence_resets_per_turn = false
-rarity = 1
+rarity = 4
 categories = Array[String]([])
 rng_weight = 1.0
 unlocked = true
-damage_bonus = 0
+damage_bonus = 6
 shield_bonus = 0
 agility_bonus = 0
 hit_points_bonus = 0
 strikes_bonus = 0
 burn_damage_bonus = 0
 cant_attack = false
-keywords = Array[String](["Acid"])
+keywords = Array[String]([])
 metadata/_custom_type_script = "uid://dthg27pchm1fm"

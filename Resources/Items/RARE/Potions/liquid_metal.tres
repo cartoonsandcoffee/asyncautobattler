@@ -1,16 +1,16 @@
-[gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://d4m487yugghgc"]
+[gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://jm28ilk145jd"]
 
-[ext_resource type="Texture2D" uid="uid://c673mfqdoecpa" path="res://Assets/Items/Armor.png" id="1_f07ca"]
-[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="2_20wjs"]
-[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="3_pkp0i"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_8u3ko"]
+[ext_resource type="Texture2D" uid="uid://b00hamhlqto4t" path="res://Assets/Items/Potions.png" id="1_53b26"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_53b26"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_8h3kw"]
-atlas = ExtResource("1_f07ca")
-region = Rect2(150, 450, 150, 150)
+[sub_resource type="AtlasTexture" id="AtlasTexture_xtheh"]
+atlas = ExtResource("1_53b26")
+region = Rect2(150, 300, 150, 150)
 
-[sub_resource type="Resource" id="Resource_f07ca"]
-script = ExtResource("2_20wjs")
-trigger_type = 22
+[sub_resource type="Resource" id="Resource_i8be5"]
+script = ExtResource("1_8u3ko")
+trigger_type = 1
 trigger_stat = 9
 trigger_status = 10
 trigger_value_threshold = 0
@@ -36,11 +36,11 @@ target_stat_type = 0
 target_item_category = ""
 target_stat = 2
 target_status = 10
-effect_of = 3
+effect_of = 1
 effect_amount = 0
-effect_stat_party = 4
-effect_stat_type = 3
-effect_stat_value = 9
+effect_stat_party = 0
+effect_stat_type = 2
+effect_stat_value = 0
 effect_status_value = 10
 effect_multiplier = 1.0
 convert_from_type = 0
@@ -63,16 +63,16 @@ custom_description = ""
 metadata/_custom_type_script = "uid://dahay7fvi7bik"
 
 [resource]
-script = ExtResource("3_pkp0i")
+script = ExtResource("2_53b26")
 item_id = ""
 base_item_id = ""
-item_name = "Dripping Carapace"
-item_type = 1
-item_desc = "Whenever the enemy loses shield to acid, gain that shield."
-item_icon = SubResource("AtlasTexture_8h3kw")
-item_color = Color(0.33287, 0.593084, 0.339722, 1)
-item_bundle = 0
-rules = Array[ExtResource("2_20wjs")]([SubResource("Resource_f07ca")])
+item_name = "Liquid Metal"
+item_type = 8
+item_desc = "Battle Start: Gain shield equal to missing hitpoints."
+item_icon = SubResource("AtlasTexture_xtheh")
+item_color = Color(0.4698, 0.58, 0.559797, 1)
+item_bundle = 1
+rules = Array[ExtResource("1_8u3ko")]([SubResource("Resource_i8be5")])
 repeat_rules_X_times = 0
 repeat_rules_for_category = ""
 trigger_priority = 0
@@ -80,8 +80,8 @@ trigger_only_once = false
 trigger_only_first_turn = false
 trigger_on_occurrence_number = 0
 occurrence_resets_per_turn = false
-rarity = 1
-categories = Array[String]([])
+rarity = 2
+categories = Array[String](["Unique", "Potion"])
 rng_weight = 1.0
 unlocked = true
 damage_bonus = 0
@@ -91,5 +91,5 @@ hit_points_bonus = 0
 strikes_bonus = 0
 burn_damage_bonus = 0
 cant_attack = false
-keywords = Array[String](["Acid"])
+keywords = Array[String](["Battle Start"])
 metadata/_custom_type_script = "uid://dthg27pchm1fm"

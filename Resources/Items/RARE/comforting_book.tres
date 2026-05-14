@@ -1,18 +1,18 @@
-[gd_resource type="Resource" script_class="Item" load_steps=7 format=3 uid="uid://ckpuvw20qb8kv"]
+[gd_resource type="Resource" script_class="Item" load_steps=7 format=3 uid="uid://cun64aufk7rmb"]
 
-[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_ae0f8"]
-[ext_resource type="Texture2D" uid="uid://bwo3qldtbc8u6" path="res://Assets/Items/Items.png" id="1_uib6y"]
-[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_uib6y"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_11cs8"]
+[ext_resource type="Texture2D" uid="uid://b87hrg88fc55p" path="res://Assets/Items/Tomes.png" id="1_v0dt4"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_v0dt4"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_45i1v"]
-atlas = ExtResource("1_uib6y")
-region = Rect2(600, 1050, 150, 150)
+[sub_resource type="AtlasTexture" id="AtlasTexture_11cs8"]
+atlas = ExtResource("1_v0dt4")
+region = Rect2(450, 0, 150, 150)
 
-[sub_resource type="Resource" id="Resource_1snhd"]
-script = ExtResource("1_ae0f8")
+[sub_resource type="Resource" id="Resource_v0dt4"]
+script = ExtResource("1_11cs8")
 trigger_type = 2
 trigger_stat = 9
-trigger_status = 9
+trigger_status = 10
 trigger_value_threshold = 0
 countdown_value = 0
 countdown_recurs = false
@@ -21,7 +21,7 @@ condition_type = 0
 condition_of = 4
 condition_stat = 9
 condition_party_stat_type = 0
-condition_status = 9
+condition_status = 10
 condition_item_category = ""
 condition_comparison = ">"
 compare_to = 0
@@ -29,8 +29,63 @@ condition_value = 0
 condition_to_party = 4
 condition_stat_type = 3
 condition_party_stat = 9
-condition_party_status = 9
-effect_type = 4
+condition_party_status = 10
+effect_type = 0
+target_type = 0
+target_stat_type = 0
+target_item_category = ""
+target_stat = 2
+target_status = 10
+effect_of = 0
+effect_amount = 1
+effect_stat_party = 4
+effect_stat_type = 3
+effect_stat_value = 9
+effect_status_value = 10
+effect_multiplier = 1.0
+convert_from_type = 0
+convert_from_party = 0
+convert_from_stat = 9
+convert_from_status = 10
+convert_to_type = 0
+convert_to_party = 0
+convert_to_stat = 9
+convert_to_status = 10
+conversion_amount_type = 0
+conversion_amount_value = 1
+conversion_ratio = 1.0
+retrigger_type = 1
+retrigger_target = 0
+retrigger_item = 0
+retrigger_category = ""
+spend_trigger_flag = false
+special_string = ""
+custom_description = ""
+metadata/_custom_type_script = "uid://dahay7fvi7bik"
+
+[sub_resource type="Resource" id="Resource_yn0nt"]
+script = ExtResource("1_11cs8")
+trigger_type = 2
+trigger_stat = 9
+trigger_status = 10
+trigger_value_threshold = 0
+countdown_value = 0
+countdown_recurs = false
+has_condition = false
+condition_type = 0
+condition_of = 4
+condition_stat = 9
+condition_party_stat_type = 0
+condition_status = 10
+condition_item_category = ""
+condition_comparison = ">"
+compare_to = 0
+condition_value = 0
+condition_to_party = 4
+condition_stat_type = 3
+condition_party_stat = 9
+condition_party_status = 10
+effect_type = 2
 target_type = 0
 target_stat_type = 0
 target_item_category = ""
@@ -41,16 +96,16 @@ effect_amount = 1
 effect_stat_party = 4
 effect_stat_type = 3
 effect_stat_value = 9
-effect_status_value = 9
+effect_status_value = 10
 effect_multiplier = 1.0
 convert_from_type = 0
 convert_from_party = 0
 convert_from_stat = 9
-convert_from_status = 9
+convert_from_status = 10
 convert_to_type = 0
 convert_to_party = 0
 convert_to_stat = 9
-convert_to_status = 9
+convert_to_status = 10
 conversion_amount_type = 0
 conversion_amount_value = 1
 conversion_ratio = 1.0
@@ -58,75 +113,22 @@ retrigger_type = 1
 retrigger_target = 0
 retrigger_item = 0
 retrigger_category = ""
-special_string = ""
-custom_description = ""
-metadata/_custom_type_script = "uid://dahay7fvi7bik"
-
-[sub_resource type="Resource" id="Resource_tu7uc"]
-script = ExtResource("1_ae0f8")
-trigger_type = 2
-trigger_stat = 9
-trigger_status = 9
-trigger_value_threshold = 0
-countdown_value = 0
-countdown_recurs = false
-has_condition = true
-condition_type = 0
-condition_of = 0
-condition_stat = 0
-condition_party_stat_type = 0
-condition_status = 9
-condition_item_category = ""
-condition_comparison = "=="
-compare_to = 1
-condition_value = 0
-condition_to_party = 0
-condition_stat_type = 1
-condition_party_stat = 0
-condition_party_status = 9
-effect_type = 0
-target_type = 0
-target_stat_type = 0
-target_item_category = ""
-target_stat = 2
-target_status = 9
-effect_of = 0
-effect_amount = 2
-effect_stat_party = 4
-effect_stat_type = 3
-effect_stat_value = 9
-effect_status_value = 9
-effect_multiplier = 1.0
-convert_from_type = 0
-convert_from_party = 0
-convert_from_stat = 9
-convert_from_status = 9
-convert_to_type = 0
-convert_to_party = 0
-convert_to_stat = 9
-convert_to_status = 9
-conversion_amount_type = 0
-conversion_amount_value = 1
-conversion_ratio = 1.0
-retrigger_type = 1
-retrigger_target = 0
-retrigger_item = 0
-retrigger_category = ""
+spend_trigger_flag = false
 special_string = ""
 custom_description = ""
 metadata/_custom_type_script = "uid://dahay7fvi7bik"
 
 [resource]
-script = ExtResource("2_uib6y")
+script = ExtResource("2_v0dt4")
 item_id = ""
 base_item_id = ""
-item_name = "Metalliglass Totem"
-item_type = 11
-item_desc = "Turn Start: Restore 1 health, if your health is full gain 2 shield instead."
-item_icon = SubResource("AtlasTexture_45i1v")
-item_color = Color(0.580392, 0.686275, 0.752941, 1)
-item_bundle = 4
-rules = Array[ExtResource("1_ae0f8")]([SubResource("Resource_1snhd"), SubResource("Resource_tu7uc")])
+item_name = "Comforting Book"
+item_type = 9
+item_desc = "Turn Start: Gain 1 shield and decrease a random status effect by 1."
+item_icon = SubResource("AtlasTexture_11cs8")
+item_color = Color(0.4, 0.741176, 1, 1)
+item_bundle = 6
+rules = Array[ExtResource("1_11cs8")]([SubResource("Resource_v0dt4"), SubResource("Resource_yn0nt")])
 repeat_rules_X_times = 0
 repeat_rules_for_category = ""
 trigger_priority = 0
@@ -135,7 +137,7 @@ trigger_only_first_turn = false
 trigger_on_occurrence_number = 0
 occurrence_resets_per_turn = false
 rarity = 2
-categories = Array[String](["Clearmetal"])
+categories = Array[String](["Shimmering", "Unique"])
 rng_weight = 1.0
 unlocked = true
 damage_bonus = 0
@@ -145,5 +147,5 @@ hit_points_bonus = 0
 strikes_bonus = 0
 burn_damage_bonus = 0
 cant_attack = false
-keywords = Array[String]([])
+keywords = Array[String](["Blessing"])
 metadata/_custom_type_script = "uid://dthg27pchm1fm"

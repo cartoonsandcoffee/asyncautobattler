@@ -1,0 +1,151 @@
+[gd_resource type="Resource" script_class="Item" load_steps=7 format=3 uid="uid://drqrbc0s4ldim"]
+
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_l5wtv"]
+[ext_resource type="Texture2D" uid="uid://odgh4yu37u8o" path="res://Assets/Items/Crystals.png" id="1_uboo7"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_uboo7"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ev2o6"]
+atlas = ExtResource("1_uboo7")
+region = Rect2(150, 0, 150, 150)
+
+[sub_resource type="Resource" id="Resource_xc7el"]
+script = ExtResource("1_l5wtv")
+trigger_type = 1
+trigger_stat = 9
+trigger_status = 10
+trigger_value_threshold = 0
+countdown_value = 0
+countdown_recurs = false
+has_condition = true
+condition_type = 0
+condition_of = 0
+condition_stat = 4
+condition_party_stat_type = 0
+condition_status = 10
+condition_item_category = ""
+condition_comparison = ">="
+compare_to = 0
+condition_value = 5
+condition_to_party = 4
+condition_stat_type = 3
+condition_party_stat = 9
+condition_party_status = 10
+effect_type = 0
+target_type = 0
+target_stat_type = 0
+target_item_category = ""
+target_stat = 4
+target_status = 10
+effect_of = 0
+effect_amount = -5
+effect_stat_party = 4
+effect_stat_type = 3
+effect_stat_value = 9
+effect_status_value = 10
+effect_multiplier = 1.0
+convert_from_type = 0
+convert_from_party = 0
+convert_from_stat = 4
+convert_from_status = 10
+convert_to_type = 0
+convert_to_party = 0
+convert_to_stat = 0
+convert_to_status = 10
+conversion_amount_type = 0
+conversion_amount_value = 1
+conversion_ratio = 1.0
+retrigger_type = 1
+retrigger_target = 0
+retrigger_item = 0
+retrigger_category = ""
+spend_trigger_flag = false
+special_string = ""
+custom_description = ""
+metadata/_custom_type_script = "uid://dahay7fvi7bik"
+
+[sub_resource type="Resource" id="Resource_kk2ca"]
+script = ExtResource("1_l5wtv")
+trigger_type = 1
+trigger_stat = 9
+trigger_status = 10
+trigger_value_threshold = 0
+countdown_value = 0
+countdown_recurs = false
+has_condition = false
+condition_type = 0
+condition_of = 4
+condition_stat = 9
+condition_party_stat_type = 0
+condition_status = 10
+condition_item_category = ""
+condition_comparison = ">"
+compare_to = 0
+condition_value = 0
+condition_to_party = 4
+condition_stat_type = 3
+condition_party_stat = 9
+condition_party_status = 10
+effect_type = 0
+target_type = 0
+target_stat_type = 1
+target_item_category = ""
+target_stat = 0
+target_status = 10
+effect_of = 0
+effect_amount = 10
+effect_stat_party = 4
+effect_stat_type = 3
+effect_stat_value = 9
+effect_status_value = 10
+effect_multiplier = 1.0
+convert_from_type = 0
+convert_from_party = 0
+convert_from_stat = 9
+convert_from_status = 10
+convert_to_type = 0
+convert_to_party = 0
+convert_to_stat = 9
+convert_to_status = 10
+conversion_amount_type = 0
+conversion_amount_value = 1
+conversion_ratio = 1.0
+retrigger_type = 1
+retrigger_target = 0
+retrigger_item = 0
+retrigger_category = ""
+spend_trigger_flag = false
+special_string = ""
+custom_description = ""
+metadata/_custom_type_script = "uid://dahay7fvi7bik"
+
+[resource]
+script = ExtResource("2_uboo7")
+item_id = ""
+base_item_id = ""
+item_name = "Emerald"
+item_type = 16
+item_desc = "Battle Start: Convert 5 gold into 10 max hitpoints."
+item_icon = SubResource("AtlasTexture_ev2o6")
+item_color = Color(0.2754, 0.81, 0.31995, 1)
+item_bundle = 0
+rules = Array[ExtResource("1_l5wtv")]([SubResource("Resource_xc7el"), SubResource("Resource_kk2ca")])
+repeat_rules_X_times = 0
+repeat_rules_for_category = ""
+trigger_priority = 0
+trigger_only_once = false
+trigger_only_first_turn = false
+trigger_on_occurrence_number = 0
+occurrence_resets_per_turn = false
+rarity = 4
+categories = Array[String](["Crystal"])
+rng_weight = 1.0
+unlocked = true
+damage_bonus = 0
+shield_bonus = 0
+agility_bonus = 0
+hit_points_bonus = 0
+strikes_bonus = 0
+burn_damage_bonus = 0
+cant_attack = false
+keywords = Array[String](["Battle Start"])
+metadata/_custom_type_script = "uid://dthg27pchm1fm"

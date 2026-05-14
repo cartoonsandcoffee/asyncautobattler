@@ -1,16 +1,16 @@
-[gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://d4m487yugghgc"]
+[gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://dde1vtcd2gsuu"]
 
-[ext_resource type="Texture2D" uid="uid://c673mfqdoecpa" path="res://Assets/Items/Armor.png" id="1_f07ca"]
-[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="2_20wjs"]
-[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="3_pkp0i"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_6stnk"]
+[ext_resource type="Texture2D" uid="uid://fujbmxi0k7vs" path="res://Assets/Items/Tools.png" id="1_bf2p7"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_bf2p7"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_8h3kw"]
-atlas = ExtResource("1_f07ca")
-region = Rect2(150, 450, 150, 150)
+[sub_resource type="AtlasTexture" id="AtlasTexture_242la"]
+atlas = ExtResource("1_bf2p7")
+region = Rect2(750, 0, 150, 150)
 
-[sub_resource type="Resource" id="Resource_f07ca"]
-script = ExtResource("2_20wjs")
-trigger_type = 22
+[sub_resource type="Resource" id="Resource_1e1nx"]
+script = ExtResource("1_6stnk")
+trigger_type = 12
 trigger_stat = 9
 trigger_status = 10
 trigger_value_threshold = 0
@@ -30,14 +30,14 @@ condition_to_party = 4
 condition_stat_type = 3
 condition_party_stat = 9
 condition_party_status = 10
-effect_type = 0
-target_type = 0
+effect_type = 3
+target_type = 1
 target_stat_type = 0
 target_item_category = ""
-target_stat = 2
+target_stat = 9
 target_status = 10
-effect_of = 3
-effect_amount = 0
+effect_of = 0
+effect_amount = 1
 effect_stat_party = 4
 effect_stat_type = 3
 effect_stat_value = 9
@@ -63,16 +63,16 @@ custom_description = ""
 metadata/_custom_type_script = "uid://dahay7fvi7bik"
 
 [resource]
-script = ExtResource("3_pkp0i")
+script = ExtResource("2_bf2p7")
 item_id = ""
 base_item_id = ""
-item_name = "Dripping Carapace"
-item_type = 1
-item_desc = "Whenever the enemy loses shield to acid, gain that shield."
-item_icon = SubResource("AtlasTexture_8h3kw")
-item_color = Color(0.33287, 0.593084, 0.339722, 1)
-item_bundle = 0
-rules = Array[ExtResource("2_20wjs")]([SubResource("Resource_f07ca")])
+item_name = "Darkwood Necklace"
+item_type = 16
+item_desc = "Whenever you deal non-weapon or non-burn damage to the enemy, deal 1 additional damage."
+item_icon = SubResource("AtlasTexture_242la")
+item_color = Color(0.25098, 0.207843, 0.4, 1)
+item_bundle = 3
+rules = Array[ExtResource("1_6stnk")]([SubResource("Resource_1e1nx")])
 repeat_rules_X_times = 0
 repeat_rules_for_category = ""
 trigger_priority = 0
@@ -80,8 +80,8 @@ trigger_only_once = false
 trigger_only_first_turn = false
 trigger_on_occurrence_number = 0
 occurrence_resets_per_turn = false
-rarity = 1
-categories = Array[String]([])
+rarity = 2
+categories = Array[String](["Dark", "Unique"])
 rng_weight = 1.0
 unlocked = true
 damage_bonus = 0
@@ -91,5 +91,5 @@ hit_points_bonus = 0
 strikes_bonus = 0
 burn_damage_bonus = 0
 cant_attack = false
-keywords = Array[String](["Acid"])
+keywords = Array[String]([])
 metadata/_custom_type_script = "uid://dthg27pchm1fm"
