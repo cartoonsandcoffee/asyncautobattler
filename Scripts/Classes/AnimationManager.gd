@@ -142,17 +142,12 @@ func _play_battle_end(winner, loser):
 			if combat_panel.enemy_anim.has_animation(anim_name):
 				combat_panel.enemy_anim.speed_scale = 1.0
 				combat_panel.enemy_anim.play(anim_name)
-				
-				#var anim_length = combat_panel.enemy_anim.get_animation(anim_name).length
-				#await CombatSpeed.create_timer(anim_length)		
+
 		else:
 			var anim_name = _get_animation_variant("player_die")
 			if combat_panel.player_anim.has_animation(anim_name):
 				combat_panel.player_anim.speed_scale = 1.0
 				combat_panel.player_anim.play(anim_name)
-				
-				#var anim_length = combat_panel.player_anim.get_animation(anim_name).length
-				#await CombatSpeed.create_timer(anim_length)
 
 	var turn_sign = _create_turn_sign(message)
 	var duration = CombatSpeed.get_duration("milestone_sign")
@@ -182,37 +177,11 @@ func _execute_item_sequence(items: Array, entity, trigger_type: String):
 		var rule = item_data.rules[0]			    # item_data["rule"]
 		var slot_index = item_data.slot_index		# item_data.get("slot_index", -1)
 		
-		## -- JDM: Removing Item highlighting during combat, seems redundant and causes visual noise
 
-		# ----- STEP 1: Highlight the item
-		# Highlight the item slot
-		#if combat_panel and entity == CombatManager.player_entity:
-		#	combat_panel.highlight_item_slot(slot_index, slot_index == -1)
-
-		# Brief moment for highlight to be visible
-		#await CombatSpeed.create_timer(CombatSpeed.get_duration("item_highlight_brief"))
-		
-		# ----- STEP 2: Show Item Proc
+		# ---- STEP 2: Show Item Proc
 		if combat_panel:
-			#combat_panel.spawn_item_proc_indicator(item, rule, entity)
 			var proc_duration = CombatSpeed.get_duration("item_proc")
-			#await CombatSpeed.create_timer(proc_duration * 0.8)  # Wait for most of animation
 
-			# emit completion so the status effects update
-			#item_proc_complete.emit(entity, rule)
-
-		## -- JDM: removing this because removing item highlighting, but that if-statement may be useful for overlap timing
-		# ----- STEP 3: Clear Highlight, move to next
-		#if combat_panel:
-		#	combat_panel._clear_all_highlights()
-		#	if i < items.size() - 1:
-		#		await CombatSpeed.create_timer(CombatSpeed.get_duration("item_highlight_brief"))
-
-		#await CombatSpeed.create_timer(CombatSpeed.get_overlap_duration())
-		#item_animation_complete.emit(item)
-
-	# Brief pause after all items complete
-	#await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap"))
 
 
 # ===== ITEM ANIMATION SYSTEM =====
@@ -241,15 +210,12 @@ func _execute_attack_animation(attacker, target):
 		combat_panel.player_anim.speed_scale = 1.0
 		var anim_length = combat_panel.player_anim.get_animation("player_attack").length
 		combat_panel.player_anim.play(anim_name)
-		#await CombatSpeed.create_timer(anim_length * 0.5)
 
 	else:
 		var anim_name = _get_animation_variant("enemy_attack")
 		combat_panel.enemy_anim.speed_scale = 1.0
 		var anim_length = combat_panel.enemy_anim.get_animation(anim_name).length
 		combat_panel.enemy_anim.play(anim_name)
-
-		#await CombatSpeed.create_timer(anim_length * 0.5)
 
 func play_damage_indicator(target, amount: int, damage_stat: Enums.Stats, visual_info: Dictionary):
 	"""Queue a damage indicator animation"""
@@ -298,9 +264,6 @@ func _process_animation_queue():
 		
 		# Execute the animation
 		await _execute_animation_request(request)
-		
-		# Brief gap between animations for clarity
-		#await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap"))
 	
 	is_processing = false
 	animation_sequence_complete.emit()
@@ -360,9 +323,6 @@ func _on_combat_started(player, enemy):
 	current_milestone = ""
 
 func _on_combat_ended(winner, loser):
-	# Wait a moment for any final animations
-	#await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap"))
-	
 	# Clear everything
 	clear_all_animations()
 	is_processing = false
@@ -438,9 +398,6 @@ func wait_for_all_animations():
 			if child.has_method("stat_animation_done") and child.visible:
 				# Wait for proc animation
 				await child.stat_animation_done
-	
-	# Small final pause
-	#await CombatSpeed.create_timer(CombatSpeed.get_duration("turn_gap"))
 
 func is_busy() -> bool:
 	return is_processing

@@ -6,9 +6,10 @@ extends CanvasLayer
 var current_tooltip: Control = null
 var tooltip_offset := Vector2(0, 10)
 var padding := 10  # Minimum distance from screen edges
-var item_size:= Vector2(100,105)
+var _placement_side: String = "above"
 
-var item_tooltip_scene = preload("res://Scenes/Elements/item_tooltip.tscn")
+#var item_tooltip_scene = preload("res://Scenes/Elements/item_tooltip.tscn")
+var item_tooltip_scene = preload("res://Scenes/Card/item_card.tscn")
 
 func _ready():
 	# Set high layer to ensure tooltips are always on top
@@ -18,7 +19,7 @@ func _ready():
 ## Tooltip anchors bottom to top of item and grows upward by default
 func show_item_tooltip(item: Item, anchor_global_pos: Vector2, anchor_size: Vector2 = Vector2(100, 100), is_from_compendium: bool = false, entity = null) -> void:
 	hide_tooltip()
-	
+
 	if not item:
 		return
 	
@@ -29,16 +30,34 @@ func show_item_tooltip(item: Item, anchor_global_pos: Vector2, anchor_size: Vect
 
 	# Setup the tooltip with item data (uses existing item_tooltip.gd logic)
 	current_tooltip.set_item(item, false, entity)
+
+	# Show crafting recipe ingredients for CRAFTED rarity items
+	if item.rarity == Enums.Rarity.CRAFTED:
+		var recipe: CraftingRecipe = ItemsManager.get_recipe_for_item(item)
+		if recipe:
+			var ingredients: Array[Item] = []
+			if recipe.ingredient_1:
+				ingredients.append(recipe.ingredient_1)
+			if recipe.ingredient_2:
+				ingredients.append(recipe.ingredient_2)
+			if ingredients.size() > 0:
+				current_tooltip.set_bonus_ingredients(ingredients)
 	
+	current_tooltip.show_card()
+
 	# Wait one frame for tooltip to calculate its size
 	await get_tree().process_frame
 	
+	if not is_instance_valid(current_tooltip):
+		return
+
 	# Position with bottom of tooltip anchored to top of item
 	var positioned = _calculate_anchored_position(current_tooltip, anchor_global_pos, anchor_size)
 	current_tooltip.global_position = positioned
+	current_tooltip.placement_side = _placement_side
 
 	await get_tree().process_frame
-	if current_tooltip and current_tooltip.has_method("create_stacked_definitions"):
+	if is_instance_valid(current_tooltip) and current_tooltip.has_method("create_stacked_definitions"):
 		current_tooltip.create_stacked_definitions()
 		
 func show_setbonus_tooltip(item: Item, anchor_global_pos: Vector2, anchor_size: Vector2 = Vector2(100, 100), is_from_compendium: bool = false, recipe = null) -> void:
@@ -58,12 +77,18 @@ func show_setbonus_tooltip(item: Item, anchor_global_pos: Vector2, anchor_size: 
 	if recipe:
 		current_tooltip.set_bonus_ingredients(recipe.required_items)
 	
+	current_tooltip.show_card()
+
 	# Wait one frame for tooltip to calculate its size
 	await get_tree().process_frame
-	
+
+	if not is_instance_valid(current_tooltip):
+		return
+
 	# Position with bottom of tooltip anchored to top of item
 	var positioned = _calculate_anchored_position(current_tooltip, anchor_global_pos, anchor_size)
 	current_tooltip.global_position = positioned
+	current_tooltip.placement_side = _placement_side
 
 	await get_tree().process_frame
 	if current_tooltip and current_tooltip.has_method("create_stacked_definitions"):
@@ -82,58 +107,61 @@ func hide_tooltip() -> void:
 ## Calculate position anchoring tooltip bottom to item top (grows upward)
 ## Falls back to anchoring tooltip top to item bottom (grows downward) if insufficient space
 func _calculate_anchored_position(tooltip: Control, anchor_pos: Vector2, anchor_size: Vector2) -> Vector2:
+	if not is_instance_valid(tooltip):
+		return Vector2.ZERO
 	var viewport_size = get_viewport().get_visible_rect().size
 
-	# Get tooltip size
-	var tooltip_size: Vector2
-	if tooltip:
-		if tooltip.has_node("Panel/PanelContainer"):
-			var panel = tooltip.get_node("Panel/PanelContainer")
-			tooltip_size = panel.size
+	# Read size dynamically in case card dimensions change in future
+	var tooltip_size: Vector2 = Vector2.ZERO
+	if tooltip and tooltip.has_node("Panel/Control/PanelContainer"):
+		tooltip_size = tooltip.get_node("Panel/Control/PanelContainer").size
+	else:
+		tooltip_size = tooltip.size
+
+	print("tooltip_size: ", tooltip_size, " | path exists: ", tooltip.has_node("Panel/Control/PanelContainer"))
+	
+	# Item bounds
+	var item_left   := anchor_pos.x
+	var item_right  := anchor_pos.x + anchor_size.x
+	var item_top    := anchor_pos.y
+	var item_bottom := anchor_pos.y + anchor_size.y
+	var item_center_x := anchor_pos.x + anchor_size.x / 2.0
+	var item_center_y := anchor_pos.y + anchor_size.y / 2.0
+
+	# Fit checks — does the card fit in each direction with padding?
+	var fits_above : bool = (item_top    - padding - tooltip_size.y) >= padding
+	var fits_below : bool = (item_bottom + padding + tooltip_size.y) <= (viewport_size.y - padding)
+	var fits_left  : bool = (item_left   - padding - tooltip_size.x) >= padding
+	var fits_right : bool = (item_right  + padding + tooltip_size.x) <= (viewport_size.x - padding)
+
+	var pos := Vector2.ZERO
+
+	if fits_above:
+		_placement_side = "above"
+		pos.y = item_top - padding - tooltip_size.y
+		pos.x = clamp(item_center_x - tooltip_size.x / 2.0, padding, viewport_size.x - tooltip_size.x - padding)
+	elif fits_below:
+		_placement_side = "below"
+		pos.y = item_bottom + padding
+		pos.x = clamp(item_center_x - tooltip_size.x / 2.0, padding, viewport_size.x - tooltip_size.x - padding)
+	elif fits_left or fits_right:  # <-- replaces the two separate elifs
+		var space_right : float = viewport_size.x - item_right
+		var space_left : float = item_left
+		if fits_right and (not fits_left or space_right >= space_left):
+			_placement_side = "right"
+			pos.x = item_right + padding
 		else:
-			tooltip_size = tooltip.size
-
-	var pos = Vector2.ZERO
-	
-	# VERTICAL: Anchor bottom of tooltip to top of item (grows upward)
-	var item_top_y = anchor_pos.y
-	var item_bottom_y = anchor_pos.y + anchor_size.y
-	
-	var pos_above = item_top_y - tooltip_size.y  # Bottom of tooltip at top of item
-	var pos_below = item_bottom_y + tooltip_size.y # Top of tooltip at bottom of item
-	
-	if pos_above >= padding:
-		# Enough space above - anchor bottom to top (grows upward)
-		pos.y = item_top_y - tooltip_offset.y #pos_above
+			_placement_side = "left"
+			pos.x = item_left - padding - tooltip_size.x
+		pos.y = clamp(item_center_y - tooltip_size.y / 2.0, padding, viewport_size.y - tooltip_size.y - padding)
 	else:
-		# Not enough space above - anchor top to bottom (grows downward)
-		pos.y = pos_below + tooltip_offset.y
-	
-	# HORIZONTAL: Try right first, then left if that goes offscreen
-	var item_left_x = anchor_pos.x
-	var item_right_x = anchor_pos.x + anchor_size.x
+		_placement_side = "above"
+		# Last resort: force above, clamped
+		pos.y = item_top - padding - tooltip_size.y
+		pos.x = clamp(item_center_x - tooltip_size.x / 2.0, padding, viewport_size.x - tooltip_size.x - padding)
 
-	var pos_right = item_left_x + tooltip_offset.x
-	var pos_left = item_right_x - (tooltip_size.x) - tooltip_offset.x 
-	
-	# Check if right side fits without going offscreen
-	var right_fits = (pos_right + tooltip_size.x <= viewport_size.x - padding)
-	
-	# Check if left side fits without going offscreen
-	var left_fits = (pos_left >= padding)
-
-	if left_fits:
-		# Right doesn't fit but left does
-		pos.x = pos_left
-	elif right_fits:
-		# Right side has room
-		pos.x = pos_right
-	else:
-		# Neither side fits perfectly, prefer right and let horizontal clamp handle it
-		pos.x = pos_right
-	
-	# Final clamp to ensure tooltip stays on screen
+	# Final safety clamp — catches any remaining edge cases
 	pos.x = clamp(pos.x, padding, viewport_size.x - tooltip_size.x - padding)
-	pos.y = clamp(pos.y, padding, viewport_size.y - padding) # JDM: Might need to add tooltip_size.y to the MIN part of this equation to stop things showing off top of screen
+	pos.y = clamp(pos.y, padding, viewport_size.y - tooltip_size.y - padding)
 
 	return pos

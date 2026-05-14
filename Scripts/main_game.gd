@@ -4,34 +4,38 @@ extends Control
 ## Main game scene controller that manages the overall game interface
 ## Coordinates inventory UI, dungeon map, and room display area
 
+signal replacement_done()
+
 # UI Components
-#@onready var dungeon_map_panel: Panel = $TopPanel
-@onready var inventory_panel: Panel = $BottomPanel
 @onready var combat_panel: CombatPanel = $CombatPanel
 
 @onready var room_background: TextureRect = $RoomContainer/roomPic
 @onready var event_container: Node = $EventContainer
-@onready var door_container: HBoxContainer = $DoorContainer/HBoxContainer
-@onready var btn_continue: Button = $DoorContainer/btnContinue
 
-@onready var stat_health: Control = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/statHealth
-@onready var stat_damage: Control = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/statDamage
-@onready var stat_shield: Control = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/statShield
-@onready var stat_agility: Control = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/statAgility
-@onready var stat_gold: Control = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/statGold
-@onready var stat_strikes: Control = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/MarginContainer/VBoxContainer/statStrikes
-@onready var stat_burn_damage: Control = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/MarginContainer/VBoxContainer/statBurnDamage
+@onready var onward_button: OnwardButton = $OnwardButton
+@onready var fight_or_flee: FightOrFlee = $FightFlee
+@onready var pet_interface: Control = $PetItemInterface
+@onready var pet_button: Control = $BottomPanelHolder/stackedBarContainer/rowStatsStatusCets/boxDinglemeyer/PetButton
 
-@onready var btn_town: Button = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap/btnTown
-@onready var lbl_moves: Label = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap/boxMoves/lblMoves
-@onready var lbl_rank: Label = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap/VBoxContainer/lblRank
+@onready var stat_health: Control = $BottomPanelHolder/stackedBarContainer/rowStatsStatusCets/mainStatContainer/PanelContainer/VBoxContainer/HboxStats2/statHealth
+@onready var stat_damage: Control = $BottomPanelHolder/stackedBarContainer/rowStatsStatusCets/mainStatContainer/PanelContainer/VBoxContainer/hboxStats1/statDamage
+@onready var stat_shield: Control = $BottomPanelHolder/stackedBarContainer/rowStatsStatusCets/mainStatContainer/PanelContainer/VBoxContainer/hboxStats1/statShield
+@onready var stat_agility: Control = $BottomPanelHolder/stackedBarContainer/rowStatsStatusCets/mainStatContainer/PanelContainer/VBoxContainer/hboxStats1/statAgility
+@onready var stat_gold: Control = $BottomPanelHolder/stackedBarContainer/rowStatsStatusCets/mainStatContainer/PanelContainer/VBoxContainer/HboxStats2/statGold
+@onready var stat_strikes: Control = $BottomPanelHolder/stackedBarContainer/rowTertiary/miscContainer/HBoxExtraStats/statStrikes
+@onready var stat_burn_damage: Control = $BottomPanelHolder/stackedBarContainer/rowTertiary/miscContainer/HBoxExtraStats/statBurnDamage
+@onready var stat_turns_left: Control = $BottomPanelHolder/stackedBarContainer/rowTertiary/miscContainer/HBoxExtraStats/statTurns
 
-@onready var item_grid: GridContainer = $BottomPanel/MarginContainer/VBoxContainer/HBoxContainer/InventorySlots/ItemSlots
-@onready var weapon_slot: ItemSlot = $BottomPanel/MarginContainer/VBoxContainer/HBoxContainer/Weapon
-@onready var sets_grid: GridContainer = $BottomPanel/panelSets/gridSets
+@onready var lbl_rank: Label = $RankLabelHolder/HBoxContainer/RankPanel/HBoxContainer/VBoxContainer/lblRank
 
+@onready var item_grid: GridContainer = $BottomPanelHolder/stackedBarContainer/rowInventory/PanelContainer/HBoxContainer/ItemSlots
+@onready var weapon_slot: ItemSlot = $BottomPanelHolder/stackedBarContainer/rowInventory/PanelContainer/HBoxContainer/Weapon
+@onready var sets_grid: GridContainer = $BottomPanelHolder/stackedBarContainer/rowStatsStatusCets/StatusAndSets/gridSets
+@onready var status_grid: GridContainer = $BottomPanelHolder/stackedBarContainer/rowStatsStatusCets/StatusAndSets/statusBox
+
+@onready var discard_zone: PanelContainer = $DiscardZoneHolder/panelDiscard
 @onready var replacement_panel: Panel = $ReplaceItemPanel
-@onready var replacement_item: ItemSlot = $ReplaceItemPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/itemBox/ItemReplace
+@onready var replacement_item: ItemSlot = $ReplaceItemPanel/controlReplace/PanelContainer/MarginContainer/mainContent/HBoxContainer/picHolder/MarginContainer/itemBox/ItemReplace
 @onready var drop_panel: Panel = $DropItemPanel
 @onready var drop_item: ItemSlot = $DropItemPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/itemBox/ItemDrop
 
@@ -42,22 +46,17 @@ extends Control
 @onready var fade_overlay: ColorRect = $FadeOverlay
 
 ## -- Combat Controls
-@onready var box_combatcontrols: PanelContainer = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls
-@onready var box_fighrun: VBoxContainer = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/boxFightRun
-@onready var box_comatspeed: VBoxContainer = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/CombatLogBox
-@onready var lbl_turn: Label = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/CombatLogBox/lblTurn
-@onready var lbl_speed: Label = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/CombatLogBox/speedControls/lblSpeed
-@onready var btn_run: Button = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/boxFightRun/HBoxContainer/btnRun
-@onready var btn_instant: Control = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxCombatControls/boxFightRun/HBoxContainer/instant_combat_toggle
+@onready var box_comatspeed: VBoxContainer = $BottomPanelHolder/stackedBarContainer/rowStatsStatusCets/combatSpeedBox
+@onready var lbl_turn: Label = $BottomPanelHolder/stackedBarContainer/rowStatsStatusCets/combatSpeedBox/lblTurn
+@onready var lbl_speed: Label = $BottomPanelHolder/stackedBarContainer/rowStatsStatusCets/combatSpeedBox/speedControls/lblSpeed
+@onready var box_dinglemeyer: MarginContainer = $BottomPanelHolder/stackedBarContainer/rowStatsStatusCets/boxDinglemeyer
 
 ## -- Version Popup
 @onready var version_popup: Control = $versionPopup
 @onready var version_label: RichTextLabel = $versionPopup/PanelContainer/panelBlack/panelBorder/VBoxContainer/txtVersionMsg
 
 @onready var crt_shader: CanvasLayer = $CRT_Shader
-
-# Mini-map stuff
-@onready var minimap: Minimap = $BottomPanel/MarginContainer/VBoxContainer/hboxStats/boxMiniMap
+@onready var fog_shader: ColorRect = $Fog_Shader
 
 @onready var check_boss_panel: MapZoomPanel = $CheckBossPanel
 @onready var pause_menu: Control = $PauseMenu
@@ -68,8 +67,6 @@ var current_event
 
 var item_slot = preload("res://Scenes/item.tscn")
 var set_slot = preload("res://Scenes/Elements/set_bonus_display.tscn")
-var item_proc = preload("res://Scenes/Elements/combat_item_proc.tscn")
-var door_choice_scene = preload("res://Scenes/door_choice.tscn")
 
 var item_slots: Array[ItemSlot] = []
 var current_room_data: RoomData = null
@@ -80,15 +77,17 @@ var dragging_from_slot: int = -1
 var dragging_slot: ItemSlot = null
 var drag_preview: Control = null
 var is_dragging: bool = false
+var is_hovering_discard_zone: bool = false
+var hovered_slot_during_drag: ItemSlot = null
 
 # for combat
 var awaiting_combat_result: bool = false
 var combat_result_callback: Callable
-var is_attack_sequence_active: bool = false
 
 # for overwriting items when your inventory is full
 var pending_reward_item: Item = null
 var inventory_replacement_mode: bool = false
+var pending_weapon_replace: bool = false
 
 var pending_drop_item: Item = null
 var pending_drop_slot_index: int = -1
@@ -115,14 +114,20 @@ func _ready():
 	#Player.status_updated.connect(_on_status_effects_updated)
 	SetBonusManager.set_bonuses_updated.connect(setup_bonuses)
 
-	#DungeonManager.show_minimap.connect(_show_panels)
+	onward_button.chose_camp.connect(_go_back_to_camp)
+	onward_button.chose_onward.connect(_on_continue_pressed)
+
+	fight_or_flee.chose_fight.connect(_player_chose_fight)
+	fight_or_flee.chose_run.connect(_player_chose_run)
+
+	pet_button.button_clicked.connect(pet_interface.open_popup)
 
 	# Connect to CombatManager signals for real-time combat stat updates
 	CombatManager.stat_changed.connect(_on_combat_stat_changed)
 	CombatManager.combat_started.connect(_on_combat_started_for_ui)
 	CombatManager.combat_ended.connect(_on_combat_ended_for_ui)
 	CombatManager.item_processor.occurrence_updated.connect(_on_occurrence_updated)
-	CombatManager.strike_ui_update_requested.connect(_strike_ui_update)
+	#CombatManager.combat_log_updated.connect(_on_combat_log_updated)
 
 	# Signals to drag and drop "Replacement" items when inventory full
 	replacement_item.drag_started.connect(_on_drag_started)
@@ -134,11 +139,12 @@ func _ready():
 	# Connect minimap signals
 	#DungeonManager.minimap_update_requested.connect(_on_minimap_update_requested)
 	#minimap.room_icon_clicked.connect(_on_minimap_room_clicked)
-	minimap.zoom_out_requested.connect(_on_zoom_out_requested)
+	#minimap.zoom_out_requested.connect(_on_zoom_out_requested)
 	pause_menu.new_run_requested.connect(reset_dungeon_for_new_run)
 	pause_menu.menu_closed.connect(check_crt_filter)
 
 	combat_panel.main_game = self
+	combat_panel.player_status_container = status_grid
 	combat_panel.combat_completed.connect(_on_combat_completed)
 	combat_panel.player_chose_run.connect(_on_player_ran)
 
@@ -148,11 +154,6 @@ func _ready():
 	if pause_menu and compendium:
 		pause_menu.compendium_panel = compendium
 
-	if btn_continue:
-		btn_continue.pressed.connect(_on_continue_pressed)
-		btn_continue.disabled = true
-		btn_continue.visible = false 
-
 	# CRT SHADER SETTING
 	check_crt_filter()
 
@@ -160,30 +161,61 @@ func _ready():
 	check_boss_panel.closed.connect(_on_zoom_panel_closed)
 	check_boss_panel.boss_rush_pressed.connect(_on_boss_rush_pressed)
 
-	DungeonManager.reset()
-
-	create_test_player()
-	await _ensure_player_profile()
-
+	if DungeonManager.is_loaded_from_save:
+		DungeonManager.is_loaded_from_save = false  
+		create_test_player()
+		await _ensure_player_profile()
+		show_bottom_panel(true)
+		load_room(DungeonManager.get_town_room())
+	else:
+		DungeonManager.reset()
+		create_test_player()
+		await _ensure_player_profile()
+		load_starting_room()
+		
 	load_player_skin()
-
-	load_starting_room()
 
 	#AUDIO
 	var dungeon_ambient = load("res://Assets/Audio/Ambient/Ambience 01.mp3")
 	AudioManager.play_ambient(dungeon_ambient, true)
 
-	anim_tools.play("setup_toolbars")
+	#anim_tools.play("setup_toolbars")
 	set_process_input(true) # for drag preview
 	#call_deferred("_debug_find_oversized_controls")
 	await get_tree().process_frame
 	
+func _process(delta: float) -> void:
+	if is_dragging:
+		# Inventory slot hover highlight
+		var slot_under_mouse = get_slot_under_mouse()
+		if slot_under_mouse != hovered_slot_during_drag:
+			if hovered_slot_during_drag:
+				hovered_slot_during_drag.hide_drag_hover()
+			hovered_slot_during_drag = slot_under_mouse
+			if hovered_slot_during_drag and hovered_slot_during_drag != dragging_slot:
+				hovered_slot_during_drag.show_drag_hover()
+		
+		# Discard zone hover
+		if discard_zone.visible:
+			var over_zone = is_over_discard_zone()
+			if over_zone and not is_hovering_discard_zone:
+				is_hovering_discard_zone = true
+				anim_tools.play("discard_hover")
+			elif not over_zone and is_hovering_discard_zone:
+				is_hovering_discard_zone = false
+				anim_tools.play("discard_idle")
+
 func check_crt_filter():
 	# CRT SHADER SETTING
 	if GameSettings.crt_effect_enabled:
 		crt_shader.visible = true
 	else:
 		crt_shader.visible = false
+
+	if GameSettings.fog_enabled:
+		fog_shader.visible = true
+	else:
+		fog_shader.visible = false
 
 func _debug_find_oversized_controls():
 	print("\n=== CHECKING FOR OVERSIZED CONTROLS ===")
@@ -255,12 +287,10 @@ func load_starting_room():
 	await DungeonManager.initialize_rank()
 
 	# Load starter room
-	var starter_room = DungeonManager.get_town_room()
+	var starter_room = DungeonManager.get_starter_room()
 	load_room(starter_room)
 
 func load_room(room_data: RoomData):
-	btn_town.disabled = true
-
 	# Update background
 	room_background.texture = room_data.room_definition.background_texture
 
@@ -279,15 +309,26 @@ func load_room(room_data: RoomData):
 	# Player uses room currency
 	Player.use_room()
 
+	if !Player.is_in_town and Player.pet_carrying_item == null:
+		pet_button.is_enabled(true)
+	else:
+		pet_button.is_enabled(false)
+
 	# Fade transition
 	anim_fade.play("fade_in")
-	var anim_length = anim_fade.get_animation("fade_in").length
-	await CombatSpeed.create_timer(anim_length)
+	await anim_fade.animation_finished
 
 	if get_tree().has_group("item_selection_events"):
 		for room_event in get_tree().get_nodes_in_group("item_selection_events"):
 			if room_event.has_signal("need_item_replace"):
 				room_event.need_item_replace.connect(show_inventory_replacement_mode)
+
+func show_bottom_panel(_fast:bool):
+	if _fast:
+		anim_tools.play("show_bottom_panel_fast")
+	else:
+		anim_tools.play("show_bottom_panel")
+		await anim_tools.animation_finished
 
 func load_player_skin():
 	var skin_id: int = 0
@@ -307,6 +348,9 @@ func load_player_skin():
 func show_inventory_replacement_mode(new_item: Item):
 	pending_reward_item = new_item
 	replacement_item.set_item(new_item)
+	if ItemsManager.player_has_duplicate(new_item, false):
+		replacement_item.show_upgrade_anim()
+	pending_weapon_replace = (new_item.item_type == Item.ItemType.WEAPON)
 	show_item_replacement_overlay()
 
 func clear_current_event():
@@ -345,10 +389,8 @@ func _on_event_completed():
 	clear_current_event()
 	show_continue_button()
 
-	# Check for shortcuts
 	var completed_room = current_room_data  # Store this when loading room
 	DungeonManager.complete_room(completed_room)
-	btn_town.disabled = false
 
 ## ==========================================================
 ## BOSS ROOM STUFF
@@ -379,6 +421,7 @@ func _handle_quit_while_ahead():
 	
 	# Show victory stats screen (TODO: Create this UI)
 	await _show_victory_screen()
+	SaveManager.delete_saved_run()
 	
 	# Return to main menu
 	get_tree().change_scene_to_file("res://Scenes/main_menu.tscn")
@@ -422,6 +465,7 @@ func _handle_champion_victory():
 	
 	# Show champion victory screen
 	await _show_champion_victory_screen()
+	SaveManager.delete_saved_run()
 
 	# Return to main menu
 	get_tree().change_scene_to_file("res://Scenes/main_menu.tscn")
@@ -469,20 +513,9 @@ func boss_room_completed(_choice: String):
 		await _handle_champion_victory()
 
 func _on_continue_pressed():
-	hide_continue_button()
-
-	# Check if we just completed a boss room
-	#var is_boss_room = false
-	
-	#if current_room_data and current_room_data.room_definition:
-	#	is_boss_room = current_room_data.room_definition.room_type == Enums.RoomType.BOSS
-	
-	#if is_boss_room:
-	#	# Boss victory - play staircase animation and advance rank
-	#	await _handle_boss_victory()
-	#	return
-
 	# Get random dungeon room
+	onward_button.reset_anims()
+
 	var next_room = DungeonManager.get_random_dungeon_room()
 
 	if not Player.has_rooms_remaining():
@@ -490,9 +523,8 @@ func _on_continue_pressed():
 
 	if next_room:
 #		# Fade transition
-		anim_fade.play("fade_out")
-		var anim_length = anim_fade.get_animation("fade_out").length
-		await CombatSpeed.create_timer(anim_length)
+		anim_fade.play("fade_out_retry")
+		await anim_fade.animation_finished
 
 		var cp = get_tree().get_first_node_in_group("combat_panel")
 		if cp:
@@ -505,98 +537,20 @@ func _on_continue_pressed():
 		push_error("No next room found!")
 
 
-
 func show_continue_button():
-	if btn_continue:
-		btn_continue.visible = true
-		btn_continue.disabled = false
-		btn_continue.grab_focus()  # Optional: auto-focus for keyboard users
+	if inventory_replacement_mode:
+		await replacement_done
+	
+	var clr: Color = Color.WHITE
 
-func hide_continue_button():
-	if btn_continue:
-		btn_continue.visible = false
-		btn_continue.disabled = true
+	if current_room_data:
+		if current_room_data.get_rarity() == Enums.Rarity.COMMON || current_room_data.get_rarity() == Enums.Rarity.UNCOMMON:
+			clr = gamecolors.get_rank_color(Player.current_rank)
+		else:
+			clr = current_room_data.room_definition.room_color
 
-func show_doors_with_shortcuts(shortcuts: Array[ShortcutOption]):
-	"""Show 3 doors: Continue + 2 shortcuts (reusing existing door system)"""
-	
-	# Clear any old doors
-	for child in door_container.get_children():
-		child.queue_free()
+	onward_button.show_popup(clr)
 
-	# DOOR 2 & 3: Shortcuts
-	for option in shortcuts:
-		# Convert ShortcutOption to RoomData so door can display it
-		var shortcut_room = create_room_data_for_door(option)
-		
-		var shortcut_door = door_choice_scene.instantiate()
-		door_container.add_child(shortcut_door)
-		shortcut_door.setup_door(shortcut_room)  # ← YOUR EXISTING METHOD
-		shortcut_door.door_selected.connect(func(rd): _on_shortcut_door_selected(option))
-		shortcut_door.on_room_completed()  # ← YOUR EXISTING ANIMATION
-	
-	# Show the door container
-	door_container.visible = true
-	
-func _on_shortcut_door_selected(option: ShortcutOption):
-	# Player chose shortcut door
-	var current_room = DungeonManager.current_rank_rooms[DungeonManager.current_room_index]
-	DungeonManager.all_visited_rooms.append(current_room)
-
-	door_container.visible = false
-	
-	# Apply the shortcut (marks rooms skipped, replaces destination)
-	DungeonManager.apply_shortcut(option)
-	
-	# Advance to destination
-	DungeonManager.advance_room()  # Advance once past current room
-	
-	# Skip ahead
-	for i in range(option.skip_count):
-		var room_data = RoomData.new()
-		room_data.room_definition = RoomRegistry.get_room_by_id("SKIPPED")
-		room_data.room_state["skipped"] = true
-		DungeonManager.all_visited_rooms.append(room_data)
-		DungeonManager.advance_room()
-	
-	# Load destination room
-	var dest_room = DungeonManager.get_current_room()
-	if dest_room:
-		anim_fade.play("fade_out")
-		var anim_length = anim_fade.get_animation("fade_out").length
-		await CombatSpeed.create_timer(anim_length)
-		await load_room(dest_room)
-
-func create_room_data_for_door(option: ShortcutOption) -> RoomData:
-	"""Convert shortcut option into RoomData so door system can display it"""
-	
-	# Create room data from destination
-	var room_data = RoomData.new(
-		option.destination_room,
-		option.destination_room.get_random_event()
-	)
-	
-	# Add shortcut info to description
-	var base_desc = option.destination_room.room_desc
-	var shortcut_info = "\n\n Shortcut: Skip %d rooms\n%s" % [
-		option.skip_count,
-		" Combat ahead" if option.has_combat else " Safe passage"
-	]
-	
-	# Store modified description (door tooltip will show this)
-	room_data.room_state["custom_desc"] = base_desc + shortcut_info
-	
-	return room_data
-
-func _strike_ui_update(entity, strikes_remaining: int, strikes_next_turn: int):
-	if not (entity == Player):
-		return
-
-	is_attack_sequence_active = true
-	stat_strikes.update_stat(Enums.Stats.STRIKES, strikes_remaining, strikes_next_turn)
-	# If countdown finished, resume normal updates
-	if strikes_remaining == 0:
-		is_attack_sequence_active = false
 
 func play_combat_alert_arrow():
 	anim_tools.play("combat_arrow")
@@ -611,15 +565,12 @@ func set_player_stats():
 
 		# Check for blind on damage display
 		var displayed_damage = Player.stats.damage_current
-		if Player.status_effects and Player.status_effects.blind > 0:
-			displayed_damage = ceili(displayed_damage / 2.0)
 		stat_damage.update_stat(Enums.Stats.DAMAGE, displayed_damage, Player.stats.damage)
 				
 		stat_shield.update_stat(Enums.Stats.SHIELD, Player.stats.shield_current, Player.stats.shield)
 		stat_agility.update_stat(Enums.Stats.AGILITY, Player.stats.agility_current, Player.stats.agility)
-		stat_burn_damage.update_stat(Enums.Stats.BURN_DAMAGE, Player.stats.burn_damage_current, Player.stats.burn_damage)
-		if not is_attack_sequence_active:
-			stat_strikes.update_stat(Enums.Stats.STRIKES, Player.stats.strikes_current, Player.stats.strikes)
+		stat_burn_damage.update_stat(Enums.Stats.BURN_DAMAGE, Player.stats.burn_damage_current, Player.stats.burn_damage, Player.inventory.has_keyword("Burn"))
+		stat_strikes.update_stat(Enums.Stats.STRIKES, Player.stats.strikes_left, Player.stats.strikes_next_turn, Player.inventory.has_keyword("Strikes"))
 	else:
 		# During exploration: show current/max for HP, base values for others
 		# (since stats reset to base between combats)
@@ -627,13 +578,13 @@ func set_player_stats():
 		stat_damage.update_stat(Enums.Stats.DAMAGE, Player.stats.damage, Player.stats.damage)  # Show base as both current and max
 		stat_shield.update_stat(Enums.Stats.SHIELD, Player.stats.shield, Player.stats.shield)
 		stat_agility.update_stat(Enums.Stats.AGILITY, Player.stats.agility, Player.stats.agility)
-		stat_strikes.update_stat(Enums.Stats.STRIKES, Player.stats.strikes, Player.stats.strikes)
-		stat_burn_damage.update_stat(Enums.Stats.BURN_DAMAGE, Player.stats.burn_damage, Player.stats.burn_damage)
+		stat_strikes.update_stat(Enums.Stats.STRIKES, Player.stats.strikes, Player.stats.strikes, Player.inventory.has_keyword("Strikes"))
+		stat_burn_damage.update_stat(Enums.Stats.BURN_DAMAGE, Player.stats.burn_damage, Player.stats.burn_damage, Player.inventory.has_keyword("Burn"))
 	
 	# Gold always shows current amount (no max)
 	stat_gold.update_stat(Enums.Stats.GOLD, Player.stats.gold, Player.stats.gold)
+	stat_turns_left.update_stat(Enums.Stats.TURNS_LEFT, Player.rooms_left_this_rank, Player.rooms_left_this_rank)
 
-	lbl_moves.text = str(Player.rooms_left_this_rank) 
 	lbl_rank.text = "Rank " + str(Player.current_rank) 
 
 func _on_inventory_size_changed(_new_size: int):
@@ -641,29 +592,30 @@ func _on_inventory_size_changed(_new_size: int):
 
 func setup_inventory():
 	item_slots.clear()
-	item_slots.resize(Player.inventory.max_item_slots)
-	item_grid.columns = Player.inventory.max_item_slots
+	item_slots.resize(Player.inventory.TOTAL_SLOTS)
+	item_grid.columns = Player.inventory.TOTAL_SLOTS
 	setup_weapon()
 
 	for child in item_grid.get_children():
 		item_grid.remove_child(child)
 		child.queue_free()
 
-	for i in range(Player.inventory.item_slots.size()):
+	for i in range(Player.inventory.TOTAL_SLOTS):
 		var item = Player.inventory.item_slots[i]
 		var item_container = item_slot.instantiate()
 
 		item_container.owner_entity = Player
 		item_container.set_item(item)
-		item_container.custom_minimum_size = Vector2(100, 100)
+		item_container.custom_minimum_size = Vector2(110, 115)
 		item_container.slot_index = i
 		item_container.set_order(i + 1)  # Display 1-based index
+		
+		var is_locked = i >= Player.inventory.unlocked_slots
+		item_container.set_locked(is_locked)
 
 		item_container.drag_started.connect(_on_drag_started)
 		item_container.drag_ended.connect(_on_drag_ended)
 		item_container.slot_dropped_on.connect(_on_slot_dropped_on)
-		item_container.slot_clicked.connect(_on_slot_clicked)
-		item_container.slot_double_clicked.connect(_on_slot_double_clicked.bind(i))
 
 		item_slots[i] = (item_container)
 		item_grid.add_child(item_container)
@@ -696,9 +648,11 @@ func show_item_replacement_overlay():
 	replacement_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 
 func hide_item_replacement_overlay():
+	pending_weapon_replace = false
 	pending_reward_item = null
 	anim_tools.play("hide_replace_item")
 	inventory_replacement_mode = false
+	replacement_done.emit()
 	replacement_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 func show_item_drop_overlay():
@@ -743,11 +697,13 @@ func _on_stats_updated():
 func _on_inventory_updated(item: Item, slot: int):
 	setup_inventory()
 
+
 func _on_drag_started(slot: ItemSlot):
 	if not slot.current_item:
 		return
 	
 	dragging_slot = slot
+	is_dragging = true
 	
 	# Create drag preview
 	create_drag_preview(slot.current_item)
@@ -755,8 +711,22 @@ func _on_drag_started(slot: ItemSlot):
 	# Optional: Hide tooltip while dragging
 	TooltipManager.hide_tooltip()
 
+	# show discard zone if item is discardable
+	if not inventory_replacement_mode and get_current_item_combiner() == null and not pet_interface.visible and slot.current_item.item_type != Item.ItemType.WEAPON and not slot.current_item.has_category("Non-discardable"):
+		anim_tools.play("show_discard")
+
 func _on_drag_ended(slot: ItemSlot):
 	## ---- JDM: All the functionality for the different places items can be dropped
+
+	## -- DROPPING ON THE DISCARD ZONE
+	if not inventory_replacement_mode and is_over_discard_zone() and slot.current_item and not pet_interface.visible and slot.current_item.item_type != Item.ItemType.WEAPON and not slot.current_item.has_category("Non-discardable"):
+		Player.inventory.remove_item(slot.slot_index)
+		#Player.inventory.compact_items()
+		setup_inventory()
+		Player.update_stats_from_items()
+		clear_dragging_vars()
+		slot.modulate.a = 1.0
+		return
 
 	## -- DROPPING INTO AN ITEM COMBINER
 	var combiner = get_current_item_combiner()
@@ -781,14 +751,42 @@ func _on_drag_ended(slot: ItemSlot):
 
 	## -- DRAG AND DROP FROM REPLACEMENT MODAL
 	if inventory_replacement_mode and dragging_slot == replacement_item:
-		var target_slot = get_slot_under_mouse()
-		if target_slot:
-			Player.inventory.replace_item_at_slot(pending_reward_item, target_slot.slot_index)
-			setup_inventory()
-			Player.update_stats_from_items()
-			hide_item_replacement_overlay()
+		if pending_weapon_replace:
+			if weapon_slot.get_global_rect().has_point(get_global_mouse_position()):
+				Player.inventory.set_weapon(pending_reward_item)
+				Player.update_stats_from_items()
+				AudioManager.play_ui_sound("item_pickup")
+				setup_weapon()
+				hide_item_replacement_overlay()
+		else:
+			var target_slot = get_slot_under_mouse()
+			if target_slot and not target_slot.is_locked:
+				Player.inventory.replace_item_at_slot(pending_reward_item, target_slot.slot_index)
+				setup_inventory()
+				Player.update_stats_from_items()
+				hide_item_replacement_overlay()
 		clear_dragging_vars()
 		return  # Don't process normal inventory drop
+
+	## -- DROPPING INVENTORY ITEM ONTO PET SLOT
+	if is_over_pet_slot() and slot.current_item:
+		var inv_item = slot.current_item
+		var pet_item = Player.pet_carrying_item
+
+		if pet_item != null:
+			# Swap: pet item goes to the vacated inventory slot
+			Player.inventory.item_slots[slot.slot_index] = pet_item
+		else:
+			Player.inventory.remove_item(slot.slot_index)
+
+		Player.pet_carrying_item = inv_item
+		setup_inventory()
+		Player.update_stats_from_items()
+		pet_interface.refresh()
+		AudioManager.play_ui_sound("item_pickup")
+		clear_dragging_vars()
+		slot.modulate.a = 1.0
+		return
 
 	## -- NORAML INVENTORY REORDERING
 	# Find what slot we're over
@@ -801,6 +799,34 @@ func _on_drag_ended(slot: ItemSlot):
 	clear_dragging_vars()
 	slot.modulate.a = 1.0
 	
+## -- DRAGGING FROM PET SLOT TO INVENTORY
+func _on_pet_slot_drag_ended(slot: ItemSlot):
+	var target_slot = get_slot_under_mouse()
+	if target_slot == null or target_slot.is_locked:
+		# No valid target — item stays with pet, nothing changes
+		clear_dragging_vars()
+		slot.modulate.a = 1.0
+		return
+
+	var pet_item = Player.pet_carrying_item
+	var inv_item = Player.inventory.item_slots[target_slot.slot_index]
+
+	if inv_item != null:
+		# Swap: inventory item goes to pet, pet item goes to inventory slot
+		Player.inventory.item_slots[target_slot.slot_index] = pet_item
+		Player.pet_carrying_item = inv_item
+	else:
+		# Empty slot: just move pet item into inventory
+		Player.inventory.item_slots[target_slot.slot_index] = pet_item
+		Player.pet_carrying_item = null
+
+	setup_inventory()
+	Player.update_stats_from_items()
+	pet_interface.refresh()
+	AudioManager.play_ui_sound("item_pickup")
+	clear_dragging_vars()
+	slot.modulate.a = 1.0
+
 func _on_weapon_drag_ended(slot: ItemSlot):
 	# Only allow weapon dragging to crafting combiner, NOT to inventory slots
 	var combiner = get_current_item_combiner()
@@ -828,6 +854,9 @@ func _on_weapon_drag_ended(slot: ItemSlot):
 	slot.modulate.a = 1.0
 
 func clear_dragging_vars():
+	if discard_zone.visible:
+		anim_tools.play("hide_discard")
+
 	# Clean up drag state
 	if drag_preview:
 		drag_preview.queue_free()
@@ -835,45 +864,28 @@ func clear_dragging_vars():
 	
 	dragging_slot = null
 	is_dragging = false
+	
+	if hovered_slot_during_drag:
+		hovered_slot_during_drag.hide_drag_hover()
+		hovered_slot_during_drag = null
+	is_hovering_discard_zone = false
 
+func discard_idle_anim():
+	anim_tools.play("discard_idle")
 
 func _on_slot_dropped_on(target_slot: ItemSlot, dragged_item: Item):
+	if target_slot.is_locked:
+		return
 	if dragging_slot and dragging_slot != target_slot:
 		perform_item_move(dragging_slot, target_slot)
 
-func _on_slot_clicked(_item: ItemSlot):
-	## JDM: This is OLD CODE from when you had to click-to-replace (testing drag-and-drop)
-	#if not inventory_replacement_mode or not pending_reward_item:
-	#	return
-
-	## Replace the item
-	#Player.inventory.replace_item_at_slot(pending_reward_item, _item.slot_index)
-
-	#setup_inventory()
-	#Player.update_stats_from_items()
-	#hide_item_replacement_overlay()
-	pass
-
-func _on_slot_double_clicked(slot_index: int):
-	if inventory_replacement_mode:
-		return
-
-	# Check if slot has an item
-	var item = Player.inventory.item_slots[slot_index]
-	if item == null:
-		return  # Can't drop empty slots
-
-	pending_drop_item = item
-	pending_drop_slot_index = slot_index
-	drop_item.set_item(pending_drop_item)
-	drop_item.set_item_type_desc()
-
-	show_item_drop_overlay()
-	
 func perform_item_move(from_slot: ItemSlot, to_slot: ItemSlot):
 	var from_index = from_slot.slot_index
 	var to_index = to_slot.slot_index
 	
+	if to_slot.is_locked:
+		return
+
 	## --------- JDM: This is the code for swapping item positions,
 	## If moving to empty slot, just move
 	#if not to_slot.current_item:
@@ -902,6 +914,11 @@ func get_slot_under_mouse() -> ItemSlot:
 		if slot and slot.get_global_rect().has_point(mouse_pos):
 			return slot
 	return null
+
+func is_over_pet_slot() -> bool:
+	if pet_interface == null or not pet_interface.visible:
+		return false
+	return pet_interface.item_slot.get_global_rect().has_point(get_global_mouse_position())
 
 func get_current_item_combiner() -> ItemCombiner:
 	# Get the ItemCombiner from current event if it exists
@@ -987,7 +1004,8 @@ func create_drag_preview(item: Item):
 	get_tree().root.add_child(drag_preview)
 
 func _show_panels():
-	anim_tools.play("setup_toolbars")
+	pass
+	#anim_tools.play("setup_toolbars")
 
 
 func request_combat(enemy: Enemy) -> bool:
@@ -1030,31 +1048,13 @@ func _on_btn_cancel_replace_pressed() -> void:
 	hide_item_replacement_overlay()
 
 
-func _on_btn_drop_pressed() -> void:
-	if pending_drop_item and pending_drop_slot_index >= 0:
-		# Remove item from inventory
-		Player.inventory.remove_item(pending_drop_slot_index)
-		
-		# Shift inventory to remove gaps
-		Player.inventory.compact_items()
-		
-		# Refresh inventory display
-		setup_inventory()
-		
-		# Update player stats
-		Player.update_stats_from_items()
-		
-		hide_item_drop_overlay()
-
-func _on_btn_cancel_drop_pressed() -> void:
-	hide_item_drop_overlay()
-
 func is_in_replacement_mode() -> bool:
 	return inventory_replacement_mode
 
 # Track when combat starts/ends for proper stat display
 func _on_combat_started_for_ui(player, enemy):
 	set_player_stats()  # Refresh to show current values
+	pet_button.is_enabled(false)
 	AudioManager.on_combat_started(enemy.enemy_type == Enemy.EnemyType.BOSS_PLAYER, enemy)	
 
 func _on_combat_ended_for_ui(winner, loser):
@@ -1062,6 +1062,9 @@ func _on_combat_ended_for_ui(winner, loser):
 	await get_tree().process_frame  # Wait for stats to reset
 	set_player_stats()
 	AudioManager.on_combat_ended()
+	
+	if !Player.is_in_town and Player.pet_carrying_item == null:
+		pet_button.is_enabled(true)
 
 	# Reset all countdown displays
 	for slot in item_slots:
@@ -1096,6 +1099,14 @@ func _on_combat_stat_changed(entity, stat: Enums.Stats, old_value: int, new_valu
 				stat_gold.update_stat(Enums.Stats.GOLD, 
 					Player.stats.gold, 
 					Player.stats.gold)
+			Enums.Stats.STRIKES:
+				stat_strikes.update_stat(Enums.Stats.STRIKES, 
+					Player.stats.strikes_left,
+					Player.stats.strikes_next_turn)
+			Enums.Stats.BURN_DAMAGE:
+				stat_burn_damage.update_stat(Enums.Stats.BURN_DAMAGE, 
+					Player.stats.burn_damage_current, 
+					Player.stats.burn_damage)
 
 func _on_occurrence_updated(entity, item: Item, trigger_type: Enums.TriggerType, current_count: int, remaining: int):
 	# Only update if it's the player's item
@@ -1123,27 +1134,20 @@ func _on_minimap_room_clicked(room_index: int):
 	if room_index == 5:
 		show_boss_panel()
 
-func _on_zoom_out_requested():
-	if !Player.popup_open || Player.is_in_town:
-		check_boss_panel.visible = true
-		check_boss_panel.show_panel()
-
 func _on_zoom_panel_closed():
 	check_boss_panel.visible = false
 	Player.popup_open = false
 
 func _on_boss_rush_pressed():
 	anim_fade.play("fade_out_retry")
-	var anim_length = anim_fade.get_animation("fade_out_retry").length
-	await CombatSpeed.create_timer(anim_length)
-
+	await anim_fade.animation_finished
+	
 	if combat_panel:
 		combat_panel.slide_animation.play("RESET")
 		combat_panel.player_anim.play("RESET")
 		combat_panel.enemy_anim.play("RESET")
-		combat_panel.combat_shadow.visible = true
-		combat_panel.combat_shadow.modulate.a = 1.0
 
+	onward_button.reset_anims()
 	check_boss_panel.hide_panel()
 	_on_zoom_panel_closed()
 
@@ -1225,6 +1229,7 @@ func reset_dungeon_for_new_run():
 	
 func fade_out():
 	anim_fade.play("fade_out_retry")
+	await anim_fade.animation_finished
 
 func screen_shake(intensity: float = 10.0, duration: float = 0.5):
 	"""Shake the entire UI root instead of camera."""
@@ -1249,21 +1254,18 @@ func screen_shake(intensity: float = 10.0, duration: float = 0.5):
 	shake_tween.tween_property(ui_root, "position", original_position, 0.1)
 
 
-func _on_btn_continue_mouse_exited() -> void:
-	CursorManager.reset_cursor()
-
-func _on_btn_continue_mouse_entered() -> void:
-	CursorManager.set_navigation_cursor()
-
-
 func _on_btn_cancel_replace_mouse_entered() -> void:
 	AudioManager.play_ui_sound("woosh")
 
 
 func _on_btn_town_pressed() -> void:
+	fade_out()
+	_go_back_to_camp()
+
+func _go_back_to_camp() -> void:
+	onward_button.reset_anims()
 	var town_room = DungeonManager.get_town_room()
 	if town_room:
-		#Player.town_visits_left_this_rank -= 1
 		load_room(town_room)
 
 func _on_version_outdated(latest_version: String):
@@ -1279,3 +1281,29 @@ func _on_version_outdated(latest_version: String):
 func _on_btn_return_pressed() -> void:
 	get_tree().paused = false
 	get_tree().change_scene_to_file("res://Scenes/main_menu.tscn")
+
+func _on_btn_menu_pressed() -> void:
+	pause_menu.show_pause_menu()
+
+func is_over_discard_zone() -> bool:
+	return discard_zone.visible and discard_zone.get_global_rect().has_point(get_global_mouse_position())
+
+func _on_btn_zoom_pressed() -> void:
+	if current_event is BossRoomEvent:
+		return
+	if !Player.popup_open || Player.is_in_town:
+		check_boss_panel.visible = true
+		check_boss_panel.show_panel()
+
+func _player_chose_run():
+	# Emit signal for room event
+	combat_panel.player_chose_run.emit()
+	
+	# Slide out
+	combat_panel.hide_panel()
+	
+	# Complete without combat
+	combat_panel.combat_completed.emit(false)
+
+func _player_chose_fight():
+	combat_panel.setup_fight()

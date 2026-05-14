@@ -73,6 +73,8 @@ const UI_SOUND_NAMES = {
 	"new_run_hover": "res://Assets/Audio/SFX/UI/new_run_hover.ogg",
 	"new_run_click": "res://Assets/Audio/SFX/UI/new_run_click.ogg",
 	"pappas": "res://Assets/Audio/SFX/UI/uwin.mp3",	
+	"vine_hover": "res://Assets/Audio/SFX/UI/vine_hover.ogg",
+	"vine_drop": "res://Assets/Audio/SFX/UI/rope_drop.ogg",
 }
 
 const COMBAT_SOUND_NAMES = {
@@ -115,7 +117,8 @@ const EVENT_SOUND_NAMES = {
 	"no3": "res://Assets/Audio/SFX/EVENT/voice_nuhuh.ogg",
 	"no4": "res://Assets/Audio/SFX/EVENT/voice_nhm.ogg",
 	"trumpet": "res://Assets/Audio/SFX/EVENT/trumpet1.ogg",
-	"quick_fight": "res://Assets/Audio/SFX/EVENT/quick_fight.ogg"
+	"quick_fight": "res://Assets/Audio/SFX/EVENT/quick_fight.ogg",
+	"instant_combat": "res://Assets/Audio/SFX/COMBAT/instant_fight.ogg",
 }
 
 const VOICES = {
@@ -216,7 +219,9 @@ func _load_music_tracks():
 	# Format: music_tracks["name"] = "path/to/file.ogg"
 	
 	# Example structure:
+	music_tracks["menu_music"] = "res://Assets/Audio/Music/Sector X.mp3"
 	music_tracks["general_exploration"] = "res://Assets/Audio/Music/Main Theme (Dark - OGG).ogg"
+	music_tracks["new_exploration"] = "res://Assets/Audio/Music/new_thinky_music.ogg"
 	music_tracks["combat_npc"] = "res://Assets/Audio/Music/Combat Theme.mp3"
 	music_tracks["combat_pvp"] = "res://Assets/Audio/Music/Main Theme (Epic).mp3"
 	music_tracks["defeat"] = "res://Assets/Audio/Music/Piano Theme OGG.ogg"
@@ -321,6 +326,18 @@ func play_general_music():
 
 	_switch_music_context(MusicContext.GENERAL, "general_exploration")
 
+func play_main_theme():
+	if not is_ready:
+		push_warning("[AudioManager] Not ready yet, deferring music")
+		call_deferred("play_main_theme")
+		return
+
+	if not music_tracks.has("menu_music"):
+		push_warning("[AudioManager] General music not loaded yet")
+		return
+
+	_switch_music_context(MusicContext.GENERAL, "menu_music")
+
 func play_defeat_music():
 	if not is_ready:
 		push_warning("[AudioManager] Not ready yet, deferring music")
@@ -338,7 +355,10 @@ func play_combat_music(is_pvp: bool = false, enemy: Enemy = null):
 		push_warning("[AudioManager] Not ready yet, deferring music")
 		return
 
-    # Enemy-specific music overrides everything
+	if CombatSpeed.is_instant_mode_outside_combat():
+		return
+	
+	# Enemy-specific music overrides everything
 	if enemy and enemy.combat_music:
 		_switch_music_context_stream(MusicContext.ENEMY_OVERRIDE, enemy.combat_music)
 		return

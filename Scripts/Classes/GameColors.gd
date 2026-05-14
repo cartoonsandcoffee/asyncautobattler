@@ -33,12 +33,12 @@ class Rarity:
 	const crafted = Color("#7e806a")			# brown
 
 class Room:
-	const rank_1 = Color("#967caf")        	# Brown
-	const rank_2 = Color("#97bd85")        	# Brown
-	const rank_3 = Color("#96a6d3")         	# Dark purple
+	const rank_1 = Color("#8c6aac")        	# Brown
+	const rank_2 = Color("#8ccc6e")        	# Brown
+	const rank_3 = Color("#5e7fc7")         	# Dark purple
 	const rank_4 = Color("#cc6a54")      		# Red-orange
-	const rank_5 = Color("#68ac82")      		# Purple
-	const rank_6 = Color("#cf7b7b")     		# Red
+	const rank_5 = Color("#d8b599")      		# Purple
+	const rank_6 = Color("#a12929")     		# Red
 
 class Difficulty:
 	const very_easy = Color("#ffff66")      # Yellow

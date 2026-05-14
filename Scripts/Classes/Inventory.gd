@@ -15,12 +15,16 @@ signal inventory_size_changed(_new_size: int)
 @export var weapon_slot: Item = null
 @export var item_slots: Array[Item] = []
 var max_item_slots: int = 4
+var unlocked_slots: int = 4
+const TOTAL_SLOTS: int = 12
 
 var owner_entity = null  # Store reference to owning entity
 
 func _init():
 	# Initialize empty item slots
-	item_slots.resize(max_item_slots)
+	item_slots.resize(TOTAL_SLOTS)
+	max_item_slots = TOTAL_SLOTS
+
 
 func add_item(new_item: Item) -> bool:
 	var item_instance = new_item.create_instance()
@@ -184,7 +188,7 @@ func remove_item(index: int) -> Item:
 	if item != null:
 		item_slots[index] = null
 		item_removed.emit(item, index)
-		compact_items()
+		#compact_items()
 	
 	return item
 
@@ -214,7 +218,7 @@ func clear_slot(index: int) -> void:
 			item_removed.emit(item, index)
 
 func get_empty_slot_index() -> int:
-	for i in range(item_slots.size()):
+	for i in range(unlocked_slots):
 		if item_slots[i] == null:
 			return i
 	return -1
@@ -228,8 +232,8 @@ func is_slot_empty(index: int) -> bool:
 	return item_slots[index] == null
 
 func is_full() -> bool:
-	for slot in item_slots:
-		if slot == null:
+	for i in range(unlocked_slots):
+		if item_slots[i] == null:
 			return false
 	return true
 
@@ -255,14 +259,23 @@ func count_items_with_category(category: String) -> int:
 	
 	return count
 
+func has_keyword(keyword: String) -> bool:
+	for item in item_slots:
+		if item and keyword in item.keywords:
+			return true
+	if weapon_slot and keyword in weapon_slot.keywords:
+		return true
+	return false
+
 func expand_inventory(additional_slots: int) -> void:
-	max_item_slots += additional_slots
-	item_slots.resize(max_item_slots)
+	unlocked_slots = mini(unlocked_slots + additional_slots, TOTAL_SLOTS)
+	inventory_size_changed.emit(unlocked_slots)
 
 func set_inventory_size(total_slots: int) -> void:
-	max_item_slots = total_slots
-	item_slots.resize(max_item_slots)
-	inventory_size_changed.emit(total_slots)
+	unlocked_slots = mini(total_slots, TOTAL_SLOTS)
+	max_item_slots = TOTAL_SLOTS
+	item_slots.resize(TOTAL_SLOTS)
+	inventory_size_changed.emit(unlocked_slots)
 
 func compact_items():
 	"""Removes all null gaps in the inventory by shifting items left"""
@@ -333,6 +346,7 @@ func insert_item_at(from_index: int, to_index: int):
 # For saving/loading
 func get_save_data() -> Dictionary:
 	var data = {
+		"unlocked_slots": unlocked_slots,
 		"max_slots": max_item_slots,
 		"items": [],
 		"weapon": null
@@ -342,27 +356,37 @@ func get_save_data() -> Dictionary:
 		if item_slots[i] != null:
 			data.items.append({
 				"slot": i,
-				"item_resource_path": item_slots[i].resource_path
+				"item_id": item_slots[i].item_id
 			})
 	
 	if weapon_slot != null:
-		data.weapon = weapon_slot.resource_path
+		data.weapon = weapon_slot.item_id
 	
 	return data
 
 func load_from_save_data(data: Dictionary) -> void:
-	max_item_slots = data.get("max_slots", 4)
+	max_item_slots = data.get("max_slots", 12)
+	unlocked_slots = data.get("unlocked_slots", 4)
 	item_slots.clear()
 	item_slots.resize(max_item_slots)
 	
 	for item_data in data.get("items", []):
-		var item = load(item_data.item_resource_path) as Item
+		var item = ItemsManager.get_item_by_id(item_data.get("item_id", ""))
 		if item:
-			item_slots[item_data.slot] = item
+			var instance = item.create_instance()  
+			instance.slot_index = item_data.slot
+			item_slots[item_data.slot] = instance
+		else:
+			push_warning("[Inventory] Could not restore item_id: %s" % item_data.get("item_id", "?"))
 	
-	if data.has("weapon") and data.weapon != null:
-		weapon_slot = load(data.weapon) as Item
-
+	var weapon_id: String = data.get("weapon", "")
+	if weapon_id != "":
+		var weapon = ItemsManager.get_item_by_id(weapon_id)
+		if weapon:
+			weapon_slot = weapon.create_instance()  
+		else:
+			push_warning("[Inventory] Could not restore weapon_id: %s" % weapon_id)
+			
 func print_inventory():
 	print(" ------ CURRENT INVENTORY ITEMS (SLOTS) ------")
 	for i in range(item_slots.size()):

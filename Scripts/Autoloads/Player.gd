@@ -5,7 +5,7 @@ signal inventory_updated(item: Item, slot_index: int)
 signal profile_loaded()
 signal ears_changed(new_balance: int)
 
-const GAME_VERSION = "0.1.02" 
+const GAME_VERSION = "0.1.04" 
 
 # ============================================
 # PERSISTENT PROFILE DATA (Synced with Supabase)
@@ -21,6 +21,7 @@ var champions_killed: int = 0
 var total_runs: int = 0
 
 const PLAYER_DATA_PATH = "user://player_data.json"
+const RUN_SAVE_PATH = "user://run_save.json"
 
 var stats: GameStats:
 	get:
@@ -55,6 +56,7 @@ var current_weapon_stat_upgrades: Dictionary = {
 	"agility": 0
 }
 var current_weapon_rule_upgrade: Item = null  # The enchantment item
+var pet_carrying_item: Item = null  # The enchantment item
 
 # Entity state flags
 var is_player: bool = false
@@ -74,6 +76,7 @@ var run_start_time: float = 0.0
 var max_gold_this_run: int = 0
 var items_found_this_run: int = 0
 
+var pet_familiar_left: int = 1
 var super_upgrades_left: int = 1
 var scorpion_encounters_left: int = 1
 var rare_camp_events_left: int = 1
@@ -84,7 +87,7 @@ var town_shop_inventory: Array[String] = [] # item IDs, "" = purchased/empty slo
 
 # town usage variables
 var rooms_left_this_rank: int = 0
-var total_rooms_per_rank: int = 15
+var total_rooms_per_rank: int = 10 ## - Should be 15, lowered for testing.
 var shrine_uses_left_this_rank: int = 0
 var total_shrine_uses_per_rank: int = 1
 var banishes_left_this_rank: int = 0
@@ -96,6 +99,7 @@ var is_in_town: bool = false
 var popup_open: bool = false
 
 func new_run(nm: String):
+	SaveManager.delete_saved_run()
 	player_name = nm
 	SkinManager.apply_selected_skin_to_player()
 	ItemsManager.clear_banished_items()
@@ -113,15 +117,17 @@ func new_run(nm: String):
 		stats.gold = 0
 		stats.reset_to_base_values()
 	
-	if inventory:
-		set_test_inventory()
-
 	current_weapon_stat_upgrades = {
 		"damage": 0,
 		"shield": 0,
 		"agility": 0
 	}
 	current_weapon_rule_upgrade = null
+
+	pet_carrying_item = null
+
+	if inventory:
+		set_test_inventory()
 
 	current_rank = 1
 	current_room = 1
@@ -131,6 +137,7 @@ func new_run(nm: String):
 	damage_dealt_this_run = 0
 	damage_taken_this_run = 0
 
+	pet_familiar_left = 1
 	super_upgrades_left = 1
 	scorpion_encounters_left = 1
 	rare_camp_events_left = 1
@@ -146,10 +153,11 @@ func new_run(nm: String):
 	stats.shop_upgrades = 0
 	stats.refresh_cost = 1
 
-	rooms_left_this_rank = total_rooms_per_rank + 1  # JDM: Adding 1 to offset the first time town is loaded
+	rooms_left_this_rank = total_rooms_per_rank + 2  # JDM: Adding 1 to offset the first time town is loaded
 	banishes_left_this_rank = total_banishes_per_rank
 	shrine_uses_left_this_rank = total_shrine_uses_per_rank
 	campfires_left_this_rank = total_campfires_per_rank
+
 
 func set_test_inventory():
 	if !inventory:
@@ -161,24 +169,86 @@ func set_test_inventory():
 
 	inventory.add_item(ItemsManager.available_items["weapon_fists"])
 
-	#inventory.add_item(ItemsManager.available_items["blessed_talisman"])
+	#inventory.add_item(ItemsManager.available_items["purifying_talon"])
 	#inventory.add_item(ItemsManager.available_items["golden_helmet_of_the_old_gods"])
-	#inventory.add_item(ItemsManager.available_items["dew_fly"])
+	#inventory.add_item(ItemsManager.available_items["calming_relic"])
+	#inventory.add_item(ItemsManager.available_items["golden_dew_fly"])
 
-	#inventory.add_item(ItemsManager.available_items["diamond_corroded_armor"])
-	#inventory.add_item(ItemsManager.available_items["diamond_ring_of_life"])
-	#inventory.add_item(ItemsManager.available_items["diamond_corroded_armor"])
+	#inventory.add_item(ItemsManager.available_items["spiked_mace"])
+	#inventory.add_item(ItemsManager.available_items["purple_skin_vest"])
+	#inventory.add_item(ItemsManager.available_items["purple_skin_gloves"])
+	#inventory.add_item(ItemsManager.available_items["leather_boots"])
+	#inventory.add_item(ItemsManager.available_items["darkmoth"])
 
-	#inventory.add_item(ItemsManager.available_items["diamond_ring_of_power"])
+	## -- Test positioning of statuses and set bonuses
+	#inventory.add_item(ItemsManager.available_items["stinky_shield"])
+	#inventory.add_item(ItemsManager.available_items["cleansing_axe"])
+	#inventory.add_item(ItemsManager.available_items["thorn_bug"])
+	#inventory.add_item(ItemsManager.available_items["golden_helmet_of_the_old_gods"])
+
+	## - Items for testing rules
+	#inventory.add_item(ItemsManager.available_items["poison_dagger"])
+	#inventory.add_item(ItemsManager.available_items["golden_dark_crawler"])
+
+	## - Items for testing strikes
+	#inventory.add_item(ItemsManager.available_items["crickets_leg"])
+	#inventory.add_item(ItemsManager.available_items["multishot_bow"])
+	#inventory.add_item(ItemsManager.available_items["nimble_cloak"])
+	#inventory.add_item(ItemsManager.available_items["nimble_cloak"])
+	#inventory.add_item(ItemsManager.available_items["golden_nimble_hood"])
+	#inventory.add_item(ItemsManager.available_items["nimble_hood"])
+	#inventory.add_item(ItemsManager.available_items["diamond_collectors_armor"])
+	#inventory.add_item(ItemsManager.available_items["diamond_shafeek_boots"])
+
+	## - Items for testing meta trigger
+	#inventory.add_item(ItemsManager.available_items["fury_steel"])
+	#inventory.add_item(ItemsManager.available_items["acrid_potion"])
+	#inventory.add_item(ItemsManager.available_items["mountain_dew"])
+	#inventory.add_item(ItemsManager.available_items["burning_scorpion"])
+	#inventory.add_item(ItemsManager.available_items["armored_fire_beetle"])
+
+	## - Items for specific meta-trigger
+	#inventory.add_item(ItemsManager.available_items["multishot_bow"])
+	#inventory.add_item(ItemsManager.available_items["nimble_gloves"])
+	#inventory.add_item(ItemsManager.available_items["gore_armor"])
+	#inventory.add_item(ItemsManager.available_items["bloodmoth"])
+	#inventory.add_item(ItemsManager.available_items["t_apparatus"])
+
+	## Items for testing vampiric rules
+	#inventory.add_item(ItemsManager.available_items["vampiric_blade"])
+	#inventory.add_item(ItemsManager.available_items["diamond_crown_of_rage"])
+	#inventory.add_item(ItemsManager.available_items["diamond_scuttlemite"])
+	#inventory.add_item(ItemsManager.available_items["hardwood_pauldrons"])
+	#inventory.add_item(ItemsManager.available_items["diamond_collectors_armor"])
+
+	## Items for testing Blind rules
+	#inventory.add_item(ItemsManager.available_items["inconvenient_blade"])
+	#inventory.add_item(ItemsManager.available_items["diamond_radiant_shield"])
+	#inventory.add_item(ItemsManager.available_items["golden_shimmering_gauntlet"])
+	#inventory.add_item(ItemsManager.available_items["diamond_crown_of_rage"])
+	#inventory.add_item(ItemsManager.available_items["diamond_collectors_armor"])
+
+
+	## - Items for testing persistent damage rules
+	#current_weapon_rule_upgrade = ItemsManager.available_upgrades["colossus"]
+	#inventory.add_item(ItemsManager.available_items["golden_crown_of_rage"])	
+	#inventory.add_item(ItemsManager.available_items["Indecent_Exposure"])
+	#inventory.add_item(ItemsManager.available_items["golden_firefly"])
+
+	## - Items for testing repeats
+	#inventory.add_item(ItemsManager.available_items["clearmetal_shoulder_plate"])
+	#inventory.add_item(ItemsManager.available_items["armored_beetle"])
+	#inventory.add_item(ItemsManager.available_items["armored_beetle"])
 	#inventory.add_item(ItemsManager.available_items["clearmetal_spear"])
-	#inventory.add_item(ItemsManager.available_items["essence_of_charcoal"])
+	#inventory.add_item(ItemsManager.available_items["dark_crawler"])
 
-	#inventory.add_item(ItemsManager.available_items["chitinous_tibia"])
-	#inventory.add_item(ItemsManager.available_items["test_relic"])	
-	#inventory.add_item(ItemsManager.available_items["thorny_vest"])
-	
-	#inventory.add_item(ItemsManager.available_items["golden_corroded_armor"])
-	#inventory.add_item(ItemsManager.available_items["corroded_pauldrons"])
+	## - Items for testing RINGS
+	#inventory.add_item(ItemsManager.available_items["ornate_sword"])
+	#inventory.add_item(ItemsManager.available_items["ring_of_power"])
+	#inventory.add_item(ItemsManager.available_items["ring_of_life"])
+	#inventory.add_item(ItemsManager.available_items["ring_of_theft"])
+	#inventory.add_item(ItemsManager.available_items["jewelry_box"])
+
 	#inventory.add_item(ItemsManager.available_items["stinky_shield"])
 	#inventory.add_item(ItemsManager.available_items["cleansing_axe"])
 	
@@ -247,7 +317,12 @@ func _apply_persistent_rules():
 	var all_items = inventory.item_slots.duplicate()
 	if inventory.weapon_slot:
 		all_items.append(inventory.weapon_slot)
+		if current_weapon_rule_upgrade:
+			all_items.append(current_weapon_rule_upgrade)
 	
+	for bonus_item in SetBonusManager.get_active_set_bonuses(self):
+		all_items.append(bonus_item)
+
 	for item in all_items:
 		if not item:
 			continue
@@ -658,6 +733,11 @@ func _serialize_weapon_enchantment() -> Dictionary:
 		return {"id": current_weapon_rule_upgrade.item_id, "name": current_weapon_rule_upgrade.item_name}
 	return {}
 
+func _serialize_pet_item() -> Dictionary:
+	if pet_carrying_item and not pet_carrying_item.item_id.is_empty():
+		return {"id": pet_carrying_item.item_id, "name": pet_carrying_item.item_name}
+	return {}
+
 func has_rooms_remaining() -> bool:
 	"""Check if player can enter another dungeon room"""
 	return rooms_left_this_rank > 0
@@ -701,24 +781,44 @@ func complete_rank_boss():
 	refill_rooms_for_new_rank()
 	stats.stats_updated.emit()
 
-	print("[Player] Rank advanced to %d! Rooms reset to 10" % current_rank)
+	print("[Player] Rank advanced to %d!" % current_rank)
 
 # ============================================
-# SERIALIZATION (For local save/load - future use)
+# SERIALIZATION (For local save/load)
 # ============================================
 
 func to_dict() -> Dictionary:
-	"""Serialize current run state for local saves."""
+	# Serialize current run state for local saves.
+
 	return {
 		# Persistent data
 		"player_uuid": player_uuid,
 		"player_name": player_name,
 		"skin_id": skin_id,
+		"skin_color": skin_color.to_html(),
+		"item_bundles": item_bundles,
+		#"scarcity_mode": scarcity_mode,
 		
 		# Run state
 		"current_rank": current_rank,
 		"current_room": current_room,
 		"rooms_cleared": rooms_cleared_this_run,
+		"rooms_left_this_rank": rooms_left_this_rank + 1,
+		"town_shop_inventory": town_shop_inventory,
+		
+		# Per-run encounter counters
+		"pet_familiar_left": pet_familiar_left,
+		"super_upgrades_left": super_upgrades_left,
+		"scorpion_encounters_left": scorpion_encounters_left,
+		"rare_camp_events_left": rare_camp_events_left,
+		"potion_makers_left": potion_makers_left,
+		"tinker_events_left": tinker_events_left,
+		"crystal_events_left": crystal_events_left,
+		
+		# Per-rank counters
+		"shrine_uses_left_this_rank": shrine_uses_left_this_rank,
+		"banishes_left_this_rank": banishes_left_this_rank,
+		"campfires_left_this_rank": campfires_left_this_rank,
 		
 		# Stats
 		"stats": {
@@ -729,7 +829,8 @@ func to_dict() -> Dictionary:
 			"agility": stats.agility,
 			"strikes": stats.strikes,
 			"burn_damage": stats.burn_damage,
-			"gold": stats.gold
+			"gold": stats.gold,
+			"shop_upgrades": stats.shop_upgrades,
 		},
 		
 		# Inventory
@@ -738,16 +839,28 @@ func to_dict() -> Dictionary:
 		# Weapon upgrades
 		"weapon_stat_upgrades": current_weapon_stat_upgrades,
 		"weapon_enchantment": _serialize_weapon_enchantment(),
+		"pet_item": _serialize_pet_item(),
 		
 		# Run stats
 		"enemies_defeated": enemies_defeated_this_run,
 		"gold_earned": gold_earned_this_run,
 		"damage_dealt": damage_dealt_this_run,
-		"damage_taken": damage_taken_this_run
+		"damage_taken": damage_taken_this_run,
+		"max_gold_this_run": max_gold_this_run,
+		"items_found_this_run": items_found_this_run,
+		
+		# Dungeon bag state
+		"dungeon": {
+			"current_rank": DungeonManager.current_rank,
+			"rooms_visited_this_rank": DungeonManager.rooms_visited_this_rank,
+			"exhausted_room_ids": DungeonManager._bag._exhausted_ids.duplicate(),
+			"last_drawn_room": DungeonManager._bag._last_drawn.room_name if DungeonManager._bag._last_drawn else "",
+			"boss_data": DungeonManager.current_boss_data.duplicate()
+		}
 	}
 
 func from_dict(data: Dictionary):
-	"""Restore run state from local save."""
+	# Restore run state from local save.
 	if data.is_empty():
 		push_warning("[Player] Empty save data provided")
 		return
@@ -756,13 +869,42 @@ func from_dict(data: Dictionary):
 	player_uuid = data.get("player_uuid", "")
 	player_name = data.get("player_name", "Player")
 	skin_id = data.get("skin_id", 0)
-	var color_hex:String = data.get("skin_color", "#FFFFFF")
+	var color_hex: String = data.get("skin_color", "#FFFFFF")
 	skin_color = Color(color_hex)
+	#scarcity_mode = data.get("scarcity_mode", false)
+
+	var raw_bundles: Array = data.get("item_bundles", [])
+	if raw_bundles.is_empty():
+		item_bundles = [Enums.ItemBundles.REVENGE, Enums.ItemBundles.HONOR, Enums.ItemBundles.DUTY]
+	else:
+		item_bundles.clear()
+		for b in raw_bundles:
+			item_bundles.append(b as Enums.ItemBundles)
 
 	# Run state
 	current_rank = data.get("current_rank", 1)
 	current_room = data.get("current_room", 1)
 	rooms_cleared_this_run = data.get("rooms_cleared", 0)
+	rooms_left_this_rank = data.get("rooms_left_this_rank", total_rooms_per_rank)
+
+	var raw_shop: Array = data.get("town_shop_inventory", [])
+	town_shop_inventory.clear()
+	for s in raw_shop:
+		town_shop_inventory.append(str(s))
+	
+	# Per-run encounter counters
+	pet_familiar_left = data.get("pet_familiar_left", 1)
+	super_upgrades_left = data.get("super_upgrades_left", 1)
+	scorpion_encounters_left = data.get("scorpion_encounters_left", 1)
+	rare_camp_events_left = data.get("rare_camp_events_left", 1)
+	potion_makers_left = data.get("potion_makers_left", 1)
+	tinker_events_left = data.get("tinker_events_left", 1)
+	crystal_events_left = data.get("crystal_events_left", 1)
+	
+	# Per-rank counters
+	shrine_uses_left_this_rank = data.get("shrine_uses_left_this_rank", total_shrine_uses_per_rank)
+	banishes_left_this_rank = data.get("banishes_left_this_rank", total_banishes_per_rank)
+	campfires_left_this_rank = data.get("campfires_left_this_rank", total_campfires_per_rank)
 	
 	# Stats
 	var stats_data = data.get("stats", {})
@@ -775,6 +917,7 @@ func from_dict(data: Dictionary):
 		stats.strikes = stats_data.get("strikes", 1)
 		stats.burn_damage = stats_data.get("burn_damage", 0)
 		stats.gold = stats_data.get("gold", 0)
+		stats.shop_upgrades = stats_data.get("shop_upgrades", 0)
 	
 	# Inventory
 	var inv_data = data.get("inventory", {})
@@ -786,21 +929,58 @@ func from_dict(data: Dictionary):
 		"damage": 0, "shield": 0, "agility": 0
 	})
 	
-	# Weapon enchantment (need to load the actual Item from the ID)
+	# Weapon enchantment
 	var enchantment_data = data.get("weapon_enchantment", {})
 	if not enchantment_data.is_empty() and enchantment_data.has("id"):
-		# Load the enchantment item by ID
 		current_weapon_rule_upgrade = ItemsManager.get_item_by_id(enchantment_data.id)
 	else:
 		current_weapon_rule_upgrade = null
 	
+	var pet_item = data.get("pet_item", {})
+	if not pet_item.is_empty() and pet_item.has("id"):
+		pet_carrying_item = ItemsManager.get_item_by_id(pet_item.id)
+	else:
+		pet_carrying_item = null
+
 	# Run stats
 	enemies_defeated_this_run = data.get("enemies_defeated", 0)
 	gold_earned_this_run = data.get("gold_earned", 0)
 	damage_dealt_this_run = data.get("damage_dealt", 0)
 	damage_taken_this_run = data.get("damage_taken", 0)
+	max_gold_this_run = data.get("max_gold_this_run", 0)
+	items_found_this_run = data.get("items_found_this_run", 0)
+	
+	# Dungeon bag — restore after rank is set
+	var dungeon_data = data.get("dungeon", {})
+	if not dungeon_data.is_empty():
+		# Sync both rank vars from the single saved source of truth
+		var saved_rank: int = dungeon_data.get("current_rank", 1)
+		current_rank = saved_rank
+		DungeonManager.current_rank = saved_rank
+		DungeonManager.rooms_visited_this_rank = dungeon_data.get("rooms_visited_this_rank", 0)
+		
+		# Restore bag
+		var exhausted: Array = dungeon_data.get("exhausted_room_ids", [])
+		var last_drawn: String = dungeon_data.get("last_drawn_room", "")
+		DungeonManager._bag.restore_from_save(saved_rank, exhausted, last_drawn)
+		
+		# Restore boss data — recreate enemy from saved Supabase dict, no re-fetch needed
+		var boss_data: Dictionary = dungeon_data.get("boss_data", {})
+		DungeonManager.current_boss_data = boss_data
+		if not boss_data.is_empty():
+			if saved_rank < 6:
+				DungeonManager.current_boss_enemy = BossHandler.create_boss_enemy(boss_data)
+			else:
+				DungeonManager.current_boss_enemy = BossHandler.create_boss_enemy(boss_data)
+				if boss_data.get("is_shadow", false):
+					DungeonManager.current_boss_enemy.enemy_name += " (Shadow)"
+			if DungeonManager.current_boss_enemy:
+				DungeonManager.boss_loaded.emit(DungeonManager.current_boss_enemy)
+		else:
+			DungeonManager.current_boss_enemy = BossHandler.get_fallback_boss(saved_rank)
 	
 	print("[Player] Loaded save data for: %s (Rank %d)" % [player_name, current_rank])
+
 
 static func compare_versions(v1: String, v2: String) -> int:
 	# Compare two semantic version strings.

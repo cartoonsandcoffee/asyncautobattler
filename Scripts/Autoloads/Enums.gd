@@ -22,7 +22,8 @@ enum Stats {
 	EXPOSED,
 	WOUNDED,
 	BURN_DAMAGE,
-	NONE
+	NONE,
+	TURNS_LEFT
 }
 
 enum ItemBundles {

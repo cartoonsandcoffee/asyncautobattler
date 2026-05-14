@@ -214,7 +214,7 @@ func get_random_items(count: int, rarity: Enums.Rarity, include_bonus: bool = fa
 
 	# Filter for common rarity only
 	for item in all_items:
-		if item.item_name == Player.inventory.weapon_slot.item_name:  # Don't offer player weapon they already have.
+		if Player.inventory.weapon_slot and item.item_name == Player.inventory.weapon_slot.item_name:  # Don't offer player weapon they already have.
 			continue
 		if item.has_category("Unique") && Player.inventory.has_unique_item(item.item_id): # Don't offer player multiple copies of unique items
 			continue
@@ -607,3 +607,20 @@ func clear_banished_items() -> void:
 	"""Reset banished items (call at start of new run)"""
 	banished_items_this_run.clear()
 	print("[ItemsManager] Cleared banished items")
+
+func player_has_duplicate(item: Item, item_is_in_inventory: bool = false) -> bool:
+	if (item.rarity != Enums.Rarity.COMMON && item.rarity != Enums.Rarity.GOLDEN):
+		return false
+	var count = 0
+	for inv_item in Player.inventory.item_slots:
+		if inv_item and inv_item.item_id == item.item_id:
+			count += 1
+	var threshold = 2 if item_is_in_inventory else 1
+
+	return count >= threshold
+
+func get_recipe_for_item(item: Item) -> CraftingRecipe:
+	for recipe in crafting_recipes:
+		if recipe.result_item and recipe.result_item.item_id == item.item_id:
+			return recipe
+	return null

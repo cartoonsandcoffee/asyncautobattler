@@ -16,6 +16,7 @@ var screen_shake_enabled: bool = true
 var vsync_enabled: bool = true
 var fullscreen_enabled: bool = false
 var skip_opening: bool = false
+var fog_enabled: bool = true
 
 # Gameplay Settings (for future use)
 var combat_speed: int = 1  # 0=slow, 1=normal, 2=fast
@@ -106,7 +107,12 @@ func set_crt_effect(enabled: bool):
 	graphics_changed.emit("crt_effect", enabled)
 	settings_changed.emit()
 	
-
+func set_fog(enabled: bool):
+	# Enable/Disable fog in game
+	fog_enabled = enabled
+	graphics_changed.emit("fog_enabled", enabled)
+	settings_changed.emit()
+	
 func set_screen_shake(enabled: bool):
 	"""Enable/disable screen shake effects."""
 	screen_shake_enabled = enabled
@@ -162,6 +168,7 @@ func save_settings():
 	config.set_value("graphics", "vsync", vsync_enabled)
 	config.set_value("graphics", "fullscreen", fullscreen_enabled)
 	config.set_value("graphics", "skip_opening", skip_opening)
+	config.set_value("graphics", "fog_enabled", fog_enabled)
 
 	# Gameplay section (for future)
 	config.set_value("gameplay", "combat_speed", combat_speed)
@@ -198,6 +205,7 @@ func load_settings():
 	vsync_enabled = config.get_value("graphics", "vsync", true)
 	fullscreen_enabled = config.get_value("graphics", "fullscreen", false)
 	skip_opening = config.get_value("graphics", "skip_opening", false)
+	fog_enabled = config.get_value("graphics", "fog_enabled", false)
 
 
 	# Gameplay settings
@@ -221,7 +229,7 @@ func apply_all_settings():
 	set_vsync(vsync_enabled)
 	set_fullscreen(fullscreen_enabled)
 	set_crt_effect(crt_effect_enabled)
-	
+	set_fog(fog_enabled)
 
 func reset_to_defaults():
 	"""Reset all settings to default values."""
@@ -235,6 +243,7 @@ func reset_to_defaults():
 	vsync_enabled = true
 	fullscreen_enabled = false
 	skip_opening = false
+	fog_enabled = true
 
 	combat_speed = 1
 	show_damage_numbers = true

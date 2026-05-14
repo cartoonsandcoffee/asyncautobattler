@@ -18,31 +18,27 @@ enum PanelState {
 }
 
 # UI References
-@onready var enemy_name_label: Label = $CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/VBoxContainer/HBoxContainer/boxEnemyName/lblEnemy
-@onready var enemy_desc_label: RichTextLabel = $CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/VBoxContainer/lblEnemyDesc
-@onready var enemy_sprite: TextureRect = $picEnemy
-@onready var btn_enemy:Button = $picEnemy/btnEnemy
+@onready var enemy_name_label: Label = $TopPanelHolder/VBoxContainer/enemyStatsInventory/MarginContainer/VBoxContainer/enemyStats/EnemyNameBox/HBoxContainer/boxEnemyName/lblEnemy
+@onready var enemy_desc_label: RichTextLabel = $TopPanelHolder/VBoxContainer/enemyStatsInventory/MarginContainer/VBoxContainer/enemyStats/EnemyNameBox/lblEnemyDesc
+@onready var enemy_sprite: TextureRect = $Enemy/picEnemy
+@onready var btn_enemy:Button = $Enemy/picEnemy/btnEnemy
 
 # Enemy stat displays
-@onready var enemy_health_stat: StatBoxDisplay = $CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/statsContainer/statHealth
-@onready var enemy_shield_stat: StatBoxDisplay = $CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/statsContainer/statShield
-@onready var enemy_damage_stat: StatBoxDisplay = $CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/statsContainer/statDamage
-@onready var enemy_agility_stat: StatBoxDisplay = $CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/statsContainer/statAgility
-@onready var enemy_strikes_stat: StatBoxDisplay = $CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/statsContainer/VBoxContainer/statStrikes
-@onready var enemy_burn_stat: StatBoxDisplay = $CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyStats/statsContainer/VBoxContainer/statBurn
+@onready var enemy_health_stat: StatBoxDisplay = $TopPanelHolder/VBoxContainer/enemyStatsInventory/MarginContainer/VBoxContainer/enemyStats/statsContainer/statHealth
+@onready var enemy_shield_stat: StatBoxDisplay = $TopPanelHolder/VBoxContainer/enemyStatsInventory/MarginContainer/VBoxContainer/enemyStats/statsContainer/statShield
+@onready var enemy_damage_stat: StatBoxDisplay = $TopPanelHolder/VBoxContainer/enemyStatsInventory/MarginContainer/VBoxContainer/enemyStats/statsContainer/statDamage
+@onready var enemy_agility_stat: StatBoxDisplay = $TopPanelHolder/VBoxContainer/enemyStatsInventory/MarginContainer/VBoxContainer/enemyStats/statsContainer/statAgility
+@onready var enemy_strikes_stat: StatBoxDisplay = $TopPanelHolder/VBoxContainer/enemyStatsInventory/MarginContainer/VBoxContainer/enemyStats/statsContainer/statBurn
+@onready var enemy_burn_stat: StatBoxDisplay = $TopPanelHolder/VBoxContainer/enemyStatsInventory/MarginContainer/VBoxContainer/enemyStats/statsContainer/statStrikes
 
-@onready var stat_container: PanelContainer = $CombatPanelTop/PanelContainer
-
-@onready var enemy_weapon_slot: ItemSlot = $CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyInventory/Weapon
-@onready var enemy_item_grid: GridContainer = $CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyInventory/InventorySlots/ItemSlots
-@onready var enemy_inventory: HBoxContainer = $CombatPanelTop/PanelContainer/MarginContainer/VBoxContainer/enemyInventory
-
+@onready var enemy_weapon_slot: ItemSlot = $TopPanelHolder/VBoxContainer/enemyStatsInventory/MarginContainer/VBoxContainer/enemyInventory/Weapon
+@onready var enemy_item_grid: GridContainer = $TopPanelHolder/VBoxContainer/enemyStatsInventory/MarginContainer/VBoxContainer/enemyInventory/InventorySlots/ItemSlots
+@onready var enemy_inventory: HBoxContainer = $TopPanelHolder/VBoxContainer/enemyStatsInventory/MarginContainer/VBoxContainer/enemyInventory
 
 # Status Effect Boxes
-@onready var player_status_container: HBoxContainer = $CombatPanelTop/panelStatusPlayer/HBoxContainer/statusBox
-@onready var enemy_status_container: HBoxContainer = $CombatPanelTop/panelStatusEnemy/HBoxContainer/statusBox
-@onready var enemy_set_container: HBoxContainer = $CombatPanelTop/panelStatusEnemy/HBoxContainer/setBox
-@onready var enemy_status_holder: PanelContainer = $CombatPanelTop/panelStatusEnemy
+@onready var player_status_container: GridContainer # set in code
+@onready var enemy_status_container: GridContainer = $TopPanelHolder/VBoxContainer/enemyStatusSets/HBoxContainer/statusBox
+@onready var enemy_set_container: HBoxContainer = $TopPanelHolder/VBoxContainer/enemyStatusSets/HBoxContainer/setBox
 
 # Victory Panel
 @onready var victory_panel: Panel = $VictoryPanel
@@ -56,7 +52,7 @@ enum PanelState {
 @onready var txt_history_dead: RichTextLabel =$DeathPanel/PanelContainer/MarginContainer/VBoxContainer/boxHistory/txtHistoryDead
 
 # Animation
-@onready var combat_shadow: TextureRect = $combatShadow 
+@onready var anim_enemy_stat_bar:AnimationPlayer = $animEnemyStats
 @onready var slide_animation: AnimationPlayer = $combatPanelAnim
 @onready var player_anim: AnimationPlayer = $animPlayer
 @onready var enemy_anim: AnimationPlayer = $animEnemy
@@ -77,21 +73,12 @@ var is_visible: bool = false
 var current_player_entity
 var current_enemy_entity: Enemy
 var highlighted_item_slot: ItemSlot = null
-var is_enemy_attack_sequence_active: bool = false
 
 # References to inventory slots for highlighting
 var inventory_item_slots: Array[ItemSlot] = []
 var weapon_slot_ref: ItemSlot = null
 
 var gamecolors: GameColors
-
-# Variables for item/status proc inidcator visual spawning
-var player_pos: Vector2 = Vector2(422, 262)
-var enemy_pos: Vector2 = Vector2(695,180)
-var pos_shift: int = 15
-#var last_indicator_spawn_time: float = 0.0
-var indicator_spawn_queue: Array[Dictionary] = []
-var is_processing_indicator_queue: bool = false
 
 func _ready():
 	# Start off-screen
@@ -110,17 +97,9 @@ func connect_combat_signals():
 	# --- Combat event signals
 	CombatManager.healing_applied.connect(_on_healing_applied)
 	CombatManager.stat_changed.connect(_on_stat_changed)
-	CombatManager.status_proc.connect(spawn_status_proc_indicator)
-	CombatManager.strike_ui_update_requested.connect(_on_strike_ui_update)
 
 	# --- Item/ability triggers
 	CombatManager.item_rule_triggered.connect(_on_item_rule_triggered)
-	CombatManager.enemy_ability_triggered.connect(_on_enemy_ability_triggered)
-	
-	# Special events
-	CombatManager.entity_exposed.connect(_on_entity_exposed)
-	CombatManager.entity_wounded.connect(_on_entity_wounded)
-
 
 func setup_for_combat(enemy_entity, inventory_slots: Array[ItemSlot], weapon_slot: ItemSlot):
 	current_player_entity = Player
@@ -159,26 +138,19 @@ func setup_for_combat(enemy_entity, inventory_slots: Array[ItemSlot], weapon_slo
 
 	var is_boss_fight = current_enemy_entity.enemy_type == Enemy.EnemyType.BOSS_PLAYER
 
+	var can_run: bool = true
+
 	# Update the RUN button stuff
 	if is_boss_fight:
 		# Boss fight - cannot run
-		main_game.btn_run.disabled = true
-		enemy_status_holder.position.y = 245
-		main_game.btn_run.tooltip_text = "You cannot flee, this is inevitable!"
+		can_run = false
 		enemy_inventory.visible = true
 	else:
 		# Normal fight - can run if fast enough
 		enemy_inventory.visible = false
-		enemy_status_holder.position.y = 135
-		var can_run = current_player_entity.stats.agility > current_enemy_entity.stats.agility
-		main_game.btn_run.disabled = !can_run
-		if not can_run:
-			main_game.btn_run.tooltip_text = "Enemy is too fast to escape!"
-		else:
-			main_game.btn_run.tooltip_text = "Flee from combat"
-	
-	# lets see.. i don't know
-	show_panel()
+		can_run = current_player_entity.stats.agility > current_enemy_entity.stats.agility
+
+	show_panel(can_run, is_boss_fight)
 
 func _populate_enemy_set_bonuses(enemy: Enemy):
 	"""Display active set bonuses for the enemy."""
@@ -215,7 +187,7 @@ func clear_statuses():
 	for child in enemy_status_container.get_children():
 		child.queue_free()
 
-func show_panel():
+func show_panel(can_run: bool = true, is_boss: bool = false):
 	"""Slide the combat panel in from the right"""
 	if is_visible:
 		return
@@ -223,15 +195,14 @@ func show_panel():
 	visible = true
 	is_visible = true
 	
+	anim_enemy_stat_bar.play("show_stat_bar")
 	slide_animation.play("open_Combat")
-	#await slide_animation.animation_finished
+	await slide_animation.animation_finished
 
 	## -- Buttons on the main game
-	main_game.box_combatcontrols.visible = true
-	main_game.minimap.visible = false
-	main_game.box_fighrun.visible = true
+	main_game.box_dinglemeyer.visible = false
 	main_game.box_comatspeed.visible = false
-	main_game.play_combat_alert_arrow()
+	main_game.fight_or_flee.show_popup(can_run, is_boss)
 
 	combat_ui_ready.emit()
 
@@ -244,31 +215,14 @@ func hide_panel():
 	visible = false
 	
 	## -- Buttons on the main game
-	main_game.box_combatcontrols.visible = false
-	main_game.minimap.visible = true
-	main_game.box_fighrun.visible = true
+	main_game.box_dinglemeyer.visible = true
 	main_game.box_comatspeed.visible = false
 
 	# Clear highlighted items
 	_clear_all_highlights()
 
-func _on_strike_ui_update(entity, strikes_remaining: int, strikes_next_turn: int):
-	# Only handle enemy entity
-	if entity != CombatManager.enemy_entity:
-		return
-	
-	# Flag that enemy is in attack sequence
-	is_enemy_attack_sequence_active = true
-	
-	# Update enemy strike countdown (assuming you have a StatBoxDisplay for enemy strikes)
-	enemy_strikes_stat.update_stat(Enums.Stats.STRIKES, strikes_remaining, strikes_next_turn)
-	# If countdown finished, resume normal updates
-	if strikes_remaining == 0:
-		is_enemy_attack_sequence_active = false
-
 func _update_enemy_stats():
 	if not current_enemy_entity:
-		print("THERE IS NO ENEMY!!!!!!!!!!")
 		return
 	
 	# HP
@@ -279,18 +233,17 @@ func _update_enemy_stats():
 	
 	# Damage stat
 	var displayed_damage = current_enemy_entity.stats.damage_current
-	# check for BLIND
-	if current_enemy_entity.status_effects and current_enemy_entity.status_effects.blind > 0:
-		# Halve damage (round up)
-		displayed_damage = ceili(displayed_damage / 2.0)
 	enemy_damage_stat.update_stat(Enums.Stats.DAMAGE, displayed_damage, displayed_damage)
 
 	# Agility stat
 	enemy_agility_stat.update_stat(Enums.Stats.AGILITY, current_enemy_entity.stats.agility_current, current_enemy_entity.stats.agility_current)
 
-	if not is_enemy_attack_sequence_active:
-		enemy_strikes_stat.update_stat(Enums.Stats.STRIKES, current_enemy_entity.stats.strikes_current, current_enemy_entity.stats.strikes_current)
-	enemy_burn_stat.update_stat(Enums.Stats.BURN_DAMAGE, current_enemy_entity.stats.burn_damage_current, current_enemy_entity.stats.burn_damage_current)
+	enemy_strikes_stat.update_stat(Enums.Stats.STRIKES, current_enemy_entity.stats.strikes_left, current_enemy_entity.stats.strikes_next_turn)
+
+	var show_burn: bool = false
+	if current_enemy_entity.inventory:
+		show_burn = current_enemy_entity.inventory.has_keyword("Burn")
+	enemy_burn_stat.update_stat(Enums.Stats.BURN_DAMAGE, current_enemy_entity.stats.burn_damage_current, current_enemy_entity.stats.burn_damage_current, show_burn)
 
 
 func highlight_item_slot(slot_index: int, is_weapon: bool = false):
@@ -328,7 +281,7 @@ func _on_combat_started(player_entity, enemy_entity):
 	btn_enemy.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 	## -- Buttons on the main game
-	main_game.box_fighrun.visible = false
+	main_game.box_dinglemeyer.visible = false
 	main_game.box_comatspeed.visible = true
 
 func _on_combat_ended(winner, loser):
@@ -357,12 +310,9 @@ func _on_combat_ended(winner, loser):
 	_set_state(PanelState.POST_COMBAT)
 	_clear_all_highlights()
 	clear_all_proc_indicators()
-	clear_indicator_queue()  # Clear any pending indicators when combat ends
 
 	## -- Buttons on the main game
-	main_game.box_combatcontrols.visible = false
-	main_game.minimap.visible = true
-	main_game.box_fighrun.visible = false
+	main_game.box_dinglemeyer.visible = true
 	main_game.box_comatspeed.visible = false
 
 	update_history_text()
@@ -404,16 +354,6 @@ func _on_turn_started(entity, turn_number):
 func _on_turn_ended(entity):
 	_clear_all_highlights()
 
-
-func _on_attack_executed(attacker, target, damage):
-	var attacker_name = CombatManager.get_entity_name(attacker)
-	var target_name = CombatManager.get_entity_name(target)
-
-	#if damage < 10:
-	#	CameraShake.shake_medium()
-	#else:
-	#	CameraShake.shake_heavy()
-
 func _get_status_enum(status_name: String) -> Enums.StatusEffects:
 	match status_name:
 		"poison": return Enums.StatusEffects.POISON
@@ -421,81 +361,11 @@ func _get_status_enum(status_name: String) -> Enums.StatusEffects:
 		"acid": return Enums.StatusEffects.ACID
 		"thorns": return Enums.StatusEffects.THORNS
 		"bleed": return Enums.StatusEffects.BLEED
-		"thorns": return Enums.StatusEffects.THORNS
 		"regeneration": return Enums.StatusEffects.REGENERATION
 		"blessing": return Enums.StatusEffects.BLESSING
 		"stun": return Enums.StatusEffects.STUN
 		"random": return Enums.StatusEffects.RANDOM
 		_: return Enums.StatusEffects.NONE
-
-func _spawn_damage_indicator_immediate(target, amount: int, damage_stat: Enums.Stats, visual_info: Dictionary) -> void:
-	"""Create a damage indicator at the appropriate position - called by AnimationManager"""
-	var combat_item_proc = item_proc.instantiate()
-	
-	combat_item_proc.set_references()
-	combat_item_proc.set_label(amount * -1)  # Negative for damage
-	combat_item_proc.set_info(visual_info.get("source_name", "Damage!"))
-	
-	# Set visuals based on damage type
-	if visual_info.has("status"):
-		# Status effect damage - use status icon
-		combat_item_proc.set_status_as_item_visuals(_get_status_enum(visual_info.status))
-	elif visual_info.has("icon") and visual_info.icon:
-		# Attack damage - use weapon icon
-		combat_item_proc.set_item_visuals(visual_info.icon, visual_info.get("color", Color.WHITE))
-	else:
-		# Generic damage
-		combat_item_proc.set_item_visuals(null, visual_info.get("color", Color.RED))
-	
-	# Set stat visual (shield or HP)
-	combat_item_proc.set_stat_visuals(damage_stat)
-	
-	# Position based on target and stat
-	add_child(combat_item_proc)
-	AudioManager.play_ui_sound("item_proc")
-
-	if target == current_enemy_entity:
-		# Enemy takes damage
-		combat_item_proc.global_position = enemy_pos + Vector2(randi_range(-pos_shift, pos_shift), 0)
-		
-		combat_item_proc.run_animation(Enums.Party.PLAYER) # - change back to ENEMY to make it go downward
-		_update_enemy_stats()
-	else:
-		# Player takes damage
-		combat_item_proc.global_position = player_pos + Vector2(randi_range(-pos_shift, pos_shift), 0)
-		combat_item_proc.run_animation(Enums.Party.PLAYER)
-		Player.stats.stats_updated.emit()
-
-
-func _handle_status_box_update_immediate(entity, status: Enums.StatusEffects, stacks: int):
-	"""Handle status box update immediately (called from queue processor)"""
-	var container = player_status_container if entity == current_player_entity else enemy_status_container
-	
-	# Find existing box
-	var existing_box: StatusBox = null
-	for child in container.get_children():
-		if child is StatusBox and child.status == status:
-			existing_box = child
-			break
-	
-	if stacks > 0:
-		if existing_box:
-			# Update existing box
-			_update_status_box_value(existing_box, stacks)
-		else:
-			# Create new box
-			_create_status_box(container, status, stacks)
-	else:
-		# Remove box (stacks reached 0)
-		if existing_box:
-			_remove_status_box(existing_box)
-
-	# Update stats if blind changed (affects damage display)
-	if entity == current_enemy_entity:
-		_update_enemy_stats()
-	elif entity == current_player_entity:
-		main_game.set_player_stats()	
-
 
 func test_camera_shake():
 	if GameSettings.screen_shake_enabled:
@@ -505,12 +375,6 @@ func test_camera_shake():
 func play_sfx_footstep():
 	AudioManager.play_synced_sound("combat_footstep")
 
-func _on_damage_dealt(target, amount, taken_by):
-	# JDM: ----- UNUSED?!?!?!
-	var target_name = CombatManager.get_entity_name(target)
-
-	#if amount < 10:
-	#	CameraShake.shake_medium()
 
 func _on_healing_applied(target, amount):
 	"""Handle healing"""
@@ -527,106 +391,7 @@ func _on_stat_changed(entity, stat: Enums.Stats, old_value: int, new_value: int)
 	#else:
 	#	Player.stats.stats_updated.emit()  # NOTE: Player stat updates should happen in combatmanager.stat_changed
 
-
-func _on_status_applied(entity, status_name: Enums.StatusEffects, stacks: int):
-	# JDM:  REMOVED: Status boxes now update after animation in CombatStatusHandler
-	#if entity == Player:
-	#	Player.status_updated.emit()
-	#else:
-	#	_update_enemy_status_effects()
-	pass
-
-func _on_status_removed(entity, status: Enums.StatusEffects, stacks: int):
-	# JDM:  REMOVED: Status boxes now update after animation in CombatStatusHandler
-	#if entity == Player:
-	#	Player.status_updated.emit()	
-	pass
-
 func _on_item_rule_triggered(item: Item, rule: ItemRule, entity):
-	pass
-
-func _spawn_item_proc_indicator_immediate(item: Item, rule: ItemRule, entity, amount: int = 0, resolved_status: Enums.StatusEffects = Enums.StatusEffects.NONE):
-	var combat_item_proc = item_proc.instantiate()
-	var _pos = Vector2(0,0)
-	var offset = Vector2(45, -50)
-	
-	combat_item_proc.set_references()
-
-	combat_item_proc.set_label(amount)  
-	combat_item_proc.set_info(Enums.get_trigger_type_string(rule.trigger_type))
-	combat_item_proc.set_item_visuals(item.item_icon, item.item_color)
-
-	if rule.effect_type == Enums.EffectType.MODIFY_STAT:
-		combat_item_proc.set_stat_visuals(rule.target_stat)
-		if rule.target_stat == Enums.Stats.HITPOINTS:
-			_pos = main_game.stat_health.global_position + offset
-		if rule.target_stat == Enums.Stats.DAMAGE:
-			_pos = main_game.stat_damage.global_position + offset
-		if rule.target_stat == Enums.Stats.SHIELD:
-			_pos = main_game.stat_shield.global_position + offset
-		if rule.target_stat == Enums.Stats.AGILITY:
-			_pos = main_game.stat_agility.global_position + offset	
-		if rule.target_stat == Enums.Stats.GOLD:
-			_pos = main_game.stat_gold.global_position + offset
-	elif  rule.effect_type == Enums.EffectType.HEAL:
-		combat_item_proc.set_stat_visuals(Enums.Stats.HITPOINTS)
-	elif  rule.effect_type == Enums.EffectType.DEAL_DAMAGE:
-		combat_item_proc.set_status_visuals(Enums.StatusEffects.BLEED) 
-		combat_item_proc._done() 
-		return # JDM: This goes through combat damage, does not need status proc
-	elif rule.effect_type == Enums.EffectType.APPLY_STATUS:
-		combat_item_proc.set_status_visuals(resolved_status)
-		_pos = main_game.loop_through_player_items_for_position(item)
-	elif rule.effect_type == Enums.EffectType.REMOVE_STATUS:
-		combat_item_proc.set_status_visuals(resolved_status)
-		_pos = main_game.loop_through_player_items_for_position(item)
-
-	add_child(combat_item_proc)
-	combat_item_proc.position = _pos
-	AudioManager.play_ui_sound("item_proc")
-	var entity_name: String = CombatManager.get_entity_name(entity)
-
-	if (entity_name == "Player" && rule.target_type == Enums.TargetType.SELF):
-		combat_item_proc.position = player_pos + Vector2(randi_range(-pos_shift, pos_shift), 0)
-		combat_item_proc.run_animation(Enums.Party.PLAYER)
-
-	if (entity_name == "Player" && rule.target_type == Enums.TargetType.ENEMY):
-		combat_item_proc.position = enemy_pos + Vector2(randi_range(-pos_shift, pos_shift), 0)
-		combat_item_proc.run_animation(Enums.Party.PLAYER)
-
-	if (entity_name != "Player" && rule.target_type == Enums.TargetType.SELF):
-		combat_item_proc.position = enemy_pos + Vector2(randi_range(-pos_shift, pos_shift), 0)
-		combat_item_proc.run_animation(Enums.Party.PLAYER)
-
-	if (entity_name != "Player" && rule.target_type == Enums.TargetType.ENEMY):
-		combat_item_proc.position = player_pos + Vector2(randi_range(-pos_shift, pos_shift), 0)
-		combat_item_proc.run_animation(Enums.Party.PLAYER)
-
-func _spawn_status_proc_indicator_immediate(entity, _status: Enums.StatusEffects, _stat: Enums.Stats, value: int):
-	var combat_item_proc = item_proc.instantiate()
-	
-	combat_item_proc.set_references()
-	combat_item_proc.set_label(value)	
-	combat_item_proc.set_info("Status Effect")	
-	combat_item_proc.set_status_as_item_visuals(_status)
-	combat_item_proc.set_stat_visuals(_stat)
-
-	add_child(combat_item_proc)
-	AudioManager.play_ui_sound("item_proc")
-
-	if entity == current_player_entity:
-		combat_item_proc.position = player_pos + Vector2(randi_range(-pos_shift, pos_shift), 0)
-	else:
-		combat_item_proc.position = enemy_pos + Vector2(randi_range(-pos_shift, pos_shift), 0)
-	combat_item_proc.run_animation(Enums.Party.PLAYER)
-
-func _on_enemy_ability_triggered(ability: EnemyAbility, entity):
-	pass
-
-func _on_entity_exposed(entity):
-	pass
-
-func _on_entity_wounded(entity):
 	pass
 
 func player_joins_combat_anim():
@@ -636,9 +401,11 @@ func anim_player_walk_to_door():
 	player_anim.play("player_walk_to_door")
 
 func anim_close_panels():
+	anim_enemy_stat_bar.play("hide_stat_bar")
 	slide_animation.play("close_combat")
 
 func anim_close_panels_instant():
+	anim_enemy_stat_bar.play("hide_stat_bar")
 	slide_animation.play("close_combat_instant")
 
 func anim_player_hit():
@@ -710,10 +477,10 @@ func _on_btn_run_pressed() -> void:
 	# Complete without combat
 	combat_completed.emit(false)
 
-func _on_btn_fight_pressed() -> void:
+func setup_fight():
 	if !CombatManager.combat_active:
 		## -- Buttons on the main game
-		main_game.box_fighrun.visible = false
+		main_game.box_dinglemeyer.visible = false
 		main_game.box_comatspeed.visible = true
 
 	_set_state(PanelState.IN_COMBAT)
@@ -725,7 +492,7 @@ func _on_btn_fight_pressed() -> void:
 		main_game.box_comatspeed.visible = false
 		player_anim.stop()
 		enemy_anim.stop()
-		AudioManager.play_event_sound("quick_fight")
+		AudioManager.play_event_sound("instant_combat")
 		anim_instant.play("instant_combat")
 		var anim_length = anim_instant.get_animation("instant_combat").length
 		await CombatSpeed.create_timer(anim_length)
@@ -735,6 +502,9 @@ func _on_btn_fight_pressed() -> void:
 	else:
 		main_game.box_comatspeed.visible = true
 		CombatManager.start_combat(current_player_entity, current_enemy_entity)
+
+func _on_btn_fight_pressed() -> void:
+	setup_fight()
 
 func _set_state(new_state: PanelState):
 	current_state = new_state
@@ -799,58 +569,8 @@ func _print_node_tree(node: Node, depth: int):
 	for child in node.get_children():
 		_print_node_tree(child, depth + 1)
 
-func rebuild_status_boxes(entity):
-	## JDM ---- THIS FUNCTION MAY BE DELETED AFTER WE FULLY USE THE INDICATOR QUEUE
 
-	if not entity or not entity.status_effects:
-		push_warning("[CombatPanel] Cannot rebuild status boxes - entity or status_effects is null")
-		return
-
-	var container = player_status_container if entity == current_player_entity else enemy_status_container
-	
-	if not container or not is_instance_valid(container):
-		push_warning("[CombatPanel] Cannot rebuild status boxes - container is invalid")
-		return
-
-	# Get current boxes to check for changes
-	var existing_boxes: Dictionary = {}
-	for child in container.get_children():
-		if child is StatusBox:
-			existing_boxes[child.status] = child
-
-	# Update stats if blind changed (affects damage display)
-	if entity == current_enemy_entity:
-		_update_enemy_stats()
-	elif entity == current_player_entity:
-		main_game.set_player_stats()	
-		
-	# Track which statuses are currently active
-	var active_statuses: Dictionary = {}
-	
-	# Check all status types
-	for status_value in Enums.StatusEffects.values():
-		var status: Enums.StatusEffects = status_value
-		var stacks = entity.status_effects.get_status_value(status)
-
-		if stacks > 0:
-			print("\n\n\n" + Enums.get_status_string(status) + " " + str(stacks) + "\n\n\n")
-
-			active_statuses[status] = stacks
-			if existing_boxes.has(status):
-				# Update existing box with animation
-				var box = existing_boxes[status]
-				_update_status_box_value(box, stacks)
-				existing_boxes.erase(status)  # Mark as handled
-			else:
-				# Create new box with spawn animation
-				_create_status_box(container, status, stacks)
-
-	# Remove boxes for statuses that are now 0
-	for status in existing_boxes.keys():
-		var box = existing_boxes[status]
-		_remove_status_box(box)
-
-func _create_status_box(container: HBoxContainer, status: Enums.StatusEffects, stacks: int):
+func _create_status_box(container: GridContainer, status: Enums.StatusEffects, stacks: int):
 	var box = status_box.instantiate()
 	box.custom_minimum_size = Vector2(100, 55)
 	container.add_child(box)
@@ -917,7 +637,7 @@ func _populate_enemy_inventory(enemy: Enemy):
 			var item_slot = item_slot_scene.instantiate()
 			item_slot.owner_entity = enemy
 			item_slot.set_item(item)
-			item_slot.custom_minimum_size = Vector2(100, 100)
+			item_slot.custom_minimum_size = Vector2(110, 115)
 			item_slot.slot_index = i + 1
 			item_slot.set_order(i + 1)
 			enemy_item_grid.add_child(item_slot)
@@ -927,8 +647,8 @@ func _populate_enemy_inventory(enemy: Enemy):
 func _on_btn_quit_pressed() -> void:
 	hide_death_panel()
 	main_game.fade_out()
-	# Optional: Save any stats/progress before quitting
-	# await save_run_stats()
+
+	SaveManager.delete_saved_run()
 	
 	# Update defeat stats BEFORE resetting
 	await _update_defeat_stats()
@@ -986,131 +706,6 @@ func hide_death_panel():
 		death_panel.visible = false
 		visible = false
 
-# ============================================================================
-# PUBLIC SPAWN FUNCTIONS (Entry Points - Called from everywhere)
-# ============================================================================
-
-func spawn_status_proc_indicator(entity, _status: Enums.StatusEffects, _stat: Enums.Stats, value: int):
-	"""Queue a status effect indicator spawn"""
-	indicator_spawn_queue.append({
-		"type": "status",
-		"entity": entity,
-		"status": _status,
-		"stat": _stat,
-		"value": value
-	})
-	
-	if not is_processing_indicator_queue:
-		_process_indicator_queue()
-
-func spawn_item_proc_indicator(item: Item, rule: ItemRule, entity, amount: int = 0):
-	"""Queue an item proc indicator spawn"""
-	indicator_spawn_queue.append({
-		"type": "item",
-		"item": item,
-		"rule": rule,
-		"resolved_status": rule.target_status,
-		"entity": entity,
-		"amount": amount
-	})
-	
-	if not is_processing_indicator_queue:
-		_process_indicator_queue()
-
-func create_damage_indicator(target, amount: int, damage_stat: Enums.Stats, visual_info: Dictionary):
-	"""Queue a damage indicator spawn"""
-	indicator_spawn_queue.append({
-		"type": "damage",
-		"target": target,
-		"amount": amount,
-		"damage_stat": damage_stat,
-		"visual_info": visual_info
-	})
-	
-	if not is_processing_indicator_queue:
-		_process_indicator_queue()	
-
-func spawn_status_box_update(entity, status: Enums.StatusEffects, new_stacks: int):
-	"""Queue a status box update"""
-	indicator_spawn_queue.append({
-		"type": "status_box_update",
-		"entity": entity,
-		"status": status,
-		"stacks": new_stacks
-	})
-	
-	if not is_processing_indicator_queue:
-		_process_indicator_queue()
-
-# ============================================================================
-# QUEUE PROCESSOR (Sequential Spawning with Timing)
-# ============================================================================
-
-func _process_indicator_queue():
-	"""Process the indicator spawn queue sequentially with proper timing"""
-	if is_processing_indicator_queue or indicator_spawn_queue.is_empty():
-		return
-	
-	is_processing_indicator_queue = true
-	
-	while not indicator_spawn_queue.is_empty():
-		# Check if we should stop (game paused or scene changing)
-		if get_tree().paused or not is_inside_tree():
-			is_processing_indicator_queue = false
-			return
-
-		var request = indicator_spawn_queue.pop_front()
-		var timer_duration: float = 0.0
-		# Spawn the appropriate indicator type
-		match request.type:
-			"status":
-				_spawn_status_proc_indicator_immediate(request.entity, request.status, request.stat, request.value)
-				timer_duration = CombatSpeed.get_duration("item_proc")
-			"item":
-				_spawn_item_proc_indicator_immediate(request.item,request.rule,request.entity,request.amount, request.get("resolved_status", request.rule.target_status))
-				timer_duration = CombatSpeed.get_duration("item_proc")
-			"damage":
-				_spawn_damage_indicator_immediate(request.target,request.amount,request.damage_stat,request.visual_info)
-				timer_duration = CombatSpeed.get_duration("item_proc")
-			"status_box_update":
-				_handle_status_box_update_immediate(request.entity,request.status,request.stacks)
-				timer_duration = CombatSpeed.get_duration("status_effect")
-
-		# Wait for readability - but check pause state
-		if not CombatSpeed.is_instant_mode():
-			var elapsed = 0.0
-			while elapsed < timer_duration:
-				# If paused or scene changing, stop processing
-				if get_tree().paused or not is_inside_tree():
-					is_processing_indicator_queue = false
-					return
-				
-				await get_tree().create_timer(0.1, false).timeout  # false = doesn't pause
-				elapsed += 0.1
-
-	is_processing_indicator_queue = false
-
-# ============================================================================
-# QUEUE MANAGEMENT UTILITIES
-# ============================================================================
-
-func clear_indicator_queue():
-	"""Clear the indicator queue (useful for combat end or reset)"""
-	indicator_spawn_queue.clear()
-	is_processing_indicator_queue = false
-
-func wait_for_indicator_queue_to_finish():
-	"""Wait for all queued indicators to finish processing"""
-	# If queue is actively processing, wait for it to complete
-	
-	while is_processing_indicator_queue or not indicator_spawn_queue.is_empty():
-	#while not indicator_spawn_queue.is_empty():
-		await get_tree().process_frame
-
-func _exit_tree():
-	# Clear the queue to prevent processing in wrong scene
-	indicator_spawn_queue.clear()
-	is_processing_indicator_queue = false
 
 
 func _on_btn_enemy_mouse_exited() -> void:

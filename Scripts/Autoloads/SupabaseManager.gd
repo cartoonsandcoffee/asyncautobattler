@@ -701,6 +701,15 @@ func is_username_available(username: String) -> bool:
 		push_error("[SupabaseManager] Error checking username: %d" % result.status)
 		return false
 
+func is_username_available_debug(username: String) -> Dictionary:
+	var query = "?username=eq.%s&select=player_id" % username.uri_encode()
+	var result = await _supabase_get("/rest/v1/player_profiles" + query)
+	
+	if result.status == 200:
+		return {"available": result.data.is_empty(), "error": false, "status": result.status}
+	else:
+		return {"available": true, "error": true, "status": result.status}
+
 func update_username(player_id: String, new_username: String) -> Dictionary:
 	"""Update player's username. Returns success/error result."""
 	# First check if username is available

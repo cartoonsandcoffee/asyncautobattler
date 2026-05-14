@@ -180,3 +180,23 @@ func _passes_filters(room_def: RoomDefinition) -> bool:
 			return false
 
 	return true
+
+## ---------------------------------------------------------------
+## -- For Loading Saved Games
+## ---------------------------------------------------------------
+func restore_from_save(rank: int, exhausted_ids: Array, last_drawn_name: String) -> void:
+	# Rebuild bag state from a save. Called by Player.from_dict after rank is restored.
+
+	_current_rank = rank
+	_exhausted_ids.clear()
+	for id in exhausted_ids:
+		_exhausted_ids.append(str(id))
+	_last_drawn = null
+	_active_bag.clear()
+	_temp_skipped.clear()
+	_fill_and_shuffle()  # rebuilds active bag respecting exhausted list
+	if last_drawn_name != "":
+		for rd in RoomRegistry.get_available_rooms_for_rank(_current_rank):
+			if rd.room_name == last_drawn_name:
+				_last_drawn = rd
+				break

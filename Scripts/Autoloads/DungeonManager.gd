@@ -29,6 +29,8 @@ var current_boss_enemy: Enemy = null
 var _initialized: bool = false
 var _bag: DungeonBag = DungeonBag.new()
 
+var is_loaded_from_save: bool =  false
+
 # ============================================================================
 # SIGNALS
 # ============================================================================
@@ -250,7 +252,8 @@ func complete_room(room_data: RoomData):
 	"""Called when player completes a room - track stats and consume currency"""
 	rooms_visited_this_rank += 1
 	all_visited_rooms.append(room_data)
-	
+	SaveManager.save_run()
+
 	print("[DungeonManager] Room completed: %s. Total this rank: %d, Player rooms: %d" % [
 		room_data.room_definition.room_name if room_data else "Unknown",
 		rooms_visited_this_rank,
@@ -365,12 +368,11 @@ func advance_rank():
 	rooms_visited_this_rank = 0
 	
 	# Increase inventory size: +2 slots per rank (4,6,8,10,12)
-	var current_size = Player.inventory.max_item_slots
-	if current_size < 12:
-		Player.inventory.set_inventory_size(current_size + 2)
+	if Player.inventory.unlocked_slots < Player.inventory.TOTAL_SLOTS:
+		Player.inventory.expand_inventory(2)
 		print("[DungeonManager] Rank %d! Inventory expanded to %d slots" % [
 			current_rank, 
-			Player.inventory.max_item_slots
+			Player.inventory.unlocked_slots
 		])
 	
 	# Clear old boss data

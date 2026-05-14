@@ -7,14 +7,15 @@ extends Control
 @onready var hall_of_fame = $Panel/HallofChampions
 @onready var skin_selector: Control = $Panel/skinPanel
 
-@onready var lbl_ears: Label = $Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel/HBoxContainer/lblEars
+@onready var lbl_ears: Label = $Panel/skinPanel/PanelContainer/VBoxContainer/HBoxContainer/lblEars
 @onready var lbl_name: Label = $Panel/CharacterSelectMenu/backPanel/VBoxContainer/panelName/MarginContainer/lblName
 @onready var lbl_champkills: Label = $Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel/lblChampKills
 @onready var lbl_activechamps: Label = $Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel/lblActiveChamps
 
 @onready var pic_skin: TextureRect = $Panel/CharacterSelectMenu/backPanel/picChar
 
-@onready var btn_new_run: Button = $Panel/panelBottom/HBoxContainer/panMid/MarginContainer/btnNewGame
+@onready var btn_new_run: Button = $Panel/panelBottom/HBoxContainer/panMid/MarginContainer/HBoxContainer/btnNewGame
+@onready var btn_continue: Button = $Panel/panelBottom/HBoxContainer/panMid/MarginContainer/HBoxContainer/btnContinue
 @onready var btn_compendium: Button = $Panel/loadoutPanel/PanelContainer/MarginContainer/PanelContainer/VBoxContainer/btnCompendium
 @onready var btn_hall: Button = $Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel/btnHeroes
 @onready var btn_info: Button = $Panel/panelBottom/HBoxContainer/panLeft/VBoxContainer/iconButtons/btnInfo
@@ -40,8 +41,7 @@ func _ready() -> void:
 	confirm_systems_initialized()
 	skin_selector.refresh_skin.connect(_refresh_skin)
 
-	if not SaveManager.save_exists():
-		pass
+	btn_continue.visible = SaveManager.has_saved_run()
 
 	AudioManager.stop_music()
 	var dungeon_ambient = load("res://Assets/Audio/Ambient/Ambience 01.mp3")
@@ -65,8 +65,10 @@ func bind_button_hovers():
 	btn_info.mouse_entered.connect(mouse_entered_info.bind("Game Information"))
 	btn_settings.mouse_entered.connect(mouse_entered_info.bind("Settings"))
 	btn_quit.mouse_entered.connect(mouse_entered_info.bind("Quit"))
+	btn_continue.mouse_entered.connect(mouse_entered_info.bind("Continue your previously saved run"))
 
 	btn_new_run.mouse_exited.connect(mouse_exited_info)
+	btn_continue.mouse_exited.connect(mouse_exited_info)
 	btn_compendium.mouse_exited.connect(mouse_exited_info)
 	btn_hall.mouse_exited.connect(mouse_exited_info)
 	btn_info.mouse_exited.connect(mouse_exited_info)
@@ -251,8 +253,6 @@ func on_bundle_hover(_bundle: Enums.ItemBundles):
 func on_bundle_exit():
 	lbl_bundles.text = "Select 3 bundles.  Each includes approximately 30 unique items."
 
-func _on_btn_new_game_mouse_exited() -> void:
-	pass # Replace with function body.
 
 func _on_btn_new_game_mouse_entered() -> void:
 	lbl_name.text = "New Game"
@@ -268,3 +268,12 @@ func _on_btn_random_pressed() -> void:
 	Player.item_bundles.clear()
 	Player.item_bundles.assign(all_bundles.slice(0, MAX_BUNDLES))
 	_refresh_bundle_buttons()
+
+
+func _on_btn_continue_pressed() -> void:
+	if SaveManager.load_run():
+		# DungeonManager bag is already restored via from_dict
+		# Skip new_run(), go straight to town or current room
+		get_tree().change_scene_to_file("res://Scenes/main_game.tscn")
+	else:
+		push_error("Failed to load saved run")

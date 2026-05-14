@@ -41,18 +41,14 @@ const SPEED_CONFIGS = {
 const BASE_DURATIONS = {
 	"milestone_sign": 1.3,        # Battle Start, Turn Start signs
 
-	# ITEM PROCESSING
-	"proc_overlap": 0.66,           # Time before starting next proc (for overlap)
-	
 	# COMBAT PACING
-	"attack_slide": 1.2,           # Attack slide animation
+	"attack_slide": 1.0,           # Attack slide animation
 	"attack_gap": 0.3,             # between multiple strikes
 
 	# VISUAL FEEDBACK
-	"damage_number": 0.8,          # Damage indicator animation
-	"exposed_wounded": 1.0,        # Timing for these effects
-	"status_effect": 0.1,          # Status effect visual
-	"item_proc": 0.8,              # Item effect proc animation
+	"damage_number": 1.0,          # Damage indicator 
+	"status_change": 0.2,          # Status effect visual
+	"item_proc": 1.0,              # Item effect proc animation
 	"turn_gap": 0.4,               # Brief pause between turns
 	"phase_transition": 0.3,       # between major sections
 }
@@ -78,6 +74,9 @@ func get_multiplier() -> float:
 
 func is_instant_mode() -> bool:
 	return in_combat and current_mode == CombatSpeedMode.INSTANT
+
+func is_instant_mode_outside_combat() -> bool:
+	return current_mode == CombatSpeedMode.INSTANT
 
 func get_duration(animation_type: String) -> float:
 	if not animation_type in BASE_DURATIONS:
@@ -133,6 +132,6 @@ func create_timer(duration: float) -> SceneTreeTimer:
 	# Then create the actual timer
 
 	if duration > 0:
-		await get_tree().create_timer(duration).timeout
+		await get_tree().create_timer(duration, false).timeout
 	
 	return null
