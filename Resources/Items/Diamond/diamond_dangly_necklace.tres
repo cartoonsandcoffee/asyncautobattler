@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="Item" load_steps=5 format=3 uid="uid://bpin0t57cvftr"]
+
+[ext_resource type="Texture2D" uid="uid://fujbmxi0k7vs" path="res://Assets/Items/Tools.png" id="1_xr5ql"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="2_w4f3h"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="3_c6lve"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_06f4k"]
+atlas = ExtResource("1_xr5ql")
+region = Rect2(600, 450, 150, 150)
+
+[resource]
+script = ExtResource("3_c6lve")
+item_id = ""
+base_item_id = ""
+item_name = "Diamond Dangly Necklace"
+item_type = 16
+item_desc = ""
+item_icon = SubResource("AtlasTexture_06f4k")
+item_color = Color(0.568627, 0.921569, 1, 1)
+item_bundle = 3
+rules = Array[ExtResource("2_w4f3h")]([])
+repeat_rules_X_times = 0
+repeat_rules_for_category = ""
+trigger_priority = 0
+trigger_only_once = false
+trigger_only_first_turn = false
+trigger_on_occurrence_number = 0
+occurrence_resets_per_turn = false
+rarity = 7
+categories = Array[String]([])
+rng_weight = 1.0
+unlocked = true
+damage_bonus = -4
+shield_bonus = 0
+agility_bonus = 0
+hit_points_bonus = 32
+strikes_bonus = 0
+burn_damage_bonus = 0
+cant_attack = false
+keywords = Array[String]([])
+metadata/_custom_type_script = "uid://dthg27pchm1fm"

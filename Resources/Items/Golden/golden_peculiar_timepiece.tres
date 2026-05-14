@@ -1,15 +1,15 @@
-[gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://drjihx06j3xeo"]
+[gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://xk5ktvauvdds"]
 
-[ext_resource type="Texture2D" uid="uid://fujbmxi0k7vs" path="res://Assets/Items/Tools.png" id="1_cexvf"]
-[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="2_xl66q"]
-[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="3_lbkj8"]
+[ext_resource type="Texture2D" uid="uid://fujbmxi0k7vs" path="res://Assets/Items/Tools.png" id="1_a22je"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="2_8ajfv"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="3_i04am"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_7383p"]
-atlas = ExtResource("1_cexvf")
+[sub_resource type="AtlasTexture" id="AtlasTexture_sb1dt"]
+atlas = ExtResource("1_a22je")
 region = Rect2(600, 150, 150, 150)
 
-[sub_resource type="Resource" id="Resource_ndthi"]
-script = ExtResource("2_xl66q")
+[sub_resource type="Resource" id="Resource_r867g"]
+script = ExtResource("2_8ajfv")
 trigger_type = 2
 trigger_stat = 9
 trigger_status = 10
@@ -21,6 +21,7 @@ condition_type = 0
 condition_of = 4
 condition_stat = 9
 condition_status = 10
+condition_item_category = ""
 condition_comparison = ">"
 compare_to = 0
 condition_value = 0
@@ -31,14 +32,16 @@ condition_party_status = 10
 effect_type = 6
 target_type = 0
 target_stat_type = 0
+target_item_category = ""
 target_stat = 9
 target_status = 10
 effect_of = 0
-effect_amount = 2
+effect_amount = 0
 effect_stat_party = 4
 effect_stat_type = 3
 effect_stat_value = 9
 effect_status_value = 10
+effect_multiplier = 1.0
 convert_from_type = 0
 convert_from_party = 0
 convert_from_stat = 3
@@ -52,19 +55,22 @@ conversion_amount_value = 2
 conversion_ratio = 2.0
 retrigger_type = 1
 retrigger_target = 0
+retrigger_item = 0
 special_string = ""
 custom_description = ""
 metadata/_custom_type_script = "uid://dahay7fvi7bik"
 
 [resource]
-script = ExtResource("3_lbkj8")
+script = ExtResource("3_i04am")
 item_id = ""
+base_item_id = ""
 item_name = "Golden Peculiar Timepiece"
-item_type = 11
-item_desc = ""
-item_icon = SubResource("AtlasTexture_7383p")
-item_color = Color(0.878431, 0.701961, 0, 1)
-rules = Array[ExtResource("2_xl66q")]([SubResource("Resource_ndthi")])
+item_type = 12
+item_desc = "Turn Start: Convert 2 agility to restore 4 health."
+item_icon = SubResource("AtlasTexture_sb1dt")
+item_color = Color(1, 0.8, 0, 1)
+item_bundle = 0
+rules = Array[ExtResource("2_8ajfv")]([SubResource("Resource_r867g")])
 repeat_rules_X_times = 0
 repeat_rules_for_category = ""
 trigger_priority = 0
@@ -73,7 +79,7 @@ trigger_only_first_turn = false
 trigger_on_occurrence_number = 0
 occurrence_resets_per_turn = false
 rarity = 6
-categories = Array[String]([])
+categories = Array[String](["Inscribed"])
 rng_weight = 1.0
 unlocked = true
 damage_bonus = 0
@@ -82,4 +88,6 @@ agility_bonus = 2
 hit_points_bonus = 0
 strikes_bonus = 0
 burn_damage_bonus = 0
+cant_attack = false
+keywords = Array[String]([])
 metadata/_custom_type_script = "uid://dthg27pchm1fm"

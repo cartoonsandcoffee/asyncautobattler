@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="Item" load_steps=5 format=3 uid="uid://deq6ef2ahotuk"]
+
+[ext_resource type="Texture2D" uid="uid://bwo3qldtbc8u6" path="res://Assets/Items/Items.png" id="1_7a4c2"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="2_mi8d8"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="3_f5khr"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cjqd6"]
+atlas = ExtResource("1_7a4c2")
+region = Rect2(300, 150, 150, 150)
+
+[resource]
+script = ExtResource("3_f5khr")
+item_id = ""
+base_item_id = ""
+item_name = "Diamond Heavy Shield"
+item_type = 2
+item_desc = ""
+item_icon = SubResource("AtlasTexture_cjqd6")
+item_color = Color(0.568627, 0.921569, 1, 1)
+item_bundle = 0
+rules = Array[ExtResource("2_mi8d8")]([])
+repeat_rules_X_times = 0
+repeat_rules_for_category = ""
+trigger_priority = 0
+trigger_only_once = false
+trigger_only_first_turn = false
+trigger_on_occurrence_number = 0
+occurrence_resets_per_turn = false
+rarity = 7
+categories = Array[String]([])
+rng_weight = 1.0
+unlocked = true
+damage_bonus = -4
+shield_bonus = 24
+agility_bonus = -4
+hit_points_bonus = 0
+strikes_bonus = 0
+burn_damage_bonus = 0
+cant_attack = false
+keywords = Array[String]([])
+metadata/_custom_type_script = "uid://dthg27pchm1fm"

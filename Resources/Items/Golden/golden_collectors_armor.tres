@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="Item" load_steps=5 format=3 uid="uid://e6p0s1adbmfy"]
+
+[ext_resource type="Texture2D" uid="uid://c673mfqdoecpa" path="res://Assets/Items/Armor.png" id="1_6r46u"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="2_sk5lh"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="3_wfrgm"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bnk7v"]
+atlas = ExtResource("1_6r46u")
+region = Rect2(300, 600, 150, 150)
+
+[resource]
+script = ExtResource("3_wfrgm")
+item_id = ""
+base_item_id = ""
+item_name = "Golden Collector's Armor"
+item_type = 1
+item_desc = "Upgrading triples shield value instead of doubling it."
+item_icon = SubResource("AtlasTexture_bnk7v")
+item_color = Color(1, 0.8, 0, 1)
+item_bundle = 0
+rules = Array[ExtResource("2_sk5lh")]([])
+repeat_rules_X_times = 0
+repeat_rules_for_category = ""
+trigger_priority = 0
+trigger_only_once = false
+trigger_only_first_turn = false
+trigger_on_occurrence_number = 0
+occurrence_resets_per_turn = false
+rarity = 6
+categories = Array[String](["Collector"])
+rng_weight = 1.0
+unlocked = true
+damage_bonus = 0
+shield_bonus = 9
+agility_bonus = 0
+hit_points_bonus = 0
+strikes_bonus = 0
+burn_damage_bonus = 0
+cant_attack = false
+keywords = Array[String]([])
+metadata/_custom_type_script = "uid://dthg27pchm1fm"

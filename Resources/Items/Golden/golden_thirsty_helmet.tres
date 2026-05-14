@@ -1,14 +1,14 @@
-[gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://dkq6g1bcqyknh"]
+[gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://bjb3d1we2fu8n"]
 
 [ext_resource type="Texture2D" uid="uid://hl37x7hsnly" path="res://Assets/Items/Helmets.png" id="1_aqxh4"]
 [ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="2_jou81"]
 [ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="3_m221m"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_hmajw"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_dg8lv"]
 atlas = ExtResource("1_aqxh4")
-region = Rect2(600, 0, 150, 150)
+region = Rect2(600, 450, 150, 150)
 
-[sub_resource type="Resource" id="Resource_yn8jm"]
+[sub_resource type="Resource" id="Resource_o41qd"]
 script = ExtResource("2_jou81")
 trigger_type = 3
 trigger_stat = 9
@@ -21,6 +21,7 @@ condition_type = 0
 condition_of = 4
 condition_stat = 9
 condition_status = 10
+condition_item_category = ""
 condition_comparison = ">"
 compare_to = 0
 condition_value = 0
@@ -31,14 +32,16 @@ condition_party_status = 10
 effect_type = 4
 target_type = 0
 target_stat_type = 0
+target_item_category = ""
 target_stat = 9
 target_status = 10
-effect_of = 1
-effect_amount = 0
+effect_of = 0
+effect_amount = 2
 effect_stat_party = 0
 effect_stat_type = 0
 effect_stat_value = 1
 effect_status_value = 10
+effect_multiplier = 1.0
 convert_from_type = 0
 convert_from_party = 0
 convert_from_stat = 9
@@ -52,6 +55,7 @@ conversion_amount_value = 1
 conversion_ratio = 1.0
 retrigger_type = 1
 retrigger_target = 0
+retrigger_item = 0
 special_string = ""
 custom_description = ""
 metadata/_custom_type_script = "uid://dahay7fvi7bik"
@@ -59,12 +63,14 @@ metadata/_custom_type_script = "uid://dahay7fvi7bik"
 [resource]
 script = ExtResource("3_m221m")
 item_id = ""
+base_item_id = ""
 item_name = "Golden Thirsty Helmet"
 item_type = 5
-item_desc = "First Turn: On Hit restore health equal to damage dealt by strikes."
-item_icon = SubResource("AtlasTexture_hmajw")
-item_color = Color(0.878431, 0.701961, 0, 1)
-rules = Array[ExtResource("2_jou81")]([SubResource("Resource_yn8jm")])
+item_desc = ""
+item_icon = SubResource("AtlasTexture_dg8lv")
+item_color = Color(1, 0.8, 0, 1)
+item_bundle = 0
+rules = Array[ExtResource("2_jou81")]([SubResource("Resource_o41qd")])
 repeat_rules_X_times = 0
 repeat_rules_for_category = ""
 trigger_priority = 0
@@ -82,4 +88,6 @@ agility_bonus = 0
 hit_points_bonus = 0
 strikes_bonus = 0
 burn_damage_bonus = 0
+cant_attack = false
+keywords = Array[String]([])
 metadata/_custom_type_script = "uid://dthg27pchm1fm"

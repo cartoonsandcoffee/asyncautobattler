@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="Item" load_steps=5 format=3 uid="uid://hxs5f1qc73ut"]
+
+[ext_resource type="Texture2D" uid="uid://hl37x7hsnly" path="res://Assets/Items/Helmets.png" id="1_53t5h"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="2_mkvub"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="3_l2phe"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lh74a"]
+atlas = ExtResource("1_53t5h")
+region = Rect2(750, 300, 150, 150)
+
+[resource]
+script = ExtResource("3_l2phe")
+item_id = ""
+base_item_id = ""
+item_name = "Golden Crown of Caution"
+item_type = 16
+item_desc = ""
+item_icon = SubResource("AtlasTexture_lh74a")
+item_color = Color(1, 0.8, 0, 1)
+item_bundle = 3
+rules = Array[ExtResource("2_mkvub")]([])
+repeat_rules_X_times = 0
+repeat_rules_for_category = ""
+trigger_priority = 0
+trigger_only_once = false
+trigger_only_first_turn = false
+trigger_on_occurrence_number = 0
+occurrence_resets_per_turn = false
+rarity = 6
+categories = Array[String]([])
+rng_weight = 1.0
+unlocked = true
+damage_bonus = 0
+shield_bonus = 10
+agility_bonus = 0
+hit_points_bonus = -4
+strikes_bonus = 0
+burn_damage_bonus = 0
+cant_attack = false
+keywords = Array[String]([])
+metadata/_custom_type_script = "uid://dthg27pchm1fm"

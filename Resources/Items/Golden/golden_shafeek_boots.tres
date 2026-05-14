@@ -1,22 +1,24 @@
-[gd_resource type="Resource" script_class="Item" load_steps=5 format=3 uid="uid://c31fumtauekst"]
+[gd_resource type="Resource" script_class="Item" load_steps=5 format=3 uid="uid://cdi7acrcfrr3a"]
 
-[ext_resource type="Texture2D" uid="uid://c6vpfj00alg03" path="res://Assets/Items/Boots.png" id="1_m1whn"]
-[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="2_abk6x"]
-[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="3_3b2i4"]
+[ext_resource type="Texture2D" uid="uid://c6vpfj00alg03" path="res://Assets/Items/Boots.png" id="1_vx2f7"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="2_rtrbh"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="3_ryh35"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_um0yl"]
-atlas = ExtResource("1_m1whn")
+[sub_resource type="AtlasTexture" id="AtlasTexture_8h4aj"]
+atlas = ExtResource("1_vx2f7")
 region = Rect2(450, 0, 150, 150)
 
 [resource]
-script = ExtResource("3_3b2i4")
+script = ExtResource("3_ryh35")
 item_id = ""
+base_item_id = ""
 item_name = "Golden Shafeek's Overlarge Boots"
 item_type = 4
 item_desc = ""
-item_icon = SubResource("AtlasTexture_um0yl")
-item_color = Color(0.878431, 0.701961, 0, 1)
-rules = Array[ExtResource("2_abk6x")]([])
+item_icon = SubResource("AtlasTexture_8h4aj")
+item_color = Color(1, 0.8, 0, 1)
+item_bundle = 0
+rules = Array[ExtResource("2_rtrbh")]([])
 repeat_rules_X_times = 0
 repeat_rules_for_category = ""
 trigger_priority = 0
@@ -34,4 +36,6 @@ agility_bonus = 4
 hit_points_bonus = 0
 strikes_bonus = 0
 burn_damage_bonus = 0
+cant_attack = false
+keywords = Array[String]([])
 metadata/_custom_type_script = "uid://dthg27pchm1fm"

@@ -1,15 +1,15 @@
-[gd_resource type="Resource" script_class="Item" load_steps=7 format=3 uid="uid://b5rl7lypy26of"]
+[gd_resource type="Resource" script_class="Item" load_steps=7 format=3 uid="uid://discoha6lumkl"]
 
-[ext_resource type="Texture2D" uid="uid://bwo3qldtbc8u6" path="res://Assets/Items/Items.png" id="1_aqoi3"]
-[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_cc0dv"]
-[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_aqoi3"]
+[ext_resource type="Texture2D" uid="uid://bwo3qldtbc8u6" path="res://Assets/Items/Items.png" id="1_aoery"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="2_hfsgn"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="3_3fndv"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_gync0"]
-atlas = ExtResource("1_aqoi3")
+[sub_resource type="AtlasTexture" id="AtlasTexture_ar7ba"]
+atlas = ExtResource("1_aoery")
 region = Rect2(150, 1350, 150, 150)
 
-[sub_resource type="Resource" id="Resource_xqvlp"]
-script = ExtResource("1_cc0dv")
+[sub_resource type="Resource" id="Resource_w5lrm"]
+script = ExtResource("2_hfsgn")
 trigger_type = 1
 trigger_stat = 9
 trigger_status = 9
@@ -21,6 +21,7 @@ condition_type = 0
 condition_of = 4
 condition_stat = 9
 condition_status = 9
+condition_item_category = ""
 condition_comparison = ">"
 compare_to = 0
 condition_value = 0
@@ -31,6 +32,7 @@ condition_party_status = 9
 effect_type = 1
 target_type = 1
 target_stat_type = 0
+target_item_category = ""
 target_stat = 9
 target_status = 7
 effect_of = 0
@@ -39,6 +41,7 @@ effect_stat_party = 4
 effect_stat_type = 3
 effect_stat_value = 9
 effect_status_value = 9
+effect_multiplier = 1.0
 convert_from_type = 0
 convert_from_party = 0
 convert_from_stat = 9
@@ -52,12 +55,13 @@ conversion_amount_value = 1
 conversion_ratio = 1.0
 retrigger_type = 1
 retrigger_target = 0
+retrigger_item = 0
 special_string = ""
 custom_description = ""
 metadata/_custom_type_script = "uid://dahay7fvi7bik"
 
-[sub_resource type="Resource" id="Resource_xvkiu"]
-script = ExtResource("1_cc0dv")
+[sub_resource type="Resource" id="Resource_aisr7"]
+script = ExtResource("2_hfsgn")
 trigger_type = 4
 trigger_stat = 9
 trigger_status = 9
@@ -69,6 +73,7 @@ condition_type = 0
 condition_of = 4
 condition_stat = 9
 condition_status = 9
+condition_item_category = ""
 condition_comparison = ">"
 compare_to = 0
 condition_value = 0
@@ -79,6 +84,7 @@ condition_party_status = 9
 effect_type = 1
 target_type = 1
 target_stat_type = 0
+target_item_category = ""
 target_stat = 9
 target_status = 7
 effect_of = 0
@@ -87,6 +93,7 @@ effect_stat_party = 4
 effect_stat_type = 3
 effect_stat_value = 9
 effect_status_value = 9
+effect_multiplier = 1.0
 convert_from_type = 0
 convert_from_party = 0
 convert_from_stat = 9
@@ -100,19 +107,22 @@ conversion_amount_value = 1
 conversion_ratio = 1.0
 retrigger_type = 1
 retrigger_target = 0
+retrigger_item = 0
 special_string = ""
 custom_description = ""
 metadata/_custom_type_script = "uid://dahay7fvi7bik"
 
 [resource]
-script = ExtResource("2_aqoi3")
+script = ExtResource("3_3fndv")
 item_id = ""
-item_name = "Golden Lantern"
-item_type = 11
+base_item_id = ""
+item_name = "Golden Latern"
+item_type = 12
 item_desc = "Battle Start & Exposed: Give the enemy 2 burn."
-item_icon = SubResource("AtlasTexture_gync0")
-item_color = Color(0.878431, 0.701961, 0, 1)
-rules = Array[ExtResource("1_cc0dv")]([SubResource("Resource_xqvlp"), SubResource("Resource_xvkiu")])
+item_icon = SubResource("AtlasTexture_ar7ba")
+item_color = Color(1, 0.8, 0, 1)
+item_bundle = 0
+rules = Array[ExtResource("2_hfsgn")]([SubResource("Resource_w5lrm"), SubResource("Resource_aisr7")])
 repeat_rules_X_times = 0
 repeat_rules_for_category = ""
 trigger_priority = 0
@@ -123,11 +133,13 @@ occurrence_resets_per_turn = false
 rarity = 6
 categories = Array[String]([])
 rng_weight = 1.0
-unlocked = false
+unlocked = true
 damage_bonus = 0
 shield_bonus = 0
 agility_bonus = 0
 hit_points_bonus = 0
 strikes_bonus = 0
 burn_damage_bonus = 0
+cant_attack = false
+keywords = Array[String](["Burn"])
 metadata/_custom_type_script = "uid://dthg27pchm1fm"

@@ -1,22 +1,24 @@
-[gd_resource type="Resource" script_class="Item" load_steps=5 format=3 uid="uid://di3xrneeefy7p"]
+[gd_resource type="Resource" script_class="Item" load_steps=5 format=3 uid="uid://dyh2ta43ljk4c"]
 
-[ext_resource type="Texture2D" uid="uid://c673mfqdoecpa" path="res://Assets/Items/Armor.png" id="1_1kcjd"]
-[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="2_u5evq"]
-[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="3_oqahp"]
+[ext_resource type="Texture2D" uid="uid://c673mfqdoecpa" path="res://Assets/Items/Armor.png" id="1_veowj"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="2_86e8l"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="3_2t27m"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_vsgrg"]
-atlas = ExtResource("1_1kcjd")
+[sub_resource type="AtlasTexture" id="AtlasTexture_ofvsu"]
+atlas = ExtResource("1_veowj")
 region = Rect2(0, 0, 150, 150)
 
 [resource]
-script = ExtResource("3_oqahp")
+script = ExtResource("3_2t27m")
 item_id = ""
+base_item_id = ""
 item_name = "Golden Purpleskin Vest"
 item_type = 1
 item_desc = ""
-item_icon = SubResource("AtlasTexture_vsgrg")
-item_color = Color(0.878431, 0.701961, 0, 1)
-rules = Array[ExtResource("2_u5evq")]([])
+item_icon = SubResource("AtlasTexture_ofvsu")
+item_color = Color(1, 0.8, 0, 1)
+item_bundle = 0
+rules = Array[ExtResource("2_86e8l")]([])
 repeat_rules_X_times = 0
 repeat_rules_for_category = ""
 trigger_priority = 0
@@ -34,4 +36,6 @@ agility_bonus = 2
 hit_points_bonus = 0
 strikes_bonus = 0
 burn_damage_bonus = 0
+cant_attack = false
+keywords = Array[String]([])
 metadata/_custom_type_script = "uid://dthg27pchm1fm"
