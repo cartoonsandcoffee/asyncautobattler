@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="RoomDefinition" load_steps=6 format=3 uid="uid://1r0dmibbqedh"]
+
+[ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="1_jr5r2"]
+[ext_resource type="Texture2D" uid="uid://dak7u2ow3a8c6" path="res://Assets/Art/Backgrounds/Back_Gears.png" id="1_r3l4v"]
+[ext_resource type="Script" uid="uid://d211hcjce7xyf" path="res://Scripts/Resources/RoomDefinition.gd" id="2_4pgnr"]
+[ext_resource type="PackedScene" uid="uid://bl35xrq7cnwcw" path="res://Scenes/Rooms/rare_treasure_elite_charles.tscn" id="2_o0vgu"]
+[ext_resource type="Resource" uid="uid://5noxiygg4e27" path="res://Resources/Enemies/elite_charles.tres" id="5_av404"]
+
+[resource]
+script = ExtResource("2_4pgnr")
+room_type = 1
+rarity = 2
+room_name = "Tinker's Workshop"
+room_desc = "The ruins of an old workshop of some kind..."
+utility_subtype = ""
+background_texture = ExtResource("1_r3l4v")
+room_color = Color(0.37, 0.362847, 0.2627, 1)
+can_have_random_combat = true
+random_combat_chance = 1.0
+specific_enemy = ExtResource("5_av404")
+random_enemy_pool = Array[ExtResource("1_jr5r2")]([])
+can_spawn_shortcuts = false
+shortcut_chance = 0.0
+possible_events = Array[PackedScene]([ExtResource("2_o0vgu")])
+rank_weights = Array[int]([0, 0, 0, 0, 1, 2, 2])
+metadata/_custom_type_script = "uid://d211hcjce7xyf"

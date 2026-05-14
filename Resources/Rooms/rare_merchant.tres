@@ -1,11 +1,14 @@
-[gd_resource type="Resource" script_class="RoomDefinition" load_steps=7 format=3 uid="uid://db32vfvrpmajs"]
+[gd_resource type="Resource" script_class="RoomDefinition" load_steps=10 format=3 uid="uid://db32vfvrpmajs"]
 
-[ext_resource type="Texture2D" uid="uid://csprhhu3ka3ig" path="res://Assets/Art/Room_03_Background.png" id="1_sump8"]
+[ext_resource type="Texture2D" uid="uid://dnw0mej3amlga" path="res://Assets/Art/Backgrounds/Background_06.png" id="1_6x5or"]
 [ext_resource type="Script" uid="uid://d211hcjce7xyf" path="res://Scripts/Resources/RoomDefinition.gd" id="1_wtrbw"]
 [ext_resource type="Texture2D" uid="uid://dm4mqcf00whsb" path="res://Assets/Art/Doors/arch.png" id="2_fk3tc"]
 [ext_resource type="PackedScene" uid="uid://cyk1rros0xlt5" path="res://Scenes/Rooms/rare_merchant.tscn" id="3_fk3tc"]
+[ext_resource type="AudioStream" uid="uid://ddpe5i2218pgw" path="res://Assets/Audio/Music/Merchant_Music.ogg" id="3_ynpfh"]
 [ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="4_sump8"]
 [ext_resource type="Texture2D" uid="uid://qj84yrov8e6x" path="res://Resources/Icons/minimap_merchant.tres" id="5_gbf7r"]
+[ext_resource type="Resource" uid="uid://conkutd8s2s2s" path="res://Resources/Enemies/ShrunkenHead.tres" id="5_ynpfh"]
+[ext_resource type="Resource" uid="uid://codm7f05kd1fa" path="res://Resources/Enemies/gormund.tres" id="7_6x5or"]
 
 [resource]
 script = ExtResource("1_wtrbw")
@@ -14,17 +17,16 @@ rarity = 2
 room_name = "A rare merchant"
 room_desc = "From above you, someone lowers themsevles into the room."
 utility_subtype = ""
-background_texture = ExtResource("1_sump8")
+background_texture = ExtResource("1_6x5or")
 door_texture = ExtResource("2_fk3tc")
 room_icon = ExtResource("5_gbf7r")
 room_color = Color(1, 0.853333, 0.56, 1)
-can_have_random_combat = false
-random_combat_chance = 0.0
-random_enemy_pool = Array[ExtResource("4_sump8")]([])
+music_override = ExtResource("3_ynpfh")
+can_have_random_combat = true
+random_combat_chance = 0.6
+random_enemy_pool = Array[ExtResource("4_sump8")]([ExtResource("5_ynpfh"), ExtResource("7_6x5or")])
 can_spawn_shortcuts = false
 shortcut_chance = 0.0
 possible_events = Array[PackedScene]([ExtResource("3_fk3tc")])
-spawn_weight = 1
-min_rank = 3
-max_rank = 5
+rank_weights = Array[int]([0, 0, 0, 1, 1, 2, 2])
 metadata/_custom_type_script = "uid://d211hcjce7xyf"

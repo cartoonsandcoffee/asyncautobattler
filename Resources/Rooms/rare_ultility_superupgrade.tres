@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="RoomDefinition" load_steps=8 format=3 uid="uid://c8l3k4aof8jcx"]
+
+[ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="1_t6p8g"]
+[ext_resource type="Texture2D" uid="uid://dgtyfe7u507wx" path="res://Assets/Art/Backgrounds/Background_Chamber_1.png" id="1_w1j25"]
+[ext_resource type="AudioStream" uid="uid://ddpe5i2218pgw" path="res://Assets/Audio/Music/Merchant_Music.ogg" id="2_b02yc"]
+[ext_resource type="Script" uid="uid://d211hcjce7xyf" path="res://Scripts/Resources/RoomDefinition.gd" id="2_hqrf5"]
+[ext_resource type="PackedScene" uid="uid://bpbr2fjgpoo4q" path="res://Scenes/Rooms/rare_utility_singleupgrade.tscn" id="2_kgje5"]
+[ext_resource type="Texture2D" uid="uid://bffx10anckips" path="res://Assets/monochrome-transparent_packed.png" id="4_kgje5"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b02yc"]
+atlas = ExtResource("4_kgje5")
+region = Rect2(608, 240, 16, 16)
+
+[resource]
+script = ExtResource("2_hqrf5")
+room_type = 3
+rarity = 2
+room_name = "Ancient Hall"
+room_desc = "Look at that guy..."
+utility_subtype = ""
+background_texture = ExtResource("1_w1j25")
+room_icon = SubResource("AtlasTexture_b02yc")
+room_color = Color(0.629625, 0.69, 0.1725, 1)
+music_override = ExtResource("2_b02yc")
+can_have_random_combat = false
+random_combat_chance = 0.0
+random_enemy_pool = Array[ExtResource("1_t6p8g")]([])
+can_spawn_shortcuts = false
+shortcut_chance = 0.0
+possible_events = Array[PackedScene]([ExtResource("2_kgje5")])
+rank_weights = Array[int]([0, 0, 0, 0, 1, 2, 2])
+metadata/_custom_type_script = "uid://d211hcjce7xyf"

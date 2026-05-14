@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="RoomDefinition" load_steps=10 format=3 uid="uid://d1gaos3b0mnpi"]
+
+[ext_resource type="Texture2D" uid="uid://cr5mucfkmo2k4" path="res://Assets/Art/Backgrounds/Hallway_01.png" id="1_3dnb3"]
+[ext_resource type="Texture2D" uid="uid://dxx8lmffw6ob7" path="res://Assets/Art/Doors/hallway.png" id="2_e0elq"]
+[ext_resource type="PackedScene" uid="uid://du7g8vv71gm88" path="res://Scenes/Rooms/common_treasure_gold.tscn" id="3_3dnb3"]
+[ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="4_dws1m"]
+[ext_resource type="Resource" uid="uid://dg2wcy0kx620y" path="res://Resources/Enemies/Goblin.tres" id="5_hipiq"]
+[ext_resource type="Resource" uid="uid://ds6c57pit221x" path="res://Resources/Enemies/Memreet.tres" id="6_ov42p"]
+[ext_resource type="Resource" uid="uid://d057cg4onuvp0" path="res://Resources/Enemies/Ogle.tres" id="7_jsaad"]
+[ext_resource type="Texture2D" uid="uid://crih8ktekhdwb" path="res://Resources/Icons/minimap_treasure.tres" id="8_crn23"]
+[ext_resource type="Script" uid="uid://d211hcjce7xyf" path="res://Scripts/Resources/RoomDefinition.gd" id="9_6xtdm"]
+
+[resource]
+script = ExtResource("9_6xtdm")
+room_type = 1
+rarity = 0
+room_name = "A gold pile"
+room_desc = "A pile of gold"
+utility_subtype = ""
+background_texture = ExtResource("1_3dnb3")
+door_texture = ExtResource("2_e0elq")
+room_icon = ExtResource("8_crn23")
+room_color = Color(0.396, 0.55, 0.4499, 1)
+can_have_random_combat = true
+random_combat_chance = 1.0
+random_enemy_pool = Array[ExtResource("4_dws1m")]([ExtResource("5_hipiq"), ExtResource("6_ov42p"), ExtResource("7_jsaad")])
+can_spawn_shortcuts = false
+shortcut_chance = 0.0
+possible_events = Array[PackedScene]([ExtResource("3_3dnb3")])
+rank_weights = Array[int]([0, 4, 2, 2, 0, 0, 0])
+metadata/_custom_type_script = "uid://d211hcjce7xyf"

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="SetBonus" load_steps=6 format=3 uid="uid://20ut44ra27an"]
+
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="1_4gwb0"]
+[ext_resource type="Script" uid="uid://drivepk7scvso" path="res://Scripts/Resources/SetBonus.gd" id="2_0fseh"]
+[ext_resource type="Resource" uid="uid://chworc33v0mh" path="res://Resources/Items/UNCOMMON/stinky_shield.tres" id="2_363nb"]
+[ext_resource type="Resource" uid="uid://cuuck3jkk3oe0" path="res://Resources/Items/Weapons/Uncommon/cleansing_axe.tres" id="3_n7k05"]
+[ext_resource type="Resource" uid="uid://curfo14oobfqu" path="res://Resources/SetBonuses/fabrizios_delight.tres" id="5_aedok"]
+
+[resource]
+script = ExtResource("2_0fseh")
+setbonus_name = "Fabrizio's Delight"
+unlocked = true
+discovered = false
+required_items = Array[ExtResource("1_4gwb0")]([ExtResource("2_363nb"), ExtResource("3_n7k05")])
+setbonus_item = ExtResource("5_aedok")
+metadata/_custom_type_script = "uid://drivepk7scvso"

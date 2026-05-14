@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="SetBonus" load_steps=6 format=3 uid="uid://f23bflrpbw5g"]
+
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="1_edy72"]
+[ext_resource type="Resource" uid="uid://d4kx26jb5xya6" path="res://Resources/Items/RARE/darkwood_greaves.tres" id="2_ujms4"]
+[ext_resource type="Script" uid="uid://drivepk7scvso" path="res://Scripts/Resources/SetBonus.gd" id="2_yppqv"]
+[ext_resource type="Resource" uid="uid://c54cu2wbexln1" path="res://Resources/Items/COMMON/bronze_barbed_helm.tres" id="3_eva7o"]
+[ext_resource type="Resource" uid="uid://wbp1718048cb" path="res://Resources/SetBonuses/angered_reprisal.tres" id="5_nw1yo"]
+
+[resource]
+script = ExtResource("2_yppqv")
+setbonus_name = "Angered Reprisal Recipe"
+unlocked = true
+discovered = false
+required_items = Array[ExtResource("1_edy72")]([ExtResource("2_ujms4"), ExtResource("3_eva7o")])
+setbonus_item = ExtResource("5_nw1yo")
+metadata/_custom_type_script = "uid://drivepk7scvso"

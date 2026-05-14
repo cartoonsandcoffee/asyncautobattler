@@ -1,12 +1,13 @@
-[gd_resource type="Resource" script_class="RoomDefinition" load_steps=8 format=3 uid="uid://dcqxpdnoj1gwj"]
+[gd_resource type="Resource" script_class="RoomDefinition" load_steps=9 format=3 uid="uid://dcqxpdnoj1gwj"]
 
 [ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="1_aejt7"]
-[ext_resource type="Texture2D" uid="uid://csprhhu3ka3ig" path="res://Assets/Art/Room_03_Background.png" id="1_whols"]
+[ext_resource type="Texture2D" uid="uid://csprhhu3ka3ig" path="res://Assets/Art/Backgrounds/Room_03_Background.png" id="1_whols"]
 [ext_resource type="Script" uid="uid://d211hcjce7xyf" path="res://Scripts/Resources/RoomDefinition.gd" id="2_edt80"]
 [ext_resource type="Texture2D" uid="uid://dxx8lmffw6ob7" path="res://Assets/Art/Doors/hallway.png" id="2_i17t3"]
 [ext_resource type="PackedScene" uid="uid://b0dklw464yb2h" path="res://Scenes/Rooms/uncommon_treasure_deadmerch.tscn" id="3_fh0fn"]
 [ext_resource type="Resource" uid="uid://conkutd8s2s2s" path="res://Resources/Enemies/ShrunkenHead.tres" id="5_i17t3"]
 [ext_resource type="Texture2D" uid="uid://crih8ktekhdwb" path="res://Resources/Icons/minimap_treasure.tres" id="5_nqhtj"]
+[ext_resource type="Resource" uid="uid://bu2yqpt7pejnm" path="res://Resources/Enemies/Wormy.tres" id="6_fh0fn"]
 
 [resource]
 script = ExtResource("2_edt80")
@@ -20,12 +21,10 @@ door_texture = ExtResource("2_i17t3")
 room_icon = ExtResource("5_nqhtj")
 room_color = Color(0.41125, 0.7, 0.315, 1)
 can_have_random_combat = true
-random_combat_chance = 1.0
-random_enemy_pool = Array[ExtResource("1_aejt7")]([ExtResource("5_i17t3")])
+random_combat_chance = 0.5
+random_enemy_pool = Array[ExtResource("1_aejt7")]([ExtResource("5_i17t3"), ExtResource("6_fh0fn")])
 can_spawn_shortcuts = true
 shortcut_chance = 1.0
 possible_events = Array[PackedScene]([ExtResource("3_fh0fn")])
-spawn_weight = 3
-min_rank = 1
-max_rank = 5
+rank_weights = Array[int]([0, 0, 0, 2, 4, 4, 5])
 metadata/_custom_type_script = "uid://d211hcjce7xyf"

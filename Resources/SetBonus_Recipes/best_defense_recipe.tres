@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="SetBonus" load_steps=6 format=3 uid="uid://cl8efbdnd8hv8"]
 
 [ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="1_ctsnw"]
-[ext_resource type="Resource" uid="uid://c0rtbgff5xhnu" path="res://Resources/Items/COMMON/thorn_shield.tres" id="2_7ubdq"]
+[ext_resource type="Resource" uid="uid://c0rtbgff5xhnu" path="res://Resources/Items/UNCOMMON/thorn_shield.tres" id="2_7ubdq"]
 [ext_resource type="Script" uid="uid://drivepk7scvso" path="res://Scripts/Resources/SetBonus.gd" id="2_jx55e"]
 [ext_resource type="Resource" uid="uid://2hgqlmndhv8t" path="res://Resources/Items/Weapons/Common/parrying_blade.tres" id="3_rpfhf"]
 [ext_resource type="Resource" uid="uid://ckapuaffme1ky" path="res://Resources/SetBonuses/best_defense.tres" id="5_fut6j"]

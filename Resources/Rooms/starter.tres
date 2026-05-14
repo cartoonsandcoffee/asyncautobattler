@@ -1,9 +1,8 @@
-[gd_resource type="Resource" script_class="RoomDefinition" load_steps=8 format=3 uid="uid://cqy15fmdy31by"]
+[gd_resource type="Resource" script_class="RoomDefinition" load_steps=7 format=3 uid="uid://cqy15fmdy31by"]
 
 [ext_resource type="Script" uid="uid://d211hcjce7xyf" path="res://Scripts/Resources/RoomDefinition.gd" id="1_ituav"]
 [ext_resource type="Texture2D" uid="uid://bu1mkenrfhi7i" path="res://Assets/Art/Backgrounds/Starter Room.png" id="1_spj34"]
 [ext_resource type="PackedScene" uid="uid://ccn7le6eky01v" path="res://Scenes/Rooms/starter_oldman.tscn" id="2_pmv54"]
-[ext_resource type="AudioStream" uid="uid://bfrk4ktus6bsm" path="res://Assets/Audio/Music/Piano Theme.mp3" id="2_spj34"]
 [ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="3_pmv54"]
 [ext_resource type="Texture2D" uid="uid://bffx10anckips" path="res://Assets/monochrome-transparent_packed.png" id="3_spj34"]
 
@@ -21,13 +20,10 @@ utility_subtype = ""
 background_texture = ExtResource("1_spj34")
 room_icon = SubResource("AtlasTexture_pnpm5")
 room_color = Color(0.32549, 0.447059, 0.423529, 1)
-music_override = ExtResource("2_spj34")
 can_have_random_combat = false
 random_combat_chance = 0.0
 random_enemy_pool = Array[ExtResource("3_pmv54")]([])
 can_spawn_shortcuts = false
 shortcut_chance = 0.0
 possible_events = Array[PackedScene]([ExtResource("2_pmv54")])
-spawn_weight = 1
-min_rank = 0
-max_rank = 0
+rank_weights = Array[int]([0, 0, 0, 0, 0, 0, 0])

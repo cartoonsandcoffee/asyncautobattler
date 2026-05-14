@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="SetBonus" load_steps=6 format=3 uid="uid://c1xxt1e0x8y3b"]
+
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="1_ug7gd"]
+[ext_resource type="Resource" uid="uid://hl74seqg4b3s" path="res://Resources/Items/COMMON/holy_shield.tres" id="2_3kn3k"]
+[ext_resource type="Script" uid="uid://drivepk7scvso" path="res://Scripts/Resources/SetBonus.gd" id="2_r6qcy"]
+[ext_resource type="Resource" uid="uid://bycv8wclyndki" path="res://Resources/Items/RARE/dads_shield.tres" id="3_cqie0"]
+[ext_resource type="Resource" uid="uid://dvbb6iqw4vypg" path="res://Resources/SetBonuses/strong_ankles.tres" id="5_rgqjl"]
+
+[resource]
+script = ExtResource("2_r6qcy")
+setbonus_name = "Strong Ankles Recipe"
+unlocked = true
+discovered = false
+required_items = Array[ExtResource("1_ug7gd")]([ExtResource("2_3kn3k"), ExtResource("3_cqie0")])
+setbonus_item = ExtResource("5_rgqjl")
+metadata/_custom_type_script = "uid://drivepk7scvso"

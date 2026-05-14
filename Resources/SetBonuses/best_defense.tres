@@ -1,12 +1,12 @@
 [gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://ckapuaffme1ky"]
 
 [ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_28bh4"]
-[ext_resource type="Texture2D" uid="uid://bffx10anckips" path="res://Assets/monochrome-transparent_packed.png" id="1_qa013"]
+[ext_resource type="Texture2D" uid="uid://cor2pjystm0pc" path="res://Assets/Items/SetBonuses.png" id="1_qa013"]
 [ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_qa013"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hi6dk"]
 atlas = ExtResource("1_qa013")
-region = Rect2(576, 176, 16, 16)
+region = Rect2(0, 300, 150, 150)
 
 [sub_resource type="Resource" id="Resource_rfwws"]
 script = ExtResource("1_28bh4")
@@ -20,6 +20,7 @@ has_condition = true
 condition_type = 1
 condition_of = 0
 condition_stat = 9
+condition_party_stat_type = 0
 condition_status = 2
 condition_item_category = ""
 condition_comparison = "<"
@@ -63,11 +64,13 @@ metadata/_custom_type_script = "uid://dahay7fvi7bik"
 [resource]
 script = ExtResource("2_qa013")
 item_id = ""
+base_item_id = ""
 item_name = "The Best Defense"
 item_type = 17
 item_desc = "Turn Start: If you have less than 10 thorns, double your thorns."
 item_icon = SubResource("AtlasTexture_hi6dk")
 item_color = Color(0.41336, 0.48, 0.2448, 1)
+item_bundle = 0
 rules = Array[ExtResource("1_28bh4")]([SubResource("Resource_rfwws")])
 repeat_rules_X_times = 0
 repeat_rules_for_category = ""
@@ -87,4 +90,5 @@ hit_points_bonus = 0
 strikes_bonus = 0
 burn_damage_bonus = 0
 cant_attack = false
+keywords = Array[String]([])
 metadata/_custom_type_script = "uid://dthg27pchm1fm"

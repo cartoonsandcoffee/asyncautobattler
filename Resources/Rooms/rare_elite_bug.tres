@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="RoomDefinition" load_steps=8 format=3 uid="uid://c8i3c7do1b7dv"]
+
+[ext_resource type="Texture2D" uid="uid://d27de30ukdp3e" path="res://Assets/Art/Backgrounds/Chamber_01.png" id="1_o7rci"]
+[ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="1_urarj"]
+[ext_resource type="PackedScene" uid="uid://b5fdhc5sfpir1" path="res://Scenes/Rooms/rare_treasure_elite_bug.tscn" id="2_6chox"]
+[ext_resource type="Script" uid="uid://d211hcjce7xyf" path="res://Scripts/Resources/RoomDefinition.gd" id="2_ca7bq"]
+[ext_resource type="Texture2D" uid="uid://bffx10anckips" path="res://Assets/monochrome-transparent_packed.png" id="4_ji4nd"]
+[ext_resource type="Resource" uid="uid://2unrs071sgcd" path="res://Resources/Enemies/bug_elite.tres" id="6_n3k1d"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rdy6k"]
+atlas = ExtResource("4_ji4nd")
+region = Rect2(448, 80, 16, 16)
+
+[resource]
+script = ExtResource("2_ca7bq")
+room_type = 1
+rarity = 2
+room_name = "An Insect Nest"
+room_desc = "Some kind of insect defending a cocoon."
+utility_subtype = ""
+background_texture = ExtResource("1_o7rci")
+room_icon = SubResource("AtlasTexture_rdy6k")
+room_color = Color(0.255, 0.5, 0.29175, 1)
+can_have_random_combat = true
+random_combat_chance = 1.0
+specific_enemy = ExtResource("6_n3k1d")
+random_enemy_pool = Array[ExtResource("1_urarj")]([])
+can_spawn_shortcuts = false
+shortcut_chance = 0.0
+possible_events = Array[PackedScene]([ExtResource("2_6chox")])
+rank_weights = Array[int]([0, 0, 0, 0, 0, 2, 2])
+metadata/_custom_type_script = "uid://d211hcjce7xyf"

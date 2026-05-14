@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="RoomDefinition" load_steps=9 format=3 uid="uid://ddh181jo74wi8"]
+
+[ext_resource type="Texture2D" uid="uid://l55w27vtdncw" path="res://Assets/Art/Backgrounds/Back_Fountain.png" id="1_2a6s8"]
+[ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="1_csknv"]
+[ext_resource type="AudioStream" uid="uid://d08plolcucavm" path="res://Assets/Audio/Music/Theme_Variant_Camp.ogg" id="2_3bag2"]
+[ext_resource type="Script" uid="uid://d211hcjce7xyf" path="res://Scripts/Resources/RoomDefinition.gd" id="2_rhsjf"]
+[ext_resource type="PackedScene" uid="uid://h2a1mym0x80v" path="res://Scenes/Rooms/rare_utility_fountain.tscn" id="3_c22ce"]
+[ext_resource type="Resource" uid="uid://codm7f05kd1fa" path="res://Resources/Enemies/gormund.tres" id="5_wpe3k"]
+[ext_resource type="Resource" uid="uid://conkutd8s2s2s" path="res://Resources/Enemies/ShrunkenHead.tres" id="6_hxdx1"]
+[ext_resource type="Resource" uid="uid://bu2yqpt7pejnm" path="res://Resources/Enemies/Wormy.tres" id="7_wf54f"]
+
+[resource]
+script = ExtResource("2_rhsjf")
+room_type = 3
+rarity = 2
+room_name = "Mysterious Fountain"
+room_desc = "A mysterious fountain... how mysterious."
+utility_subtype = ""
+background_texture = ExtResource("1_2a6s8")
+room_color = Color(0.3348, 0.35532, 0.54, 1)
+music_override = ExtResource("2_3bag2")
+can_have_random_combat = true
+random_combat_chance = 0.6
+random_enemy_pool = Array[ExtResource("1_csknv")]([ExtResource("5_wpe3k"), ExtResource("6_hxdx1"), ExtResource("7_wf54f")])
+can_spawn_shortcuts = false
+shortcut_chance = 0.0
+possible_events = Array[PackedScene]([ExtResource("3_c22ce")])
+rank_weights = Array[int]([0, 0, 0, 0, 1, 2, 2])
+metadata/_custom_type_script = "uid://d211hcjce7xyf"

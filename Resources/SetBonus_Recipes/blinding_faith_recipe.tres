@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="SetBonus" load_steps=8 format=3 uid="uid://bw43h6qw7pd57"]
+
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="1_p2qen"]
+[ext_resource type="Resource" uid="uid://ctlj65ge21guc" path="res://Resources/Items/COMMON/radiant_shield.tres" id="2_bqdtw"]
+[ext_resource type="Script" uid="uid://drivepk7scvso" path="res://Scripts/Resources/SetBonus.gd" id="2_tkntg"]
+[ext_resource type="Resource" uid="uid://wj3yw6nbrd02" path="res://Resources/Items/COMMON/shimmering_gauntlet.tres" id="3_wu4va"]
+[ext_resource type="Resource" uid="uid://dlkut7ysb51h4" path="res://Resources/Items/UNCOMMON/blinding_flash.tres" id="4_e148p"]
+[ext_resource type="Resource" uid="uid://djr8afnhysbab" path="res://Resources/Items/RARE/shimmering_greaves.tres" id="5_84bb2"]
+[ext_resource type="Resource" uid="uid://b2txpt0axhbwa" path="res://Resources/SetBonuses/blinding_faith.tres" id="7_y688i"]
+
+[resource]
+script = ExtResource("2_tkntg")
+setbonus_name = "Blinding Faith"
+unlocked = true
+discovered = false
+required_items = Array[ExtResource("1_p2qen")]([ExtResource("2_bqdtw"), ExtResource("3_wu4va"), ExtResource("4_e148p"), ExtResource("5_84bb2")])
+setbonus_item = ExtResource("7_y688i")
+metadata/_custom_type_script = "uid://drivepk7scvso"

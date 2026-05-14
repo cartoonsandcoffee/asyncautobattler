@@ -1,21 +1,23 @@
 [gd_resource type="Resource" script_class="Item" load_steps=5 format=3 uid="uid://dahmlphtk0dyx"]
 
 [ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_3ocww"]
-[ext_resource type="Texture2D" uid="uid://bffx10anckips" path="res://Assets/monochrome-transparent_packed.png" id="1_qjdle"]
+[ext_resource type="Texture2D" uid="uid://cor2pjystm0pc" path="res://Assets/Items/SetBonuses.png" id="1_qjdle"]
 [ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_qjdle"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ajy6t"]
 atlas = ExtResource("1_qjdle")
-region = Rect2(512, 160, 16, 16)
+region = Rect2(600, 600, 150, 150)
 
 [resource]
 script = ExtResource("2_qjdle")
 item_id = ""
+base_item_id = ""
 item_name = "Covert Cache"
 item_type = 17
 item_desc = ""
 item_icon = SubResource("AtlasTexture_ajy6t")
-item_color = Color(0.458824, 0.333333, 0.219608, 1)
+item_color = Color(0.86, 0.588957, 0.3354, 1)
+item_bundle = 0
 rules = Array[ExtResource("1_3ocww")]([])
 repeat_rules_X_times = 0
 repeat_rules_for_category = ""
@@ -35,4 +37,5 @@ hit_points_bonus = 10
 strikes_bonus = 0
 burn_damage_bonus = 0
 cant_attack = false
+keywords = Array[String]([])
 metadata/_custom_type_script = "uid://dthg27pchm1fm"

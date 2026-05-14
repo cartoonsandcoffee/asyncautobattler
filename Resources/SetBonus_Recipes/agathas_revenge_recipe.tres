@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="SetBonus" load_steps=6 format=3 uid="uid://b8xsrkqqdtndx"]
+
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="1_86prn"]
+[ext_resource type="Resource" uid="uid://xjovmhjuew0r" path="res://Resources/Items/UNCOMMON/Potions/blood_from_below.tres" id="2_pbjkl"]
+[ext_resource type="Script" uid="uid://drivepk7scvso" path="res://Scripts/Resources/SetBonus.gd" id="2_yx5sq"]
+[ext_resource type="Resource" uid="uid://bacsljaid5t34" path="res://Resources/Items/UNCOMMON/Potions/paralysis_poison.tres" id="3_uomu6"]
+[ext_resource type="Resource" uid="uid://rp7hiiwd65sd" path="res://Resources/SetBonuses/agathas_revenge.tres" id="5_lhvoy"]
+
+[resource]
+script = ExtResource("2_yx5sq")
+setbonus_name = "Agatha's Revenge Recipe"
+unlocked = true
+discovered = false
+required_items = Array[ExtResource("1_86prn")]([ExtResource("2_pbjkl"), ExtResource("3_uomu6")])
+setbonus_item = ExtResource("5_lhvoy")
+metadata/_custom_type_script = "uid://drivepk7scvso"

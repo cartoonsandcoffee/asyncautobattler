@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="RoomDefinition" load_steps=6 format=3 uid="uid://dgvt3iaff8fp5"]
+
+[ext_resource type="Texture2D" uid="uid://pbc4gcbv7vu4" path="res://Assets/Art/Backgrounds/Back_Crystals.png" id="1_4hblj"]
+[ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="1_lhnpd"]
+[ext_resource type="Script" uid="uid://d211hcjce7xyf" path="res://Scripts/Resources/RoomDefinition.gd" id="2_5qu10"]
+[ext_resource type="PackedScene" uid="uid://kbelew667bem" path="res://Scenes/Rooms/rare_treasure_crystal.tscn" id="2_i2vdw"]
+[ext_resource type="Resource" uid="uid://chrew52xfkg3r" path="res://Resources/Enemies/CrystalGuy.tres" id="5_b2sb4"]
+
+[resource]
+script = ExtResource("2_5qu10")
+room_type = 1
+rarity = 2
+room_name = "Crystal Cave"
+room_desc = "A glistening cavern of jewels and gemstones."
+utility_subtype = ""
+background_texture = ExtResource("1_4hblj")
+room_color = Color(1, 0.75, 0.954167, 1)
+can_have_random_combat = true
+random_combat_chance = 1.0
+specific_enemy = ExtResource("5_b2sb4")
+random_enemy_pool = Array[ExtResource("1_lhnpd")]([])
+can_spawn_shortcuts = false
+shortcut_chance = 0.0
+possible_events = Array[PackedScene]([ExtResource("2_i2vdw")])
+rank_weights = Array[int]([0, 0, 0, 0, 1, 1, 2])
+metadata/_custom_type_script = "uid://d211hcjce7xyf"

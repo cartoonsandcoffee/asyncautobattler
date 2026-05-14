@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="RoomDefinition" load_steps=9 format=3 uid="uid://dpp7g45v4ye70"]
+
+[ext_resource type="Texture2D" uid="uid://daeptxxk8jt0v" path="res://Assets/Art/Backgrounds/Background_05.png" id="1_d2wlb"]
+[ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="1_mrdxe"]
+[ext_resource type="Script" uid="uid://d211hcjce7xyf" path="res://Scripts/Resources/RoomDefinition.gd" id="2_i2i7q"]
+[ext_resource type="PackedScene" uid="uid://dt0g5ekhrghn3" path="res://Scenes/Rooms/common_utility_upgrade.tscn" id="2_kxwk0"]
+[ext_resource type="Texture2D" uid="uid://bffx10anckips" path="res://Assets/monochrome-transparent_packed.png" id="4_d2wlb"]
+[ext_resource type="Resource" uid="uid://ds6c57pit221x" path="res://Resources/Enemies/Memreet.tres" id="4_weld8"]
+[ext_resource type="Resource" uid="uid://d057cg4onuvp0" path="res://Resources/Enemies/Ogle.tres" id="5_trwew"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_weld8"]
+atlas = ExtResource("4_d2wlb")
+region = Rect2(64, 224, 16, 16)
+
+[resource]
+script = ExtResource("2_i2i7q")
+room_type = 3
+rarity = 0
+room_name = "Weapon Upgrade"
+room_desc = "Upgrade a weapon stat"
+utility_subtype = ""
+background_texture = ExtResource("1_d2wlb")
+room_icon = SubResource("AtlasTexture_weld8")
+room_color = Color(0.286275, 0.686275, 0.819608, 1)
+can_have_random_combat = true
+random_combat_chance = 0.4
+random_enemy_pool = Array[ExtResource("1_mrdxe")]([ExtResource("4_weld8"), ExtResource("5_trwew")])
+can_spawn_shortcuts = false
+shortcut_chance = 0.0
+possible_events = Array[PackedScene]([ExtResource("2_kxwk0")])
+rank_weights = Array[int]([0, 2, 2, 2, 2, 2, 2])
+metadata/_custom_type_script = "uid://d211hcjce7xyf"

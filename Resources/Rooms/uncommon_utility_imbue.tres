@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="RoomDefinition" load_steps=10 format=3 uid="uid://d3oi0y3l1yb57"]
+
+[ext_resource type="Texture2D" uid="uid://daeptxxk8jt0v" path="res://Assets/Art/Backgrounds/Background_05.png" id="1_6rx5f"]
+[ext_resource type="Texture2D" uid="uid://dm4mqcf00whsb" path="res://Assets/Art/Doors/arch.png" id="2_6rx5f"]
+[ext_resource type="PackedScene" uid="uid://ce4v0pt2qw5lh" path="res://Scenes/Rooms/uncommon_utility_combiner.tscn" id="3_yslrm"]
+[ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="4_re3n7"]
+[ext_resource type="Resource" uid="uid://ds6c57pit221x" path="res://Resources/Enemies/Memreet.tres" id="5_q1rop"]
+[ext_resource type="Resource" uid="uid://d057cg4onuvp0" path="res://Resources/Enemies/Ogle.tres" id="6_676w0"]
+[ext_resource type="Texture2D" uid="uid://dui540vrg7otc" path="res://Resources/Icons/minimap_utility.tres" id="7_2akbk"]
+[ext_resource type="Resource" uid="uid://dg2wcy0kx620y" path="res://Resources/Enemies/Goblin.tres" id="7_6rx5f"]
+[ext_resource type="Script" uid="uid://d211hcjce7xyf" path="res://Scripts/Resources/RoomDefinition.gd" id="8_gsbd8"]
+
+[resource]
+script = ExtResource("8_gsbd8")
+room_type = 3
+rarity = 1
+room_name = "A forge"
+room_desc = "What is that thing?"
+utility_subtype = ""
+background_texture = ExtResource("1_6rx5f")
+door_texture = ExtResource("2_6rx5f")
+room_icon = ExtResource("7_2akbk")
+room_color = Color(0.3723, 0.51, 0.406725, 1)
+can_have_random_combat = true
+random_combat_chance = 0.3
+random_enemy_pool = Array[ExtResource("4_re3n7")]([ExtResource("5_q1rop"), ExtResource("6_676w0"), ExtResource("7_6rx5f")])
+can_spawn_shortcuts = false
+shortcut_chance = 0.6
+possible_events = Array[PackedScene]([ExtResource("3_yslrm")])
+rank_weights = Array[int]([0, 0, 1, 2, 2, 2, 2])
+metadata/_custom_type_script = "uid://d211hcjce7xyf"

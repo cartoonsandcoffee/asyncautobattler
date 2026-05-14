@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="RoomDefinition" load_steps=9 format=3 uid="uid://d2aik1ynja484"]
+
+[ext_resource type="Texture2D" uid="uid://ci156s4y1tkxg" path="res://Assets/Art/Backgrounds/Background_04.png" id="1_7bug2"]
+[ext_resource type="Texture2D" uid="uid://dxx8lmffw6ob7" path="res://Assets/Art/Doors/hallway.png" id="2_vrr44"]
+[ext_resource type="PackedScene" uid="uid://bqvlcutw40dvm" path="res://Scenes/Rooms/common_treasure_weaponpile.tscn" id="3_8yj52"]
+[ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="4_rvccf"]
+[ext_resource type="Texture2D" uid="uid://dui540vrg7otc" path="res://Resources/Icons/minimap_utility.tres" id="5_dd5j4"]
+[ext_resource type="Resource" uid="uid://bu2yqpt7pejnm" path="res://Resources/Enemies/Wormy.tres" id="5_vrr44"]
+[ext_resource type="Resource" uid="uid://gm0vvksbp7e4" path="res://Resources/Enemies/Anguish.tres" id="6_8yj52"]
+[ext_resource type="Script" uid="uid://d211hcjce7xyf" path="res://Scripts/Resources/RoomDefinition.gd" id="6_ycgwm"]
+
+[resource]
+script = ExtResource("6_ycgwm")
+room_type = 1
+rarity = 1
+room_name = "A Weapon Mound"
+room_desc = ""
+utility_subtype = ""
+background_texture = ExtResource("1_7bug2")
+door_texture = ExtResource("2_vrr44")
+room_icon = ExtResource("5_dd5j4")
+room_color = Color(0.64, 0.42944, 0.3392, 1)
+can_have_random_combat = true
+random_combat_chance = 0.4
+random_enemy_pool = Array[ExtResource("4_rvccf")]([ExtResource("5_vrr44"), ExtResource("6_8yj52")])
+can_spawn_shortcuts = false
+shortcut_chance = 0.0
+possible_events = Array[PackedScene]([ExtResource("3_8yj52")])
+rank_weights = Array[int]([0, 1, 2, 2, 2, 2, 2])
+metadata/_custom_type_script = "uid://d211hcjce7xyf"

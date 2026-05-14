@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="SetBonus" load_steps=6 format=3 uid="uid://bxjfvt30d86vw"]
+
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="1_6qsex"]
+[ext_resource type="Resource" uid="uid://dmw52r6dv34q4" path="res://Resources/Items/COMMON/loot_finder.tres" id="2_rtkbb"]
+[ext_resource type="Script" uid="uid://drivepk7scvso" path="res://Scripts/Resources/SetBonus.gd" id="2_w553l"]
+[ext_resource type="Resource" uid="uid://b7pilxm4spj4u" path="res://Resources/Items/UNCOMMON/old_kings_helm.tres" id="3_kkfy6"]
+[ext_resource type="Resource" uid="uid://d4a2oc41653pp" path="res://Resources/SetBonuses/midas_envy.tres" id="5_qad3r"]
+
+[resource]
+script = ExtResource("2_w553l")
+setbonus_name = "Midas' Envy Recipe"
+unlocked = true
+discovered = false
+required_items = Array[ExtResource("1_6qsex")]([ExtResource("2_rtkbb"), ExtResource("3_kkfy6")])
+setbonus_item = ExtResource("5_qad3r")
+metadata/_custom_type_script = "uid://drivepk7scvso"

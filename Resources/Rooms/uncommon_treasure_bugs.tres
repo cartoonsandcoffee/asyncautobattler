@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="RoomDefinition" load_steps=9 format=3 uid="uid://ck6t7ok2kjkpg"]
+
+[ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="1_4g1y3"]
+[ext_resource type="Texture2D" uid="uid://d27de30ukdp3e" path="res://Assets/Art/Backgrounds/Chamber_01.png" id="1_qj04t"]
+[ext_resource type="Script" uid="uid://d211hcjce7xyf" path="res://Scripts/Resources/RoomDefinition.gd" id="2_dyviw"]
+[ext_resource type="Texture2D" uid="uid://dm4mqcf00whsb" path="res://Assets/Art/Doors/arch.png" id="2_ulfi2"]
+[ext_resource type="PackedScene" uid="uid://dnpww8cmfay1x" path="res://Scenes/Rooms/uncommon_utility_crafting.tscn" id="3_if0ei"]
+[ext_resource type="Resource" uid="uid://dg2wcy0kx620y" path="res://Resources/Enemies/Goblin.tres" id="5_dxgrs"]
+[ext_resource type="Resource" uid="uid://d057cg4onuvp0" path="res://Resources/Enemies/Ogle.tres" id="6_qj04t"]
+[ext_resource type="Texture2D" uid="uid://dui540vrg7otc" path="res://Resources/Icons/minimap_utility.tres" id="6_xtpi7"]
+
+[resource]
+script = ExtResource("2_dyviw")
+room_type = 1
+rarity = 1
+room_name = "Infested Mound"
+room_desc = "Bugs!"
+utility_subtype = ""
+background_texture = ExtResource("1_qj04t")
+door_texture = ExtResource("2_ulfi2")
+room_icon = ExtResource("6_xtpi7")
+room_color = Color(0.59, 0.54398, 0.3599, 1)
+can_have_random_combat = true
+random_combat_chance = 0.3
+random_enemy_pool = Array[ExtResource("1_4g1y3")]([ExtResource("5_dxgrs"), ExtResource("6_qj04t")])
+can_spawn_shortcuts = true
+shortcut_chance = 0.6
+possible_events = Array[PackedScene]([ExtResource("3_if0ei")])
+rank_weights = Array[int]([0, 2, 2, 3, 2, 1, 1])
+metadata/_custom_type_script = "uid://d211hcjce7xyf"

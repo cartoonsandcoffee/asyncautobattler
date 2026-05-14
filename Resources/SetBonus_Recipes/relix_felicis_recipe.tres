@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="1_7jg8l"]
 [ext_resource type="Script" uid="uid://drivepk7scvso" path="res://Scripts/Resources/SetBonus.gd" id="2_hcn34"]
 [ext_resource type="Resource" uid="uid://cvmdan2ccgk2s" path="res://Resources/Items/Weapons/Common/nimble_cutlass.tres" id="2_vmxx6"]
-[ext_resource type="Resource" uid="uid://cypgkq58nuwdb" path="res://Resources/Items/COMMON/peculiar_timepiece.tres" id="3_r8mia"]
+[ext_resource type="Resource" uid="uid://cypgkq58nuwdb" path="res://Resources/Items/UNCOMMON/peculiar_timepiece.tres" id="3_vmxx6"]
 [ext_resource type="Resource" uid="uid://d016cl4g5jqga" path="res://Resources/SetBonuses/felix_felicis.tres" id="5_y52bu"]
 
 [resource]
@@ -11,6 +11,6 @@ script = ExtResource("2_hcn34")
 setbonus_name = "Felix Felicis"
 unlocked = true
 discovered = false
-required_items = Array[ExtResource("1_7jg8l")]([ExtResource("2_vmxx6"), ExtResource("3_r8mia")])
+required_items = Array[ExtResource("1_7jg8l")]([ExtResource("2_vmxx6"), ExtResource("3_vmxx6")])
 setbonus_item = ExtResource("5_y52bu")
 metadata/_custom_type_script = "uid://drivepk7scvso"

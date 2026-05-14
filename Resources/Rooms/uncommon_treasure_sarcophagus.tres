@@ -1,11 +1,13 @@
-[gd_resource type="Resource" script_class="RoomDefinition" load_steps=7 format=3 uid="uid://dhy15s12tye57"]
+[gd_resource type="Resource" script_class="RoomDefinition" load_steps=9 format=3 uid="uid://dhy15s12tye57"]
 
 [ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="1_abdws"]
-[ext_resource type="Texture2D" uid="uid://csprhhu3ka3ig" path="res://Assets/Art/Room_03_Background.png" id="1_akb8j"]
+[ext_resource type="Texture2D" uid="uid://ci156s4y1tkxg" path="res://Assets/Art/Backgrounds/Background_04.png" id="1_ojbnj"]
 [ext_resource type="Texture2D" uid="uid://by3aww4863ulx" path="res://Assets/Art/Doors/tomb.png" id="2_akb8j"]
 [ext_resource type="Script" uid="uid://d211hcjce7xyf" path="res://Scripts/Resources/RoomDefinition.gd" id="2_qu4wd"]
 [ext_resource type="PackedScene" uid="uid://bonuuoofoy2li" path="res://Scenes/Rooms/uncommon_treasure_grave.tscn" id="3_628wp"]
 [ext_resource type="Texture2D" uid="uid://crih8ktekhdwb" path="res://Resources/Icons/minimap_treasure.tres" id="5_5v7cb"]
+[ext_resource type="Resource" uid="uid://gm0vvksbp7e4" path="res://Resources/Enemies/Anguish.tres" id="5_ojbnj"]
+[ext_resource type="Resource" uid="uid://codm7f05kd1fa" path="res://Resources/Enemies/gormund.tres" id="6_628wp"]
 
 [resource]
 script = ExtResource("2_qu4wd")
@@ -14,17 +16,15 @@ rarity = 1
 room_name = "An ancient sarcophagus"
 room_desc = "Looks like this belonged to someone important"
 utility_subtype = ""
-background_texture = ExtResource("1_akb8j")
+background_texture = ExtResource("1_ojbnj")
 door_texture = ExtResource("2_akb8j")
 room_icon = ExtResource("5_5v7cb")
 room_color = Color(0.556373, 0.2816, 0.64, 1)
-can_have_random_combat = false
-random_combat_chance = 0.0
-random_enemy_pool = Array[ExtResource("1_abdws")]([])
-can_spawn_shortcuts = true
-shortcut_chance = 1.0
+can_have_random_combat = true
+random_combat_chance = 0.3
+random_enemy_pool = Array[ExtResource("1_abdws")]([ExtResource("5_ojbnj"), ExtResource("6_628wp")])
+can_spawn_shortcuts = false
+shortcut_chance = 0.5
 possible_events = Array[PackedScene]([ExtResource("3_628wp")])
-spawn_weight = 3
-min_rank = 1
-max_rank = 5
+rank_weights = Array[int]([0, 0, 1, 2, 2, 3, 3])
 metadata/_custom_type_script = "uid://d211hcjce7xyf"

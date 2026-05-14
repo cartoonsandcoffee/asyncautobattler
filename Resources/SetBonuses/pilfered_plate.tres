@@ -1,12 +1,12 @@
 [gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://6ncucrs2sl47"]
 
-[ext_resource type="Texture2D" uid="uid://bffx10anckips" path="res://Assets/monochrome-transparent_packed.png" id="1_xig3a"]
+[ext_resource type="Texture2D" uid="uid://c673mfqdoecpa" path="res://Assets/Items/Armor.png" id="1_xig3a"]
 [ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_yql64"]
 [ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_xig3a"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_62ig8"]
 atlas = ExtResource("1_xig3a")
-region = Rect2(544, 16, 16, 16)
+region = Rect2(150, 300, 150, 150)
 
 [sub_resource type="Resource" id="Resource_ew7sd"]
 script = ExtResource("1_yql64")
@@ -20,6 +20,7 @@ has_condition = false
 condition_type = 0
 condition_of = 4
 condition_stat = 9
+condition_party_stat_type = 0
 condition_status = 10
 condition_item_category = ""
 condition_comparison = ">"
@@ -63,11 +64,13 @@ metadata/_custom_type_script = "uid://dahay7fvi7bik"
 [resource]
 script = ExtResource("2_xig3a")
 item_id = ""
+base_item_id = ""
 item_name = "Pilfered Plate"
 item_type = 17
 item_desc = "Turn Start: Steal 2 shield from the enemy."
 item_icon = SubResource("AtlasTexture_62ig8")
 item_color = Color(0.4588, 0.590027, 0.74, 1)
+item_bundle = 0
 rules = Array[ExtResource("1_yql64")]([SubResource("Resource_ew7sd")])
 repeat_rules_X_times = 0
 repeat_rules_for_category = ""
@@ -87,4 +90,5 @@ hit_points_bonus = 0
 strikes_bonus = 0
 burn_damage_bonus = 0
 cant_attack = false
+keywords = Array[String]([])
 metadata/_custom_type_script = "uid://dthg27pchm1fm"

@@ -1,12 +1,12 @@
 [gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://d016cl4g5jqga"]
 
-[ext_resource type="Texture2D" uid="uid://bffx10anckips" path="res://Assets/monochrome-transparent_packed.png" id="1_ab457"]
+[ext_resource type="Texture2D" uid="uid://cor2pjystm0pc" path="res://Assets/Items/SetBonuses.png" id="1_ab457"]
 [ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_t4c0e"]
 [ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_ab457"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1fcir"]
 atlas = ExtResource("1_ab457")
-region = Rect2(496, 80, 16, 16)
+region = Rect2(150, 0, 150, 150)
 
 [sub_resource type="Resource" id="Resource_kajpf"]
 script = ExtResource("1_t4c0e")
@@ -20,6 +20,7 @@ has_condition = false
 condition_type = 0
 condition_of = 4
 condition_stat = 9
+condition_party_stat_type = 0
 condition_status = 10
 condition_item_category = ""
 condition_comparison = ">"
@@ -63,11 +64,13 @@ metadata/_custom_type_script = "uid://dahay7fvi7bik"
 [resource]
 script = ExtResource("2_ab457")
 item_id = ""
+base_item_id = ""
 item_name = "Felix Felicis"
 item_type = 17
 item_desc = "On Hit: Gain 1 agility."
 item_icon = SubResource("AtlasTexture_1fcir")
-item_color = Color(0.91, 0.883307, 0.5096, 1)
+item_color = Color(0.87, 0.8323, 0.3045, 1)
+item_bundle = 0
 rules = Array[ExtResource("1_t4c0e")]([SubResource("Resource_kajpf")])
 repeat_rules_X_times = 0
 repeat_rules_for_category = ""
@@ -87,4 +90,5 @@ hit_points_bonus = 0
 strikes_bonus = 0
 burn_damage_bonus = 0
 cant_attack = false
+keywords = Array[String]([])
 metadata/_custom_type_script = "uid://dthg27pchm1fm"

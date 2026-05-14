@@ -1,12 +1,12 @@
 [gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://cp56llexhhihv"]
 
-[ext_resource type="Texture2D" uid="uid://bffx10anckips" path="res://Assets/monochrome-transparent_packed.png" id="1_c6dca"]
+[ext_resource type="Texture2D" uid="uid://cor2pjystm0pc" path="res://Assets/Items/SetBonuses.png" id="1_c6dca"]
 [ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_ckckx"]
 [ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_c6dca"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6x8ye"]
 atlas = ExtResource("1_c6dca")
-region = Rect2(432, 192, 16, 16)
+region = Rect2(150, 300, 150, 150)
 
 [sub_resource type="Resource" id="Resource_bevbn"]
 script = ExtResource("1_ckckx")
@@ -20,6 +20,7 @@ has_condition = false
 condition_type = 0
 condition_of = 4
 condition_stat = 9
+condition_party_stat_type = 0
 condition_status = 10
 condition_item_category = ""
 condition_comparison = ">"
@@ -56,6 +57,8 @@ conversion_ratio = 1.0
 retrigger_type = 4
 retrigger_target = 0
 retrigger_item = 1
+retrigger_category = ""
+spend_trigger_flag = true
 special_string = ""
 custom_description = ""
 metadata/_custom_type_script = "uid://dahay7fvi7bik"
@@ -63,11 +66,13 @@ metadata/_custom_type_script = "uid://dahay7fvi7bik"
 [resource]
 script = ExtResource("2_c6dca")
 item_id = ""
+base_item_id = ""
 item_name = "Sorro Masque"
 item_type = 17
-item_desc = "Battle Start: Trigger all Exposed items."
+item_desc = "Trigger your Exposed items at Battle Start instead."
 item_icon = SubResource("AtlasTexture_6x8ye")
-item_color = Color(0.79, 0.4424, 0.552473, 1)
+item_color = Color(0.79, 0.6636, 0.74576, 1)
+item_bundle = 0
 rules = Array[ExtResource("1_ckckx")]([SubResource("Resource_bevbn")])
 repeat_rules_X_times = 0
 repeat_rules_for_category = ""
@@ -87,4 +92,5 @@ hit_points_bonus = 0
 strikes_bonus = 0
 burn_damage_bonus = 0
 cant_attack = false
+keywords = Array[String]([])
 metadata/_custom_type_script = "uid://dthg27pchm1fm"

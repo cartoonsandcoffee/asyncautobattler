@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="SetBonus" load_steps=6 format=3 uid="uid://b3j5k647opkr"]
+
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="1_e8n0m"]
+[ext_resource type="Resource" uid="uid://ekip41rfxjgj" path="res://Resources/Items/COMMON/poison_sheath.tres" id="2_m5n2c"]
+[ext_resource type="Script" uid="uid://drivepk7scvso" path="res://Scripts/Resources/SetBonus.gd" id="2_v5yu0"]
+[ext_resource type="Resource" uid="uid://cv3ic2ide2tjv" path="res://Resources/Items/UNCOMMON/truth_crystal.tres" id="3_vv4yn"]
+[ext_resource type="Resource" uid="uid://dpwjggpxoc6ya" path="res://Resources/SetBonuses/sickening_mask.tres" id="5_ef2g0"]
+
+[resource]
+script = ExtResource("2_v5yu0")
+setbonus_name = "Sickening Mask"
+unlocked = true
+discovered = false
+required_items = Array[ExtResource("1_e8n0m")]([ExtResource("2_m5n2c"), ExtResource("3_vv4yn")])
+setbonus_item = ExtResource("5_ef2g0")
+metadata/_custom_type_script = "uid://drivepk7scvso"

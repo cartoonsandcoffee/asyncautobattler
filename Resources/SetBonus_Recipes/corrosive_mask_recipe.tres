@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="SetBonus" load_steps=6 format=3 uid="uid://bq3234ooqomkk"]
+
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="1_qnkj0"]
+[ext_resource type="Script" uid="uid://drivepk7scvso" path="res://Scripts/Resources/SetBonus.gd" id="2_3ic1c"]
+[ext_resource type="Resource" uid="uid://d4m487yugghgc" path="res://Resources/Items/RARE/rusted_plate.tres" id="2_qnom6"]
+[ext_resource type="Resource" uid="uid://cjd3or1lebrpt" path="res://Resources/Items/Weapons/Uncommon/dripping_sword.tres" id="3_hysfn"]
+[ext_resource type="Resource" uid="uid://cmayjm4ks8tsp" path="res://Resources/SetBonuses/corrosive_mask.tres" id="5_iuwdj"]
+
+[resource]
+script = ExtResource("2_3ic1c")
+setbonus_name = "Corrosive Mask"
+unlocked = true
+discovered = false
+required_items = Array[ExtResource("1_qnkj0")]([ExtResource("2_qnom6"), ExtResource("3_hysfn")])
+setbonus_item = ExtResource("5_iuwdj")
+metadata/_custom_type_script = "uid://drivepk7scvso"

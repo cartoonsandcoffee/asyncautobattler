@@ -1,12 +1,12 @@
 [gd_resource type="Resource" script_class="Item" load_steps=8 format=3 uid="uid://difsxfiye7c1g"]
 
 [ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_5cgaj"]
-[ext_resource type="Texture2D" uid="uid://bffx10anckips" path="res://Assets/monochrome-transparent_packed.png" id="1_nj28d"]
+[ext_resource type="Texture2D" uid="uid://cor2pjystm0pc" path="res://Assets/Items/SetBonuses.png" id="1_nj28d"]
 [ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_nj28d"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_h7sr5"]
 atlas = ExtResource("1_nj28d")
-region = Rect2(400, 128, 16, 16)
+region = Rect2(750, 450, 150, 150)
 
 [sub_resource type="Resource" id="Resource_4wbwx"]
 script = ExtResource("1_5cgaj")
@@ -20,6 +20,7 @@ has_condition = false
 condition_type = 0
 condition_of = 4
 condition_stat = 9
+condition_party_stat_type = 0
 condition_status = 10
 condition_item_category = ""
 condition_comparison = ">"
@@ -72,6 +73,7 @@ has_condition = false
 condition_type = 0
 condition_of = 4
 condition_stat = 9
+condition_party_stat_type = 0
 condition_status = 10
 condition_item_category = ""
 condition_comparison = ">"
@@ -124,6 +126,7 @@ has_condition = false
 condition_type = 0
 condition_of = 4
 condition_stat = 9
+condition_party_stat_type = 0
 condition_status = 10
 condition_item_category = ""
 condition_comparison = ">"
@@ -167,11 +170,13 @@ metadata/_custom_type_script = "uid://dahay7fvi7bik"
 [resource]
 script = ExtResource("2_nj28d")
 item_id = ""
+base_item_id = ""
 item_name = "Pitching Tentacles"
 item_type = 17
 item_desc = "Battle Start: Double your attack damage, shield, and agility."
 item_icon = SubResource("AtlasTexture_h7sr5")
 item_color = Color(1, 0.43, 0.677, 1)
+item_bundle = 0
 rules = Array[ExtResource("1_5cgaj")]([SubResource("Resource_4wbwx"), SubResource("Resource_5ascp"), SubResource("Resource_074wj")])
 repeat_rules_X_times = 0
 repeat_rules_for_category = ""
@@ -191,4 +196,5 @@ hit_points_bonus = 0
 strikes_bonus = 0
 burn_damage_bonus = 0
 cant_attack = false
+keywords = Array[String]([])
 metadata/_custom_type_script = "uid://dthg27pchm1fm"

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="SetBonus" load_steps=6 format=3 uid="uid://7jqldvnpn2ud"]
+
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="1_0yh1n"]
+[ext_resource type="Script" uid="uid://drivepk7scvso" path="res://Scripts/Resources/SetBonus.gd" id="2_6tig4"]
+[ext_resource type="Resource" uid="uid://ml5pps6rirfo" path="res://Resources/Items/Weapons/Uncommon/direstone_dagger.tres" id="2_xec5h"]
+[ext_resource type="Resource" uid="uid://xvkwjemmqgo1" path="res://Resources/Items/RARE/nimble_gloves.tres" id="3_gfc6f"]
+[ext_resource type="Resource" uid="uid://4vh8t0e45uet" path="res://Resources/SetBonuses/dire_straights.tres" id="5_mq0q5"]
+
+[resource]
+script = ExtResource("2_6tig4")
+setbonus_name = "Dire Straits Recipe"
+unlocked = true
+discovered = false
+required_items = Array[ExtResource("1_0yh1n")]([ExtResource("2_xec5h"), ExtResource("3_gfc6f")])
+setbonus_item = ExtResource("5_mq0q5")
+metadata/_custom_type_script = "uid://drivepk7scvso"

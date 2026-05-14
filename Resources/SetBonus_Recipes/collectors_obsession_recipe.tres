@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="SetBonus" load_steps=7 format=3 uid="uid://75m3fy6fgsfu"]
+
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="1_4ohne"]
+[ext_resource type="Resource" uid="uid://de0hiikm2cqjt" path="res://Resources/Items/COMMON/collectors_armor.tres" id="2_emqv1"]
+[ext_resource type="Script" uid="uid://drivepk7scvso" path="res://Scripts/Resources/SetBonus.gd" id="2_p8klj"]
+[ext_resource type="Resource" uid="uid://dimqf78722mif" path="res://Resources/Items/Weapons/Common/collectors_sword.tres" id="3_14ji7"]
+[ext_resource type="Resource" uid="uid://bvb831emnavn3" path="res://Resources/Items/RARE/collectors_item.tres" id="4_d1elj"]
+[ext_resource type="Resource" uid="uid://cct3glxnsg65" path="res://Resources/SetBonuses/collectors_obsession.tres" id="6_dlhwy"]
+
+[resource]
+script = ExtResource("2_p8klj")
+setbonus_name = "Collector's Obsession"
+unlocked = true
+discovered = false
+required_items = Array[ExtResource("1_4ohne")]([ExtResource("2_emqv1"), ExtResource("3_14ji7"), ExtResource("4_d1elj")])
+setbonus_item = ExtResource("6_dlhwy")
+metadata/_custom_type_script = "uid://drivepk7scvso"

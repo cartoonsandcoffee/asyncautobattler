@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="SetBonus" load_steps=6 format=3 uid="uid://qr0frqwiasek"]
+
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="1_rs22k"]
+[ext_resource type="Script" uid="uid://drivepk7scvso" path="res://Scripts/Resources/SetBonus.gd" id="2_c4266"]
+[ext_resource type="Resource" uid="uid://blh58trnwryna" path="res://Resources/Items/RARE/scabby_ring.tres" id="2_g56j6"]
+[ext_resource type="Resource" uid="uid://1lj0hqhjf82j" path="res://Resources/Items/Weapons/Rare/dracools_axe.tres" id="3_cc22c"]
+[ext_resource type="Resource" uid="uid://y1qhw6plwvga" path="res://Resources/SetBonuses/draycools_wedding.tres" id="5_toyxn"]
+
+[resource]
+script = ExtResource("2_c4266")
+setbonus_name = "Draycool's Wedding"
+unlocked = true
+discovered = false
+required_items = Array[ExtResource("1_rs22k")]([ExtResource("2_g56j6"), ExtResource("3_cc22c")])
+setbonus_item = ExtResource("5_toyxn")
+metadata/_custom_type_script = "uid://drivepk7scvso"

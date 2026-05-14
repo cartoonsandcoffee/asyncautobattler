@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="RoomDefinition" load_steps=4 format=3 uid="uid://lai551wjt8r5"]
+
+[ext_resource type="PackedScene" uid="uid://dbkadwlk4fth4" path="res://Scenes/Rooms/main_camp.tscn" id="1_j3fst"]
+[ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="1_odf3i"]
+[ext_resource type="Script" uid="uid://d211hcjce7xyf" path="res://Scripts/Resources/RoomDefinition.gd" id="2_j3fst"]
+
+[resource]
+script = ExtResource("2_j3fst")
+room_type = 6
+rarity = 0
+room_name = "Town"
+room_desc = "A meager townsquare, deep underground."
+utility_subtype = ""
+room_color = Color(1, 1, 1, 1)
+can_have_random_combat = false
+random_combat_chance = 0.0
+random_enemy_pool = Array[ExtResource("1_odf3i")]([])
+can_spawn_shortcuts = false
+shortcut_chance = 0.0
+possible_events = Array[PackedScene]([ExtResource("1_j3fst")])
+rank_weights = Array[int]([0, 0, 0, 0, 0, 0, 0])
+metadata/_custom_type_script = "uid://d211hcjce7xyf"
