@@ -1,21 +1,21 @@
-[gd_resource type="Resource" script_class="Enemy" load_steps=16 format=3 uid="uid://dg2wcy0kx620y"]
+[gd_resource type="Resource" script_class="Enemy" load_steps=16 format=3 uid="uid://c6g14ri8qkf6h"]
 
-[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="2_aiy86"]
-[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="3_hkn3j"]
-[ext_resource type="AudioStream" uid="uid://1kl0rltlfbig" path="res://Assets/Audio/SFX/COMBAT/approaching_pheld.ogg" id="4_ggdh7"]
-[ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="4_xr38p"]
-[ext_resource type="Texture2D" uid="uid://c1so3i5pkhik5" path="res://Assets/Art/Enemies/Enemy_02.png" id="5_hkn3j"]
-[ext_resource type="Texture2D" uid="uid://brkvaqqc37hpf" path="res://Assets/UI/icons.png" id="6_ag7pw"]
-[ext_resource type="AudioStream" uid="uid://biugux6ljd3hy" path="res://Assets/Audio/SFX/COMBAT/ogle_death.ogg" id="6_xhg8o"]
-[ext_resource type="Script" uid="uid://damxywvog3lsq" path="res://Scripts/Classes/Inventory.gd" id="7_xhg8o"]
-[ext_resource type="Script" uid="uid://c461mcmm1ot6v" path="res://Scripts/Classes/GameStats.gd" id="7_xr38p"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="1_ah63g"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="3_mbnhh"]
+[ext_resource type="AudioStream" uid="uid://1kl0rltlfbig" path="res://Assets/Audio/SFX/COMBAT/approaching_pheld.ogg" id="4_qu63w"]
+[ext_resource type="AudioStream" uid="uid://biugux6ljd3hy" path="res://Assets/Audio/SFX/COMBAT/ogle_death.ogg" id="5_7r0ad"]
+[ext_resource type="Script" uid="uid://damxywvog3lsq" path="res://Scripts/Classes/Inventory.gd" id="6_mbnhh"]
+[ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="6_nxx77"]
+[ext_resource type="Texture2D" uid="uid://c1so3i5pkhik5" path="res://Assets/Art/Enemies/Enemy_02.png" id="7_d1bax"]
+[ext_resource type="Texture2D" uid="uid://brkvaqqc37hpf" path="res://Assets/UI/icons.png" id="7_qu63w"]
+[ext_resource type="Script" uid="uid://c461mcmm1ot6v" path="res://Scripts/Classes/GameStats.gd" id="8_rukbg"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_3q4th"]
-atlas = ExtResource("6_ag7pw")
+[sub_resource type="AtlasTexture" id="AtlasTexture_7r0ad"]
+atlas = ExtResource("7_qu63w")
 region = Rect2(450, 150, 150, 150)
 
-[sub_resource type="Resource" id="Resource_ntg4k"]
-script = ExtResource("2_aiy86")
+[sub_resource type="Resource" id="Resource_nxx77"]
+script = ExtResource("3_mbnhh")
 trigger_type = 4
 trigger_stat = 9
 trigger_status = 10
@@ -43,7 +43,7 @@ target_item_category = ""
 target_stat = 1
 target_status = 10
 effect_of = 0
-effect_amount = 1
+effect_amount = 3
 effect_stat_party = 4
 effect_stat_type = 3
 effect_stat_value = 9
@@ -64,22 +64,21 @@ retrigger_type = 1
 retrigger_target = 0
 retrigger_item = 0
 retrigger_category = ""
-spend_trigger_flag = false
 special_string = ""
 custom_description = ""
 metadata/_custom_type_script = "uid://dahay7fvi7bik"
 
-[sub_resource type="Resource" id="Resource_j23ql"]
-script = ExtResource("3_hkn3j")
+[sub_resource type="Resource" id="Resource_d1bax"]
+script = ExtResource("1_ah63g")
 item_id = ""
 base_item_id = ""
 item_name = "Hardened Claws"
 item_type = 12
 item_desc = ""
-item_icon = SubResource("AtlasTexture_3q4th")
-item_color = Color(0.71, 0.4828, 0.4828, 1)
+item_icon = SubResource("AtlasTexture_7r0ad")
+item_color = Color(0.79, 0.6241, 0.6241, 1)
 item_bundle = 0
-rules = Array[ExtResource("2_aiy86")]([SubResource("Resource_ntg4k")])
+rules = Array[ExtResource("3_mbnhh")]([SubResource("Resource_nxx77")])
 repeat_rules_X_times = 0
 repeat_rules_for_category = ""
 trigger_priority = 0
@@ -101,46 +100,47 @@ cant_attack = false
 keywords = Array[String]([])
 metadata/_custom_type_script = "uid://dthg27pchm1fm"
 
-[sub_resource type="Resource" id="Resource_656x5"]
-script = ExtResource("7_xhg8o")
-item_slots = Array[ExtResource("3_hkn3j")]([SubResource("Resource_j23ql")])
+[sub_resource type="Resource" id="Resource_rukbg"]
+script = ExtResource("6_mbnhh")
+weapon_slot = SubResource("Resource_d1bax")
+item_slots = Array[ExtResource("1_ah63g")]([])
 metadata/_custom_type_script = "uid://damxywvog3lsq"
 
 [sub_resource type="Resource" id="Resource_gre71"]
-script = ExtResource("7_xr38p")
-damage = 1
-shield = 3
+script = ExtResource("8_rukbg")
+damage = 2
+shield = 8
 agility = 150
-hit_points = 5
+hit_points = 10
 gold = 0
 strikes = 1
 burn_damage = 3
 metadata/_custom_type_script = "uid://c461mcmm1ot6v"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xr38p"]
-atlas = ExtResource("5_hkn3j")
+atlas = ExtResource("7_d1bax")
 region = Rect2(540, 610, 200, 200)
 
 [resource]
-script = ExtResource("4_xr38p")
+script = ExtResource("6_nxx77")
 enemy_id = "Goblin"
 enemy_name = "An Ethenot"
 enemy_type = 0
-description = "On Exposed: Gain 1 attack."
-sprite = ExtResource("5_hkn3j")
-sprite_hit = ExtResource("5_hkn3j")
-sprite_attack = ExtResource("5_hkn3j")
+description = "On Exposed: Gain 3 attack."
+sprite = ExtResource("7_d1bax")
+sprite_hit = ExtResource("7_d1bax")
+sprite_attack = ExtResource("7_d1bax")
 sprite_color = Color(0.521569, 0.282353, 0.396078, 1)
 weapon_sprite = SubResource("AtlasTexture_xr38p")
 skin_id = 0
 skin_color = Color(1, 1, 1, 1)
 item_bundle = Array[int]([])
 stats = SubResource("Resource_gre71")
-inventory = SubResource("Resource_656x5")
-gold = 3
+inventory = SubResource("Resource_rukbg")
+gold = 1
 item_drop_chance = 0.1
-possible_item_drops = Array[ExtResource("3_hkn3j")]([])
-approach_sound = ExtResource("4_ggdh7")
-death_sound = ExtResource("6_xhg8o")
-abilities = Array[ExtResource("3_hkn3j")]([])
+possible_item_drops = Array[ExtResource("1_ah63g")]([])
+approach_sound = ExtResource("4_qu63w")
+death_sound = ExtResource("5_7r0ad")
+abilities = Array[ExtResource("1_ah63g")]([])
 metadata/_custom_type_script = "uid://relhyqi21ar8"

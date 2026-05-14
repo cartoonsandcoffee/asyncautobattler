@@ -1,0 +1,200 @@
+[gd_resource type="Resource" script_class="Enemy" load_steps=16 format=3 uid="uid://chrew52xfkg3r"]
+
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="1_b1ak6"]
+[ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="2_c1a1x"]
+[ext_resource type="AudioStream" uid="uid://gcpmm7lewmpt" path="res://Assets/Audio/Music/fight_ethenot.ogg" id="2_edrob"]
+[ext_resource type="Texture2D" uid="uid://odgh4yu37u8o" path="res://Assets/Items/Crystals.png" id="3_vjrbv"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="4_xq6yj"]
+[ext_resource type="Script" uid="uid://damxywvog3lsq" path="res://Scripts/Classes/Inventory.gd" id="5_dnrnm"]
+[ext_resource type="Texture2D" uid="uid://curcs7o8kgol7" path="res://Assets/Art/Enemies/Enemy_Crystal.png" id="7_l1ia4"]
+[ext_resource type="Script" uid="uid://c461mcmm1ot6v" path="res://Scripts/Classes/GameStats.gd" id="8_b1y18"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sbbat"]
+atlas = ExtResource("3_vjrbv")
+region = Rect2(0, 0, 150, 150)
+
+[sub_resource type="Resource" id="Resource_xku6x"]
+script = ExtResource("4_xq6yj")
+trigger_type = 1
+trigger_stat = 9
+trigger_status = 10
+trigger_value_threshold = 0
+countdown_value = 0
+countdown_recurs = false
+has_condition = false
+condition_type = 0
+condition_of = 4
+condition_stat = 9
+condition_party_stat_type = 0
+condition_status = 10
+condition_item_category = ""
+condition_comparison = ">"
+compare_to = 0
+condition_value = 0
+condition_to_party = 4
+condition_stat_type = 3
+condition_party_stat = 9
+condition_party_status = 10
+effect_type = 6
+target_type = 1
+target_stat_type = 0
+target_item_category = ""
+target_stat = 4
+target_status = 10
+effect_of = 0
+effect_amount = -5
+effect_stat_party = 4
+effect_stat_type = 3
+effect_stat_value = 9
+effect_status_value = 10
+effect_multiplier = 1.0
+convert_from_type = 0
+convert_from_party = 1
+convert_from_stat = 4
+convert_from_status = 10
+convert_to_type = 0
+convert_to_party = 0
+convert_to_stat = 2
+convert_to_status = 10
+conversion_amount_type = 0
+conversion_amount_value = 5
+conversion_ratio = 4.0
+retrigger_type = 1
+retrigger_target = 0
+retrigger_item = 0
+retrigger_category = ""
+spend_trigger_flag = false
+special_string = ""
+custom_description = ""
+metadata/_custom_type_script = "uid://dahay7fvi7bik"
+
+[sub_resource type="Resource" id="Resource_edrob"]
+script = ExtResource("4_xq6yj")
+trigger_type = 5
+trigger_stat = 9
+trigger_status = 10
+trigger_value_threshold = 0
+countdown_value = 0
+countdown_recurs = false
+has_condition = false
+condition_type = 0
+condition_of = 4
+condition_stat = 9
+condition_party_stat_type = 0
+condition_status = 10
+condition_item_category = ""
+condition_comparison = ">"
+compare_to = 0
+condition_value = 0
+condition_to_party = 4
+condition_stat_type = 3
+condition_party_stat = 9
+condition_party_status = 10
+effect_type = 6
+target_type = 0
+target_stat_type = 0
+target_item_category = ""
+target_stat = 9
+target_status = 10
+effect_of = 0
+effect_amount = 0
+effect_stat_party = 4
+effect_stat_type = 3
+effect_stat_value = 9
+effect_status_value = 10
+effect_multiplier = 1.0
+convert_from_type = 0
+convert_from_party = 1
+convert_from_stat = 4
+convert_from_status = 10
+convert_to_type = 0
+convert_to_party = 0
+convert_to_stat = 1
+convert_to_status = 10
+conversion_amount_type = 0
+conversion_amount_value = 5
+conversion_ratio = 1.0
+retrigger_type = 1
+retrigger_target = 0
+retrigger_item = 0
+retrigger_category = ""
+spend_trigger_flag = false
+special_string = ""
+custom_description = ""
+metadata/_custom_type_script = "uid://dahay7fvi7bik"
+
+[sub_resource type="Resource" id="Resource_s5a8d"]
+script = ExtResource("1_b1ak6")
+item_id = ""
+base_item_id = ""
+item_name = "Crystal Syphon"
+item_type = 16
+item_desc = ""
+item_icon = SubResource("AtlasTexture_sbbat")
+item_color = Color(1, 0.66, 0.892333, 1)
+item_bundle = 0
+rules = Array[ExtResource("4_xq6yj")]([SubResource("Resource_xku6x"), SubResource("Resource_edrob")])
+repeat_rules_X_times = 0
+repeat_rules_for_category = ""
+trigger_priority = 0
+trigger_only_once = false
+trigger_only_first_turn = false
+trigger_on_occurrence_number = 0
+occurrence_resets_per_turn = false
+rarity = 0
+categories = Array[String]([])
+rng_weight = 1.0
+unlocked = false
+damage_bonus = 0
+shield_bonus = 0
+agility_bonus = 0
+hit_points_bonus = 0
+strikes_bonus = 0
+burn_damage_bonus = 0
+cant_attack = false
+keywords = Array[String]([])
+metadata/_custom_type_script = "uid://dthg27pchm1fm"
+
+[sub_resource type="Resource" id="Resource_8t6ni"]
+script = ExtResource("5_dnrnm")
+item_slots = Array[ExtResource("1_b1ak6")]([SubResource("Resource_s5a8d")])
+metadata/_custom_type_script = "uid://damxywvog3lsq"
+
+[sub_resource type="Resource" id="Resource_qdx4d"]
+script = ExtResource("8_b1y18")
+damage = 5
+shield = 0
+agility = 0
+hit_points = 10
+gold = 0
+strikes = 1
+burn_damage = 4
+metadata/_custom_type_script = "uid://c461mcmm1ot6v"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3gxoh"]
+atlas = ExtResource("7_l1ia4")
+region = Rect2(850, 300, 150, 150)
+
+[resource]
+script = ExtResource("2_c1a1x")
+enemy_id = ""
+enemy_name = "Tetragon"
+enemy_type = 0
+description = "Battle Start: Steal 5 of the player's gold to convert into 20 shield. 
+Wounded: Steal 5 of the player's gold and convert it into 5 attack damage."
+sprite = ExtResource("7_l1ia4")
+sprite_hit = ExtResource("7_l1ia4")
+sprite_attack = ExtResource("7_l1ia4")
+sprite_color = Color(1, 1, 1, 1)
+weapon_sprite = SubResource("AtlasTexture_3gxoh")
+skin_id = 0
+skin_color = Color(1, 1, 1, 1)
+item_bundle = Array[int]([])
+stats = SubResource("Resource_qdx4d")
+inventory = SubResource("Resource_8t6ni")
+gold = 10
+item_drop_chance = 0.1
+possible_item_drops = Array[ExtResource("1_b1ak6")]([])
+combat_music = ExtResource("2_edrob")
+abilities = Array[ExtResource("1_b1ak6")]([])
+metadata/_custom_type_script = "uid://relhyqi21ar8"

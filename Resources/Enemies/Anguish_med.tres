@@ -1,15 +1,20 @@
-[gd_resource type="Resource" script_class="Enemy" load_steps=12 format=3 uid="uid://gm0vvksbp7e4"]
+[gd_resource type="Resource" script_class="Enemy" load_steps=14 format=3 uid="uid://dj2vdtwdkp6p8"]
 
-[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="1_yn4yh"]
-[ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="2_n1qiu"]
-[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="3_2vtmy"]
-[ext_resource type="AudioStream" uid="uid://1kl0rltlfbig" path="res://Assets/Audio/SFX/COMBAT/approaching_pheld.ogg" id="3_u1i2p"]
-[ext_resource type="AudioStream" uid="uid://biugux6ljd3hy" path="res://Assets/Audio/SFX/COMBAT/ogle_death.ogg" id="4_ih78y"]
-[ext_resource type="Texture2D" uid="uid://cbplljl2tkk4b" path="res://Assets/Art/Enemies/Enemy_01.png" id="5_2vtmy"]
-[ext_resource type="Script" uid="uid://c461mcmm1ot6v" path="res://Scripts/Classes/GameStats.gd" id="5_u1i2p"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="1_3howw"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="2_4v4hd"]
+[ext_resource type="Texture2D" uid="uid://cor2pjystm0pc" path="res://Assets/Items/SetBonuses.png" id="2_gn8fr"]
+[ext_resource type="AudioStream" uid="uid://1kl0rltlfbig" path="res://Assets/Audio/SFX/COMBAT/approaching_pheld.ogg" id="3_gn8fr"]
+[ext_resource type="AudioStream" uid="uid://biugux6ljd3hy" path="res://Assets/Audio/SFX/COMBAT/ogle_death.ogg" id="4_56bgk"]
+[ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="5_htwkk"]
+[ext_resource type="Texture2D" uid="uid://cbplljl2tkk4b" path="res://Assets/Art/Enemies/Enemy_01.png" id="6_uugwn"]
+[ext_resource type="Script" uid="uid://c461mcmm1ot6v" path="res://Scripts/Classes/GameStats.gd" id="7_pcjef"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_56bgk"]
+atlas = ExtResource("2_gn8fr")
+region = Rect2(750, 450, 150, 150)
 
 [sub_resource type="Resource" id="Resource_mnldd"]
-script = ExtResource("3_2vtmy")
+script = ExtResource("2_4v4hd")
 trigger_type = 4
 trigger_stat = 9
 trigger_status = 10
@@ -37,7 +42,7 @@ target_item_category = ""
 target_stat = 1
 target_status = 10
 effect_of = 0
-effect_amount = 1
+effect_amount = 2
 effect_stat_party = 4
 effect_stat_type = 3
 effect_stat_value = 9
@@ -58,21 +63,21 @@ retrigger_type = 1
 retrigger_target = 0
 retrigger_item = 0
 retrigger_category = ""
-spend_trigger_flag = false
 special_string = ""
 custom_description = ""
 metadata/_custom_type_script = "uid://dahay7fvi7bik"
 
 [sub_resource type="Resource" id="Resource_2vtmy"]
-script = ExtResource("1_yn4yh")
+script = ExtResource("1_3howw")
 item_id = ""
 base_item_id = ""
-item_name = "Anguish"
+item_name = "Anguish Strength"
 item_type = 0
 item_desc = ""
-item_color = Color(0, 0, 0, 1)
+item_icon = SubResource("AtlasTexture_56bgk")
+item_color = Color(0.567, 0.441, 0.63, 1)
 item_bundle = 0
-rules = Array[ExtResource("3_2vtmy")]([SubResource("Resource_mnldd")])
+rules = Array[ExtResource("2_4v4hd")]([SubResource("Resource_mnldd")])
 repeat_rules_X_times = 0
 repeat_rules_for_category = ""
 trigger_priority = 0
@@ -95,9 +100,9 @@ keywords = Array[String]([])
 metadata/_custom_type_script = "uid://dthg27pchm1fm"
 
 [sub_resource type="Resource" id="Resource_f84qh"]
-script = ExtResource("5_u1i2p")
-damage = 1
-shield = 8
+script = ExtResource("7_pcjef")
+damage = 2
+shield = 15
 agility = 2
 hit_points = 10
 gold = 1
@@ -106,28 +111,28 @@ burn_damage = 3
 metadata/_custom_type_script = "uid://c461mcmm1ot6v"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_u1i2p"]
-atlas = ExtResource("5_2vtmy")
+atlas = ExtResource("6_uugwn")
 region = Rect2(100, 150, 350, 350)
 
 [resource]
-script = ExtResource("2_n1qiu")
-enemy_id = ""
+script = ExtResource("5_htwkk")
+enemy_id = "Anguish"
 enemy_name = "A Pheld"
 enemy_type = 0
-description = "Exposed: Gain 1 attack damage."
-sprite = ExtResource("5_2vtmy")
-sprite_hit = ExtResource("5_2vtmy")
-sprite_attack = ExtResource("5_2vtmy")
+description = "Exposed: Gain 2 attack damage."
+sprite = ExtResource("6_uugwn")
+sprite_hit = ExtResource("6_uugwn")
+sprite_attack = ExtResource("6_uugwn")
 sprite_color = Color(0.2806, 0.61, 0.40138, 1)
 weapon_sprite = SubResource("AtlasTexture_u1i2p")
 skin_id = 0
 skin_color = Color(1, 1, 1, 1)
 item_bundle = Array[int]([])
 stats = SubResource("Resource_f84qh")
-gold = 3
+gold = 1
 item_drop_chance = 0.1
-possible_item_drops = Array[ExtResource("1_yn4yh")]([])
-approach_sound = ExtResource("3_u1i2p")
-death_sound = ExtResource("4_ih78y")
-abilities = Array[ExtResource("1_yn4yh")]([SubResource("Resource_2vtmy")])
+possible_item_drops = Array[ExtResource("1_3howw")]([])
+approach_sound = ExtResource("3_gn8fr")
+death_sound = ExtResource("4_56bgk")
+abilities = Array[ExtResource("1_3howw")]([SubResource("Resource_2vtmy")])
 metadata/_custom_type_script = "uid://relhyqi21ar8"

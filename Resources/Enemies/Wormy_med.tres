@@ -1,19 +1,19 @@
-[gd_resource type="Resource" script_class="Enemy" load_steps=14 format=3 uid="uid://bu2yqpt7pejnm"]
+[gd_resource type="Resource" script_class="Enemy" load_steps=14 format=3 uid="uid://mm5ajlnaid7f"]
 
-[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="1_gy5no"]
-[ext_resource type="Texture2D" uid="uid://dnoemwxrs7dnj" path="res://Assets/UI/status_effects.png" id="2_mfpc0"]
-[ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="2_y811y"]
-[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="3_h3hke"]
-[ext_resource type="Texture2D" uid="uid://m8v0tmmx7n5q" path="res://Assets/Art/Enemies/Enemy_04.png" id="3_psvjx"]
-[ext_resource type="Script" uid="uid://c461mcmm1ot6v" path="res://Scripts/Classes/GameStats.gd" id="4_craip"]
-[ext_resource type="Script" uid="uid://damxywvog3lsq" path="res://Scripts/Classes/Inventory.gd" id="4_qxmod"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="1_0k1vb"]
+[ext_resource type="Texture2D" uid="uid://dnoemwxrs7dnj" path="res://Assets/UI/status_effects.png" id="2_wefn1"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="3_6ptxg"]
+[ext_resource type="Script" uid="uid://damxywvog3lsq" path="res://Scripts/Classes/Inventory.gd" id="4_6g2dk"]
+[ext_resource type="Script" uid="uid://relhyqi21ar8" path="res://Scripts/Resources/Enemy.gd" id="5_oyrlp"]
+[ext_resource type="Texture2D" uid="uid://m8v0tmmx7n5q" path="res://Assets/Art/Enemies/Enemy_04.png" id="6_7omkh"]
+[ext_resource type="Script" uid="uid://c461mcmm1ot6v" path="res://Scripts/Classes/GameStats.gd" id="7_hdk37"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_njswr"]
-atlas = ExtResource("2_mfpc0")
+atlas = ExtResource("2_wefn1")
 region = Rect2(0, 0, 150, 150)
 
 [sub_resource type="Resource" id="Resource_gmj1y"]
-script = ExtResource("3_h3hke")
+script = ExtResource("3_6ptxg")
 trigger_type = 5
 trigger_stat = 9
 trigger_status = 10
@@ -41,7 +41,7 @@ target_item_category = ""
 target_stat = 9
 target_status = 0
 effect_of = 0
-effect_amount = 2
+effect_amount = 4
 effect_stat_party = 4
 effect_stat_type = 3
 effect_stat_value = 9
@@ -62,13 +62,12 @@ retrigger_type = 1
 retrigger_target = 0
 retrigger_item = 0
 retrigger_category = ""
-spend_trigger_flag = false
 special_string = ""
 custom_description = ""
 metadata/_custom_type_script = "uid://dahay7fvi7bik"
 
 [sub_resource type="Resource" id="Resource_jctv0"]
-script = ExtResource("1_gy5no")
+script = ExtResource("1_0k1vb")
 item_id = ""
 base_item_id = ""
 item_name = "Vile Innards"
@@ -77,7 +76,7 @@ item_desc = "Wounded: Give the player 2 poison."
 item_icon = SubResource("AtlasTexture_njswr")
 item_color = Color(0.556967, 0.2418, 0.62, 1)
 item_bundle = 0
-rules = Array[ExtResource("3_h3hke")]([SubResource("Resource_gmj1y")])
+rules = Array[ExtResource("3_6ptxg")]([SubResource("Resource_gmj1y")])
 repeat_rules_X_times = 0
 repeat_rules_for_category = ""
 trigger_priority = 0
@@ -100,34 +99,34 @@ keywords = Array[String]([])
 metadata/_custom_type_script = "uid://dthg27pchm1fm"
 
 [sub_resource type="Resource" id="Resource_vjrs7"]
-script = ExtResource("4_qxmod")
-item_slots = Array[ExtResource("1_gy5no")]([SubResource("Resource_jctv0")])
+script = ExtResource("4_6g2dk")
+item_slots = Array[ExtResource("1_0k1vb")]([SubResource("Resource_jctv0")])
 metadata/_custom_type_script = "uid://damxywvog3lsq"
 
 [sub_resource type="Resource" id="Resource_jy7bu"]
-script = ExtResource("4_craip")
+script = ExtResource("7_hdk37")
 damage = 2
-shield = 4
-agility = 2
-hit_points = 5
+shield = 5
+agility = 4
+hit_points = 12
 gold = 0
 strikes = 1
 burn_damage = 3
 metadata/_custom_type_script = "uid://c461mcmm1ot6v"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mfpc0"]
-atlas = ExtResource("3_psvjx")
+atlas = ExtResource("6_7omkh")
 region = Rect2(150, 550, 150, 150)
 
 [resource]
-script = ExtResource("2_y811y")
+script = ExtResource("5_oyrlp")
 enemy_id = "Wormy"
 enemy_name = "A Zoltha"
 enemy_type = 0
-description = "Wounded: Give the Player 2 poison."
-sprite = ExtResource("3_psvjx")
-sprite_hit = ExtResource("3_psvjx")
-sprite_attack = ExtResource("3_psvjx")
+description = "Wounded: Give the Player 4 poison."
+sprite = ExtResource("6_7omkh")
+sprite_hit = ExtResource("6_7omkh")
+sprite_attack = ExtResource("6_7omkh")
 sprite_color = Color(1, 1, 1, 1)
 weapon_sprite = SubResource("AtlasTexture_mfpc0")
 skin_id = 0
@@ -137,6 +136,6 @@ stats = SubResource("Resource_jy7bu")
 inventory = SubResource("Resource_vjrs7")
 gold = 1
 item_drop_chance = 0.1
-possible_item_drops = Array[ExtResource("1_gy5no")]([])
-abilities = Array[ExtResource("1_gy5no")]([])
+possible_item_drops = Array[ExtResource("1_0k1vb")]([])
+abilities = Array[ExtResource("1_0k1vb")]([])
 metadata/_custom_type_script = "uid://relhyqi21ar8"
