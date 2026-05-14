@@ -135,6 +135,7 @@ enum ConversionAmountType {
 @export var retrigger_target: Enums.TargetType = Enums.TargetType.SELF
 @export var retrigger_item: Enums.ItemToRetrigger = Enums.ItemToRetrigger.NONE
 @export var retrigger_category: String = ""
+@export var spend_trigger_flag: bool = false
 
 @export_group("Special")
 @export var special_string: String = "" # for special edge-case instructions for persistant rules, like: "exposed-triggers-twice"
@@ -292,6 +293,11 @@ func _validate_property(property: Dictionary) -> void:
 	if prop_name in ["retrigger_type", "retrigger_target", "retrigger_item", "retrigger_category"]:
 		if effect_type != Enums.EffectType.TRIGGER_OTHER_ITEMS:
 			property.usage = PROPERTY_USAGE_NO_EDITOR
+
+	if prop_name in ["spend_trigger_flag"]:
+		if effect_type != Enums.EffectType.TRIGGER_OTHER_ITEMS && retrigger_item != Enums.ItemToRetrigger.ALL:
+			property.usage = PROPERTY_USAGE_NO_EDITOR
+
 
 func get_desc_trigger() -> String:
 	var trigger_str = Enums.get_trigger_type_string(trigger_type)

@@ -5,13 +5,13 @@ extends RoomEvent
 @onready var item_choice_container: GridContainer = $panelOffer/PanelContainer/MarginContainer/VBoxContainer/itemContainer
 @onready var name_label: Label = $panelOffer/PanelContainer/MarginContainer/VBoxContainer/lblName
 @onready var dialogue_label: RichTextLabel = $panelOffer/PanelContainer/MarginContainer/VBoxContainer/lblDialog
-@onready var btn_event: Button = $picEvent/btnEvent
+@onready var btn_event: Button = $eventHolder1/picEvent/btnEvent
 @onready var panel_offer: Panel = $panelOffer
+@onready var btn_next:Button =$picFarBack/centerPoint/btnNext
 
 @onready var anim_event: AnimationPlayer = $animEvent
 @onready var anim_label: AnimationPlayer = $animLabel
 @onready var anim_box: AnimationPlayer = $animBox
-@onready var anim_rope: AnimationPlayer = $animRope
 @onready var anim_blood:AnimationPlayer = $animBlood
 
 var item_choice_scene = preload("res://Scenes/item_choice.tscn")
@@ -21,7 +21,7 @@ var items_offered: int = 3
 func initialize_event():
 	#slideshow_player.close_slideshow.connect(_close_slideshow)
 	#anim_slides.play("open_slideshow")
-	
+
 	generate_item_choices()
 	disable_button()
 
@@ -75,14 +75,11 @@ func finish_event():
 	anim_event.play("hide_event")
 	await anim_event.animation_finished
 
-	anim_rope.play("show_rope")
-	await anim_rope.animation_finished
-	anim_rope.play("rope_sway")
-	
-	#await DungeonManager.slide_in_menus()
+	main_game_ref.show_bottom_panel(false)
+	btn_next.disabled = false
 
 	# Complete the event
-	complete_event()
+	#complete_event()
 
 func _on_btn_event_pressed() -> void:
 	AudioManager.play_event_sound("corpse")
@@ -102,8 +99,14 @@ func _on_btn_event_mouse_entered() -> void:
 	if !panel_offer.visible:
 		anim_label.play("show_label")
 		CursorManager.set_interact_cursor()
-		AudioManager.play_ui_sound("woosh")
 
+
+func _on_dungeon_button_clicked() -> void:
+	main_game_ref.fade_out()
+	
+	var next_room: RoomData = DungeonManager.get_town_room()
+
+	main_game_ref.load_room(next_room)
 
 
 func _on_btn_skip_mouse_entered() -> void:
@@ -111,3 +114,13 @@ func _on_btn_skip_mouse_entered() -> void:
 
 func _on_btn_skip_pressed() -> void:
 	finish_event()
+
+
+
+func _on_btn_next_mouse_exited() -> void:
+	if !panel_offer.visible:
+		CursorManager.reset_cursor()
+
+func _on_btn_next_mouse_entered() -> void:
+	if !panel_offer.visible:
+		CursorManager.set_navigation_cursor()

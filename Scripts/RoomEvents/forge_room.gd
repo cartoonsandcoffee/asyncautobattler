@@ -6,7 +6,7 @@ extends RoomEvent
 @onready var button: Button = $picTreasure/Button
 @onready var weapon_upgrader: WeaponUpgrader = $WeaponUpgrader
 
-@onready var particles: CPUParticles2D = $jar_particles
+@onready var particles: CPUParticles2D = $picTreasure/jar_particles
 
 
 func _ready():

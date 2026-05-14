@@ -55,6 +55,7 @@ func _on_btn_event_pressed() -> void:
 	particles.emitting = false
 	anim_labels.play("hide_label")
 	anim_items.play("show_items")
+	items_offering.show_popup()
 
 func _on_btn_event_mouse_exited() -> void:
 	if items_offering.visible == false:

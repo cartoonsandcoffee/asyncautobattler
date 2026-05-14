@@ -21,8 +21,6 @@ var boss_enemy: Enemy = null
 func _ready():
 	# Get main game reference
 	main_game_ref = get_tree().get_root().get_node_or_null("MainGame")
-	if main_game_ref:
-		main_game_ref.btn_instant.visible = false
 
 	CombatSpeed.set_speed(CombatSpeed.CombatSpeedMode.NORMAL) #Always default to normal speed for boss battles
 	if not main_game_ref:
@@ -96,7 +94,7 @@ func _boss_battle_sequence():
 		await _handle_defeat()
 	
 	if main_game_ref:
-		main_game_ref.btn_instant.show_me()
+		main_game_ref.fight_or_flee.instant_toggle.show_me()
 		
 	# 5. Complete event
 	#complete_event()

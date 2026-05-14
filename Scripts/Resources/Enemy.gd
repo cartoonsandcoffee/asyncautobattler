@@ -84,7 +84,8 @@ func reset_to_base_values():
 	stats.shield_current = stats.shield
 	stats.agility_current = stats.agility
 	stats.hit_points_current = stats.hit_points
-	stats.strikes_current = stats.strikes
+	stats.strikes_left = stats.strikes
+	stats.strikes_next_turn = stats.strikes
 	stats.burn_damage_current = stats.burn_damage
 
 	# Reset status effects
@@ -187,7 +188,12 @@ func _apply_persistent_rules():
 	var all_items = inventory.item_slots.duplicate()
 	if inventory.weapon_slot:
 		all_items.append(inventory.weapon_slot)
+		if current_weapon_rule_upgrade:
+			all_items.append(current_weapon_rule_upgrade)
 	
+	for bonus_item in SetBonusManager.get_active_set_bonuses(self):
+		all_items.append(bonus_item)
+
 	for item in all_items:
 		if not item:
 			continue
@@ -325,11 +331,11 @@ func _get_persistent_stat_value(stat: Enums.Stats, stat_type: Enums.StatType) ->
 				return stats.agility
 		Enums.Stats.STRIKES:
 			if stat_type == Enums.StatType.CURRENT:
-				return stats.strikes_current
+				return stats.strikes_left
 			elif stat_type == Enums.StatType.MISSING:
-				return stats.strikes - stats.strikes_current
+				return 0
 			else:
-				return stats.strikes
+				return stats.strikes_next_turn
 		Enums.Stats.BURN_DAMAGE:
 			if stat_type == Enums.StatType.CURRENT:
 				return stats.burn_damage_current

@@ -7,7 +7,7 @@ extends RoomEvent
 @onready var button: Button = $picEvent/btnEvent
 @onready var items_offering: ItemOffering = $FreeItemOffering
 
-@onready var particles: CPUParticles2D = $particles
+@onready var particles: CPUParticles2D = $picEvent/particles
 
 func _ready():
 	super._ready()  # Call parent's _ready
@@ -53,6 +53,7 @@ func _on_btn_event_pressed() -> void:
 	AudioManager.play_event_sound("coins_fall")
 	anim_labels.play("hide_label")
 	anim_items.play("show_items")
+	items_offering.show_popup()
 
 func _on_btn_event_mouse_exited() -> void:
 	if items_offering.visible == false:

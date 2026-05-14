@@ -7,7 +7,7 @@ extends RoomEvent
 @onready var button: Button = $picTreasure/Button
 @onready var items_offering: ItemOffering = $FreeItemOffering
 
-@onready var particles: CPUParticles2D = $jar_particles
+@onready var particles: CPUParticles2D = $picTreasure/jar_particles
 
 func _ready():
 	print("grave_room -> ready")
@@ -52,6 +52,7 @@ func _on_button_pressed() -> void:
 	CursorManager.reset_cursor()
 	AudioManager.play_event_sound("sarcophagus")
 	anim_box.play("openBox")
+	items_offering.show_popup()
 
 func close_box():
 	anim_box.play("closeBox")

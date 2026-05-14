@@ -6,7 +6,7 @@ extends RoomEvent
 @onready var anim_items: AnimationPlayer = $animItems
 @onready var button: Button = $picEvent/btnEvent
 
-@onready var particles: CPUParticles2D = $particles
+@onready var particles: CPUParticles2D = $picEvent/particles
 @onready var panel_pop: PanelContainer = $panelDone
 @onready var lbl_gold: Label = $panelDone/PanelContainer/VBoxContainer/Label
 

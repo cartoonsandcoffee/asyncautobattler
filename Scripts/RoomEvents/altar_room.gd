@@ -52,6 +52,7 @@ func _on_button_pressed() -> void:
 	AudioManager.play_event_sound("corpse")
 	text_anim.play("altar_hide_text")
 	box_anim.play("altar_open_box")
+	item_combiner.show_popup()
 
 
 func close_box():

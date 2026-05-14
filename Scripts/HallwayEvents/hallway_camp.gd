@@ -6,7 +6,7 @@ extends RoomEvent
 @onready var anim_main: AnimationPlayer = $animMain
 @onready var btn_continue: Button = $btnDone
 @onready var label: RichTextLabel = $lblRested
-@onready var particles: CPUParticles2D = $smoke
+@onready var particles: CPUParticles2D = $picEvent/smoke
 
 var event_active: bool = true
 
@@ -30,7 +30,7 @@ func show_event():
 
 	# -- Heal the player
 	Player.stats.hit_points_current = Player.stats.hit_points
-	Player.add_rooms(5)
+	Player.add_rooms(7)
 	Player.campfires_left_this_rank -= 1
 	if main_game_ref and main_game_ref.has_method("set_player_stats"):
 		main_game_ref.set_player_stats()

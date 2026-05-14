@@ -1,9 +1,9 @@
 class_name BasicMerchantRoomEvent
 extends RoomEvent
 
-@onready var button: Button = $picEvent/Button
+@onready var button: Button = $Control/picEvent/Button
 @onready var item_store: ItemStore = $item_merchant_store
-@onready var lbl_action: Label = $lblAction
+@onready var lbl_action: Label = $Control/lblAction
 
 @onready var anim_label: AnimationPlayer = $animLabel
 @onready var anim_event: AnimationPlayer = $animEvent
