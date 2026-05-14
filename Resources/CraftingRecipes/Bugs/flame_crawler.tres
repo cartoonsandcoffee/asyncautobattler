@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=5 format=3 uid="uid://doq6gmv4yi2q2"]
+
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="1_27lx6"]
+[ext_resource type="Resource" uid="uid://cujl5ch1124qt" path="res://Resources/Items/COMMON/Bugs/firefly.tres" id="1_m3htp"]
+[ext_resource type="Resource" uid="uid://bfh5dsabm3t7v" path="res://Resources/Items/COMMON/Bugs/dark_crawler.tres" id="2_7o8l2"]
+[ext_resource type="Resource" uid="uid://d0ttoauw7v1ct" path="res://Resources/Items/CRAFTED/flame_crawler.tres" id="3_jy7k8"]
+
+[resource]
+script = ExtResource("1_27lx6")
+recipe_name = "Flame Crawler Recipe"
+result_item = ExtResource("3_jy7k8")
+ingredient_1 = ExtResource("1_m3htp")
+ingredient_2 = ExtResource("2_7o8l2")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

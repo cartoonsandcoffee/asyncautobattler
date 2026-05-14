@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=5 format=3 uid="uid://cxkvoy4t62ay0"]
+
+[ext_resource type="Resource" uid="uid://dojehh6j2el5u" path="res://Resources/Items/COMMON/Bugs/corpsehopper.tres" id="1_e2nkr"]
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="1_yf7b2"]
+[ext_resource type="Resource" uid="uid://cmaw7terlhaqh" path="res://Resources/Items/COMMON/Bugs/thorn_bug.tres" id="2_aah1g"]
+[ext_resource type="Resource" uid="uid://bjpag68u0f5v" path="res://Resources/Items/CRAFTED/thorn_hopper.tres" id="3_gvh4t"]
+
+[resource]
+script = ExtResource("1_yf7b2")
+recipe_name = "Thornhopper Recipe"
+result_item = ExtResource("3_gvh4t")
+ingredient_1 = ExtResource("1_e2nkr")
+ingredient_2 = ExtResource("2_aah1g")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

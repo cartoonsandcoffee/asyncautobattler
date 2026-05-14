@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=5 format=3 uid="uid://cuxy4pfv4grpx"]
+
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="1_5qita"]
+[ext_resource type="Resource" uid="uid://bjcwhsgb00cp4" path="res://Resources/Items/COMMON/Bugs/scuttlemite.tres" id="1_bvar2"]
+[ext_resource type="Resource" uid="uid://cujl5ch1124qt" path="res://Resources/Items/COMMON/Bugs/firefly.tres" id="2_rhql1"]
+[ext_resource type="Resource" uid="uid://bhn6an6sgpgae" path="res://Resources/Items/CRAFTED/firemite.tres" id="3_m1rs3"]
+
+[resource]
+script = ExtResource("1_5qita")
+recipe_name = "Firemite Recipe"
+result_item = ExtResource("3_m1rs3")
+ingredient_1 = ExtResource("1_bvar2")
+ingredient_2 = ExtResource("2_rhql1")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

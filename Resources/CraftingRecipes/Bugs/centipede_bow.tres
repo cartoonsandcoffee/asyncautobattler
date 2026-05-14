@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=5 format=3 uid="uid://bp6o46244450h"]
+
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="1_a0dqc"]
+[ext_resource type="Resource" uid="uid://p3wxrinhtge8" path="res://Resources/Items/UNCOMMON/Bugs/illipede.tres" id="1_xxer8"]
+[ext_resource type="Resource" uid="uid://dom0yx6umneq0" path="res://Resources/Items/Weapons/Common/chitinous_tibia.tres" id="2_g7jq2"]
+[ext_resource type="Resource" uid="uid://b0yhjedk3pbec" path="res://Resources/Items/CRAFTED/centepede_bow.tres" id="3_8xhmp"]
+
+[resource]
+script = ExtResource("1_a0dqc")
+recipe_name = "Centipede Bow"
+recipe_id = ""
+result_item = ExtResource("3_8xhmp")
+ingredient_1 = ExtResource("1_xxer8")
+ingredient_2 = ExtResource("2_g7jq2")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

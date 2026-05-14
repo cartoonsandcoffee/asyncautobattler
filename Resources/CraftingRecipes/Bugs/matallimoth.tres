@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=5 format=3 uid="uid://xr7i1jrss0gn"]
+
+[ext_resource type="Resource" uid="uid://bxutqn0j4k42k" path="res://Resources/Items/COMMON/Bugs/bloodmoth.tres" id="1_e88ym"]
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="1_i15cr"]
+[ext_resource type="Resource" uid="uid://bswnlio2cfp8j" path="res://Resources/Items/UNCOMMON/Bugs/armored_beetle.tres" id="2_c7d3w"]
+[ext_resource type="Resource" uid="uid://dov53bdvmi83i" path="res://Resources/Items/CRAFTED/metallimoth.tres" id="3_q0n82"]
+
+[resource]
+script = ExtResource("1_i15cr")
+recipe_name = "Metallimoth"
+recipe_id = ""
+result_item = ExtResource("3_q0n82")
+ingredient_1 = ExtResource("1_e88ym")
+ingredient_2 = ExtResource("2_c7d3w")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

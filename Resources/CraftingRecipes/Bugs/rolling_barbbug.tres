@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=5 format=3 uid="uid://cebifmbdcdj6o"]
+
+[ext_resource type="Resource" uid="uid://btq6kvq4onts3" path="res://Resources/Items/UNCOMMON/Bugs/jaunty_pillbug.tres" id="1_712jy"]
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="1_lbehj"]
+[ext_resource type="Resource" uid="uid://cmaw7terlhaqh" path="res://Resources/Items/COMMON/Bugs/thorn_bug.tres" id="2_hmlja"]
+[ext_resource type="Resource" uid="uid://tvp8lr0qgamg" path="res://Resources/Items/CRAFTED/rolling_barb_bug.tres" id="3_bxvkg"]
+
+[resource]
+script = ExtResource("1_lbehj")
+recipe_name = "Rolling Barb Bug"
+recipe_id = ""
+result_item = ExtResource("3_bxvkg")
+ingredient_1 = ExtResource("1_712jy")
+ingredient_2 = ExtResource("2_hmlja")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

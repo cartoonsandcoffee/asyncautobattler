@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=5 format=3 uid="uid://cirf8b6lk52y"]
+
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="1_2d26a"]
+[ext_resource type="Resource" uid="uid://bjcwhsgb00cp4" path="res://Resources/Items/COMMON/Bugs/scuttlemite.tres" id="1_l7ype"]
+[ext_resource type="Resource" uid="uid://dom0yx6umneq0" path="res://Resources/Items/Weapons/Common/chitinous_tibia.tres" id="2_83b86"]
+[ext_resource type="Resource" uid="uid://dtl6h15f3f7ou" path="res://Resources/Items/CRAFTED/infested_club.tres" id="3_ulogh"]
+
+[resource]
+script = ExtResource("1_2d26a")
+recipe_name = "Infested Club"
+recipe_id = ""
+result_item = ExtResource("3_ulogh")
+ingredient_1 = ExtResource("1_l7ype")
+ingredient_2 = ExtResource("2_83b86")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

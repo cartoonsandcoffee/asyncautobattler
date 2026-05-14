@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=5 format=3 uid="uid://c0jkfme2j2n3a"]
+
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="1_7ex54"]
+[ext_resource type="Resource" uid="uid://btq6kvq4onts3" path="res://Resources/Items/UNCOMMON/Bugs/jaunty_pillbug.tres" id="1_q2kup"]
+[ext_resource type="Resource" uid="uid://bfh5dsabm3t7v" path="res://Resources/Items/COMMON/Bugs/dark_crawler.tres" id="2_ec2gm"]
+[ext_resource type="Resource" uid="uid://bls4g53aoj5f0" path="res://Resources/Items/CRAFTED/midnight_roller.tres" id="3_djirh"]
+
+[resource]
+script = ExtResource("1_7ex54")
+recipe_name = "Midnight Roller"
+recipe_id = ""
+result_item = ExtResource("3_djirh")
+ingredient_1 = ExtResource("1_q2kup")
+ingredient_2 = ExtResource("2_ec2gm")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

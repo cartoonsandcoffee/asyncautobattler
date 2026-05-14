@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=5 format=3 uid="uid://hk0y17nl23uv"]
+
+[ext_resource type="Resource" uid="uid://btq6kvq4onts3" path="res://Resources/Items/UNCOMMON/Bugs/jaunty_pillbug.tres" id="1_2uy24"]
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="1_u1f2r"]
+[ext_resource type="Resource" uid="uid://p3wxrinhtge8" path="res://Resources/Items/UNCOMMON/Bugs/illipede.tres" id="2_gbqwt"]
+[ext_resource type="Resource" uid="uid://dxulb841b1gqt" path="res://Resources/Items/CRAFTED/stink_bug.tres" id="3_2maq0"]
+
+[resource]
+script = ExtResource("1_u1f2r")
+recipe_name = "Stink Bug"
+recipe_id = ""
+result_item = ExtResource("3_2maq0")
+ingredient_1 = ExtResource("1_2uy24")
+ingredient_2 = ExtResource("2_gbqwt")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

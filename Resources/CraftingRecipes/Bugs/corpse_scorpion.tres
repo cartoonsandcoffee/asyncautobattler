@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=5 format=3 uid="uid://b6efj5fdw6q2e"]
+
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="1_l1roj"]
+[ext_resource type="Resource" uid="uid://dojehh6j2el5u" path="res://Resources/Items/COMMON/Bugs/corpsehopper.tres" id="1_mrqg6"]
+[ext_resource type="Resource" uid="uid://gwtkjhno3cxa" path="res://Resources/Items/RARE/Bugs/pit_scorpion.tres" id="2_qybxv"]
+[ext_resource type="Resource" uid="uid://buuavkku5dp6x" path="res://Resources/Items/CRAFTED/corpse_scorpion.tres" id="3_jgm4k"]
+
+[resource]
+script = ExtResource("1_l1roj")
+recipe_name = "Corpse Scorpion Recipe"
+result_item = ExtResource("3_jgm4k")
+ingredient_1 = ExtResource("1_mrqg6")
+ingredient_2 = ExtResource("2_qybxv")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

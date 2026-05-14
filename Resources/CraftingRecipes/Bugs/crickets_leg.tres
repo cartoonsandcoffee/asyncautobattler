@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=5 format=3 uid="uid://bxslgu382nv8b"]
+
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="1_8v5vv"]
+[ext_resource type="Resource" uid="uid://dom0yx6umneq0" path="res://Resources/Items/Weapons/Common/chitinous_tibia.tres" id="1_n4c8l"]
+[ext_resource type="Resource" uid="uid://dojehh6j2el5u" path="res://Resources/Items/COMMON/Bugs/corpsehopper.tres" id="2_v3elt"]
+[ext_resource type="Resource" uid="uid://dncjutsgjjes5" path="res://Resources/Items/CRAFTED/crickets_leg.tres" id="3_lr733"]
+
+[resource]
+script = ExtResource("1_8v5vv")
+recipe_name = "Crickets Leg Recipe"
+recipe_id = ""
+result_item = ExtResource("3_lr733")
+ingredient_1 = ExtResource("1_n4c8l")
+ingredient_2 = ExtResource("2_v3elt")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

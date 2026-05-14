@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=5 format=3 uid="uid://c02w5tirs2pe8"]
+
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="1_flrln"]
+[ext_resource type="Resource" uid="uid://cmaw7terlhaqh" path="res://Resources/Items/COMMON/Bugs/thorn_bug.tres" id="1_vclf2"]
+[ext_resource type="Resource" uid="uid://bswnlio2cfp8j" path="res://Resources/Items/UNCOMMON/Bugs/armored_beetle.tres" id="2_vva2f"]
+[ext_resource type="Resource" uid="uid://c2lso2p8nfokc" path="res://Resources/Items/CRAFTED/prickling_beetle.tres" id="3_0yuin"]
+
+[resource]
+script = ExtResource("1_flrln")
+recipe_name = "Prickling Beetle"
+recipe_id = ""
+result_item = ExtResource("3_0yuin")
+ingredient_1 = ExtResource("1_vclf2")
+ingredient_2 = ExtResource("2_vva2f")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

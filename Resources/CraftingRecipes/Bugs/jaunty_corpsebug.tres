@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=5 format=3 uid="uid://bc7gvbds8opuu"]
+
+[ext_resource type="Resource" uid="uid://dojehh6j2el5u" path="res://Resources/Items/COMMON/Bugs/corpsehopper.tres" id="1_52tm1"]
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="1_xd7ga"]
+[ext_resource type="Resource" uid="uid://btq6kvq4onts3" path="res://Resources/Items/UNCOMMON/Bugs/jaunty_pillbug.tres" id="2_geekh"]
+[ext_resource type="Resource" uid="uid://c80b4flcgbiwf" path="res://Resources/Items/CRAFTED/jaunty_corpsebug.tres" id="3_i25u5"]
+
+[resource]
+script = ExtResource("1_xd7ga")
+recipe_name = "Jaunty Corpsebug"
+recipe_id = ""
+result_item = ExtResource("3_i25u5")
+ingredient_1 = ExtResource("1_52tm1")
+ingredient_2 = ExtResource("2_geekh")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

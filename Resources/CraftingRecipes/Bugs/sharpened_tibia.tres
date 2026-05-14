@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=5 format=3 uid="uid://b6h74dxl2iiq8"]
+
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="1_dwh6n"]
+[ext_resource type="Resource" uid="uid://bswnlio2cfp8j" path="res://Resources/Items/UNCOMMON/Bugs/armored_beetle.tres" id="1_or0le"]
+[ext_resource type="Resource" uid="uid://dom0yx6umneq0" path="res://Resources/Items/Weapons/Common/chitinous_tibia.tres" id="2_raayw"]
+[ext_resource type="Resource" uid="uid://eokqi034fivt" path="res://Resources/Items/CRAFTED/sharpened_tibia.tres" id="3_t2els"]
+
+[resource]
+script = ExtResource("1_dwh6n")
+recipe_name = "Sharpened Tibia"
+recipe_id = ""
+result_item = ExtResource("3_t2els")
+ingredient_1 = ExtResource("1_or0le")
+ingredient_2 = ExtResource("2_raayw")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

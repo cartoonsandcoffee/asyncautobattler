@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=5 format=3 uid="uid://bmcgs5lq71bok"]
+
+[ext_resource type="Resource" uid="uid://cujl5ch1124qt" path="res://Resources/Items/COMMON/Bugs/firefly.tres" id="1_0xtxh"]
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="1_g8qiw"]
+[ext_resource type="Resource" uid="uid://gwtkjhno3cxa" path="res://Resources/Items/RARE/Bugs/pit_scorpion.tres" id="2_dklql"]
+[ext_resource type="Resource" uid="uid://jsvverdyoamv" path="res://Resources/Items/CRAFTED/burning_scorpion.tres" id="3_h3871"]
+
+[resource]
+script = ExtResource("1_g8qiw")
+recipe_name = "Burning Scorpion Recipe"
+result_item = ExtResource("3_h3871")
+ingredient_1 = ExtResource("1_0xtxh")
+ingredient_2 = ExtResource("2_dklql")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

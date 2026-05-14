@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=5 format=3 uid="uid://b6kn7njeg24u6"]
+
+[ext_resource type="Resource" uid="uid://bxutqn0j4k42k" path="res://Resources/Items/COMMON/Bugs/bloodmoth.tres" id="1_a31ig"]
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="1_ynjtq"]
+[ext_resource type="Resource" uid="uid://dh70w8brjqbph" path="res://Resources/Items/COMMON/Bugs/dew_fly.tres" id="2_jjart"]
+[ext_resource type="Resource" uid="uid://bcbk51onaj8pe" path="res://Resources/Items/CRAFTED/mosquito.tres" id="3_fpdp7"]
+
+[resource]
+script = ExtResource("1_ynjtq")
+recipe_name = "Mosquito"
+recipe_id = ""
+result_item = ExtResource("3_fpdp7")
+ingredient_1 = ExtResource("1_a31ig")
+ingredient_2 = ExtResource("2_jjart")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

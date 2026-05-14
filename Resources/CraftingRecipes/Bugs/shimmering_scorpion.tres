@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=5 format=3 uid="uid://taf67lqxnokd"]
+
+[ext_resource type="Resource" uid="uid://dh70w8brjqbph" path="res://Resources/Items/COMMON/Bugs/dew_fly.tres" id="1_2wcnn"]
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="1_5exdy"]
+[ext_resource type="Resource" uid="uid://gwtkjhno3cxa" path="res://Resources/Items/RARE/Bugs/pit_scorpion.tres" id="2_eq33y"]
+[ext_resource type="Resource" uid="uid://dg4ckf340akj" path="res://Resources/Items/CRAFTED/shimmering_scorpion.tres" id="3_0y2ai"]
+
+[resource]
+script = ExtResource("1_5exdy")
+recipe_name = "Shimmering Scorpion"
+recipe_id = ""
+result_item = ExtResource("3_0y2ai")
+ingredient_1 = ExtResource("1_2wcnn")
+ingredient_2 = ExtResource("2_eq33y")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

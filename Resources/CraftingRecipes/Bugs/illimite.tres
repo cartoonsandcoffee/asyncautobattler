@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=5 format=3 uid="uid://cvmlie1apcinv"]
+
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="1_b7bdj"]
+[ext_resource type="Resource" uid="uid://p3wxrinhtge8" path="res://Resources/Items/UNCOMMON/Bugs/illipede.tres" id="1_q0enm"]
+[ext_resource type="Resource" uid="uid://bjcwhsgb00cp4" path="res://Resources/Items/COMMON/Bugs/scuttlemite.tres" id="2_bk1j6"]
+[ext_resource type="Resource" uid="uid://l2ybm0e8o4l" path="res://Resources/Items/CRAFTED/illimite.tres" id="3_vao5j"]
+
+[resource]
+script = ExtResource("1_b7bdj")
+recipe_name = "Illimite Recipe"
+result_item = ExtResource("3_vao5j")
+ingredient_1 = ExtResource("1_q0enm")
+ingredient_2 = ExtResource("2_bk1j6")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

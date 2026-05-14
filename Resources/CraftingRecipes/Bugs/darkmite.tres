@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=5 format=3 uid="uid://ba6e8mrwf2wdm"]
+
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="1_6sotr"]
+[ext_resource type="Resource" uid="uid://bfh5dsabm3t7v" path="res://Resources/Items/COMMON/Bugs/dark_crawler.tres" id="1_ndctd"]
+[ext_resource type="Resource" uid="uid://bjcwhsgb00cp4" path="res://Resources/Items/COMMON/Bugs/scuttlemite.tres" id="2_e6wmu"]
+[ext_resource type="Resource" uid="uid://bg7630cvcyh6d" path="res://Resources/Items/CRAFTED/Darkmite.tres" id="3_i108c"]
+
+[resource]
+script = ExtResource("1_6sotr")
+recipe_name = "Dark Mite"
+recipe_id = ""
+result_item = ExtResource("3_i108c")
+ingredient_1 = ExtResource("1_ndctd")
+ingredient_2 = ExtResource("2_e6wmu")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

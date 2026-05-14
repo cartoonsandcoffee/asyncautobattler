@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=5 format=3 uid="uid://c6rkdjhox8l5v"]
+
+[ext_resource type="Resource" uid="uid://cujl5ch1124qt" path="res://Resources/Items/COMMON/Bugs/firefly.tres" id="1_nv06t"]
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="1_yp6om"]
+[ext_resource type="Resource" uid="uid://cmaw7terlhaqh" path="res://Resources/Items/COMMON/Bugs/thorn_bug.tres" id="2_78kc4"]
+[ext_resource type="Resource" uid="uid://owxbchwvljwi" path="res://Resources/Items/CRAFTED/firebug.tres" id="3_ja5vb"]
+
+[resource]
+script = ExtResource("1_yp6om")
+recipe_name = "Fire Bug Recipe"
+result_item = ExtResource("3_ja5vb")
+ingredient_1 = ExtResource("1_nv06t")
+ingredient_2 = ExtResource("2_78kc4")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

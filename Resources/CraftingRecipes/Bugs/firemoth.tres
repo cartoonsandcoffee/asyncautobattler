@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=5 format=3 uid="uid://yplymy4bvwj8"]
+
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="1_7b8af"]
+[ext_resource type="Resource" uid="uid://bxutqn0j4k42k" path="res://Resources/Items/COMMON/Bugs/bloodmoth.tres" id="1_qogxw"]
+[ext_resource type="Resource" uid="uid://cujl5ch1124qt" path="res://Resources/Items/COMMON/Bugs/firefly.tres" id="2_jlmmr"]
+[ext_resource type="Resource" uid="uid://cscqduo1trcpc" path="res://Resources/Items/CRAFTED/Firemoth.tres" id="3_irocl"]
+
+[resource]
+script = ExtResource("1_7b8af")
+recipe_name = "firemoth"
+recipe_id = ""
+result_item = ExtResource("3_irocl")
+ingredient_1 = ExtResource("1_qogxw")
+ingredient_2 = ExtResource("2_jlmmr")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

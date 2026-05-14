@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=5 format=3 uid="uid://earyaclnkehk"]
+
+[ext_resource type="Resource" uid="uid://p3wxrinhtge8" path="res://Resources/Items/UNCOMMON/Bugs/illipede.tres" id="1_fi6k3"]
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="1_l4xtf"]
+[ext_resource type="Resource" uid="uid://bxutqn0j4k42k" path="res://Resources/Items/COMMON/Bugs/bloodmoth.tres" id="2_kuuwy"]
+[ext_resource type="Resource" uid="uid://ovr43yw3c7ie" path="res://Resources/Items/CRAFTED/plague_moth.tres" id="3_176ox"]
+
+[resource]
+script = ExtResource("1_l4xtf")
+recipe_name = "Plague Moth"
+recipe_id = ""
+result_item = ExtResource("3_176ox")
+ingredient_1 = ExtResource("1_fi6k3")
+ingredient_2 = ExtResource("2_kuuwy")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

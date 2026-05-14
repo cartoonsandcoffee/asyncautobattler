@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=5 format=3 uid="uid://d2go0j2jq3yrm"]
+
+[ext_resource type="Resource" uid="uid://dojehh6j2el5u" path="res://Resources/Items/COMMON/Bugs/corpsehopper.tres" id="1_0nxyx"]
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="1_tuu2v"]
+[ext_resource type="Resource" uid="uid://bswnlio2cfp8j" path="res://Resources/Items/UNCOMMON/Bugs/armored_beetle.tres" id="2_7rpxx"]
+[ext_resource type="Resource" uid="uid://b2hyh1dnhjcs7" path="res://Resources/Items/CRAFTED/reinforced_leaper.tres" id="3_3okpa"]
+
+[resource]
+script = ExtResource("1_tuu2v")
+recipe_name = "Reinforced Leaper"
+recipe_id = ""
+result_item = ExtResource("3_3okpa")
+ingredient_1 = ExtResource("1_0nxyx")
+ingredient_2 = ExtResource("2_7rpxx")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=5 format=3 uid="uid://dvvue38tsu7o1"]
+
+[ext_resource type="Resource" uid="uid://bswnlio2cfp8j" path="res://Resources/Items/UNCOMMON/Bugs/armored_beetle.tres" id="1_5fvvl"]
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="1_j4tfr"]
+[ext_resource type="Resource" uid="uid://btq6kvq4onts3" path="res://Resources/Items/UNCOMMON/Bugs/jaunty_pillbug.tres" id="2_7ju4o"]
+[ext_resource type="Resource" uid="uid://dtccy3kp1xfkc" path="res://Resources/Items/CRAFTED/reinforced_pillbug.tres" id="3_vtjh6"]
+
+[resource]
+script = ExtResource("1_j4tfr")
+recipe_name = "Reinforced Pillbug"
+recipe_id = ""
+result_item = ExtResource("3_vtjh6")
+ingredient_1 = ExtResource("1_5fvvl")
+ingredient_2 = ExtResource("2_7ju4o")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

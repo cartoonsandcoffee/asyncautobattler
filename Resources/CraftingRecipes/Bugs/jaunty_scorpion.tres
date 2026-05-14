@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=5 format=3 uid="uid://cde7cccstg6si"]
+
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="1_6vpr0"]
+[ext_resource type="Resource" uid="uid://gwtkjhno3cxa" path="res://Resources/Items/RARE/Bugs/pit_scorpion.tres" id="1_j7s7o"]
+[ext_resource type="Resource" uid="uid://btq6kvq4onts3" path="res://Resources/Items/UNCOMMON/Bugs/jaunty_pillbug.tres" id="2_l8qpw"]
+[ext_resource type="Resource" uid="uid://bolng7ti3kmha" path="res://Resources/Items/CRAFTED/jaunty_scorpion.tres" id="3_wd522"]
+
+[resource]
+script = ExtResource("1_6vpr0")
+recipe_name = "Jaunty Scorpion"
+result_item = ExtResource("3_wd522")
+ingredient_1 = ExtResource("1_j7s7o")
+ingredient_2 = ExtResource("2_l8qpw")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

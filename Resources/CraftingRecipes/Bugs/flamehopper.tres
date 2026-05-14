@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=5 format=3 uid="uid://byj1gbix2fr8l"]
+
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="1_ayhr0"]
+[ext_resource type="Resource" uid="uid://dojehh6j2el5u" path="res://Resources/Items/COMMON/Bugs/corpsehopper.tres" id="1_d2pe0"]
+[ext_resource type="Resource" uid="uid://cujl5ch1124qt" path="res://Resources/Items/COMMON/Bugs/firefly.tres" id="2_hri41"]
+[ext_resource type="Resource" uid="uid://jx4te5fsgxjf" path="res://Resources/Items/CRAFTED/flamehopper.tres" id="3_tno6l"]
+
+[resource]
+script = ExtResource("1_ayhr0")
+recipe_name = "Flamehopper"
+recipe_id = ""
+result_item = ExtResource("3_tno6l")
+ingredient_1 = ExtResource("1_d2pe0")
+ingredient_2 = ExtResource("2_hri41")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

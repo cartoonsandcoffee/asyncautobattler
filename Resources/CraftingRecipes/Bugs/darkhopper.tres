@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=5 format=3 uid="uid://d0qxiqesfw6xi"]
+
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="1_eih0x"]
+[ext_resource type="Resource" uid="uid://dojehh6j2el5u" path="res://Resources/Items/COMMON/Bugs/corpsehopper.tres" id="1_oysay"]
+[ext_resource type="Resource" uid="uid://bfh5dsabm3t7v" path="res://Resources/Items/COMMON/Bugs/dark_crawler.tres" id="2_dha81"]
+[ext_resource type="Resource" uid="uid://b6sa5gc18ha33" path="res://Resources/Items/CRAFTED/darkhopper.tres" id="3_c7slw"]
+
+[resource]
+script = ExtResource("1_eih0x")
+recipe_name = "darkhopper"
+recipe_id = ""
+result_item = ExtResource("3_c7slw")
+ingredient_1 = ExtResource("1_oysay")
+ingredient_2 = ExtResource("2_dha81")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"

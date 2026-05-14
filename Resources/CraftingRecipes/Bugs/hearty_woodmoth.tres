@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=5 format=3 uid="uid://c0nqsfjqakc3r"]
+
+[ext_resource type="Resource" uid="uid://bxutqn0j4k42k" path="res://Resources/Items/COMMON/Bugs/bloodmoth.tres" id="1_38vy7"]
+[ext_resource type="Script" uid="uid://b3xny6thwxjy7" path="res://Scripts/Classes/CraftingRecipe.gd" id="1_xe74o"]
+[ext_resource type="Resource" uid="uid://bjcwhsgb00cp4" path="res://Resources/Items/COMMON/Bugs/scuttlemite.tres" id="2_s3rer"]
+[ext_resource type="Resource" uid="uid://wtpe6n403kqi" path="res://Resources/Items/CRAFTED/hearty_woodmoth.tres" id="3_61la0"]
+
+[resource]
+script = ExtResource("1_xe74o")
+recipe_name = "Hearty Woodmoth"
+recipe_id = ""
+result_item = ExtResource("3_61la0")
+ingredient_1 = ExtResource("1_38vy7")
+ingredient_2 = ExtResource("2_s3rer")
+is_unlocked = true
+metadata/_custom_type_script = "uid://b3xny6thwxjy7"
