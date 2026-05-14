@@ -2,6 +2,7 @@ extends Control
 
 @onready var list_container: GridContainer = $Panel/PanelContainer/MarginContainer/mainBox/leftBox/VBoxContainer/PanelContainer/ScrollContainer/GridContainer
 @onready var tab_description: Label = $Panel/PanelContainer/MarginContainer/mainBox/leftBox/VBoxContainer/lblMenu
+@onready var scroll_container: ScrollContainer = $Panel/PanelContainer/MarginContainer/mainBox/leftBox/VBoxContainer/PanelContainer/ScrollContainer
 
 @onready var build_box: HBoxContainer = $Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox
 @onready var weapon: GridContainer = $Panel/PanelContainer/MarginContainer/mainBox/rightBox/buildBox/boxInventory/weapon/GridContainer
@@ -41,6 +42,7 @@ func _ready() -> void:
 	#_switch_tab("my_champions")
 	set_buttons()
 	build_box.visible = false
+	scroll_container.get_v_scroll_bar().custom_minimum_size.x = 20
 
 func set_buttons():
 	btn_champions.pressed.connect(_switch_tab.bind("my_champions"))
@@ -332,10 +334,10 @@ func _show_build_details(build: Dictionary) -> void:
 func _load_build_inventory(build: Dictionary) -> void:
 	# Clear existing items
 	for child in inventory.get_children():
-		child.queue_free()
+		child.free()
 
 	for child in weapon.get_children():
-		child.queue_free()
+		child.free()
 
 	# Parse inventory from database format
 	var inv_data = build.get("inventory", [])
@@ -393,10 +395,10 @@ func _display_cached_items(build_id: String) -> void:
 	"""Instantly display pre-loaded items from cache."""
 	# Clear existing items
 	for child in inventory.get_children():
-		child.queue_free()
+		child.free()
 
 	for child in weapon.get_children():
-		child.queue_free()
+		child.free()
 	
 	var cached = _loaded_items_cache.get(build_id, {})
 	var items = cached.get("items", [])
@@ -433,7 +435,7 @@ func _show_set_bonuses(items: Array[Item]) -> void:
 		return
 
 	for child in set_bonuses.get_children():
-		child.queue_free()
+		child.free()
 
 	var item_slot_scene = preload("res://Scenes/item.tscn")
 

@@ -24,6 +24,7 @@ signal settings_menu_closed()
 @onready var check_vsync: CheckBox
 @onready var check_fullscreen: CheckBox
 @onready var check_skip_opening: CheckBox
+@onready var check_fog: CheckBox
 
 # Buttons
 @onready var btn_apply: Button
@@ -64,9 +65,10 @@ func _get_ui_references():
 	# Graphics checkboxes
 	check_crt_effect = get_node_or_null("Panel/pnlBlackBack/pnlBorder/VBoxContainer/panelGraphics/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/checkCRT")
 	check_screen_shake = get_node_or_null("Panel/pnlBlackBack/pnlBorder/VBoxContainer/panelGraphics/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/checkShake")
-	check_vsync = get_node_or_null("Panel/pnlBlackBack/pnlBorder/VBoxContainer/panelGraphics/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/checkVSYNC")
-	check_fullscreen = get_node_or_null("Panel/pnlBlackBack/pnlBorder/VBoxContainer/panelGraphics/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/checkFullscreen")
-	check_skip_opening = get_node_or_null("Panel/pnlBlackBack/pnlBorder/VBoxContainer/panelGraphics/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer2/checkSkipOpening")
+	check_vsync = get_node_or_null("Panel/pnlBlackBack/pnlBorder/VBoxContainer/panelGraphics/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer2/checkVSYNC")
+	check_fullscreen = get_node_or_null("Panel/pnlBlackBack/pnlBorder/VBoxContainer/panelGraphics/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer2/checkFullscreen")
+	check_skip_opening = get_node_or_null("Panel/pnlBlackBack/pnlBorder/VBoxContainer/panelGraphics/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/checkSkipOpening")
+	check_fog = get_node_or_null("Panel/pnlBlackBack/pnlBorder/VBoxContainer/panelGraphics/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/checkFog")
 
 	# Buttons
 	btn_apply = get_node_or_null("Panel/pnlBlackBack/pnlBorder/VBoxContainer/Buttons/btnApply")
@@ -96,6 +98,8 @@ func _connect_signals():
 		check_fullscreen.toggled.connect(_on_fullscreen_toggled)
 	if check_skip_opening:
 		check_skip_opening.toggled.connect(_on_skip_opening_toggled)
+	if check_fog:
+		check_fog.toggled.connect(_on_fog_toggled)
 
 	# Buttons
 	if btn_apply:
@@ -139,6 +143,8 @@ func load_current_settings():
 		check_fullscreen.button_pressed = GameSettings.fullscreen_enabled
 	if check_skip_opening:
 		check_skip_opening.button_pressed = GameSettings.skip_opening
+	if check_fog:
+		check_fog.button_pressed = GameSettings.fog_enabled
 
 func apply_settings():
 	"""Apply all settings to GameSettings and save."""
@@ -188,6 +194,9 @@ func _on_fullscreen_toggled(enabled: bool):
 
 func _on_skip_opening_toggled(enabled: bool):
 	GameSettings.set_skip_opening(enabled)
+
+func _on_fog_toggled(enabled: bool):
+	GameSettings.set_fog(enabled)
 
 ## =============================================================================
 ## BUTTON CALLBACKS

@@ -3,20 +3,42 @@ extends Control
 signal username_confirmed(username: String)
 
 @onready var lbl: Label = $Label
+@onready var lbl_ship: Label = $controlMainMenu/lblShip
+
+@onready var control_loading: Control = $controlLoading
+@onready var control_menu: Control = $controlMainMenu
+@onready var anim_planet: AnimationPlayer = $animPlanet
+
+@onready var lbl_menu: Label = $controlMainMenu/smallButtonHolder/MarginContainer/VBoxContainer/HBoxContainer/lblMenu
+@onready var btn_quit: Button = $controlMainMenu/smallButtonHolder/MarginContainer/VBoxContainer/HBoxContainer/btnQuit
+@onready var btn_info: Button = $controlMainMenu/smallButtonHolder/MarginContainer/VBoxContainer/HBoxContainer/btnInfo
+@onready var btn_settings: Button = $controlMainMenu/smallButtonHolder/MarginContainer/VBoxContainer/HBoxContainer/btnSettings
+
+@onready var anim_play: AnimationPlayer = $animPlay
+@onready var anim_hall: AnimationPlayer = $animHall
+@onready var anim_play_idle: AnimationPlayer = $animPlayIdle
+@onready var anim_hall_idle: AnimationPlayer = $animHallIdle
+@onready var anim_fader: AnimationPlayer = $animFade
+
+@onready var btn_play: Button = $controlMainMenu/controlPlay/picPlay/btnPlay
+@onready var btn_hall: Button = $controlMainMenu/controlHall/picHall/btnHall
 
 @onready var txt_error: Label = $panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/MarginContainer2/txtError
 @onready var txt_name: TextEdit = $panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/txtName
 @onready var btn_name: Button = $panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/btnName
 @onready var panel_name: Panel = $panelName
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
-@onready var main_menu: Panel = $panelMainMenu
+
 @onready var info_panel: Control = $GameInfo
+@onready var champion_panel: Control = $HallofChampions
+@onready var settings_panel: Control = $SettingsPanel
 
 var good_name: bool = false
 var uuid: String = ""
 
 func _ready():
 	# Defer actual game loading to next frame so UI renders
+	anim_planet.play("planet_idle")
 	call_deferred("_initialize_systems")
 
 func _process(delta: float) -> void:
@@ -90,11 +112,42 @@ func _load_game():
 	await get_tree().process_frame
 	
 	# Now load your actual main scene
-	AudioManager.play_general_music()
-	main_menu.visible = true
+	AudioManager.play_main_theme()
+	await anim_planet.animation_finished
+	control_menu.visible = true
+	load_menu_screen()
 	
+func load_menu_screen():
+	btn_quit.pressed.connect(_on_btn_quit_pressed) 
+	btn_info.pressed.connect(_on_btn_info_pressed) 
+	btn_settings.pressed.connect(_on_btn_settings_pressed) 
+	btn_play.pressed.connect(_on_btn_play_pressed) 
+	btn_hall.pressed.connect(_on_btn_hall_pressed)
+
+	btn_quit.mouse_entered.connect(generic_hover.bind("Quit")) 
+	btn_info.mouse_entered.connect(generic_hover.bind("Game Info")) 
+	btn_settings.mouse_entered.connect(generic_hover.bind("Settings")) 
+	btn_play.mouse_entered.connect(btn_play_hover)
+	btn_hall.mouse_entered.connect(btn_hall_hover)
+
+	btn_quit.mouse_exited.connect(generic_unhover) 
+	btn_info.mouse_exited.connect(generic_unhover) 
+	btn_settings.mouse_exited.connect(generic_unhover) 
+	btn_play.mouse_exited.connect(btn_play_unhover)
+	btn_hall.mouse_exited.connect(btn_hall_unhover)
+
+	anim_play.play("show_play")
+	await anim_play.animation_finished
+	anim_play_idle.play("play_idle")
+	anim_hall.play("show_hall")
+	await anim_hall.animation_finished
+	anim_hall_idle.play("hall_idle")
+
+	btn_play.disabled = false
+	btn_hall.disabled = false
 
 func _on_btn_name_pressed() -> void:
+	print("BTN PRESSED - good_name: ", good_name, " text: ", txt_name.text)
 	AudioManager.play_ui_sound("button_click")
 	# Emit the signal to continue profile loading
 	var username = txt_name.text.strip_edges()
@@ -126,10 +179,11 @@ func _load_player_profile():
 	# Fetch from Supabase
 	var profile = await SupabaseManager.get_player_profile(uuid)
 
-	if not profile.is_empty():
+	if profile != null and profile is Dictionary and not profile.is_empty():
 		# Existing player
 		Player.load_profile_from_supabase(profile)
 		lbl.text = "Welcome back, %s!" % Player.player_name
+		lbl_ship.text = Player.player_name
 	else:
 		# New player - show name input and WAIT for completion
 		enter_new_player()
@@ -163,7 +217,21 @@ func _load_player_profile():
 			# Could loop back to try again, or use default name
 		
 
+func generic_hover(_lbl: String):
+	lbl_menu.text = _lbl
+	CursorManager.set_interact_cursor()
+	AudioManager.play_ui_sound("button_hover")
 
+func generic_unhover():
+	lbl_menu.text = ""
+	CursorManager.reset_cursor()
+
+func _on_btn_settings_pressed() -> void:
+	AudioManager.play_ui_sound("button_click")
+	if settings_panel:
+		settings_panel.show_panel()
+	else:
+		push_warning("[MainMenu] Settings panel not found!")
 
 func _on_btn_info_pressed() -> void:
 	info_panel.visible = true
@@ -171,10 +239,35 @@ func _on_btn_info_pressed() -> void:
 func _on_btn_quit_pressed() -> void:
 	get_tree().quit()
 
+func _on_btn_hall_pressed() -> void:
+	champion_panel.visible = true
 
 func _on_btn_play_pressed() -> void:
+	anim_fader.play("fade_out")
+	await anim_fader.animation_finished
 	get_tree().change_scene_to_file("res://Scenes/main_menu.tscn")
 
 
 func enter_new_player():
 	animation_player.play("namebox_flyin")
+
+func btn_play_hover():
+	anim_play.play("show_hover")
+	AudioManager.play_ui_sound("vine_hover")
+	CursorManager.set_interact_cursor()
+
+func btn_play_unhover():
+	anim_play.play("hide_hover")
+	CursorManager.reset_cursor()
+
+func btn_hall_hover():
+	anim_hall.play("show_hover")
+	AudioManager.play_ui_sound("vine_hover")
+	CursorManager.set_interact_cursor()
+
+func btn_hall_unhover():
+	anim_hall.play("hide_hover")
+	CursorManager.reset_cursor()
+
+func play_sound_drop():
+	AudioManager.play_ui_sound("vine_drop")

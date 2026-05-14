@@ -104,10 +104,16 @@ func _on_quit_pressed():
 	if AudioManager:
 		AudioManager.play_ui_sound("button_click")
 	
-	_show_confirm("Are you sure?\nYour current run will be lost.", func():
-		get_tree().paused = false
-		get_tree().change_scene_to_file("res://Scenes/main_menu.tscn")
-	)
+	## Automatically save and quit
+	SaveManager.save_run()
+	get_tree().paused = false
+	get_tree().change_scene_to_file("res://Scenes/main_menu.tscn")
+
+	## Show Prompt
+	#_show_confirm("Are you sure?\nYour current run will be lost.", func():
+	#	get_tree().paused = false
+	#	get_tree().change_scene_to_file("res://Scenes/main_menu.tscn")
+	#)
 
 func _on_new_run_pressed():
 	if AudioManager:
