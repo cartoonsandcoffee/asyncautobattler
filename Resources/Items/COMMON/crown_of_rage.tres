@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="Item" load_steps=5 format=3 uid="uid://4k6slv33vt57"]
+
+[ext_resource type="Texture2D" uid="uid://hl37x7hsnly" path="res://Assets/Items/Helmets.png" id="1_ex7u5"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_ikbul"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_ex7u5"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lr65o"]
+atlas = ExtResource("1_ex7u5")
+region = Rect2(300, 300, 150, 150)
+
+[resource]
+script = ExtResource("2_ex7u5")
+item_id = ""
+base_item_id = ""
+item_name = "Crown of Rage"
+item_type = 16
+item_desc = ""
+item_icon = SubResource("AtlasTexture_lr65o")
+item_color = Color(0.8, 0.24, 0.24, 1)
+item_bundle = 3
+rules = Array[ExtResource("1_ikbul")]([])
+repeat_rules_X_times = 0
+repeat_rules_for_category = ""
+trigger_priority = 0
+trigger_only_once = false
+trigger_only_first_turn = false
+trigger_on_occurrence_number = 0
+occurrence_resets_per_turn = false
+rarity = 0
+categories = Array[String]([])
+rng_weight = 1.0
+unlocked = true
+damage_bonus = 1
+shield_bonus = 0
+agility_bonus = -1
+hit_points_bonus = 0
+strikes_bonus = 0
+burn_damage_bonus = 0
+cant_attack = false
+keywords = Array[String]([])
+metadata/_custom_type_script = "uid://dthg27pchm1fm"

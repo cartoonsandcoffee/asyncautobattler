@@ -6,7 +6,7 @@
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2sqm0"]
 atlas = ExtResource("1_a6e7w")
-region = Rect2(150, 600, 150, 150)
+region = Rect2(900, 450, 150, 150)
 
 [sub_resource type="Resource" id="Resource_es5if"]
 script = ExtResource("1_2ufvv")
@@ -20,7 +20,9 @@ has_condition = false
 condition_type = 0
 condition_of = 4
 condition_stat = 9
+condition_party_stat_type = 0
 condition_status = 10
+condition_item_category = ""
 condition_comparison = ">"
 compare_to = 0
 condition_value = 0
@@ -31,6 +33,7 @@ condition_party_status = 10
 effect_type = 1
 target_type = 1
 target_stat_type = 0
+target_item_category = ""
 target_stat = 9
 target_status = 0
 effect_of = 0
@@ -39,6 +42,7 @@ effect_stat_party = 4
 effect_stat_type = 3
 effect_stat_value = 9
 effect_status_value = 10
+effect_multiplier = 1.0
 convert_from_type = 0
 convert_from_party = 0
 convert_from_stat = 9
@@ -52,6 +56,8 @@ conversion_amount_value = 1
 conversion_ratio = 1.0
 retrigger_type = 1
 retrigger_target = 0
+retrigger_item = 0
+retrigger_category = ""
 special_string = ""
 custom_description = ""
 metadata/_custom_type_script = "uid://dahay7fvi7bik"
@@ -59,11 +65,13 @@ metadata/_custom_type_script = "uid://dahay7fvi7bik"
 [resource]
 script = ExtResource("2_a6e7w")
 item_id = ""
+base_item_id = ""
 item_name = "Poison Sheath"
 item_type = 12
-item_desc = ""
+item_desc = "On Hit: Give the enemy 2 poison. (First turn only)"
 item_icon = SubResource("AtlasTexture_2sqm0")
-item_color = Color(1, 0.4, 1, 1)
+item_color = Color(0.839216, 0.337255, 0.839216, 1)
+item_bundle = 5
 rules = Array[ExtResource("1_2ufvv")]([SubResource("Resource_es5if")])
 repeat_rules_X_times = 0
 repeat_rules_for_category = ""
@@ -82,4 +90,6 @@ agility_bonus = 0
 hit_points_bonus = 0
 strikes_bonus = 0
 burn_damage_bonus = 0
+cant_attack = false
+keywords = Array[String](["Poison"])
 metadata/_custom_type_script = "uid://dthg27pchm1fm"

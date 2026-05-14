@@ -1,0 +1,96 @@
+[gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://b6bb51snjiary"]
+
+[ext_resource type="Texture2D" uid="uid://b00hamhlqto4t" path="res://Assets/Items/Potions.png" id="1_1g2d1"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_no6qv"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_1g2d1"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rfm1h"]
+atlas = ExtResource("1_1g2d1")
+region = Rect2(450, 300, 150, 150)
+
+[sub_resource type="Resource" id="Resource_eco7y"]
+script = ExtResource("1_no6qv")
+trigger_type = 23
+trigger_stat = 9
+trigger_status = 0
+trigger_value_threshold = 0
+countdown_value = 0
+countdown_recurs = false
+has_condition = false
+condition_type = 0
+condition_of = 4
+condition_stat = 9
+condition_party_stat_type = 0
+condition_status = 10
+condition_item_category = ""
+condition_comparison = ">"
+compare_to = 0
+condition_value = 0
+condition_to_party = 4
+condition_stat_type = 3
+condition_party_stat = 9
+condition_party_status = 10
+effect_type = 1
+target_type = 1
+target_stat_type = 0
+target_item_category = ""
+target_stat = 9
+target_status = 0
+effect_of = 0
+effect_amount = 9
+effect_stat_party = 4
+effect_stat_type = 3
+effect_stat_value = 9
+effect_status_value = 10
+effect_multiplier = 1.0
+convert_from_type = 0
+convert_from_party = 0
+convert_from_stat = 9
+convert_from_status = 10
+convert_to_type = 0
+convert_to_party = 0
+convert_to_stat = 9
+convert_to_status = 10
+conversion_amount_type = 0
+conversion_amount_value = 1
+conversion_ratio = 1.0
+retrigger_type = 1
+retrigger_target = 0
+retrigger_item = 0
+retrigger_category = ""
+spend_trigger_flag = false
+special_string = ""
+custom_description = ""
+metadata/_custom_type_script = "uid://dahay7fvi7bik"
+
+[resource]
+script = ExtResource("2_1g2d1")
+item_id = ""
+base_item_id = "blood_from_below"
+item_name = "Super Blood From Below"
+item_type = 8
+item_desc = "The first time the enemy gains poison, give them 9 additional poison."
+item_icon = SubResource("AtlasTexture_rfm1h")
+item_color = Color(0.680327, 0.2214, 0.82, 1)
+item_bundle = 0
+rules = Array[ExtResource("1_no6qv")]([SubResource("Resource_eco7y")])
+repeat_rules_X_times = 0
+repeat_rules_for_category = ""
+trigger_priority = 0
+trigger_only_once = true
+trigger_only_first_turn = false
+trigger_on_occurrence_number = 0
+occurrence_resets_per_turn = false
+rarity = 8
+categories = Array[String](["Unique", "Elixir"])
+rng_weight = 1.0
+unlocked = true
+damage_bonus = 0
+shield_bonus = 0
+agility_bonus = 0
+hit_points_bonus = 0
+strikes_bonus = 0
+burn_damage_bonus = 0
+cant_attack = false
+keywords = Array[String](["Poison"])
+metadata/_custom_type_script = "uid://dthg27pchm1fm"
