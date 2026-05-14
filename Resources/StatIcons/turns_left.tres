@@ -1,0 +1,6 @@
+[gd_resource type="AtlasTexture" load_steps=2 format=3 uid="uid://cp4kilemf84wo"]
+
+[ext_resource type="Texture2D" uid="uid://du2hnv4nfpp78" path="res://Assets/UI/Cursors/busy_hourglass_outline_detail.png" id="1_4re2r"]
+
+[resource]
+atlas = ExtResource("1_4re2r")

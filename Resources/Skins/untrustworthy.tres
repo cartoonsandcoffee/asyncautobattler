@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SkinData" load_steps=5 format=3 uid="uid://sfw8f3cv3rd3"]
+
+[ext_resource type="Script" uid="uid://k4fgb1rs6ix6" path="res://Scripts/Resources/SkinData.gd" id="1_af5fo"]
+[ext_resource type="Texture2D" uid="uid://bffx10anckips" path="res://Assets/monochrome-transparent_packed.png" id="2_c1e73"]
+[ext_resource type="Texture2D" uid="uid://lw3wcfkp33xn" path="res://Assets/Art/Player/PVP/Player_Skin_7.png" id="3_1fgam"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jggy3"]
+atlas = ExtResource("2_c1e73")
+region = Rect2(480, 144, 16, 16)
+
+[resource]
+script = ExtResource("1_af5fo")
+skin_id = 7
+display_name = "Treacherous"
+cost = 30
+sprite = ExtResource("3_1fgam")
+skin_icon = SubResource("AtlasTexture_jggy3")
+is_default = false
+is_unlocked = true
+metadata/_custom_type_script = "uid://k4fgb1rs6ix6"

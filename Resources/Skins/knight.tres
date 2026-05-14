@@ -11,7 +11,7 @@ region = Rect2(448, 0, 16, 16)
 [resource]
 script = ExtResource("1_b0s8l")
 skin_id = 1
-display_name = "Knight"
+display_name = "Dauntless"
 cost = 10
 sprite = ExtResource("3_4ygad")
 skin_icon = SubResource("AtlasTexture_4ygad")

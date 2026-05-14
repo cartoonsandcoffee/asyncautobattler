@@ -11,7 +11,7 @@ region = Rect2(384, 16, 16, 16)
 [resource]
 script = ExtResource("1_5v283")
 skin_id = 2
-display_name = "Mage"
+display_name = "Pensive"
 cost = 10
 sprite = ExtResource("3_gmv5r")
 skin_icon = SubResource("AtlasTexture_gmv5r")

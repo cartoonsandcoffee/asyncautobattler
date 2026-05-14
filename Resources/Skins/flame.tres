@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SkinData" load_steps=5 format=3 uid="uid://cg1kn5bktpkii"]
+
+[ext_resource type="Script" uid="uid://k4fgb1rs6ix6" path="res://Scripts/Resources/SkinData.gd" id="1_a11r3"]
+[ext_resource type="Texture2D" uid="uid://bffx10anckips" path="res://Assets/monochrome-transparent_packed.png" id="2_ignue"]
+[ext_resource type="Texture2D" uid="uid://cndwjfn7ua0jj" path="res://Assets/Art/Player/PVP/Player_Skin_4.png" id="3_jmnyw"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5sbgt"]
+atlas = ExtResource("2_ignue")
+region = Rect2(432, 48, 16, 16)
+
+[resource]
+script = ExtResource("1_a11r3")
+skin_id = 4
+display_name = "Burning"
+cost = 30
+sprite = ExtResource("3_jmnyw")
+skin_icon = SubResource("AtlasTexture_5sbgt")
+is_default = false
+is_unlocked = true
+metadata/_custom_type_script = "uid://k4fgb1rs6ix6"

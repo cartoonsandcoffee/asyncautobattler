@@ -11,7 +11,7 @@ region = Rect2(384, 32, 16, 16)
 [resource]
 script = ExtResource("1_o4m5n")
 skin_id = 3
-display_name = "Warlock"
+display_name = "Disdainful"
 cost = 20
 sprite = ExtResource("3_jfk74")
 skin_icon = SubResource("AtlasTexture_jfk74")
