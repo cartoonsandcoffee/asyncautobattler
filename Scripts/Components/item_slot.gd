@@ -25,6 +25,7 @@ enum ItemType {
 @onready var pic_rarity: TextureRect
 @onready var wep_indicator: TextureRect
 @onready var pnl_rarity: Panel
+@onready var anim_upgrade: AnimationPlayer
 
 @export var item_type: ItemType = ItemType.OTHER
 @export var current_item: Item = null
@@ -34,11 +35,7 @@ var slot_index: int = -1  # to track position
 var is_dragging: bool = false  
 var is_combat_highlighted: bool = false
 var is_in_crafting_slot: bool = false
-
-# stuff for double click
-var click_count: int = 0
-var click_timer: float = 0.0
-var double_click_time: float = 0.3  # Time window for double-click
+var is_locked: bool = false
 
 var is_from_compendium: bool = false
 var owner_entity = null
@@ -46,6 +43,7 @@ var owner_entity = null
 var default_grey: Color = Color("#9b9b9b")
 
 var gamecolors: GameColors
+var locked_icon: Texture2D = load("res://Resources/StatIcons/locked.tres")
 
 func _ready() -> void:
 	set_references()
@@ -64,6 +62,7 @@ func set_references():
 	lbl_countdown = $Panel/VBoxContainer/itemContainer/lblCountdown
 	wep_indicator = $Panel/VBoxContainer/itemContainer/wepIndicator
 	set_shader = $Panel/VBoxContainer/itemContainer/MarginContainer/item_icon/shaderRect
+	anim_upgrade = $animUpgrade
 
 	if !button.button_down.is_connected(_on_button_down):
 		button.button_down.connect(_on_button_down)
@@ -89,6 +88,11 @@ func set_item(item: Item):
 		button.disabled = false
 		pnl_rarity.visible = true
 
+		if ItemsManager.player_has_duplicate(item, true):
+			show_upgrade_anim()
+		else:
+			stop_upgrade_anim()
+
 		# Initialize countdown display
 		if item.trigger_on_occurrence_number > 0:
 			lbl_countdown.text = str(item.trigger_on_occurrence_number)
@@ -97,6 +101,17 @@ func set_item(item: Item):
 			lbl_countdown.visible = false
 	else:
 		set_empty()
+
+func show_upgrade_anim():
+	if current_item.rarity == Enums.Rarity.COMMON:
+		anim_upgrade.play("show_gold")
+	elif current_item.rarity == Enums.Rarity.GOLDEN:
+		anim_upgrade.play("show_diamond")
+	else:
+		anim_upgrade.play("upgrade_show")
+
+func stop_upgrade_anim():
+	anim_upgrade.play("RESET")
 
 func set_item_type_desc():
 	if current_item:
@@ -153,6 +168,24 @@ func set_empty():
 	button.disabled = true
 	pnl_rarity.visible = false
 	lbl_countdown.visible = false
+	item_icon.texture = null
+	item_icon.self_modulate = Color.WHITE
+	lbl_order.text = ""
+	stop_upgrade_anim()
+
+func set_locked(locked: bool) -> void:
+	is_locked = locked
+
+	if locked:
+		modulate.a = 0.2 if locked else 1.0
+		item_icon.texture = locked_icon
+		mouse_filter = MOUSE_FILTER_IGNORE if locked else MOUSE_FILTER_STOP
+		button.disabled = true
+		current_item = null
+		item_instance_id = -1
+		pnl_rarity.visible = false
+		lbl_countdown.visible = false
+
 
 func update_visuals():
 	if current_item:
@@ -276,6 +309,8 @@ func _on_button_mouse_exited() -> void:
 	panel_border.modulate = Color.WHITE
 
 func _on_button_mouse_entered() -> void:
+	if is_locked:
+		return	
 	if current_item && current_item.item_type != Item.ItemType.SET_BONUS:
 		if !button.disabled:
 			if current_item && !is_dragging:  # Only if slot has item
@@ -292,12 +327,18 @@ func _on_button_mouse_entered() -> void:
 			panel_border.modulate = Color(1.2, 1.2, 1.2)		
 
 func _on_button_down():
+	if is_locked:
+		return
+	
 	if CombatManager.combat_active:
 		return null  # Disable dragging during combat	
 	
 	if is_dragging:
 		return
 
+	if is_from_compendium:
+		return
+		
 	if get_tree().get_first_node_in_group("main_game").is_dragging:
 		return
 
@@ -309,6 +350,7 @@ func _on_button_down():
 		CursorManager.set_item_grab_cursor()
 		AudioManager.play_ui_sound("item_pickup")
 		modulate.a = 0.4  # Make semi-transparent while dragging
+		show_tooltip()
 
 func _on_button_up():
 	if is_dragging:
@@ -320,22 +362,8 @@ func _on_button_up():
 			modulate.a = 1.0
 
 func _on_button_pressed():
-	click_count += 1
-	click_timer = 0.0
-	
 	if CombatManager.combat_active:
 		return false  # Disable dropping during combat
-
-
-
-	if click_count == 1:
-		# Start timer for potential double-click
-		pass
-	elif click_count == 2:
-		# Double-click detected
-		slot_double_clicked.emit()
-		click_count = 0
-
 
 
 func _on_button_gui_input(event: InputEvent):
@@ -349,20 +377,19 @@ func set_selectable(_set: bool):
 
 func _can_drop_data(position: Vector2, data) -> bool:
 	# Allow dropping if we're an empty slot or swapping
+	if is_locked:
+		return false	
 	return data is Dictionary and data.has("item")
 
 func _drop_data(position: Vector2, data):
+	if is_locked:
+		return
+	
 	if data.has("from_slot"):
 		slot_dropped_on.emit(self, data.item)
 
-func _on_click_timeout():
-	if click_count == 1:
-		# Single click - emit normal click signal
-		slot_clicked.emit(self)
+func show_drag_hover():
+	anim_hover.play("hover")
 
-func _process(delta):
-	if click_count > 0:
-		click_timer += delta
-		if click_timer >= double_click_time:
-			_on_click_timeout()
-			click_count = 0
+func hide_drag_hover():
+	anim_hover.play("stop")

@@ -38,6 +38,8 @@ func set_references():
 	lbl_motive1 = $Panel/PanelContainer/MarginContainer/HBoxContainer/classBox/pnlMotive1/lblMotive1
 	lbl_motive2 = $Panel/PanelContainer/MarginContainer/HBoxContainer/classBox/pnlMotive2/lblMotive2
 	lbl_motive3 = $Panel/PanelContainer/MarginContainer/HBoxContainer/classBox/pnlMotive3/lblMotive3
+	btn_main = $Panel/PanelContainer/MarginContainer/Button
+	btn_main.focus_mode = Control.FOCUS_NONE   # ← ADD THIS
 
 func set_active(is_active: bool):
 	lbl_active.visible = is_active

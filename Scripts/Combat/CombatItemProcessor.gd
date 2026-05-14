@@ -39,7 +39,7 @@ func process_items(entity, trigger_type: Enums.TriggerType, trigger_stat = Enums
 		# Check if this item can trigger
 		if can_item_trigger(entity, item, rule, trigger_type):
 			# Increment occurrence counter
-			increment_occurrence_counter(entity, item, trigger_type)
+			increment_occurrence_counter(entity, item, trigger_type, rule)
 			
 			# Check if occurrence number matches
 			if check_occurrence_match(entity, item, rule, trigger_type):
@@ -64,7 +64,7 @@ func process_items_with_status(entity, trigger_type: Enums.TriggerType, trigger_
 		var rule = item_data.rule
 		
 		if can_item_trigger(entity, item, rule, trigger_type):
-			increment_occurrence_counter(entity, item, trigger_type)
+			increment_occurrence_counter(entity, item, trigger_type, rule)
 			
 			if check_occurrence_match(entity, item, rule, trigger_type):
 				validated_items.append(item_data)
@@ -318,31 +318,24 @@ func can_item_trigger(entity, item: Item, rule: ItemRule, trigger_type: Enums.Tr
 
 # ===== OCCURRENCE SYSTEM =====
 
-func increment_occurrence_counter(entity, item: Item, trigger_type: Enums.TriggerType):
-	# Increment the occurrence counter for this item/trigger combination.
-
+func increment_occurrence_counter(entity, item: Item, trigger_type: Enums.TriggerType, rule: ItemRule = null):
 	if not occurrence_counters.has(entity):
 		occurrence_counters[entity] = {}
-	
 	if not occurrence_counters[entity].has(trigger_type):
 		occurrence_counters[entity][trigger_type] = {}
-	
-	if not occurrence_counters[entity][trigger_type].has(item):
-		occurrence_counters[entity][trigger_type][item] = 0
-	
-	occurrence_counters[entity][trigger_type][item] += 1
+	var key = rule if rule != null else item
+	if not occurrence_counters[entity][trigger_type].has(key):
+		occurrence_counters[entity][trigger_type][key] = 0
+	occurrence_counters[entity][trigger_type][key] += 1
 
-	# Emit signal for UI update
 	if item.trigger_on_occurrence_number > 0:
-		var current = occurrence_counters[entity][trigger_type][item]
-		# If trigger_only_once and already triggered, show "X" or hide counter
+		var current = occurrence_counters[entity][trigger_type][key]
 		if item.trigger_only_once and has_item_triggered(entity, item):
-			occurrence_updated.emit(entity, item, trigger_type, current, 0)  # Show 0 or hide
+			occurrence_updated.emit(entity, item, trigger_type, current, 0)
 		else:
-			# Calculate remaining until next trigger
 			var remaining = item.trigger_on_occurrence_number - (current % item.trigger_on_occurrence_number)
 			if remaining == item.trigger_on_occurrence_number:
-				remaining = 0  # Just triggered
+				remaining = 0
 			occurrence_updated.emit(entity, item, trigger_type, current, remaining)
 
 func check_occurrence_match(entity, item: Item, rule: ItemRule, trigger_type: Enums.TriggerType) -> bool:
@@ -356,23 +349,18 @@ func check_occurrence_match(entity, item: Item, rule: ItemRule, trigger_type: En
 	# If no occurrence number set, always trigger
 	if item.trigger_on_occurrence_number <= 0:
 		return true
-	
-	# Get current count
-	var count = get_occurrence_count(entity, item, trigger_type)
-	
-	# Check if count is a multiple of the occurrence number
+	var count = get_occurrence_count(entity, item, trigger_type, rule)
 	return (count % item.trigger_on_occurrence_number) == 0
 
-func get_occurrence_count(entity, item: Item, trigger_type: Enums.TriggerType) -> int:
-	"""Get the current occurrence count for this item/trigger."""
+func get_occurrence_count(entity, item: Item, trigger_type: Enums.TriggerType, rule: ItemRule = null) -> int:
 	if not occurrence_counters.has(entity):
 		return 0
 	if not occurrence_counters[entity].has(trigger_type):
 		return 0
-	if not occurrence_counters[entity][trigger_type].has(item):
+	var key = rule if rule != null else item
+	if not occurrence_counters[entity][trigger_type].has(key):
 		return 0
-	
-	return occurrence_counters[entity][trigger_type][item]
+	return occurrence_counters[entity][trigger_type][key]
 
 func reset_occurrence_counters_per_turn(entity):
 	#Reset occurrence counters for items with occurrence_resets_per_turn = true.
@@ -397,17 +385,16 @@ func reset_occurrence_counters_per_turn(entity):
 				_reset_item_occurrences(entity, ability)
 
 func _reset_item_occurrences(entity, item: Item):
-	"""Reset all occurrence counters for a specific item."""
 	if not occurrence_counters.has(entity):
 		return
-	
 	for trigger_type in occurrence_counters[entity].keys():
-		if occurrence_counters[entity][trigger_type].has(item):
-			occurrence_counters[entity][trigger_type][item] = 0
-
-			# Emit signal for UI reset
-			if item.trigger_on_occurrence_number > 0:
-				occurrence_updated.emit(entity, item, trigger_type, 0, item.trigger_on_occurrence_number)
+		for key in occurrence_counters[entity][trigger_type].keys():
+			# Reset any key that belongs to this item (rule keys or item key)
+			var belongs = (key == item) or (key is ItemRule and item.rules.has(key))
+			if belongs:
+				occurrence_counters[entity][trigger_type][key] = 0
+				if item.trigger_on_occurrence_number > 0:
+					occurrence_updated.emit(entity, item, trigger_type, 0, item.trigger_on_occurrence_number)
 
 func _reset_only_once_per_turn_itmes(entity):
 	# JDM: This SHOULD use the "Trigger_only_once" and "Occurrence_resets_per_turn" variables in conjunction

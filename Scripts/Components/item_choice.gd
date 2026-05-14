@@ -16,8 +16,8 @@ enum ChoiceType {
 @onready var item_icon: TextureRect 
 @onready var wep_indicator: TextureRect 
 @onready var anim_hover: AnimationPlayer
-#@onready var tooltip: Control
-#@onready var tooltip_panel: Panel
+@onready var anim_upgrade: AnimationPlayer
+
 @onready var button: Button
 @onready var box_cost: HBoxContainer
 @onready var box_poor: HBoxContainer
@@ -59,6 +59,7 @@ func set_references():
 	wep_indicator = $Panel/VBoxContainer/itemContainer/wep_indicator
 	pic_rarity = $Panel/VBoxContainer/itemContainer/pnlRare/picRarity
 	pnl_rarity = $Panel/VBoxContainer/itemContainer/pnlRare
+	anim_upgrade = $animUpgrade
 
 	if choice_type == ChoiceType.REWARD:
 		price_container.visible = false
@@ -74,6 +75,10 @@ func set_item(item: Item):
 		update_visuals()
 		button.disabled = false
 		pnl_rarity.visible = true
+		if ItemsManager.player_has_duplicate(item, false):
+			show_upgrade_anim()
+		else:
+			stop_upgrade_anim()
 	else:
 		set_empty()
 	
@@ -269,3 +274,14 @@ func _on_button_pressed() -> void:
 		item_selected.emit(current_item)
 	elif choice_type == ChoiceType.PURCHASE:
 		item_purchased.emit(self)
+
+func show_upgrade_anim():
+	if current_item.rarity == Enums.Rarity.COMMON:
+		anim_upgrade.play("show_gold")
+	elif current_item.rarity == Enums.Rarity.GOLDEN:
+		anim_upgrade.play("show_diamond")
+	else:
+		anim_upgrade.play("upgrade_show")
+
+func stop_upgrade_anim():
+	anim_upgrade.play("RESET")

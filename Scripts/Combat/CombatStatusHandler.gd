@@ -24,7 +24,7 @@ func _init(manager, stat_handler_ref: CombatStatHandler):
 	
 # ===== STATUS APPLICATION =====
 
-func apply_status(entity, status: Enums.StatusEffects, stacks: int, log_gain: bool = true, source_item: Item = null):
+func apply_status(entity, status: Enums.StatusEffects, stacks: int, source_item: Item = null):
 	# Apply status effect stacks to an entity.
 	# Automatically triggers ON_STATUS_GAINED items.
 
@@ -38,14 +38,6 @@ func apply_status(entity, status: Enums.StatusEffects, stacks: int, log_gain: bo
 	
 	var new_value = get_status_value(entity, status)
 	
-	var combat_panel = combat_manager.get_tree().get_first_node_in_group("combat_panel")
-	if not CombatSpeed.is_instant_mode():
-		if combat_panel:
-			combat_panel.spawn_status_box_update(entity, status, new_value)
-
-	if log_gain:
-		combat_manager.add_to_combat_log_string(CombatLog.fmt_status_gain(_get_entity_name(entity), status, stacks, new_value))
-
 	# Trigger ON_STATUS_GAINED items
 	status_gained_triggered.emit(entity, status, new_value, source_item)
 
@@ -70,17 +62,10 @@ func remove_status(entity, status: Enums.StatusEffects, stacks: int):
 	entity.status_effects.decrement_status(status, stacks)
 	
 	var new_value = get_status_value(entity, status)
-	
+
 	# Handle Blessing
 	if status == Enums.StatusEffects.BLESSING:
 		_process_blessing(entity, stacks)
-
-	var combat_panel = combat_manager.get_tree().get_first_node_in_group("combat_panel")
-	if not CombatSpeed.is_instant_mode():
-		if combat_panel:
-			combat_panel.spawn_status_box_update(entity, status, new_value)
-
-	combat_manager.add_to_combat_log_string(CombatLog.fmt_status_lose(_get_entity_name(entity), status, stacks, new_value))
 
 	# Trigger ON_STATUS_REMOVED items (even if partial removal)
 	status_removed_triggered.emit(entity, status, new_value)
@@ -149,13 +134,8 @@ func process_turn_start_status_effects(entity):
 	#combat_manager.add_to_combat_log_string("%s's status effects:" % CombatLog.color_entity(combat_manager.get_entity_name(entity)))
 
 	# Process each status effect type
-	await _process_acid(entity)
-	await _process_poison(entity)
-
-	# New timing code instead of all the CombatSpeed.create_timer(...) calls for visual procs
-	var combat_panel = get_tree().get_first_node_in_group("combat_panel")
-	if combat_panel:
-		await combat_panel.wait_for_indicator_queue_to_finish()
+	_process_acid(entity)
+	_process_poison(entity)
 
 
 # ===== INDIVIDUAL STATUS PROCESSORS =====
@@ -172,19 +152,13 @@ func _process_poison(entity):
 	# Check if entity has shield
 	if entity.stats.shield_current > 0:
 		# Shield blocks poison - no damage, but poison still decrements
-		combat_manager.add_to_combat_log_string(CombatLog.fmt_status_blocked(_get_entity_name(entity), Enums.Stats.SHIELD, Enums.StatusEffects.POISON, damage))
+		combat_manager.event_queue.enqueue(CombatEvent.log(CombatLog.fmt_status_blocked(_get_entity_name(entity), Enums.Stats.SHIELD, Enums.StatusEffects.POISON, damage)))
 	else:
-		# No shield - poison damages HP directly
-		var old_hp = entity.stats.hit_points_current
-		stat_handler.change_stat(entity, Enums.Stats.HITPOINTS, -damage)
-		var new_hp = entity.stats.hit_points_current
-
-		combat_manager.add_to_combat_log_string(CombatLog.fmt_status_proc_with_range(Enums.StatusEffects.POISON, _get_entity_name(entity), damage, old_hp, new_hp))
-
-		combat_manager.status_proc.emit(entity, Enums.StatusEffects.POISON, Enums.Stats.HITPOINTS, -damage)
+		combat_manager.event_queue.enqueue(CombatEvent.modify_stat(entity, Enums.Stats.HITPOINTS, -damage, Enums.StatType.CURRENT, null, "poison"))
+		combat_manager.event_queue.enqueue(CombatEvent.status_proc_visual(entity, Enums.StatusEffects.POISON, Enums.Stats.HITPOINTS, -damage))
 	
 	# Always decrement poison by 1
-	remove_status(entity, Enums.StatusEffects.POISON, 1)
+	combat_manager.event_queue.enqueue(CombatEvent.remove_status(entity, Enums.StatusEffects.POISON, 1))
 
 func _process_burn(entity):
 	# Burn: Damages HP based on burn_damage stat * burn stacks.
@@ -195,8 +169,6 @@ func _process_burn(entity):
 	if entity.status_effects.burn <= 0:
 		return
 	
-	var burn_stacks = entity.status_effects.burn
-	
 	# Get the source of the burn (opposite entity)
 	var burn_source = combat_manager.enemy_entity if entity == combat_manager.player_entity else combat_manager.player_entity
 	
@@ -205,15 +177,13 @@ func _process_burn(entity):
 	var total_damage = burn_damage_per_stack
 	
 	# LOG the burn proc
-	combat_manager.add_to_combat_log_string(CombatLog.fmt_status_proc(Enums.StatusEffects.BURN, _get_entity_name(entity), total_damage))
+	combat_manager.event_queue.enqueue(CombatEvent.log(CombatLog.fmt_status_proc(Enums.StatusEffects.BURN, _get_entity_name(entity), total_damage)))
 
 	# Apply burn damage through damage system
-	# This respects shield and can trigger EXPOSED
-	if combat_manager.damage_system:
-		await combat_manager.damage_system.apply_damage(entity, total_damage, burn_source, "burn")
+	combat_manager.event_queue.enqueue(CombatEvent.deal_damage(burn_source, entity, total_damage, "burn"))
 		
 	# Decrement burn by 1
-	remove_status(entity, Enums.StatusEffects.BURN, 1)
+	combat_manager.event_queue.enqueue(CombatEvent.remove_status(entity, Enums.StatusEffects.BURN, 1))
 
 	if _check_for_persistent_burn_rule(burn_source): #check if the entity applying the burn has "burn triggers twice" item.
 		_process_burn_second_time(entity)
@@ -223,9 +193,7 @@ func _process_burn_second_time(entity):
 	
 	if entity.status_effects.burn <= 0:
 		return
-	
-	var burn_stacks = entity.status_effects.burn
-	
+
 	# Get the source of the burn (opposite entity)
 	var burn_source = combat_manager.enemy_entity if entity == combat_manager.player_entity else combat_manager.player_entity
 	
@@ -234,15 +202,13 @@ func _process_burn_second_time(entity):
 	var total_damage = burn_damage_per_stack
 	
 	# LOG the burn proc
-	combat_manager.add_to_combat_log_string(CombatLog.fmt_status_proc(Enums.StatusEffects.BURN, _get_entity_name(entity), total_damage))
+	combat_manager.event_queue.enqueue(CombatEvent.log(CombatLog.fmt_status_proc(Enums.StatusEffects.BURN, _get_entity_name(entity), total_damage)))
 
 	# Apply burn damage through damage system
-	# This respects shield and can trigger EXPOSED
-	if combat_manager.damage_system:
-		await combat_manager.damage_system.apply_damage(entity, total_damage, burn_source, "burn")
+	combat_manager.event_queue.enqueue(CombatEvent.deal_damage(burn_source, entity, total_damage, "burn"))
 		
 	# Decrement burn by 1
-	remove_status(entity, Enums.StatusEffects.BURN, 1)
+	combat_manager.event_queue.enqueue(CombatEvent.remove_status(entity, Enums.StatusEffects.BURN, 1))
 
 func _process_acid(entity):
 	# Acid: Damages shield only, does NOT decrement naturally. Can trigger EXPOSED when shield reaches 0.
@@ -256,30 +222,27 @@ func _process_acid(entity):
 	if entity.stats.shield_current > 0:
 		var old_shield = entity.stats.shield_current
 		var damage_dealt = mini(damage, entity.stats.shield_current)
-		
-		# Apply to shield
-		stat_handler.change_stat(entity, Enums.Stats.SHIELD, -damage_dealt)
-		var new_shield = entity.stats.shield_current
+		var new_shield = max(0, old_shield - damage_dealt)
 
-		# LOG with colors
-		combat_manager.add_to_combat_log_string(CombatLog.fmt_status_proc_with_range(Enums.StatusEffects.ACID, _get_entity_name(entity), damage_dealt, old_shield, new_shield, Enums.Stats.SHIELD))
+		# Apply to shield
+		combat_manager.event_queue.enqueue(CombatEvent.modify_stat(entity, Enums.Stats.SHIELD, -damage_dealt, Enums.StatType.CURRENT, null, "acid"))
 
 		# Get the source of the acid (opposite entity)
 		var acid_source = combat_manager.enemy_entity if entity == combat_manager.player_entity else combat_manager.player_entity
 	
 		# Visual feedback
 		var stat_for_visual = Enums.Stats.SHIELD
-		if entity.stats.shield_current == 0:
+		if new_shield == 0:
 			stat_for_visual = Enums.Stats.EXPOSED
 		
-		combat_manager.status_proc.emit(entity, Enums.StatusEffects.ACID, stat_for_visual, -damage_dealt)
+		combat_manager.event_queue.enqueue(CombatEvent.status_proc_visual(entity, Enums.StatusEffects.ACID, stat_for_visual, -damage_dealt))
 		acid_proc_triggered.emit(acid_source, damage_dealt)
 	else:
-		combat_manager.add_to_combat_log_string("   %s: %s has no %s to damage." % [
-				CombatLog.color_status(Enums.StatusEffects.ACID),
-				CombatLog.color_entity(_get_entity_name(entity)),
-				CombatLog.color_stat(Enums.Stats.SHIELD)])
-
+		combat_manager.event_queue.enqueue(CombatEvent.log("   %s: %s has no %s to damage." % [
+			CombatLog.color_status(Enums.StatusEffects.ACID),
+			CombatLog.color_entity(_get_entity_name(entity)),
+			CombatLog.color_stat(Enums.Stats.SHIELD)
+		]))
 	# NOTE: Acid does NOT decrement naturally
 
 func _process_regeneration(entity):
@@ -290,37 +253,21 @@ func _process_regeneration(entity):
 	
 	var heal_amount:int = entity.status_effects.regeneration
 	var old_hp:int = entity.stats.hit_points_current
-
-	# Heal through stat handler
-	stat_handler.change_stat(entity, Enums.Stats.HITPOINTS, heal_amount)
 	
-	# heal through the damage system healer
-	#combat_manager.damage_system.heal_entity(entity, heal_amount, null, false )
-	
-	var new_hp: int  = entity.stats.hit_points_current
+	var max_hp: int = entity.stats.hit_points
+	var new_hp: int = min(old_hp + heal_amount, max_hp)   # preview
 	var actual_heal: int  = new_hp - old_hp
 	var overheal: int = heal_amount - actual_heal
 
-	if actual_heal > 0:
-		combat_manager.add_to_combat_log_string(CombatLog.fmt_heal(_get_entity_name(entity), actual_heal, old_hp, new_hp, Enums.StatusEffects.REGENERATION))
-		
-		combat_manager.status_proc.emit(entity, Enums.StatusEffects.REGENERATION, Enums.Stats.HITPOINTS, heal_amount)
+	combat_manager.event_queue.enqueue(CombatEvent.modify_stat(entity, Enums.Stats.HITPOINTS, heal_amount))
+	combat_manager.event_queue.enqueue(CombatEvent.status_proc_visual(entity, Enums.StatusEffects.REGENERATION, Enums.Stats.HITPOINTS, heal_amount))
 
-		if overheal > 0:
-			combat_manager.add_to_combat_log_string(CombatLog.fmt_overheal(_get_entity_name(entity), overheal))
-			overheal_triggered.emit(entity, overheal)
-	else:
-		combat_manager.add_to_combat_log_string(CombatLog.fmt_overheal(_get_entity_name(entity), overheal))
+	if overheal > 0:
 		overheal_triggered.emit(entity, overheal)
-		combat_manager.add_to_combat_log_string("   %s: %s is already at full %s. (Overheal %s)" % [
-				CombatLog.color_status(Enums.StatusEffects.REGENERATION),
-				CombatLog.color_entity(_get_entity_name(entity)),
-				CombatLog.color_stat(Enums.Stats.HITPOINTS),
-				str(overheal)
-			])
+
 
 	# Decrement regen by 1
-	remove_status(entity, Enums.StatusEffects.REGENERATION, 1)
+	combat_manager.event_queue.enqueue(CombatEvent.remove_status(entity, Enums.StatusEffects.REGENERATION, 1))
 
 func _process_blind(entity):
 	# Blind: Placeholder behavior - currently just decrements.
@@ -330,47 +277,56 @@ func _process_blind(entity):
 		return
 	
 	# Decrement blind by 1
-	remove_status(entity, Enums.StatusEffects.BLIND, 1)
+	combat_manager.event_queue.enqueue(CombatEvent.remove_status(entity, Enums.StatusEffects.BLIND, 1))
 
 func _process_blessing(entity, _stacks: int):
 	# Blessing: Special behavior on removal (heal 3 and gain 1 damage).
-	var heal_per_stack = 3
-	var damage_per_stack = 1
+	var heal_per_stack = GameStats.BASE_BLESSING_HEAL
+	var damage_per_stack = GameStats.BASE_BLESSING_DAMAGE
+	
+	var doublings = _count_persistent_blessing_doublings(entity)
+	for i in range(doublings):
+		heal_per_stack *= 2
+		damage_per_stack *= 2
 	
 	var total_heal = heal_per_stack * _stacks
 	var total_damage = damage_per_stack * _stacks
 
 	var old_hp: int = entity.stats.hit_points_current
+	var max_hp: int = entity.stats.hit_points
+	var actual_heal: int = min(total_heal, max_hp - old_hp)
+	var overheal: int = total_heal - actual_heal
 
 	if total_heal > 0:
-		combat_manager.damage_system.heal_entity(entity, total_heal, null)
+		combat_manager.event_queue.enqueue_next(CombatEvent.modify_stat(entity, Enums.Stats.HITPOINTS, total_heal, Enums.StatType.CURRENT, null, "Blessing"))
 	if total_damage > 0:
-		#stat_handler.change_stat(entity, Enums.Stats.DAMAGE, total_damage, Enums.StatType.CURRENT)
 		entity.stats.modify_combat_temp_stat(Enums.Stats.DAMAGE, total_damage)
-
-	var new_hp: int  = entity.stats.hit_points_current
-	var actual_heal: int  = new_hp - old_hp
-	var overheal: int = total_heal - actual_heal
 
 	# LOG with colors
 	if actual_heal > 0:
-		combat_manager.status_proc.emit(entity, Enums.StatusEffects.BLESSING, Enums.Stats.HITPOINTS, actual_heal)
-
-	combat_manager.add_to_combat_log_string(
-		"   %s: Removed %d from %s. Healing %s %s gaining %s attack." % [
-			CombatLog.color_status(Enums.StatusEffects.BLESSING),
-			_stacks,
-			CombatLog.color_entity(_get_entity_name(entity)),
-			CombatLog.color(str(total_heal), CombatLog._stat_color(Enums.Stats.HITPOINTS)) + CombatLog.icon_stat(Enums.Stats.HITPOINTS),
-			CombatLog.color(str(total_damage), CombatLog._stat_color(Enums.Stats.DAMAGE)) + CombatLog.icon_stat(Enums.Stats.DAMAGE)
-		]
-	)
+		combat_manager.event_queue.enqueue_next(CombatEvent.status_proc_visual(entity, Enums.StatusEffects.BLESSING, Enums.Stats.HITPOINTS, actual_heal))
 
 	if overheal > 0:
-		combat_manager.add_to_combat_log_string(CombatLog.fmt_overheal(_get_entity_name(entity), overheal))
 		overheal_triggered.emit(entity, overheal)
 
-	combat_manager.status_proc.emit(entity, Enums.StatusEffects.BLESSING, Enums.Stats.DAMAGE, _stacks)
+	combat_manager.event_queue.enqueue_next(CombatEvent.status_proc_visual(entity, Enums.StatusEffects.BLESSING, Enums.Stats.DAMAGE, _stacks))
+
+	var overheal_str: String = ""
+	var actual_heal_str: String = ""
+
+	if overheal > 0:
+		overheal_str = "(Overheal of %s)" % [CombatLog.color(str(overheal), CombatLog._stat_color(Enums.Stats.HITPOINTS)) + CombatLog.icon_stat(Enums.Stats.HITPOINTS),]
+	if actual_heal > 0:
+		actual_heal_str = "healed for %s (%d → %d)," % [CombatLog.color(str(actual_heal), CombatLog._stat_color(Enums.Stats.HITPOINTS)) + CombatLog.icon_stat(Enums.Stats.HITPOINTS), old_hp, old_hp + actual_heal]
+	else:
+		actual_heal_str = "%s full. %s," % [CombatLog.color(str("Hitpoints"), CombatLog._stat_color(Enums.Stats.HITPOINTS)), overheal_str]
+	combat_manager.event_queue.enqueue_next(CombatEvent.log(
+		"      %s: %s %s gained %s attack damage." % [
+			CombatLog.color_status(Enums.StatusEffects.BLESSING),
+			CombatLog.color_entity(_get_entity_name(entity)),
+			actual_heal_str,
+			CombatLog.color(str(total_damage), CombatLog._stat_color(Enums.Stats.DAMAGE)) + CombatLog.icon_stat(Enums.Stats.DAMAGE)
+		]))
 
 
 # ===== TURN END PROCESSING =====
@@ -386,59 +342,36 @@ func process_turn_end_status_effects(entity):
 
 	#combat_manager.add_to_combat_log_string("%s's status effects:" % CombatLog.color_entity(combat_manager.get_entity_name(entity)))
 
-	await _process_burn(entity)  
-	await _process_regeneration(entity)  
-	await _process_blind(entity)  
+	_process_burn(entity)  
+	_process_regeneration(entity)  
+	_process_blind(entity)  
 
-	# New timing code instead of all the CombatSpeed.create_timer(...) calls for visual procs
-	var combat_panel = get_tree().get_first_node_in_group("combat_panel")
-	if combat_panel:
-		await combat_panel.wait_for_indicator_queue_to_finish()
 
 # ===== THORNS REFLECTION =====
 
-func process_thorns_removal(entity):
-	#JDM: Thorn removal should be called after turn_end_status_effects of opponent and only removed if triggered
-	if entity.status_effects.thorns_triggered_for_removal:
-		remove_status(entity, Enums.StatusEffects.THORNS, entity.status_effects.thorns)
-		entity.status_effects.thorns_triggered(false) # Set as "not triggered" for the next turn
-
-func process_thorns_reflection(attacker, target):
-	# Process thorns reflection damage.
-	# Called when an entity with thorns is hit by an attack.
+func enqueue_thorns_if_present(attacker, target) -> void:
+	# Called from ATTACK_ANIMATION handler after each strike.
+	# Enqueues thorns damage and removal into the event queue instead of awaiting inline.
 	
-	# Thorns:
-	# - Reflects damage back to attacker
-	# - Damages BOTH shield and HP (goes through shield first, then HP)
-	# - Is REMOVED after reflecting (when owner is hit)
-
 	if not target.status_effects or target.status_effects.thorns <= 0:
 		return
 	
 	var thorns_damage = target.status_effects.thorns
-
 	var doublings = _count_persistent_thorn_doublings(target)
 	for i in range(doublings):
 		thorns_damage *= 2
 
-	var attacker_name: String = _get_entity_name(attacker)
-	var target_name: String = _get_entity_name(target)
-
-	# LOG thorns reflection
-	combat_manager.add_to_combat_log_string("   %s: %s takes %s damage from %s." % [
-			CombatLog.color_status(Enums.StatusEffects.THORNS),
-			CombatLog.color_entity(attacker_name),
-			CombatLog.color(str(thorns_damage), CombatLog._status_color(Enums.StatusEffects.THORNS)),
-			CombatLog.color_entity(target_name)
-		])
-
-
-	# Apply thorns damage through damage system (respects shield)
-	if combat_manager.damage_system:
-		await combat_manager.damage_system.apply_damage(attacker, thorns_damage, target, "thorns")
+	# Enqueue thorns damage — resolves in queue after the hit that triggered it
+	combat_manager.event_queue.enqueue(CombatEvent.deal_damage(target, attacker, thorns_damage, "thorns"))
 	
-	# Thorns get removed at opponent's TURN END but only if they've been triggered
+	# Mark for removal at turn end (existing mechanism unchanged)
 	target.status_effects.thorns_triggered(true)
+
+func process_thorns_removal(entity):
+	#JDM: Thorn removal should be called after turn_end_status_effects of opponent and only removed if triggered
+	if entity.status_effects.thorns_triggered_for_removal:
+		combat_manager.event_queue.enqueue(CombatEvent.remove_status(entity, Enums.StatusEffects.THORNS, entity.status_effects.thorns))
+		entity.status_effects.thorns_triggered(false) # Set as "not triggered" for the next turn
 
 # ===== HELPER FUNCTIONS =====
 
@@ -491,11 +424,15 @@ func _check_for_persistent_burn_rule(entity) -> bool:
 
 func _count_persistent_thorn_doublings(entity) -> int:
 	var inventory = null
+	var other_entity = null
+
 	if entity == combat_manager.player_entity:
 		inventory = Player.inventory
+		other_entity = combat_manager.enemy_entity
 	elif "inventory" in entity:
 		inventory = entity.inventory
-	
+		other_entity = combat_manager.player_entity
+
 	if not inventory:
 		return 0
 	
@@ -514,11 +451,47 @@ func _count_persistent_thorn_doublings(entity) -> int:
 			if rule.special_string != "double_thorn_damage":
 				continue
 			if rule.has_condition:
-				if not combat_manager.condition_evaluator.evaluate_condition(rule, entity, entity):
+				if not combat_manager.condition_evaluator.evaluate_condition(rule, entity, other_entity):
 					continue
 			count += 1
 	
 	return count
+
+func _count_persistent_blessing_doublings(entity) -> int:
+	var inventory = null
+	var other_entity = null
+
+	if entity == combat_manager.player_entity:
+		inventory = Player.inventory
+		other_entity = combat_manager.enemy_entity
+	elif "inventory" in entity:
+		inventory = entity.inventory
+		other_entity = combat_manager.player_entity
+
+	if not inventory:
+		return 0
+	
+	var all_items = []
+	if inventory.weapon_slot:
+		all_items.append(inventory.weapon_slot)
+	for item in inventory.item_slots:
+		if item:
+			all_items.append(item)
+	
+	var count: int = 0
+	for item in all_items:
+		for rule in item.rules:
+			if rule.trigger_type != Enums.TriggerType.PERSISTENT:
+				continue
+			if rule.special_string != "double_blessing":
+				continue
+			if rule.has_condition:
+				if not combat_manager.condition_evaluator.evaluate_condition(rule, entity, other_entity):
+					continue
+			count += 1
+	
+	return count
+
 
 func _check_special_rule(rule: ItemRule) -> bool:
 	# Apply persistent effect to damage/strikes/burn current values.
@@ -536,4 +509,3 @@ func reset_all_statuses(entity):
 	"""Reset all status effects for an entity."""
 	if entity.status_effects:
 		entity.status_effects.reset_statuses()
-

@@ -20,114 +20,87 @@ func _init(manager, stat_handler_ref: CombatStatHandler, status_handler_ref: Com
 
 # ===== DAMAGE APPLICATION =====
 
-func apply_damage(target, amount: int, source, damage_type: String) -> int:
+func apply_damage(target, amount: int, source, damage_type: String, source_item: Item = null) -> int:
 	# --- SINGLE SOURCE OF TRUTH for all damage in combat.
 	
 	# Damage flow:
 	# 1. Apply to shield first (if any)
 	# 2. Apply remaining to HP
-	# 3. Check for thorns reflection
-	# 4. Create damage visuals
-	# 5. Emit signals
+	# 3. Create damage visuals
+	# 4. Emit signals
 	
 	# Returns: Total damage dealt
 	# damage_type: "attack", "poison", "burn", "acid", "thorns", "item"
 
 	if amount <= 0:
 		return 0
-	
+
 	var total_damage_dealt = 0
 	var remaining_damage = amount
-	
-	# STEP 1: Apply to shield first 
+	var damage_events: Array[CombatEvent] = []
+
+	# Capture threshold values at function scope
+	var shield_before: int = 0
+	var shield_after: int = 0
+	var hp_before: int = 0
+	var hp_after: int = 0
+	var shield_hit: bool = false
+	var hp_hit: bool = false
+
+	# STEP 1: Shield
 	if target.stats.shield_current > 0:
-		var shield_before: int = target.stats.shield_current
+		shield_before = target.stats.shield_current
 		var shield_damage: int = mini(target.stats.shield_current, remaining_damage)
-		
-		# == SHOW VISUAL DAMAGE PROC ANIMATION
-		var will_expose:bool = (target.stats.shield_current - shield_damage) == 0
+		shield_after = shield_before - shield_damage
+		var will_expose: bool = shield_after == 0
 		var visual_stat = Enums.Stats.EXPOSED if will_expose else Enums.Stats.SHIELD
-		await _create_damage_visual(target, shield_damage, visual_stat, source, damage_type)
-
-		# THIS IS THE SHIELD LOGGING:
-		var shield_after: int = max(0, shield_before - shield_damage)
-		combat_manager.add_to_combat_log_string(CombatLog.fmt_damage_shield(combat_manager.get_entity_name(target), shield_damage, shield_before, shield_after))
-
-		# Apply shield damage
-		stat_handler.change_stat(target, Enums.Stats.SHIELD, -shield_damage)
-
+		var v_info = _get_visual_info_for_damage_type(damage_type, source)
+		damage_events.append(CombatEvent.damage_visual(target, shield_damage, visual_stat, v_info))
+		damage_events.append(CombatEvent.modify_stat(target, Enums.Stats.SHIELD, -shield_damage, Enums.StatType.CURRENT, source_item, damage_type))
 		total_damage_dealt += shield_damage
 		remaining_damage -= shield_damage
-	
-	# STEP 2: Apply remaining damage to HP
+		shield_hit = true
+
+	# STEP 2: HP
 	if remaining_damage > 0:
-		var hp_before: int = target.stats.hit_points_current
+		hp_before = target.stats.hit_points_current
 		var hp_damage: int = remaining_damage
-		
-		# == SHOW VISUAL DAMAGE PROC ANIMATION
-		var will_wound:bool = (float(hp_before - hp_damage) / float(target.stats.hit_points)) <= 0.5
-		var visual_stat = Enums.Stats.WOUNDED if will_wound else Enums.Stats.HITPOINTS
-		await _create_damage_visual(target, hp_damage, visual_stat, source, damage_type)
-
-		# THIS IS THE HP LOGGING:
-		var hp_after:int = max(0, hp_before - hp_damage)
-		combat_manager.add_to_combat_log_string(CombatLog.fmt_damage_hp(combat_manager.get_entity_name(target), hp_damage, hp_before, hp_after))
-		
-		# Apply HP damage
-		stat_handler.change_stat(target, Enums.Stats.HITPOINTS, -hp_damage)
-
+		hp_after = max(0, hp_before - hp_damage)
+		var will_wound: bool = (float(hp_after) / float(target.stats.hit_points)) <= 0.5
+		var hp_visual_stat = Enums.Stats.WOUNDED if will_wound else Enums.Stats.HITPOINTS
+		var hp_v_info = _get_visual_info_for_damage_type(damage_type, source)
+		damage_events.append(CombatEvent.damage_visual(target, hp_damage, hp_visual_stat, hp_v_info))
+		damage_events.append(CombatEvent.modify_stat(target, Enums.Stats.HITPOINTS, -hp_damage, Enums.StatType.CURRENT, source_item, damage_type))
 		total_damage_dealt += hp_damage
-	
-	# STEP 3: Process thorns reflection (if source exists and target has thorns)
-	if source and damage_type == "attack":
-		await status_handler.process_thorns_reflection(source, target)
-	
-	# Emit signal
+		hp_hit = true
+
+	# Append threshold checks at END of batch so EXPOSED/WOUNDED fire
+	# only after the full hit (shield + HP carry-through) has resolved.
+	if shield_hit:
+		damage_events.append(CombatEvent.check_thresholds(target, Enums.Stats.SHIELD, shield_before, shield_after))
+	if hp_hit:
+		damage_events.append(CombatEvent.check_thresholds(target, Enums.Stats.HITPOINTS, hp_before, hp_after))
+
+	combat_manager.event_queue.enqueue_batch_next(damage_events)
 	damage_dealt.emit(target, total_damage_dealt, source)
-	
 	return total_damage_dealt
 
 # ===== HEALING =====
 
-func heal_entity(entity, amount: int, source, log_heal: bool = true):
-	# Heal an entity's HP.
-	# Automatically clamps to max HP.
-
+func heal_entity(entity, amount: int, source, heal_source_label: String = "Heal"):
 	if amount <= 0:
 		return
-	
 	var old_hp = entity.stats.hit_points_current
-	
-	# Heal through stat handler (it handles clamping)
-	stat_handler.change_stat(entity, Enums.Stats.HITPOINTS, amount)
-	
-	var actual_healing = entity.stats.hit_points_current - old_hp
+	var max_hp: int = entity.stats.hit_points
+	var actual_healing: int = min(amount, max_hp - old_hp)
+	combat_manager.event_queue.enqueue_next(CombatEvent.modify_stat(entity, Enums.Stats.HITPOINTS, amount, Enums.StatType.CURRENT, source, heal_source_label))
 	
 	if actual_healing > 0:
-		# VISUAL DONE IN CombatEffectExecutor
-		# await _create_damage_visual(entity, actual_healing, Enums.Stats.HITPOINTS, source, "item")
-		
 		# Emit signal
 		healing_applied.emit(entity, actual_healing)
 		
-		if log_heal:
-			combat_manager.add_to_combat_log_string(CombatLog.fmt_heal(_get_entity_name(entity), actual_healing, old_hp, old_hp + actual_healing))
-	
 
 # ===== DAMAGE VISUALS =====
-
-func _create_damage_visual(target, amount: int, damage_stat: Enums.Stats, source, damage_type: String):
-	# Create visual feedback for damage/healing.
-	# Routes through AnimationManager to create damage indicators.
-	
-	if CombatSpeed.is_instant_mode():
-		return  # No visuals in instant mode
-
-	# Prepare visual info based on damage type
-	var visual_info = _get_visual_info_for_damage_type(damage_type, source)
-	
-	# Send to animation manager
-	combat_manager.animation_manager.play_damage_indicator(target, amount, damage_stat, visual_info)
 	
 func _get_visual_info_for_damage_type(damage_type: String, source) -> Dictionary:
 	# Get visual information (icon, color, name) for a damage type.
@@ -199,6 +172,22 @@ func _get_visual_info_for_damage_type(damage_type: String, source) -> Dictionary
 			info.color = game_colors.stats.regeneration
 			info.source_name = "Heal"
 	
+	if damage_type.begins_with("Strike"):
+		if source:
+			if source == combat_manager.player_entity:
+				if source.inventory and source.inventory.weapon_slot:
+					info.icon = source.inventory.weapon_slot.item_icon
+					info.color = source.inventory.weapon_slot.item_color
+			else:
+				if "inventory" in source and source.inventory and source.inventory.weapon_slot:
+					info.icon = source.inventory.weapon_slot.item_icon
+					info.color = source.inventory.weapon_slot.item_color
+				elif source is Enemy and source.weapon_sprite:
+					info.icon = source.weapon_sprite
+					info.color = game_colors.stats.damage
+			info.source_name = damage_type
+
+
 	return info
 
 # ===== HELPER FUNCTIONS =====

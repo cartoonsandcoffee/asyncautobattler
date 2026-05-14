@@ -163,7 +163,10 @@ func get_condition_check_entity(rule: ItemRule, source_entity, target_entity):
 	if rule.condition_of == Enums.TargetType.SELF:
 		return source_entity
 	elif rule.condition_of == Enums.TargetType.ENEMY:
-		return target_entity
+		if source_entity == combat_manager.player_entity:
+			return combat_manager.enemy_entity
+		else:
+			return combat_manager.player_entity
 	else:
 		return source_entity
 

@@ -47,9 +47,6 @@ func _done():
 	anim_player.play("hide")
 	turn_animation_done.emit()
 
-	# Wait using timer instead of animation_finished
-	var anim_length = anim_player.get_animation("hide").length
-	await CombatSpeed.create_timer(anim_length)
 	queue_free()
 
 func fade_in():

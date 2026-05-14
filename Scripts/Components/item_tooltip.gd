@@ -203,8 +203,14 @@ func set_bonus_ingredients(_items: Array[Item]):
 		var item_slot = set_ingredient_item.instantiate()
 		item_slot.set_bonus(item)
 		item_slot.turn_off_shader()
-		#item_slot.custom_minimum_size = Vector2(90, 90) 
-		item_slot.scale = Vector2(0.5, 0.5)
+		item_slot.custom_minimum_size = Vector2(70,70) 
+
+		var icon = item_slot.get_node("picSetBonus")
+		#icon.custom_minimum_size = Vector2(45, 45)
+		#icon.size = Vector2(45, 45)
+		icon.scale = Vector2(0.75,0.75)
+		icon.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 
 		set_ingredients.add_child(item_slot)
 

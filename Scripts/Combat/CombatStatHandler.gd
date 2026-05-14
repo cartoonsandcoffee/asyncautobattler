@@ -32,14 +32,17 @@ func change_stat(entity, stat: Enums.Stats, amount: int, _stat_type: Enums.StatT
 	# 6. Checks for ONE_HITPOINT_LEFT threshold
 	# 7. Checks for death (0 HP)
 	
+	# Handling for when strikes are dynamically changed:
+	var read_type = Enums.StatType.BASE if stat == Enums.Stats.STRIKES else _stat_type
+
 	# Use this for EVERYTHING that changes stats.
 
-	var old_value = get_stat_value(entity, stat, _stat_type)
+	var old_value = get_stat_value(entity, stat, read_type)
 	
 	# Apply the change
 	modify_stat(entity, stat, amount, _stat_type)
 	
-	var new_value = get_stat_value(entity, stat, _stat_type)
+	var new_value = get_stat_value(entity, stat, read_type)
 	
 	# Emit the stat_changed signal
 	stat_changed.emit(entity, stat, old_value, new_value)
@@ -55,7 +58,6 @@ func change_stat(entity, stat: Enums.Stats, amount: int, _stat_type: Enums.StatT
 		stat_loss_triggered.emit(entity, stat, abs(delta), source_item)
 	
 	# Check for special thresholds
-	await _check_thresholds(entity, stat, old_value, new_value)
 	recalculate_damage(entity)
 
 # ===== STAT MODIFICATION =====
@@ -120,9 +122,9 @@ func get_stat_value(entity, stat: Enums.Stats, stat_type: Enums.StatType = Enums
 		Enums.Stats.STRIKES:
 			match stat_type:
 				Enums.StatType.CURRENT:
-					return  entity.stats.strikes_current
+					return  entity.stats.strikes_left
 				Enums.StatType.BASE:
-					return entity.stats.strikes
+					return entity.stats.strikes_next_turn
 				Enums.StatType.MISSING:
 					return 0
 
@@ -142,37 +144,29 @@ func get_stat_value(entity, stat: Enums.Stats, stat_type: Enums.StatType = Enums
 
 # ===== THRESHOLD CHECKS =====
 
-func _check_thresholds(entity, stat: Enums.Stats, old_value: int, new_value: int):
-	# Check for special thresholds and emit appropriate signals.
-	
-	# Check for WOUNDED (50% HP)
+func fire_threshold_signals(entity, stat: Enums.Stats, old_value: int, new_value: int, stat_type: Enums.StatType = Enums.StatType.CURRENT):
+	# Called from CHECK_THRESHOLDS event handler after full damage batch resolves.
 	if stat == Enums.Stats.HITPOINTS:
 		var max_hp = entity.stats.hit_points
 		var wounded_threshold = max_hp / 2
-		
-		# Crossed the 50% threshold going down?
-		if old_value > wounded_threshold and new_value <= wounded_threshold:
+		var current_hp = entity.stats.hit_points_current
+
+		if current_hp <= wounded_threshold:
 			if not _is_wounded_triggered(entity):
 				_mark_wounded_triggered(entity, true)
-
 				wounded_triggered.emit(entity)
-		
-		# Check for ONE_HITPOINT_LEFT
-		if new_value == 1 and old_value > 1:
-			one_hitpoint_left_triggered.emit(entity)
-		
-		# Check for death
-		if new_value <= 0:
-			death_triggered.emit(entity)
-	
-	# Check for EXPOSED (0 shield)
+
+		if stat_type == Enums.StatType.CURRENT:
+			if new_value == 1 and old_value > 1:
+				one_hitpoint_left_triggered.emit(entity)
+			if new_value <= 0:
+				death_triggered.emit(entity)
+
 	if stat == Enums.Stats.SHIELD:
 		if old_value > 0 and new_value == 0:
 			if not _is_exposed_triggered(entity):
 				_mark_exposed_triggered(entity, true)
-
 				exposed_triggered.emit(entity)
-
 
 func recalculate_damage(entity):
 	# Recalculate ONLY damage (output stats that user persistent conditionals).
@@ -191,31 +185,17 @@ func recalculate_damage(entity):
 	# Apply persistent conditional effects (only to output stats)
 	_apply_persistent_to_output_stats(entity)
 	
+	if entity.status_effects and entity.status_effects.blind > 0:
+		entity.stats.damage_current = int(ceil(float(entity.stats.damage_current) / 2.0))
+
 	entity.stats.stats_updated.emit()
 
 func _apply_persistent_to_output_stats(entity):
 	# Apply persistent rules to damage/strikes current values only.
 	
-	# Get entity's inventory
-	var inventory = null
-	if entity == combat_manager.player_entity:
-		inventory = Player.inventory
-	elif "inventory" in entity:
-		inventory = entity.inventory
-	
-	if not inventory:
-		return
-	
-	var opponent = combat_manager.enemy_entity if entity == combat_manager.player_entity else combat_manager.player_entity
+	var all_items = combat_manager.get_all_entity_items(entity)
 
-	# Collect items
-	var all_items = []
-	if inventory.weapon_slot:
-		all_items.append(inventory.weapon_slot)
-	for item in inventory.item_slots:
-		if item:
-			all_items.append(item)
-	
+	var opponent = combat_manager.enemy_entity if entity == combat_manager.player_entity else combat_manager.player_entity	
 	# Process persistent rules
 	for item in all_items:
 		for rule in item.rules:
@@ -223,7 +203,7 @@ func _apply_persistent_to_output_stats(entity):
 				continue
 			
 			# Only damage allowed in combat recalculation so far
-			if rule.target_stat not in [Enums.Stats.DAMAGE]:
+			if rule.target_stat not in [Enums.Stats.DAMAGE] and rule.special_string == "":
 				continue
 			
 			# Evaluate condition
@@ -244,10 +224,10 @@ func _apply_persistent_effect_to_output(entity, rule: ItemRule):
 				entity.stats.damage_current *= 2
 			"halve_damage", "half_damage":
 				entity.stats.damage_current = int(entity.stats.damage_current * 0.5)
-			"exposed_can_trigger_twice":
+			"exposed_can_trigger_twice": 
 				if _get_entity_name(entity) == "Player":
 					combat_manager.player_can_exposed_twice = true
-				elif _get_entity_name(entity) == "Enemy":
+				else:
 					combat_manager.enemy_can_exposed_twice = true
 			_:
 				print(" X - Unknown special_string in combat: ", rule.special_string)
@@ -279,7 +259,7 @@ func _is_exposed_triggered(entity) -> bool:
 	# Check if entity has already triggered EXPOSED this combat.
 	if entity == combat_manager.player_entity:
 		if combat_manager.player_can_exposed_twice:
-			if combat_manager.player_exposed_trigger && combat_manager.player_has_exposed_twice:
+			if combat_manager.player_exposed_triggered && combat_manager.player_has_exposed_twice:
 				return true
 			else:
 				return false
@@ -339,4 +319,3 @@ func reset_combat_state():
 	combat_manager.enemy_can_exposed_twice = false
 	combat_manager.player_has_exposed_twice = false
 	combat_manager.enemy_has_exposed_twice = false
-	combat_manager.death_processing = false

@@ -134,6 +134,7 @@ func generate_item_choices():
 		choice_button.set_item(item)
 		choice_button.item_selected.connect(_on_item_selected)
 
+
 func _on_item_selected(item: Item):
 	if selection_locked:
 		return
@@ -142,21 +143,24 @@ func _on_item_selected(item: Item):
 	btn_skip.disabled = true
 
 	if item.item_type == Item.ItemType.WEAPON:
-		# Automatic weapon swap
-		Player.inventory.set_weapon(item)
-		Player.update_stats_from_items()
-		#AudioManager.play_ui_sound("item_pickup")
-		item_selected.emit(item)
+		if Player.inventory.weapon_slot != null and Player.inventory.weapon_slot.item_id != "weapon_fists":
+			need_item_replace.emit(item)
+		else:
+			Player.inventory.set_weapon(item)
+			Player.update_stats_from_items()
+			item_selected.emit(item)
 	else:
 		if Player.inventory.has_empty_slot():
 			Player.inventory.add_item(item)
 			Player.update_stats_from_items()
 			#AudioManager.play_ui_sound("item_pickup")
+			_clear_inventory_duplicate_indicators()
 			item_selected.emit(item)	
 		else:
 			need_item_replace.emit(item)
 
 func _on_btn_skip_pressed() -> void:
+	_clear_inventory_duplicate_indicators()
 	item_skipped.emit()
 
 func _on_btn_skip_mouse_exited() -> void:
@@ -180,3 +184,39 @@ func _on_btn_reroll_mouse_exited() -> void:
 func _on_btn_reroll_mouse_entered() -> void:
 	CursorManager.set_interact_cursor()
 	AudioManager.play_ui_sound("woosh")
+
+func show_popup():
+	_refresh_inventory_duplicate_indicators()
+
+func _refresh_inventory_duplicate_indicators():
+	var main_game = get_tree().get_first_node_in_group("main_game")
+	if not main_game:
+		return
+	
+	# Build set of offered common item_ids
+	var offered_ids: Array = []
+	for child in item_choice_container.get_children():
+		if child.has_method("get_current_item"):
+			var offered_item = child.get_current_item()
+			if offered_item and offered_item.rarity == Enums.Rarity.COMMON:
+				offered_ids.append(offered_item.item_id)
+	
+	for inv_slot in main_game.item_slots:
+		if not inv_slot.current_item:
+			continue
+		if inv_slot.current_item.item_id in offered_ids:
+			inv_slot.show_upgrade_anim()
+		else:
+			inv_slot.stop_upgrade_anim()
+
+func _clear_inventory_duplicate_indicators():
+	var main_game = get_tree().get_first_node_in_group("main_game")
+	if not main_game:
+		return
+	for inv_slot in main_game.item_slots:
+		if not inv_slot.current_item:
+			continue
+		if ItemsManager.player_has_duplicate(inv_slot.current_item, true):
+			inv_slot.show_upgrade_anim()
+		else:
+			inv_slot.stop_upgrade_anim()
