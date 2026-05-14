@@ -41,7 +41,6 @@ SkinManager="*res://Scripts/Autoloads/SkinManager.gd"
 
 window/size/viewport_width=1536
 window/size/viewport_height=864
-window/size/resizable=false
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
@@ -61,3 +60,11 @@ pause={
 
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true
+
+[shader_globals]
+
+mouse_screen_pos={
+"type": "vec2",
+"value": Vector2(0, 0)
+}
