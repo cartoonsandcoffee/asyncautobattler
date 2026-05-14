@@ -1,0 +1,29 @@
+[gd_resource type="Theme" load_steps=6 format=3 uid="uid://b3mgkpy6wmwks"]
+
+[ext_resource type="FontFile" uid="uid://cif7u8lvaqla2" path="res://Assets/UI/Enchanted Land.otf" id="1_5ekne"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yiwyd"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y2mm2"]
+bg_color = Color(0, 0, 0, 1)
+border_width_bottom = 3
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_udg4j"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_d80tw"]
+
+[resource]
+default_font = ExtResource("1_5ekne")
+Button/colors/font_color = Color(0.78, 0.78, 0.78, 1)
+Button/colors/font_hover_color = Color(1, 1, 1, 1)
+Button/colors/font_hover_pressed_color = Color(0.966667, 1, 0, 1)
+Button/colors/font_outline_color = Color(0.8, 0.088, 0.088, 1)
+Button/colors/font_pressed_color = Color(0.85, 0.8109, 0.2635, 1)
+Button/constants/outline_size = 0
+Button/font_sizes/font_size = 42
+Button/fonts/font = ExtResource("1_5ekne")
+Button/styles/focus = SubResource("StyleBoxEmpty_yiwyd")
+Button/styles/hover = SubResource("StyleBoxFlat_y2mm2")
+Button/styles/normal = SubResource("StyleBoxEmpty_udg4j")
+Button/styles/pressed = SubResource("StyleBoxEmpty_d80tw")

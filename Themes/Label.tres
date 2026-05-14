@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=23 format=3 uid="uid://cpqqj8uayl3pq"]
+[gd_resource type="Theme" load_steps=28 format=3 uid="uid://cpqqj8uayl3pq"]
 
 [ext_resource type="FontFile" uid="uid://cif7u8lvaqla2" path="res://Assets/UI/Enchanted Land.otf" id="1_1j0f5"]
 [ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="1_8wl1t"]
@@ -76,6 +76,54 @@ border_width_right = 3
 border_width_bottom = 3
 border_color = Color(1, 1, 1, 1)
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rg0t2"]
+content_margin_right = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hq6qu"]
+bg_color = Color(0.374139, 0.374139, 0.374139, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 8
+border_color = Color(0.787759, 0.787759, 0.787759, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_auc44"]
+bg_color = Color(0.741385, 0.741385, 0.741384, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 8
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k4phx"]
+bg_color = Color(0.366595, 0.366595, 0.366594, 1)
+border_width_left = 3
+border_width_top = 8
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.505344, 0.505344, 0.505344, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yv2wi"]
+content_margin_left = 5.0
+content_margin_right = 5.0
+bg_color = Color(1, 1, 1, 0.196078)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
 [resource]
 Button/colors/font_color = Color(0.851769, 0.851769, 0.851769, 1)
 Button/colors/font_hover_color = Color(0.98, 0, 0, 1)
@@ -121,3 +169,8 @@ RichTextLabel/fonts/bold_font = ExtResource("2_n1tjh")
 RichTextLabel/fonts/bold_italics_font = ExtResource("3_j4qlc")
 RichTextLabel/fonts/italics_font = ExtResource("4_8wl1t")
 RichTextLabel/fonts/normal_font = ExtResource("5_rg0t2")
+ScrollContainer/styles/panel = SubResource("StyleBoxEmpty_rg0t2")
+VScrollBar/styles/grabber = SubResource("StyleBoxFlat_hq6qu")
+VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_auc44")
+VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_k4phx")
+VScrollBar/styles/scroll = SubResource("StyleBoxFlat_yv2wi")
