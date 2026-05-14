@@ -1,46 +1,46 @@
-[gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://kur0wl3yq2ab"]
+[gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://dkb6dshy5ps4g"]
 
-[ext_resource type="Texture2D" uid="uid://cjqv5mk8ht5lb" path="res://Assets/Items/Weapons.png" id="1_jof6w"]
-[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="2_g3sh1"]
-[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="3_ji5dg"]
+[ext_resource type="Texture2D" uid="uid://cjqv5mk8ht5lb" path="res://Assets/Items/Weapons.png" id="1_7lcyi"]
+[ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_i33j3"]
+[ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_7lcyi"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_la13c"]
-atlas = ExtResource("1_jof6w")
-region = Rect2(150, 0, 150, 150)
+[sub_resource type="AtlasTexture" id="AtlasTexture_6onki"]
+atlas = ExtResource("1_7lcyi")
+region = Rect2(900, 750, 150, 150)
 
-[sub_resource type="Resource" id="Resource_b4tmb"]
-script = ExtResource("2_g3sh1")
-trigger_type = 1
+[sub_resource type="Resource" id="Resource_go0u2"]
+script = ExtResource("1_i33j3")
+trigger_type = 3
 trigger_stat = 9
 trigger_status = 10
 trigger_value_threshold = 0
 countdown_value = 0
 countdown_recurs = false
-has_condition = false
+has_condition = true
 condition_type = 0
-condition_of = 4
-condition_stat = 9
+condition_of = 1
+condition_stat = 2
 condition_party_stat_type = 0
 condition_status = 10
 condition_item_category = ""
-condition_comparison = ">"
+condition_comparison = "=="
 compare_to = 0
 condition_value = 0
 condition_to_party = 4
 condition_stat_type = 3
 condition_party_stat = 9
 condition_party_status = 10
-effect_type = 1
+effect_type = 4
 target_type = 0
 target_stat_type = 0
 target_item_category = ""
-target_stat = 9
-target_status = 0
-effect_of = 0
-effect_amount = 1
-effect_stat_party = 4
-effect_stat_type = 3
-effect_stat_value = 9
+target_stat = 0
+target_status = 10
+effect_of = 1
+effect_amount = 0
+effect_stat_party = 0
+effect_stat_type = 0
+effect_stat_value = 1
 effect_status_value = 10
 effect_multiplier = 1.0
 convert_from_type = 0
@@ -58,21 +58,22 @@ retrigger_type = 1
 retrigger_target = 0
 retrigger_item = 0
 retrigger_category = ""
+spend_trigger_flag = false
 special_string = ""
 custom_description = ""
 metadata/_custom_type_script = "uid://dahay7fvi7bik"
 
 [resource]
-script = ExtResource("3_ji5dg")
+script = ExtResource("2_7lcyi")
 item_id = ""
 base_item_id = ""
-item_name = "Sword of Sickness"
+item_name = "Vampiric Blade"
 item_type = 0
-item_desc = "Battle Start: Gain 1 poison."
-item_icon = SubResource("AtlasTexture_la13c")
-item_color = Color(0.57228, 0.4636, 0.76, 1)
-item_bundle = 6
-rules = Array[ExtResource("2_g3sh1")]([SubResource("Resource_b4tmb")])
+item_desc = "On Hit: If the enemy doesn't have any shield, you restore hitpoints equal to your attack damage."
+item_icon = SubResource("AtlasTexture_6onki")
+item_color = Color(0.76, 0.19, 0.19, 1)
+item_bundle = 2
+rules = Array[ExtResource("1_i33j3")]([SubResource("Resource_go0u2")])
 repeat_rules_X_times = 0
 repeat_rules_for_category = ""
 trigger_priority = 0
@@ -80,16 +81,16 @@ trigger_only_once = false
 trigger_only_first_turn = false
 trigger_on_occurrence_number = 0
 occurrence_resets_per_turn = false
-rarity = 0
-categories = Array[String]([])
+rarity = 2
+categories = Array[String](["Vampiric"])
 rng_weight = 1.0
 unlocked = true
-damage_bonus = 3
+damage_bonus = 1
 shield_bonus = 0
 agility_bonus = 0
 hit_points_bonus = 0
 strikes_bonus = 0
 burn_damage_bonus = 0
 cant_attack = false
-keywords = Array[String](["Poison", "Battle Start"])
+keywords = Array[String]([])
 metadata/_custom_type_script = "uid://dthg27pchm1fm"
