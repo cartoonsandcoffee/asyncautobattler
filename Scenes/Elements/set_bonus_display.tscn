@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://gxrsahs265w7" path="res://Scripts/Components/set_bonus_display.gd" id="1_acveb"]
 [ext_resource type="Texture2D" uid="uid://ofqhkq0qfkqk" path="res://Assets/Items/Bugs.png" id="2_74sha"]
-[ext_resource type="Shader" uid="uid://dms2cy767su3j" path="res://Shaders/detailed_shine.gdshader" id="3_p1u7n"]
+[ext_resource type="Shader" uid="uid://dms2cy767su3j" path="res://Shaders/glint or shine/detailed_shine.gdshader" id="3_p1u7n"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hwy0k"]
 bg_color = Color(0, 0, 0, 1)
@@ -68,7 +68,8 @@ layout_mode = 1
 offset_right = 90.0
 offset_bottom = 90.0
 texture = SubResource("AtlasTexture_4qorr")
-expand_mode = 1
+expand_mode = 3
+stretch_mode = 5
 
 [node name="ShaderRect" type="ColorRect" parent="picSetBonus"]
 material = SubResource("ShaderMaterial_ofpn7")

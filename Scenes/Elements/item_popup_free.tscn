@@ -1,0 +1,219 @@
+[gd_scene load_steps=10 format=3 uid="uid://dhrdhjrhe7667"]
+
+[ext_resource type="Texture2D" uid="uid://djreh4aobw1al" path="res://Assets/UI/PopupButtonTall.png" id="2_nfrkd"]
+[ext_resource type="Texture2D" uid="uid://muq65ml3jy4x" path="res://Assets/UI/PopupTile4x4Small.png" id="2_xyjtw"]
+[ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="3_8de21"]
+[ext_resource type="Texture2D" uid="uid://d4gqpfi5addgw" path="res://Assets/UI/item_slot_back.png" id="3_nfrkd"]
+[ext_resource type="PackedScene" uid="uid://bkhvt0y2lh81v" path="res://Scenes/item_choice_dynamic.tscn" id="5_arrfs"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_lfnpm"]
+texture = ExtResource("2_xyjtw")
+texture_margin_left = 100.0
+texture_margin_top = 100.0
+texture_margin_right = 100.0
+texture_margin_bottom = 100.0
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8de21"]
+texture = ExtResource("2_nfrkd")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_56xjj"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_54k7b"]
+
+[node name="ItemPopupFree" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="centerPoint" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(20, 20)
+
+[node name="panelItems" type="Panel" parent="centerPoint"]
+self_modulate = Color(0.396, 0.55, 0.506367, 1)
+custom_minimum_size = Vector2(600, 300)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -656.0
+offset_top = -312.0
+offset_right = 542.0
+offset_bottom = 313.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_lfnpm")
+
+[node name="Panel" type="Panel" parent="centerPoint/panelItems"]
+self_modulate = Color(0.360784, 0.431373, 0.411765, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -36.0
+offset_top = -229.5
+offset_right = 210.0
+offset_bottom = 203.5
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_8de21")
+
+[node name="PanelContainer" type="PanelContainer" parent="centerPoint/panelItems"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -650.0
+offset_top = -257.5
+offset_right = 650.0
+offset_bottom = 257.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_56xjj")
+
+[node name="MarginContainer" type="MarginContainer" parent="centerPoint/panelItems/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 120
+theme_override_constants/margin_top = 80
+theme_override_constants/margin_right = 120
+theme_override_constants/margin_bottom = 80
+
+[node name="VBoxContainer" type="VBoxContainer" parent="centerPoint/panelItems/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="centerPoint/panelItems/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_8de21")
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 86
+text = "This is a Shop Now..."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RichTextLabel" type="RichTextLabel" parent="centerPoint/panelItems/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_8de21")
+theme_override_colors/default_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/bold_italics_font_size = 28
+theme_override_font_sizes/italics_font_size = 28
+theme_override_font_sizes/normal_font_size = 28
+theme_override_font_sizes/bold_font_size = 28
+bbcode_enabled = true
+text = "This is where the other writing would go"
+fit_content = true
+
+[node name="contentPanel" type="PanelContainer" parent="centerPoint/panelItems/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_54k7b")
+
+[node name="itemGrid" type="GridContainer" parent="centerPoint/panelItems/PanelContainer/MarginContainer/VBoxContainer/contentPanel"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/h_separation = 20
+columns = 4
+
+[node name="TextureRect2" type="TextureRect" parent="centerPoint/panelItems/PanelContainer/MarginContainer/VBoxContainer/contentPanel/itemGrid"]
+self_modulate = Color(0.396078, 0.54902, 0.505882, 1)
+custom_minimum_size = Vector2(250, 250)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("3_nfrkd")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="ItemChoice" parent="centerPoint/panelItems/PanelContainer/MarginContainer/VBoxContainer/contentPanel/itemGrid/TextureRect2" instance=ExtResource("5_arrfs")]
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -100.0
+offset_right = 100.0
+offset_bottom = 100.0
+size_flags_horizontal = 6
+size_flags_vertical = 6
+
+[node name="TextureRect3" type="TextureRect" parent="centerPoint/panelItems/PanelContainer/MarginContainer/VBoxContainer/contentPanel/itemGrid"]
+self_modulate = Color(0.396078, 0.54902, 0.505882, 1)
+custom_minimum_size = Vector2(250, 250)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("3_nfrkd")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="ItemChoice" parent="centerPoint/panelItems/PanelContainer/MarginContainer/VBoxContainer/contentPanel/itemGrid/TextureRect3" instance=ExtResource("5_arrfs")]
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -100.0
+offset_right = 100.0
+offset_bottom = 100.0
+size_flags_horizontal = 6
+size_flags_vertical = 6
+
+[node name="TextureRect4" type="TextureRect" parent="centerPoint/panelItems/PanelContainer/MarginContainer/VBoxContainer/contentPanel/itemGrid"]
+self_modulate = Color(0.396078, 0.54902, 0.505882, 1)
+custom_minimum_size = Vector2(250, 250)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("3_nfrkd")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="ItemChoice" parent="centerPoint/panelItems/PanelContainer/MarginContainer/VBoxContainer/contentPanel/itemGrid/TextureRect4" instance=ExtResource("5_arrfs")]
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -100.0
+offset_right = 100.0
+offset_bottom = 100.0
+size_flags_horizontal = 6
+size_flags_vertical = 6

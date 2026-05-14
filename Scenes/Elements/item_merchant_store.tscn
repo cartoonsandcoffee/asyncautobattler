@@ -331,6 +331,7 @@ pivot_offset = Vector2(275, 132)
 theme_override_styles/panel = SubResource("StyleBoxEmpty_xggb2")
 
 [node name="BlackBack" type="PanelContainer" parent="Panel"]
+z_index = 10
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

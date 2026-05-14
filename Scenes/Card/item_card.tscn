@@ -1,0 +1,396 @@
+[gd_scene load_steps=20 format=3 uid="uid://5tmsyirr73xl"]
+
+[ext_resource type="Texture2D" uid="uid://baqs64hrvmdo0" path="res://Assets/UI/CardBack_01.png" id="1_q33pr"]
+[ext_resource type="Script" uid="uid://2ihh0fsy5akf" path="res://Scripts/Card/item_card.gd" id="1_ythyo"]
+[ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="2_6ugni"]
+[ext_resource type="Shader" uid="uid://dbo7qc2solfnb" path="res://Shaders/outlines/all-in-one-outline.gdshader" id="2_rygt6"]
+[ext_resource type="Texture2D" uid="uid://2il2b4pystph" path="res://Resources/Rarity/uncommon.tres" id="3_orras"]
+[ext_resource type="Texture2D" uid="uid://wrgpt3ywe7hx" path="res://Assets/Art/Noise/T_VFX_MarbleNoise_tiled.png" id="3_v6onx"]
+[ext_resource type="Theme" uid="uid://od14ccps1daj" path="res://Themes/descriptive_label.tres" id="4_ythyo"]
+[ext_resource type="PackedScene" uid="uid://dsvlfpdul0yj7" path="res://Scenes/Card/card_stat.tscn" id="5_orras"]
+[ext_resource type="PackedScene" uid="uid://veyfqa2b4ijn" path="res://Scenes/Elements/category_label.tscn" id="6_ythyo"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ythyo"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8xd3p"]
+
+[sub_resource type="Gradient" id="Gradient_v2jqw"]
+colors = PackedColorArray(0.79, 0.1106, 0.1106, 1, 1, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_j7473"]
+gradient = SubResource("Gradient_v2jqw")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1qt4s"]
+shader = ExtResource("2_rygt6")
+shader_parameter/scrollingTexture = ExtResource("3_v6onx")
+shader_parameter/textureScale = Vector2(1, 1)
+shader_parameter/angle = 45.0
+shader_parameter/textureSpeed = 0.0500005
+shader_parameter/textureStrength = 0.44
+shader_parameter/thickness = 20.0
+shader_parameter/tolerance = 0.823
+shader_parameter/color = SubResource("GradientTexture1D_j7473")
+shader_parameter/gradientResolution = 10
+shader_parameter/diagonals = true
+shader_parameter/rounded = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8xd3p"]
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+expand_margin_left = 10.0
+expand_margin_top = 10.0
+expand_margin_right = 10.0
+expand_margin_bottom = 10.0
+
+[sub_resource type="Animation" id="Animation_8xd3p"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel/Control:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Panel/Control:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.7, 0.7)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Panel/Control:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Panel/Control:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_rygt6"]
+resource_name = "card_idle"
+length = 2.0
+loop_mode = 2
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel/Control:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -20)]
+}
+
+[sub_resource type="Animation" id="Animation_ythyo"]
+resource_name = "show_tooltip"
+length = 0.2
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel/Control:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Panel/Control:scale")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.7, 0.7), Vector2(1.1, 1.1), Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Panel/Control:rotation")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.122173, 0.0]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play_card_idle"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_rygt6"]
+_data = {
+&"RESET": SubResource("Animation_8xd3p"),
+&"card_idle": SubResource("Animation_rygt6"),
+&"show_tooltip": SubResource("Animation_ythyo")
+}
+
+[node name="ItemCard" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 372.0
+offset_bottom = 460.0
+pivot_offset = Vector2(186, 230)
+mouse_filter = 2
+script = ExtResource("1_ythyo")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+offset_right = 369.0
+offset_bottom = 120.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_ythyo")
+
+[node name="Control" type="Control" parent="Panel"]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(372, 460)
+layout_mode = 1
+anchors_preset = 0
+offset_right = 372.0
+offset_bottom = 460.0
+scale = Vector2(0.7, 0.7)
+pivot_offset = Vector2(186, 230)
+mouse_filter = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="Panel/Control"]
+layout_mode = 1
+offset_right = 372.0
+offset_bottom = 460.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_8xd3p")
+
+[node name="TextureRect" type="TextureRect" parent="Panel/Control/PanelContainer"]
+material = SubResource("ShaderMaterial_1qt4s")
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("1_q33pr")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/Control/PanelContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 55
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/Control/PanelContainer/MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme = ExtResource("2_6ugni")
+
+[node name="TopPart" type="VBoxContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="lblName" type="Label" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart"]
+layout_mode = 2
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 32
+text = "Flying Sword of Jeffrey's Decay"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart"]
+layout_mode = 2
+theme_override_constants/margin_top = 15
+
+[node name="rarityContainer" type="HBoxContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart/rarityContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="picRarity" type="TextureRect" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart/rarityContainer"]
+layout_mode = 2
+texture = ExtResource("3_orras")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="lblRarity" type="Label" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart/rarityContainer"]
+layout_mode = 2
+theme = ExtResource("4_ythyo")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "Uncommon"
+vertical_alignment = 1
+
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart/rarityContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart"]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+
+[node name="statContainer" type="HBoxContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="CardStat" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart/statContainer" instance=ExtResource("5_orras")]
+custom_minimum_size = Vector2(65, 90)
+layout_mode = 2
+
+[node name="CardStat2" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart/statContainer" instance=ExtResource("5_orras")]
+custom_minimum_size = Vector2(65, 90)
+layout_mode = 2
+
+[node name="CardStat3" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart/statContainer" instance=ExtResource("5_orras")]
+custom_minimum_size = Vector2(65, 90)
+layout_mode = 2
+
+[node name="CardStat4" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart/statContainer" instance=ExtResource("5_orras")]
+custom_minimum_size = Vector2(65, 90)
+layout_mode = 2
+
+[node name="MarginContainer3" type="MarginContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="BottomPart" type="VBoxContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="textMargin" type="MarginContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_constants/margin_left = 70
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 55
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/textMargin"]
+layout_mode = 2
+
+[node name="txtUpgrades" type="RichTextLabel" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/textMargin/VBoxContainer"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+bbcode_enabled = true
+text = "XXX"
+fit_content = true
+horizontal_alignment = 1
+
+[node name="txtDesc" type="RichTextLabel" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/textMargin/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+bbcode_enabled = true
+text = "This is a great example of where the text will go."
+fit_content = true
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="categoryGrid" type="GridContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+columns = 3
+
+[node name="CategoryLabel" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/categoryGrid" instance=ExtResource("6_ythyo")]
+custom_minimum_size = Vector2(130, 34)
+layout_mode = 2
+
+[node name="CategoryLabel2" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/categoryGrid" instance=ExtResource("6_ythyo")]
+visible = false
+custom_minimum_size = Vector2(175, 50)
+layout_mode = 2
+
+[node name="CategoryLabel3" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/categoryGrid" instance=ExtResource("6_ythyo")]
+visible = false
+custom_minimum_size = Vector2(175, 50)
+layout_mode = 2
+
+[node name="bundleMargin" type="MarginContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="boxBundle" type="HBoxContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart"]
+visible = false
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/boxBundle"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="panelBundle" type="PanelContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/boxBundle"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_8xd3p")
+
+[node name="lblBundle" type="Label" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/boxBundle/panelBundle"]
+layout_mode = 2
+theme = ExtResource("4_ythyo")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "Test Bundle Name"
+
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/boxBundle"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+process_mode = 3
+libraries = {
+&"": SubResource("AnimationLibrary_rygt6")
+}

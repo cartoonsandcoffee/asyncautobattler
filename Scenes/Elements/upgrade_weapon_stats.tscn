@@ -215,6 +215,7 @@ grow_vertical = 2
 script = ExtResource("1_gr881")
 
 [node name="panelBack" type="Panel" parent="."]
+z_index = 10
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

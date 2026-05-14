@@ -1,39 +1,32 @@
-[gd_scene load_steps=40 format=3 uid="uid://bhutmb7ud57lk"]
+[gd_scene load_steps=39 format=3 uid="uid://bkhvt0y2lh81v"]
 
-[ext_resource type="Script" uid="uid://d0pbs8dnvje5l" path="res://Scripts/Components/item_choice.gd" id="1_4pu7h"]
-[ext_resource type="Texture2D" uid="uid://7h1qtewfvmnq" path="res://Assets/Items/Blank.png" id="2_32j57"]
-[ext_resource type="FontFile" uid="uid://dgwg8mvobk57a" path="res://Assets/UI/Fonts/ImperatorSmallCaps Bold.ttf" id="3_5por3"]
-[ext_resource type="Texture2D" uid="uid://cfj380cj5wikn" path="res://Assets/UI/web_back_test.png" id="4_5jpqp"]
-[ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="4_5por3"]
-[ext_resource type="Texture2D" uid="uid://1p2fhdhgi3x4" path="res://Assets/UI/Select.png" id="4_50rcf"]
-[ext_resource type="PackedScene" uid="uid://7ygdm4ameglb" path="res://Scenes/Elements/item_tooltip.tscn" id="5_5jpqp"]
-[ext_resource type="Texture2D" uid="uid://7gybg0pei0fk" path="res://Resources/StatIcons/stat_gold.tres" id="5_50rcf"]
-[ext_resource type="Texture2D" uid="uid://2edhx1a70b00" path="res://Resources/Rarity/common.tres" id="8_4sdkt"]
-[ext_resource type="Theme" uid="uid://od14ccps1daj" path="res://Themes/descriptive_label.tres" id="8_50rcf"]
-[ext_resource type="Texture2D" uid="uid://cxcph5ndupuqa" path="res://Assets/UI/arrow_down.png" id="9_3dfqd"]
-[ext_resource type="Texture2D" uid="uid://cu26bt7hayy3a" path="res://Resources/Rarity/golden.tres" id="10_ihguw"]
-[ext_resource type="Texture2D" uid="uid://chqkiec8p5s" path="res://Resources/Rarity/diamond.tres" id="11_b5cp2"]
+[ext_resource type="Script" uid="uid://d0pbs8dnvje5l" path="res://Scripts/Components/item_choice.gd" id="1_rpucp"]
+[ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="2_7oawj"]
+[ext_resource type="Texture2D" uid="uid://7gybg0pei0fk" path="res://Resources/StatIcons/stat_gold.tres" id="3_vol3t"]
+[ext_resource type="Texture2D" uid="uid://cfj380cj5wikn" path="res://Assets/UI/web_back_test.png" id="4_rk3f4"]
+[ext_resource type="Texture2D" uid="uid://2edhx1a70b00" path="res://Resources/Rarity/common.tres" id="5_q6w63"]
+[ext_resource type="Texture2D" uid="uid://c673mfqdoecpa" path="res://Assets/Items/Armor.png" id="6_fd57x"]
+[ext_resource type="FontFile" uid="uid://dgwg8mvobk57a" path="res://Assets/UI/Fonts/ImperatorSmallCaps Bold.ttf" id="7_r5csh"]
+[ext_resource type="Texture2D" uid="uid://1p2fhdhgi3x4" path="res://Assets/UI/Select.png" id="8_pxb5p"]
+[ext_resource type="Texture2D" uid="uid://cu26bt7hayy3a" path="res://Resources/Rarity/golden.tres" id="10_v4j2j"]
+[ext_resource type="Texture2D" uid="uid://chqkiec8p5s" path="res://Resources/Rarity/diamond.tres" id="11_dlqwf"]
+[ext_resource type="PackedScene" uid="uid://7ygdm4ameglb" path="res://Scenes/Elements/item_tooltip.tscn" id="12_fnucf"]
+[ext_resource type="Theme" uid="uid://od14ccps1daj" path="res://Themes/descriptive_label.tres" id="13_p7t57"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tnst4"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5jpqp"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jmixh"]
-bg_color = Color(0, 0, 0, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(1, 1, 1, 1)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fd57x"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4sdkt"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4sdkt"]
-bg_color = Color(0, 0, 0, 1)
+bg_color = Color(0, 0, 0, 0)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_btogu"]
-atlas = ExtResource("2_32j57")
-region = Rect2(528, 0, 16, 16)
+[sub_resource type="AtlasTexture" id="AtlasTexture_rpucp"]
+atlas = ExtResource("6_fd57x")
+region = Rect2(0, 600, 150, 150)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fif6b"]
 bg_color = Color(0.199101, 0.198613, 0.189857, 1)
@@ -81,22 +74,10 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Panel/Selector:pivot_offset")
+tracks/1/path = NodePath("Panel/Selector:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Panel/Selector:scale")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -106,6 +87,7 @@ tracks/2/keys = {
 [sub_resource type="Animation" id="Animation_66iod"]
 resource_name = "hover"
 loop_mode = 1
+step = 0.025
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -121,26 +103,14 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Panel/Selector:pivot_offset")
-tracks/1/interp = 1
+tracks/1/path = NodePath("Panel/Selector:scale")
+tracks/1/interp = 2
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(58, 53)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Panel/Selector:scale")
-tracks/2/interp = 2
-tracks/2/loop_wrap = true
-tracks/2/keys = {
 "times": PackedFloat32Array(0, 0.6, 1),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Vector2(0.95, 0.95), Vector2(1.05, 1.05), Vector2(0.95, 0.95)]
+"values": [Vector2(1, 1), Vector2(1.1, 1.1), Vector2(1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_tnst4"]
@@ -170,46 +140,22 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Panel/Panel2/picUpgrade:scale")
+tracks/0/path = NodePath("Panel/Panel2/upgGold:emitting")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0.5, 0.5)]
+"update": 1,
+"values": [false]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Panel/Panel2/picUpgrade:self_modulate")
+tracks/1/path = NodePath("Panel/Panel2/upgDiamond:emitting")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Panel/Panel2/upgGold:emitting")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Panel/Panel2/upgDiamond:emitting")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
@@ -251,30 +197,6 @@ resource_name = "upgrade_show"
 length = 2.0
 loop_mode = 1
 step = 0.025
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Panel/Panel2/picUpgrade:scale")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(0.5, 0.5), Vector2(1, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Panel/Panel2/picUpgrade:self_modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.5, 1),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ihguw"]
 _data = {
@@ -287,26 +209,35 @@ _data = {
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_66iod"]
 
 [node name="ItemChoice" type="Control"]
+custom_minimum_size = Vector2(500, 500)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_4pu7h")
+script = ExtResource("1_rpucp")
 
 [node name="Panel" type="Panel" parent="."]
 custom_minimum_size = Vector2(100, 100)
-layout_mode = 0
-offset_right = 100.0
-offset_bottom = 105.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_tnst4")
 
 [node name="priceContainer" type="PanelContainer" parent="Panel"]
-layout_mode = 2
-offset_top = 105.0
-offset_right = 100.0
-offset_bottom = 135.0
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 31.0
+offset_bottom = 81.0
+grow_horizontal = 2
+grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxEmpty_5jpqp")
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel/priceContainer"]
@@ -315,7 +246,7 @@ layout_mode = 2
 [node name="hboxCost" type="HBoxContainer" parent="Panel/priceContainer/MarginContainer"]
 modulate = Color(1, 0.733333, 0, 1)
 layout_mode = 2
-theme = ExtResource("4_5por3")
+theme = ExtResource("2_7oawj")
 theme_override_constants/separation = 5
 
 [node name="MarginContainer2" type="MarginContainer" parent="Panel/priceContainer/MarginContainer/hboxCost"]
@@ -325,13 +256,16 @@ size_flags_horizontal = 3
 [node name="picGoldIcon" type="TextureRect" parent="Panel/priceContainer/MarginContainer/hboxCost"]
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
-texture = ExtResource("5_50rcf")
+texture = ExtResource("3_vol3t")
 expand_mode = 3
+stretch_mode = 5
 
 [node name="lblPrice" type="Label" parent="Panel/priceContainer/MarginContainer/hboxCost"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 42
 text = "10"
+vertical_alignment = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel/priceContainer/MarginContainer/hboxCost"]
 layout_mode = 2
@@ -345,7 +279,7 @@ layout_mode = 2
 modulate = Color(1, 0.38, 0.38, 1)
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("4_5por3")
+theme = ExtResource("2_7oawj")
 theme_override_font_sizes/font_size = 26
 text = "Too  Poor!"
 horizontal_alignment = 1
@@ -363,12 +297,12 @@ theme_override_constants/separation = 0
 [node name="itemContainer" type="PanelContainer" parent="Panel/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_jmixh")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_fd57x")
 
 [node name="wep_indicator" type="TextureRect" parent="Panel/VBoxContainer/itemContainer"]
 visible = false
 layout_mode = 2
-texture = ExtResource("4_5jpqp")
+texture = ExtResource("4_rk3f4")
 
 [node name="ColorRect" type="ColorRect" parent="Panel/VBoxContainer/itemContainer/wep_indicator"]
 visible = false
@@ -397,8 +331,9 @@ anchor_right = 1.0
 offset_left = -20.0
 offset_bottom = 20.0
 grow_horizontal = 0
-texture = ExtResource("8_4sdkt")
-expand_mode = 1
+texture = ExtResource("5_q6w63")
+expand_mode = 3
+stretch_mode = 5
 
 [node name="PanelContainer" type="PanelContainer" parent="Panel/VBoxContainer/itemContainer/pnlRare/picRarity"]
 show_behind_parent = true
@@ -420,10 +355,12 @@ theme_override_constants/margin_bottom = 5
 [node name="item_icon" type="TextureRect" parent="Panel/VBoxContainer/itemContainer/MarginContainer"]
 custom_minimum_size = Vector2(75, 75)
 layout_mode = 2
-texture = SubResource("AtlasTexture_btogu")
-expand_mode = 1
+texture = SubResource("AtlasTexture_rpucp")
+expand_mode = 3
+stretch_mode = 5
 
 [node name="orderContainer" type="PanelContainer" parent="Panel/VBoxContainer"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_styles/panel = SubResource("StyleBoxFlat_fif6b")
@@ -435,7 +372,7 @@ theme_override_constants/margin_bottom = 3
 [node name="lblOrder" type="Label" parent="Panel/VBoxContainer/orderContainer/MarginContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.894922, 0.894922, 0.894922, 1)
-theme_override_fonts/font = ExtResource("3_5por3")
+theme_override_fonts/font = ExtResource("7_r5csh")
 theme_override_font_sizes/font_size = 12
 text = "weapon"
 horizontal_alignment = 1
@@ -448,13 +385,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -7.0
-offset_top = -7.0
-offset_right = 9.0
-offset_bottom = -6.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("4_50rcf")
+pivot_offset = Vector2(258, 250)
+texture = ExtResource("8_pxb5p")
 region_rect = Rect2(0, 0, 75, 75)
 patch_margin_left = 25
 patch_margin_top = 25
@@ -475,36 +409,21 @@ theme_override_styles/normal = SubResource("StyleBoxEmpty_5r5i4")
 
 [node name="Panel2" type="Panel" parent="Panel"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
 anchor_bottom = 1.0
-offset_bottom = -14.0
 grow_horizontal = 2
-grow_vertical = 2
+grow_vertical = 0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_tcf1q")
 
-[node name="picUpgrade" type="TextureRect" parent="Panel/Panel2"]
-self_modulate = Color(1, 1, 1, 0)
-layout_mode = 2
-offset_left = 3.0
-offset_top = 2.89633
-offset_right = 97.0
-offset_bottom = 87.8963
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(0.5, 0.5)
-pivot_offset = Vector2(47, 42)
-mouse_filter = 2
-texture = ExtResource("9_3dfqd")
-expand_mode = 1
-flip_v = true
-
 [node name="upgGold" type="CPUParticles2D" parent="Panel/Panel2"]
-position = Vector2(48, 86)
+position = Vector2(-1, -25)
 emitting = false
 amount = 3
-texture = ExtResource("10_ihguw")
+texture = ExtResource("10_v4j2j")
 speed_scale = 0.4
 emission_shape = 3
 emission_rect_extents = Vector2(40, 1)
@@ -517,10 +436,10 @@ scale_amount_curve = SubResource("Curve_x45mh")
 color_ramp = SubResource("Gradient_kyj2u")
 
 [node name="upgDiamond" type="CPUParticles2D" parent="Panel/Panel2"]
-position = Vector2(49, 87)
+position = Vector2(0, -24)
 emitting = false
 amount = 3
-texture = ExtResource("11_b5cp2")
+texture = ExtResource("11_dlqwf")
 speed_scale = 0.4
 emission_shape = 3
 emission_rect_extents = Vector2(50, 1)
@@ -551,7 +470,7 @@ offset_right = 368.0
 offset_bottom = -14.0
 theme_override_styles/panel = SubResource("StyleBoxEmpty_66iod")
 
-[node name="ItemTooltip" parent="ToolTip" instance=ExtResource("5_5jpqp")]
+[node name="ItemTooltip" parent="ToolTip" instance=ExtResource("12_fnucf")]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -573,7 +492,7 @@ offset_top = 54.0
 offset_right = 94.0
 offset_bottom = 91.0
 rotation = -0.537561
-theme = ExtResource("8_50rcf")
+theme = ExtResource("13_p7t57")
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 text = "Too 
 Expensive"

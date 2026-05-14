@@ -1,15 +1,15 @@
-[gd_scene load_steps=55 format=3 uid="uid://dal4a52ms64j6"]
+[gd_scene load_steps=59 format=3 uid="uid://dal4a52ms64j6"]
 
 [ext_resource type="Script" uid="uid://ddldx468qw34w" path="res://Scripts/main_menu.gd" id="1_n45e2"]
-[ext_resource type="Texture2D" uid="uid://cuwvv1egt6rpg" path="res://Assets/Art/TitleScreen/title_screen_dark.png" id="2_m3bi6"]
 [ext_resource type="FontFile" uid="uid://dbt53hulxegh2" path="res://Assets/UI/Fonts/Imperator.ttf" id="2_opfnp"]
+[ext_resource type="Texture2D" uid="uid://bti76lug2ucsx" path="res://Assets/Art/CharacterSelect.png" id="2_tt8ml"]
 [ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="3_n45e2"]
-[ext_resource type="Texture2D" uid="uid://c8c62iwt0buee" path="res://Assets/Art/TitleScreen/title_screen_light.png" id="3_wyh8j"]
 [ext_resource type="Texture2D" uid="uid://dxt3yb4gkjn6x" path="res://Assets/Art/Particles/smoke_07.png" id="4_ujyyl"]
 [ext_resource type="Shader" uid="uid://c4e2x1kcm6urs" path="res://Shaders/fire_shader.tres" id="5_mkpwh"]
 [ext_resource type="Texture2D" uid="uid://48oitsyk7ir4" path="res://Assets/Art/Noise/T_VFX_Noise_465.png" id="6_4nkqq"]
 [ext_resource type="Texture2D" uid="uid://5hncfitv451a" path="res://Assets/Art/Noise/T_Gradient_circle22.jpg" id="7_ehtkc"]
 [ext_resource type="Texture2D" uid="uid://ejynek1siy2n" path="res://Assets/UI/White.png" id="8_6dk6o"]
+[ext_resource type="Texture2D" uid="uid://occ7is5nueun" path="res://Assets/Art/Events/CompendiumButton.png" id="9_fmarx"]
 [ext_resource type="Texture2D" uid="uid://bx6acen5dxj1r" path="res://Assets/UI/CharSelect/FloorBit.png" id="9_mkpwh"]
 [ext_resource type="Texture2D" uid="uid://eb6npl80r4to" path="res://Assets/Art/Player/PVP/Player_Skin_0.png" id="10_4nkqq"]
 [ext_resource type="Texture2D" uid="uid://bujuc6bka60iu" path="res://Assets/UI/banner.png" id="11_5n0dv"]
@@ -108,41 +108,109 @@ region = Rect2(300, 0, 150, 150)
 
 [sub_resource type="Animation" id="Animation_hkdq0"]
 length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Panel/BackgroundImages/backLight:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
 
 [sub_resource type="Animation" id="Animation_fmarx"]
 resource_name = "back_flicker"
 length = 3.0
 loop_mode = 1
 step = 0.025
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Panel/BackgroundImages/backLight:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1.5, 3),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0.627451), Color(1, 1, 1, 0.901961), Color(1, 1, 1, 0.627451)]
-}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_xcoo4"]
 _data = {
 &"RESET": SubResource("Animation_hkdq0"),
 &"back_flicker": SubResource("Animation_fmarx")
+}
+
+[sub_resource type="Animation" id="Animation_xcoo4"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel/CompendiumHolder:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.56, 0.56, 0.56, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Panel/CompendiumHolder:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.8, 0.8)]
+}
+
+[sub_resource type="Animation" id="Animation_tt8ml"]
+resource_name = "hover_compendium"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel/CompendiumHolder:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.56, 0.56, 0.56, 1), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Panel/CompendiumHolder:scale")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.8, 0.8), Vector2(0.9, 0.9)]
+}
+
+[sub_resource type="Animation" id="Animation_jw7lb"]
+resource_name = "unhover_compendium"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel/CompendiumHolder:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(0.56, 0.56, 0.56, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Panel/CompendiumHolder:scale")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.9, 0.9), Vector2(0.8, 0.8)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_6vfk8"]
+_data = {
+&"RESET": SubResource("Animation_xcoo4"),
+&"hover_compendium": SubResource("Animation_tt8ml"),
+&"unhover_compendium": SubResource("Animation_jw7lb")
 }
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_fmarx"]
@@ -190,28 +258,38 @@ grow_vertical = 2
 
 [node name="backDark" type="TextureRect" parent="Panel/BackgroundImages"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 14
+anchor_top = 0.5
 anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_bottom = 0.5
+offset_top = -366.0
+offset_bottom = 321.2
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_m3bi6")
-expand_mode = 3
+texture = ExtResource("2_tt8ml")
+expand_mode = 5
+stretch_mode = 5
 
-[node name="backLight" type="TextureRect" parent="Panel/BackgroundImages"]
+[node name="CompendiumHolder" type="Control" parent="Panel"]
+visible = false
+modulate = Color(0.56, 0.56, 0.56, 1)
+custom_minimum_size = Vector2(436, 290)
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 126.0
+offset_top = -24.0
+offset_right = 562.0
+offset_bottom = 276.0
 grow_vertical = 2
-texture = ExtResource("3_wyh8j")
-expand_mode = 1
+scale = Vector2(0.8, 0.8)
+pivot_offset = Vector2(218, 145)
 
-[node name="smoke" type="CPUParticles2D" parent="Panel/BackgroundImages"]
-position = Vector2(923, 460)
-emitting = false
-amount = 10
+[node name="smoke" type="CPUParticles2D" parent="Panel/CompendiumHolder"]
+position = Vector2(195.5, -11.25)
+scale = Vector2(1.25, 1.25)
+amount = 1
 texture = ExtResource("4_ujyyl")
 lifetime = 2.0
 speed_scale = 0.4
@@ -229,15 +307,30 @@ scale_amount_curve = SubResource("Curve_jr6u5")
 color = Color(0.637843, 0.637843, 0.637843, 1)
 color_ramp = SubResource("Gradient_6m47u")
 
-[node name="Fire" type="TextureRect" parent="Panel/BackgroundImages"]
+[node name="Fire" type="TextureRect" parent="Panel/CompendiumHolder"]
 material = SubResource("ShaderMaterial_tt8ml")
-layout_mode = 0
-offset_left = 889.0
-offset_top = 405.0
-offset_right = 944.0
-offset_bottom = 472.0
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -43.75
+offset_top = -46.25
+offset_right = 11.25
+offset_bottom = 20.75
+grow_horizontal = 2
+scale = Vector2(0.8, 0.8)
 texture = ExtResource("8_6dk6o")
 expand_mode = 1
+
+[node name="picDesk" type="TextureRect" parent="Panel/CompendiumHolder"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("9_fmarx")
+expand_mode = 3
 
 [node name="CharacterSelectMenu" type="Control" parent="Panel"]
 layout_mode = 1
@@ -324,6 +417,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="playerInfoPanel" type="HBoxContainer" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer"]
+visible = false
 layout_mode = 2
 
 [node name="spacer4" type="MarginContainer" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel"]
@@ -356,21 +450,6 @@ size_flags_horizontal = 3
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel"]
 layout_mode = 2
 tooltip_text = "You get \"Ears\" from beating other high level players.  They can be earned passively by beating the Champion after Rank 5."
-
-[node name="picEar" type="TextureRect" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel/HBoxContainer"]
-custom_minimum_size = Vector2(50, 0)
-layout_mode = 2
-texture = ExtResource("13_wyh8j")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="lblEars" type="Label" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme = ExtResource("3_n45e2")
-text = "000"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="spacer3" type="MarginContainer" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel"]
 layout_mode = 2
@@ -536,6 +615,25 @@ theme_override_styles/panel = SubResource("StyleBoxEmpty_84iac")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel/skinPanel/PanelContainer"]
 layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/skinPanel/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="picEar" type="TextureRect" parent="Panel/skinPanel/PanelContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+texture = ExtResource("13_wyh8j")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="lblEars" type="Label" parent="Panel/skinPanel/PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("3_n45e2")
+text = "000"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="lblSkins" type="Label" parent="Panel/skinPanel/PanelContainer/VBoxContainer"]
 layout_mode = 2
@@ -624,11 +722,23 @@ theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="btnNewGame" type="Button" parent="Panel/panelBottom/HBoxContainer/panMid/MarginContainer"]
-custom_minimum_size = Vector2(300, 75)
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/panelBottom/HBoxContainer/panMid/MarginContainer"]
 layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="btnNewGame" type="Button" parent="Panel/panelBottom/HBoxContainer/panMid/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(0, 75)
+layout_mode = 2
+size_flags_horizontal = 3
 theme = ExtResource("3_n45e2")
 text = "New Run"
+
+[node name="btnContinue" type="Button" parent="Panel/panelBottom/HBoxContainer/panMid/MarginContainer/HBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("3_n45e2")
+text = "Continue Run"
 
 [node name="panLeft" type="PanelContainer" parent="Panel/panelBottom/HBoxContainer"]
 layout_mode = 2
@@ -646,7 +756,7 @@ size_flags_vertical = 3
 layout_mode = 2
 size_flags_horizontal = 8
 theme = ExtResource("19_6m47u")
-theme_override_constants/separation = 50
+theme_override_constants/separation = 20
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel/panelBottom/HBoxContainer/panLeft/VBoxContainer/iconButtons"]
 layout_mode = 2
@@ -679,6 +789,7 @@ expand_icon = true
 [node name="MarginContainer2" type="MarginContainer" parent="Panel/panelBottom/HBoxContainer/panLeft/VBoxContainer/iconButtons"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/margin_left = 30
 
 [node name="MarginContainer2" type="MarginContainer" parent="Panel/panelBottom/HBoxContainer/panLeft/VBoxContainer"]
 layout_mode = 2
@@ -705,6 +816,11 @@ libraries = {
 &"": SubResource("AnimationLibrary_xcoo4")
 }
 
+[node name="animCompendium" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_6vfk8")
+}
+
 [node name="CRT_Shader" type="CanvasLayer" parent="."]
 visible = false
 
@@ -721,9 +837,9 @@ mesh = SubResource("QuadMesh_hkdq0")
 [connection signal="pressed" from="Panel/loadoutPanel/PanelContainer/MarginContainer/PanelContainer/VBoxContainer/toggleBundle/bunChaos" to="." method="_on_bun_chaos_pressed"]
 [connection signal="pressed" from="Panel/loadoutPanel/PanelContainer/MarginContainer/PanelContainer/VBoxContainer/MarginContainer/btnRandom" to="." method="_on_btn_random_pressed"]
 [connection signal="pressed" from="Panel/loadoutPanel/PanelContainer/MarginContainer/PanelContainer/VBoxContainer/btnCompendium" to="." method="_on_btn_compendium_pressed"]
-[connection signal="mouse_entered" from="Panel/panelBottom/HBoxContainer/panMid/MarginContainer/btnNewGame" to="." method="_on_btn_new_game_mouse_entered"]
-[connection signal="mouse_exited" from="Panel/panelBottom/HBoxContainer/panMid/MarginContainer/btnNewGame" to="." method="_on_btn_new_game_mouse_exited"]
-[connection signal="pressed" from="Panel/panelBottom/HBoxContainer/panMid/MarginContainer/btnNewGame" to="." method="_on_btn_new_game_pressed"]
+[connection signal="mouse_entered" from="Panel/panelBottom/HBoxContainer/panMid/MarginContainer/HBoxContainer/btnNewGame" to="." method="_on_btn_new_game_mouse_entered"]
+[connection signal="pressed" from="Panel/panelBottom/HBoxContainer/panMid/MarginContainer/HBoxContainer/btnNewGame" to="." method="_on_btn_new_game_pressed"]
+[connection signal="pressed" from="Panel/panelBottom/HBoxContainer/panMid/MarginContainer/HBoxContainer/btnContinue" to="." method="_on_btn_continue_pressed"]
 [connection signal="pressed" from="Panel/panelBottom/HBoxContainer/panLeft/VBoxContainer/iconButtons/btnInfo" to="." method="_on_btn_info_pressed"]
 [connection signal="pressed" from="Panel/panelBottom/HBoxContainer/panLeft/VBoxContainer/iconButtons/btnSettings" to="." method="_on_btn_settings_pressed"]
 [connection signal="pressed" from="Panel/panelBottom/HBoxContainer/panLeft/VBoxContainer/iconButtons/btnQuit" to="." method="_on_btn_quit_pressed"]

@@ -1,0 +1,172 @@
+[gd_scene load_steps=10 format=3 uid="uid://co7xji8qkuesd"]
+
+[ext_resource type="Script" uid="uid://bgts6074854ev" path="res://Scripts/Components/MainCamp/camp_store.gd" id="1_phklk"]
+[ext_resource type="Texture2D" uid="uid://cs8cwwngwet46" path="res://Assets/Art/Events/Town/MainCamp_Back.png" id="2_k6b8v"]
+[ext_resource type="Texture2D" uid="uid://3xbcf1mjb8l3" path="res://Assets/Art/Events/Town/FloorHole.png" id="3_ggu57"]
+[ext_resource type="Theme" uid="uid://p8sbf2usmdfn" path="res://Themes/invis_buttons.tres" id="4_5yico"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5dsgb"]
+
+[sub_resource type="Animation" id="Animation_liyj2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("controlMain:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("controlMain:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.7, 0.7, 0.7, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_e7qjw"]
+resource_name = "mouse_exit"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("controlMain:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1.05, 1.05), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("controlMain:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(0.7, 0.7, 0.7, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_qju78"]
+resource_name = "mouse_over"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("controlMain:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.05, 1.05)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("controlMain:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.7, 0.7, 0.7, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_u62wv"]
+_data = {
+&"RESET": SubResource("Animation_liyj2"),
+&"mouse_exit": SubResource("Animation_e7qjw"),
+&"mouse_over": SubResource("Animation_qju78")
+}
+
+[node name="CampBanish" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("1_phklk")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_k6b8v")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="controlMain" type="Control" parent="."]
+modulate = Color(0.7, 0.7, 0.7, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -117.5
+offset_top = -43.5
+offset_right = 117.5
+offset_bottom = 43.5
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(117, 43)
+
+[node name="PanelContainer" type="PanelContainer" parent="controlMain"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_5dsgb")
+
+[node name="picMain" type="TextureRect" parent="controlMain/PanelContainer"]
+layout_mode = 2
+texture = ExtResource("3_ggu57")
+expand_mode = 3
+stretch_mode = 5
+flip_h = true
+
+[node name="Button" type="Button" parent="controlMain/PanelContainer/picMain"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("4_5yico")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_u62wv")
+}

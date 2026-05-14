@@ -1,0 +1,643 @@
+[gd_scene load_steps=35 format=3 uid="uid://s2llyy4x3nna"]
+
+[ext_resource type="Script" uid="uid://dgeq2818v5h6s" path="res://Scripts/Components/onward_camp.gd" id="1_qmv73"]
+[ext_resource type="Texture2D" uid="uid://bo0ykogjymh6m" path="res://Assets/UI/button_VineOnward_Color.png" id="2_u26tn"]
+[ext_resource type="Texture2D" uid="uid://1cagro0pbj3q" path="res://Assets/UI/button_VineOnward_Whtie.png" id="3_rcsyx"]
+[ext_resource type="Texture2D" uid="uid://d36lmkessk1cp" path="res://Assets/UI/button_VineCamp_Color.png" id="4_825m1"]
+[ext_resource type="Texture2D" uid="uid://cip53fd280pe7" path="res://Assets/UI/button_VineCamp_White.png" id="5_78b16"]
+[ext_resource type="Animation" uid="uid://l7xcuno0g128" path="res://Animations/onward_highlight.res" id="7_c7w6k"]
+[ext_resource type="Animation" uid="uid://bicxnvsd4ppny" path="res://Animations/onward_unhighlight.res" id="8_u26tn"]
+[ext_resource type="Animation" uid="uid://beyrjqy8cc5vp" path="res://Animations/onward_hover.res" id="9_rcsyx"]
+[ext_resource type="Animation" uid="uid://cci2dqky3q5r0" path="res://Animations/onward_idle.res" id="9_u26tn"]
+[ext_resource type="Animation" uid="uid://cxtrgyw21xs2o" path="res://Animations/camp_idle.res" id="10_rcsyx"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1qw7o"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7pcgg"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c7w6k"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u26tn"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rcsyx"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_825m1"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_78b16"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mdhut"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7a0pj"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0pgsm"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7orye"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_esac5"]
+
+[sub_resource type="Animation" id="Animation_f7gnl"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("dimBack/centerBox/choiceOnward:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("dimBack/centerBox/choiceOnward/onwardWhite:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.5, 0.5, 0.5, 0.623529)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("dimBack/centerBox/choiceCamp:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("dimBack/centerBox/choiceCamp/campWhite:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.501961, 0.501961, 0.501961, 0.623529)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath(".:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_qmv73"]
+resource_name = "hide_popup"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_28fyd"]
+resource_name = "show_popup"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.1, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"play_camp_show"
+}, {
+"args": [],
+"method": &"play_onward_show"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ipd5p"]
+_data = {
+&"RESET": SubResource("Animation_f7gnl"),
+&"hide_popup": SubResource("Animation_qmv73"),
+&"show_popup": SubResource("Animation_28fyd")
+}
+
+[sub_resource type="Animation" id="Animation_c7w6k"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("dimBack/centerBox/choiceOnward:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("dimBack/centerBox/choiceOnward:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("dimBack/centerBox/choiceOnward/onwardWhite:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.5, 0.5, 0.5, 0.588235)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("dimBack/centerBox/choiceOnward:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(543, -800)]
+}
+
+[sub_resource type="Animation" id="Animation_u26tn"]
+resource_name = "onward_show"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("dimBack/centerBox/choiceOnward:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(543, -800), Vector2(543, 50), Vector2(543, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("dimBack/centerBox/choiceOnward:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, 0.0698132, -0.0349066]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("dimBack/centerBox/choiceOnward:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 1)]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play_onward_hover"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_825m1"]
+_data = {
+&"RESET": SubResource("Animation_c7w6k"),
+&"onward_highlight": ExtResource("7_c7w6k"),
+&"onward_hover": ExtResource("9_rcsyx"),
+&"onward_idle": ExtResource("9_u26tn"),
+&"onward_show": SubResource("Animation_u26tn"),
+&"onward_unhighlight": ExtResource("8_u26tn")
+}
+
+[sub_resource type="Animation" id="Animation_825m1"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("dimBack/centerBox/choiceCamp:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("dimBack/centerBox/choiceCamp/campWhite:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.5, 0.5, 0.5, 0.470588)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("dimBack/centerBox/choiceCamp:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("dimBack/centerBox/choiceCamp:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1031, -800)]
+}
+
+[sub_resource type="Animation" id="Animation_78b16"]
+resource_name = "camp_hover"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("dimBack/centerBox/choiceCamp/campWhite:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.5, 0.5, 0.5, 0.470588), Color(0.5, 0.5, 0.5, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("dimBack/centerBox/choiceCamp:scale")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.05, 1.05)]
+}
+
+[sub_resource type="Animation" id="Animation_7a0pj"]
+resource_name = "camp_show"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("dimBack/centerBox/choiceCamp:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1031, -600), Vector2(1031, 30), Vector2(1031, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("dimBack/centerBox/choiceCamp:rotation")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.125, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, -0.0523599, 0.0523599]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play_camp_hover"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_mdhut"]
+resource_name = "camp_unhover"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("dimBack/centerBox/choiceCamp/campWhite:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.5, 0.5, 0.5, 0), Color(0.5, 0.5, 0.5, 0.470588)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("dimBack/centerBox/choiceCamp:scale")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1.05, 1.05), Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_0pgsm"]
+_data = {
+&"RESET": SubResource("Animation_825m1"),
+&"camp_hover": SubResource("Animation_78b16"),
+&"camp_idle": ExtResource("10_rcsyx"),
+&"camp_show": SubResource("Animation_7a0pj"),
+&"camp_unhover": SubResource("Animation_mdhut")
+}
+
+[node name="OnwardCamp" type="Control"]
+visible = false
+modulate = Color(1, 1, 1, 0)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+script = ExtResource("1_qmv73")
+
+[node name="dimBack" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_1qw7o")
+
+[node name="centerBox" type="Panel" parent="dimBack"]
+custom_minimum_size = Vector2(1200, 600)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_7pcgg")
+
+[node name="choiceOnward" type="Control" parent="dimBack/centerBox"]
+custom_minimum_size = Vector2(300, 600)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -225.0
+offset_top = -800.0
+offset_right = 225.0
+offset_bottom = -200.0
+grow_horizontal = 2
+pivot_offset = Vector2(225, 0)
+
+[node name="onwardColor" type="TextureRect" parent="dimBack/centerBox/choiceOnward"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 68.9717
+grow_vertical = 2
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("2_u26tn")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="onwardWhite" type="TextureRect" parent="dimBack/centerBox/choiceOnward"]
+modulate = Color(0.5, 0.5, 0.5, 0.588235)
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+grow_vertical = 2
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("3_rcsyx")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="btnOnward" type="Button" parent="dimBack/centerBox/choiceOnward/onwardWhite"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 113.0
+offset_right = -88.2068
+offset_bottom = -102.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_c7w6k")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_u26tn")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_rcsyx")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_825m1")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_78b16")
+
+[node name="choiceCamp" type="Control" parent="dimBack/centerBox"]
+custom_minimum_size = Vector2(505, 600)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -505.0
+offset_top = -800.0
+offset_bottom = -200.0
+grow_horizontal = 0
+pivot_offset = Vector2(252, 0)
+
+[node name="campColor" type="TextureRect" parent="dimBack/centerBox/choiceCamp"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -505.286
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("4_825m1")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="campWhite" type="TextureRect" parent="dimBack/centerBox/choiceCamp"]
+modulate = Color(0.5, 0.5, 0.5, 0.470588)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -505.286
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("5_78b16")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="btnCamp" type="Button" parent="dimBack/centerBox/choiceCamp/campWhite"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 155.0
+offset_right = -127.286
+offset_bottom = -80.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_mdhut")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_7a0pj")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_0pgsm")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_7orye")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_esac5")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_ipd5p")
+}
+
+[node name="animOnward" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_825m1")
+}
+
+[node name="animOnward2" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_825m1")
+}
+
+[node name="animCamp" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_0pgsm")
+}
+
+[node name="animCamp2" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_0pgsm")
+}
+
+[connection signal="mouse_entered" from="dimBack/centerBox/choiceOnward/onwardWhite/btnOnward" to="." method="_on_btn_onward_mouse_entered"]
+[connection signal="mouse_exited" from="dimBack/centerBox/choiceOnward/onwardWhite/btnOnward" to="." method="_on_btn_onward_mouse_exited"]
+[connection signal="pressed" from="dimBack/centerBox/choiceOnward/onwardWhite/btnOnward" to="." method="_on_btn_onward_pressed"]
+[connection signal="mouse_entered" from="dimBack/centerBox/choiceCamp/campWhite/btnCamp" to="." method="_on_btn_camp_mouse_entered"]
+[connection signal="mouse_exited" from="dimBack/centerBox/choiceCamp/campWhite/btnCamp" to="." method="_on_btn_camp_mouse_exited"]
+[connection signal="pressed" from="dimBack/centerBox/choiceCamp/campWhite/btnCamp" to="." method="_on_btn_camp_pressed"]

@@ -551,7 +551,7 @@ tracks/5/keys = {
 
 [sub_resource type="Animation" id="Animation_u30id"]
 resource_name = "hide"
-length = 0.3
+length = 0.01
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true

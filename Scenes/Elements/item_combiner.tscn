@@ -211,6 +211,7 @@ pivot_offset = Vector2(275, 132)
 theme_override_styles/panel = SubResource("StyleBoxEmpty_d4lnh")
 
 [node name="panelBlack" type="PanelContainer" parent="Panel"]
+z_index = 10
 custom_minimum_size = Vector2(600, 150)
 layout_mode = 1
 anchors_preset = 8

@@ -1,0 +1,1024 @@
+[gd_scene load_steps=40 format=3 uid="uid://d08r3wuotxaf8"]
+
+[ext_resource type="Texture2D" uid="uid://bnj3ygyotq5wv" path="res://Assets/UI/button_Fight_White.png" id="1_6qyws"]
+[ext_resource type="Script" uid="uid://b610ovfn73oyt" path="res://Scripts/Components/fight_flee.gd" id="1_cdsbu"]
+[ext_resource type="Texture2D" uid="uid://ommwey2fnnb2" path="res://Assets/UI/button_Fight_Color.png" id="2_cdsbu"]
+[ext_resource type="Texture2D" uid="uid://c5j822x16yep3" path="res://Assets/Art/Particles/star_08.png" id="3_5xp4v"]
+[ext_resource type="Texture2D" uid="uid://dhofxa5bgmljn" path="res://Assets/UI/button_Run_White.png" id="4_kclqi"]
+[ext_resource type="Texture2D" uid="uid://bwaut4kwcmrs0" path="res://Assets/UI/button_Run_Color.png" id="5_2yw06"]
+[ext_resource type="Texture2D" uid="uid://bhantmwmqo0jc" path="res://Assets/UI/button_CantRun_Color.png" id="7_5xp4v"]
+[ext_resource type="PackedScene" uid="uid://cwbr81rsawe8p" path="res://Scenes/Elements/instant_combat_toggle.tscn" id="8_kclqi"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m2wva"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tvfy8"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5xp4v"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kclqi"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2yw06"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_k0ig7"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6637e"]
+
+[sub_resource type="Curve" id="Curve_k0ig7"]
+_data = [Vector2(0, 0.23481), 0.0, 0.0, 0, 0, Vector2(1, 0.563924), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_6637e"]
+offsets = PackedFloat32Array(0, 0.67354, 1)
+colors = PackedColorArray(1, 0.901961, 0.509804, 1, 1, 0.901984, 0.509922, 1, 1, 0.902, 0.51, 0)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ppdj8"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ka0tc"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sodrs"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_josxc"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_i38mu"]
+
+[sub_resource type="Animation" id="Animation_6637e"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_sodrs"]
+resource_name = "hide_popup"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_k0ig7"]
+resource_name = "show_popup"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_josxc"]
+_data = {
+&"RESET": SubResource("Animation_6637e"),
+&"hide_popup": SubResource("Animation_sodrs"),
+&"show_popup": SubResource("Animation_k0ig7")
+}
+
+[sub_resource type="Animation" id="Animation_ka0tc"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("dimBack/centerBox/choiceFight:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -800)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("dimBack/centerBox/choiceFight:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.6, 0.6)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("dimBack/centerBox/choiceFight/fightParticles:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("dimBack/centerBox/choiceFight/fightColor:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("dimBack/centerBox/choiceFight/fightColor/btnFight:disabled")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_5xp4v"]
+resource_name = "fight_back_to_normal"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("dimBack/centerBox/choiceFight:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.58, 0.58), Vector2(0.6, 0.6)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("dimBack/centerBox/choiceFight/fightColor:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0.509804), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play_fight_idle"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_cdsbu"]
+resource_name = "fight_deselect"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("dimBack/centerBox/choiceFight:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.62, 0.62), Vector2(0.58, 0.58)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("dimBack/centerBox/choiceFight/fightColor:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0.509804)]
+}
+
+[sub_resource type="Animation" id="Animation_6qyws"]
+resource_name = "fight_idle"
+loop_mode = 1
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("dimBack/centerBox/choiceFight:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.6, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.6, 0.6), Vector2(0.63, 0.63), Vector2(0.6, 0.6)]
+}
+
+[sub_resource type="Animation" id="Animation_ppdj8"]
+resource_name = "show_fight"
+length = 0.5
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("dimBack/centerBox/choiceFight:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, -800), Vector2(0, 0), Vector2(0, -50), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("dimBack/centerBox/choiceFight:scale")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0.6, 0.68), Vector2(0.6, 0.68), Vector2(0.68, 0.6), Vector2(0.6, 0.6)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("dimBack/centerBox/choiceFight/fightParticles:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.3, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"impact_sfx"
+}, {
+"args": [],
+"method": &"play_fight_idle"
+}]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("dimBack/centerBox/choiceFight/fightColor:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("dimBack/centerBox/choiceFight/fightColor/btnFight:disabled")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_sodrs"]
+_data = {
+&"RESET": SubResource("Animation_ka0tc"),
+&"fight_back_to_normal": SubResource("Animation_5xp4v"),
+&"fight_deselect": SubResource("Animation_cdsbu"),
+&"fight_idle": SubResource("Animation_6qyws"),
+&"show_fight": SubResource("Animation_ppdj8")
+}
+
+[sub_resource type="Animation" id="Animation_i38mu"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("dimBack/centerBox/choiceFlee:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(450, -800)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("dimBack/centerBox/choiceFlee:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.6, 0.6)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("dimBack/centerBox/choiceFlee/runParticles:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("dimBack/centerBox/choiceFlee/runColor:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("dimBack/centerBox/choiceFlee/runWhite:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("dimBack/centerBox/choiceFlee/runBroken:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("dimBack/centerBox/choiceFlee/runColor:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("dimBack/centerBox/choiceFlee/runColor/btnRun:disabled")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_tvfy8"]
+resource_name = "run_back_to_normal"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("dimBack/centerBox/choiceFlee:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.58, 0.58), Vector2(0.6, 0.6)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("dimBack/centerBox/choiceFlee/runColor:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0.635294), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play_run_idle"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_2yw06"]
+resource_name = "run_deselect"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("dimBack/centerBox/choiceFlee:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.62, 0.62), Vector2(0.58, 0.58)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("dimBack/centerBox/choiceFlee/runColor:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0.635294)]
+}
+
+[sub_resource type="Animation" id="Animation_kclqi"]
+resource_name = "run_idle"
+loop_mode = 1
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("dimBack/centerBox/choiceFlee:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.6, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.6, 0.6), Vector2(0.63, 0.63), Vector2(0.6, 0.6)]
+}
+
+[sub_resource type="Animation" id="Animation_josxc"]
+resource_name = "show_run"
+length = 0.7
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("dimBack/centerBox/choiceFlee:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.2, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(450, -800), Vector2(450, 0), Vector2(450, -50), Vector2(450, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("dimBack/centerBox/choiceFlee:scale")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.2, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0.6, 0.68), Vector2(0.6, 0.68), Vector2(0.68, 0.6), Vector2(0.6, 0.6)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("dimBack/centerBox/choiceFlee/runParticles:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("dimBack/centerBox/choiceFlee/runColor:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.7),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play_run_idle"
+}]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath(".")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"impact_sfx"
+}]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("dimBack/centerBox/choiceFlee/runColor/btnRun:disabled")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.7),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_m2wva"]
+resource_name = "show_run_broken"
+length = 0.7
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("dimBack/centerBox/choiceFlee:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.2, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(450, -800), Vector2(450, 0), Vector2(450, -50), Vector2(450, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("dimBack/centerBox/choiceFlee:scale")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.2, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0.6, 0.68), Vector2(0.6, 0.68), Vector2(0.68, 0.6), Vector2(0.6, 0.6)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("dimBack/centerBox/choiceFlee/runParticles:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("dimBack/centerBox/choiceFlee/runColor:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.7),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play_run_idle"
+}]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath(".")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"impact_sfx"
+}]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("dimBack/centerBox/choiceFlee/runBroken:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("dimBack/centerBox/choiceFlee/runColor:visible")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("dimBack/centerBox/choiceFlee/runWhite:visible")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_m2wva"]
+_data = {
+&"RESET": SubResource("Animation_i38mu"),
+&"run_back_to_normal": SubResource("Animation_tvfy8"),
+&"run_deselect": SubResource("Animation_2yw06"),
+&"run_idle": SubResource("Animation_kclqi"),
+&"show_run": SubResource("Animation_josxc"),
+&"show_run_broken": SubResource("Animation_m2wva")
+}
+
+[node name="FightFlee" type="Control"]
+visible = false
+modulate = Color(1, 1, 1, 0)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_cdsbu")
+
+[node name="dimBack" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_m2wva")
+
+[node name="centerBox" type="Panel" parent="dimBack"]
+custom_minimum_size = Vector2(1050, 600)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -525.0
+offset_top = -300.0
+offset_right = 525.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_tvfy8")
+
+[node name="choiceFight" type="Control" parent="dimBack/centerBox"]
+custom_minimum_size = Vector2(600, 600)
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_top = -800.0
+offset_right = 600.0
+offset_bottom = -800.0
+grow_vertical = 2
+scale = Vector2(0.6, 0.6)
+pivot_offset = Vector2(300, 300)
+
+[node name="fightWhite" type="TextureRect" parent="dimBack/centerBox/choiceFight"]
+modulate = Color(0.2, 0.2, 0.2, 1)
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 610.379
+grow_vertical = 2
+texture = ExtResource("1_6qyws")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="fightColor" type="TextureRect" parent="dimBack/centerBox/choiceFight"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 610.379
+grow_vertical = 2
+texture = ExtResource("2_cdsbu")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="btnFight" type="Button" parent="dimBack/centerBox/choiceFight/fightColor"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_5xp4v")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_kclqi")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_2yw06")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_k0ig7")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_6637e")
+disabled = true
+
+[node name="fightParticles" type="CPUParticles2D" parent="dimBack/centerBox/choiceFight"]
+position = Vector2(321, 558)
+emitting = false
+amount = 30
+texture = ExtResource("3_5xp4v")
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+direction = Vector2(0, 0)
+spread = 180.0
+gravity = Vector2(0, 200)
+initial_velocity_min = 200.0
+initial_velocity_max = 400.0
+scale_amount_min = 0.1
+scale_amount_max = 0.5
+scale_amount_curve = SubResource("Curve_k0ig7")
+color = Color(1, 0.902, 0.51, 1)
+color_ramp = SubResource("Gradient_6637e")
+
+[node name="choiceFlee" type="Control" parent="dimBack/centerBox"]
+custom_minimum_size = Vector2(600, 600)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -600.0
+offset_top = -800.0
+offset_bottom = -800.0
+grow_horizontal = 0
+grow_vertical = 2
+scale = Vector2(0.6, 0.6)
+pivot_offset = Vector2(300, 300)
+
+[node name="runWhite" type="TextureRect" parent="dimBack/centerBox/choiceFlee"]
+modulate = Color(0.2, 0.2, 0.2, 1)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("4_kclqi")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="runColor" type="TextureRect" parent="dimBack/centerBox/choiceFlee"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("5_2yw06")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="btnRun" type="Button" parent="dimBack/centerBox/choiceFlee/runColor"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ppdj8")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_ka0tc")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_sodrs")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_josxc")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_i38mu")
+disabled = true
+
+[node name="runBroken" type="TextureRect" parent="dimBack/centerBox/choiceFlee"]
+visible = false
+modulate = Color(0.61, 0.61, 0.61, 1)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -579.736
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("7_5xp4v")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="runParticles" type="CPUParticles2D" parent="dimBack/centerBox/choiceFlee"]
+position = Vector2(326, 551)
+emitting = false
+amount = 30
+texture = ExtResource("3_5xp4v")
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+direction = Vector2(0, 0)
+spread = 180.0
+gravity = Vector2(0, 200)
+initial_velocity_min = 200.0
+initial_velocity_max = 400.0
+scale_amount_min = 0.1
+scale_amount_max = 0.5
+scale_amount_curve = SubResource("Curve_k0ig7")
+color = Color(1, 0.902, 0.51, 1)
+color_ramp = SubResource("Gradient_6637e")
+
+[node name="toggleInstant" type="Control" parent="dimBack/centerBox"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.9, 0.9)
+
+[node name="instant_combat_toggle" parent="dimBack/centerBox/toggleInstant" instance=ExtResource("8_kclqi")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = 100.0
+offset_right = 100.0
+offset_bottom = 300.0
+pivot_offset = Vector2(100, 100)
+
+[node name="animPanel" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_josxc")
+}
+
+[node name="animFight" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_sodrs")
+}
+
+[node name="animRun" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_m2wva")
+}
+
+[connection signal="mouse_entered" from="dimBack/centerBox/choiceFight/fightColor/btnFight" to="." method="_on_btn_fight_mouse_entered"]
+[connection signal="mouse_exited" from="dimBack/centerBox/choiceFight/fightColor/btnFight" to="." method="_on_btn_fight_mouse_exited"]
+[connection signal="pressed" from="dimBack/centerBox/choiceFight/fightColor/btnFight" to="." method="_on_btn_fight_pressed"]
+[connection signal="mouse_entered" from="dimBack/centerBox/choiceFlee/runColor/btnRun" to="." method="_on_btn_run_mouse_entered"]
+[connection signal="mouse_exited" from="dimBack/centerBox/choiceFlee/runColor/btnRun" to="." method="_on_btn_run_mouse_exited"]
+[connection signal="pressed" from="dimBack/centerBox/choiceFlee/runColor/btnRun" to="." method="_on_btn_run_pressed"]

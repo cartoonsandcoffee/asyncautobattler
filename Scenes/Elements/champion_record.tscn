@@ -282,6 +282,7 @@ size_flags_horizontal = 3
 
 [node name="Button" type="Button" parent="Panel/PanelContainer/MarginContainer"]
 layout_mode = 2
+focus_mode = 0
 theme_override_styles/focus = SubResource("StyleBoxEmpty_vpoee")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_jkk1w")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_letk8")

@@ -1,0 +1,357 @@
+[gd_scene load_steps=21 format=3 uid="uid://dx6dh3x71thr4"]
+
+[ext_resource type="Texture2D" uid="uid://djreh4aobw1al" path="res://Assets/UI/PopupButtonTall.png" id="1_b1i7b"]
+[ext_resource type="Script" uid="uid://4b4hyjnaetsn" path="res://Scripts/Components/pet_item_interface.gd" id="1_qqifo"]
+[ext_resource type="Texture2D" uid="uid://muq65ml3jy4x" path="res://Assets/UI/PopupTile4x4Small.png" id="2_7eghc"]
+[ext_resource type="Texture2D" uid="uid://7msowayrga1p" path="res://Assets/Art/Events/PetFamiliar3.png" id="3_7eghc"]
+[ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="4_2lpsh"]
+[ext_resource type="Texture2D" uid="uid://d4gqpfi5addgw" path="res://Assets/UI/item_slot_back.png" id="5_x0t7e"]
+[ext_resource type="Texture2D" uid="uid://dekpvi3k71cs7" path="res://Assets/UI/ItemSquare.png" id="7_jy4yx"]
+[ext_resource type="PackedScene" uid="uid://cqhyru53o5wfx" path="res://Scenes/item.tscn" id="8_c5vja"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4jm2t"]
+texture = ExtResource("1_b1i7b")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_km478"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_j8pj7"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bf6hp"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qqifo"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2lpsh"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_x0t7e"]
+texture = ExtResource("2_7eghc")
+texture_margin_left = 75.0
+texture_margin_top = 55.0
+texture_margin_right = 75.0
+texture_margin_bottom = 60.0
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+region_rect = Rect2(15, 0, 570, 300)
+modulate_color = Color(0.3572, 0.43804, 0.47, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4jm2t"]
+atlas = ExtResource("3_7eghc")
+region = Rect2(75, 225, 400, 400)
+
+[sub_resource type="Animation" id="Animation_2lpsh"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.5, 0.5)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("..:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_x0t7e"]
+resource_name = "hide_popup"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.1, 1.1), Vector2(0.5, 0.5)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("..:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_qqifo"]
+resource_name = "show_popup"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.5, 0.5), Vector2(1.1, 1.1), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("..:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_jy4yx"]
+_data = {
+&"RESET": SubResource("Animation_2lpsh"),
+&"hide_popup": SubResource("Animation_x0t7e"),
+&"show_popup": SubResource("Animation_qqifo")
+}
+
+[node name="PetItemInterface" type="Control"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_qqifo")
+
+[node name="controlMain" type="Control" parent="."]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(700, 500)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -250.0
+offset_right = 400.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+pivot_offset = Vector2(400, 250)
+mouse_filter = 2
+
+[node name="panelClose" type="PanelContainer" parent="controlMain"]
+self_modulate = Color(0.25377, 0.319576, 0.344591, 1)
+custom_minimum_size = Vector2(233, 394)
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -98.0
+offset_top = -197.0
+offset_right = 135.0
+offset_bottom = 197.0
+grow_horizontal = 0
+grow_vertical = 2
+pivot_offset = Vector2(116, 197)
+theme_override_styles/panel = SubResource("StyleBoxTexture_4jm2t")
+
+[node name="MarginContainer" type="MarginContainer" parent="controlMain/panelClose"]
+layout_mode = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 130
+theme_override_constants/margin_right = 80
+theme_override_constants/margin_bottom = 150
+
+[node name="btnClose" type="Button" parent="controlMain/panelClose/MarginContainer"]
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0.154876, 0.154876, 0.154876, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0.381703, 0.381703, 0.381703, 1)
+theme_override_colors/font_pressed_color = Color(0.737193, 0.737193, 0.737193, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 82
+theme_override_styles/focus = SubResource("StyleBoxEmpty_km478")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_j8pj7")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_bf6hp")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_qqifo")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_2lpsh")
+text = "X"
+
+[node name="PanelContainer" type="PanelContainer" parent="controlMain"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -321.0
+offset_top = -231.5
+offset_right = 321.0
+offset_bottom = 231.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_x0t7e")
+
+[node name="MarginContainer" type="MarginContainer" parent="controlMain/PanelContainer"]
+layout_mode = 2
+theme = ExtResource("4_2lpsh")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="controlMain/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="petPicContainer" type="VBoxContainer" parent="controlMain/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_2lpsh")
+
+[node name="TextureRect" type="TextureRect" parent="controlMain/PanelContainer/MarginContainer/HBoxContainer/petPicContainer"]
+self_modulate = Color(0.356863, 0.439216, 0.470588, 1)
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("5_x0t7e")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="MarginContainer" type="MarginContainer" parent="controlMain/PanelContainer/MarginContainer/HBoxContainer/petPicContainer/TextureRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="ColorRect" type="ColorRect" parent="controlMain/PanelContainer/MarginContainer/HBoxContainer/petPicContainer/TextureRect/MarginContainer"]
+visible = false
+layout_mode = 2
+color = Color(0, 0, 0, 1)
+
+[node name="picPet" type="TextureRect" parent="controlMain/PanelContainer/MarginContainer/HBoxContainer/petPicContainer/TextureRect/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = SubResource("AtlasTexture_4jm2t")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="MarginContainer" type="MarginContainer" parent="controlMain/PanelContainer/MarginContainer/HBoxContainer/petPicContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="controlMain/PanelContainer/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="lblTitle" type="Label" parent="controlMain/PanelContainer/MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+text = "Dinglemeyer, at your service!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="lblMessage" type="RichTextLabel" parent="controlMain/PanelContainer/MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/default_color = Color(0.899258, 0.899258, 0.899258, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+bbcode_enabled = true
+text = "'What is your command for Dinglemeyer the wretched, master?'"
+fit_content = true
+horizontal_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="controlMain/PanelContainer/MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="picHolder" type="TextureRect" parent="controlMain/PanelContainer/MarginContainer/HBoxContainer/VBoxContainer/MarginContainer"]
+self_modulate = Color(0.599325, 0.688577, 0.722925, 1)
+custom_minimum_size = Vector2(250, 250)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("7_jy4yx")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="MarginContainer" type="MarginContainer" parent="controlMain/PanelContainer/MarginContainer/HBoxContainer/VBoxContainer/MarginContainer/picHolder"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 70
+theme_override_constants/margin_top = 70
+
+[node name="Item" parent="controlMain/PanelContainer/MarginContainer/HBoxContainer/VBoxContainer/MarginContainer/picHolder/MarginContainer" instance=ExtResource("8_c5vja")]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="controlMain"]
+libraries = {
+&"": SubResource("AnimationLibrary_jy4yx")
+}

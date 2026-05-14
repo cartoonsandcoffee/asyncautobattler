@@ -1,0 +1,306 @@
+[gd_scene load_steps=20 format=3 uid="uid://ct6jer1f0brbb"]
+
+[ext_resource type="Script" uid="uid://rblvleb51v0e" path="res://Scripts/Components/stat_box.gd" id="1_ro5bv"]
+[ext_resource type="Texture2D" uid="uid://bf5l3mn4r31le" path="res://Assets/UI/Item_Border_Small_Test.png" id="2_p1sst"]
+[ext_resource type="Texture2D" uid="uid://brkvaqqc37hpf" path="res://Assets/UI/icons.png" id="3_8hxma"]
+[ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="4_midrc"]
+[ext_resource type="Texture2D" uid="uid://072s2rxwk6m8" path="res://Assets/UI/panel-border-004.png" id="5_thca3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rtndc"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8ja2n"]
+texture = ExtResource("2_p1sst")
+texture_margin_left = 20.0
+texture_margin_top = 20.0
+texture_margin_right = 19.0
+texture_margin_bottom = 15.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ro5bv"]
+bg_color = Color(0.3, 0.3, 0.3, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.7, 0.7, 0.7, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p1sst"]
+bg_color = Color(0.82, 0.82, 0.82, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8, 0.8, 0.8, 0)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ro5bv"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lw8oi"]
+atlas = ExtResource("3_8hxma")
+region = Rect2(0, 0, 150, 150)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jgaej"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xyjii"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lw8oi"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8ja2n"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jgaej"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Animation" id="Animation_xyjii"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel/panel_hurt:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Panel/panel_hurt:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Panel/panel_hurt:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_jgaej"]
+resource_name = "show_wounded"
+loop_mode = 1
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel/panel_hurt:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.7, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.5, 1.5), Vector2(1.5, 1.5)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Panel/panel_hurt:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Panel/panel_hurt:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.7, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_rtndc"]
+_data = {
+&"RESET": SubResource("Animation_xyjii"),
+&"show_wounded": SubResource("Animation_jgaej")
+}
+
+[node name="StatBox" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ro5bv")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_rtndc")
+
+[node name="panel_hurt" type="PanelContainer" parent="Panel"]
+visible = false
+self_modulate = Color(1, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(65, 21)
+theme_override_styles/panel = SubResource("StyleBoxTexture_8ja2n")
+
+[node name="ProgressBar" type="ProgressBar" parent="Panel"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 51.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_ro5bv")
+theme_override_styles/fill = SubResource("StyleBoxFlat_p1sst")
+show_percentage = false
+
+[node name="statContainer" type="PanelContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_ro5bv")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/statContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="icon" type="TextureRect" parent="Panel/statContainer/HBoxContainer"]
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = SubResource("AtlasTexture_lw8oi")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="lbl_stat" type="Label" parent="Panel/statContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("4_midrc")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 38
+text = "155/155"
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="Panel/statContainer"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_jgaej")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_xyjii")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_lw8oi")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_8ja2n")
+
+[node name="stat_holder" type="NinePatchRect" parent="Panel"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_p1sst")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 25
+patch_margin_bottom = 25
+
+[node name="Tooltip" type="Panel" parent="."]
+visible = false
+z_index = 100
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -160.0
+offset_right = 393.0
+offset_bottom = -47.0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_jgaej")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="Tooltip"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_thca3")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 18
+patch_margin_bottom = 18
+
+[node name="MarginContainer" type="MarginContainer" parent="Tooltip/NinePatchRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Tooltip/NinePatchRect/MarginContainer"]
+layout_mode = 2
+
+[node name="lbl_name" type="Label" parent="Tooltip/NinePatchRect/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_midrc")
+theme_override_font_sizes/font_size = 28
+text = "- Name -"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="lbl_tooltip" type="RichTextLabel" parent="Tooltip/NinePatchRect/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("4_midrc")
+theme_override_font_sizes/normal_font_size = 16
+text = "Tooltip description goes here. fasdfasdsdfasffasfsdfsdff fsdfsd sfsdf sdf sdf "
+fit_content = true
+
+[node name="animWounded" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_rtndc")
+}
+
+[connection signal="mouse_entered" from="Panel/statContainer/Button" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/statContainer/Button" to="." method="_on_button_mouse_exited"]

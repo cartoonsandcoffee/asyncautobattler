@@ -386,6 +386,7 @@ pivot_offset = Vector2(275, 132)
 theme_override_styles/panel = SubResource("StyleBoxEmpty_xggb2")
 
 [node name="BlackBack" type="PanelContainer" parent="Panel"]
+z_index = 10
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -457,6 +458,7 @@ layout_mode = 2
 text = "I'm done here..."
 
 [node name="sidePanelBlack" type="PanelContainer" parent="Panel"]
+z_index = 11
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -517,6 +519,7 @@ theme_override_styles/pressed = SubResource("StyleBoxEmpty_bhv48")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_advby")
 
 [node name="sidePanelUpgrade" type="PanelContainer" parent="Panel"]
+z_index = 11
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
