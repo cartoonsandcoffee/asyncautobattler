@@ -1,12 +1,12 @@
 [gd_resource type="Resource" script_class="Item" load_steps=6 format=3 uid="uid://bgqjjq7qtqqqu"]
 
 [ext_resource type="Script" uid="uid://dahay7fvi7bik" path="res://Scripts/Resources/ItemRule.gd" id="1_2otmq"]
-[ext_resource type="Texture2D" uid="uid://bwo3qldtbc8u6" path="res://Assets/Items/Items.png" id="1_pvt27"]
+[ext_resource type="Texture2D" uid="uid://fujbmxi0k7vs" path="res://Assets/Items/Tools.png" id="1_pvt27"]
 [ext_resource type="Script" uid="uid://dthg27pchm1fm" path="res://Scripts/Resources/Item.gd" id="2_pvt27"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mtd2x"]
 atlas = ExtResource("1_pvt27")
-region = Rect2(600, 1050, 150, 150)
+region = Rect2(900, 600, 150, 150)
 
 [sub_resource type="Resource" id="Resource_7lsk4"]
 script = ExtResource("1_2otmq")
@@ -20,7 +20,9 @@ has_condition = false
 condition_type = 0
 condition_of = 4
 condition_stat = 9
+condition_party_stat_type = 0
 condition_status = 9
+condition_item_category = ""
 condition_comparison = ">"
 compare_to = 0
 condition_value = 0
@@ -31,6 +33,7 @@ condition_party_status = 9
 effect_type = 0
 target_type = 0
 target_stat_type = 0
+target_item_category = ""
 target_stat = 9
 target_status = 9
 effect_of = 0
@@ -39,6 +42,7 @@ effect_stat_party = 4
 effect_stat_type = 3
 effect_stat_value = 9
 effect_status_value = 9
+effect_multiplier = 1.0
 convert_from_type = 0
 convert_from_party = 0
 convert_from_stat = 9
@@ -52,18 +56,23 @@ conversion_amount_value = 1
 conversion_ratio = 1.0
 retrigger_type = 1
 retrigger_target = 0
-special_string = "[exposed] +1"
+retrigger_item = 0
+retrigger_category = ""
+spend_trigger_flag = false
+special_string = "exposed_can_trigger_twice"
 custom_description = ""
 metadata/_custom_type_script = "uid://dahay7fvi7bik"
 
 [resource]
 script = ExtResource("2_pvt27")
 item_id = ""
+base_item_id = ""
 item_name = "Indecent Exposure"
 item_type = 12
 item_desc = "Exposed can trigger 1 additional time."
 item_icon = SubResource("AtlasTexture_mtd2x")
 item_color = Color(0.499866, 0.624219, 0.212876, 1)
+item_bundle = 1
 rules = Array[ExtResource("1_2otmq")]([SubResource("Resource_7lsk4")])
 repeat_rules_X_times = 0
 repeat_rules_for_category = ""
@@ -73,7 +82,7 @@ trigger_only_first_turn = false
 trigger_on_occurrence_number = 0
 occurrence_resets_per_turn = false
 rarity = 1
-categories = Array[String]([])
+categories = Array[String](["Unique"])
 rng_weight = 1.0
 unlocked = true
 damage_bonus = 0
@@ -82,4 +91,6 @@ agility_bonus = 0
 hit_points_bonus = 0
 strikes_bonus = 0
 burn_damage_bonus = 0
+cant_attack = false
+keywords = Array[String]([])
 metadata/_custom_type_script = "uid://dthg27pchm1fm"
