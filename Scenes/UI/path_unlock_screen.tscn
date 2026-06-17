@@ -1,0 +1,273 @@
+[gd_scene format=3 uid="uid://fuf43acacc0m"]
+
+[ext_resource type="Script" uid="uid://cfkq3i6n0vma2" path="res://Scripts/UI/path_unlock_screen.gd" id="1_df7dt"]
+[ext_resource type="Texture2D" uid="uid://bqa4b4vxfkqp8" path="res://Assets/Art/Events/Zooms/popup_unlock.png" id="2_e8yyi"]
+[ext_resource type="Texture2D" uid="uid://bx6acen5dxj1r" path="res://Assets/UI/CharSelect/FloorBit.png" id="3_u65mn"]
+[ext_resource type="Texture2D" uid="uid://c56wo6urs88eb" path="res://Assets/Art/Player/PVP/CharSelect_Corrupt.png" id="4_e16ne"]
+[ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="5_8fbbr"]
+[ext_resource type="Theme" uid="uid://wsf7lticxc8g" path="res://Themes/stone_button_03.tres" id="6_rtlhl"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f3ulp"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lne1p"]
+
+[sub_resource type="Animation" id="Animation_18741"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel/PanelContainer/MarginContainer/Panel/picChar:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.9, 0.9)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Panel/PanelContainer/MarginContainer/Panel/picChar:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Panel/PanelContainer/MarginContainer/Panel/picFloor:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.31, 0.23043333, 0.13949999, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_df7dt"]
+resource_name = "hide"
+length = 0.39999999999999997
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_ydawe"]
+resource_name = "show_unlock"
+length = 0.8
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel/PanelContainer/MarginContainer/Panel/picChar:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.9, 0.9), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Panel/PanelContainer/MarginContainer/Panel/picChar:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Panel/PanelContainer/MarginContainer/Panel/picFloor:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.31, 0.23043333, 0.13949999, 1), Color(0.46, 0.36125335, 0.24839999, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8oblf"]
+_data = {
+&"RESET": SubResource("Animation_18741"),
+&"hide": SubResource("Animation_df7dt"),
+&"show_unlock": SubResource("Animation_ydawe")
+}
+
+[node name="PathUnlockScreen" type="Control" unique_id=2132402288]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_df7dt")
+
+[node name="Panel" type="Panel" parent="." unique_id=1214833632]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="Panel" unique_id=1509599126]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -673.86
+offset_top = -379.0
+offset_right = 673.86
+offset_bottom = 379.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
+theme_override_styles/panel = SubResource("StyleBoxEmpty_f3ulp")
+
+[node name="picBack" type="TextureRect" parent="Panel/PanelContainer" unique_id=1677510798]
+layout_mode = 2
+texture = ExtResource("2_e8yyi")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/PanelContainer" unique_id=1992282633]
+layout_mode = 2
+theme_override_constants/margin_left = 200
+theme_override_constants/margin_top = 100
+theme_override_constants/margin_right = 200
+theme_override_constants/margin_bottom = 100
+
+[node name="Panel" type="Panel" parent="Panel/PanelContainer/MarginContainer" unique_id=145147569]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_lne1p")
+
+[node name="picFloor" type="TextureRect" parent="Panel/PanelContainer/MarginContainer/Panel" unique_id=1706244715]
+modulate = Color(0.31, 0.23043333, 0.13949999, 1)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -137.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("3_u65mn")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="picChar" type="TextureRect" parent="Panel/PanelContainer/MarginContainer/Panel" unique_id=512945126]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -283.88892
+offset_top = -255.5
+offset_right = 283.88892
+offset_bottom = 255.5
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.9, 0.9)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+texture = ExtResource("4_e16ne")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/PanelContainer/MarginContainer" unique_id=334860712]
+layout_mode = 2
+
+[node name="lblMain" type="Label" parent="Panel/PanelContainer/MarginContainer/VBoxContainer" unique_id=509478900]
+layout_mode = 2
+theme = ExtResource("5_8fbbr")
+theme_override_colors/font_color = Color(1, 0.8875, 0.55, 1)
+theme_override_colors/font_shadow_color = Color(0.23, 0.23, 0.23, 0.4862745)
+theme_override_colors/font_outline_color = Color(0.6, 0.036000002, 0.036000002, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 5
+theme_override_constants/shadow_outline_size = 10
+theme_override_font_sizes/font_size = 48
+text = "New  Character  Path  Unlocked: The Corrupted!"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/PanelContainer/MarginContainer/VBoxContainer" unique_id=1196861116]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="txtDesc" type="RichTextLabel" parent="Panel/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=53154799]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("5_8fbbr")
+bbcode_enabled = true
+text = "This is where the main text about the unlock will go. And as the definition scrolls across the screen it will show the user what the thing is..."
+fit_content = true
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1093149888]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1583374542]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Button" type="Button" parent="Panel/PanelContainer" unique_id=967331898]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme = ExtResource("6_rtlhl")
+text = "Yes, this pleases me..."
+
+[node name="animChar" type="AnimationPlayer" parent="." unique_id=1150456280]
+libraries/ = SubResource("AnimationLibrary_8oblf")
+
+[connection signal="pressed" from="Panel/PanelContainer/Button" to="." method="_on_btn_dismiss_pressed"]

@@ -1,7 +1,6 @@
-[gd_scene load_steps=31 format=3 uid="uid://bl35xrq7cnwcw"]
+[gd_scene format=3 uid="uid://bl35xrq7cnwcw"]
 
 [ext_resource type="Script" uid="uid://mvmmjvwm47pr" path="res://Scripts/RoomEvents/rare_treasure_elite_charles.gd" id="1_4bnh0"]
-[ext_resource type="Texture2D" uid="uid://dak7u2ow3a8c6" path="res://Assets/Art/Backgrounds/Back_Gears.png" id="1_ij4ql"]
 [ext_resource type="Texture2D" uid="uid://df1se6ks7hyic" path="res://Assets/Art/Events/TinkerShed.png" id="2_hosy6"]
 [ext_resource type="Texture2D" uid="uid://c6uhtg2telr2f" path="res://Assets/Art/Particles/circle_05.png" id="4_hhvo1"]
 [ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="5_lcyln"]
@@ -21,15 +20,15 @@ point_count = 2
 offsets = PackedFloat32Array(0, 0.625, 1)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3ou34"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_h5jla"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jdc6k"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qr548"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4hgw0"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qr548"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jdc6k"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_h5jla"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3ou34"]
 
 [sub_resource type="Animation" id="Animation_ab5hj"]
 length = 0.001
@@ -415,7 +414,7 @@ _data = {
 &"show_label": SubResource("Animation_sth5e")
 }
 
-[node name="rare_treasure_elite_charles" type="Control"]
+[node name="rare_treasure_elite_charles" type="Control" unique_id=1333512865]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -424,18 +423,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_4bnh0")
 
-[node name="picBack" type="TextureRect" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("1_ij4ql")
-expand_mode = 1
-
-[node name="Event" type="Control" parent="."]
+[node name="Event" type="Control" parent="." unique_id=489687401]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 8
@@ -450,7 +438,7 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="picEvent" type="TextureRect" parent="Event"]
+[node name="picEvent" type="TextureRect" parent="Event" unique_id=2019001942]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -467,7 +455,7 @@ scale = Vector2(0.33, 0.33)
 pivot_offset = Vector2(722, 512)
 texture = ExtResource("2_hosy6")
 
-[node name="particles" type="CPUParticles2D" parent="Event/picEvent"]
+[node name="particles" type="CPUParticles2D" parent="Event/picEvent" unique_id=1137851073]
 position = Vector2(697.757, 615.03)
 scale = Vector2(3.0303, 3.0303)
 emitting = false
@@ -487,7 +475,7 @@ scale_amount_curve = SubResource("Curve_rdlt5")
 color = Color(1, 0.8, 0, 1)
 color_ramp = SubResource("Gradient_vv42e")
 
-[node name="Button" type="Button" parent="Event/picEvent"]
+[node name="Button" type="Button" parent="Event/picEvent" unique_id=984497177]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -498,14 +486,14 @@ offset_right = -210.0
 offset_bottom = -97.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_3ou34")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_h5jla")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_jdc6k")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_4hgw0")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_qr548")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_4hgw0")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_jdc6k")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_h5jla")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_3ou34")
 disabled = true
 
-[node name="lblEvent" type="Label" parent="Event"]
+[node name="lblEvent" type="Label" parent="Event" unique_id=1434272813]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 8
@@ -532,7 +520,7 @@ text = "Check it out!"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="FreeItemOffering" parent="." instance=ExtResource("6_im8xd")]
+[node name="FreeItemOffering" parent="." unique_id=641607525 instance=ExtResource("6_im8xd")]
 visible = false
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
@@ -545,22 +533,17 @@ filter_by = 4
 items_offered = 4
 box_name = "A Tinker's Toolshed"
 box_desc = "There's all kinds of great stuff in here."
+use_keyword_weighting = false
 items = Array[ExtResource("7_6ksyu")]([ExtResource("8_0hxqq"), ExtResource("9_g4bi2"), ExtResource("10_2egpx"), ExtResource("11_a7vj2")])
 
-[node name="animEvent" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_od0kn")
-}
+[node name="animEvent" type="AnimationPlayer" parent="." unique_id=1580291271]
+libraries/ = SubResource("AnimationLibrary_od0kn")
 
-[node name="animItems" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_8nelg")
-}
+[node name="animItems" type="AnimationPlayer" parent="." unique_id=1814229411]
+libraries/ = SubResource("AnimationLibrary_8nelg")
 
-[node name="animLabel" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_cj2l3")
-}
+[node name="animLabel" type="AnimationPlayer" parent="." unique_id=1214216167]
+libraries/ = SubResource("AnimationLibrary_cj2l3")
 
 [connection signal="mouse_entered" from="Event/picEvent/Button" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="Event/picEvent/Button" to="." method="_on_button_mouse_exited"]

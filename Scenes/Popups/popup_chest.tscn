@@ -1,0 +1,349 @@
+[gd_scene format=3 uid="uid://cdej7ou0hafij"]
+
+[ext_resource type="Script" uid="uid://cxvnmd0f704nd" path="res://Scripts/Popups/popup_chest.gd" id="1_celpu"]
+[ext_resource type="Texture2D" uid="uid://c1cf6utne3w0" path="res://Assets/Art/Events/Zooms/popup_chest.png" id="1_nyrpr"]
+[ext_resource type="Theme" uid="uid://bo603ra16ac63" path="res://Themes/stone_button_01.tres" id="3_mkn5q"]
+[ext_resource type="Theme" uid="uid://0hs8qbirg21w" path="res://Themes/stone_button_02.tres" id="4_rpj15"]
+[ext_resource type="Theme" uid="uid://wsf7lticxc8g" path="res://Themes/stone_button_03.tres" id="5_abnn8"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_celpu"]
+bg_color = Color(0, 0, 0, 0.588235)
+corner_radius_top_left = 100
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3w2q6"]
+
+[sub_resource type="Animation" id="Animation_abnn8"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CanvasLayer/Control:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.5, 0.5)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CanvasLayer/Control:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("CanvasLayer/Control:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("CanvasLayer:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_mkn5q"]
+resource_name = "hide_popup"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CanvasLayer/Control:scale")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.8, 0.8), Vector2(0.95, 0.95), Vector2(0.5, 0.5)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CanvasLayer/Control:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("CanvasLayer/Control:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_rpj15"]
+resource_name = "show_popup"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CanvasLayer/Control:scale")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.5, 0.5), Vector2(0.95, 0.95), Vector2(0.8, 0.8)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CanvasLayer/Control:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("CanvasLayer/Control:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("CanvasLayer:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_r08f0"]
+_data = {
+&"RESET": SubResource("Animation_abnn8"),
+&"hide_popup": SubResource("Animation_mkn5q"),
+&"show_popup": SubResource("Animation_rpj15")
+}
+
+[node name="PopupChest" type="Control" unique_id=1737668420]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(768, 432)
+mouse_filter = 2
+script = ExtResource("1_celpu")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=6594913]
+layer = 5
+visible = false
+
+[node name="Control" type="Control" parent="CanvasLayer" unique_id=1826145478]
+visible = false
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(1536, 864)
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -768.0
+offset_top = -432.0
+offset_right = 768.0
+offset_bottom = 432.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+pivot_offset = Vector2(768, 432)
+mouse_filter = 2
+
+[node name="picBack" type="TextureRect" parent="CanvasLayer/Control" unique_id=1805808991]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_nyrpr")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="centerArea" type="Control" parent="CanvasLayer/Control" unique_id=710697970]
+custom_minimum_size = Vector2(800, 400)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -200.0
+offset_right = 400.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(400, 200)
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/Control/centerArea" unique_id=1044558105]
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -100.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(400, 150)
+theme_override_styles/panel = SubResource("StyleBoxFlat_celpu")
+
+[node name="GridContainer" type="GridContainer" parent="CanvasLayer/Control/centerArea/PanelContainer" unique_id=648906167]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/h_separation = 30
+columns = 3
+
+[node name="panelButtons" type="PanelContainer" parent="CanvasLayer/Control" unique_id=607756147]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -143.25
+offset_bottom = -28.2499
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_3w2q6")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Control/panelButtons" unique_id=1460581315]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Control/panelButtons/HBoxContainer" unique_id=2106695424]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="btnSkip" type="Button" parent="CanvasLayer/Control/panelButtons/HBoxContainer" unique_id=1460754444]
+z_index = 1
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme = ExtResource("3_mkn5q")
+text = "Done"
+
+[node name="btnTake" type="Button" parent="CanvasLayer/Control/panelButtons/HBoxContainer" unique_id=1669544509]
+visible = false
+z_index = 1
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme = ExtResource("4_rpj15")
+text = "Take This"
+
+[node name="btnBanish" type="Button" parent="CanvasLayer/Control/panelButtons/HBoxContainer" unique_id=967901754]
+visible = false
+z_index = 1
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme = ExtResource("5_abnn8")
+text = "Banish Item (2)"
+
+[node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer/Control/panelButtons/HBoxContainer" unique_id=32152442]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=760818772]
+libraries/ = SubResource("AnimationLibrary_r08f0")
+
+[connection signal="mouse_entered" from="CanvasLayer/Control/panelButtons/HBoxContainer/btnSkip" to="." method="_on_btn_skip_mouse_entered"]
+[connection signal="mouse_exited" from="CanvasLayer/Control/panelButtons/HBoxContainer/btnSkip" to="." method="_on_btn_skip_mouse_exited"]
+[connection signal="pressed" from="CanvasLayer/Control/panelButtons/HBoxContainer/btnSkip" to="." method="_on_btn_skip_pressed"]
+[connection signal="mouse_entered" from="CanvasLayer/Control/panelButtons/HBoxContainer/btnTake" to="." method="_on_btn_skip_mouse_entered"]
+[connection signal="mouse_exited" from="CanvasLayer/Control/panelButtons/HBoxContainer/btnTake" to="." method="_on_btn_skip_mouse_exited"]
+[connection signal="pressed" from="CanvasLayer/Control/panelButtons/HBoxContainer/btnTake" to="." method="_on_btn_take_pressed"]
+[connection signal="mouse_entered" from="CanvasLayer/Control/panelButtons/HBoxContainer/btnBanish" to="." method="_on_btn_skip_mouse_entered"]
+[connection signal="mouse_exited" from="CanvasLayer/Control/panelButtons/HBoxContainer/btnBanish" to="." method="_on_btn_skip_mouse_exited"]
+[connection signal="pressed" from="CanvasLayer/Control/panelButtons/HBoxContainer/btnBanish" to="." method="_on_btn_banish_pressed"]

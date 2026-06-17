@@ -1,133 +1,47 @@
-[gd_scene load_steps=28 format=3 uid="uid://cyk1rros0xlt5"]
+[gd_scene format=3 uid="uid://cyk1rros0xlt5"]
 
 [ext_resource type="Script" uid="uid://c7016id4jo37y" path="res://Scripts/RoomEvents/basic_merchant_room.gd" id="1_mup82"]
 [ext_resource type="Resource" uid="uid://dg2wcy0kx620y" path="res://Resources/Enemies/Goblin.tres" id="2_ayb8c"]
-[ext_resource type="Texture2D" uid="uid://daeptxxk8jt0v" path="res://Assets/Art/Backgrounds/Background_05.png" id="3_mup82"]
-[ext_resource type="Texture2D" uid="uid://c87udhg7dvjp6" path="res://Assets/Art/Events/Merchant01.png" id="4_7t4nh"]
 [ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="5_qa2ds"]
 [ext_resource type="Texture2D" uid="uid://bknlvkqmfanuc" path="res://Assets/Art/Events/Merchant03_Shadow.png" id="6_4wj6g"]
 [ext_resource type="Texture2D" uid="uid://drvu7mtjni0f1" path="res://Assets/Art/Events/Merchant03.png" id="7_xe8gq"]
 [ext_resource type="PackedScene" uid="uid://bb31dt8vvd6f4" path="res://Scenes/Elements/item_merchant_store.tscn" id="8_7d7dr"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_eeq1g"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5acf8"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cpbib"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4d7ki"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_d2ydr"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4d7ki"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cpbib"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5acf8"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_eeq1g"]
 
 [sub_resource type="Animation" id="Animation_pepgq"]
 length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Merchant:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(0, 0, 0, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Merchant:scale")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0.3, 0.3)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Merchant:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(-156, -612)]
-}
 
 [sub_resource type="Animation" id="Animation_d2ydr"]
 resource_name = "hide_merchant"
 length = 0.4
 step = 0.01
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Merchant:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
 
 [sub_resource type="Animation" id="Animation_qxk2n"]
 resource_name = "merchant_idle"
 length = 3.0
 loop_mode = 1
 step = 0.025
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Merchant:scale")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1.8, 3),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector2(0.3, 0.3), Vector2(0.315, 0.31), Vector2(0.3, 0.3)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Merchant:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 1.8, 3),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector2(-156, -612), Vector2(-156, -620), Vector2(-156, -612)]
-}
 
 [sub_resource type="Animation" id="Animation_2p7gf"]
 resource_name = "show_merchant"
 length = 0.4
 step = 0.01
-tracks/0/type = "value"
+tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Merchant:modulate")
+tracks/0/path = NodePath(".")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(0, 0, 0, 1), Color(1, 1, 1, 1)]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
 "times": PackedFloat32Array(0.4),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -624,7 +538,7 @@ _data = {
 &"show_event": SubResource("Animation_4d7ki")
 }
 
-[node name="basic_merchant_room" type="Control"]
+[node name="basic_merchant_room" type="Control" unique_id=558107834]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -635,37 +549,7 @@ script = ExtResource("1_mup82")
 event_description = "From a burrow in the wall, a skittish creature has wares to sell."
 enemy_resource = ExtResource("2_ayb8c")
 
-[node name="picBack" type="TextureRect" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("3_mup82")
-expand_mode = 1
-
-[node name="Merchant" type="TextureRect" parent="."]
-visible = false
-modulate = Color(0, 0, 0, 1)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -924.0
-offset_top = -1044.0
-offset_right = 667.0
-offset_bottom = 444.0
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(0.3, 0.3)
-pivot_offset = Vector2(942.5, 1152.5)
-texture = ExtResource("4_7t4nh")
-
-[node name="Control" type="Control" parent="."]
+[node name="Control" type="Control" parent="." unique_id=912361402]
 custom_minimum_size = Vector2(1000, 700)
 layout_mode = 1
 anchors_preset = 8
@@ -680,7 +564,7 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="lblAction" type="Label" parent="Control"]
+[node name="lblAction" type="Label" parent="Control" unique_id=1834336345]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 5
@@ -704,7 +588,7 @@ text = "Shop"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="picShadow" type="TextureRect" parent="Control"]
+[node name="picShadow" type="TextureRect" parent="Control" unique_id=895819240]
 modulate = Color(0, 0, 0, 1)
 custom_minimum_size = Vector2(800, 200)
 layout_mode = 1
@@ -724,7 +608,7 @@ pivot_offset = Vector2(400, 180)
 texture = ExtResource("6_4wj6g")
 expand_mode = 3
 
-[node name="picEvent" type="TextureRect" parent="Control"]
+[node name="picEvent" type="TextureRect" parent="Control" unique_id=231550777]
 modulate = Color(0, 0, 0, 1)
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 1
@@ -741,7 +625,7 @@ pivot_offset = Vector2(195, -56)
 texture = ExtResource("7_xe8gq")
 expand_mode = 3
 
-[node name="Button" type="Button" parent="Control/picEvent"]
+[node name="Button" type="Button" parent="Control/picEvent" unique_id=1355353880]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 1
 anchors_preset = 15
@@ -753,35 +637,30 @@ offset_right = -82.0
 offset_bottom = -168.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_eeq1g")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_5acf8")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_cpbib")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_d2ydr")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_4d7ki")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_d2ydr")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_cpbib")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_5acf8")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_eeq1g")
 disabled = true
 
-[node name="item_merchant_store" parent="." instance=ExtResource("8_7d7dr")]
+[node name="item_merchant_store" parent="." unique_id=295277643 instance=ExtResource("8_7d7dr")]
 layout_mode = 1
 mouse_filter = 1
 item_rarity = 2
 box_name = "A peddler descends from above..."
 box_desc = "He has some wares you might like."
 allow_refresh = false
+use_keyword_weighting = false
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_jveqv")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=755105383]
+libraries/ = SubResource("AnimationLibrary_jveqv")
 
-[node name="animLabel" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_oxewi")
-}
+[node name="animLabel" type="AnimationPlayer" parent="." unique_id=1044136137]
+libraries/ = SubResource("AnimationLibrary_oxewi")
 
-[node name="animEvent" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_a4075")
-}
+[node name="animEvent" type="AnimationPlayer" parent="." unique_id=1294252198]
+libraries/ = SubResource("AnimationLibrary_a4075")
 
 [connection signal="mouse_entered" from="Control/picEvent/Button" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="Control/picEvent/Button" to="." method="_on_button_mouse_exited"]

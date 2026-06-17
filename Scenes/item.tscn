@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://cqhyru53o5wfx"]
+[gd_scene load_steps=52 format=3 uid="uid://cqhyru53o5wfx"]
 
 [ext_resource type="Script" uid="uid://c60g0xugsdgdl" path="res://Scripts/Components/item_slot.gd" id="1_tnst4"]
 [ext_resource type="Texture2D" uid="uid://cfj380cj5wikn" path="res://Assets/UI/web_back_test.png" id="2_jmixh"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://1p2fhdhgi3x4" path="res://Assets/UI/Select.png" id="4_btogu"]
 [ext_resource type="Texture2D" uid="uid://7h1qtewfvmnq" path="res://Assets/Items/Blank.png" id="4_tnst4"]
 [ext_resource type="Texture2D" uid="uid://bwo3qldtbc8u6" path="res://Assets/Items/Items.png" id="6_66iod"]
+[ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="6_cr6d1"]
 [ext_resource type="PackedScene" uid="uid://7ygdm4ameglb" path="res://Scenes/Elements/item_tooltip.tscn" id="6_renmp"]
 [ext_resource type="Texture2D" uid="uid://2edhx1a70b00" path="res://Resources/Rarity/common.tres" id="7_5r5i4"]
 [ext_resource type="Texture2D" uid="uid://bn24rd5ycn41x" path="res://Assets/UI/rarity_icons.png" id="7_jmixh"]
@@ -384,6 +385,7 @@ custom_minimum_size = Vector2(100, 100)
 layout_mode = 0
 offset_right = 110.0
 offset_bottom = 115.0
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_tnst4")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
@@ -473,6 +475,7 @@ visible = false
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
+theme = ExtResource("6_cr6d1")
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 2
 text = "5"

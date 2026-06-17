@@ -1,7 +1,6 @@
-[gd_scene load_steps=28 format=3 uid="uid://b5fdhc5sfpir1"]
+[gd_scene format=3 uid="uid://b5fdhc5sfpir1"]
 
 [ext_resource type="Script" uid="uid://bje6td3bsyn5b" path="res://Scripts/RoomEvents/rare_treasure_elite_bug.gd" id="1_srtqs"]
-[ext_resource type="Texture2D" uid="uid://d27de30ukdp3e" path="res://Assets/Art/Backgrounds/Chamber_01.png" id="2_rpvuc"]
 [ext_resource type="Texture2D" uid="uid://dxw4wnrx37lmp" path="res://Assets/Art/Particles/magic_05.png" id="3_hbka7"]
 [ext_resource type="Texture2D" uid="uid://cjfknxrt7nsap" path="res://Assets/Art/Events/cocoon.png" id="4_pl85s"]
 [ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="5_hbka7"]
@@ -18,15 +17,15 @@ point_count = 2
 offsets = PackedFloat32Array(0, 0.625, 1)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ke3fl"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7v73r"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5ugpi"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ncrpm"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_oplpu"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ncrpm"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5ugpi"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7v73r"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ke3fl"]
 
 [sub_resource type="Animation" id="Animation_pl85s"]
 length = 0.001
@@ -448,7 +447,7 @@ _data = {
 &"show_box": SubResource("Animation_oplpu")
 }
 
-[node name="rare_treasure_elite_bug" type="Control"]
+[node name="rare_treasure_elite_bug" type="Control" unique_id=1323994347]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -457,18 +456,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_srtqs")
 
-[node name="picBack" type="TextureRect" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("2_rpvuc")
-expand_mode = 1
-
-[node name="Particles" type="CPUParticles2D" parent="."]
+[node name="Particles" type="CPUParticles2D" parent="." unique_id=1623679017]
 position = Vector2(812, 464)
 emitting = false
 amount = 10
@@ -490,7 +478,7 @@ scale_amount_curve = SubResource("Curve_rpvuc")
 color = Color(0.745813, 0.5472, 0.76, 1)
 color_ramp = SubResource("Gradient_1rbu2")
 
-[node name="picEvent" type="TextureRect" parent="."]
+[node name="picEvent" type="TextureRect" parent="." unique_id=580775007]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 8
@@ -508,7 +496,7 @@ pivot_offset = Vector2(160, 162)
 texture = ExtResource("4_pl85s")
 expand_mode = 1
 
-[node name="lblAction" type="Label" parent="picEvent"]
+[node name="lblAction" type="Label" parent="picEvent" unique_id=1655653758]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 8
@@ -532,21 +520,21 @@ text = "Reach  in!"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="btnEvent" type="Button" parent="picEvent"]
+[node name="btnEvent" type="Button" parent="picEvent" unique_id=601487556]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_ke3fl")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_7v73r")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_5ugpi")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_oplpu")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_ncrpm")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_oplpu")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_5ugpi")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_7v73r")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ke3fl")
 disabled = true
 
-[node name="FreeItemOffering" parent="." instance=ExtResource("6_pl85s")]
+[node name="FreeItemOffering" parent="." unique_id=1397073371 instance=ExtResource("6_pl85s")]
 visible = false
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
@@ -561,23 +549,18 @@ item_rarity = 2
 items_offered = 1
 box_name = "Some  Giant  Cocoon"
 box_desc = "You can see something moving in there..."
+use_keyword_weighting = false
 category_string = "Cocooned"
 items = Array[ExtResource("7_rpvuc")]([ExtResource("8_1rbu2")])
 
-[node name="animEvent" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_1rbu2")
-}
+[node name="animEvent" type="AnimationPlayer" parent="." unique_id=1315920739]
+libraries/ = SubResource("AnimationLibrary_1rbu2")
 
-[node name="animLabel" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_5ugpi")
-}
+[node name="animLabel" type="AnimationPlayer" parent="." unique_id=1301109351]
+libraries/ = SubResource("AnimationLibrary_5ugpi")
 
-[node name="animItem" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_j7jeq")
-}
+[node name="animItem" type="AnimationPlayer" parent="." unique_id=39844408]
+libraries/ = SubResource("AnimationLibrary_j7jeq")
 
 [connection signal="mouse_entered" from="picEvent/btnEvent" to="." method="_on_btn_event_mouse_entered"]
 [connection signal="mouse_exited" from="picEvent/btnEvent" to="." method="_on_btn_event_mouse_exited"]

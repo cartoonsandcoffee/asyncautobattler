@@ -1,13 +1,12 @@
-[gd_scene load_steps=29 format=3 uid="uid://du7g8vv71gm88"]
+[gd_scene format=3 uid="uid://du7g8vv71gm88"]
 
 [ext_resource type="Script" uid="uid://bvrjwxhxhxpir" path="res://Scripts/RoomEvents/common_treasure_gold.gd" id="1_6ujqc"]
-[ext_resource type="Texture2D" uid="uid://cr5mucfkmo2k4" path="res://Assets/Art/Backgrounds/Hallway_01.png" id="2_gfw5h"]
 [ext_resource type="Texture2D" uid="uid://dlkbx5t1ok6f5" path="res://Assets/Art/Events/treasure_pile.png" id="3_18qgg"]
 [ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="4_18qgg"]
 [ext_resource type="Texture2D" uid="uid://c6uhtg2telr2f" path="res://Assets/Art/Particles/circle_05.png" id="6_oerrk"]
-[ext_resource type="Texture2D" uid="uid://derrdt27xagod" path="res://Assets/UI/panel-border-007.png" id="6_swgkd"]
-[ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="7_oerrk"]
 [ext_resource type="Animation" uid="uid://c3i266wq8xrth" path="res://Animations/itembox_show.res" id="8_l38tp"]
+[ext_resource type="PackedScene" uid="uid://bj1txoqo06q6n" path="res://Scenes/Elements/stat_item.tscn" id="8_r6b70"]
+[ext_resource type="PackedScene" uid="uid://dgtmvnmoj4rwd" path="res://Scenes/Elements/coin_animation.tscn" id="9_18qgg"]
 
 [sub_resource type="Curve" id="Curve_7xgip"]
 _limits = [0.3, 3.0, 0.0, 1.0]
@@ -18,26 +17,171 @@ point_count = 2
 offsets = PackedFloat32Array(0, 0.625, 1)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xcab8"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nhd8p"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qyy0y"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_01rsx"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rq07n"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_01rsx"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qyy0y"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cqyu2"]
-bg_color = Color(0, 0, 0, 1)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nhd8p"]
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_l38tp"]
-texture = ExtResource("6_swgkd")
-texture_margin_left = 28.0
-texture_margin_top = 28.0
-texture_margin_right = 28.0
-texture_margin_bottom = 28.0
-region_rect = Rect2(0, 0, 96, 96)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xcab8"]
+
+[sub_resource type="Animation" id="Animation_oerrk"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("centerPt/StatItem:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("centerPt/StatItem:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("centerPt/StatItem:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_swgkd"]
+resource_name = "get_gold"
+length = 1.3
+step = 0.025
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("centerPt/coinAnimation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play_coin_anim"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("centerPt/coinAnimation2")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.05),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play_coin_anim"
+}]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("centerPt/coinAnimation3")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play_coin_anim"
+}]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("centerPt/StatItem:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.2, 1, 1.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(0, 0, 0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("centerPt/StatItem:scale")
+tracks/4/interp = 2
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.5, 1.5)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("centerPt/StatItem:position")
+tracks/5/interp = 2
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 1.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -50)]
+}
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("centerPt/coinAnimation4")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0.15),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play_coin_anim"
+}]
+}
+tracks/7/type = "method"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("centerPt/coinAnimation5")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play_coin_anim"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_cqyu2"]
+_data = {
+&"RESET": SubResource("Animation_oerrk"),
+&"get_gold": SubResource("Animation_swgkd")
+}
 
 [sub_resource type="Animation" id="Animation_1qr6a"]
 length = 0.001
@@ -51,7 +195,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-12.5, 67.5)]
+"values": [Vector2(-12, -10)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -92,7 +236,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(10, -40), Vector2(-12.5, 67.5)]
+"values": [Vector2(-12, -40), Vector2(-12, -10)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -133,7 +277,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(-12.5, 67.5), Vector2(10, -40)]
+"values": [Vector2(-12, -10), Vector2(-12, -40)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -297,83 +441,11 @@ _data = {
 [sub_resource type="Animation" id="Animation_qyy0y"]
 resource_name = "RESET"
 length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("panelDone:scale")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0.5, 0.5)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("panelDone:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("panelDone:visible")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
 
 [sub_resource type="Animation" id="Animation_gfw5h"]
 resource_name = "hide_items"
 length = 0.4
 step = 0.025
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("panelDone:scale")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector2(1, 1), Vector2(1.1, 1.1), Vector2(0.5, 0.5)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("panelDone:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("panelDone:visible")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, false]
-}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rq07n"]
 _data = {
@@ -382,7 +454,7 @@ _data = {
 &"show_items": ExtResource("8_l38tp")
 }
 
-[node name="HallwayGold" type="Control"]
+[node name="HallwayGold" type="Control" unique_id=1972970978]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -391,18 +463,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_6ujqc")
 
-[node name="picBack" type="TextureRect" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("2_gfw5h")
-expand_mode = 1
-
-[node name="picEvent" type="TextureRect" parent="."]
+[node name="picEvent" type="TextureRect" parent="." unique_id=1628902144]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 8
@@ -420,20 +481,17 @@ scale = Vector2(1.1, 1.1)
 texture = ExtResource("3_18qgg")
 expand_mode = 1
 
-[node name="lblEvent" type="Label" parent="picEvent"]
+[node name="lblEvent" type="Label" parent="picEvent" unique_id=835065716]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
-anchors_preset = 8
+anchors_preset = 5
 anchor_left = 0.5
-anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -191.5
-offset_top = -29.0
-offset_right = 191.5
-offset_bottom = 29.0
+offset_left = -191.0
+offset_top = -10.0
+offset_right = 192.0
+offset_bottom = 48.0
 grow_horizontal = 2
-grow_vertical = 2
 scale = Vector2(0.5, 0.5)
 pivot_offset = Vector2(191, 29)
 theme_override_colors/font_color = Color(1, 0.866667, 0, 1)
@@ -442,12 +500,12 @@ theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_constants/outline_size = 5
 theme_override_fonts/font = ExtResource("4_18qgg")
-theme_override_font_sizes/font_size = 46
+theme_override_font_sizes/font_size = 32
 text = "Take some gold..."
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="particles" type="CPUParticles2D" parent="picEvent"]
+[node name="particles" type="CPUParticles2D" parent="picEvent" unique_id=582438623]
 visible = false
 position = Vector2(170.909, 72.2727)
 scale = Vector2(0.909091, 0.909091)
@@ -468,79 +526,102 @@ scale_amount_curve = SubResource("Curve_7xgip")
 color = Color(1, 0.8, 0, 1)
 color_ramp = SubResource("Gradient_1xwjt")
 
-[node name="btnEvent" type="Button" parent="picEvent"]
+[node name="btnEvent" type="Button" parent="picEvent" unique_id=475459653]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_xcab8")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_nhd8p")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_qyy0y")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_rq07n")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_01rsx")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_rq07n")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_qyy0y")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_nhd8p")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_xcab8")
 disabled = true
 
-[node name="panelDone" type="PanelContainer" parent="."]
+[node name="controlCoinsAnim" type="Control" parent="." unique_id=1423506769]
 visible = false
-modulate = Color(1, 1, 1, 0)
-custom_minimum_size = Vector2(500, 200)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="centerPt" type="Control" parent="controlCoinsAnim" unique_id=1713182550]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -250.0
-offset_top = -100.0
-offset_right = 250.0
-offset_bottom = 100.0
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(0.5, 0.5)
-pivot_offset = Vector2(250, 100)
-theme_override_styles/panel = SubResource("StyleBoxFlat_cqyu2")
+mouse_filter = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="panelDone"]
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_l38tp")
+[node name="StatItem" parent="controlCoinsAnim/centerPt" unique_id=978264445 instance=ExtResource("8_r6b70")]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+grow_horizontal = 1
+grow_vertical = 1
+pivot_offset = Vector2(35, 20)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="panelDone/PanelContainer"]
-layout_mode = 2
-theme = ExtResource("7_oerrk")
+[node name="coinAnimation" parent="controlCoinsAnim/centerPt" unique_id=558192358 instance=ExtResource("9_18qgg")]
+layout_mode = 1
+offset_left = -200.0
+offset_top = -179.0
+offset_right = 200.0
+offset_bottom = 121.0
 
-[node name="Label" type="Label" parent="panelDone/PanelContainer/VBoxContainer"]
-layout_mode = 2
-text = "You find 6 gold!"
-horizontal_alignment = 1
-vertical_alignment = 1
+[node name="coinAnimation2" parent="controlCoinsAnim/centerPt" unique_id=1662138292 instance=ExtResource("9_18qgg")]
+layout_mode = 1
+offset_left = -162.0
+offset_top = -179.0
+offset_right = 238.0
+offset_bottom = 121.0
 
-[node name="MarginContainer" type="MarginContainer" parent="panelDone/PanelContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
+[node name="coinAnimation4" parent="controlCoinsAnim/centerPt" unique_id=201599694 instance=ExtResource("9_18qgg")]
+layout_mode = 1
+offset_left = -135.0
+offset_top = -179.0
+offset_right = 265.0
+offset_bottom = 121.0
 
-[node name="Button" type="Button" parent="panelDone/PanelContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 75)
-layout_mode = 2
-text = "Done"
+[node name="coinAnimation3" parent="controlCoinsAnim/centerPt" unique_id=504598622 instance=ExtResource("9_18qgg")]
+layout_mode = 1
+offset_left = -257.0
+offset_top = -179.0
+offset_right = 143.0
+offset_bottom = 121.0
 
-[node name="animLabel" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_ip8wj")
-}
+[node name="coinAnimation5" parent="controlCoinsAnim/centerPt" unique_id=574896245 instance=ExtResource("9_18qgg")]
+layout_mode = 1
+offset_left = -272.0
+offset_top = -179.0
+offset_right = 128.0
+offset_bottom = 121.0
 
-[node name="animEvent" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_13ixs")
-}
+[node name="animCoinGet" type="AnimationPlayer" parent="controlCoinsAnim" unique_id=1532487188]
+libraries/ = SubResource("AnimationLibrary_cqyu2")
 
-[node name="animItems" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_rq07n")
-}
+[node name="animLabel" type="AnimationPlayer" parent="." unique_id=1107704872]
+libraries/ = SubResource("AnimationLibrary_ip8wj")
+
+[node name="animEvent" type="AnimationPlayer" parent="." unique_id=997449815]
+libraries/ = SubResource("AnimationLibrary_13ixs")
+
+[node name="animItems" type="AnimationPlayer" parent="." unique_id=1367178069]
+libraries/ = SubResource("AnimationLibrary_rq07n")
 
 [connection signal="mouse_entered" from="picEvent/btnEvent" to="." method="_on_btn_event_mouse_entered"]
 [connection signal="mouse_exited" from="picEvent/btnEvent" to="." method="_on_btn_event_mouse_exited"]
 [connection signal="pressed" from="picEvent/btnEvent" to="." method="_on_btn_event_pressed"]
-[connection signal="pressed" from="panelDone/PanelContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]

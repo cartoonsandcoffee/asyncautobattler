@@ -1,32 +1,42 @@
-[gd_scene load_steps=24 format=3 uid="uid://bpqljjke1liyx"]
+[gd_scene format=3 uid="uid://bpqljjke1liyx"]
 
 [ext_resource type="Script" uid="uid://7td1u4y3tfm4" path="res://Scripts/Components/map_zoom_panel.gd" id="1_0ltav"]
-[ext_resource type="Texture2D" uid="uid://derrdt27xagod" path="res://Assets/UI/panel-border-007.png" id="1_dlfjx"]
 [ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="2_8u2o6"]
+[ext_resource type="Texture2D" uid="uid://cfci441ywkwkh" path="res://Assets/UI/rank_boss_border.png" id="2_vtuys"]
 [ext_resource type="Texture2D" uid="uid://eb6npl80r4to" path="res://Assets/Art/Player/PVP/Player_Skin_0.png" id="4_0ltav"]
+[ext_resource type="PackedScene" uid="uid://biqdjtdf8p38s" path="res://Scenes/Elements/rank_boss_selector.tscn" id="4_iblfs"]
 [ext_resource type="Texture2D" uid="uid://ccbcslnsifj3o" path="res://Assets/UI/divider-fade-002.png" id="5_0ltav"]
 [ext_resource type="PackedScene" uid="uid://ct6jer1f0brbb" path="res://Scenes/Elements/stat_box2.tscn" id="5_wjcpn"]
 [ext_resource type="PackedScene" uid="uid://cqhyru53o5wfx" path="res://Scenes/item.tscn" id="7_s1gig"]
 [ext_resource type="Texture2D" uid="uid://cf5b8qtetu7b8" path="res://Assets/Art/Events/Zooms/boss_battle.png" id="8_cr0pl"]
-[ext_resource type="PackedScene" uid="uid://s4uxiifbera4" path="res://Scenes/Elements/progression_box.tscn" id="8_mj34i"]
 [ext_resource type="Texture2D" uid="uid://bujuc6bka60iu" path="res://Assets/UI/banner.png" id="9_mj34i"]
+[ext_resource type="Theme" uid="uid://bo603ra16ac63" path="res://Themes/stone_button_01.tres" id="10_agf1h"]
+[ext_resource type="Theme" uid="uid://0hs8qbirg21w" path="res://Themes/stone_button_02.tres" id="11_t2w21"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lja66"]
 bg_color = Color(0, 0, 0, 1)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_oiv5d"]
-texture = ExtResource("1_dlfjx")
-texture_margin_left = 32.0
-texture_margin_top = 32.0
-texture_margin_right = 32.0
-texture_margin_bottom = 32.0
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_agf1h"]
+texture = ExtResource("2_vtuys")
+texture_margin_left = 40.0
+texture_margin_top = 80.0
+texture_margin_right = 40.0
+texture_margin_bottom = 80.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+region_rect = Rect2(0, 0, 800, 300)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_vboqv"]
-texture = ExtResource("1_dlfjx")
-texture_margin_left = 28.0
-texture_margin_top = 28.0
-texture_margin_right = 28.0
-texture_margin_bottom = 28.0
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_oiv5d"]
+texture = ExtResource("2_vtuys")
+texture_margin_left = 40.0
+texture_margin_top = 80.0
+texture_margin_right = 40.0
+texture_margin_bottom = 80.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iblfs"]
+bg_color = Color(0, 0, 0, 0.392157)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hd1fi"]
 texture = ExtResource("8_cr0pl")
@@ -341,7 +351,7 @@ _data = {
 &"show_players": SubResource("Animation_vboqv")
 }
 
-[node name="MapZoomPanel" type="Control"]
+[node name="MapZoomPanel" type="Control" unique_id=1665968964]
 z_index = 10
 layout_mode = 3
 anchors_preset = 15
@@ -351,7 +361,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_0ltav")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Panel" type="Panel" parent="." unique_id=1721292523]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -362,57 +372,88 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_lja66")
 
-[node name="PanelContainer" type="PanelContainer" parent="Panel"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel" unique_id=1389577137]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -545.0
-offset_top = -388.0
-offset_right = 571.0
-offset_bottom = 395.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_oiv5d")
+theme_override_constants/separation = 10
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/PanelContainer"]
+[node name="spacer1" type="MarginContainer" parent="Panel/HBoxContainer" unique_id=1690175186]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="panelTourney" type="PanelContainer" parent="Panel/HBoxContainer" unique_id=1363863773]
+custom_minimum_size = Vector2(0, 700)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_agf1h")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/HBoxContainer/panelTourney" unique_id=1099498970]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel/PanelContainer/HBoxContainer"]
-custom_minimum_size = Vector2(50, 0)
-layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/PanelContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="Panel/HBoxContainer/panelTourney/VBoxContainer" unique_id=250182678]
+visible = false
+custom_minimum_size = Vector2(550, 0)
 layout_mode = 2
 theme = ExtResource("2_8u2o6")
+text = "Progression"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="mainContent" type="HBoxContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer"]
+[node name="rankButtons" type="GridContainer" parent="Panel/HBoxContainer/panelTourney/VBoxContainer" unique_id=45648904]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RankBossSelector" parent="Panel/HBoxContainer/panelTourney/VBoxContainer/rankButtons" unique_id=1580966159 instance=ExtResource("4_iblfs")]
+custom_minimum_size = Vector2(550, 140)
+layout_mode = 2
+
+[node name="RankBossSelector2" parent="Panel/HBoxContainer/panelTourney/VBoxContainer/rankButtons" unique_id=1612125560 instance=ExtResource("4_iblfs")]
+custom_minimum_size = Vector2(550, 140)
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="Panel/HBoxContainer" unique_id=1615496691]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_oiv5d")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/HBoxContainer/PanelContainer" unique_id=604694837]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer" unique_id=1006797742]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer" unique_id=1236333031]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="mainContent" type="HBoxContainer" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer" unique_id=40399936]
 layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("2_8u2o6")
-theme_override_constants/separation = 20
+theme_override_constants/separation = 10
 
-[node name="bossContainer" type="VBoxContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent"]
+[node name="bossContainer" type="VBoxContainer" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent" unique_id=2022345312]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="boxProfile" type="HBoxContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer"]
+[node name="boxProfile" type="HBoxContainer" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer" unique_id=2042597244]
 layout_mode = 2
 
-[node name="vBoxProfile" type="VBoxContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/boxProfile"]
+[node name="vBoxProfile" type="VBoxContainer" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/boxProfile" unique_id=40469705]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="lblBoss" type="Label" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/boxProfile/vBoxProfile"]
+[node name="lblBoss" type="Label" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/boxProfile/vBoxProfile" unique_id=2142456632]
 layout_mode = 2
 theme_override_font_sizes/font_size = 48
 text = "[Boss Name]"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="lblRank" type="Label" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/boxProfile/vBoxProfile"]
+[node name="lblRank" type="Label" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/boxProfile/vBoxProfile" unique_id=1767192390]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
 theme_override_font_sizes/font_size = 32
@@ -420,273 +461,240 @@ text = "Rank Boss"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="bossPic" type="TextureRect" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/boxProfile/vBoxProfile"]
+[node name="lblBossInfo" type="RichTextLabel" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/boxProfile/vBoxProfile" unique_id=1921146307]
+layout_mode = 2
+bbcode_enabled = true
+text = "A Weak opponent reigning for 43 days."
+fit_content = true
+horizontal_alignment = 1
+
+[node name="bossPic" type="TextureRect" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/boxProfile/vBoxProfile" unique_id=1900427924]
 custom_minimum_size = Vector2(200, 300)
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("4_0ltav")
-expand_mode = 1
+expand_mode = 3
 stretch_mode = 5
 
-[node name="vBoxStats" type="VBoxContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer"]
+[node name="vBoxStats" type="VBoxContainer" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer" unique_id=1881002659]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="bossStatGrid" type="GridContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats"]
+[node name="PanelContainer" type="PanelContainer" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats" unique_id=1425456895]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_iblfs")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/PanelContainer" unique_id=166874418]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="bossStatGrid" type="GridContainer" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/PanelContainer/MarginContainer" unique_id=1602219202]
 layout_mode = 2
 size_flags_horizontal = 4
-columns = 4
+columns = 3
 
-[node name="statHealth" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid" instance=ExtResource("5_wjcpn")]
+[node name="statHealth" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/PanelContainer/MarginContainer/bossStatGrid" unique_id=1344574092 instance=ExtResource("5_wjcpn")]
 custom_minimum_size = Vector2(130, 40)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 show_tooltip = false
 
-[node name="statShield" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid" instance=ExtResource("5_wjcpn")]
-custom_minimum_size = Vector2(130, 40)
+[node name="statShield" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/PanelContainer/MarginContainer/bossStatGrid" unique_id=1624528396 instance=ExtResource("5_wjcpn")]
+custom_minimum_size = Vector2(100, 40)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 stat = 2
 show_tooltip = false
 
-[node name="statAttack" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid" instance=ExtResource("5_wjcpn")]
-custom_minimum_size = Vector2(130, 40)
+[node name="statAttack" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/PanelContainer/MarginContainer/bossStatGrid" unique_id=1555383310 instance=ExtResource("5_wjcpn")]
+custom_minimum_size = Vector2(100, 40)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 stat = 1
 show_tooltip = false
 
-[node name="statAgility" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid" instance=ExtResource("5_wjcpn")]
-custom_minimum_size = Vector2(130, 40)
+[node name="statAgility" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/PanelContainer/MarginContainer/bossStatGrid" unique_id=572099 instance=ExtResource("5_wjcpn")]
+custom_minimum_size = Vector2(100, 40)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 stat = 3
 show_tooltip = false
 
-[node name="statBurnDamage" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid" instance=ExtResource("5_wjcpn")]
-custom_minimum_size = Vector2(130, 40)
+[node name="statBurnDamage" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/PanelContainer/MarginContainer/bossStatGrid" unique_id=1236478662 instance=ExtResource("5_wjcpn")]
+custom_minimum_size = Vector2(100, 40)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 stat = 8
 show_tooltip = false
 
-[node name="statStrikes" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid" instance=ExtResource("5_wjcpn")]
-custom_minimum_size = Vector2(130, 40)
+[node name="statStrikes" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/PanelContainer/MarginContainer/bossStatGrid" unique_id=636470342 instance=ExtResource("5_wjcpn")]
+custom_minimum_size = Vector2(100, 40)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 stat = 5
 show_tooltip = false
 
-[node name="statGold" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid" instance=ExtResource("5_wjcpn")]
-custom_minimum_size = Vector2(130, 40)
+[node name="statGold" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/PanelContainer/MarginContainer/bossStatGrid" unique_id=1914568329 instance=ExtResource("5_wjcpn")]
+custom_minimum_size = Vector2(100, 40)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 stat = 4
 show_tooltip = false
 
-[node name="bossInventory" type="VBoxContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent"]
+[node name="bossInventory" type="VBoxContainer" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent" unique_id=352188740]
 layout_mode = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 10
 
-[node name="divider" type="HBoxContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory"]
+[node name="divider" type="HBoxContainer" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory" unique_id=1260745568]
 layout_mode = 2
 
-[node name="MarginContainer2" type="MarginContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/divider"]
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/divider" unique_id=1167798554]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="TextureRect2" type="TextureRect" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/divider"]
+[node name="TextureRect2" type="TextureRect" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/divider" unique_id=967533711]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("5_0ltav")
 stretch_mode = 5
 
-[node name="Label2" type="Label" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/divider"]
+[node name="Label2" type="Label" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/divider" unique_id=983866079]
 layout_mode = 2
 text = "  Inventory  "
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/divider"]
+[node name="TextureRect" type="TextureRect" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/divider" unique_id=1896036496]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("5_0ltav")
 stretch_mode = 5
 flip_h = true
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/divider"]
+[node name="MarginContainer" type="MarginContainer" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/divider" unique_id=1364988030]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="setBox" type="HBoxContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory"]
+[node name="setBox" type="HBoxContainer" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory" unique_id=599465141]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 
-[node name="weapon" type="HBoxContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory"]
+[node name="weapon" type="HBoxContainer" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory" unique_id=1857439318]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="GridContainer" type="GridContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/weapon"]
+[node name="GridContainer" type="GridContainer" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/weapon" unique_id=130275927]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="Item" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/weapon/GridContainer" instance=ExtResource("7_s1gig")]
-clip_contents = true
+[node name="Item" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/weapon/GridContainer" unique_id=485230629 instance=ExtResource("7_s1gig")]
 custom_minimum_size = Vector2(100, 120)
+clip_contents = true
 layout_mode = 2
 
-[node name="bossInventoryGrid" type="GridContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory"]
+[node name="bossInventoryGrid" type="GridContainer" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory" unique_id=2138649636]
 layout_mode = 2
 columns = 4
 
-[node name="Item" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+[node name="Item" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" unique_id=754312427 instance=ExtResource("7_s1gig")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Item2" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+[node name="Item2" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" unique_id=650001797 instance=ExtResource("7_s1gig")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Item3" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+[node name="Item3" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" unique_id=1374770666 instance=ExtResource("7_s1gig")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Item4" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+[node name="Item4" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" unique_id=1554061103 instance=ExtResource("7_s1gig")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Item5" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+[node name="Item5" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" unique_id=1355953875 instance=ExtResource("7_s1gig")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Item6" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+[node name="Item6" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" unique_id=1524172118 instance=ExtResource("7_s1gig")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Item7" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+[node name="Item7" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" unique_id=1497468731 instance=ExtResource("7_s1gig")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Item8" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+[node name="Item8" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" unique_id=1746172462 instance=ExtResource("7_s1gig")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Item9" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+[node name="Item9" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" unique_id=806417268 instance=ExtResource("7_s1gig")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Item10" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+[node name="Item10" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" unique_id=394895660 instance=ExtResource("7_s1gig")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Item11" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+[node name="Item11" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" unique_id=2021698541 instance=ExtResource("7_s1gig")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Item12" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" instance=ExtResource("7_s1gig")]
+[node name="Item12" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid" unique_id=621416550 instance=ExtResource("7_s1gig")]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="buttonContainer" type="HBoxContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer"]
+[node name="buttonContainer" type="HBoxContainer" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer" unique_id=1365593078]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/buttonContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/buttonContainer" unique_id=44676953]
 visible = false
 layout_mode = 2
 
-[node name="btnClose" type="Button" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/buttonContainer"]
+[node name="btnClose" type="Button" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/buttonContainer" unique_id=556431294]
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "WAIT... NOT YET"
+theme = ExtResource("10_agf1h")
+theme_type_variation = &"FlatButton"
+text = "Wait... Not Yet"
 
-[node name="MarginContainer2" type="MarginContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/buttonContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/buttonContainer" unique_id=1871142073]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="btnRush" type="Button" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/buttonContainer"]
+[node name="btnRush" type="Button" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/buttonContainer" unique_id=1990121667]
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "READY TO FIGHT"
+theme = ExtResource("11_t2w21")
+theme_type_variation = &"FlatButton"
+text = "Ready to Fight"
 
-[node name="MarginContainer3" type="MarginContainer" parent="Panel/PanelContainer/HBoxContainer/VBoxContainer/buttonContainer"]
+[node name="MarginContainer3" type="MarginContainer" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/buttonContainer" unique_id=1753975607]
 visible = false
 layout_mode = 2
 
-[node name="MarginContainer2" type="MarginContainer" parent="Panel/PanelContainer/HBoxContainer"]
-custom_minimum_size = Vector2(50, 0)
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/HBoxContainer/PanelContainer/HBoxContainer" unique_id=1368084579]
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/margin_left = 5
 
-[node name="panelTourney" type="PanelContainer" parent="Panel"]
-visible = false
-custom_minimum_size = Vector2(0, 700)
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 93.0
-offset_top = -350.0
-offset_right = 424.0
-offset_bottom = 350.0
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_vboqv")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/panelTourney"]
+[node name="spacer2" type="MarginContainer" parent="Panel/HBoxContainer" unique_id=71976918]
 layout_mode = 2
+size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="Panel/panelTourney/VBoxContainer"]
-layout_mode = 2
-theme = ExtResource("2_8u2o6")
-text = "Progression"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="rankBox6" parent="Panel/panelTourney/VBoxContainer" instance=ExtResource("8_mj34i")]
-custom_minimum_size = Vector2(250, 90)
-layout_mode = 2
-size_flags_horizontal = 4
-rank = 6
-
-[node name="rankBox5" parent="Panel/panelTourney/VBoxContainer" instance=ExtResource("8_mj34i")]
-custom_minimum_size = Vector2(250, 90)
-layout_mode = 2
-size_flags_horizontal = 4
-rank = 5
-
-[node name="rankBox4" parent="Panel/panelTourney/VBoxContainer" instance=ExtResource("8_mj34i")]
-custom_minimum_size = Vector2(250, 90)
-layout_mode = 2
-size_flags_horizontal = 4
-rank = 4
-
-[node name="rankBox3" parent="Panel/panelTourney/VBoxContainer" instance=ExtResource("8_mj34i")]
-custom_minimum_size = Vector2(250, 90)
-layout_mode = 2
-size_flags_horizontal = 4
-rank = 3
-
-[node name="rankBox2" parent="Panel/panelTourney/VBoxContainer" instance=ExtResource("8_mj34i")]
-custom_minimum_size = Vector2(250, 90)
-layout_mode = 2
-size_flags_horizontal = 4
-rank = 2
-
-[node name="rankBox1" parent="Panel/panelTourney/VBoxContainer" instance=ExtResource("8_mj34i")]
-custom_minimum_size = Vector2(250, 90)
-layout_mode = 2
-size_flags_horizontal = 4
-
-[node name="panelMatchup" type="Panel" parent="."]
+[node name="panelMatchup" type="Panel" parent="." unique_id=1542471434]
 visible = false
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
@@ -697,7 +705,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_hd1fi")
 
-[node name="Player1" type="TextureRect" parent="panelMatchup"]
+[node name="Player1" type="TextureRect" parent="panelMatchup" unique_id=184097770]
 visible = false
 modulate = Color(0, 0, 0, 1)
 layout_mode = 1
@@ -715,7 +723,7 @@ texture = ExtResource("4_0ltav")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Player2" type="TextureRect" parent="panelMatchup"]
+[node name="Player2" type="TextureRect" parent="panelMatchup" unique_id=1248668777]
 visible = false
 modulate = Color(0, 0, 0, 1)
 layout_mode = 1
@@ -736,7 +744,7 @@ texture = ExtResource("4_0ltav")
 expand_mode = 3
 stretch_mode = 5
 
-[node name="panelTitle" type="PanelContainer" parent="panelMatchup"]
+[node name="panelTitle" type="PanelContainer" parent="panelMatchup" unique_id=1727599053]
 self_modulate = Color(0.71, 0.633793, 0.5467, 1)
 layout_mode = 1
 anchors_preset = 10
@@ -746,13 +754,13 @@ offset_bottom = -54.0
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_gkt0m")
 
-[node name="MarginContainer" type="MarginContainer" parent="panelMatchup/panelTitle"]
+[node name="MarginContainer" type="MarginContainer" parent="panelMatchup/panelTitle" unique_id=1988156938]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="panelMatchup/panelTitle/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="panelMatchup/panelTitle/MarginContainer" unique_id=1126578698]
 layout_mode = 2
 
-[node name="lblFight" type="Label" parent="panelMatchup/panelTitle/MarginContainer/VBoxContainer"]
+[node name="lblFight" type="Label" parent="panelMatchup/panelTitle/MarginContainer/VBoxContainer" unique_id=762327160]
 layout_mode = 2
 size_flags_vertical = 1
 theme = ExtResource("2_8u2o6")
@@ -764,11 +772,11 @@ text = "Rank 1"
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="panelMatchup/panelTitle/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="panelMatchup/panelTitle/MarginContainer/VBoxContainer" unique_id=1999619319]
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 
-[node name="lblPlayer1" type="Label" parent="panelMatchup/panelTitle/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="lblPlayer1" type="Label" parent="panelMatchup/panelTitle/MarginContainer/VBoxContainer/HBoxContainer" unique_id=383016432]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("2_8u2o6")
@@ -778,7 +786,7 @@ text = "CartoonsAndCoffee"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Label" type="Label" parent="panelMatchup/panelTitle/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="panelMatchup/panelTitle/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1809965455]
 layout_mode = 2
 theme = ExtResource("2_8u2o6")
 theme_override_colors/font_color = Color(1, 0.871667, 0.23, 1)
@@ -788,7 +796,7 @@ text = "vs."
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="lblPlayer2" type="Label" parent="panelMatchup/panelTitle/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="lblPlayer2" type="Label" parent="panelMatchup/panelTitle/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1880648907]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("2_8u2o6")
@@ -798,14 +806,10 @@ text = "Player 2 Name"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_mj34i")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=388330493]
+libraries/ = SubResource("AnimationLibrary_mj34i")
 
-[node name="animFight" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_bvg5d")
-}
+[node name="animFight" type="AnimationPlayer" parent="." unique_id=1417977277]
+libraries/ = SubResource("AnimationLibrary_bvg5d")
 
-[connection signal="pressed" from="Panel/PanelContainer/HBoxContainer/VBoxContainer/buttonContainer/btnRush" to="." method="_on_btn_rush_pressed"]
+[connection signal="pressed" from="Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/buttonContainer/btnRush" to="." method="_on_btn_rush_pressed"]

@@ -1,20 +1,19 @@
-[gd_scene load_steps=20 format=3 uid="uid://m163y3gcbfc4"]
+[gd_scene format=3 uid="uid://m163y3gcbfc4"]
 
 [ext_resource type="Script" uid="uid://cfmjnc8rb4xmi" path="res://Scripts/HallwayEvents/hallway_peddler.gd" id="1_po35g"]
 [ext_resource type="Texture2D" uid="uid://c87udhg7dvjp6" path="res://Assets/Art/Events/Merchant01.png" id="2_c0g1i"]
-[ext_resource type="Texture2D" uid="uid://cr5mucfkmo2k4" path="res://Assets/Art/Backgrounds/Hallway_01.png" id="2_ytue0"]
 [ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="3_po35g"]
-[ext_resource type="PackedScene" uid="uid://bb31dt8vvd6f4" path="res://Scenes/Elements/item_merchant_store.tscn" id="5_74n3r"]
+[ext_resource type="PackedScene" uid="uid://dnmag51xsl47f" path="res://Scenes/Popups/popup_peddler.tscn" id="5_ytue0"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_74n3r"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4ftqd"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dilfk"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mwdwy"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7y6wx"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mwdwy"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dilfk"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4ftqd"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_74n3r"]
 
 [sub_resource type="Animation" id="Animation_kjpp6"]
 length = 0.001
@@ -445,7 +444,7 @@ _data = {
 &"show_event": SubResource("Animation_ma7gw")
 }
 
-[node name="HallwayPeddler" type="Control"]
+[node name="HallwayPeddler" type="Control" unique_id=553086796]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -454,18 +453,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_po35g")
 
-[node name="picBack" type="TextureRect" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("2_ytue0")
-expand_mode = 1
-
-[node name="picEvent" type="TextureRect" parent="."]
+[node name="picEvent" type="TextureRect" parent="." unique_id=204927861]
 modulate = Color(0, 0, 0, 1)
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 1
@@ -486,21 +474,21 @@ texture = ExtResource("2_c0g1i")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="btnEvent" type="Button" parent="picEvent"]
+[node name="btnEvent" type="Button" parent="picEvent" unique_id=448811170]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_74n3r")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_4ftqd")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_dilfk")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_7y6wx")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_mwdwy")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_7y6wx")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_dilfk")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_4ftqd")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_74n3r")
 disabled = true
 
-[node name="lblAction" type="Label" parent="."]
+[node name="lblAction" type="Label" parent="." unique_id=750852580]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 0
 offset_left = 518.0
@@ -521,24 +509,15 @@ text = "Shop"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="item_merchant_store" parent="." instance=ExtResource("5_74n3r")]
+[node name="PopupPeddler" parent="." unique_id=346981933 instance=ExtResource("5_ytue0")]
 layout_mode = 1
-items_offered = 2
-item_columns = 2
-box_name = "A Peddler"
-box_desc = "You can't beat these prices..."
-allow_refresh = false
 on_sale = true
 
-[node name="animLabel" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_c81bx")
-}
+[node name="animLabel" type="AnimationPlayer" parent="." unique_id=1488976731]
+libraries/ = SubResource("AnimationLibrary_c81bx")
 
-[node name="animEvent" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_v4ijj")
-}
+[node name="animEvent" type="AnimationPlayer" parent="." unique_id=1502492237]
+libraries/ = SubResource("AnimationLibrary_v4ijj")
 
 [connection signal="mouse_entered" from="picEvent/btnEvent" to="." method="_on_btn_event_mouse_entered"]
 [connection signal="mouse_exited" from="picEvent/btnEvent" to="." method="_on_btn_event_mouse_exited"]

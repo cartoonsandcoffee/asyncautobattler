@@ -1,22 +1,21 @@
-[gd_scene load_steps=29 format=3 uid="uid://dnpww8cmfay1x"]
+[gd_scene format=3 uid="uid://dnpww8cmfay1x"]
 
 [ext_resource type="Script" uid="uid://bngvv00tpw67t" path="res://Scripts/RoomEvents/uncommon_utility_crafting.gd" id="1_1vilr"]
 [ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="2_nonn0"]
-[ext_resource type="Texture2D" uid="uid://cr5mucfkmo2k4" path="res://Assets/Art/Backgrounds/Hallway_01.png" id="2_oqb6w"]
 [ext_resource type="Texture2D" uid="uid://krj6t4onxp2l" path="res://Assets/Art/Events/infested_mound.png" id="3_oqb6w"]
 [ext_resource type="Texture2D" uid="uid://rgu723p7kdwu" path="res://Assets/Art/Events/crafting_eyes.png" id="4_6u7kd"]
 [ext_resource type="Texture2D" uid="uid://ofqhkq0qfkqk" path="res://Assets/Items/Bugs.png" id="6_6u7kd"]
 [ext_resource type="PackedScene" uid="uid://c3h585v8mippc" path="res://Scenes/Elements/free_item_offering.tscn" id="7_oqb6w"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_oqb6w"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2jla6"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xskcj"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m6ybx"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7es7g"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m6ybx"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xskcj"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2jla6"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_oqb6w"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oqb6w"]
 atlas = ExtResource("6_6u7kd")
@@ -422,7 +421,7 @@ _data = {
 &"show_box": SubResource("Animation_xskcj")
 }
 
-[node name="CraftingRoom" type="Control"]
+[node name="CraftingRoom" type="Control" unique_id=1855367781]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -431,18 +430,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_1vilr")
 
-[node name="picBack" type="TextureRect" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("2_oqb6w")
-expand_mode = 1
-
-[node name="Control" type="Control" parent="."]
+[node name="Control" type="Control" parent="." unique_id=1101328480]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 8
@@ -458,7 +446,7 @@ grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(327, 210)
 
-[node name="picCauldron" type="TextureRect" parent="Control"]
+[node name="picCauldron" type="TextureRect" parent="Control" unique_id=950512799]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -476,7 +464,7 @@ pivot_offset = Vector2(682, 342)
 texture = ExtResource("3_oqb6w")
 expand_mode = 1
 
-[node name="Button" type="Button" parent="Control/picCauldron"]
+[node name="Button" type="Button" parent="Control/picCauldron" unique_id=956435998]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -487,14 +475,14 @@ offset_right = -233.0
 offset_bottom = -128.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_oqb6w")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_2jla6")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_xskcj")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_7es7g")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_m6ybx")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_7es7g")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_xskcj")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_2jla6")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_oqb6w")
 disabled = true
 
-[node name="lblOpen" type="Label" parent="Control"]
+[node name="lblOpen" type="Label" parent="Control" unique_id=1977201216]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 8
@@ -522,7 +510,7 @@ text = "Examine."
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="picEyes" type="TextureRect" parent="Control"]
+[node name="picEyes" type="TextureRect" parent="Control" unique_id=1437705204]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -542,7 +530,7 @@ pivot_offset = Vector2(217.5, 55.75)
 texture = ExtResource("4_6u7kd")
 expand_mode = 1
 
-[node name="gut_particles" type="CPUParticles2D" parent="Control"]
+[node name="gut_particles" type="CPUParticles2D" parent="Control" unique_id=1604054325]
 position = Vector2(357.5, 281.25)
 emitting = false
 amount = 30
@@ -563,7 +551,7 @@ angle_curve = SubResource("Curve_2jla6")
 scale_amount_curve = SubResource("Curve_xskcj")
 color = Color(0.35448, 0.2562, 0.42, 1)
 
-[node name="FreeItemOffering" parent="." instance=ExtResource("7_oqb6w")]
+[node name="FreeItemOffering" parent="." unique_id=382251503 instance=ExtResource("7_oqb6w")]
 visible = false
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
@@ -576,22 +564,17 @@ scale = Vector2(0.5, 0.5)
 filter_by = 2
 box_name = "Infested Mound"
 box_desc = "It's crawling with bugs..."
+use_keyword_weighting = false
 category_string = "Bug"
 
-[node name="animEvent" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_gwpiq")
-}
+[node name="animEvent" type="AnimationPlayer" parent="." unique_id=83520101]
+libraries/ = SubResource("AnimationLibrary_gwpiq")
 
-[node name="animText" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_xskcj")
-}
+[node name="animText" type="AnimationPlayer" parent="." unique_id=415212282]
+libraries/ = SubResource("AnimationLibrary_xskcj")
 
-[node name="animBox" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_3g0fr")
-}
+[node name="animBox" type="AnimationPlayer" parent="." unique_id=3707817]
+libraries/ = SubResource("AnimationLibrary_3g0fr")
 
 [connection signal="mouse_entered" from="Control/picCauldron/Button" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="Control/picCauldron/Button" to="." method="_on_button_mouse_exited"]

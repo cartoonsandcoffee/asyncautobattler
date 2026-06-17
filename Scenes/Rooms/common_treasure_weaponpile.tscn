@@ -1,8 +1,7 @@
-[gd_scene load_steps=25 format=3 uid="uid://bqvlcutw40dvm"]
+[gd_scene format=3 uid="uid://bqvlcutw40dvm"]
 
 [ext_resource type="Script" uid="uid://cqorbe72ves58" path="res://Scripts/RoomEvents/altar_room.gd" id="1_4qefn"]
 [ext_resource type="Resource" uid="uid://gm0vvksbp7e4" path="res://Resources/Enemies/Anguish.tres" id="2_mtbdh"]
-[ext_resource type="Texture2D" uid="uid://cr5mucfkmo2k4" path="res://Assets/Art/Backgrounds/Hallway_01.png" id="3_4qefn"]
 [ext_resource type="Texture2D" uid="uid://cr43ke21qx4hi" path="res://Assets/Art/Events/corpse_pile_sword.png" id="4_q08fy"]
 [ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="5_o4cxg"]
 [ext_resource type="PackedScene" uid="uid://c3h585v8mippc" path="res://Scenes/Elements/free_item_offering.tscn" id="6_k5n7a"]
@@ -11,15 +10,15 @@
 [ext_resource type="Animation" uid="uid://dfgi52spygusb" path="res://Animations/altar_open_box.res" id="9_qkb2o"]
 [ext_resource type="Animation" uid="uid://u4wkdm5bvrhg" path="res://Animations/altar_show_text.res" id="10_pdkfq"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_x31fb"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_n3iiu"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5jklw"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_axv24"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dwi30"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_axv24"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5jklw"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_n3iiu"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_x31fb"]
 
 [sub_resource type="Animation" id="Animation_n3iiu"]
 length = 0.001
@@ -298,7 +297,7 @@ _data = {
 &"altar_open_box": ExtResource("9_qkb2o")
 }
 
-[node name="AltarRoom" type="Control"]
+[node name="AltarRoom" type="Control" unique_id=652050557]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -308,18 +307,7 @@ grow_vertical = 2
 script = ExtResource("1_4qefn")
 enemy_resource = ExtResource("2_mtbdh")
 
-[node name="picBack" type="TextureRect" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("3_4qefn")
-expand_mode = 1
-
-[node name="picEvent" type="TextureRect" parent="."]
+[node name="picEvent" type="TextureRect" parent="." unique_id=1022822639]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 8
@@ -339,7 +327,7 @@ texture = ExtResource("4_q08fy")
 expand_mode = 3
 stretch_mode = 5
 
-[node name="Button" type="Button" parent="picEvent"]
+[node name="Button" type="Button" parent="picEvent" unique_id=753857857]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -350,14 +338,14 @@ offset_right = -128.0
 offset_bottom = -21.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_x31fb")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_n3iiu")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_5jklw")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_dwi30")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_axv24")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_dwi30")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_5jklw")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_n3iiu")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_x31fb")
 disabled = true
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="." unique_id=1282631759]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -381,7 +369,7 @@ text = "Reach in!"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="FreeItemOffering" parent="." instance=ExtResource("6_k5n7a")]
+[node name="FreeItemOffering" parent="." unique_id=1041795213 instance=ExtResource("6_k5n7a")]
 visible = false
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
@@ -390,21 +378,16 @@ pivot_offset = Vector2(776, 420)
 filter_by = 1
 box_name = "Weapon Pile"
 box_desc = "Among the body parts, you feel some weapons."
+use_keyword_weighting = false
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_pc7tr")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=82223986]
+libraries/ = SubResource("AnimationLibrary_pc7tr")
 
-[node name="textAnim" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_5veg6")
-}
+[node name="textAnim" type="AnimationPlayer" parent="." unique_id=1417529419]
+libraries/ = SubResource("AnimationLibrary_5veg6")
 
-[node name="boxAnim" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_y00et")
-}
+[node name="boxAnim" type="AnimationPlayer" parent="." unique_id=1057175338]
+libraries/ = SubResource("AnimationLibrary_y00et")
 
 [connection signal="mouse_entered" from="picEvent/Button" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="picEvent/Button" to="." method="_on_button_mouse_exited"]

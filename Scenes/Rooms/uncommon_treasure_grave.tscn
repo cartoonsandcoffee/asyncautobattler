@@ -1,12 +1,14 @@
-[gd_scene load_steps=28 format=3 uid="uid://bonuuoofoy2li"]
+[gd_scene format=3 uid="uid://bonuuoofoy2li"]
 
 [ext_resource type="Script" uid="uid://dkldgov83rkne" path="res://Scripts/RoomEvents/grave_room.gd" id="1_b5h87"]
 [ext_resource type="Resource" uid="uid://gm0vvksbp7e4" path="res://Resources/Enemies/Anguish.tres" id="2_5sbht"]
-[ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="2_b5h87"]
-[ext_resource type="Texture2D" uid="uid://ci156s4y1tkxg" path="res://Assets/Art/Backgrounds/Background_04.png" id="3_jmcaa"]
-[ext_resource type="PackedScene" uid="uid://c3h585v8mippc" path="res://Scenes/Elements/free_item_offering.tscn" id="4_0h2n3"]
+[ext_resource type="Texture2D" uid="uid://dv348o75u3ltu" path="res://Assets/Art/Events/Sarcophagus_Open.png" id="3_jmcaa"]
 [ext_resource type="Texture2D" uid="uid://dvag4ctmsp38b" path="res://Assets/Art/Events/Sarcophagus.png" id="5_0h2n3"]
 [ext_resource type="Texture2D" uid="uid://dxw4wnrx37lmp" path="res://Assets/Art/Particles/magic_05.png" id="5_m4yyy"]
+[ext_resource type="Texture2D" uid="uid://lb5ebdhwaa8i" path="res://Assets/Art/Particles/star_05.png" id="6_xqrls"]
+[ext_resource type="PackedScene" uid="uid://bx4e84ca4u645" path="res://Scenes/Elements/DisplayItemChoicesFree.tscn" id="7_jmcaa"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f3ulp"]
 
 [sub_resource type="Curve" id="Curve_rwip8"]
 _limits = [0.3, 3.0, 0.0, 1.0]
@@ -17,310 +19,30 @@ point_count = 2
 offsets = PackedFloat32Array(0, 0.625, 1)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fh2em"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5hy7u"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_q8b1v"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_h0lw6"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xe641"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_h0lw6"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_q8b1v"]
 
-[sub_resource type="Animation" id="Animation_rqccd"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5hy7u"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fh2em"]
+
+[sub_resource type="Curve" id="Curve_ucuks"]
+_data = [Vector2(0, 0.07142866), 0.0, 0.0, 0, 0, Vector2(1, 0.36638665), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_mfa2w"]
+offsets = PackedFloat32Array(0, 0.6902655, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.63274336, 1, 1, 1, 0)
+
+[sub_resource type="Animation" id="Animation_ychc7"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("lblOpen:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("lblOpen:scale")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0.5, 0.5)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("lblOpen:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(512, 200)]
-}
-
-[sub_resource type="Animation" id="Animation_taixv"]
-resource_name = "hide_text"
-length = 0.4
-step = 0.01
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("lblOpen:scale")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(1, 1), Vector2(0.5, 0.5)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("lblOpen:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("lblOpen:position")
-tracks/2/interp = 2
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(512, 150), Vector2(512, 200)]
-}
-
-[sub_resource type="Animation" id="Animation_sixyl"]
-resource_name = "show_text"
-length = 0.4
-step = 0.025
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("lblOpen:scale")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(0.5, 0.5), Vector2(1, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("lblOpen:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-tracks/2/type = "method"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath(".")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0.4),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"hover_text"
-}]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("lblOpen:position")
-tracks/3/interp = 2
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(512, 200), Vector2(512, 150)]
-}
-
-[sub_resource type="Animation" id="Animation_0y74d"]
-resource_name = "text_hover"
-loop_mode = 1
-step = 0.01
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("lblOpen:scale")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5, 1),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector2(1, 1), Vector2(1.1, 1.1), Vector2(1, 1)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_23tol"]
-_data = {
-&"RESET": SubResource("Animation_rqccd"),
-&"hide_text": SubResource("Animation_taixv"),
-&"show_text": SubResource("Animation_sixyl"),
-&"text_hover": SubResource("Animation_0y74d")
-}
-
-[sub_resource type="Animation" id="Animation_ckt4l"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../FreeItemOffering:scale")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("../FreeItemOffering:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("../FreeItemOffering:visible")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-
-[sub_resource type="Animation" id="Animation_f2fgj"]
-resource_name = "closeBox"
-length = 0.4
-step = 0.01
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../FreeItemOffering:scale")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.08, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector2(1, 1), Vector2(1.1, 1.1), Vector2(0.5, 0.5)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("../FreeItemOffering:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("../FreeItemOffering:visible")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, false]
-}
-
-[sub_resource type="Animation" id="Animation_3q1ay"]
-resource_name = "openBox"
-length = 0.4
-step = 0.01
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../FreeItemOffering:scale")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.35, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(0.5, 0.5), Vector2(1.1, 1.1), Vector2(0.95, 0.95), Vector2(1, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("../FreeItemOffering:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("../FreeItemOffering:visible")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_sixyl"]
-_data = {
-&"RESET": SubResource("Animation_ckt4l"),
-&"closeBox": SubResource("Animation_f2fgj"),
-&"openBox": SubResource("Animation_3q1ay")
-}
-
-[sub_resource type="Animation" id="Animation_ooyyh"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("picTreasure:modulate")
+tracks/0/path = NodePath(".:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -332,7 +54,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("picTreasure/jar_particles:emitting")
+tracks/1/path = NodePath("controlEvent/eventContainer/picTreasure/jar_particles:emitting")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -344,19 +66,19 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("picTreasure:visible")
+tracks/2/path = NodePath("controlEvent/eventContainer/picOpen:visible")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [false]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("picTreasure/Button:disabled")
+tracks/3/path = NodePath("controlEvent/eventContainer/picTreasure:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -365,84 +87,83 @@ tracks/3/keys = {
 "update": 1,
 "values": [true]
 }
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("controlEvent/eventContainer/openParticles:emitting")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
-[sub_resource type="Animation" id="Animation_q4k6o"]
-resource_name = "jars_done"
+[sub_resource type="Animation" id="Animation_y78y5"]
+resource_name = "hide_event"
 length = 0.4
-step = 0.01
+step = 0.025
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("picTreasure/jar_particles:emitting")
+tracks/0/path = NodePath(".:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.05),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, false]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("picTreasure:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("picTreasure:visible")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("controlEvent/eventContainer/picTreasure/jar_particles:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [true, false]
+"values": [false, false]
 }
 
-[sub_resource type="Animation" id="Animation_ps6k6"]
-resource_name = "show_jars"
-length = 0.5
-step = 0.01
+[sub_resource type="Animation" id="Animation_qwdya"]
+resource_name = "open"
+length = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("picTreasure:modulate")
+tracks/0/path = NodePath("controlEvent/eventContainer/picOpen:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
+"times": PackedFloat32Array(0, 0.03333334),
 "transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(0, 0, 0, 1), Color(1, 1, 1, 1)]
+"update": 1,
+"values": [false, true]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("picTreasure:visible")
+tracks/1/path = NodePath("controlEvent/eventContainer/picTreasure:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.03333334),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [true]
+"values": [true, false]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("picTreasure/jar_particles:emitting")
+tracks/2/path = NodePath("controlEvent/eventContainer/openParticles:emitting")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.5),
+"times": PackedFloat32Array(0, 0.03333334),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -450,24 +171,111 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("picTreasure/Button:disabled")
+tracks/3/path = NodePath("controlEvent/eventContainer/picTreasure/jar_particles:emitting")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0.5),
+"times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_3q1ay"]
-_data = {
-&"RESET": SubResource("Animation_ooyyh"),
-&"jars_done": SubResource("Animation_q4k6o"),
-&"show_jars": SubResource("Animation_ps6k6")
+[sub_resource type="Animation" id="Animation_o4xw2"]
+resource_name = "show_event"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("controlEvent/eventContainer/picTreasure/jar_particles:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
 }
 
-[node name="GraveRoom" type="Control"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_y77ww"]
+_data = {
+&"RESET": SubResource("Animation_ychc7"),
+&"hide_event": SubResource("Animation_y78y5"),
+&"open": SubResource("Animation_qwdya"),
+&"show_event": SubResource("Animation_o4xw2")
+}
+
+[sub_resource type="Animation" id="Animation_fsj7u"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("controlEvent/eventContainer:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_8pcrl"]
+resource_name = "hover"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("controlEvent/eventContainer:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.05, 1.05)]
+}
+
+[sub_resource type="Animation" id="Animation_rppja"]
+resource_name = "un_hover"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("controlEvent/eventContainer:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1.05, 1.05), Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_47g5t"]
+_data = {
+&"RESET": SubResource("Animation_fsj7u"),
+&"hover": SubResource("Animation_8pcrl"),
+&"un_hover": SubResource("Animation_rppja")
+}
+
+[node name="GraveRoom" type="Control" unique_id=1036185447]
+modulate = Color(0, 0, 0, 1)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -478,38 +286,46 @@ script = ExtResource("1_b5h87")
 event_description = "The smell of tilled earth wafts from behind the bars."
 enemy_resource = ExtResource("2_5sbht")
 
-[node name="picBack" type="TextureRect" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("3_jmcaa")
-expand_mode = 1
-
-[node name="picTreasure" type="TextureRect" parent="."]
-modulate = Color(0, 0, 0, 1)
+[node name="controlEvent" type="Control" parent="." unique_id=100808401]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -178.124
-offset_top = -245.0
-offset_right = 178.124
-offset_bottom = 245.0
+offset_left = -183.0
+offset_top = -177.5
+offset_right = 183.0
+offset_bottom = 177.5
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(0.8, 0.8)
-pivot_offset = Vector2(178, 245)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+
+[node name="eventContainer" type="PanelContainer" parent="controlEvent" unique_id=2083962779]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
+theme_override_styles/panel = SubResource("StyleBoxEmpty_f3ulp")
+
+[node name="picOpen" type="TextureRect" parent="controlEvent/eventContainer" unique_id=858146577]
+visible = false
+layout_mode = 2
+texture = ExtResource("3_jmcaa")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="picTreasure" type="TextureRect" parent="controlEvent/eventContainer" unique_id=1927373113]
+layout_mode = 2
 texture = ExtResource("5_0h2n3")
 expand_mode = 3
+stretch_mode = 5
 
-[node name="jar_particles" type="CPUParticles2D" parent="picTreasure"]
-position = Vector2(191.251, 210)
+[node name="jar_particles" type="CPUParticles2D" parent="controlEvent/eventContainer/picTreasure" unique_id=2031253494]
+position = Vector2(133.00003, 157.5)
 scale = Vector2(1.25, 1.25)
 emitting = false
 amount = 10
@@ -531,70 +347,51 @@ scale_amount_curve = SubResource("Curve_rwip8")
 color = Color(0.745813, 0.5472, 0.76, 1)
 color_ramp = SubResource("Gradient_j1cei")
 
-[node name="Button" type="Button" parent="picTreasure"]
+[node name="Button" type="Button" parent="controlEvent/eventContainer/picTreasure" unique_id=46462578]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_fh2em")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_5hy7u")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_q8b1v")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_xe641")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_h0lw6")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_xe641")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_q8b1v")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_5hy7u")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_fh2em")
 disabled = true
 
-[node name="lblOpen" type="Label" parent="."]
-modulate = Color(1, 1, 1, 0)
-layout_mode = 0
-offset_left = 512.0
-offset_top = 200.0
-offset_right = 1008.0
-offset_bottom = 270.0
-scale = Vector2(0.5, 0.5)
-pivot_offset = Vector2(248, 35)
-theme_override_colors/font_color = Color(0.899266, 0.805079, 0.264486, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.458824)
-theme_override_colors/font_outline_color = Color(0.50771, 0.241023, 0, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 2
-theme_override_constants/outline_size = 5
-theme_override_fonts/font = ExtResource("2_b5h87")
-theme_override_font_sizes/font_size = 55
-text = "Investigate."
-horizontal_alignment = 1
-vertical_alignment = 1
+[node name="openParticles" type="CPUParticles2D" parent="controlEvent/eventContainer" unique_id=1464724301]
+position = Vector2(151.00003, 199.50002)
+emitting = false
+amount = 30
+texture = ExtResource("6_xqrls")
+one_shot = true
+speed_scale = 0.75
+explosiveness = 1.0
+use_fixed_seed = true
+seed = 3488646907
+lifetime_randomness = 0.2
+direction = Vector2(0, 0)
+spread = 180.0
+gravity = Vector2(0, 100)
+initial_velocity_min = 100.0
+initial_velocity_max = 300.0
+scale_amount_curve = SubResource("Curve_ucuks")
+color = Color(1, 0.8506667, 0.36, 1)
+color_ramp = SubResource("Gradient_mfa2w")
 
-[node name="FreeItemOffering" parent="." instance=ExtResource("4_0h2n3")]
-visible = false
-modulate = Color(1, 1, 1, 0)
+[node name="DisplayItemChoicesFree" parent="." unique_id=15131559 instance=ExtResource("7_jmcaa")]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
+box_desc = "A hero's grave... full of goodies"
 item_rarity = 2
-box_name = "A Hero's Grave"
-box_desc = "Someone special must be laid to rest here. Oh well..."
 
-[node name="animOpen" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_23tol")
-}
+[node name="animEvent" type="AnimationPlayer" parent="." unique_id=642947775]
+libraries/ = SubResource("AnimationLibrary_y77ww")
 
-[node name="animBox" type="AnimationPlayer" parent="."]
-root_node = NodePath("../animJars")
-libraries = {
-&"": SubResource("AnimationLibrary_sixyl")
-}
+[node name="animHover" type="AnimationPlayer" parent="." unique_id=816590697]
+libraries/ = SubResource("AnimationLibrary_47g5t")
 
-[node name="animJars" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_3q1ay")
-}
-
-[connection signal="mouse_entered" from="picTreasure/Button" to="." method="_on_button_mouse_entered"]
-[connection signal="mouse_exited" from="picTreasure/Button" to="." method="_on_button_mouse_exited"]
-[connection signal="pressed" from="picTreasure/Button" to="." method="_on_button_pressed"]
+[connection signal="mouse_entered" from="controlEvent/eventContainer/picTreasure/Button" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="controlEvent/eventContainer/picTreasure/Button" to="." method="_on_button_mouse_exited"]
+[connection signal="pressed" from="controlEvent/eventContainer/picTreasure/Button" to="." method="_on_button_pressed"]

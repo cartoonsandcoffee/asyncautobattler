@@ -1,21 +1,20 @@
-[gd_scene load_steps=23 format=3 uid="uid://dt0g5ekhrghn3"]
+[gd_scene format=3 uid="uid://dt0g5ekhrghn3"]
 
-[ext_resource type="Texture2D" uid="uid://ccbefxbhjge3h" path="res://Assets/Art/Backgrounds/Room_04_Background.png" id="1_6m87v"]
 [ext_resource type="Script" uid="uid://c5n4q837qkmdb" path="res://Scripts/RoomEvents/common_utility_upgrade.gd" id="1_of6sx"]
 [ext_resource type="Texture2D" uid="uid://bu7mymmyyfan2" path="res://Assets/Art/Events/merch_upgrade_back.png" id="2_of6sx"]
 [ext_resource type="Texture2D" uid="uid://2kh6snshkwr5" path="res://Assets/Art/Events/merch_upgrade_fore.png" id="3_r0kne"]
 [ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="4_6nhqd"]
 [ext_resource type="PackedScene" uid="uid://b0fp41v6klk1o" path="res://Scenes/Elements/upgrade_weapon_stats.tscn" id="6_r0kne"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f5tux"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jvpcw"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_avxmd"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hs18u"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fbxj4"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hs18u"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_avxmd"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jvpcw"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f5tux"]
 
 [sub_resource type="Animation" id="Animation_fd7rg"]
 length = 0.001
@@ -290,7 +289,7 @@ _data = {
 &"show_text": SubResource("Animation_vs00n")
 }
 
-[node name="CommonUtilityUpgrade" type="Control"]
+[node name="CommonUtilityUpgrade" type="Control" unique_id=1765861111]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -299,18 +298,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_of6sx")
 
-[node name="picBack" type="TextureRect" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("1_6m87v")
-expand_mode = 1
-
-[node name="mainEvent" type="Control" parent="."]
+[node name="mainEvent" type="Control" parent="." unique_id=947629501]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 15
@@ -319,7 +307,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="picBack" type="TextureRect" parent="mainEvent"]
+[node name="picBack" type="TextureRect" parent="mainEvent" unique_id=419581906]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -336,7 +324,7 @@ scale = Vector2(0.25, 0.25)
 pivot_offset = Vector2(463, 540)
 texture = ExtResource("2_of6sx")
 
-[node name="picFore" type="TextureRect" parent="mainEvent"]
+[node name="picFore" type="TextureRect" parent="mainEvent" unique_id=917926329]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -353,7 +341,7 @@ scale = Vector2(0.25, 0.25)
 pivot_offset = Vector2(473, 882)
 texture = ExtResource("3_r0kne")
 
-[node name="lblAction" type="Label" parent="mainEvent"]
+[node name="lblAction" type="Label" parent="mainEvent" unique_id=1275514267]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 8
@@ -381,7 +369,7 @@ text = "Talk..."
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button" type="Button" parent="mainEvent"]
+[node name="Button" type="Button" parent="mainEvent" unique_id=24627253]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -394,30 +382,24 @@ offset_right = 96.0
 offset_bottom = 119.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_f5tux")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_jvpcw")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_avxmd")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_fbxj4")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_hs18u")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_fbxj4")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_avxmd")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_jvpcw")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_f5tux")
 disabled = true
 
-[node name="UpgradeWeaponStats" parent="." instance=ExtResource("6_r0kne")]
+[node name="UpgradeWeaponStats" parent="." unique_id=313167380 instance=ExtResource("6_r0kne")]
 layout_mode = 1
 
-[node name="animEvent" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_16kcj")
-}
+[node name="animEvent" type="AnimationPlayer" parent="." unique_id=963828193]
+libraries/ = SubResource("AnimationLibrary_16kcj")
 
-[node name="animGuy" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_1irvj")
-}
+[node name="animGuy" type="AnimationPlayer" parent="." unique_id=2145664672]
+libraries/ = SubResource("AnimationLibrary_1irvj")
 
-[node name="animText" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_2m673")
-}
+[node name="animText" type="AnimationPlayer" parent="." unique_id=1683135741]
+libraries/ = SubResource("AnimationLibrary_2m673")
 
 [connection signal="mouse_entered" from="mainEvent/Button" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="mainEvent/Button" to="." method="_on_button_mouse_exited"]

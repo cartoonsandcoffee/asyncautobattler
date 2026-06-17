@@ -1,14 +1,16 @@
-[gd_scene load_steps=40 format=3 uid="uid://ccn7le6eky01v"]
+[gd_scene load_steps=43 format=3 uid="uid://ccn7le6eky01v"]
 
 [ext_resource type="Script" uid="uid://d3frxexh2thsb" path="res://Scripts/RoomEvents/mysterious_old_man.gd" id="1_06che"]
 [ext_resource type="Texture2D" uid="uid://cpvpcykg6mt2x" path="res://Assets/Art/Backgrounds/Starter_New.png" id="2_b2aq1"]
 [ext_resource type="Texture2D" uid="uid://kas6w4h5ckvr" path="res://Assets/Art/Backgrounds/Starter_Farback.png" id="2_m0hn6"]
 [ext_resource type="Texture2D" uid="uid://dl3r0x1cxu6vs" path="res://Assets/Art/Events/acid_drip.png" id="4_cprod"]
 [ext_resource type="Texture2D" uid="uid://c6uhtg2telr2f" path="res://Assets/Art/Particles/circle_05.png" id="5_qbqed"]
-[ext_resource type="Texture2D" uid="uid://072s2rxwk6m8" path="res://Assets/UI/panel-border-004.png" id="5_rvg6h"]
 [ext_resource type="Texture2D" uid="uid://cp3p7omychwb5" path="res://Assets/Art/Events/SpaceCorpse.png" id="6_erqm4"]
 [ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="6_pg0oh"]
+[ext_resource type="Texture2D" uid="uid://cfci441ywkwkh" path="res://Assets/UI/rank_boss_border.png" id="8_2gcih"]
 [ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="8_erqm4"]
+[ext_resource type="Texture2D" uid="uid://bnnq12liax8kc" path="res://Assets/UI/DefinitionTest.png" id="10_cprod"]
+[ext_resource type="Theme" uid="uid://bo603ra16ac63" path="res://Themes/stone_button_01.tres" id="12_wmllw"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_b2aq1"]
 
@@ -38,61 +40,59 @@ colors = PackedColorArray(0.25, 1, 0, 1, 0.313726, 0.796078, 0.0431373, 1, 0.275
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wmllw"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xs086"]
-bg_color = Color(0, 0, 0, 1)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u6mwf"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_858be"]
-texture = ExtResource("5_rvg6h")
-texture_margin_left = 16.0
-texture_margin_top = 16.0
-texture_margin_right = 16.0
-texture_margin_bottom = 16.0
+texture = ExtResource("8_2gcih")
+texture_margin_left = 40.0
+texture_margin_top = 40.0
+texture_margin_right = 40.0
+texture_margin_bottom = 40.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_r7jkv"]
+texture = ExtResource("10_cprod")
+texture_margin_left = 15.0
+texture_margin_top = 20.0
+texture_margin_right = 15.0
+texture_margin_bottom = 15.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
 
 [sub_resource type="Animation" id="Animation_ffkdy"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("panelOffer:pivot_offset")
+tracks/0/path = NodePath("panelOffer:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(267, 150)]
+"values": [Vector2(0.5, 0.5)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("panelOffer:scale")
+tracks/1/path = NodePath("panelOffer:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0.5, 0.5)]
+"values": [Color(1, 1, 1, 0)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("panelOffer:modulate")
+tracks/2/path = NodePath("panelOffer:visible")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("panelOffer:visible")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
@@ -147,46 +147,34 @@ step = 0.01
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("panelOffer:pivot_offset")
-tracks/0/interp = 1
+tracks/0/path = NodePath("panelOffer:scale")
+tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(267, 150)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("panelOffer:scale")
-tracks/1/interp = 2
-tracks/1/loop_wrap = true
-tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.3, 0.45),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Vector2(0.5, 0.5), Vector2(1.15, 1.15), Vector2(1, 1)]
 }
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("panelOffer:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("panelOffer:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.45),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("panelOffer:visible")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("panelOffer:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
@@ -689,7 +677,6 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="picBlood" type="TextureRect" parent="Control"]
-visible = false
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 5
@@ -821,23 +808,31 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -267.0
-offset_top = -190.0
-offset_right = 267.0
-offset_bottom = 150.0
+offset_left = -311.0
+offset_top = -227.0
+offset_right = 311.0
+offset_bottom = 227.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.5, 0.5)
-pivot_offset = Vector2(267, 150)
-theme_override_styles/panel = SubResource("StyleBoxFlat_xs086")
+pivot_offset = Vector2(311, 227)
+theme_override_styles/panel = SubResource("StyleBoxEmpty_u6mwf")
 
 [node name="PanelContainer" type="PanelContainer" parent="panelOffer"]
+z_index = 10
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -311.0
+offset_top = -227.0
+offset_right = 311.0
+offset_bottom = 227.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset = Vector2(311, 227)
 theme_override_styles/panel = SubResource("StyleBoxTexture_858be")
 
 [node name="MarginContainer" type="MarginContainer" parent="panelOffer/PanelContainer"]
@@ -854,7 +849,7 @@ theme_override_constants/separation = 10
 [node name="lblName" type="Label" parent="panelOffer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 42
-text = "Your  Dead  Partner."
+text = "It's... your dead body!"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -863,20 +858,26 @@ clip_contents = false
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 bbcode_enabled = true
-text = "Good old Williams... always had a weapon or three handy."
+text = "Your instincts were to always carry a weapon..."
 fit_content = true
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="itemContainer" type="GridContainer" parent="panelOffer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="panelOffer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_r7jkv")
+
+[node name="itemContainer" type="GridContainer" parent="panelOffer/PanelContainer/MarginContainer/VBoxContainer/PanelContainer"]
 custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_constants/h_separation = 10
 columns = 3
 
 [node name="btnSkip" type="Button" parent="panelOffer/PanelContainer/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
+theme = ExtResource("12_wmllw")
 text = "Don't grab anything..."
 
 [node name="animBox" type="AnimationPlayer" parent="."]

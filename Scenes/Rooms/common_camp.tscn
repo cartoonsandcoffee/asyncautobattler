@@ -1,7 +1,6 @@
-[gd_scene load_steps=36 format=3 uid="uid://dl7fby7lsklkk"]
+[gd_scene format=3 uid="uid://dl7fby7lsklkk"]
 
 [ext_resource type="Script" uid="uid://biptebupq216e" path="res://Scripts/HallwayEvents/hallway_camp.gd" id="1_hyja3"]
-[ext_resource type="Texture2D" uid="uid://cr5mucfkmo2k4" path="res://Assets/Art/Backgrounds/Hallway_01.png" id="2_owu7u"]
 [ext_resource type="Texture2D" uid="uid://dxt3yb4gkjn6x" path="res://Assets/Art/Particles/smoke_07.png" id="3_n4m1l"]
 [ext_resource type="Texture2D" uid="uid://c2lunpve1ax4w" path="res://Assets/Art/Events/campfire_dim.png" id="4_g5vxb"]
 [ext_resource type="Texture2D" uid="uid://37b2fi5slcla" path="res://Assets/Art/Events/campfire_light.png" id="5_do143"]
@@ -50,15 +49,15 @@ shader_parameter/Texture_3 = ExtResource("8_55hwx")
 shader_parameter/Texture_4 = SubResource("GradientTexture2D_n4m1l")
 shader_parameter/Texture_Color_1D = SubResource("GradientTexture1D_g5vxb")
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xwpmn"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2kbbf"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dxkbg"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_p82xo"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_i7pbw"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_p82xo"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dxkbg"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2kbbf"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xwpmn"]
 
 [sub_resource type="Animation" id="Animation_6t15k"]
 length = 0.001
@@ -364,7 +363,7 @@ _data = {
 &"show_event": SubResource("Animation_yicm8")
 }
 
-[node name="HallwayCamp" type="Control"]
+[node name="HallwayCamp" type="Control" unique_id=14144718]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -373,18 +372,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_hyja3")
 
-[node name="picBack" type="TextureRect" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("2_owu7u")
-expand_mode = 1
-
-[node name="picEvent" type="TextureRect" parent="."]
+[node name="picEvent" type="TextureRect" parent="." unique_id=40219926]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 1
 anchors_preset = 8
@@ -401,7 +389,7 @@ grow_vertical = 2
 texture = ExtResource("4_g5vxb")
 expand_mode = 5
 
-[node name="smoke" type="CPUParticles2D" parent="picEvent"]
+[node name="smoke" type="CPUParticles2D" parent="picEvent" unique_id=1104288606]
 position = Vector2(100, 48)
 amount = 10
 texture = ExtResource("3_n4m1l")
@@ -421,7 +409,7 @@ scale_amount_curve = SubResource("Curve_i8ton")
 color = Color(0.637843, 0.637843, 0.637843, 1)
 color_ramp = SubResource("Gradient_55lkv")
 
-[node name="picHighlight" type="TextureRect" parent="picEvent"]
+[node name="picHighlight" type="TextureRect" parent="picEvent" unique_id=885097871]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -431,7 +419,7 @@ grow_vertical = 2
 texture = ExtResource("5_do143")
 expand_mode = 1
 
-[node name="Fire" type="TextureRect" parent="picEvent"]
+[node name="Fire" type="TextureRect" parent="picEvent" unique_id=797974101]
 material = SubResource("ShaderMaterial_vilh3")
 layout_mode = 0
 offset_left = 60.0
@@ -441,20 +429,20 @@ offset_bottom = 66.0
 texture = ExtResource("9_13384")
 expand_mode = 1
 
-[node name="btnDone" type="Button" parent="."]
+[node name="btnDone" type="Button" parent="." unique_id=244957487]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 0
 offset_left = 627.0
 offset_top = 318.0
 offset_right = 1037.0
 offset_bottom = 558.0
-theme_override_styles/focus = SubResource("StyleBoxEmpty_xwpmn")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_2kbbf")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_dxkbg")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_i7pbw")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_p82xo")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_i7pbw")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_dxkbg")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_2kbbf")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_xwpmn")
 
-[node name="lblRested" type="RichTextLabel" parent="."]
+[node name="lblRested" type="RichTextLabel" parent="." unique_id=1010081130]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -474,7 +462,7 @@ text = "[tornado]You feel rested...[/tornado]"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=558371828]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 15
@@ -485,20 +473,14 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
-[node name="animFire" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_wqj5t")
-}
+[node name="animFire" type="AnimationPlayer" parent="." unique_id=1048740165]
+libraries/ = SubResource("AnimationLibrary_wqj5t")
 
-[node name="animText" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_do143")
-}
+[node name="animText" type="AnimationPlayer" parent="." unique_id=582728560]
+libraries/ = SubResource("AnimationLibrary_do143")
 
-[node name="animMain" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_n4m1l")
-}
+[node name="animMain" type="AnimationPlayer" parent="." unique_id=1845118596]
+libraries/ = SubResource("AnimationLibrary_n4m1l")
 
 [connection signal="mouse_entered" from="btnDone" to="." method="_on_btn_continue_mouse_entered"]
 [connection signal="mouse_exited" from="btnDone" to="." method="_on_btn_continue_mouse_exited"]

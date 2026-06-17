@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://bj6okkj0mki2p"]
+
+[ext_resource type="Theme" uid="uid://od14ccps1daj" path="res://Themes/descriptive_label.tres" id="1_g4s2e"]
+[ext_resource type="Script" uid="uid://b4g8x4iftbo4v" path="res://Scripts/Card/set_bonus_piece.gd" id="1_iv6mb"]
+[ext_resource type="Texture2D" uid="uid://c673mfqdoecpa" path="res://Assets/Items/Armor.png" id="2_iv6mb"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f3ulp"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f3ulp"]
+atlas = ExtResource("2_iv6mb")
+region = Rect2(0, 0, 150, 150)
+
+[node name="SetBonusPiece" type="Control" unique_id=1024247402]
+custom_minimum_size = Vector2(150, 70)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 120.0
+offset_bottom = 70.0
+mouse_filter = 2
+script = ExtResource("1_iv6mb")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1152697480]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_f3ulp")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=1043923371]
+layout_mode = 2
+
+[node name="lblName" type="Label" parent="PanelContainer/VBoxContainer" unique_id=790429379]
+layout_mode = 2
+theme = ExtResource("1_g4s2e")
+theme_override_font_sizes/font_size = 14
+text = " Ingredient Name"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="picItem" type="TextureRect" parent="PanelContainer/VBoxContainer" unique_id=1710589221]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+texture = SubResource("AtlasTexture_f3ulp")
+expand_mode = 3
+stretch_mode = 5

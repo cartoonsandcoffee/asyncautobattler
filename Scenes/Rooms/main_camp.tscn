@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://dbkadwlk4fth4"]
+[gd_scene format=3 uid="uid://dbkadwlk4fth4"]
 
 [ext_resource type="Texture2D" uid="uid://cs8cwwngwet46" path="res://Assets/Art/Events/Town/MainCamp_Back.png" id="1_d4jcf"]
 [ext_resource type="Script" uid="uid://cgwj47xss31u4" path="res://Scripts/RoomEvents/main_camp.gd" id="1_r85n3"]
@@ -14,7 +14,10 @@
 [ext_resource type="Texture2D" uid="uid://chqkiec8p5s" path="res://Resources/Rarity/diamond.tres" id="8_rxmm4"]
 [ext_resource type="PackedScene" uid="uid://c1apkhjh04c5f" path="res://Scenes/Elements/MainCamp/camp_pet.tscn" id="11_u40g7"]
 [ext_resource type="PackedScene" uid="uid://dfuglhrwpha2" path="res://Scenes/Elements/item_combiner.tscn" id="12_vpagu"]
-[ext_resource type="PackedScene" uid="uid://m1r75x06jjg7" path="res://Scenes/Elements/item_town_merchant.tscn" id="13_r85n3"]
+[ext_resource type="PackedScene" uid="uid://kgljujr7n80l" path="res://Scenes/Elements/MainCamp/camp_map.tscn" id="13_jrobx"]
+[ext_resource type="PackedScene" uid="uid://bxcdw5w6hk55w" path="res://Scenes/Popups/popup_store.tscn" id="15_jobms"]
+[ext_resource type="PackedScene" uid="uid://fxieyxskv32q" path="res://Scenes/Zooms/boss_warning_popup.tscn" id="16_05jbj"]
+[ext_resource type="PackedScene" uid="uid://qvbvsentijw6" path="res://Scenes/Popups/popup_map_maker.tscn" id="17_t66dj"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grllx"]
 bg_color = Color(0, 0, 0, 1)
@@ -103,7 +106,7 @@ _data = {
 &"show_gold": SubResource("Animation_jobms")
 }
 
-[node name="MainCamp" type="Control"]
+[node name="MainCamp" type="Control" unique_id=2122507207]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -114,7 +117,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_r85n3")
 
-[node name="FullScreenBlack" type="Panel" parent="."]
+[node name="FullScreenBlack" type="Panel" parent="." unique_id=1116270175]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -123,7 +126,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_grllx")
 
-[node name="picBack" type="TextureRect" parent="FullScreenBlack"]
+[node name="picBack" type="TextureRect" parent="FullScreenBlack" unique_id=330777125]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -133,7 +136,7 @@ grow_vertical = 2
 texture = ExtResource("1_d4jcf")
 expand_mode = 3
 
-[node name="LabelContainer" type="PanelContainer" parent="FullScreenBlack"]
+[node name="LabelContainer" type="PanelContainer" parent="FullScreenBlack" unique_id=126490226]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -141,7 +144,7 @@ offset_bottom = 150.0
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_cfxqc")
 
-[node name="lblTip" type="Label" parent="FullScreenBlack/LabelContainer"]
+[node name="lblTip" type="Label" parent="FullScreenBlack/LabelContainer" unique_id=1246767469]
 layout_mode = 2
 size_flags_vertical = 1
 theme_override_colors/font_color = Color(0.92, 0.87768, 0.2852, 1)
@@ -153,7 +156,7 @@ text = "A small camp, outside some kind of arena."
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="CenterButtons" type="Control" parent="FullScreenBlack"]
+[node name="CenterButtons" type="Control" parent="FullScreenBlack" unique_id=563248077]
 custom_minimum_size = Vector2(1000, 600)
 layout_mode = 1
 anchors_preset = 8
@@ -168,7 +171,7 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="CampBanish" parent="FullScreenBlack/CenterButtons" instance=ExtResource("2_w4c2v")]
+[node name="CampBanish" parent="FullScreenBlack/CenterButtons" unique_id=906725559 instance=ExtResource("2_w4c2v")]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -181,44 +184,44 @@ offset_bottom = -161.0
 grow_vertical = 0
 scale = Vector2(0.8, 0.75)
 
-[node name="CampChampion" parent="FullScreenBlack/CenterButtons" instance=ExtResource("2_hx2i5")]
+[node name="CampChampion" parent="FullScreenBlack/CenterButtons" unique_id=1010154025 instance=ExtResource("2_hx2i5")]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 46.0
+offset_left = 49.0
 offset_top = -95.0
-offset_right = 46.0
+offset_right = 49.0
 offset_bottom = -95.0
 scale = Vector2(0.75, 0.75)
 
-[node name="CampShrine" parent="FullScreenBlack/CenterButtons" instance=ExtResource("2_dc4a7")]
+[node name="CampShrine" parent="FullScreenBlack/CenterButtons" unique_id=11622551 instance=ExtResource("2_dc4a7")]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -129.0
-offset_right = -129.0
+offset_left = -114.0
+offset_right = -114.0
 scale = Vector2(0.5, 0.5)
 
-[node name="CampCombiner" parent="FullScreenBlack/CenterButtons" instance=ExtResource("3_5ihta")]
+[node name="CampCombiner" parent="FullScreenBlack/CenterButtons" unique_id=778093489 instance=ExtResource("3_5ihta")]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_right = 0.0
 anchor_bottom = 0.5
-offset_left = 176.0
+offset_left = 189.0
 offset_top = 6.0
-offset_right = 176.0
+offset_right = 189.0
 offset_bottom = 6.0
 grow_horizontal = 1
 scale = Vector2(0.7, 0.7)
 
-[node name="upgGold" type="CPUParticles2D" parent="FullScreenBlack/CenterButtons/CampCombiner"]
+[node name="upgGold" type="CPUParticles2D" parent="FullScreenBlack/CenterButtons/CampCombiner" unique_id=955255123]
 position = Vector2(22.8571, -151.429)
 emitting = false
 amount = 3
@@ -234,7 +237,7 @@ initial_velocity_max = 20.0
 scale_amount_curve = SubResource("Curve_vpagu")
 color_ramp = SubResource("Gradient_r85n3")
 
-[node name="upgDiamond" type="CPUParticles2D" parent="FullScreenBlack/CenterButtons/CampCombiner"]
+[node name="upgDiamond" type="CPUParticles2D" parent="FullScreenBlack/CenterButtons/CampCombiner" unique_id=1117429222]
 position = Vector2(27.1428, -147.143)
 emitting = false
 amount = 3
@@ -250,33 +253,33 @@ initial_velocity_max = 20.0
 scale_amount_curve = SubResource("Curve_u40g7")
 color_ramp = SubResource("Gradient_05jbj")
 
-[node name="CampStore" parent="FullScreenBlack/CenterButtons" instance=ExtResource("2_grllx")]
+[node name="CampStore" parent="FullScreenBlack/CenterButtons" unique_id=1966800947 instance=ExtResource("2_grllx")]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -566.0
+offset_left = -552.0
 offset_top = 29.0
-offset_right = -566.0
+offset_right = -552.0
 offset_bottom = 29.0
 scale = Vector2(1, 0.9)
 
-[node name="CampPet" parent="FullScreenBlack/CenterButtons" instance=ExtResource("11_u40g7")]
+[node name="CampPet" parent="FullScreenBlack/CenterButtons" unique_id=2117685745 instance=ExtResource("11_u40g7")]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 207.0
-offset_top = 5.0
-offset_right = 207.0
-offset_bottom = 5.0
+offset_left = 214.0
+offset_top = 5.00003
+offset_right = 214.0
+offset_bottom = 5.00003
 scale = Vector2(0.45, 0.45)
 
-[node name="CampBug" parent="FullScreenBlack/CenterButtons" instance=ExtResource("7_w4c2v")]
+[node name="CampBug" parent="FullScreenBlack/CenterButtons" unique_id=1435610065 instance=ExtResource("7_w4c2v")]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -289,7 +292,10 @@ offset_bottom = 3.0
 grow_horizontal = 0
 scale = Vector2(0.8, 0.847)
 
-[node name="CampDungeon" parent="FullScreenBlack" instance=ExtResource("2_q1w84")]
+[node name="CampMap" parent="FullScreenBlack" unique_id=417071047 instance=ExtResource("13_jrobx")]
+layout_mode = 1
+
+[node name="CampDungeon" parent="FullScreenBlack" unique_id=235757221 instance=ExtResource("2_q1w84")]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -302,7 +308,7 @@ offset_bottom = -16.0
 grow_horizontal = 0
 scale = Vector2(1.1, 1.1)
 
-[node name="banish_popup" parent="." instance=ExtResource("12_vpagu")]
+[node name="banish_popup" parent="." unique_id=785090896 instance=ExtResource("12_vpagu")]
 layout_mode = 1
 combiner_mode = 4
 number_of_slots = 1
@@ -315,12 +321,13 @@ sb_name = "It is Gone!"
 sb_text = "You will not see it again this run."
 sb_button = "Done!"
 
-[node name="merchant_popup" parent="." instance=ExtResource("13_r85n3")]
+[node name="PopupStore" parent="." unique_id=1761781499 instance=ExtResource("15_jobms")]
 layout_mode = 1
-box_name = "A Peddler's Hut"
-box_desc = "Would any of these help you?"
 
-[node name="shrine_popup" parent="." instance=ExtResource("12_vpagu")]
+[node name="PopupMapMaker" parent="." unique_id=1356046870 instance=ExtResource("17_t66dj")]
+layout_mode = 1
+
+[node name="shrine_popup" parent="." unique_id=1582277038 instance=ExtResource("12_vpagu")]
 layout_mode = 1
 combiner_mode = 1
 number_of_slots = 1
@@ -333,7 +340,7 @@ sb_name = "Someone Smiled"
 sb_text = "Have your prayers been answered?"
 sb_button = "Done"
 
-[node name="forge_popup" parent="." instance=ExtResource("12_vpagu")]
+[node name="forge_popup" parent="." unique_id=87988369 instance=ExtResource("12_vpagu")]
 layout_mode = 1
 instruction_text = "Give me two identical Common  or Golden items..."
 box_name = "A Forge"
@@ -342,7 +349,7 @@ sb_name = "Success!"
 sb_text = "I've combined them into something stronger!"
 sb_button = "Take Your New Item"
 
-[node name="crafting_popup" parent="." instance=ExtResource("12_vpagu")]
+[node name="crafting_popup" parent="." unique_id=982109844 instance=ExtResource("12_vpagu")]
 layout_mode = 1
 combiner_mode = 3
 instruction_text = "\"I like to breed exotic bugs.\""
@@ -355,10 +362,12 @@ sb_name = "Beautiful Offspring"
 sb_text = "Here's an exotic bug for you!"
 sb_button = "Um, thanks."
 
-[node name="animUpgrade" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_jrobx")
-}
+[node name="BossWarningPopup" parent="." unique_id=676815908 instance=ExtResource("16_05jbj")]
+z_index = 20
+layout_mode = 1
+
+[node name="animUpgrade" type="AnimationPlayer" parent="." unique_id=1092038670]
+libraries/ = SubResource("AnimationLibrary_jrobx")
 
 [connection signal="button_clicked" from="FullScreenBlack/CenterButtons/CampBanish" to="." method="_on_camp_banish_button_clicked"]
 [connection signal="button_entered" from="FullScreenBlack/CenterButtons/CampBanish" to="." method="_on_camp_banish_button_entered"]
@@ -381,6 +390,9 @@ libraries = {
 [connection signal="button_clicked" from="FullScreenBlack/CenterButtons/CampBug" to="." method="_on_camp_bug_button_clicked"]
 [connection signal="button_entered" from="FullScreenBlack/CenterButtons/CampBug" to="." method="_on_camp_bug_button_entered"]
 [connection signal="button_exited" from="FullScreenBlack/CenterButtons/CampBug" to="." method="_on_camp_bug_button_exited"]
+[connection signal="button_clicked" from="FullScreenBlack/CampMap" to="." method="_on_camp_map_button_clicked"]
+[connection signal="button_entered" from="FullScreenBlack/CampMap" to="." method="_on_camp_map_button_entered"]
+[connection signal="button_exited" from="FullScreenBlack/CampMap" to="." method="_on_camp_map_button_exited"]
 [connection signal="button_clicked" from="FullScreenBlack/CampDungeon" to="." method="_on_camp_dungeon_button_clicked"]
 [connection signal="button_entered" from="FullScreenBlack/CampDungeon" to="." method="_on_camp_dungeon_button_entered"]
 [connection signal="button_exited" from="FullScreenBlack/CampDungeon" to="." method="_on_camp_dungeon_button_exited"]

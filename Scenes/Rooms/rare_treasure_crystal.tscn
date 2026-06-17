@@ -1,7 +1,6 @@
-[gd_scene load_steps=31 format=3 uid="uid://kbelew667bem"]
+[gd_scene format=3 uid="uid://kbelew667bem"]
 
 [ext_resource type="Script" uid="uid://djeatjt87k7lw" path="res://Scripts/RoomEvents/rare_treasure_crystal.gd" id="1_c74wm"]
-[ext_resource type="Texture2D" uid="uid://pbc4gcbv7vu4" path="res://Assets/Art/Backgrounds/Back_Crystals.png" id="1_sq5ru"]
 [ext_resource type="Texture2D" uid="uid://c1igkf2tqjdrl" path="res://Assets/Art/Events/Crystals.png" id="2_c74wm"]
 [ext_resource type="Texture2D" uid="uid://dxw4wnrx37lmp" path="res://Assets/Art/Particles/magic_05.png" id="3_ohn0j"]
 [ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="4_xdact"]
@@ -21,15 +20,15 @@ point_count = 2
 offsets = PackedFloat32Array(0, 0.625, 1)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8qxfv"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gc08j"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fc0ib"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ht36o"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yq8rk"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ht36o"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fc0ib"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gc08j"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8qxfv"]
 
 [sub_resource type="Animation" id="Animation_ab5hj"]
 length = 0.001
@@ -415,7 +414,7 @@ _data = {
 &"show_label": SubResource("Animation_sth5e")
 }
 
-[node name="rare_treasure_crystal" type="Control"]
+[node name="rare_treasure_crystal" type="Control" unique_id=16277335]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -424,18 +423,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_c74wm")
 
-[node name="picBack" type="TextureRect" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("1_sq5ru")
-expand_mode = 1
-
-[node name="Event" type="Control" parent="."]
+[node name="Event" type="Control" parent="." unique_id=547497811]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 8
@@ -450,7 +438,7 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="picEvent" type="TextureRect" parent="Event"]
+[node name="picEvent" type="TextureRect" parent="Event" unique_id=854375521]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -467,7 +455,7 @@ scale = Vector2(0.4, 0.4)
 pivot_offset = Vector2(421, 383)
 texture = ExtResource("2_c74wm")
 
-[node name="particles" type="CPUParticles2D" parent="Event/picEvent"]
+[node name="particles" type="CPUParticles2D" parent="Event/picEvent" unique_id=954831062]
 position = Vector2(461, 352)
 scale = Vector2(3.0303, 3.0303)
 emitting = false
@@ -489,7 +477,7 @@ scale_amount_curve = SubResource("Curve_0ke5k")
 color = Color(1, 0.4, 0.81, 1)
 color_ramp = SubResource("Gradient_t13x0")
 
-[node name="Button" type="Button" parent="Event/picEvent"]
+[node name="Button" type="Button" parent="Event/picEvent" unique_id=1578265679]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -500,14 +488,14 @@ offset_right = -210.0
 offset_bottom = -97.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_8qxfv")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_gc08j")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_fc0ib")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_yq8rk")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_ht36o")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_yq8rk")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_fc0ib")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_gc08j")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_8qxfv")
 disabled = true
 
-[node name="lblEvent" type="Label" parent="Event"]
+[node name="lblEvent" type="Label" parent="Event" unique_id=1092813081]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 8
@@ -534,7 +522,7 @@ text = "Crack the geode."
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="FreeItemOffering" parent="." instance=ExtResource("5_du6od")]
+[node name="FreeItemOffering" parent="." unique_id=1422507897 instance=ExtResource("5_du6od")]
 visible = false
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
@@ -547,22 +535,17 @@ filter_by = 4
 items_offered = 4
 box_name = "A Crystal Geode"
 box_desc = "Some of the crystals here are loose."
+use_keyword_weighting = false
 items = Array[ExtResource("6_8mk6u")]([ExtResource("8_ohn0j"), ExtResource("9_xdact"), ExtResource("10_du6od"), ExtResource("11_8mk6u")])
 
-[node name="animEvent" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_od0kn")
-}
+[node name="animEvent" type="AnimationPlayer" parent="." unique_id=1888044506]
+libraries/ = SubResource("AnimationLibrary_od0kn")
 
-[node name="animItems" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_8nelg")
-}
+[node name="animItems" type="AnimationPlayer" parent="." unique_id=1765310858]
+libraries/ = SubResource("AnimationLibrary_8nelg")
 
-[node name="animLabel" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_cj2l3")
-}
+[node name="animLabel" type="AnimationPlayer" parent="." unique_id=1443374036]
+libraries/ = SubResource("AnimationLibrary_cj2l3")
 
 [connection signal="mouse_entered" from="Event/picEvent/Button" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="Event/picEvent/Button" to="." method="_on_button_mouse_exited"]

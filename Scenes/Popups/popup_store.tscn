@@ -1,0 +1,528 @@
+[gd_scene format=3 uid="uid://bxcdw5w6hk55w"]
+
+[ext_resource type="Script" uid="uid://u8n4b3ujku3" path="res://Scripts/Popups/popup_store.gd" id="1_jtp8s"]
+[ext_resource type="Texture2D" uid="uid://bb2cpm6ogu7lv" path="res://Assets/Art/Events/Zooms/popup_store.png" id="1_qmvpg"]
+[ext_resource type="PackedScene" uid="uid://ptkwub04b8oq" path="res://Scenes/Elements/stat_box2_small.tscn" id="3_jtp8s"]
+[ext_resource type="Theme" uid="uid://bo603ra16ac63" path="res://Themes/stone_button_01.tres" id="3_nxlca"]
+[ext_resource type="Theme" uid="uid://0hs8qbirg21w" path="res://Themes/stone_button_02.tres" id="4_qmvpg"]
+[ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="5_ngwhe"]
+[ext_resource type="Texture2D" uid="uid://7gybg0pei0fk" path="res://Resources/StatIcons/stat_gold.tres" id="6_5226o"]
+[ext_resource type="Theme" uid="uid://wsf7lticxc8g" path="res://Themes/stone_button_03.tres" id="7_shyrl"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_celpu"]
+bg_color = Color(0, 0, 0, 0.588235)
+corner_radius_top_left = 100
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f3ulp"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f3ulp"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.96035105, 0.96035105, 0.96035093, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_v6xuh"]
+
+[sub_resource type="Animation" id="Animation_abnn8"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CanvasLayer/Control:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.5, 0.5)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CanvasLayer/Control:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("CanvasLayer:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_mkn5q"]
+resource_name = "hide_popup"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CanvasLayer/Control:scale")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.8, 0.8), Vector2(0.95, 0.95), Vector2(0.5, 0.5)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CanvasLayer/Control:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("CanvasLayer:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_hk7x6"]
+resource_name = "reroll"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CanvasLayer/Control:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.8, 0.8), Vector2(0.95, 0.95), Vector2(0.8, 0.8)]
+}
+
+[sub_resource type="Animation" id="Animation_rpj15"]
+resource_name = "show_popup"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CanvasLayer/Control:scale")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.5, 0.5), Vector2(0.95, 0.95), Vector2(0.8, 0.8)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CanvasLayer/Control:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("CanvasLayer:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_r08f0"]
+_data = {
+&"RESET": SubResource("Animation_abnn8"),
+&"hide_popup": SubResource("Animation_mkn5q"),
+&"reroll": SubResource("Animation_hk7x6"),
+&"show_popup": SubResource("Animation_rpj15")
+}
+
+[node name="PopupStore" type="Control" unique_id=374324967]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(768, 432)
+mouse_filter = 2
+script = ExtResource("1_jtp8s")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=2078996942]
+layer = 5
+visible = false
+
+[node name="Control" type="Control" parent="CanvasLayer" unique_id=990119228]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(1536, 864)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+mouse_filter = 2
+
+[node name="picBack" type="TextureRect" parent="CanvasLayer/Control" unique_id=1774792842]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_qmvpg")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="centerArea" type="Control" parent="CanvasLayer/Control" unique_id=498966833]
+custom_minimum_size = Vector2(800, 400)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -82.5
+offset_right = 400.0
+offset_bottom = 317.5
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(400, 200)
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/Control/centerArea" unique_id=723942014]
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -100.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(300, 150)
+theme_override_styles/panel = SubResource("StyleBoxFlat_celpu")
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Control/centerArea/PanelContainer" unique_id=507594616]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_right = 30
+
+[node name="GridContainer" type="GridContainer" parent="CanvasLayer/Control/centerArea/PanelContainer/MarginContainer" unique_id=1596796890]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/h_separation = 30
+columns = 6
+
+[node name="pnlGold" type="Panel" parent="CanvasLayer/Control" unique_id=769206428]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -333.0
+offset_top = 142.0
+offset_right = -233.0
+offset_bottom = 192.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_f3ulp")
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/Control/pnlGold" unique_id=626010308]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_f3ulp")
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Control/pnlGold/PanelContainer" unique_id=680279122]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 0
+
+[node name="statGold" parent="CanvasLayer/Control/pnlGold/PanelContainer/MarginContainer" unique_id=996680830 instance=ExtResource("3_jtp8s")]
+custom_minimum_size = Vector2(100, 40)
+layout_mode = 2
+stat = 4
+
+[node name="panelButtons" type="PanelContainer" parent="CanvasLayer/Control" unique_id=1903071573]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -143.25
+offset_bottom = -28.2499
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_v6xuh")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/panelButtons" unique_id=1869089563]
+layout_mode = 2
+
+[node name="boxSelected" type="HBoxContainer" parent="CanvasLayer/Control/panelButtons/VBoxContainer" unique_id=649553751]
+visible = false
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Control/panelButtons/VBoxContainer/boxSelected" unique_id=902155573]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="btnBuy" type="Button" parent="CanvasLayer/Control/panelButtons/VBoxContainer/boxSelected" unique_id=1206124675]
+z_index = 1
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme = ExtResource("4_qmvpg")
+text = "Buy     "
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/Control/panelButtons/VBoxContainer/boxSelected/btnBuy" unique_id=1139607926]
+modulate = Color(1, 0.733333, 0, 1)
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -117.0
+offset_top = -28.5
+offset_bottom = 28.5
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 3
+theme = ExtResource("5_ngwhe")
+theme_override_constants/separation = 10
+
+[node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer/Control/panelButtons/VBoxContainer/boxSelected/btnBuy/HBoxContainer2" unique_id=132086050]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control/panelButtons/VBoxContainer/boxSelected/btnBuy/HBoxContainer2" unique_id=1541382710]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture = ExtResource("6_5226o")
+expand_mode = 3
+
+[node name="lblBuyCost" type="Label" parent="CanvasLayer/Control/panelButtons/VBoxContainer/boxSelected/btnBuy/HBoxContainer2" unique_id=2146300788]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 48
+text = "20"
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Control/panelButtons/VBoxContainer/boxSelected/btnBuy/HBoxContainer2" unique_id=782962349]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="btnBanish" type="Button" parent="CanvasLayer/Control/panelButtons/VBoxContainer/boxSelected" unique_id=1639845227]
+z_index = 1
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme = ExtResource("7_shyrl")
+text = "Banish Item (2)"
+
+[node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer/Control/panelButtons/VBoxContainer/boxSelected" unique_id=81237719]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Control/panelButtons/VBoxContainer" unique_id=477210612]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Control/panelButtons/VBoxContainer/HBoxContainer" unique_id=1683417542]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="btnSkip" type="Button" parent="CanvasLayer/Control/panelButtons/VBoxContainer/HBoxContainer" unique_id=1665591917]
+z_index = 1
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme = ExtResource("3_nxlca")
+text = "Done"
+
+[node name="btnReroll" type="Button" parent="CanvasLayer/Control/panelButtons/VBoxContainer/HBoxContainer" unique_id=2111287753]
+z_index = 1
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme = ExtResource("4_qmvpg")
+text = "Reroll      "
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/Control/panelButtons/VBoxContainer/HBoxContainer/btnReroll" unique_id=485758936]
+modulate = Color(1, 0.733333, 0, 1)
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -117.0
+offset_top = -28.5
+offset_bottom = 28.5
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 3
+theme = ExtResource("5_ngwhe")
+theme_override_constants/separation = 10
+
+[node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer/Control/panelButtons/VBoxContainer/HBoxContainer/btnReroll/HBoxContainer2" unique_id=236130395]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control/panelButtons/VBoxContainer/HBoxContainer/btnReroll/HBoxContainer2" unique_id=2019346769]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture = ExtResource("6_5226o")
+expand_mode = 3
+
+[node name="lblRerollCost" type="Label" parent="CanvasLayer/Control/panelButtons/VBoxContainer/HBoxContainer/btnReroll/HBoxContainer2" unique_id=1241322252]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 48
+text = "20"
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Control/panelButtons/VBoxContainer/HBoxContainer/btnReroll/HBoxContainer2" unique_id=846597268]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="btnUpgrade" type="Button" parent="CanvasLayer/Control/panelButtons/VBoxContainer/HBoxContainer" unique_id=1713873626]
+z_index = 1
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme = ExtResource("7_shyrl")
+text = "Upgrade       "
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/Control/panelButtons/VBoxContainer/HBoxContainer/btnUpgrade" unique_id=1984916353]
+modulate = Color(1, 0.733333, 0, 1)
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -117.0
+offset_top = -28.5
+offset_bottom = 28.5
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 3
+theme = ExtResource("5_ngwhe")
+theme_override_constants/separation = 10
+
+[node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer/Control/panelButtons/VBoxContainer/HBoxContainer/btnUpgrade/HBoxContainer2" unique_id=225800201]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control/panelButtons/VBoxContainer/HBoxContainer/btnUpgrade/HBoxContainer2" unique_id=561264860]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture = ExtResource("6_5226o")
+expand_mode = 3
+
+[node name="lblUpgradeCost" type="Label" parent="CanvasLayer/Control/panelButtons/VBoxContainer/HBoxContainer/btnUpgrade/HBoxContainer2" unique_id=412024025]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 48
+text = "20"
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Control/panelButtons/VBoxContainer/HBoxContainer/btnUpgrade/HBoxContainer2" unique_id=1605231439]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer/Control/panelButtons/VBoxContainer/HBoxContainer" unique_id=1358014620]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=43127058]
+libraries/ = SubResource("AnimationLibrary_r08f0")
+
+[connection signal="pressed" from="CanvasLayer/Control/panelButtons/VBoxContainer/HBoxContainer/btnSkip" to="." method="_on_btn_cancel_pressed"]
+[connection signal="mouse_entered" from="CanvasLayer/Control/panelButtons/VBoxContainer/HBoxContainer/btnReroll" to="." method="_on_btn_reroll_mouse_entered"]
+[connection signal="mouse_exited" from="CanvasLayer/Control/panelButtons/VBoxContainer/HBoxContainer/btnReroll" to="." method="_on_btn_reroll_mouse_exited"]
+[connection signal="pressed" from="CanvasLayer/Control/panelButtons/VBoxContainer/HBoxContainer/btnReroll" to="." method="_on_btn_reroll_pressed"]
+[connection signal="mouse_entered" from="CanvasLayer/Control/panelButtons/VBoxContainer/HBoxContainer/btnUpgrade" to="." method="_on_btn_upgrade_mouse_entered"]
+[connection signal="mouse_exited" from="CanvasLayer/Control/panelButtons/VBoxContainer/HBoxContainer/btnUpgrade" to="." method="_on_btn_upgrade_mouse_exited"]
+[connection signal="pressed" from="CanvasLayer/Control/panelButtons/VBoxContainer/HBoxContainer/btnUpgrade" to="." method="_on_btn_upgrade_pressed"]

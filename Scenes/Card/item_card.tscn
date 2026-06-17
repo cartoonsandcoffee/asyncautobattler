@@ -1,16 +1,19 @@
-[gd_scene load_steps=20 format=3 uid="uid://5tmsyirr73xl"]
+[gd_scene format=3 uid="uid://5tmsyirr73xl"]
 
 [ext_resource type="Texture2D" uid="uid://baqs64hrvmdo0" path="res://Assets/UI/CardBack_01.png" id="1_q33pr"]
 [ext_resource type="Script" uid="uid://2ihh0fsy5akf" path="res://Scripts/Card/item_card.gd" id="1_ythyo"]
 [ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="2_6ugni"]
 [ext_resource type="Shader" uid="uid://dbo7qc2solfnb" path="res://Shaders/outlines/all-in-one-outline.gdshader" id="2_rygt6"]
+[ext_resource type="StyleBox" uid="uid://b4vwn6s3aefoi" path="res://Themes/definition_style_box_texture.tres" id="2_v6onx"]
 [ext_resource type="Texture2D" uid="uid://2il2b4pystph" path="res://Resources/Rarity/uncommon.tres" id="3_orras"]
 [ext_resource type="Texture2D" uid="uid://wrgpt3ywe7hx" path="res://Assets/Art/Noise/T_VFX_MarbleNoise_tiled.png" id="3_v6onx"]
 [ext_resource type="Theme" uid="uid://od14ccps1daj" path="res://Themes/descriptive_label.tres" id="4_ythyo"]
 [ext_resource type="PackedScene" uid="uid://dsvlfpdul0yj7" path="res://Scenes/Card/card_stat.tscn" id="5_orras"]
-[ext_resource type="PackedScene" uid="uid://veyfqa2b4ijn" path="res://Scenes/Elements/category_label.tscn" id="6_ythyo"]
+[ext_resource type="PackedScene" uid="uid://veyfqa2b4ijn" path="res://Scenes/Card/category_label.tscn" id="6_ythyo"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ythyo"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f3ulp"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8xd3p"]
 
@@ -27,7 +30,7 @@ shader_parameter/textureScale = Vector2(1, 1)
 shader_parameter/angle = 45.0
 shader_parameter/textureSpeed = 0.0500005
 shader_parameter/textureStrength = 0.44
-shader_parameter/thickness = 20.0
+shader_parameter/thickness = 30.0
 shader_parameter/tolerance = 0.823
 shader_parameter/color = SubResource("GradientTexture1D_j7473")
 shader_parameter/gradientResolution = 10
@@ -175,23 +178,26 @@ _data = {
 &"show_tooltip": SubResource("Animation_ythyo")
 }
 
-[node name="ItemCard" type="Control"]
+[node name="ItemCard" type="Control" unique_id=961699674]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 372.0
 offset_bottom = 460.0
-pivot_offset = Vector2(186, 230)
+pivot_offset_ratio = Vector2(0.5, 0.5)
 mouse_filter = 2
 script = ExtResource("1_ythyo")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Panel" type="Panel" parent="." unique_id=1775616710]
 layout_mode = 1
-offset_right = 369.0
-offset_bottom = 120.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_ythyo")
 
-[node name="Control" type="Control" parent="Panel"]
+[node name="Control" type="Control" parent="Panel" unique_id=1578808888]
 modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(372, 460)
 layout_mode = 1
@@ -199,17 +205,79 @@ anchors_preset = 0
 offset_right = 372.0
 offset_bottom = 460.0
 scale = Vector2(0.7, 0.7)
-pivot_offset = Vector2(186, 230)
+pivot_offset_ratio = Vector2(0.5, 0.5)
 mouse_filter = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="Panel/Control"]
+[node name="panelAdditional" type="Panel" parent="Panel/Control" unique_id=1430188667]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 4.0
+offset_right = 4.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_f3ulp")
+
+[node name="panelDesktop" type="PanelContainer" parent="Panel/Control/panelAdditional" unique_id=1407132489]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -53.705803
+offset_bottom = 7.294197
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = ExtResource("2_v6onx")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Panel/Control/panelAdditional/panelDesktop" unique_id=1864248727]
+layout_mode = 2
+theme = ExtResource("2_6ugni")
+theme_override_font_sizes/normal_font_size = 16
+theme_override_font_sizes/bold_font_size = 18
+theme_override_font_sizes/bold_italics_font_size = 16
+theme_override_font_sizes/italics_font_size = 16
+theme_override_font_sizes/mono_font_size = 16
+bbcode_enabled = true
+text = "[wave amp=20.0 freq=6.0 connected=1]Hold [color=white][b][Shift][/b][/color] for additional information.[/wave]"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="panelMobile" type="PanelContainer" parent="Panel/Control/panelAdditional" unique_id=2073675584]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -53.705803
+offset_bottom = 7.294197
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = ExtResource("2_v6onx")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Panel/Control/panelAdditional/panelMobile" unique_id=1677585476]
+layout_mode = 2
+theme = ExtResource("2_6ugni")
+theme_override_font_sizes/normal_font_size = 16
+theme_override_font_sizes/bold_font_size = 18
+theme_override_font_sizes/bold_italics_font_size = 16
+theme_override_font_sizes/italics_font_size = 16
+theme_override_font_sizes/mono_font_size = 16
+bbcode_enabled = true
+text = "[wave amp=20.0 freq=6.0 connected=1][color=white][b][Long Tap][/b][/color] for additional information.[/wave]"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="Panel/Control" unique_id=1761803588]
 layout_mode = 1
 offset_right = 372.0
 offset_bottom = 460.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_8xd3p")
 
-[node name="TextureRect" type="TextureRect" parent="Panel/Control/PanelContainer"]
+[node name="TextureRect" type="TextureRect" parent="Panel/Control/PanelContainer" unique_id=1422946893]
 material = SubResource("ShaderMaterial_1qt4s")
 layout_mode = 2
 mouse_filter = 2
@@ -217,7 +285,7 @@ texture = ExtResource("1_q33pr")
 expand_mode = 3
 stretch_mode = 5
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel/Control/PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Panel/Control/PanelContainer" unique_id=1754863948]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 0
@@ -225,16 +293,16 @@ theme_override_constants/margin_top = 55
 theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/Control/PanelContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/Control/PanelContainer/MarginContainer" unique_id=665816919]
 layout_mode = 2
 mouse_filter = 2
 theme = ExtResource("2_6ugni")
 
-[node name="TopPart" type="VBoxContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="TopPart" type="VBoxContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer" unique_id=630959636]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="lblName" type="Label" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart"]
+[node name="lblName" type="Label" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart" unique_id=365914297]
 layout_mode = 2
 theme_override_constants/outline_size = 3
 theme_override_font_sizes/font_size = 32
@@ -242,24 +310,24 @@ text = "Flying Sword of Jeffrey's Decay"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart"]
+[node name="MarginContainer" type="MarginContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart" unique_id=659193955]
 layout_mode = 2
 theme_override_constants/margin_top = 15
 
-[node name="rarityContainer" type="HBoxContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart"]
+[node name="rarityContainer" type="HBoxContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart" unique_id=825416468]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart/rarityContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart/rarityContainer" unique_id=122733613]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="picRarity" type="TextureRect" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart/rarityContainer"]
+[node name="picRarity" type="TextureRect" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart/rarityContainer" unique_id=336014390]
 layout_mode = 2
 texture = ExtResource("3_orras")
 expand_mode = 3
 stretch_mode = 5
 
-[node name="lblRarity" type="Label" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart/rarityContainer"]
+[node name="lblRarity" type="Label" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart/rarityContainer" unique_id=237331777]
 layout_mode = 2
 theme = ExtResource("4_ythyo")
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -267,50 +335,50 @@ theme_override_font_sizes/font_size = 18
 text = "Uncommon"
 vertical_alignment = 1
 
-[node name="MarginContainer2" type="MarginContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart/rarityContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart/rarityContainer" unique_id=1243199043]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="MarginContainer2" type="MarginContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart"]
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart" unique_id=946498691]
 layout_mode = 2
 theme_override_constants/margin_top = 10
 
-[node name="statContainer" type="HBoxContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart"]
+[node name="statContainer" type="HBoxContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart" unique_id=1818841142]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="CardStat" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart/statContainer" instance=ExtResource("5_orras")]
+[node name="CardStat" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart/statContainer" unique_id=963193809 instance=ExtResource("5_orras")]
 custom_minimum_size = Vector2(65, 90)
 layout_mode = 2
 
-[node name="CardStat2" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart/statContainer" instance=ExtResource("5_orras")]
+[node name="CardStat2" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart/statContainer" unique_id=28423377 instance=ExtResource("5_orras")]
 custom_minimum_size = Vector2(65, 90)
 layout_mode = 2
 
-[node name="CardStat3" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart/statContainer" instance=ExtResource("5_orras")]
+[node name="CardStat3" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart/statContainer" unique_id=693627157 instance=ExtResource("5_orras")]
 custom_minimum_size = Vector2(65, 90)
 layout_mode = 2
 
-[node name="CardStat4" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart/statContainer" instance=ExtResource("5_orras")]
+[node name="CardStat4" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart/statContainer" unique_id=1608522653 instance=ExtResource("5_orras")]
 custom_minimum_size = Vector2(65, 90)
 layout_mode = 2
 
-[node name="MarginContainer3" type="MarginContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart"]
+[node name="MarginContainer3" type="MarginContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart" unique_id=261754255]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="BottomPart" type="VBoxContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="BottomPart" type="VBoxContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer" unique_id=551824840]
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
 
-[node name="MarginContainer2" type="MarginContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart"]
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart" unique_id=1553962772]
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
 
-[node name="textMargin" type="MarginContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart"]
+[node name="textMargin" type="MarginContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart" unique_id=1348443241]
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
@@ -319,10 +387,10 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 55
 theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/textMargin"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/textMargin" unique_id=2047319696]
 layout_mode = 2
 
-[node name="txtUpgrades" type="RichTextLabel" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/textMargin/VBoxContainer"]
+[node name="txtUpgrades" type="RichTextLabel" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/textMargin/VBoxContainer" unique_id=809967727]
 visible = false
 layout_mode = 2
 mouse_filter = 2
@@ -331,66 +399,64 @@ text = "XXX"
 fit_content = true
 horizontal_alignment = 1
 
-[node name="txtDesc" type="RichTextLabel" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/textMargin/VBoxContainer"]
+[node name="txtDesc" type="RichTextLabel" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/textMargin/VBoxContainer" unique_id=319664488]
 layout_mode = 2
 mouse_filter = 2
 bbcode_enabled = true
 text = "This is a great example of where the text will go."
 fit_content = true
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart"]
+[node name="MarginContainer" type="MarginContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart" unique_id=818798156]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="categoryGrid" type="GridContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart"]
+[node name="categoryGrid" type="GridContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart" unique_id=2041875516]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mouse_filter = 2
 columns = 3
 
-[node name="CategoryLabel" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/categoryGrid" instance=ExtResource("6_ythyo")]
+[node name="CategoryLabel" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/categoryGrid" unique_id=33411453 instance=ExtResource("6_ythyo")]
 custom_minimum_size = Vector2(130, 34)
 layout_mode = 2
 
-[node name="CategoryLabel2" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/categoryGrid" instance=ExtResource("6_ythyo")]
+[node name="CategoryLabel2" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/categoryGrid" unique_id=1552818657 instance=ExtResource("6_ythyo")]
 visible = false
 custom_minimum_size = Vector2(175, 50)
 layout_mode = 2
 
-[node name="CategoryLabel3" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/categoryGrid" instance=ExtResource("6_ythyo")]
+[node name="CategoryLabel3" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/categoryGrid" unique_id=119999196 instance=ExtResource("6_ythyo")]
 visible = false
 custom_minimum_size = Vector2(175, 50)
 layout_mode = 2
 
-[node name="bundleMargin" type="MarginContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart"]
+[node name="bundleMargin" type="MarginContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart" unique_id=1306690526]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="boxBundle" type="HBoxContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart"]
+[node name="boxBundle" type="HBoxContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart" unique_id=294314364]
 visible = false
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/boxBundle"]
+[node name="MarginContainer" type="MarginContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/boxBundle" unique_id=492372477]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="panelBundle" type="PanelContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/boxBundle"]
+[node name="panelBundle" type="PanelContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/boxBundle" unique_id=46967616]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_8xd3p")
 
-[node name="lblBundle" type="Label" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/boxBundle/panelBundle"]
+[node name="lblBundle" type="Label" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/boxBundle/panelBundle" unique_id=486267194]
 layout_mode = 2
 theme = ExtResource("4_ythyo")
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 text = "Test Bundle Name"
 
-[node name="MarginContainer2" type="MarginContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/boxBundle"]
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/boxBundle" unique_id=1858246]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=85676954]
 process_mode = 3
-libraries = {
-&"": SubResource("AnimationLibrary_rygt6")
-}
+libraries/ = SubResource("AnimationLibrary_rygt6")

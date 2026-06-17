@@ -1,8 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://qlqnhc82ni7x"]
+[gd_scene format=3 uid="uid://qlqnhc82ni7x"]
 
 [ext_resource type="Script" uid="uid://eootj3nibbxl" path="res://Scripts/Autoloads/DungeonManager.gd" id="1_b86jv"]
 [ext_resource type="Resource" uid="uid://dcqxpdnoj1gwj" path="res://Resources/Rooms/uncommon_treasure_merchant.tres" id="2_mhvtc"]
 
-[node name="DungeonManager" type="Node2D"]
+[node name="DungeonManager" type="Node2D" unique_id=273718089]
 script = ExtResource("1_b86jv")
 testing_room_definition = ExtResource("2_mhvtc")

@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://veyfqa2b4ijn"]
+
+[ext_resource type="FontFile" uid="uid://dgwg8mvobk57a" path="res://Assets/UI/Fonts/ImperatorSmallCaps Bold.ttf" id="1_0l88l"]
+[ext_resource type="Texture2D" uid="uid://ckhhqim10ym1t" path="res://Assets/UI/Card_Category_Small.png" id="1_21afa"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_f3ulp"]
+texture = ExtResource("1_21afa")
+texture_margin_left = 28.0
+texture_margin_right = 32.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wrws2"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_v74x7"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vj6u6"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_21afa"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0l88l"]
+
+[node name="CategoryLabel" type="PanelContainer" unique_id=752981616]
+self_modulate = Color(0.2627451, 0.22352941, 0.23137255, 1)
+custom_minimum_size = Vector2(30, 25)
+offset_right = 99.0
+offset_bottom = 25.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_f3ulp")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=332226858]
+layout_mode = 2
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="lblCategory" type="Label" parent="MarginContainer" unique_id=673104101]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.828503, 0.774375, 0.716262, 1)
+theme_override_fonts/font = ExtResource("1_0l88l")
+theme_override_font_sizes/font_size = 12
+text = "Dark"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="MarginContainer" unique_id=511285417]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_wrws2")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_v74x7")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_vj6u6")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_21afa")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_0l88l")

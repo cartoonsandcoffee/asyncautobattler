@@ -1,8 +1,7 @@
-[gd_scene load_steps=25 format=3 uid="uid://ce4v0pt2qw5lh"]
+[gd_scene format=3 uid="uid://ce4v0pt2qw5lh"]
 
 [ext_resource type="Script" uid="uid://cahuuukphkgmu" path="res://Scripts/RoomEvents/forge_room.gd" id="1_gycxu"]
 [ext_resource type="Resource" uid="uid://conkutd8s2s2s" path="res://Resources/Enemies/ShrunkenHead.tres" id="2_v48r5"]
-[ext_resource type="Texture2D" uid="uid://daeptxxk8jt0v" path="res://Assets/Art/Backgrounds/Background_05.png" id="3_pty56"]
 [ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="4_7ymnc"]
 [ext_resource type="Texture2D" uid="uid://d154ok6bmavw3" path="res://Assets/Art/Events/weapon_imbue.png" id="4_nf2la"]
 [ext_resource type="Texture2D" uid="uid://dxt3yb4gkjn6x" path="res://Assets/Art/Particles/smoke_07.png" id="6_5iesb"]
@@ -17,15 +16,15 @@ point_count = 2
 offsets = PackedFloat32Array(0, 0.625, 1)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5mci1"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lx58h"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yadr2"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_np0uq"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_070eq"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_np0uq"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yadr2"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lx58h"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5mci1"]
 
 [sub_resource type="Animation" id="Animation_ooyyh"]
 length = 0.001
@@ -346,7 +345,7 @@ _data = {
 &"text_hover": SubResource("Animation_0y74d")
 }
 
-[node name="ForgeRoom" type="Control"]
+[node name="ForgeRoom" type="Control" unique_id=823105954]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -356,18 +355,7 @@ grow_vertical = 2
 script = ExtResource("1_gycxu")
 enemy_resource = ExtResource("2_v48r5")
 
-[node name="picBack" type="TextureRect" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("3_pty56")
-expand_mode = 1
-
-[node name="picTreasure" type="TextureRect" parent="."]
+[node name="picTreasure" type="TextureRect" parent="." unique_id=703612098]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 8
@@ -386,7 +374,7 @@ pivot_offset = Vector2(225, 240)
 texture = ExtResource("4_nf2la")
 expand_mode = 1
 
-[node name="jar_particles" type="CPUParticles2D" parent="picTreasure"]
+[node name="jar_particles" type="CPUParticles2D" parent="picTreasure" unique_id=1123541837]
 position = Vector2(230.333, 380)
 scale = Vector2(1.25, 1.25)
 emitting = false
@@ -408,7 +396,7 @@ scale_amount_curve = SubResource("Curve_kct4p")
 color = Color(0.637843, 0.637843, 0.637843, 1)
 color_ramp = SubResource("Gradient_x5nv0")
 
-[node name="Button" type="Button" parent="picTreasure"]
+[node name="Button" type="Button" parent="picTreasure" unique_id=587808185]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -419,14 +407,14 @@ offset_right = -79.0
 offset_bottom = -37.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_5mci1")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_lx58h")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_yadr2")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_070eq")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_np0uq")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_070eq")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_yadr2")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_lx58h")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_5mci1")
 disabled = true
 
-[node name="lblOpen" type="Label" parent="."]
+[node name="lblOpen" type="Label" parent="." unique_id=192924292]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 8
@@ -454,19 +442,15 @@ text = "Examine."
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="WeaponUpgrader" parent="." instance=ExtResource("8_nf2la")]
+[node name="WeaponUpgrader" parent="." unique_id=222933238 instance=ExtResource("8_nf2la")]
 layout_mode = 1
 box_desc = "Would you like to imbue your weapon with an additional ability? "
 
-[node name="animJars" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_3q1ay")
-}
+[node name="animJars" type="AnimationPlayer" parent="." unique_id=421286300]
+libraries/ = SubResource("AnimationLibrary_3q1ay")
 
-[node name="animOpen" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_23tol")
-}
+[node name="animOpen" type="AnimationPlayer" parent="." unique_id=46739547]
+libraries/ = SubResource("AnimationLibrary_23tol")
 
 [connection signal="mouse_entered" from="picTreasure/Button" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="picTreasure/Button" to="." method="_on_button_mouse_exited"]

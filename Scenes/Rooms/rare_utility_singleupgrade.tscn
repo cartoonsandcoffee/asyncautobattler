@@ -1,6 +1,5 @@
-[gd_scene load_steps=31 format=3 uid="uid://bpbr2fjgpoo4q"]
+[gd_scene format=3 uid="uid://bpbr2fjgpoo4q"]
 
-[ext_resource type="Texture2D" uid="uid://dgtyfe7u507wx" path="res://Assets/Art/Backgrounds/Background_Chamber_1.png" id="1_2leqs"]
 [ext_resource type="Script" uid="uid://dt5ct7fbpd4jn" path="res://Scripts/RoomEvents/rare_utility_singleupgrade.gd" id="1_qnuek"]
 [ext_resource type="Texture2D" uid="uid://dxw4wnrx37lmp" path="res://Assets/Art/Particles/magic_05.png" id="3_hw3yl"]
 [ext_resource type="Texture2D" uid="uid://dlb5016vgje33" path="res://Assets/Art/Doors/special_peddler_room_door.png" id="3_lti4h"]
@@ -8,15 +7,15 @@
 [ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="5_rsdh4"]
 [ext_resource type="PackedScene" uid="uid://dfuglhrwpha2" path="res://Scenes/Elements/item_combiner.tscn" id="6_8xi0c"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rsdh4"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8xi0c"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sqebn"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_iu5kk"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0x7xd"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_iu5kk"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sqebn"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8xi0c"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rsdh4"]
 
 [sub_resource type="Curve" id="Curve_sqebn"]
 _limits = [0.3, 3.0, 0.0, 1.0]
@@ -27,15 +26,15 @@ point_count = 2
 offsets = PackedFloat32Array(0, 0.625, 1)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_77e7y"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2t671"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wgtso"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gcanq"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qwiuq"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gcanq"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wgtso"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2t671"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_77e7y"]
 
 [sub_resource type="Animation" id="Animation_pl85s"]
 length = 0.001
@@ -329,6 +328,33 @@ _data = {
 &"show_label": SubResource("Animation_1rbu2")
 }
 
+[sub_resource type="Animation" id="Animation_c5i5w"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("centerPoint/picDoor:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("centerPoint/picDoor/btnDoor:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
 [sub_resource type="Animation" id="Animation_6fo00"]
 resource_name = "show_door"
 length = 0.3
@@ -358,40 +384,13 @@ tracks/1/keys = {
 "values": [false]
 }
 
-[sub_resource type="Animation" id="Animation_c5i5w"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("centerPoint/picDoor:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(0, 0, 0, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("centerPoint/picDoor/btnDoor:disabled")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_q4cns"]
 _data = {
 &"RESET": SubResource("Animation_c5i5w"),
 &"show_door": SubResource("Animation_6fo00")
 }
 
-[node name="rare_utility_singleupgrade" type="Control"]
+[node name="rare_utility_singleupgrade" type="Control" unique_id=1086795003]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -400,18 +399,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_qnuek")
 
-[node name="picBack" type="TextureRect" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("1_2leqs")
-expand_mode = 1
-
-[node name="centerPoint" type="Control" parent="."]
+[node name="centerPoint" type="Control" parent="." unique_id=1357486218]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -426,7 +414,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="picDoor" type="TextureRect" parent="centerPoint"]
+[node name="picDoor" type="TextureRect" parent="centerPoint" unique_id=315506659]
 modulate = Color(0, 0, 0, 1)
 custom_minimum_size = Vector2(155.2, 216)
 layout_mode = 1
@@ -441,21 +429,21 @@ grow_vertical = 2
 texture = ExtResource("3_lti4h")
 expand_mode = 3
 
-[node name="btnDoor" type="Button" parent="centerPoint/picDoor"]
+[node name="btnDoor" type="Button" parent="centerPoint/picDoor" unique_id=1791875906]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_rsdh4")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_8xi0c")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_sqebn")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_0x7xd")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_iu5kk")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_0x7xd")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_sqebn")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_8xi0c")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_rsdh4")
 disabled = true
 
-[node name="Particles" type="CPUParticles2D" parent="."]
+[node name="Particles" type="CPUParticles2D" parent="." unique_id=1518408861]
 position = Vector2(931, 478)
 emitting = false
 amount = 10
@@ -477,7 +465,7 @@ scale_amount_curve = SubResource("Curve_sqebn")
 color = Color(0.745813, 0.5472, 0.76, 1)
 color_ramp = SubResource("Gradient_0x7xd")
 
-[node name="picEvent" type="TextureRect" parent="."]
+[node name="picEvent" type="TextureRect" parent="." unique_id=1983344177]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 8
@@ -494,7 +482,7 @@ grow_vertical = 2
 texture = ExtResource("4_lti4h")
 expand_mode = 1
 
-[node name="lblAction" type="Label" parent="picEvent"]
+[node name="lblAction" type="Label" parent="picEvent" unique_id=277560787]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 8
@@ -518,21 +506,21 @@ text = "Say Hello."
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="btnEvent" type="Button" parent="picEvent"]
+[node name="btnEvent" type="Button" parent="picEvent" unique_id=248773510]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_77e7y")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_2t671")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_wgtso")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_qwiuq")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_gcanq")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_qwiuq")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_wgtso")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_2t671")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_77e7y")
 disabled = true
 
-[node name="ItemCombiner" parent="." instance=ExtResource("6_8xi0c")]
+[node name="ItemCombiner" parent="." unique_id=427190220 instance=ExtResource("6_8xi0c")]
 layout_mode = 1
 combiner_mode = 5
 number_of_slots = 1
@@ -545,20 +533,14 @@ sb_name = "Here You Go"
 sb_text = "May this serve you well..."
 sb_button = "Take it"
 
-[node name="animEvent" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_1rbu2")
-}
+[node name="animEvent" type="AnimationPlayer" parent="." unique_id=1331062458]
+libraries/ = SubResource("AnimationLibrary_1rbu2")
 
-[node name="animLabel" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_5ugpi")
-}
+[node name="animLabel" type="AnimationPlayer" parent="." unique_id=1902232703]
+libraries/ = SubResource("AnimationLibrary_5ugpi")
 
-[node name="animDoor" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_q4cns")
-}
+[node name="animDoor" type="AnimationPlayer" parent="." unique_id=2058942614]
+libraries/ = SubResource("AnimationLibrary_q4cns")
 
 [connection signal="mouse_entered" from="picEvent/btnEvent" to="." method="_on_btn_event_mouse_entered"]
 [connection signal="mouse_exited" from="picEvent/btnEvent" to="." method="_on_btn_event_mouse_exited"]

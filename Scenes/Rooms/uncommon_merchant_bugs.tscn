@@ -1,25 +1,25 @@
-[gd_scene load_steps=39 format=3 uid="uid://bpal56sqfw4wl"]
+[gd_scene format=3 uid="uid://bpal56sqfw4wl"]
 
 [ext_resource type="Script" uid="uid://dh06jc8uy1xdx" path="res://Scripts/RoomEvents/rare_merchant_room.gd" id="1_l3q0s"]
 [ext_resource type="Resource" uid="uid://gm0vvksbp7e4" path="res://Resources/Enemies/Anguish.tres" id="2_dd8dd"]
-[ext_resource type="Texture2D" uid="uid://cr5mucfkmo2k4" path="res://Assets/Art/Backgrounds/Hallway_01.png" id="3_l3q0s"]
 [ext_resource type="Texture2D" uid="uid://dbclbklsxjo03" path="res://Assets/Art/Events/Merchant02_Dark.png" id="4_1a4tn"]
 [ext_resource type="Texture2D" uid="uid://dqi6l36fb53pn" path="res://Assets/Art/Events/Merchant02_Light.png" id="5_ib6pp"]
 [ext_resource type="PackedScene" uid="uid://bb31dt8vvd6f4" path="res://Scenes/Elements/item_merchant_store.tscn" id="6_p32wl"]
 [ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="7_j5fkq"]
 [ext_resource type="Texture2D" uid="uid://dxt3yb4gkjn6x" path="res://Assets/Art/Particles/smoke_07.png" id="8_nlwpb"]
+[ext_resource type="PackedScene" uid="uid://dc1hntupipni7" path="res://Scenes/Popups/popup_merchant_selector.tscn" id="9_1a4tn"]
 [ext_resource type="Texture2D" uid="uid://7bekcj5gp5gw" path="res://Assets/UI/Border/panel-border-005.png" id="9_tw1e7"]
 [ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="10_1a4tn"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u3e5k"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fgisx"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ebe42"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o0xvr"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hg87j"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o0xvr"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ebe42"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fgisx"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u3e5k"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ib6pp"]
 bg_color = Color(0, 0, 0, 1)
@@ -30,18 +30,6 @@ texture_margin_left = 28.0
 texture_margin_top = 28.0
 texture_margin_right = 28.0
 texture_margin_bottom = 28.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j5fkq"]
-bg_color = Color(0.729412, 0.411765, 0.976471, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.42749, 0.1178, 0.62, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nlwpb"]
 bg_color = Color(0.209577, 0.0564541, 0.300837, 1)
@@ -55,13 +43,13 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8l54f"]
-bg_color = Color(0.969475, 0.631224, 0.586851, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j5fkq"]
+bg_color = Color(0.729412, 0.411765, 0.976471, 1)
 border_width_left = 3
 border_width_top = 3
 border_width_right = 3
 border_width_bottom = 3
-border_color = Color(0.411765, 0.0823529, 0.0823529, 1)
+border_color = Color(0.42749, 0.1178, 0.62, 1)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
@@ -79,13 +67,13 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nvavc"]
-bg_color = Color(0.388235, 0.717647, 0.498039, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8l54f"]
+bg_color = Color(0.969475, 0.631224, 0.586851, 1)
 border_width_left = 3
 border_width_top = 3
 border_width_right = 3
 border_width_bottom = 3
-border_color = Color(0.1085, 0.31, 0.179025, 1)
+border_color = Color(0.411765, 0.0823529, 0.0823529, 1)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
@@ -98,6 +86,18 @@ border_width_top = 3
 border_width_right = 3
 border_width_bottom = 3
 border_color = Color(0.388127, 0.717264, 0.496985, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nvavc"]
+bg_color = Color(0.388235, 0.717647, 0.498039, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.1085, 0.31, 0.179025, 1)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
@@ -439,47 +439,6 @@ point_count = 2
 offsets = PackedFloat32Array(0, 0.625, 1)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
-[sub_resource type="Animation" id="Animation_tw1e7"]
-resource_name = "show_choice"
-length = 0.4
-step = 0.025
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("panelChoice:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("panelChoice:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("panelChoice/panelBlack:scale")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector2(0.5, 0.5), Vector2(1.1, 1.1), Vector2(1, 1)]
-}
-
 [sub_resource type="Animation" id="Animation_1a4tn"]
 length = 0.001
 tracks/0/type = "value"
@@ -560,6 +519,47 @@ tracks/2/keys = {
 "values": [Vector2(1, 1), Vector2(1.1, 1.1), Vector2(0.5, 0.5)]
 }
 
+[sub_resource type="Animation" id="Animation_tw1e7"]
+resource_name = "show_choice"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("panelChoice:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("panelChoice:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("panelChoice/panelBlack:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.5, 0.5), Vector2(1.1, 1.1), Vector2(1, 1)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_p32wl"]
 _data = {
 &"RESET": SubResource("Animation_1a4tn"),
@@ -567,7 +567,7 @@ _data = {
 &"show_choice": SubResource("Animation_tw1e7")
 }
 
-[node name="RareMerchantRoom" type="Control"]
+[node name="RareMerchantRoom" type="Control" unique_id=133175282]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -578,18 +578,7 @@ script = ExtResource("1_l3q0s")
 event_description = "You catch the scent of tobacco in the air..."
 enemy_resource = ExtResource("2_dd8dd")
 
-[node name="picBack" type="TextureRect" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("3_l3q0s")
-expand_mode = 3
-
-[node name="merchantControl" type="Control" parent="."]
+[node name="merchantControl" type="Control" parent="." unique_id=418482865]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -605,21 +594,21 @@ grow_vertical = 2
 scale = Vector2(0.33, 0.33)
 pivot_offset = Vector2(663.636, 606.061)
 
-[node name="merchantDark" type="TextureRect" parent="merchantControl"]
+[node name="merchantDark" type="TextureRect" parent="merchantControl" unique_id=1481784097]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 0
 offset_right = 1253.0
 offset_bottom = 1660.0
 texture = ExtResource("4_1a4tn")
 
-[node name="merchantLight" type="TextureRect" parent="merchantControl"]
+[node name="merchantLight" type="TextureRect" parent="merchantControl" unique_id=1764472964]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 0
 offset_right = 1253.0
 offset_bottom = 1660.0
 texture = ExtResource("5_ib6pp")
 
-[node name="Button" type="Button" parent="merchantControl/merchantLight"]
+[node name="Button" type="Button" parent="merchantControl/merchantLight" unique_id=348134485]
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 1
 anchors_preset = 15
@@ -627,14 +616,14 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_u3e5k")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_fgisx")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_ebe42")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_hg87j")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_o0xvr")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hg87j")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_ebe42")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_fgisx")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_u3e5k")
 disabled = true
 
-[node name="lblAction" type="Label" parent="merchantControl"]
+[node name="lblAction" type="Label" parent="merchantControl" unique_id=1577543264]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 8
@@ -661,7 +650,7 @@ text = "Shop"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="panelChoice" type="Panel" parent="."]
+[node name="panelChoice" type="Panel" parent="." unique_id=1414876871]
 visible = false
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
@@ -671,7 +660,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="panelBlack" type="PanelContainer" parent="panelChoice"]
+[node name="panelBlack" type="PanelContainer" parent="panelChoice" unique_id=449166542]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -688,66 +677,69 @@ scale = Vector2(0.5, 0.5)
 pivot_offset = Vector2(250, 166)
 theme_override_styles/panel = SubResource("StyleBoxFlat_ib6pp")
 
-[node name="panelBorder" type="PanelContainer" parent="panelChoice/panelBlack"]
+[node name="panelBorder" type="PanelContainer" parent="panelChoice/panelBlack" unique_id=712508288]
 custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_p32wl")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="panelChoice/panelBlack/panelBorder"]
+[node name="VBoxContainer" type="VBoxContainer" parent="panelChoice/panelBlack/panelBorder" unique_id=1327248459]
 layout_mode = 2
 theme = ExtResource("10_1a4tn")
 theme_override_constants/separation = 20
 
-[node name="Label" type="Label" parent="panelChoice/panelBlack/panelBorder/VBoxContainer"]
+[node name="Label" type="Label" parent="panelChoice/panelBlack/panelBorder/VBoxContainer" unique_id=1766289057]
 layout_mode = 2
 text = "What are you interested in?"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="RichTextLabel" type="RichTextLabel" parent="panelChoice/panelBlack/panelBorder/VBoxContainer"]
+[node name="RichTextLabel" type="RichTextLabel" parent="panelChoice/panelBlack/panelBorder/VBoxContainer" unique_id=1879067674]
 layout_mode = 2
 text = "\"I can show you a variety of wares.\""
 fit_content = true
 horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="panelChoice/panelBlack/panelBorder/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="panelChoice/panelBlack/panelBorder/VBoxContainer" unique_id=1941627244]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="btnBugs" type="Button" parent="panelChoice/panelBlack/panelBorder/VBoxContainer/HBoxContainer"]
+[node name="btnBugs" type="Button" parent="panelChoice/panelBlack/panelBorder/VBoxContainer/HBoxContainer" unique_id=431900906]
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_hover_color = Color(0.31717, 0.0874, 0.46, 1)
 theme_override_colors/font_color = Color(0.729412, 0.411765, 0.976471, 1)
-theme_override_styles/hover = SubResource("StyleBoxFlat_j5fkq")
+theme_override_colors/font_hover_color = Color(0.31717, 0.0874, 0.46, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_nlwpb")
+theme_override_styles/hover = SubResource("StyleBoxFlat_j5fkq")
 text = "Bugs"
 
-[node name="btnWeapons" type="Button" parent="panelChoice/panelBlack/panelBorder/VBoxContainer/HBoxContainer"]
+[node name="btnWeapons" type="Button" parent="panelChoice/panelBlack/panelBorder/VBoxContainer/HBoxContainer" unique_id=1378242422]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_hover_color = Color(0.285146, 0.0451411, 0.0451263, 1)
 theme_override_colors/font_color = Color(0.9, 0.6327, 0.603, 1)
-theme_override_styles/hover = SubResource("StyleBoxFlat_8l54f")
+theme_override_colors/font_hover_color = Color(0.285146, 0.0451411, 0.0451263, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_yfai5")
+theme_override_styles/hover = SubResource("StyleBoxFlat_8l54f")
 text = "Weapons"
 
-[node name="btnPotions" type="Button" parent="panelChoice/panelBlack/panelBorder/VBoxContainer/HBoxContainer"]
+[node name="btnPotions" type="Button" parent="panelChoice/panelBlack/panelBorder/VBoxContainer/HBoxContainer" unique_id=1972133863]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_hover_color = Color(0.0744, 0.24, 0.13236, 1)
 theme_override_colors/font_color = Color(0.503275, 0.848493, 0.613655, 1)
-theme_override_styles/hover = SubResource("StyleBoxFlat_nvavc")
+theme_override_colors/font_hover_color = Color(0.0744, 0.24, 0.13236, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_dojlb")
+theme_override_styles/hover = SubResource("StyleBoxFlat_nvavc")
 text = "Potions"
 
-[node name="btnLeave" type="Button" parent="panelChoice/panelBlack/panelBorder/VBoxContainer"]
+[node name="btnLeave" type="Button" parent="panelChoice/panelBlack/panelBorder/VBoxContainer" unique_id=505721009]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 text = "I'm not interested."
 
-[node name="store_bugs" parent="." instance=ExtResource("6_p32wl")]
+[node name="PopupMerchantSelector" parent="." unique_id=2001507372 instance=ExtResource("9_1a4tn")]
+layout_mode = 1
+
+[node name="store_bugs" parent="." unique_id=825976464 instance=ExtResource("6_p32wl")]
 layout_mode = 1
 item_rarity = 0
 items_offered = 2
@@ -757,8 +749,9 @@ box_desc = "I've got some bugs in stock."
 include_extra_rare = true
 allow_refresh = false
 category_string = "Bug"
+use_keyword_weighting = false
 
-[node name="store_potions" parent="." instance=ExtResource("6_p32wl")]
+[node name="store_potions" parent="." unique_id=2132020337 instance=ExtResource("6_p32wl")]
 layout_mode = 1
 item_rarity = 0
 items_offered = 2
@@ -768,8 +761,9 @@ box_desc = "Look at all these potions..."
 include_extra_rare = true
 allow_refresh = false
 category_string = "Potion"
+use_keyword_weighting = false
 
-[node name="store_weapons" parent="." instance=ExtResource("6_p32wl")]
+[node name="store_weapons" parent="." unique_id=1604401947 instance=ExtResource("6_p32wl")]
 layout_mode = 1
 items_offered = 2
 item_columns = 3
@@ -778,18 +772,15 @@ box_desc = "Careful, these are sharp..."
 include_extra_rare = true
 allow_refresh = false
 category_string = "Weapon"
+use_keyword_weighting = false
 
-[node name="animMerchant" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_ebe42")
-}
+[node name="animMerchant" type="AnimationPlayer" parent="." unique_id=1622730866]
+libraries/ = SubResource("AnimationLibrary_ebe42")
 
-[node name="animLabel" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_ytph8")
-}
+[node name="animLabel" type="AnimationPlayer" parent="." unique_id=1493173980]
+libraries/ = SubResource("AnimationLibrary_ytph8")
 
-[node name="smoke" type="CPUParticles2D" parent="."]
+[node name="smoke" type="CPUParticles2D" parent="." unique_id=1643698255]
 position = Vector2(760, 441)
 emitting = false
 amount = 3
@@ -808,10 +799,8 @@ scale_amount_curve = SubResource("Curve_fgisx")
 color = Color(0.637843, 0.637843, 0.637843, 1)
 color_ramp = SubResource("Gradient_ebe42")
 
-[node name="animChoice" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_p32wl")
-}
+[node name="animChoice" type="AnimationPlayer" parent="." unique_id=105643842]
+libraries/ = SubResource("AnimationLibrary_p32wl")
 
 [connection signal="mouse_entered" from="merchantControl/merchantLight/Button" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="merchantControl/merchantLight/Button" to="." method="_on_button_mouse_exited"]

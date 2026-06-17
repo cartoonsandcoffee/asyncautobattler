@@ -1,11 +1,13 @@
-[gd_scene load_steps=26 format=3 uid="uid://b0vi56n2ciwg6"]
+[gd_scene format=3 uid="uid://b0vi56n2ciwg6"]
 
 [ext_resource type="Script" uid="uid://n5v64n1jeto2" path="res://Scripts/HallwayEvents/hallway_chest.gd" id="1_7xgip"]
-[ext_resource type="Texture2D" uid="uid://cr5mucfkmo2k4" path="res://Assets/Art/Backgrounds/Hallway_01.png" id="2_mdhwb"]
+[ext_resource type="Texture2D" uid="uid://nn5b7s2wnbrn" path="res://Assets/Art/Events/TreasureChest_open.png" id="2_tj6ii"]
 [ext_resource type="Texture2D" uid="uid://qm7nwph2d80" path="res://Assets/Art/Events/TreasureChest.png" id="2_x57kp"]
 [ext_resource type="Texture2D" uid="uid://c6uhtg2telr2f" path="res://Assets/Art/Particles/circle_05.png" id="3_x57kp"]
-[ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="4_bqoxt"]
-[ext_resource type="PackedScene" uid="uid://c3h585v8mippc" path="res://Scenes/Elements/free_item_offering.tscn" id="5_o16tn"]
+[ext_resource type="Texture2D" uid="uid://lb5ebdhwaa8i" path="res://Assets/Art/Particles/star_05.png" id="6_cnfgk"]
+[ext_resource type="PackedScene" uid="uid://bx4e84ca4u645" path="res://Scenes/Elements/DisplayItemChoicesFree.tscn" id="7_tj6ii"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f3ulp"]
 
 [sub_resource type="Curve" id="Curve_7xgip"]
 _limits = [0.3, 3.0, 0.0, 1.0]
@@ -16,181 +18,109 @@ point_count = 2
 offsets = PackedFloat32Array(0, 0.625, 1)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xcab8"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nhd8p"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qyy0y"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_01rsx"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rq07n"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_01rsx"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qyy0y"]
 
-[sub_resource type="Animation" id="Animation_1qr6a"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("picEvent/lblEvent:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(161.17, 131.5)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("picEvent/lblEvent:scale")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0.5, 0.5)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("picEvent/lblEvent:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nhd8p"]
 
-[sub_resource type="Animation" id="Animation_axvhq"]
-resource_name = "hide_label"
-length = 0.3
-step = 0.025
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("picEvent/lblEvent:position")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(250, 50), Vector2(161, 131)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("picEvent/lblEvent:scale")
-tracks/1/interp = 2
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(1, 1), Vector2(0.5, 0.5)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("picEvent/lblEvent:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xcab8"]
 
-[sub_resource type="Animation" id="Animation_13cp2"]
-resource_name = "show_label"
-length = 0.3
-step = 0.025
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("picEvent/lblEvent:position")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(161, 131), Vector2(250, 50)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("picEvent/lblEvent:scale")
-tracks/1/interp = 2
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(0.5, 0.5), Vector2(1, 1)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("picEvent/lblEvent:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
+[sub_resource type="Curve" id="Curve_lne1p"]
+_data = [Vector2(0, 0.07142866), 0.0, 0.0, 0, 0, Vector2(1, 0.36638665), 0.0, 0.0, 0, 0]
+point_count = 2
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_ip8wj"]
-_data = {
-&"RESET": SubResource("Animation_1qr6a"),
-&"hide_label": SubResource("Animation_axvhq"),
-&"show_label": SubResource("Animation_13cp2")
-}
+[sub_resource type="Gradient" id="Gradient_05i8p"]
+offsets = PackedFloat32Array(0, 0.6902655, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.63274336, 1, 1, 1, 0)
 
 [sub_resource type="Animation" id="Animation_alwvy"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("picEvent:modulate")
+tracks/0/path = NodePath("eventControl/PanelContainer/picEvent/particles:emitting")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(0, 0, 0, 1)]
+"update": 1,
+"values": [false]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("picEvent/particles:emitting")
+tracks/1/path = NodePath("eventControl/PanelContainer/picEvent/btnEvent:disabled")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": [true]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("picEvent/btnEvent:disabled")
+tracks/2/path = NodePath("eventControl:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("eventControl/PanelContainer/picOpen:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("eventControl/PanelContainer/picEvent:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("eventControl/PanelContainer/openParticles:emitting")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("eventControl:scale")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_xbja7"]
@@ -200,38 +130,96 @@ step = 0.025
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("picEvent:modulate")
+tracks/0/path = NodePath("eventControl/PanelContainer/picEvent/particles:emitting")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.4),
+"times": PackedFloat32Array(0, 0.05),
 "transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(0, 0, 0, 0)]
+"update": 1,
+"values": [true, false]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("picEvent/particles:emitting")
+tracks/1/path = NodePath("eventControl/PanelContainer/picEvent/btnEvent:disabled")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.05),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [true, false]
+"values": [false, true]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("picEvent/btnEvent:disabled")
+tracks/2/path = NodePath("eventControl:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.05),
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_mdhwb"]
+resource_name = "hover"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("eventControl:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.05, 1.05)]
+}
+
+[sub_resource type="Animation" id="Animation_mt1g3"]
+resource_name = "open"
+length = 0.1
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("eventControl/PanelContainer/picEvent:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.024999999),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("eventControl/PanelContainer/picOpen:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.024999999),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("eventControl/PanelContainer/openParticles:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.024999999),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_7e1au"]
@@ -240,176 +228,124 @@ length = 0.4
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("picEvent:modulate")
+tracks/0/path = NodePath("eventControl/PanelContainer/picEvent/particles:emitting")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(0, 0, 0, 1), Color(1, 1, 1, 1)]
+"update": 1,
+"values": [false, true]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("picEvent/particles:emitting")
+tracks/1/path = NodePath("eventControl/PanelContainer/picEvent/btnEvent:disabled")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [false, true]
+"values": [true, false]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("picEvent/btnEvent:disabled")
+tracks/2/path = NodePath("eventControl:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, false]
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_tj6ii"]
+resource_name = "un_hover"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("eventControl:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1.05, 1.05), Vector2(1, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_13ixs"]
 _data = {
 &"RESET": SubResource("Animation_alwvy"),
 &"hide_event": SubResource("Animation_xbja7"),
-&"show_event": SubResource("Animation_7e1au")
+&"hover": SubResource("Animation_mdhwb"),
+&"open": SubResource("Animation_mt1g3"),
+&"show_event": SubResource("Animation_7e1au"),
+&"un_hover": SubResource("Animation_tj6ii")
 }
 
-[sub_resource type="Animation" id="Animation_tj6ii"]
+[sub_resource type="Animation" id="Animation_cnfgk"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("FreeItemOffering:scale")
+tracks/0/path = NodePath("eventControl:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0.5, 0.5)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("FreeItemOffering:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("FreeItemOffering:visible")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"values": [Vector2(1, 1)]
 }
 
-[sub_resource type="Animation" id="Animation_cnfgk"]
-resource_name = "hide_items"
-length = 0.4
+[sub_resource type="Animation" id="Animation_wst83"]
+resource_name = "hover"
+length = 0.3
 step = 0.025
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("FreeItemOffering:scale")
-tracks/0/interp = 1
+tracks/0/path = NodePath("eventControl:scale")
+tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector2(1, 1), Vector2(1.1, 1.1), Vector2(0.5, 0.5)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("FreeItemOffering:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.4),
+"times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("FreeItemOffering:visible")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, false]
+"values": [Vector2(1, 1), Vector2(1.05, 1.05)]
 }
 
-[sub_resource type="Animation" id="Animation_mdhwb"]
-resource_name = "show_items"
-length = 0.4
+[sub_resource type="Animation" id="Animation_6v0rx"]
+resource_name = "un_hover"
+length = 0.3
 step = 0.025
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("FreeItemOffering:scale")
-tracks/0/interp = 1
+tracks/0/path = NodePath("eventControl:scale")
+tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector2(0.5, 0.5), Vector2(1.1, 1.1), Vector2(1, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("FreeItemOffering:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.4),
+"times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("FreeItemOffering:visible")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
+"values": [Vector2(1.05, 1.05), Vector2(1, 1)]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_mt1g3"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_vkps8"]
 _data = {
-&"RESET": SubResource("Animation_tj6ii"),
-&"hide_items": SubResource("Animation_cnfgk"),
-&"show_items": SubResource("Animation_mdhwb")
+&"RESET": SubResource("Animation_cnfgk"),
+&"hover": SubResource("Animation_wst83"),
+&"un_hover": SubResource("Animation_6v0rx")
 }
 
-[node name="HallwayChest" type="Control"]
+[node name="HallwayChest" type="Control" unique_id=1689754086]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -418,62 +354,47 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_7xgip")
 
-[node name="picBack" type="TextureRect" parent="."]
-visible = false
+[node name="eventControl" type="Control" parent="." unique_id=850764789]
+modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(530, 321)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -265.0
+offset_top = -160.5
+offset_right = 265.0
+offset_bottom = 160.5
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
+
+[node name="PanelContainer" type="PanelContainer" parent="eventControl" unique_id=2071197261]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_mdhwb")
-expand_mode = 1
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_f3ulp")
 
-[node name="picEvent" type="TextureRect" parent="."]
-modulate = Color(0, 0, 0, 1)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -264.17
-offset_top = -160.5
-offset_right = 264.17
-offset_bottom = 160.5
-grow_horizontal = 2
-grow_vertical = 2
+[node name="picOpen" type="TextureRect" parent="eventControl/PanelContainer" unique_id=114289011]
+visible = false
+layout_mode = 2
+texture = ExtResource("2_tj6ii")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="picEvent" type="TextureRect" parent="eventControl/PanelContainer" unique_id=123199933]
+layout_mode = 2
 texture = ExtResource("2_x57kp")
 expand_mode = 3
+stretch_mode = 5
 
-[node name="lblEvent" type="Label" parent="picEvent"]
-modulate = Color(1, 1, 1, 0)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -103.0
-offset_top = -29.0
-offset_right = 103.0
-offset_bottom = 29.0
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(0.5, 0.5)
-pivot_offset = Vector2(103, 29)
-theme_override_colors/font_color = Color(1, 0.866667, 0, 1)
-theme_override_colors/font_outline_color = Color(0.51, 0.306, 0, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 2
-theme_override_constants/outline_size = 5
-theme_override_fonts/font = ExtResource("4_bqoxt")
-theme_override_font_sizes/font_size = 46
-text = "Open It..."
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="particles" type="CPUParticles2D" parent="picEvent"]
+[node name="particles" type="CPUParticles2D" parent="eventControl/PanelContainer/picEvent" unique_id=1752901190]
 position = Vector2(385.171, 218.5)
 emitting = false
 amount = 15
@@ -492,51 +413,55 @@ scale_amount_curve = SubResource("Curve_7xgip")
 color = Color(1, 0.8, 0, 1)
 color_ramp = SubResource("Gradient_1xwjt")
 
-[node name="btnEvent" type="Button" parent="picEvent"]
+[node name="btnEvent" type="Button" parent="eventControl/PanelContainer/picEvent" unique_id=5050823]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 278.0
-offset_top = 157.0
-offset_right = -70.34
+offset_left = 197.0
+offset_top = 94.5
+offset_right = -70.339966
 offset_bottom = -38.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_xcab8")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_nhd8p")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_qyy0y")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_rq07n")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_01rsx")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_rq07n")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_qyy0y")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_nhd8p")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_xcab8")
 disabled = true
 
-[node name="FreeItemOffering" parent="." instance=ExtResource("5_o16tn")]
-visible = false
-modulate = Color(1, 1, 1, 0)
+[node name="openParticles" type="CPUParticles2D" parent="eventControl/PanelContainer" unique_id=917397533]
+position = Vector2(380.88785, 193.21028)
+emitting = false
+amount = 30
+texture = ExtResource("6_cnfgk")
+one_shot = true
+speed_scale = 0.75
+explosiveness = 1.0
+use_fixed_seed = true
+seed = 3488646907
+lifetime_randomness = 0.2
+direction = Vector2(0, 0)
+spread = 180.0
+gravity = Vector2(0, 100)
+initial_velocity_min = 100.0
+initial_velocity_max = 300.0
+scale_amount_curve = SubResource("Curve_lne1p")
+color = Color(1, 0.8506667, 0.36, 1)
+color_ramp = SubResource("Gradient_05i8p")
+
+[node name="DisplayItemChoicesFree" parent="." unique_id=15131559 instance=ExtResource("7_tj6ii")]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-scale = Vector2(0.5, 0.5)
-box_name = "A Gnarled Chest"
+box_desc = "Choose a reward from the chest."
+allow_banish = true
 
-[node name="animLabel" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_ip8wj")
-}
+[node name="animEvent" type="AnimationPlayer" parent="." unique_id=760593428]
+libraries/ = SubResource("AnimationLibrary_13ixs")
 
-[node name="animEvent" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_13ixs")
-}
+[node name="animHover" type="AnimationPlayer" parent="." unique_id=717391618]
+libraries/ = SubResource("AnimationLibrary_vkps8")
 
-[node name="animItems" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_mt1g3")
-}
-
-[connection signal="mouse_entered" from="picEvent/btnEvent" to="." method="_on_btn_event_mouse_entered"]
-[connection signal="mouse_exited" from="picEvent/btnEvent" to="." method="_on_btn_event_mouse_exited"]
-[connection signal="pressed" from="picEvent/btnEvent" to="." method="_on_btn_event_pressed"]
+[connection signal="mouse_entered" from="eventControl/PanelContainer/picEvent/btnEvent" to="." method="_on_btn_event_mouse_entered"]
+[connection signal="mouse_exited" from="eventControl/PanelContainer/picEvent/btnEvent" to="." method="_on_btn_event_mouse_exited"]
+[connection signal="pressed" from="eventControl/PanelContainer/picEvent/btnEvent" to="." method="_on_btn_event_pressed"]

@@ -1,21 +1,20 @@
-[gd_scene load_steps=22 format=3 uid="uid://h2a1mym0x80v"]
+[gd_scene format=3 uid="uid://h2a1mym0x80v"]
 
-[ext_resource type="Texture2D" uid="uid://l55w27vtdncw" path="res://Assets/Art/Backgrounds/Back_Fountain.png" id="1_adbtr"]
 [ext_resource type="Script" uid="uid://cxx0qwo1vlcpn" path="res://Scripts/RoomEvents/rare_utility_fountain.gd" id="1_sduv7"]
 [ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="2_nysvp"]
 [ext_resource type="Texture2D" uid="uid://djd35r7mq4tyl" path="res://Assets/Art/Events/Fountain.png" id="3_sduv7"]
 [ext_resource type="Texture2D" uid="uid://c6uhtg2telr2f" path="res://Assets/Art/Particles/circle_05.png" id="4_ee6bf"]
 [ext_resource type="PackedScene" uid="uid://dfuglhrwpha2" path="res://Scenes/Elements/item_combiner.tscn" id="5_nysvp"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_oodrv"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nysvp"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vqr3f"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8wq82"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vvvn6"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8wq82"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vqr3f"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nysvp"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_oodrv"]
 
 [sub_resource type="Curve" id="Curve_rqrxu"]
 _limits = [0.3, 3.0, 0.0, 1.0]
@@ -25,47 +24,6 @@ point_count = 2
 [sub_resource type="Gradient" id="Gradient_xua5a"]
 offsets = PackedFloat32Array(0, 0.625, 1)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
-
-[sub_resource type="Animation" id="Animation_ee6bf"]
-resource_name = "show_label"
-length = 0.3
-step = 0.025
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Event/lblEvent:scale")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(0.5, 0.5), Vector2(1, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Event/lblEvent:position")
-tracks/1/interp = 2
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(-171.5, -9), Vector2(-171.5, -150)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Event/lblEvent:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
 
 [sub_resource type="Animation" id="Animation_oodrv"]
 length = 0.001
@@ -147,52 +105,52 @@ tracks/2/keys = {
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_ee6bf"]
+resource_name = "show_label"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Event/lblEvent:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.5, 0.5), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Event/lblEvent:position")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(-171.5, -9), Vector2(-171.5, -150)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Event/lblEvent:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_vvvn6"]
 _data = {
 &"RESET": SubResource("Animation_oodrv"),
 &"hide_label": SubResource("Animation_vqr3f"),
 &"show_label": SubResource("Animation_ee6bf")
-}
-
-[sub_resource type="Animation" id="Animation_8wq82"]
-resource_name = "show_event"
-length = 0.4
-step = 0.025
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Event:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(0, 0, 0, 1), Color(1, 1, 1, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Event/picEvent/Button:disabled")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, false]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Event/picEvent/particles:emitting")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [false, true]
 }
 
 [sub_resource type="Animation" id="Animation_rqrxu"]
@@ -275,6 +233,47 @@ tracks/2/keys = {
 "values": [false]
 }
 
+[sub_resource type="Animation" id="Animation_8wq82"]
+resource_name = "show_event"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Event:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Event/picEvent/Button:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Event/picEvent/particles:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_pwmb1"]
 _data = {
 &"RESET": SubResource("Animation_rqrxu"),
@@ -282,7 +281,7 @@ _data = {
 &"show_event": SubResource("Animation_8wq82")
 }
 
-[node name="rare_utility_fountain" type="Control"]
+[node name="rare_utility_fountain" type="Control" unique_id=2074487742]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -291,18 +290,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_sduv7")
 
-[node name="picBack" type="TextureRect" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("1_adbtr")
-expand_mode = 1
-
-[node name="Event" type="Control" parent="."]
+[node name="Event" type="Control" parent="." unique_id=1954962439]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 8
@@ -317,7 +305,7 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="lblEvent" type="Label" parent="Event"]
+[node name="lblEvent" type="Label" parent="Event" unique_id=1488094043]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 8
@@ -344,7 +332,7 @@ text = "Investigate"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="picEvent" type="TextureRect" parent="Event"]
+[node name="picEvent" type="TextureRect" parent="Event" unique_id=1675310723]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -361,7 +349,7 @@ scale = Vector2(0.3, 0.3)
 pivot_offset = Vector2(725, 520)
 texture = ExtResource("3_sduv7")
 
-[node name="Button" type="Button" parent="Event/picEvent"]
+[node name="Button" type="Button" parent="Event/picEvent" unique_id=264588550]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -372,14 +360,14 @@ offset_right = -172.0
 offset_bottom = -118.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_oodrv")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_nysvp")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_vqr3f")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_vvvn6")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_8wq82")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_vvvn6")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_vqr3f")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_nysvp")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_oodrv")
 disabled = true
 
-[node name="particles" type="CPUParticles2D" parent="Event/picEvent"]
+[node name="particles" type="CPUParticles2D" parent="Event/picEvent" unique_id=226060950]
 position = Vector2(735, 256.667)
 scale = Vector2(10.101, 10.101)
 emitting = false
@@ -399,7 +387,7 @@ scale_amount_curve = SubResource("Curve_rqrxu")
 color = Color(0.4845, 0.4845, 0.95, 1)
 color_ramp = SubResource("Gradient_xua5a")
 
-[node name="ItemCombiner" parent="." instance=ExtResource("5_nysvp")]
+[node name="ItemCombiner" parent="." unique_id=1810845103 instance=ExtResource("5_nysvp")]
 layout_mode = 1
 combiner_mode = 6
 number_of_slots = 1
@@ -414,15 +402,11 @@ sb_name = "Success!"
 sb_text = "Your new potion seems stable."
 sb_button = "Take It"
 
-[node name="animLabel" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_vvvn6")
-}
+[node name="animLabel" type="AnimationPlayer" parent="." unique_id=1424015447]
+libraries/ = SubResource("AnimationLibrary_vvvn6")
 
-[node name="animEvent" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_pwmb1")
-}
+[node name="animEvent" type="AnimationPlayer" parent="." unique_id=474986754]
+libraries/ = SubResource("AnimationLibrary_pwmb1")
 
 [connection signal="mouse_entered" from="Event/picEvent/Button" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="Event/picEvent/Button" to="." method="_on_button_mouse_exited"]

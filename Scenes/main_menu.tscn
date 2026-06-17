@@ -1,4 +1,4 @@
-[gd_scene load_steps=59 format=3 uid="uid://dal4a52ms64j6"]
+[gd_scene format=3 uid="uid://dal4a52ms64j6"]
 
 [ext_resource type="Script" uid="uid://ddldx468qw34w" path="res://Scripts/main_menu.gd" id="1_n45e2"]
 [ext_resource type="FontFile" uid="uid://dbt53hulxegh2" path="res://Assets/UI/Fonts/Imperator.ttf" id="2_opfnp"]
@@ -6,29 +6,55 @@
 [ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="3_n45e2"]
 [ext_resource type="Texture2D" uid="uid://dxt3yb4gkjn6x" path="res://Assets/Art/Particles/smoke_07.png" id="4_ujyyl"]
 [ext_resource type="Shader" uid="uid://c4e2x1kcm6urs" path="res://Shaders/fire_shader.tres" id="5_mkpwh"]
+[ext_resource type="Texture2D" uid="uid://5a5v7w7gi8so" path="res://Assets/Art/StarField.png" id="5_tt8ml"]
 [ext_resource type="Texture2D" uid="uid://48oitsyk7ir4" path="res://Assets/Art/Noise/T_VFX_Noise_465.png" id="6_4nkqq"]
+[ext_resource type="Texture2D" uid="uid://ddr8bdx6j5htm" path="res://Assets/Art/Planet_Estab.png" id="6_fmarx"]
 [ext_resource type="Texture2D" uid="uid://5hncfitv451a" path="res://Assets/Art/Noise/T_Gradient_circle22.jpg" id="7_ehtkc"]
 [ext_resource type="Texture2D" uid="uid://ejynek1siy2n" path="res://Assets/UI/White.png" id="8_6dk6o"]
 [ext_resource type="Texture2D" uid="uid://occ7is5nueun" path="res://Assets/Art/Events/CompendiumButton.png" id="9_fmarx"]
-[ext_resource type="Texture2D" uid="uid://bx6acen5dxj1r" path="res://Assets/UI/CharSelect/FloorBit.png" id="9_mkpwh"]
-[ext_resource type="Texture2D" uid="uid://eb6npl80r4to" path="res://Assets/Art/Player/PVP/Player_Skin_0.png" id="10_4nkqq"]
-[ext_resource type="Texture2D" uid="uid://bujuc6bka60iu" path="res://Assets/UI/banner.png" id="11_5n0dv"]
+[ext_resource type="PackedScene" uid="uid://dkukoe35sxxks" path="res://Scenes/Elements/Buttons/path_select_button.tscn" id="12_1xund"]
 [ext_resource type="PackedScene" uid="uid://cf3ax1fquw2mm" path="res://Scenes/UI/settings_panel.tscn" id="12_t1dhk"]
 [ext_resource type="PackedScene" uid="uid://bqe1p63qqfmnw" path="res://Scenes/UI/compendium.tscn" id="13_5egv6"]
-[ext_resource type="Theme" uid="uid://od14ccps1daj" path="res://Themes/descriptive_label.tres" id="13_6dk6o"]
+[ext_resource type="Texture2D" uid="uid://csumsodlm42sy" path="res://Assets/Art/Player/CharSelect/Untamed_Selected.png" id="13_msuys"]
 [ext_resource type="Texture2D" uid="uid://lufpx811y86r" path="res://Assets/Items/ear.png" id="13_wyh8j"]
+[ext_resource type="Texture2D" uid="uid://bxk4jt2rc0edf" path="res://Assets/Art/Player/CharSelect/Gilded_Selected.png" id="14_aylim"]
 [ext_resource type="PackedScene" uid="uid://oba2ikwv3ve2" path="res://Scenes/UI/game_info.tscn" id="14_vtepg"]
-[ext_resource type="Texture2D" uid="uid://vtf7yfl2710m" path="res://Assets/UI/panel-border-030.png" id="15_5n0dv"]
 [ext_resource type="Theme" uid="uid://dhmhp1enwr7tp" path="res://Themes/toggle_button.tres" id="15_84iac"]
 [ext_resource type="Script" uid="uid://c1q3maisubj8y" path="res://Scripts/UI/skin_panel.gd" id="15_jr6u5"]
+[ext_resource type="Texture2D" uid="uid://n3kvwsv0rd8y" path="res://Assets/Art/Player/CharSelect/Corruped_Selected.png" id="15_y82t1"]
 [ext_resource type="PackedScene" uid="uid://do70bpwejt4ha" path="res://Scenes/Elements/skin_card.tscn" id="16_6m47u"]
+[ext_resource type="Texture2D" uid="uid://dxnk6o5wftaxk" path="res://Assets/Art/Player/CharSelect/Custom_Selected.png" id="16_bmhhk"]
 [ext_resource type="PackedScene" uid="uid://byatbn453qrno" path="res://Scenes/Elements/skin_button.tscn" id="17_84iac"]
 [ext_resource type="PackedScene" uid="uid://chs2a1fblqd0k" path="res://Scenes/UI/hallof_champions.tscn" id="17_wyh8j"]
 [ext_resource type="Theme" uid="uid://dgbknxqcoromh" path="res://Themes/skin_button.tres" id="19_6m47u"]
 [ext_resource type="Texture2D" uid="uid://cwrf3kqbgn5vy" path="res://Assets/UI/MenuButtons.png" id="20_84iac"]
+[ext_resource type="Theme" uid="uid://p8sbf2usmdfn" path="res://Themes/invis_buttons.tres" id="20_hkdq0"]
+[ext_resource type="Theme" uid="uid://0hs8qbirg21w" path="res://Themes/stone_button_02.tres" id="21_fmarx"]
+[ext_resource type="Theme" uid="uid://wsf7lticxc8g" path="res://Themes/stone_button_03.tres" id="22_hkdq0"]
 [ext_resource type="Shader" uid="uid://c5ie878mymsjg" path="res://Shaders/crt_shader.gdshader" id="27_ne6ao"]
+[ext_resource type="PackedScene" uid="uid://fuf43acacc0m" path="res://Scenes/UI/path_unlock_screen.tscn" id="28_6vfk8"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_opfnp"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_msuys"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5n0dv"]
+atlas = ExtResource("20_84iac")
+region = Rect2(0, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ne6ao"]
+atlas = ExtResource("20_84iac")
+region = Rect2(150, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tt8ml"]
+atlas = ExtResource("20_84iac")
+region = Rect2(300, 0, 150, 150)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6vfk8"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1xund"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jw7lb"]
 
 [sub_resource type="Curve" id="Curve_jr6u5"]
 _limits = [0.3, 3.0, 0.0, 1.0]
@@ -67,44 +93,6 @@ shader_parameter/Texture_2 = SubResource("GradientTexture2D_bd1y7")
 shader_parameter/Texture_3 = ExtResource("7_ehtkc")
 shader_parameter/Texture_4 = SubResource("GradientTexture2D_55lkv")
 shader_parameter/Texture_Color_1D = SubResource("GradientTexture1D_rfd6m")
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6m47u"]
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ne6ao"]
-texture = ExtResource("11_5n0dv")
-texture_margin_left = 520.0
-texture_margin_right = 523.0
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ne6ao"]
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_tt8ml"]
-texture = ExtResource("15_5n0dv")
-texture_margin_left = 24.0
-texture_margin_top = 24.0
-texture_margin_right = 24.0
-texture_margin_bottom = 24.0
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_84iac"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tt8ml"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xcoo4"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hkdq0"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fmarx"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_5n0dv"]
-atlas = ExtResource("20_84iac")
-region = Rect2(0, 0, 150, 150)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ne6ao"]
-atlas = ExtResource("20_84iac")
-region = Rect2(150, 0, 150, 150)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_tt8ml"]
-atlas = ExtResource("20_84iac")
-region = Rect2(300, 0, 150, 150)
 
 [sub_resource type="Animation" id="Animation_hkdq0"]
 length = 0.001
@@ -213,6 +201,98 @@ _data = {
 &"unhover_compendium": SubResource("Animation_jw7lb")
 }
 
+[sub_resource type="Animation" id="Animation_ne6ao"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("HallHolder:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.75, 0.75)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("HallHolder:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.56, 0.56, 0.56, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_5n0dv"]
+resource_name = "hover_hall"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("HallHolder:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.75, 0.75), Vector2(0.85, 0.85)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("HallHolder:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.56, 0.56, 0.56, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_6vfk8"]
+resource_name = "unhover_hall"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("HallHolder:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.85, 0.85), Vector2(0.75, 0.75)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("HallHolder:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(0.56, 0.56, 0.56, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1xund"]
+_data = {
+&"RESET": SubResource("Animation_ne6ao"),
+&"hover_hall": SubResource("Animation_5n0dv"),
+&"unhover_hall": SubResource("Animation_6vfk8")
+}
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_fmarx"]
 shader = ExtResource("27_ne6ao")
 
@@ -220,7 +300,7 @@ shader = ExtResource("27_ne6ao")
 size = Vector2(1536, 864)
 center_offset = Vector3(768, 432, 0)
 
-[node name="mainMenu" type="Control"]
+[node name="mainMenu" type="Control" unique_id=2071719465]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -229,7 +309,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_n45e2")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Panel" type="Panel" parent="." unique_id=755435995]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -238,7 +318,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_opfnp")
 
-[node name="ColorRect" type="ColorRect" parent="Panel"]
+[node name="ColorRect" type="ColorRect" parent="Panel" unique_id=405102485]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -247,8 +327,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="BackgroundImages" type="Control" parent="Panel"]
-visible = false
+[node name="mainScreen" type="Control" parent="Panel" unique_id=1948303845]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -256,37 +335,475 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="backDark" type="TextureRect" parent="Panel/BackgroundImages"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/mainScreen" unique_id=910142676]
 layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
+anchors_preset = 15
 anchor_right = 1.0
-anchor_bottom = 0.5
-offset_top = -366.0
-offset_bottom = 321.2
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_tt8ml")
-expand_mode = 5
+
+[node name="bottomPanel" type="PanelContainer" parent="Panel/mainScreen/VBoxContainer" unique_id=1799253179]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_msuys")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/mainScreen/VBoxContainer/bottomPanel" unique_id=847415025]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="systemButtons" type="HBoxContainer" parent="Panel/mainScreen/VBoxContainer/bottomPanel/MarginContainer" unique_id=1809098105]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme = ExtResource("19_6m47u")
+
+[node name="versionLabel" type="Label" parent="Panel/mainScreen/VBoxContainer/bottomPanel/MarginContainer/systemButtons" unique_id=1636626796]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.775063, 0.775063, 0.775063, 1)
+theme_override_fonts/font = ExtResource("2_opfnp")
+theme_override_font_sizes/font_size = 16
+text = "    ver 0.0.6     "
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/mainScreen/VBoxContainer/bottomPanel/MarginContainer/systemButtons" unique_id=831563637]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="skinPanel" type="HBoxContainer" parent="Panel/mainScreen/VBoxContainer/bottomPanel/MarginContainer/systemButtons" unique_id=1051364336]
+layout_mode = 2
+size_flags_vertical = 0
+script = ExtResource("15_jr6u5")
+
+[node name="skinsBox" type="HBoxContainer" parent="Panel/mainScreen/VBoxContainer/bottomPanel/MarginContainer/systemButtons/skinPanel" unique_id=809374409]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/mainScreen/VBoxContainer/bottomPanel/MarginContainer/systemButtons/skinPanel/skinsBox" unique_id=2108861868]
+layout_mode = 2
+
+[node name="picEar" type="TextureRect" parent="Panel/mainScreen/VBoxContainer/bottomPanel/MarginContainer/systemButtons/skinPanel/skinsBox/HBoxContainer" unique_id=450873049]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+texture = ExtResource("13_wyh8j")
+expand_mode = 1
 stretch_mode = 5
 
-[node name="CompendiumHolder" type="Control" parent="Panel"]
+[node name="lblEars" type="Label" parent="Panel/mainScreen/VBoxContainer/bottomPanel/MarginContainer/systemButtons/skinPanel/skinsBox/HBoxContainer" unique_id=1286755838]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("3_n45e2")
+text = "000"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/mainScreen/VBoxContainer/bottomPanel/MarginContainer/systemButtons/skinPanel/skinsBox" unique_id=215892848]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="skinGrid" type="GridContainer" parent="Panel/mainScreen/VBoxContainer/bottomPanel/MarginContainer/systemButtons/skinPanel/skinsBox" unique_id=1435216819]
+layout_mode = 2
+size_flags_horizontal = 4
+columns = 12
+
+[node name="skinButton6" parent="Panel/mainScreen/VBoxContainer/bottomPanel/MarginContainer/systemButtons/skinPanel/skinsBox/skinGrid" unique_id=888475270 instance=ExtResource("17_84iac")]
+layout_mode = 2
+
+[node name="skinButton5" parent="Panel/mainScreen/VBoxContainer/bottomPanel/MarginContainer/systemButtons/skinPanel/skinsBox/skinGrid" unique_id=1433325441 instance=ExtResource("17_84iac")]
+layout_mode = 2
+
+[node name="skinButton4" parent="Panel/mainScreen/VBoxContainer/bottomPanel/MarginContainer/systemButtons/skinPanel/skinsBox/skinGrid" unique_id=1409325891 instance=ExtResource("17_84iac")]
+layout_mode = 2
+
+[node name="skinButton3" parent="Panel/mainScreen/VBoxContainer/bottomPanel/MarginContainer/systemButtons/skinPanel/skinsBox/skinGrid" unique_id=1174736318 instance=ExtResource("17_84iac")]
+layout_mode = 2
+
+[node name="skinButton2" parent="Panel/mainScreen/VBoxContainer/bottomPanel/MarginContainer/systemButtons/skinPanel/skinsBox/skinGrid" unique_id=1563412812 instance=ExtResource("17_84iac")]
+layout_mode = 2
+
+[node name="skinButton" parent="Panel/mainScreen/VBoxContainer/bottomPanel/MarginContainer/systemButtons/skinPanel/skinsBox/skinGrid" unique_id=256642175 instance=ExtResource("17_84iac")]
+layout_mode = 2
+
+[node name="lblName" type="Label" parent="Panel/mainScreen/VBoxContainer/bottomPanel/MarginContainer/systemButtons" unique_id=383675102]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("3_n45e2")
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 42
+text = "Which path will your Spirit walk?"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer3" type="MarginContainer" parent="Panel/mainScreen/VBoxContainer/bottomPanel/MarginContainer/systemButtons" unique_id=2102521431]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="btnInfo" type="Button" parent="Panel/mainScreen/VBoxContainer/bottomPanel/MarginContainer/systemButtons" unique_id=27574037]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Game Info"
+icon = SubResource("AtlasTexture_5n0dv")
+icon_alignment = 1
+expand_icon = true
+
+[node name="btnSettings" type="Button" parent="Panel/mainScreen/VBoxContainer/bottomPanel/MarginContainer/systemButtons" unique_id=179305672]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Settings & Options"
+icon = SubResource("AtlasTexture_ne6ao")
+icon_alignment = 1
+expand_icon = true
+
+[node name="btnQuit" type="Button" parent="Panel/mainScreen/VBoxContainer/bottomPanel/MarginContainer/systemButtons" unique_id=22710886]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Quit"
+icon = SubResource("AtlasTexture_tt8ml")
+icon_alignment = 1
+expand_icon = true
+
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/mainScreen/VBoxContainer/bottomPanel/MarginContainer/systemButtons" unique_id=720684042]
 visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 30
+
+[node name="midPanel" type="PanelContainer" parent="Panel/mainScreen/VBoxContainer" unique_id=1197469016]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_6vfk8")
+
+[node name="picStars" type="TextureRect" parent="Panel/mainScreen/VBoxContainer/midPanel" unique_id=435881748]
+layout_mode = 2
+texture = ExtResource("5_tt8ml")
+expand_mode = 3
+
+[node name="picPlanet" type="TextureRect" parent="Panel/mainScreen/VBoxContainer/midPanel" unique_id=500564980]
+custom_minimum_size = Vector2(500, 600)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("6_fmarx")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="ColorRect" type="ColorRect" parent="Panel/mainScreen/VBoxContainer/midPanel" unique_id=470695693]
+layout_mode = 2
+color = Color(0.5408, 0.533, 0.65, 0.247059)
+
+[node name="backDark" type="TextureRect" parent="Panel/mainScreen/VBoxContainer/midPanel" unique_id=743515550]
+layout_mode = 2
+texture = ExtResource("2_tt8ml")
+expand_mode = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/mainScreen/VBoxContainer/midPanel" unique_id=1372721809]
+layout_mode = 2
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_bottom = 60
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/mainScreen/VBoxContainer/midPanel/MarginContainer" unique_id=1123571818]
+layout_mode = 2
+
+[node name="topSpacer" type="MarginContainer" parent="Panel/mainScreen/VBoxContainer/midPanel/MarginContainer/VBoxContainer" unique_id=810356738]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+
+[node name="panelSkin" type="PanelContainer" parent="Panel/mainScreen/VBoxContainer/midPanel/MarginContainer/VBoxContainer" unique_id=1195647800]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_1xund")
+
+[node name="charBox" type="HBoxContainer" parent="Panel/mainScreen/VBoxContainer/midPanel/MarginContainer/VBoxContainer/panelSkin" unique_id=2037521538]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="pathSelectRow" type="HBoxContainer" parent="Panel/mainScreen/VBoxContainer/midPanel/MarginContainer/VBoxContainer/panelSkin/charBox" unique_id=438410272]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/mainScreen/VBoxContainer/midPanel/MarginContainer/VBoxContainer/panelSkin/charBox/pathSelectRow" unique_id=1251022159]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="pathUntamed" parent="Panel/mainScreen/VBoxContainer/midPanel/MarginContainer/VBoxContainer/panelSkin/charBox/pathSelectRow" unique_id=699942794 instance=ExtResource("12_1xund")]
+layout_mode = 2
+active_texture = ExtResource("13_msuys")
+
+[node name="pathGilded" parent="Panel/mainScreen/VBoxContainer/midPanel/MarginContainer/VBoxContainer/panelSkin/charBox/pathSelectRow" unique_id=1127807107 instance=ExtResource("12_1xund")]
+layout_mode = 2
+active_texture = ExtResource("14_aylim")
+path_index = 1
+
+[node name="pathCorrupted" parent="Panel/mainScreen/VBoxContainer/midPanel/MarginContainer/VBoxContainer/panelSkin/charBox/pathSelectRow" unique_id=1408192579 instance=ExtResource("12_1xund")]
+layout_mode = 2
+active_texture = ExtResource("15_y82t1")
+path_index = 2
+
+[node name="pathCustom" parent="Panel/mainScreen/VBoxContainer/midPanel/MarginContainer/VBoxContainer/panelSkin/charBox/pathSelectRow" unique_id=935135744 instance=ExtResource("12_1xund")]
+layout_mode = 2
+active_texture = ExtResource("16_bmhhk")
+path_index = 3
+
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/mainScreen/VBoxContainer/midPanel/MarginContainer/VBoxContainer/panelSkin/charBox/pathSelectRow" unique_id=899990038]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="topPanel" type="PanelContainer" parent="Panel/mainScreen/VBoxContainer" unique_id=1325528827]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_jw7lb")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/mainScreen/VBoxContainer/topPanel" unique_id=148316920]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 10
+
+[node name="LoadoutButtons" type="HBoxContainer" parent="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer" unique_id=264042749]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="bundleInfo" type="HBoxContainer" parent="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons" unique_id=1860384387]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/bundleInfo" unique_id=1309986151]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/bundleInfo" unique_id=1936365772]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("3_n45e2")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/bundleInfo/VBoxContainer" unique_id=479931642]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/bundleInfo/VBoxContainer/HBoxContainer" unique_id=1270930878]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="lblPath" type="Label" parent="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/bundleInfo/VBoxContainer/HBoxContainer" unique_id=910899864]
+layout_mode = 2
+size_flags_horizontal = 6
+text = "Untamed Path"
+horizontal_alignment = 1
+
+[node name="showMotivesBox" type="HBoxContainer" parent="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/bundleInfo/VBoxContainer/HBoxContainer" unique_id=125634998]
+layout_mode = 2
+
+[node name="showRevenge" type="Button" parent="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/bundleInfo/VBoxContainer/HBoxContainer/showMotivesBox" unique_id=589310322]
+visible = false
+modulate = Color(0.827451, 0.133333, 0.133333, 1)
+layout_mode = 2
+theme = ExtResource("15_84iac")
+text = "   Revenge   "
+
+[node name="showHonor" type="Button" parent="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/bundleInfo/VBoxContainer/HBoxContainer/showMotivesBox" unique_id=954483101]
+visible = false
+modulate = Color(0.4, 0.6, 1, 1)
+layout_mode = 2
+theme = ExtResource("15_84iac")
+text = "   Honor   "
+
+[node name="showGreed" type="Button" parent="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/bundleInfo/VBoxContainer/HBoxContainer/showMotivesBox" unique_id=535598001]
+visible = false
+modulate = Color(1, 0.666667, 0, 1)
+layout_mode = 2
+theme = ExtResource("15_84iac")
+text = "   Greed   "
+
+[node name="showDuty" type="Button" parent="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/bundleInfo/VBoxContainer/HBoxContainer/showMotivesBox" unique_id=1283459945]
+visible = false
+modulate = Color(0.6, 0.4, 0.2, 1)
+layout_mode = 2
+theme = ExtResource("15_84iac")
+text = "   Duty   "
+
+[node name="showShame" type="Button" parent="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/bundleInfo/VBoxContainer/HBoxContainer/showMotivesBox" unique_id=143864730]
+visible = false
+modulate = Color(1, 0.4, 1, 1)
+layout_mode = 2
+theme = ExtResource("15_84iac")
+text = "   Shame   "
+
+[node name="showChaos" type="Button" parent="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/bundleInfo/VBoxContainer/HBoxContainer/showMotivesBox" unique_id=590031375]
+visible = false
+modulate = Color(0.298039, 0.788235, 0.25098, 1)
+layout_mode = 2
+theme = ExtResource("15_84iac")
+text = "   Chaos   "
+
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/bundleInfo/VBoxContainer/HBoxContainer" unique_id=1904386943]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="descPath" type="RichTextLabel" parent="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/bundleInfo/VBoxContainer" unique_id=1111673784]
+layout_mode = 2
+bbcode_enabled = true
+text = "This is "
+fit_content = true
+
+[node name="customBundle" type="HBoxContainer" parent="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons" unique_id=827436584]
+visible = false
+layout_mode = 2
+
+[node name="margRandom" type="MarginContainer" parent="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/customBundle" unique_id=1886684483]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="btnRandom" type="Button" parent="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/customBundle/margRandom" unique_id=663550821]
+layout_mode = 2
+theme = ExtResource("15_84iac")
+text = "   Random   "
+
+[node name="motivations" type="VBoxContainer" parent="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/customBundle" unique_id=769596886]
+layout_mode = 2
+
+[node name="lblBundles" type="Label" parent="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/customBundle/motivations" unique_id=1650823305]
+layout_mode = 2
+theme = ExtResource("3_n45e2")
+text = "Create your own Path..."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="toggleBundle" type="GridContainer" parent="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/customBundle/motivations" unique_id=1708219383]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+columns = 6
+
+[node name="bunRevenge" type="Button" parent="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/customBundle/motivations/toggleBundle" unique_id=1314862854]
+modulate = Color(0.827451, 0.133333, 0.133333, 1)
+layout_mode = 2
+theme = ExtResource("15_84iac")
+toggle_mode = true
+button_pressed = true
+text = "   Revenge   "
+
+[node name="bunHonor" type="Button" parent="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/customBundle/motivations/toggleBundle" unique_id=47366742]
+modulate = Color(0.4, 0.6, 1, 1)
+layout_mode = 2
+theme = ExtResource("15_84iac")
+toggle_mode = true
+button_pressed = true
+text = "   Honor   "
+
+[node name="bunGreed" type="Button" parent="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/customBundle/motivations/toggleBundle" unique_id=1430709180]
+modulate = Color(1, 0.666667, 0, 1)
+layout_mode = 2
+theme = ExtResource("15_84iac")
+toggle_mode = true
+button_pressed = true
+text = "   Greed   "
+
+[node name="bunDuty" type="Button" parent="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/customBundle/motivations/toggleBundle" unique_id=1894675690]
+modulate = Color(0.6, 0.4, 0.2, 1)
+layout_mode = 2
+theme = ExtResource("15_84iac")
+toggle_mode = true
+text = "   Duty   "
+
+[node name="bunShame" type="Button" parent="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/customBundle/motivations/toggleBundle" unique_id=1286478713]
+modulate = Color(1, 0.4, 1, 1)
+layout_mode = 2
+theme = ExtResource("15_84iac")
+toggle_mode = true
+text = "   Shame   "
+
+[node name="bunChaos" type="Button" parent="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/customBundle/motivations/toggleBundle" unique_id=1323532170]
+modulate = Color(0.298039, 0.788235, 0.25098, 1)
+layout_mode = 2
+theme = ExtResource("15_84iac")
+toggle_mode = true
+text = "   Chaos   "
+
+[node name="lblBundleInfo" type="RichTextLabel" parent="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/customBundle/motivations" unique_id=1479265181]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+theme = ExtResource("3_n45e2")
+bbcode_enabled = true
+text = "Select 3 [color=white]motivations[/color].  Each includes unique items for a different play style."
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="mainButtons" type="HBoxContainer" parent="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons" unique_id=1359135499]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 20
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/mainButtons" unique_id=1155381632]
+visible = false
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+
+[node name="btnNewGame" type="Button" parent="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/mainButtons" unique_id=2091290218]
+custom_minimum_size = Vector2(0, 75)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("21_fmarx")
+text = "New Run"
+
+[node name="btnContinue" type="Button" parent="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/mainButtons" unique_id=2072344494]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("22_hkdq0")
+text = "Continue Run"
+
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/mainButtons" unique_id=778909781]
+layout_mode = 2
+
+[node name="CompendiumHolder" type="Control" parent="Panel" unique_id=1768384538]
 modulate = Color(0.56, 0.56, 0.56, 1)
 custom_minimum_size = Vector2(436, 290)
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = 126.0
-offset_top = -24.0
-offset_right = 562.0
-offset_bottom = 276.0
+offset_top = -4.9999695
+offset_right = 436.0
+offset_bottom = 295.0
 grow_vertical = 2
 scale = Vector2(0.8, 0.8)
 pivot_offset = Vector2(218, 145)
 
-[node name="smoke" type="CPUParticles2D" parent="Panel/CompendiumHolder"]
+[node name="Label" type="Label" parent="Panel/CompendiumHolder" unique_id=284154961]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 30.0
+offset_top = -8.75
+offset_right = 156.0
+offset_bottom = 33.25
+grow_horizontal = 2
+rotation = 0.0349066
+theme = ExtResource("3_n45e2")
+theme_override_colors/font_color = Color(0.9935, 1, 0.61, 1)
+theme_override_colors/font_outline_color = Color(0.73, 0, 0, 1)
+theme_override_constants/outline_size = 3
+text = "Compendium"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="smoke" type="CPUParticles2D" parent="Panel/CompendiumHolder" unique_id=290156866]
 position = Vector2(195.5, -11.25)
 scale = Vector2(1.25, 1.25)
 amount = 1
@@ -307,7 +824,7 @@ scale_amount_curve = SubResource("Curve_jr6u5")
 color = Color(0.637843, 0.637843, 0.637843, 1)
 color_ramp = SubResource("Gradient_6m47u")
 
-[node name="Fire" type="TextureRect" parent="Panel/CompendiumHolder"]
+[node name="Fire" type="TextureRect" parent="Panel/CompendiumHolder" unique_id=700408180]
 material = SubResource("ShaderMaterial_tt8ml")
 layout_mode = 1
 anchors_preset = 5
@@ -322,7 +839,7 @@ scale = Vector2(0.8, 0.8)
 texture = ExtResource("8_6dk6o")
 expand_mode = 1
 
-[node name="picDesk" type="TextureRect" parent="Panel/CompendiumHolder"]
+[node name="picDesk" type="TextureRect" parent="Panel/CompendiumHolder" unique_id=1228163436]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -332,514 +849,182 @@ grow_vertical = 2
 texture = ExtResource("9_fmarx")
 expand_mode = 3
 
-[node name="CharacterSelectMenu" type="Control" parent="Panel"]
+[node name="btnCompendium" type="Button" parent="Panel/CompendiumHolder/picDesk" unique_id=1310968968]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("20_hkdq0")
 
-[node name="backPanel" type="Panel" parent="Panel/CharacterSelectMenu"]
+[node name="HallHolder" type="Control" parent="Panel" unique_id=2002193621]
+modulate = Color(0.56, 0.56, 0.56, 1)
+custom_minimum_size = Vector2(436, 290)
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
 anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
+anchor_bottom = 0.5
+offset_left = -437.0
+offset_top = -7.0
+offset_right = -1.0
+offset_bottom = 293.0
+grow_horizontal = 0
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxEmpty_6m47u")
-
-[node name="picFloor" type="TextureRect" parent="Panel/CharacterSelectMenu/backPanel"]
-modulate = Color(0.45, 0.35595, 0.3015, 1)
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -342.0
-offset_top = -280.0
-offset_right = 562.0
-offset_bottom = -71.0
-grow_horizontal = 2
-grow_vertical = 0
 scale = Vector2(0.75, 0.75)
-texture = ExtResource("9_mkpwh")
+pivot_offset = Vector2(218, 145)
 
-[node name="picChar" type="TextureRect" parent="Panel/CharacterSelectMenu/backPanel"]
+[node name="Label" type="Label" parent="Panel/HallHolder" unique_id=1372887649]
 layout_mode = 1
-anchors_preset = 8
+anchors_preset = 5
 anchor_left = 0.5
-anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -250.0
-offset_top = -210.0
-offset_right = 250.0
-offset_bottom = 240.0
+offset_left = -145.0
+offset_top = -2.5
+offset_right = -19.0001
+offset_bottom = 39.5
 grow_horizontal = 2
-grow_vertical = 2
-pivot_offset = Vector2(250, 225)
-texture = ExtResource("10_4nkqq")
-expand_mode = 3
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/CharacterSelectMenu/backPanel"]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 200.0
-grow_horizontal = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_top = 20
-
-[node name="panelName" type="PanelContainer" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer"]
-self_modulate = Color(0.709804, 0.635294, 0.545098, 1)
-custom_minimum_size = Vector2(0, 100)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_ne6ao")
-
-[node name="MarginContainer" type="MarginContainer" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/panelName"]
-layout_mode = 2
-theme_override_constants/margin_top = 40
-theme_override_constants/margin_bottom = 10
-
-[node name="lblName" type="Label" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/panelName/MarginContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
+rotation = -0.0174533
 theme = ExtResource("3_n45e2")
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0.9935, 1, 0.61, 1)
+theme_override_colors/font_outline_color = Color(0.73, 0, 0, 1)
 theme_override_constants/outline_size = 3
-theme_override_font_sizes/font_size = 42
-text = " Main Menu "
+text = "Hall of Souls"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="playerInfoPanel" type="HBoxContainer" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer"]
-visible = false
-layout_mode = 2
+[node name="smoke" type="CPUParticles2D" parent="Panel/HallHolder" unique_id=1613746404]
+position = Vector2(278, 42.5)
+scale = Vector2(1.25, 1.25)
+amount = 1
+texture = ExtResource("4_ujyyl")
+lifetime = 2.0
+speed_scale = 0.4
+randomness = 0.3
+direction = Vector2(0, -1)
+spread = 36.43
+gravity = Vector2(0, 0)
+initial_velocity_min = 100.0
+initial_velocity_max = 100.0
+angular_velocity_min = 30.0
+angular_velocity_max = 100.0
+scale_amount_min = 0.1
+scale_amount_max = 0.7
+scale_amount_curve = SubResource("Curve_jr6u5")
+color = Color(0.637843, 0.637843, 0.637843, 1)
+color_ramp = SubResource("Gradient_6m47u")
 
-[node name="spacer4" type="MarginContainer" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel"]
-custom_minimum_size = Vector2(300, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="lblChampKills" type="Label" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel"]
-layout_mode = 2
-theme = ExtResource("13_6dk6o")
-text = "Champion Kills: 0"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="spacer2" type="MarginContainer" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="lblActiveChamps" type="Label" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel"]
-layout_mode = 2
-theme = ExtResource("13_6dk6o")
-text = "Active Heroes: 1"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="spacer1" type="MarginContainer" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel"]
-layout_mode = 2
-tooltip_text = "You get \"Ears\" from beating other high level players.  They can be earned passively by beating the Champion after Rank 5."
-
-[node name="spacer3" type="MarginContainer" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="btnHeroes" type="Button" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel"]
-custom_minimum_size = Vector2(300, 40)
-layout_mode = 2
-theme = ExtResource("3_n45e2")
-text = "Hall of Heroes"
-
-[node name="spacer5" type="MarginContainer" parent="Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel"]
-custom_minimum_size = Vector2(300, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="loadoutPanel" type="Control" parent="Panel"]
+[node name="Fire" type="TextureRect" parent="Panel/HallHolder" unique_id=1653197003]
+material = SubResource("ShaderMaterial_tt8ml")
 layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_top = -287.5
-offset_right = 311.0
-offset_bottom = 287.5
-grow_vertical = 2
-
-[node name="PanelContainer" type="PanelContainer" parent="Panel/loadoutPanel"]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_top = -196.0
-offset_right = 368.0
-offset_bottom = 196.0
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxEmpty_ne6ao")
-
-[node name="MarginContainer" type="MarginContainer" parent="Panel/loadoutPanel/PanelContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 30
-
-[node name="PanelContainer" type="PanelContainer" parent="Panel/loadoutPanel/PanelContainer/MarginContainer"]
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_tt8ml")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/loadoutPanel/PanelContainer/MarginContainer/PanelContainer"]
-layout_mode = 2
-theme = ExtResource("3_n45e2")
-theme_override_constants/separation = 20
-
-[node name="lblBundles" type="Label" parent="Panel/loadoutPanel/PanelContainer/MarginContainer/PanelContainer/VBoxContainer"]
-layout_mode = 2
-theme = ExtResource("3_n45e2")
-text = "What motivates you? "
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="toggleBundle" type="GridContainer" parent="Panel/loadoutPanel/PanelContainer/MarginContainer/PanelContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-columns = 2
-
-[node name="bunRevenge" type="Button" parent="Panel/loadoutPanel/PanelContainer/MarginContainer/PanelContainer/VBoxContainer/toggleBundle"]
-modulate = Color(0.827451, 0.133333, 0.133333, 1)
-layout_mode = 2
-theme = ExtResource("15_84iac")
-toggle_mode = true
-button_pressed = true
-text = "   Revenge   "
-
-[node name="bunHonor" type="Button" parent="Panel/loadoutPanel/PanelContainer/MarginContainer/PanelContainer/VBoxContainer/toggleBundle"]
-modulate = Color(0.4, 0.6, 1, 1)
-layout_mode = 2
-theme = ExtResource("15_84iac")
-toggle_mode = true
-button_pressed = true
-text = "   Honor   "
-
-[node name="bunGreed" type="Button" parent="Panel/loadoutPanel/PanelContainer/MarginContainer/PanelContainer/VBoxContainer/toggleBundle"]
-modulate = Color(1, 0.666667, 0, 1)
-layout_mode = 2
-theme = ExtResource("15_84iac")
-toggle_mode = true
-button_pressed = true
-text = "   Greed   "
-
-[node name="bunDuty" type="Button" parent="Panel/loadoutPanel/PanelContainer/MarginContainer/PanelContainer/VBoxContainer/toggleBundle"]
-modulate = Color(0.6, 0.4, 0.2, 1)
-layout_mode = 2
-theme = ExtResource("15_84iac")
-toggle_mode = true
-text = "   Duty   "
-
-[node name="bunShame" type="Button" parent="Panel/loadoutPanel/PanelContainer/MarginContainer/PanelContainer/VBoxContainer/toggleBundle"]
-modulate = Color(1, 0.4, 1, 1)
-layout_mode = 2
-theme = ExtResource("15_84iac")
-toggle_mode = true
-text = "   Shame   "
-
-[node name="bunChaos" type="Button" parent="Panel/loadoutPanel/PanelContainer/MarginContainer/PanelContainer/VBoxContainer/toggleBundle"]
-modulate = Color(0.298039, 0.788235, 0.25098, 1)
-layout_mode = 2
-theme = ExtResource("15_84iac")
-toggle_mode = true
-text = "   Chaos   "
-
-[node name="MarginContainer" type="MarginContainer" parent="Panel/loadoutPanel/PanelContainer/MarginContainer/PanelContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 30
-theme_override_constants/margin_right = 30
-
-[node name="btnRandom" type="Button" parent="Panel/loadoutPanel/PanelContainer/MarginContainer/PanelContainer/VBoxContainer/MarginContainer"]
-layout_mode = 2
-theme = ExtResource("15_84iac")
-text = "Random"
-
-[node name="lblBundleInfo" type="RichTextLabel" parent="Panel/loadoutPanel/PanelContainer/MarginContainer/PanelContainer/VBoxContainer"]
-layout_mode = 2
-bbcode_enabled = true
-text = "Select 3 bundles.  Each includes approximately 30 unique items."
-fit_content = true
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="btnCompendium" type="Button" parent="Panel/loadoutPanel/PanelContainer/MarginContainer/PanelContainer/VBoxContainer"]
-custom_minimum_size = Vector2(300, 75)
-layout_mode = 2
-text = "Compendium"
-
-[node name="skinPanel" type="Control" parent="Panel"]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -40.0
-offset_top = 144.0
-offset_bottom = 184.0
-grow_horizontal = 0
-script = ExtResource("15_jr6u5")
-
-[node name="SkinCard" parent="Panel/skinPanel" instance=ExtResource("16_6m47u")]
-visible = false
-offset_left = -519.0
-offset_top = 48.0
-offset_right = -119.0
-offset_bottom = 548.0
-
-[node name="PanelContainer" type="PanelContainer" parent="Panel/skinPanel"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -138.0
-offset_top = 10.0
-offset_right = -29.0
-offset_bottom = 562.0
-grow_horizontal = 0
-theme_override_styles/panel = SubResource("StyleBoxEmpty_84iac")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/skinPanel/PanelContainer"]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/skinPanel/PanelContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="picEar" type="TextureRect" parent="Panel/skinPanel/PanelContainer/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(50, 0)
-layout_mode = 2
-texture = ExtResource("13_wyh8j")
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 41.2498
+offset_top = 7.5
+offset_right = 96.2498
+offset_bottom = 74.5
+grow_horizontal = 2
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("8_6dk6o")
 expand_mode = 1
-stretch_mode = 5
 
-[node name="lblEars" type="Label" parent="Panel/skinPanel/PanelContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme = ExtResource("3_n45e2")
-text = "000"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="lblSkins" type="Label" parent="Panel/skinPanel/PanelContainer/VBoxContainer"]
-layout_mode = 2
-theme = ExtResource("3_n45e2")
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 28
-text = "Skins"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="ScrollContainer" type="ScrollContainer" parent="Panel/skinPanel/PanelContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="skinGrid" type="GridContainer" parent="Panel/skinPanel/PanelContainer/VBoxContainer/ScrollContainer"]
-layout_mode = 2
-size_flags_horizontal = 4
-columns = 2
-
-[node name="skinButton6" parent="Panel/skinPanel/PanelContainer/VBoxContainer/ScrollContainer/skinGrid" instance=ExtResource("17_84iac")]
-layout_mode = 2
-
-[node name="skinButton5" parent="Panel/skinPanel/PanelContainer/VBoxContainer/ScrollContainer/skinGrid" instance=ExtResource("17_84iac")]
-layout_mode = 2
-
-[node name="skinButton4" parent="Panel/skinPanel/PanelContainer/VBoxContainer/ScrollContainer/skinGrid" instance=ExtResource("17_84iac")]
-layout_mode = 2
-
-[node name="skinButton3" parent="Panel/skinPanel/PanelContainer/VBoxContainer/ScrollContainer/skinGrid" instance=ExtResource("17_84iac")]
-layout_mode = 2
-
-[node name="skinButton2" parent="Panel/skinPanel/PanelContainer/VBoxContainer/ScrollContainer/skinGrid" instance=ExtResource("17_84iac")]
-layout_mode = 2
-
-[node name="skinButton" parent="Panel/skinPanel/PanelContainer/VBoxContainer/ScrollContainer/skinGrid" instance=ExtResource("17_84iac")]
-layout_mode = 2
-
-[node name="panelBottom" type="PanelContainer" parent="Panel"]
+[node name="picDesk" type="TextureRect" parent="Panel/HallHolder" unique_id=1052744672]
 layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -144.0
 grow_horizontal = 2
-grow_vertical = 0
-theme_override_styles/panel = SubResource("StyleBoxEmpty_tt8ml")
+grow_vertical = 2
+texture = ExtResource("9_fmarx")
+expand_mode = 3
+flip_h = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/panelBottom"]
-layout_mode = 2
-theme_override_constants/separation = 0
+[node name="btnHall" type="Button" parent="Panel/HallHolder/picDesk" unique_id=528770766]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("20_hkdq0")
 
-[node name="panRight" type="PanelContainer" parent="Panel/panelBottom/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxEmpty_xcoo4")
+[node name="skinPanel" type="Control" parent="Panel" unique_id=2103621866]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/panelBottom/HBoxContainer/panRight"]
-layout_mode = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="Panel/panelBottom/HBoxContainer/panRight/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="versionLabel" type="Label" parent="Panel/panelBottom/HBoxContainer/panRight/VBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.775063, 0.775063, 0.775063, 1)
-theme_override_fonts/font = ExtResource("2_opfnp")
-theme_override_font_sizes/font_size = 16
-text = "    ver 0.0.6     "
-vertical_alignment = 1
-
-[node name="MarginContainer2" type="MarginContainer" parent="Panel/panelBottom/HBoxContainer/panRight/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_top = 20
-
-[node name="panMid" type="PanelContainer" parent="Panel/panelBottom/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxEmpty_hkdq0")
-
-[node name="MarginContainer" type="MarginContainer" parent="Panel/panelBottom/HBoxContainer/panMid"]
-layout_mode = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/panelBottom/HBoxContainer/panMid/MarginContainer"]
-layout_mode = 2
-theme_override_constants/separation = 20
-
-[node name="btnNewGame" type="Button" parent="Panel/panelBottom/HBoxContainer/panMid/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(0, 75)
-layout_mode = 2
-size_flags_horizontal = 3
-theme = ExtResource("3_n45e2")
-text = "New Run"
-
-[node name="btnContinue" type="Button" parent="Panel/panelBottom/HBoxContainer/panMid/MarginContainer/HBoxContainer"]
+[node name="SkinCard" parent="Panel/skinPanel" unique_id=303909751 instance=ExtResource("16_6m47u")]
 visible = false
-layout_mode = 2
-size_flags_horizontal = 3
-theme = ExtResource("3_n45e2")
-text = "Continue Run"
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -200.0
+offset_top = 118.0
+offset_right = 200.0
+offset_bottom = 618.0
+grow_horizontal = 2
+mouse_filter = 2
 
-[node name="panLeft" type="PanelContainer" parent="Panel/panelBottom/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxEmpty_fmarx")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/panelBottom/HBoxContainer/panLeft"]
-layout_mode = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="Panel/panelBottom/HBoxContainer/panLeft/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="iconButtons" type="HBoxContainer" parent="Panel/panelBottom/HBoxContainer/panLeft/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 8
-theme = ExtResource("19_6m47u")
-theme_override_constants/separation = 20
-
-[node name="MarginContainer" type="MarginContainer" parent="Panel/panelBottom/HBoxContainer/panLeft/VBoxContainer/iconButtons"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="btnInfo" type="Button" parent="Panel/panelBottom/HBoxContainer/panLeft/VBoxContainer/iconButtons"]
-custom_minimum_size = Vector2(50, 50)
-layout_mode = 2
-tooltip_text = "Game Info"
-icon = SubResource("AtlasTexture_5n0dv")
-icon_alignment = 1
-expand_icon = true
-
-[node name="btnSettings" type="Button" parent="Panel/panelBottom/HBoxContainer/panLeft/VBoxContainer/iconButtons"]
-custom_minimum_size = Vector2(50, 50)
-layout_mode = 2
-tooltip_text = "Settings & Options"
-icon = SubResource("AtlasTexture_ne6ao")
-icon_alignment = 1
-expand_icon = true
-
-[node name="btnQuit" type="Button" parent="Panel/panelBottom/HBoxContainer/panLeft/VBoxContainer/iconButtons"]
-custom_minimum_size = Vector2(50, 50)
-layout_mode = 2
-tooltip_text = "Quit"
-icon = SubResource("AtlasTexture_tt8ml")
-icon_alignment = 1
-expand_icon = true
-
-[node name="MarginContainer2" type="MarginContainer" parent="Panel/panelBottom/HBoxContainer/panLeft/VBoxContainer/iconButtons"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/margin_left = 30
-
-[node name="MarginContainer2" type="MarginContainer" parent="Panel/panelBottom/HBoxContainer/panLeft/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_top = 20
-
-[node name="SettingsPanel" parent="Panel" instance=ExtResource("12_t1dhk")]
+[node name="PathUnlockScreen" parent="Panel" unique_id=2132402288 instance=ExtResource("28_6vfk8")]
 visible = false
 layout_mode = 1
 
-[node name="Compendium" parent="Panel" instance=ExtResource("13_5egv6")]
+[node name="SettingsPanel" parent="Panel" unique_id=926662997 instance=ExtResource("12_t1dhk")]
 visible = false
 layout_mode = 1
 
-[node name="GameInfo" parent="Panel" instance=ExtResource("14_vtepg")]
+[node name="Compendium" parent="Panel" unique_id=890953934 instance=ExtResource("13_5egv6")]
 visible = false
 layout_mode = 1
 
-[node name="HallofChampions" parent="Panel" instance=ExtResource("17_wyh8j")]
+[node name="GameInfo" parent="Panel" unique_id=697956703 instance=ExtResource("14_vtepg")]
 visible = false
 layout_mode = 1
 
-[node name="animBack" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_xcoo4")
-}
-
-[node name="animCompendium" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_6vfk8")
-}
-
-[node name="CRT_Shader" type="CanvasLayer" parent="."]
+[node name="HallofChampions" parent="Panel" unique_id=281821356 instance=ExtResource("17_wyh8j")]
 visible = false
+layout_mode = 1
 
-[node name="MeshInstance2D" type="MeshInstance2D" parent="CRT_Shader"]
+[node name="animBack" type="AnimationPlayer" parent="." unique_id=1764240940]
+libraries/ = SubResource("AnimationLibrary_xcoo4")
+
+[node name="animCompendium" type="AnimationPlayer" parent="." unique_id=1939121286]
+libraries/ = SubResource("AnimationLibrary_6vfk8")
+
+[node name="animHall" type="AnimationPlayer" parent="." unique_id=1922932334]
+root_node = NodePath("../Panel")
+libraries/ = SubResource("AnimationLibrary_1xund")
+
+[node name="CRT_Shader" type="CanvasLayer" parent="." unique_id=1456922741]
+scale = Vector2(2, 2)
+transform = Transform2D(2, 0, 0, 2, 0, 0)
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="CRT_Shader" unique_id=581399515]
 material = SubResource("ShaderMaterial_fmarx")
 mesh = SubResource("QuadMesh_hkdq0")
 
-[connection signal="pressed" from="Panel/CharacterSelectMenu/backPanel/VBoxContainer/playerInfoPanel/btnHeroes" to="." method="_on_btn_heroes_pressed"]
-[connection signal="pressed" from="Panel/loadoutPanel/PanelContainer/MarginContainer/PanelContainer/VBoxContainer/toggleBundle/bunRevenge" to="." method="_on_bun_revenge_pressed"]
-[connection signal="pressed" from="Panel/loadoutPanel/PanelContainer/MarginContainer/PanelContainer/VBoxContainer/toggleBundle/bunHonor" to="." method="_on_bun_honor_pressed"]
-[connection signal="pressed" from="Panel/loadoutPanel/PanelContainer/MarginContainer/PanelContainer/VBoxContainer/toggleBundle/bunGreed" to="." method="_on_bun_greed_pressed"]
-[connection signal="pressed" from="Panel/loadoutPanel/PanelContainer/MarginContainer/PanelContainer/VBoxContainer/toggleBundle/bunDuty" to="." method="_on_bun_duty_pressed"]
-[connection signal="pressed" from="Panel/loadoutPanel/PanelContainer/MarginContainer/PanelContainer/VBoxContainer/toggleBundle/bunShame" to="." method="_on_bun_shame_pressed"]
-[connection signal="pressed" from="Panel/loadoutPanel/PanelContainer/MarginContainer/PanelContainer/VBoxContainer/toggleBundle/bunChaos" to="." method="_on_bun_chaos_pressed"]
-[connection signal="pressed" from="Panel/loadoutPanel/PanelContainer/MarginContainer/PanelContainer/VBoxContainer/MarginContainer/btnRandom" to="." method="_on_btn_random_pressed"]
-[connection signal="pressed" from="Panel/loadoutPanel/PanelContainer/MarginContainer/PanelContainer/VBoxContainer/btnCompendium" to="." method="_on_btn_compendium_pressed"]
-[connection signal="mouse_entered" from="Panel/panelBottom/HBoxContainer/panMid/MarginContainer/HBoxContainer/btnNewGame" to="." method="_on_btn_new_game_mouse_entered"]
-[connection signal="pressed" from="Panel/panelBottom/HBoxContainer/panMid/MarginContainer/HBoxContainer/btnNewGame" to="." method="_on_btn_new_game_pressed"]
-[connection signal="pressed" from="Panel/panelBottom/HBoxContainer/panMid/MarginContainer/HBoxContainer/btnContinue" to="." method="_on_btn_continue_pressed"]
-[connection signal="pressed" from="Panel/panelBottom/HBoxContainer/panLeft/VBoxContainer/iconButtons/btnInfo" to="." method="_on_btn_info_pressed"]
-[connection signal="pressed" from="Panel/panelBottom/HBoxContainer/panLeft/VBoxContainer/iconButtons/btnSettings" to="." method="_on_btn_settings_pressed"]
-[connection signal="pressed" from="Panel/panelBottom/HBoxContainer/panLeft/VBoxContainer/iconButtons/btnQuit" to="." method="_on_btn_quit_pressed"]
+[connection signal="mouse_entered" from="Panel/mainScreen/VBoxContainer/bottomPanel/MarginContainer/systemButtons/skinPanel/skinsBox" to="." method="_on_skins_box_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/mainScreen/VBoxContainer/bottomPanel/MarginContainer/systemButtons/skinPanel/skinsBox" to="." method="_on_skins_box_mouse_exited"]
+[connection signal="pressed" from="Panel/mainScreen/VBoxContainer/bottomPanel/MarginContainer/systemButtons/btnInfo" to="." method="_on_btn_info_pressed"]
+[connection signal="pressed" from="Panel/mainScreen/VBoxContainer/bottomPanel/MarginContainer/systemButtons/btnSettings" to="." method="_on_btn_settings_pressed"]
+[connection signal="pressed" from="Panel/mainScreen/VBoxContainer/bottomPanel/MarginContainer/systemButtons/btnQuit" to="." method="_on_btn_quit_pressed"]
+[connection signal="pressed" from="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/customBundle/margRandom/btnRandom" to="." method="_on_btn_random_pressed"]
+[connection signal="pressed" from="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/customBundle/motivations/toggleBundle/bunRevenge" to="." method="_on_bun_revenge_pressed"]
+[connection signal="pressed" from="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/customBundle/motivations/toggleBundle/bunHonor" to="." method="_on_bun_honor_pressed"]
+[connection signal="pressed" from="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/customBundle/motivations/toggleBundle/bunGreed" to="." method="_on_bun_greed_pressed"]
+[connection signal="pressed" from="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/customBundle/motivations/toggleBundle/bunDuty" to="." method="_on_bun_duty_pressed"]
+[connection signal="pressed" from="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/customBundle/motivations/toggleBundle/bunShame" to="." method="_on_bun_shame_pressed"]
+[connection signal="pressed" from="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/customBundle/motivations/toggleBundle/bunChaos" to="." method="_on_bun_chaos_pressed"]
+[connection signal="mouse_entered" from="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/mainButtons/btnNewGame" to="." method="_on_btn_new_game_mouse_entered"]
+[connection signal="pressed" from="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/mainButtons/btnNewGame" to="." method="_on_btn_new_game_pressed"]
+[connection signal="pressed" from="Panel/mainScreen/VBoxContainer/topPanel/MarginContainer/LoadoutButtons/mainButtons/btnContinue" to="." method="_on_btn_continue_pressed"]
+[connection signal="pressed" from="Panel/CompendiumHolder/picDesk/btnCompendium" to="." method="_on_btn_compendium_pressed"]
+[connection signal="pressed" from="Panel/HallHolder/picDesk/btnHall" to="." method="_on_btn_heroes_pressed"]
