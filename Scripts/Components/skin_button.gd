@@ -23,6 +23,7 @@ func setup(skin: SkinData):
 
 	if SkinManager.is_unlocked(_skin.skin_id):
 		pic_button.texture = _skin.skin_icon
+		pic_button.self_modulate = Color.WHITE
 	else:
 		pic_button.texture = LOCKED_ICON
 

@@ -14,6 +14,17 @@ class_name StatBoxDisplay
 @export var show_tooltip: bool = true
 @export var show_progress_bar: bool = false
 
+const ICON_ATTACK     = preload("res://Resources/StatIcons/icon_attack.tres")
+const ICON_HEALTH     = preload("res://Resources/StatIcons/icon_health.tres")
+const ICON_SHIELD     = preload("res://Resources/StatIcons/icon_shield.tres")
+const ICON_SPEED      = preload("res://Resources/StatIcons/icon_speed.tres")
+const ICON_GOLD       = preload("res://Resources/StatIcons/stat_gold.tres")
+const ICON_STRIKES    = preload("res://Resources/StatIcons/stat_strikes.tres")
+const ICON_BURN_DMG   = preload("res://Resources/StatIcons/stat_burn.tres")
+const ICON_WOUNDED    = preload("res://Resources/StatIcons/stat_wounded.tres")
+const ICON_EXPOSED    = preload("res://Resources/StatIcons/icon_broken_shield.tres")
+const ICON_TURNS_LEFT = preload("res://Resources/StatIcons/turns_left.tres")
+
 var stat_color: Color
 var stat_icon: Texture2D
 
@@ -58,61 +69,50 @@ func update_stat(_stat: Enums.Stats, value: int, base_value: int, _display: bool
 	progress_bar.visible = show_progress_bar
 
 func set_visuals(_stat: Enums.Stats):
-	var stat_attack: Texture2D = load("res://Resources/StatIcons/icon_attack.tres")
-	var stat_health: Texture2D = load("res://Resources/StatIcons/icon_health.tres")
-	var stat_shield: Texture2D = load("res://Resources/StatIcons/icon_shield.tres")
-	var stat_speed: Texture2D = load("res://Resources/StatIcons/icon_speed.tres")
-	var stat_gold: Texture2D = load("res://Resources/StatIcons/stat_gold.tres")
-	var stat_strikes: Texture2D = load("res://Resources/StatIcons/stat_strikes.tres")
-	var stat_burn_damage: Texture2D = load("res://Resources/StatIcons/stat_burn.tres")
-	var stat_wounded: Texture2D = load("res://Resources/StatIcons/stat_wounded.tres")
-	var stat_exposed: Texture2D = load("res://Resources/StatIcons/icon_broken_shield.tres")
-	var stat_turns_left: Texture2D = load("res://Resources/StatIcons/turns_left.tres")
-
 	match _stat:
 		Enums.Stats.DAMAGE:
 			stat_name = "Attack Damage"
 			stat_color = gamecolors.stats.damage
-			icon.texture = stat_attack
+			icon.texture = ICON_ATTACK
 			stat_tooltip = "The amount you take away from the enemy's shield or hit points each turn in combat."
 		Enums.Stats.HITPOINTS:
 			stat_name = "Hit Points"
 			stat_color = gamecolors.stats.hit_points
-			icon.texture = stat_health
+			icon.texture = ICON_HEALTH
 			if stat_value <= (stat_value_base / 2):
-				icon.texture = stat_wounded
+				icon.texture = ICON_WOUNDED
 			stat_tooltip = "Your life force, when it reaches zero you die."
 		Enums.Stats.AGILITY:
 			stat_name = "Agility"
 			stat_color = gamecolors.stats.agility
-			icon.texture = stat_speed
+			icon.texture = ICON_SPEED
 			stat_tooltip = "The party with higher agility goes first in combat. Also determines if you can run away from an enemy."
 		Enums.Stats.SHIELD:
 			stat_name = "Shield"
 			stat_color = gamecolors.stats.shield
-			icon.texture = stat_shield
+			icon.texture = ICON_SHIELD
 			if stat_value == 0:
-				icon.texture = stat_exposed
+				icon.texture = ICON_EXPOSED
 			stat_tooltip = "How much damage you can withstand before you begin to lose hit points. Replenishes between battles."
 		Enums.Stats.GOLD:
 			stat_name = "Gold"
 			stat_color = gamecolors.stats.gold
-			icon.texture = stat_gold
+			icon.texture = ICON_GOLD
 			stat_tooltip = "The currency of the dungeon, spend it to buy items and weapons."
 		Enums.Stats.STRIKES:
 			stat_name = "Strikes"
 			stat_color = gamecolors.stats.strikes
-			icon.texture = stat_strikes
+			icon.texture = ICON_STRIKES
 			stat_tooltip = "How many times you hit with your weapon in a single turn. Resets between turns."
 		Enums.Stats.BURN_DAMAGE:
 			stat_name = "Burn Damage"
 			stat_color = gamecolors.stats.burn
-			icon.texture = stat_burn_damage
+			icon.texture = ICON_BURN_DMG
 			stat_tooltip = "How much damage 1 stack of burn deals to the enemy."
 		Enums.Stats.TURNS_LEFT:
 			stat_name = "Turns Left"
 			stat_color = Color.WHITE
-			icon.texture = stat_turns_left
+			icon.texture = ICON_TURNS_LEFT
 			stat_tooltip = "How much you can venture in the dungeon before fighting the rank boss."
 
 func _set_labels() -> void:
