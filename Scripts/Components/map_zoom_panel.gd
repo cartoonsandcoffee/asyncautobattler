@@ -5,27 +5,31 @@ signal closed()
 signal boss_rush_pressed()
 
 
-@onready var boss_inventory_grid: GridContainer = $Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid
-@onready var weapon_container: GridContainer = $Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/weapon/GridContainer
+@onready var boss_inventory_grid: GridContainer = $Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/bossInventoryGrid
+@onready var weapon_container: GridContainer = $Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/weapon/GridContainer
 
-@onready var boss_pic: TextureRect = $Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/boxProfile/vBoxProfile/bossPic
-@onready var lbl_boss: Label = $Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/boxProfile/vBoxProfile/lblBoss
-@onready var lbl_rank: Label = $Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/boxProfile/vBoxProfile/lblRank
-@onready var boss_stat_grid: Container = $Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid
-@onready var boss_set_bonuses: HBoxContainer = $Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/setBox
+@onready var boss_pic: TextureRect = $Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/boxProfile/vBoxProfile/bossPic
+@onready var lbl_boss: Label = $Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/boxProfile/vBoxProfile/lblBoss
+@onready var lbl_rank: Label = $Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/boxProfile/vBoxProfile/lblRank
+@onready var lbl_rival_info: RichTextLabel = $Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/boxProfile/vBoxProfile/lblBossInfo
+@onready var boss_stat_grid: Container = $Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/PanelContainer/MarginContainer/bossStatGrid
+@onready var boss_set_bonuses: HBoxContainer = $Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossInventory/setBox
 
-@onready var boss_stat_health: StatBoxDisplay = $Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid/statHealth
-@onready var boss_stat_shield: StatBoxDisplay = $Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid/statShield
-@onready var boss_stat_attack: StatBoxDisplay = $Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid/statAttack
-@onready var boss_stat_agility: StatBoxDisplay = $Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid/statAgility
+@onready var boss_stat_health: StatBoxDisplay = $Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/PanelContainer/MarginContainer/bossStatGrid/statHealth
+@onready var boss_stat_shield: StatBoxDisplay = $Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/PanelContainer/MarginContainer/bossStatGrid/statShield
+@onready var boss_stat_attack: StatBoxDisplay = $Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/PanelContainer/MarginContainer/bossStatGrid/statAttack
+@onready var boss_stat_agility: StatBoxDisplay = $Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/PanelContainer/MarginContainer/bossStatGrid/statAgility
 
-@onready var btn_close: Button = $Panel/PanelContainer/HBoxContainer/VBoxContainer/buttonContainer/btnClose
-@onready var btn_rush: Button = $Panel/PanelContainer/HBoxContainer/VBoxContainer/buttonContainer/btnRush
+@onready var btn_close: Button = $Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/buttonContainer/btnClose
+@onready var btn_rush: Button = $Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/buttonContainer/btnRush
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 
-@onready var boss_stat_strikes = $Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid/statStrikes
-@onready var boss_stat_burn = $Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid/statBurnDamage
-@onready var boss_stat_gold = $Panel/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/bossStatGrid/statGold
+@onready var boss_stat_strikes = $Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/PanelContainer/MarginContainer/bossStatGrid/statStrikes
+@onready var boss_stat_burn = $Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/PanelContainer/MarginContainer/bossStatGrid/statBurnDamage
+@onready var boss_stat_gold = $Panel/HBoxContainer/PanelContainer/HBoxContainer/VBoxContainer/mainContent/bossContainer/vBoxStats/PanelContainer/MarginContainer/bossStatGrid/statGold
+
+@onready var panel_tourney: PanelContainer = $Panel/HBoxContainer/panelTourney
+@onready var rank_buttons: GridContainer = $Panel/HBoxContainer/panelTourney/VBoxContainer/rankButtons
 
 ## == MATCH UP SCREEN ==
 @onready var lbl_fight: Label = $panelMatchup/panelTitle/MarginContainer/VBoxContainer/lblFight
@@ -34,6 +38,8 @@ signal boss_rush_pressed()
 @onready var lbl_player1: Label = $panelMatchup/panelTitle/MarginContainer/VBoxContainer/HBoxContainer/lblPlayer1
 @onready var lbl_player2: Label = $panelMatchup/panelTitle/MarginContainer/VBoxContainer/HBoxContainer/lblPlayer2
 @onready var anim_matchup: AnimationPlayer = $animFight
+
+var _preview_enemies: Dictionary = {}
 
 func _ready():
 	_setup_buttons()
@@ -73,8 +79,12 @@ func update_display():
 	# Update boss info
 	_update_boss_info()
 
+	# show all upcoming bosses
+	panel_tourney.visible = true
+	_update_tourney_panel()
+
 func show_matchup():
-	AudioManager.play_event_sound("cheering")
+	AudioManager.play_ui_sound("cheer_long")
 	AudioManager.clear_room_override()
 	AudioManager.play_combat_music(true, null) 
 	
@@ -98,8 +108,9 @@ func _on_rush_pressed():
 func _on_boss_loaded(boss: Enemy):
 	print("[MapZoomPanel] Boss loaded, updating preview: %s" % boss.enemy_name)
 	_update_boss_preview(boss)
+	_update_tourney_panel()
 
-func _update_boss_preview(boss: Enemy = null):
+func _update_boss_preview(boss: Enemy = null, override_data: Dictionary = {}):
 	"""Populate boss preview panel with boss data."""
 	# Use provided boss or get from DungeonManager
 	if not boss:
@@ -113,12 +124,18 @@ func _update_boss_preview(boss: Enemy = null):
 	# Show boss container
 	_show_boss_preview()
 	
+	## Show the info line
+	var boss_data: Dictionary = override_data if not override_data.is_empty() else DungeonManager.current_boss_data
+	var strength := "glorious" if boss_data.get("player_won", true) else "vengeful"
+	var days := _get_days_since(boss_data.get("created_at", ""))
+	lbl_rival_info.text = "a [color=white][b]%s[/b][/color] opponent reigning for [color=white][b]%d[/b][/color] days." % [strength, days]
+
 	# Update boss name
 	lbl_boss.text = boss.enemy_name
 	lbl_player2.text = boss.enemy_name
 
 	# Update boss sprite
-	_update_boss_sprite(boss)
+	_update_boss_sprite(boss, boss_data)
 	
 	# Update boss stats
 	_update_boss_stats(boss)
@@ -170,29 +187,23 @@ func _hide_boss_preview():
 	# boss_container.visible = false
 	pass
 
-func _update_boss_sprite(boss: Enemy):
+func _update_boss_sprite(boss: Enemy, data: Dictionary = {}):
 	"""Load and display boss sprite based on skin_id from Supabase."""
 	# Get skin_id from boss data (stored in DungeonManager.current_boss_data)
-	var skin_id: int = 0
-	var color_hex:String = "#FFFFFF"
-	
-	if not DungeonManager.current_boss_data.is_empty():
-		skin_id = DungeonManager.current_boss_data.get("skin_id", 0)
-		color_hex = DungeonManager.current_boss_data.get("skin_color", "#FFFFFF")
+	var skin_id: int = data.get("skin_id", 0)
 	
 	# Load sprite
-	var sprite_path = "res://Assets/Art/Player/PVP/Player_Skin_%d.png" % skin_id
-	if ResourceLoader.exists(sprite_path):
-		boss_pic.modulate = Color(color_hex)
-		boss_pic.texture = load(sprite_path)
-		player_2.texture = load(sprite_path)
+	var boss_sprite: Texture2D = SkinManager.get_sprite_texture(skin_id)
+	if boss_sprite != null:
+		boss_pic.texture = boss_sprite
+		player_2.texture = boss_sprite
 	else:
 		# Fallback to default or enemy sprite if boss skin doesn't exist
 		if boss.sprite:
 			boss_pic.texture = boss.sprite
 			player_2.texture = boss.sprite
 		else:
-			push_warning("[MapZoomPanel] Boss sprite not found: %s" % sprite_path)
+			push_warning("[MapZoomPanel] Boss sprite not found for ID: %d" % skin_id)
 
 func _update_player_sprite():
 	"""Load and display boss sprite based on skin_id from Supabase."""
@@ -201,10 +212,9 @@ func _update_player_sprite():
 	skin_id = Player.skin_id
 	
 	# Load sprite
-	var sprite_path = "res://Assets/Art/Player/PVP/Player_Skin_%d.png" % skin_id
-	if ResourceLoader.exists(sprite_path):
-		player_1.texture = load(sprite_path)
-
+	var player_sprite: Texture2D = SkinManager.get_sprite_texture(skin_id)
+	if player_sprite != null:
+		player_1.texture = player_sprite
 
 func _update_boss_stats(boss: Enemy):
 	"""Update all boss stat displays."""
@@ -273,8 +283,7 @@ func _update_boss_inventory(boss: Enemy):
 		weapon_slot.set_item(boss.inventory.weapon_slot)
 		weapon_slot.owner_entity = boss
 		weapon_slot.set_weapon_text_color()
-		weapon_slot.slot_index = 100  # High number for tooltip positioning
-		weapon_slot.custom_minimum_size = Vector2(100, 100)
+		weapon_slot.custom_minimum_size = Vector2(110, 110)
 		weapon_container.add_child(weapon_slot)
 	
 	# Add inventory items
@@ -285,6 +294,62 @@ func _update_boss_inventory(boss: Enemy):
 			item_slot.owner_entity = boss
 			item_slot.set_item(item)
 			item_slot.set_order(i+1)
-			item_slot.custom_minimum_size = Vector2(100, 100)
-			item_slot.slot_index = 100  # High number for tooltip positioning
+			item_slot.custom_minimum_size = Vector2(110, 110)
 			boss_inventory_grid.add_child(item_slot)
+
+func _get_days_since(created_at: String) -> int:
+	if created_at.is_empty():
+		return 0
+	# Strip timezone suffix Supabase appends ("+00:00" or "Z")
+	var clean = created_at.split("+")[0].rstrip("Z")
+	var unix_created = Time.get_unix_time_from_datetime_string(clean)
+	var unix_now = Time.get_unix_time_from_system()
+	return max(0, int((unix_now - unix_created) / 86400.0))
+
+func _update_tourney_panel() -> void:
+	for child in rank_buttons.get_children():
+		child.free()
+
+	var current_rank: int = DungeonManager.current_rank
+	var selector_scene := preload("res://Scenes/Elements/rank_boss_selector.tscn")
+
+	for rank in range(6, 0, -1):
+		var selector = selector_scene.instantiate()
+		selector.custom_minimum_size = Vector2(530, 120)
+		rank_buttons.add_child(selector)
+
+		var boss_data := {}
+		if rank == current_rank:
+			boss_data = DungeonManager.current_boss_data
+		elif rank > current_rank and DungeonManager.preloaded_bosses.has(rank):
+			boss_data = DungeonManager.preloaded_bosses[rank]
+		elif rank < current_rank and DungeonManager.beaten_bosses.has(rank):
+			boss_data = DungeonManager.beaten_bosses[rank]
+
+		selector.setup(boss_data, rank, rank == current_rank)
+
+		if boss_data.is_empty():
+			continue
+
+		# Pass raw data — no Enemy construction here
+		var captured_rank := rank
+		var captured_data := boss_data
+		selector.button_entered.connect(func(): _on_selector_hover_lazy(captured_rank, captured_data))
+		selector.button_exited.connect(_on_selector_hover_exit)
+
+func _on_selector_hover_lazy(rank: int, boss_data: Dictionary) -> void:
+	var preview_enemy: Enemy
+	if rank == DungeonManager.current_rank:
+		preview_enemy = DungeonManager.current_boss_enemy
+		_preview_enemies[rank] = preview_enemy
+	elif _preview_enemies.has(rank):
+		preview_enemy = _preview_enemies[rank]
+	else:
+		# First hover: create and cache
+		preview_enemy = BossHandler.create_boss_enemy(boss_data)
+		_preview_enemies[rank] = preview_enemy
+
+	_update_boss_preview(preview_enemy, boss_data)
+
+func _on_selector_hover_exit() -> void:
+	_update_boss_preview(DungeonManager.current_boss_enemy, DungeonManager.current_boss_data)

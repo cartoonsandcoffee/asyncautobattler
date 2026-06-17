@@ -1,5 +1,5 @@
 @tool
-class_name ItemOffering
+class_name PopupGrave
 extends Control
 
 signal item_selected(Item)
@@ -14,14 +14,11 @@ enum FilterItemsBy {
 	ITEM_LIST
 }
 
-@onready var item_choice_container: GridContainer = $Panel/PanelContainer/VBoxContainer/itemArea/itemsContainer
-@onready var name_label: Label = $Panel/PanelContainer/VBoxContainer/lblName
-@onready var dialogue_label: RichTextLabel = $Panel/PanelContainer/VBoxContainer/marginDesc/txtDesc
-@onready var dialogue_margin: MarginContainer = $Panel/PanelContainer/VBoxContainer/marginDesc
-@onready var btn_skip: Button = $Panel/PanelContainer/VBoxContainer/HBoxContainer/btnSkip
-@onready var btn_reroll: Button = $Panel/PanelContainer/VBoxContainer/HBoxContainer/btnReroll
-@onready var anim_reroll: AnimationPlayer = $animReroll
-@onready var anim_player: AnimationPlayer = $AnimationPlayer
+@onready var item_choice_container: GridContainer = $CanvasLayer/Control/centerArea/PanelContainer/GridContainer
+@onready var btn_skip: Button = $CanvasLayer/Control/panelButtons/HBoxContainer/btnSkip
+@onready var btn_reroll: Button = $CanvasLayer/Control/panelButtons/HBoxContainer/btnReroll
+@onready var anim_main: AnimationPlayer = $AnimationPlayer
+@onready var canvas_layer: CanvasLayer = $CanvasLayer
 
 ## Filter by what item criteria for selection
 @export var filter_by: ItemOffering.FilterItemsBy = ItemOffering.FilterItemsBy.RARITY:
@@ -31,12 +28,10 @@ enum FilterItemsBy {
 
 @export var item_rarity: Enums.Rarity = Enums.Rarity.COMMON
 @export var items_offered: int = 3
-@export var box_name:String = ""
-@export_multiline var box_desc:String = ""
 
 ## Includes an extra item of one rarity higher than selected above.
 @export var include_extra_rare: bool = false
-## Shop will weight items based on categories and keywords of player
+## Uses item's keywords to weight the randomness towards what player is building
 @export var use_keyword_weighting: bool = true
 
 @export_group("Weapon Stuff")
@@ -55,9 +50,9 @@ enum FilterItemsBy {
 ## if 0 reroll button won't appear
 @export var rerolls: int = 0
 @export var reroll_button_text:String = ""
-@export var reroll_sound_name: String = ""
+@export var reroll_sound_name: String = "dig_grave"
 
-var item_choice_scene = preload("res://Scenes/item_choice.tscn")
+var item_choice_scene = preload("res://Scenes/item_selection.tscn")
 var offered_items: Array[Item] = []
 var selection_locked: bool = false
 
@@ -91,7 +86,6 @@ func _ready() -> void:
 	add_to_group("item_selection_events") 
 	item_choice_container.columns = items_offered
 	if include_extra_rare: item_choice_container.columns = items_offered + 1
-	setup_labels()
 	setup_rerolls()
 
 func setup_rerolls():
@@ -101,13 +95,6 @@ func setup_rerolls():
 	else:
 		btn_reroll.visible = false
 		
-func setup_labels():
-	name_label.text = box_name
-	dialogue_label.text = box_desc
-	if box_desc == "" || box_desc == null:
-		dialogue_margin.visible = false
-	else:
-		dialogue_margin.visible = true
 
 func generate_item_choices():
 	for child in item_choice_container.get_children():
@@ -128,10 +115,11 @@ func generate_item_choices():
 	else:
 		offered_items = ItemsManager.get_items_by_item_type(items_offered, item_type, true, item_rarity)
 
+func show_the_choices():
 	# Create choice buttons for each item
 	for item in offered_items:
 		var choice_button = item_choice_scene.instantiate()
-		choice_button.custom_minimum_size = Vector2(110, 110)
+		choice_button.custom_minimum_size = Vector2(200, 200)
 		item_choice_container.add_child(choice_button)
 		choice_button.set_item(item)
 		choice_button.item_selected.connect(_on_item_selected)
@@ -173,11 +161,12 @@ func _on_btn_skip_mouse_entered() -> void:
 
 func _on_btn_reroll_pressed() -> void:
 	rerolls -= 1
-	anim_reroll.play("reroll")
+	anim_main.play("reroll")
 	if reroll_sound_name &&  reroll_sound_name != "":
 		AudioManager.play_event_sound(reroll_sound_name)
 	setup_rerolls()
 	generate_item_choices()
+	show_the_choices()
 	
 
 func _on_btn_reroll_mouse_exited() -> void:
@@ -186,16 +175,6 @@ func _on_btn_reroll_mouse_exited() -> void:
 func _on_btn_reroll_mouse_entered() -> void:
 	CursorManager.set_interact_cursor()
 	AudioManager.play_ui_sound("woosh")
-
-func show_popup():
-	generate_item_choices()
-	anim_player.play("show_box")
-	_refresh_inventory_duplicate_indicators()
-
-func hide_popup():
-	anim_player.play("hide_box")
-	await anim_player.animation_finished
-
 
 func _refresh_inventory_duplicate_indicators():
 	var main_game = get_tree().get_first_node_in_group("main_game")
@@ -229,3 +208,16 @@ func _clear_inventory_duplicate_indicators():
 			inv_slot.show_upgrade_anim()
 		else:
 			inv_slot.stop_upgrade_anim()
+
+func show_popup():
+	AudioManager.play_event_sound("fill_grave")
+	generate_item_choices()
+	anim_main.play("show_popup")
+	await anim_main.animation_finished
+	show_the_choices()
+	_refresh_inventory_duplicate_indicators()
+
+func hide_popup():
+	AudioManager.play_event_sound("dig_grave")
+	anim_main.play("hide_popup")
+	await anim_main.animation_finished

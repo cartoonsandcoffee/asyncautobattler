@@ -9,7 +9,6 @@ enum ChoiceType {
 	PURCHASE
 }
 
-
 @onready var panel_border: PanelContainer
 @onready var order_container: PanelContainer
 @onready var lbl_order: Label 
@@ -41,8 +40,31 @@ var gamecolors: GameColors
 var has_been_selected: bool = false
 var can_afford_item: bool = false
 
+## - JDM: For long-press tooltips on mobile only
+const LONG_PRESS_DURATION := 1.0
+var _long_press_timer: float = 0.0
+var _long_press_active: bool = false
+var _is_mobile := OS.has_feature("mobile")
+
+const RARITY_COMMON    = preload("res://Resources/Rarity/common.tres")
+const RARITY_UNCOMMON  = preload("res://Resources/Rarity/uncommon.tres")
+const RARITY_RARE      = preload("res://Resources/Rarity/rare.tres")
+const RARITY_LEGENDARY = preload("res://Resources/Rarity/legendary.tres")
+const RARITY_MYSTIC    = preload("res://Resources/Rarity/mystic.tres")
+const RARITY_GOLDEN    = preload("res://Resources/Rarity/golden.tres")
+const RARITY_DIAMOND   = preload("res://Resources/Rarity/diamond.tres")
+const RARITY_CRAFTED   = preload("res://Resources/Rarity/crafted.tres")
+
 func _ready() -> void:
 	set_references()
+
+func _process(delta: float) -> void:
+	if not _is_mobile or not _long_press_active:
+		return
+	_long_press_timer += delta
+	if _long_press_timer >= LONG_PRESS_DURATION:
+		_long_press_active = false
+		TooltipManager.expand_current_tooltip_definitions()
 
 func set_references():
 	gamecolors = GameColors.new()
@@ -65,6 +87,11 @@ func set_references():
 		price_container.visible = false
 	elif  choice_type == ChoiceType.PURCHASE:
 		price_container.visible = true
+
+	if not button.button_down.is_connected(_on_button_down):
+		button.button_down.connect(_on_button_down)
+	if not button.button_up.is_connected(_on_button_up):
+		button.button_up.connect(_on_button_up)
 
 func set_item(item: Item):
 	set_references()
@@ -162,52 +189,43 @@ func set_item_type_desc():
 
 
 func set_rarity_color():
-	var rarity_common: Texture2D = load("res://Resources/Rarity/common.tres")
-	var rarity_uncommon: Texture2D = load("res://Resources/Rarity/uncommon.tres")
-	var rarity_rare: Texture2D = load("res://Resources/Rarity/rare.tres")
-	var rarity_legendary: Texture2D = load("res://Resources/Rarity/legendary.tres")
-	var rarity_mystic: Texture2D = load("res://Resources/Rarity/mystic.tres")
-	var rarity_golden: Texture2D = load("res://Resources/Rarity/golden.tres")
-	var rarity_diamond: Texture2D = load("res://Resources/Rarity/diamond.tres")
-	var rarity_crafted: Texture2D = load("res://Resources/Rarity/crafted.tres")
-
 	if current_item.rarity == Enums.Rarity.COMMON:
-		pic_rarity.texture = rarity_common
+		pic_rarity.texture = RARITY_COMMON
 		pic_rarity.self_modulate = gamecolors.rarity.common
 		panel_border.self_modulate = gamecolors.rarity.common
 		wep_indicator.modulate = gamecolors.rarity.common
 	elif current_item.rarity == Enums.Rarity.UNCOMMON:
-		pic_rarity.texture = rarity_uncommon
+		pic_rarity.texture = RARITY_UNCOMMON
 		pic_rarity.self_modulate = gamecolors.rarity.uncommon
 		panel_border.self_modulate = gamecolors.rarity.uncommon
 		wep_indicator.modulate = gamecolors.rarity.uncommon
 	elif current_item.rarity == Enums.Rarity.RARE:
-		pic_rarity.texture = rarity_rare
+		pic_rarity.texture = RARITY_RARE
 		pic_rarity.self_modulate = gamecolors.rarity.rare
 		panel_border.self_modulate = gamecolors.rarity.rare
 		wep_indicator.modulate = gamecolors.rarity.rare
 	elif current_item.rarity == Enums.Rarity.LEGENDARY:
-		pic_rarity.texture = rarity_legendary
+		pic_rarity.texture = RARITY_LEGENDARY
 		pic_rarity.self_modulate = gamecolors.rarity.legendary
 		panel_border.self_modulate = gamecolors.rarity.legendary
 		wep_indicator.modulate = gamecolors.rarity.legendary
 	elif current_item.rarity == Enums.Rarity.MYSTERIOUS:
-		pic_rarity.texture = rarity_mystic
+		pic_rarity.texture = RARITY_MYSTIC
 		pic_rarity.self_modulate = gamecolors.rarity.mysterious
 		panel_border.self_modulate = gamecolors.rarity.mysterious
 		wep_indicator.modulate = gamecolors.rarity.mysterious
 	elif current_item.rarity == Enums.Rarity.GOLDEN:
-		pic_rarity.texture = rarity_golden
+		pic_rarity.texture = RARITY_GOLDEN
 		pic_rarity.self_modulate = gamecolors.rarity.golden
 		panel_border.self_modulate = gamecolors.rarity.golden
 		wep_indicator.modulate = gamecolors.rarity.golden
 	elif current_item.rarity == Enums.Rarity.DIAMOND:
-		pic_rarity.texture = rarity_diamond
+		pic_rarity.texture = RARITY_DIAMOND
 		pic_rarity.self_modulate = gamecolors.rarity.diamond
 		panel_border.self_modulate = gamecolors.rarity.diamond
 		wep_indicator.modulate = gamecolors.rarity.diamond
 	elif current_item.rarity == Enums.Rarity.CRAFTED:
-		pic_rarity.texture = rarity_crafted
+		pic_rarity.texture = RARITY_CRAFTED
 		pic_rarity.self_modulate = gamecolors.rarity.crafted
 		panel_border.self_modulate = gamecolors.rarity.crafted
 		wep_indicator.modulate = gamecolors.rarity.crafted
@@ -240,18 +258,32 @@ func can_afford():
 	$Panel/VBoxContainer.modulate.a = 1
 
 func _on_button_mouse_exited() -> void:
+	_long_press_active = false
 	anim_hover.play("stop")
 	CursorManager.reset_cursor()
 	TooltipManager.hide_tooltip() 
 	panel_border.modulate = Color.WHITE
 
 func _on_button_mouse_entered() -> void:
+	## - JDM: Mobile long tap
+	if _is_mobile and current_item:
+		_long_press_active = true
+		_long_press_timer = 0.0
+
 	if current_item:  # Only if slot has item
 		AudioManager.play_ui_sound("item_hover")	
 		CursorManager.set_interact_cursor()
 	if !button.disabled:
 		anim_hover.play("hover")
 		TooltipManager.show_item_tooltip(current_item, global_position, size)
+
+func _on_button_down() -> void:
+	if _is_mobile and current_item:
+		_long_press_active = true
+		_long_press_timer = 0.0
+
+func _on_button_up() -> void:
+	_on_button_mouse_exited()
 
 func _on_button_pressed() -> void:
 	if !can_afford_item && choice_type == ChoiceType.PURCHASE:

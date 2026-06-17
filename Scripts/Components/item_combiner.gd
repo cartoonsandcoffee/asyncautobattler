@@ -317,6 +317,7 @@ func _on_craft_pressed():
 		Player.super_upgrades_left -= 1
 		result = ItemsManager.combine_items(slot_1_item, slot_1_item)
 	if combiner_mode == CombinerMode.POTION:
+		Player.potion_makers_left -= 1
 		result = ItemsManager.craft_potion(slot_1_item)
 	elif combiner_mode == CombinerMode.BANISH:
 		Player.banishes_left_this_rank -= 1

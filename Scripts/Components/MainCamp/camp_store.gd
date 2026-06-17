@@ -6,7 +6,9 @@ signal button_exited()
 
 @onready var button: Button = $controlMain/PanelContainer/picMain/Button
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
-#@onready var anim_hover: AnimationPlayer = $animHover
+@onready var anim_detail: AnimationPlayer
+@onready var pic_unavail: TextureRect
+@onready var audio_player: AudioStreamPlayer2D
 
 func _ready() -> void:
 	button.pressed.connect(_on_button_pressed)
@@ -16,6 +18,14 @@ func _ready() -> void:
 func _on_button_pressed() -> void:
 	button_clicked.emit()
 
+func set_available(is_avail: bool):
+	pic_unavail = $controlMain/PanelContainer/picUnavail
+	pic_unavail.visible = !is_avail
+
+func check_available() -> bool:
+	if pic_unavail and pic_unavail != null:
+		return !pic_unavail.visible
+	return true
 
 func _on_button_mouse_exited() -> void:
 	CursorManager.reset_cursor()
@@ -29,5 +39,13 @@ func _on_button_mouse_entered() -> void:
 	#anim_hover.play("hover")
 	button_entered.emit()
 
-#func stop_hover_anim():
-#	anim_hover.play("stop_hover")
+func play_detail_anim():
+	anim_detail = $animDetail
+	if anim_detail and anim_detail != null:
+		anim_detail.play("play_detail")
+
+func load_sound():
+	audio_player = $AudioStreamPlayer2D
+	if audio_player and audio_player != null:
+		audio_player.play()
+		

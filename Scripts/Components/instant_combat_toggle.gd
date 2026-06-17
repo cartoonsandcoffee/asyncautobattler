@@ -21,25 +21,26 @@ func _on_button_toggled(toggled_on:bool) -> void:
 		pic_selected.visible = false
 		lbl_toggle.text = "Instant NPC Fights  (OFF)"
 		CombatSpeed.set_speed(CombatSpeed.CombatSpeedMode.NORMAL)
+	GameSettings.combat_speed = CombatSpeed.current_mode
+	GameSettings.save_settings()
 
 func show_me():
 	visible = true
 
-	if CombatSpeed.current_mode == CombatSpeed.CombatSpeedMode.INSTANT:
-		toggled = true
+	toggled = GameSettings.combat_speed == CombatSpeed.CombatSpeedMode.INSTANT
 		
 	if toggled:
 		pic_button.visible = false
-		pic_selected.visible = true		
+		pic_selected.visible = true
 		lbl_toggle.text = "Instant NPC Fights  (ON)"
 		pic_button.modulate.a = 1.0
 		CombatSpeed.set_speed(CombatSpeed.CombatSpeedMode.INSTANT)
 	else:
 		pic_button.visible = true
-		pic_selected.visible = false		
+		pic_selected.visible = false
 		lbl_toggle.text = "Instant NPC Fights  (OFF)"
 		pic_button.modulate.a = 0.6
-		CombatSpeed.set_speed(CombatSpeed.CombatSpeedMode.NORMAL)		
+		CombatSpeed.set_speed(CombatSpeed.CombatSpeedMode.NORMAL)
 
 
 func _on_button_mouse_exited() -> void:

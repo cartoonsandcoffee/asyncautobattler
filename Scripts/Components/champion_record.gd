@@ -21,8 +21,13 @@ signal record_mouse_exited()
 @onready var lbl_motive2: Label
 @onready var lbl_motive3: Label
 
+var _refs_set: bool = false
 
 func set_references():
+	if _refs_set:
+		return
+	_refs_set = true
+	
 	lbl_date = $Panel/PanelContainer/MarginContainer/HBoxContainer/lblDate
 	lbl_wins = $Panel/PanelContainer/MarginContainer/HBoxContainer/lblWins
 	lbl_active = $Panel/PanelContainer/MarginContainer/HBoxContainer/lblActive

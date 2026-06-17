@@ -80,7 +80,8 @@ enum ItemType {
 @export var burn_damage_bonus: int = 0
 ## ONLY applicable to Weapons, specifies whether the weapon is passive and can't attack/strike at all
 @export var cant_attack: bool = false
-@export var keywords: Array[String] = []  # hidden keywords for the filter screen
+@export var keywords: Array[String] = []  # hidden keywords for the filtering/weighted distribution screen
+@export var mechanics: Array[String] = []  # hidden keywords for filtering/mechanics triggers
 
 # Runtime state (reset each combat)
 var has_triggered_this_combat: bool = false

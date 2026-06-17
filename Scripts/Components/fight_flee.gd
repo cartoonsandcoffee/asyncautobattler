@@ -79,10 +79,12 @@ func show_popup(_can_run: bool = true, _is_boss: bool = false):
 		btn_run.disabled = true
 		anim_run.play("show_run_broken")
 	elif !can_run:
+		instant_toggle.show_me()
 		btn_run.tooltip_text = "Enemy is too fast to escape!"
 		btn_run.disabled = true
 		anim_run.play("show_run_broken")
 	else:
+		instant_toggle.show_me()
 		btn_run.tooltip_text = "Flee from combat"
 		btn_run.disabled = false
 		anim_run.play("show_run")

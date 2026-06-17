@@ -4,7 +4,7 @@ extends RoomEvent
 @onready var anim_event: AnimationPlayer = $animEvent
 @onready var anim_labels: AnimationPlayer = $animLabel
 @onready var button: Button = $picEvent/btnEvent
-@onready var item_store: ItemStore = $item_merchant_store
+@onready var item_store: PopupDiscountPeddler = $PopupPeddler
 
 func _ready():
 	super._ready()  # Call parent's _ready

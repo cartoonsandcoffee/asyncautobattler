@@ -1,4 +1,4 @@
-class_name ItemTownStore
+class_name PopupTownStore
 extends Control
 
 
@@ -6,26 +6,25 @@ signal item_selected(Item)
 signal store_closed()
 signal need_item_replace(Item)
 
-@onready var item_choice_container: GridContainer = $Panel/BlackBack/PanelContainer/VBoxContainer/itemsContainer
-@onready var name_label: Label = $Panel/BlackBack/PanelContainer/VBoxContainer/lblName
-@onready var dialogue_label: RichTextLabel = $Panel/BlackBack/PanelContainer/VBoxContainer/MarginContainer/txtDesc
-@onready var btn_cancel: Button = $Panel/BlackBack/PanelContainer/VBoxContainer/btnCancel
+@onready var item_choice_container: GridContainer = $CanvasLayer/Control/centerArea/PanelContainer/MarginContainer/GridContainer
+@onready var btn_cancel: Button = $CanvasLayer/Control/panelButtons/VBoxContainer/HBoxContainer/btnSkip
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
+@onready var stat_gold: StatBoxDisplay = $CanvasLayer/Control/pnlGold/PanelContainer/MarginContainer/statGold
 
-@onready var refresh_panel: PanelContainer = $Panel/sidePanelBlack
-@onready var refresh_cost: Label = $Panel/sidePanelBlack/panelReroll/HBoxContainer/HBoxContainer2/lblRerollCost
-@onready var btn_refresh: Button = $Panel/sidePanelBlack/btnReroll
-@onready var anim_reroll: AnimationPlayer = $animReroll
+@onready var refresh_cost: Label = $CanvasLayer/Control/panelButtons/VBoxContainer/HBoxContainer/btnReroll/HBoxContainer2/lblRerollCost
+@onready var btn_refresh: Button = $CanvasLayer/Control/panelButtons/VBoxContainer/HBoxContainer/btnReroll
 
-@onready var upgrade_panel: PanelContainer = $Panel/sidePanelUpgrade
-@onready var upgrade_cost: Label = $Panel/sidePanelUpgrade/panelUpgrade/HBoxContainer/HBoxContainer2/lblUpgradeCost
-@onready var btn_upgrade: Button = $Panel/sidePanelUpgrade/btnUpgrade
-@onready var anim_upgrade: AnimationPlayer = $animUpgrade
+@onready var upgrade_cost: Label = $CanvasLayer/Control/panelButtons/VBoxContainer/HBoxContainer/btnUpgrade/HBoxContainer2/lblUpgradeCost
+@onready var btn_upgrade: Button = $CanvasLayer/Control/panelButtons/VBoxContainer/HBoxContainer/btnUpgrade
 
-@export var box_name:String = ""
-@export_multiline var box_desc:String = ""
+@onready var purchase_cost: Label = $CanvasLayer/Control/panelButtons/VBoxContainer/boxSelected/btnBuy/HBoxContainer2/lblBuyCost
+@onready var btn_purchse: Button = $CanvasLayer/Control/panelButtons/VBoxContainer/boxSelected/btnBuy
+@onready var btn_banish: Button = $CanvasLayer/Control/panelButtons/VBoxContainer/boxSelected/btnBanish
+@onready var box_selected: HBoxContainer = $CanvasLayer/Control/panelButtons/VBoxContainer/boxSelected ## - Box with buttons when item is selected
 
-var item_choice_scene = preload("res://Scenes/item_choice.tscn")
+@export var use_keyword_weighting: bool = true
+
+var item_choice_scene = preload("res://Scenes/item_selection.tscn")
 var empty_item = preload("res://Scenes/Elements/empty_choice.tscn")
 
 var is_store_open: bool = false
@@ -40,24 +39,22 @@ var rare_items: Array[Item] = []
 
 func _ready() -> void:
 	item_choice_container.columns = 6
-	refresh_panel.visible = true
+	btn_refresh.visible = true
 
 	if Player.stats.shop_upgrades < 3:
-		upgrade_panel.visible = true
+		btn_upgrade.visible = true
 	else:
-		upgrade_panel.visible = false
+		btn_upgrade.visible = false
 
+	Player.stats.stats_updated.connect(_update_gold_display)
+	_update_gold_display()
 	add_to_group("item_selection_events") 
-	setup_labels()
-
-	generate_item_choices()
-
-func setup_labels():
-	name_label.text = box_name
 	refresh_cost_label()
-	dialogue_label.text = box_desc
-	if box_desc == "" || box_desc == null:
-		dialogue_label.visible = false
+
+	#generate_item_choices()
+
+func _update_gold_display() -> void:
+	stat_gold.update_stat(Enums.Stats.GOLD, Player.stats.gold, Player.stats.gold)
 
 func generate_item_choices():
 	#clear old items
@@ -67,13 +64,13 @@ func generate_item_choices():
 		
 	# Get 3 random items
 	if Player.current_rank < 3:
-		common_items = ItemsManager.get_random_items(2, Enums.Rarity.COMMON, false, true)
-		uncommon_items = ItemsManager.get_random_items(3, Enums.Rarity.UNCOMMON, false, true)
+		common_items = ItemsManager.get_random_items(2, Enums.Rarity.COMMON, false, true, use_keyword_weighting)
+		uncommon_items = ItemsManager.get_random_items(3, Enums.Rarity.UNCOMMON, false, true, use_keyword_weighting)
 	else:
 		common_items = []
-		uncommon_items = ItemsManager.get_random_items(5, Enums.Rarity.UNCOMMON, false, true)
+		uncommon_items = ItemsManager.get_random_items(5, Enums.Rarity.UNCOMMON, false, true, use_keyword_weighting)
 
-	rare_items = ItemsManager.get_random_items(1, Enums.Rarity.RARE, false, true)
+	rare_items = ItemsManager.get_random_items(1, Enums.Rarity.RARE, false, true, use_keyword_weighting)
 
 	offered_items = common_items + uncommon_items + rare_items
 
@@ -84,7 +81,7 @@ func generate_item_choices():
 		itm_count += 1
 
 		var choice_button = item_choice_scene.instantiate()
-		choice_button.custom_minimum_size = Vector2(110, 140)
+		choice_button.custom_minimum_size = Vector2(200, 200)
 		item_choice_container.add_child(choice_button)
 		if itm_count > (base_items_offered + Player.stats.shop_upgrades):
 			choice_button.visible = false
@@ -93,10 +90,11 @@ func generate_item_choices():
 		choice_button.set_item(item)
 		choice_button.setup_for_store(false)
 		choice_button.item_purchased.connect(_on_item_selected)
+		choice_button.display_item()
 	
 	check_affordability()
 
-func _on_item_selected(item: ItemChoice):
+func _on_item_selected(item: ItemSelection):
 	purchase_item_from_store(item)
 
 func _on_btn_cancel_pressed() -> void:
@@ -113,19 +111,17 @@ func show_store():
 	else:
 		_restore_persistent_inventory()	
 
-	anim_player.play("show_store")
-	var anim_length = anim_player.get_animation("show_store").length
-	await CombatSpeed.create_timer(anim_length)
+	anim_player.play("show_popup")
+	await anim_player.animation_finished
 	is_store_open = true
 	Player.popup_open = true
 	_refresh_inventory_duplicate_indicators()
 
 func hide_store():
 	AudioManager.play_ui_sound("popup_close")
-	anim_player.play("hide_store")
+	anim_player.play("hide_popup")
 	_clear_inventory_duplicate_indicators()
-	var anim_length = anim_player.get_animation("hide_store").length
-	await CombatSpeed.create_timer(anim_length)	
+	await anim_player.animation_finished
 	is_store_open = false
 	Player.popup_open = false
 	store_closed.emit()
@@ -166,7 +162,7 @@ func check_affordability():
 				item_slot.can_afford()
 
 
-func purchase_item_from_store(purchased_item: ItemChoice):
+func purchase_item_from_store(purchased_item: ItemSelection):
 	if Player.stats.gold >= purchased_item.item_cost:
 		Player.subtract_gold(purchased_item.item_cost)
 
@@ -217,40 +213,50 @@ func refresh_after_upgrade():
 		_save_persistent_inventory()
 	
 	if Player.stats.shop_upgrades >= 3:
-		upgrade_panel.visible = false
+		btn_upgrade.visible = false
 
 
 func refresh_cost_label():
 	refresh_cost.text = str(Player.stats.refresh_cost)
 	upgrade_cost.text = str(Player.stats.upgrade_cost)
 
+	if Player.stats.upgrade_cost > Player.stats.gold:
+		btn_upgrade.disabled = true
+	else:
+		btn_upgrade.disabled = false
+
+	if Player.stats.refresh_cost > Player.stats.gold:
+		btn_refresh.disabled = true
+	else:
+		btn_refresh.disabled = false
+
 func _on_btn_upgrade_pressed() -> void:
+	anim_player.play("reroll")
 	refresh_after_upgrade()
 	AudioManager.play_event_sound("coins_02")
 
 
 func _on_btn_upgrade_mouse_exited() -> void:
 	CursorManager.reset_cursor()
-	anim_upgrade.play("hide_upgrade")
 
 func _on_btn_upgrade_mouse_entered() -> void:
-	CursorManager.set_interact_cursor()
-	AudioManager.play_ui_sound("woosh")
-	anim_upgrade.play("show_upgrade")
+	if btn_upgrade.disabled == false:
+		CursorManager.set_interact_cursor()
+		AudioManager.play_ui_sound("woosh")
 	
 
 func _on_btn_reroll_pressed() -> void:
+	anim_player.play("reroll")
 	refresh_store_display()
 	AudioManager.play_event_sound("coins_01")
 
 func _on_btn_reroll_mouse_exited() -> void:
 	CursorManager.reset_cursor()
-	anim_reroll.play("reroll_hide")
 
 func _on_btn_reroll_mouse_entered() -> void:
-	CursorManager.set_interact_cursor()
-	AudioManager.play_ui_sound("woosh")
-	anim_reroll.play("reroll_show")
+	if btn_refresh.disabled == false:
+		CursorManager.set_interact_cursor()
+		AudioManager.play_ui_sound("woosh")
 
 func _save_persistent_inventory():
 	Player.town_shop_inventory.clear()
@@ -277,7 +283,7 @@ func _restore_persistent_inventory():
 
 		if item_id == "":
 			var empty_slot = empty_item.instantiate()
-			empty_slot.custom_minimum_size = Vector2(110, 140)
+			empty_slot.custom_minimum_size = Vector2(200, 200)
 			if itm_count > (base_items_offered + Player.stats.shop_upgrades):
 				empty_slot.visible = false
 			else:
@@ -288,20 +294,21 @@ func _restore_persistent_inventory():
 			if item:
 				# Silently replace with empty slot if item is now invalid for player
 				var is_invalid = item == null \
+					or ItemsManager.is_item_banished(item_id) \
 					or (item.has_category("Unique") and Player.inventory.has_item_by_id(item_id)) \
 					or (item.has_category("Singularity") and Player.inventory.has_any_singularity_item()) \
 					or (GameSettings.scarcity_mode and item.rarity in [Enums.Rarity.UNCOMMON, Enums.Rarity.RARE, Enums.Rarity.LEGENDARY] and Player.inventory.has_item_by_id(item_id))
 
 				if is_invalid:
 					var empty_slot = empty_item.instantiate()
-					empty_slot.custom_minimum_size = Vector2(110, 140)
+					empty_slot.custom_minimum_size = Vector2(200, 200)
 					if itm_count > (base_items_offered + Player.stats.shop_upgrades):
 						empty_slot.visible = false
 					item_choice_container.add_child(empty_slot)
 				else:
 					offered_items.append(item)
 					var choice_button = item_choice_scene.instantiate()
-					choice_button.custom_minimum_size = Vector2(110, 140)
+					choice_button.custom_minimum_size = Vector2(200, 200)
 					if itm_count > (base_items_offered + Player.stats.shop_upgrades):
 						choice_button.visible = false
 					else:
@@ -310,6 +317,7 @@ func _restore_persistent_inventory():
 					choice_button.set_item(item)
 					choice_button.setup_for_store(false)
 					choice_button.item_purchased.connect(_on_item_selected)
+					choice_button.display_item()
 	
 	check_affordability()
 

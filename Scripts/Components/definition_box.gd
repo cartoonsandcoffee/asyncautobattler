@@ -6,7 +6,12 @@ extends Control
 @onready var pic_icon: TextureRect 
 @onready var panel_container: PanelContainer
 
+var _refs_set: bool = false
+
 func set_references():
+	if _refs_set:
+		return
+	_refs_set = true
 	keyword_label = $PanelContainer/MarginContainer2/PanelContainer/MarginContainer/HBoxContainer/VBoxContainer/lblKeyword
 	desc_label = $PanelContainer/MarginContainer2/PanelContainer/MarginContainer/HBoxContainer/VBoxContainer/lblDefinition
 	anim_player = $AnimationPlayer

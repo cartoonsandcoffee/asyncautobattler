@@ -1,5 +1,5 @@
 @tool
-class_name ItemOffering
+class_name PopupChest
 extends Control
 
 signal item_selected(Item)
@@ -14,14 +14,12 @@ enum FilterItemsBy {
 	ITEM_LIST
 }
 
-@onready var item_choice_container: GridContainer = $Panel/PanelContainer/VBoxContainer/itemArea/itemsContainer
-@onready var name_label: Label = $Panel/PanelContainer/VBoxContainer/lblName
-@onready var dialogue_label: RichTextLabel = $Panel/PanelContainer/VBoxContainer/marginDesc/txtDesc
-@onready var dialogue_margin: MarginContainer = $Panel/PanelContainer/VBoxContainer/marginDesc
-@onready var btn_skip: Button = $Panel/PanelContainer/VBoxContainer/HBoxContainer/btnSkip
-@onready var btn_reroll: Button = $Panel/PanelContainer/VBoxContainer/HBoxContainer/btnReroll
-@onready var anim_reroll: AnimationPlayer = $animReroll
-@onready var anim_player: AnimationPlayer = $AnimationPlayer
+@onready var item_choice_container: GridContainer = $CanvasLayer/Control/centerArea/PanelContainer/GridContainer
+@onready var btn_skip: Button = $CanvasLayer/Control/panelButtons/HBoxContainer/btnSkip
+@onready var btn_take: Button = $CanvasLayer/Control/panelButtons/HBoxContainer/btnTake
+@onready var btn_banish: Button = $CanvasLayer/Control/panelButtons/HBoxContainer/btnBanish
+@onready var anim_main: AnimationPlayer = $AnimationPlayer
+@onready var canvas_layer: CanvasLayer = $CanvasLayer
 
 ## Filter by what item criteria for selection
 @export var filter_by: ItemOffering.FilterItemsBy = ItemOffering.FilterItemsBy.RARITY:
@@ -31,12 +29,11 @@ enum FilterItemsBy {
 
 @export var item_rarity: Enums.Rarity = Enums.Rarity.COMMON
 @export var items_offered: int = 3
-@export var box_name:String = ""
-@export_multiline var box_desc:String = ""
 
 ## Includes an extra item of one rarity higher than selected above.
 @export var include_extra_rare: bool = false
-## Shop will weight items based on categories and keywords of player
+
+## Uses item's keywords to weight the randomness towards what player is building
 @export var use_keyword_weighting: bool = true
 
 @export_group("Weapon Stuff")
@@ -51,13 +48,10 @@ enum FilterItemsBy {
 @export var item_type: Item.ItemType
 @export var items: Array[Item] = []
 
-@export_group("Rerolls")
-## if 0 reroll button won't appear
-@export var rerolls: int = 0
-@export var reroll_button_text:String = ""
-@export var reroll_sound_name: String = ""
-
-var item_choice_scene = preload("res://Scenes/item_choice.tscn")
+var selected_item: Item = null
+var selected_card: ItemSelection = null
+var empty_item = preload("res://Scenes/Elements/empty_choice.tscn")
+var item_choice_scene = preload("res://Scenes/item_selection.tscn")
 var offered_items: Array[Item] = []
 var selection_locked: bool = false
 
@@ -91,24 +85,9 @@ func _ready() -> void:
 	add_to_group("item_selection_events") 
 	item_choice_container.columns = items_offered
 	if include_extra_rare: item_choice_container.columns = items_offered + 1
-	setup_labels()
-	setup_rerolls()
-
-func setup_rerolls():
-	if rerolls > 0:
-		btn_reroll.visible = true
-		btn_reroll.text = reroll_button_text
-	else:
-		btn_reroll.visible = false
-		
-func setup_labels():
-	name_label.text = box_name
-	dialogue_label.text = box_desc
-	if box_desc == "" || box_desc == null:
-		dialogue_margin.visible = false
-	else:
-		dialogue_margin.visible = true
-
+	btn_take.visible = false
+	btn_banish.visible = false
+	
 func generate_item_choices():
 	for child in item_choice_container.get_children():
 		item_choice_container.remove_child(child)
@@ -128,14 +107,75 @@ func generate_item_choices():
 	else:
 		offered_items = ItemsManager.get_items_by_item_type(items_offered, item_type, true, item_rarity)
 
+func show_the_choices():
 	# Create choice buttons for each item
 	for item in offered_items:
 		var choice_button = item_choice_scene.instantiate()
-		choice_button.custom_minimum_size = Vector2(110, 110)
+		choice_button.use_selection_mode = true
+		choice_button.custom_minimum_size = Vector2(200, 200)
 		item_choice_container.add_child(choice_button)
 		choice_button.set_item(item)
-		choice_button.item_selected.connect(_on_item_selected)
+		choice_button.item_selected.connect(_on_item_card_clicked)
 
+func _on_item_card_clicked(item: Item) -> void:
+	if selection_locked:
+		return
+	selected_item = item
+	for child in item_choice_container.get_children():
+		if child.has_method("set_selected"):
+			var is_this_card = child.has_method("get_current_item") and child.get_current_item() == item
+			child.set_selected(is_this_card)
+			if is_this_card:
+				selected_card = child
+	_update_action_bar()
+
+func _update_action_bar() -> void:
+	btn_banish.visible = selected_item != null
+	btn_take.visible = selected_item != null
+	var has_banishes = Player.banishes_left_this_rank > 0
+	btn_banish.visible = has_banishes
+	btn_banish.text = "Banish Item (%d)" % Player.banishes_left_this_rank if has_banishes else "No banishes remaining"
+
+func _on_btn_take_pressed() -> void:
+	if not selected_item:
+		return
+	var item_to_take := selected_item
+	if selected_card:
+		selected_card.confirm_selection()
+	_reset_selection()
+	_on_item_selected(item_to_take)
+
+func _on_btn_banish_pressed() -> void:
+	if not selected_item or Player.banishes_left_this_rank <= 0:
+		return
+	Player.banishes_left_this_rank -= 1
+	ItemsManager.banish_item(selected_item.item_id)
+	AudioManager.play_ui_sound("popup_close")
+	_replace_with_empty(selected_item)
+	_reset_selection()
+
+func _replace_with_empty(item: Item) -> void:
+	for child in item_choice_container.get_children():
+		if child.has_method("get_current_item") and child.get_current_item() == item:
+			var idx: int = child.get_index()
+			item_choice_container.remove_child(child)
+			child.free()
+			var empty_slot = empty_item.instantiate()
+			empty_slot.custom_minimum_size = Vector2(200, 200)
+			item_choice_container.add_child(empty_slot)
+			item_choice_container.move_child(
+				item_choice_container.get_child(item_choice_container.get_child_count() - 1), idx
+			)
+			break
+
+func _reset_selection() -> void:
+	selected_item = null
+	selected_card = null
+	btn_take.visible = false
+	btn_banish.visible = false
+	for child in item_choice_container.get_children():
+		if child.has_method("set_selected"):
+			child.set_selected(false)
 
 func _on_item_selected(item: Item):
 	if selection_locked:
@@ -163,39 +203,29 @@ func _on_item_selected(item: Item):
 
 func _on_btn_skip_pressed() -> void:
 	_clear_inventory_duplicate_indicators()
+	CursorManager.reset_cursor()
 	item_skipped.emit()
 
 func _on_btn_skip_mouse_exited() -> void:
-	pass # Replace with function body.
+	CursorManager.reset_cursor()
 
 func _on_btn_skip_mouse_entered() -> void:
 	AudioManager.play_ui_sound("woosh")
-
-func _on_btn_reroll_pressed() -> void:
-	rerolls -= 1
-	anim_reroll.play("reroll")
-	if reroll_sound_name &&  reroll_sound_name != "":
-		AudioManager.play_event_sound(reroll_sound_name)
-	setup_rerolls()
-	generate_item_choices()
-	
-
-func _on_btn_reroll_mouse_exited() -> void:
-	CursorManager.reset_cursor()
-
-func _on_btn_reroll_mouse_entered() -> void:
 	CursorManager.set_interact_cursor()
-	AudioManager.play_ui_sound("woosh")
+
 
 func show_popup():
+	AudioManager.play_ui_sound("chest_open")
 	generate_item_choices()
-	anim_player.play("show_box")
+	anim_main.play("show_popup")
+	await anim_main.animation_finished
+	show_the_choices()
 	_refresh_inventory_duplicate_indicators()
 
 func hide_popup():
-	anim_player.play("hide_box")
-	await anim_player.animation_finished
-
+	AudioManager.play_ui_sound("chest_close")
+	anim_main.play("hide_popup")
+	await anim_main.animation_finished
 
 func _refresh_inventory_duplicate_indicators():
 	var main_game = get_tree().get_first_node_in_group("main_game")

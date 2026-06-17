@@ -10,15 +10,39 @@ signal stat_animation_done()
 @onready var panel_stat: PanelContainer
 @onready var anim_player: AnimationPlayer
 
-
 @export var item: Item = null
+
+const ICON_POISON   	= preload("res://Resources/StatIcons/StatusIcons/status_poison.tres")
+const ICON_BURN     	= preload("res://Resources/StatIcons/StatusIcons/status_burn.tres")
+const ICON_ACID     	= preload("res://Resources/StatIcons/StatusIcons/status_acid.tres")
+const ICON_THORNS    	= preload("res://Resources/StatIcons/StatusIcons/status_thorns.tres")
+const ICON_REGEN     	= preload("res://Resources/StatIcons/StatusIcons/status_regen.tres")
+const ICON_BLESSING   	= preload("res://Resources/StatIcons/StatusIcons/status_blessing.tres")
+const ICON_BLIND   		= preload("res://Resources/StatIcons/StatusIcons/status_blind.tres")
+const ICON_STUN   		= preload("res://Resources/StatIcons/StatusIcons/status_stun.tres")
+const ICON_BLEED   		= preload("res://Resources/StatIcons/StatusIcons/status_poison.tres")
+
+const ICON_ATTACK     = preload("res://Resources/StatIcons/icon_attack.tres")
+const ICON_HEALTH     = preload("res://Resources/StatIcons/icon_health.tres")
+const ICON_SHIELD     = preload("res://Resources/StatIcons/icon_shield.tres")
+const ICON_SPEED      = preload("res://Resources/StatIcons/icon_speed.tres")
+const ICON_GOLD       = preload("res://Resources/StatIcons/stat_gold.tres")
+const ICON_STRIKES    = preload("res://Resources/StatIcons/stat_strikes.tres")
+const ICON_BURN_DMG   = preload("res://Resources/StatIcons/stat_burn.tres")
+const ICON_BLANK 	  = preload("res://Assets/Items/Blank.png")
+const ICON_WOUNDED    = preload("res://Resources/StatIcons/stat_wounded.tres")
+const ICON_EXPOSED    = preload("res://Resources/StatIcons/icon_broken_shield.tres")
 
 var stat_color: Color = Color.WHITE
 var item_color: Color = Color.WHITE
 var gamecolors: GameColors
-
+var _refs_set: bool = false
 
 func set_references():
+	if _refs_set:
+		return
+	_refs_set = true
+	
 	gamecolors = GameColors.new()
 	lbl_amount = $Panel/mainPanel/MarginContainer/VBoxContainer/HBoxContainer/panelStat/MarginContainer/HBoxContainer/lblAmount
 	lbl_info = $Panel/mainPanel/MarginContainer/VBoxContainer/lblInfo
@@ -31,44 +55,34 @@ func set_info(_info: String):
 	lbl_info.text = _info
 
 func set_status_visuals(_status: Enums.StatusEffects):
-	var status_acid: Texture2D = load("res://Resources/StatIcons/StatusIcons/status_acid.tres")
-	var status_blessing: Texture2D = load("res://Resources/StatIcons/StatusIcons/status_blessing.tres")
-	var status_blind: Texture2D = load("res://Resources/StatIcons/StatusIcons/status_blind.tres")
-	var status_burn: Texture2D = load("res://Resources/StatIcons/StatusIcons/status_burn.tres")
-	var status_poison: Texture2D = load("res://Resources/StatIcons/StatusIcons/status_poison.tres")
-	var status_regen: Texture2D = load("res://Resources/StatIcons/StatusIcons/status_regen.tres")
-	var status_stun: Texture2D = load("res://Resources/StatIcons/StatusIcons/status_stun.tres")
-	var status_thorns: Texture2D = load("res://Resources/StatIcons/StatusIcons/status_thorns.tres")
-	var status_bleed: Texture2D = load("res://Resources/StatIcons/StatusIcons/status_poison.tres")
-
 	match _status:
 		Enums.StatusEffects.POISON:
 			stat_color = gamecolors.stats.poison
-			pic_stat.texture = status_poison
+			pic_stat.texture = ICON_POISON
 		Enums.StatusEffects.THORNS:
 			stat_color = gamecolors.stats.thorns
-			pic_stat.texture = status_thorns
+			pic_stat.texture = ICON_THORNS
 		Enums.StatusEffects.ACID:
 			stat_color = gamecolors.stats.acid
-			pic_stat.texture = status_acid
+			pic_stat.texture = ICON_ACID
 		Enums.StatusEffects.REGENERATION:
 			stat_color = gamecolors.stats.regeneration
-			pic_stat.texture = status_regen
+			pic_stat.texture = ICON_REGEN
 		Enums.StatusEffects.BURN:
 			stat_color = gamecolors.stats.burn
-			pic_stat.texture = status_burn
+			pic_stat.texture = ICON_BURN
 		Enums.StatusEffects.STUN:
 			stat_color = gamecolors.stats.stun
-			pic_stat.texture = status_stun
+			pic_stat.texture = ICON_STUN
 		Enums.StatusEffects.BLIND:
 			stat_color = gamecolors.stats.strikes
-			pic_stat.texture = status_blind	
+			pic_stat.texture = ICON_BLIND	
 		Enums.StatusEffects.BLESSING:
 			stat_color = gamecolors.stats.shield
-			pic_stat.texture = status_blessing
+			pic_stat.texture = ICON_BLESSING
 		Enums.StatusEffects.BLEED:
 			stat_color = gamecolors.stats.damage
-			pic_stat.texture = status_bleed
+			pic_stat.texture = ICON_BLEED
 		_:
 			pass
 
@@ -76,85 +90,68 @@ func set_status_visuals(_status: Enums.StatusEffects):
 	pic_stat.self_modulate = stat_color
 
 func set_status_as_item_visuals(_status: Enums.StatusEffects):
-	var status_acid: Texture2D = load("res://Resources/StatIcons/StatusIcons/status_acid.tres")
-	var status_blessing: Texture2D = load("res://Resources/StatIcons/StatusIcons/status_blessing.tres")
-	var status_blind: Texture2D = load("res://Resources/StatIcons/StatusIcons/status_blind.tres")
-	var status_burn: Texture2D = load("res://Resources/StatIcons/StatusIcons/status_burn.tres")
-	var status_poison: Texture2D = load("res://Resources/StatIcons/StatusIcons/status_poison.tres")
-	var status_regen: Texture2D = load("res://Resources/StatIcons/StatusIcons/status_regen.tres")
-	var status_stun: Texture2D = load("res://Resources/StatIcons/StatusIcons/status_stun.tres")
-	var status_thorns: Texture2D = load("res://Resources/StatIcons/StatusIcons/status_thorns.tres")
-
 	match _status:
 		Enums.StatusEffects.POISON:
 			pic_item.self_modulate = gamecolors.stats.poison
-			pic_item.texture = status_poison
+			pic_item.texture = ICON_POISON
 		Enums.StatusEffects.THORNS:
 			pic_item.self_modulate = gamecolors.stats.thorns
-			pic_item.texture = status_thorns
+			pic_item.texture = ICON_THORNS
 		Enums.StatusEffects.ACID:
 			pic_item.self_modulate = gamecolors.stats.acid
-			pic_item.texture = status_acid
+			pic_item.texture = ICON_ACID
 		Enums.StatusEffects.REGENERATION:
 			pic_item.self_modulate = gamecolors.stats.regeneration
-			pic_item.texture = status_regen
+			pic_item.texture = ICON_REGEN
 		Enums.StatusEffects.BURN:
 			pic_item.self_modulate = gamecolors.stats.burn
-			pic_item.texture = status_burn
+			pic_item.texture = ICON_BURN
 		Enums.StatusEffects.STUN:
 			pic_item.self_modulate = gamecolors.stats.stun
-			pic_item.texture = status_stun
+			pic_item.texture = ICON_STUN
 		Enums.StatusEffects.BLIND:
 			pic_item.self_modulate = gamecolors.stats.strikes
-			pic_item.texture = status_blind	
+			pic_item.texture = ICON_BLIND	
 		Enums.StatusEffects.BLESSING:
 			pic_item.self_modulate = gamecolors.stats.shield
-			pic_item.texture = status_blessing					
+			pic_item.texture = ICON_BLESSING
+		Enums.StatusEffects.BLEED:
+			pic_item.self_modulate = gamecolors.stats.damage
+			pic_item.texture = ICON_BLEED	
 		_:
 			pass
 
 func set_stat_visuals(_stat: Enums.Stats):
-	var stat_attack: Texture2D = load("res://Resources/StatIcons/icon_attack.tres")
-	var stat_health: Texture2D = load("res://Resources/StatIcons/icon_health.tres")
-	var stat_shield: Texture2D = load("res://Resources/StatIcons/icon_shield.tres")
-	var stat_speed: Texture2D = load("res://Resources/StatIcons/icon_speed.tres")
-	var stat_gold: Texture2D = load("res://Resources/StatIcons/stat_gold.tres")
-	var stat_strikes: Texture2D = load("res://Resources/StatIcons/stat_strikes.tres")
-	var stat_brokenshield: Texture2D = load("res://Resources/StatIcons/icon_broken_shield.tres")
-	var stat_wounded: Texture2D = load("res://Resources/StatIcons/stat_wounded.tres")
-	var stat_burn_damage: Texture2D = load("res://Resources/StatIcons/stat_burn.tres")
-	var stat_blank: Texture2D = load("res://Assets/Items/Blank.png")
-
 	match _stat:
 		Enums.Stats.DAMAGE:
 			stat_color = gamecolors.stats.damage
-			pic_stat.texture = stat_attack
+			pic_stat.texture = ICON_ATTACK
 		Enums.Stats.HITPOINTS:
 			stat_color = gamecolors.stats.hit_points
-			pic_stat.texture = stat_health
+			pic_stat.texture = ICON_HEALTH
 		Enums.Stats.AGILITY:
 			stat_color = gamecolors.stats.agility
-			pic_stat.texture = stat_speed
+			pic_stat.texture = ICON_SPEED
 		Enums.Stats.SHIELD:
 			stat_color = gamecolors.stats.shield
-			pic_stat.texture = stat_shield
+			pic_stat.texture = ICON_SHIELD
 		Enums.Stats.GOLD:
 			stat_color = gamecolors.stats.gold
-			pic_stat.texture = stat_gold
+			pic_stat.texture = ICON_GOLD
 		Enums.Stats.STRIKES:
 			stat_color = gamecolors.stats.strikes
-			pic_stat.texture = stat_strikes
+			pic_stat.texture = ICON_STRIKES
 		Enums.Stats.EXPOSED:
 			stat_color = gamecolors.stats.shield
-			pic_stat.texture = stat_brokenshield
+			pic_stat.texture = ICON_EXPOSED
 		Enums.Stats.WOUNDED:
 			stat_color = gamecolors.stats.hit_points
-			pic_stat.texture = stat_wounded
+			pic_stat.texture = ICON_WOUNDED
 		Enums.Stats.BURN_DAMAGE:
 			stat_color = gamecolors.stats.burn
-			pic_stat.texture = stat_burn_damage
+			pic_stat.texture = ICON_BURN_DMG
 		Enums.Stats.NONE:
-			pic_stat.texture = stat_blank
+			pic_stat.texture = ICON_BLANK
 
 	panel_stat.self_modulate = stat_color
 	pic_stat.self_modulate = stat_color

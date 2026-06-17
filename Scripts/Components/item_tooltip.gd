@@ -19,6 +19,15 @@ extends Control
 @onready var panel_bundle: PanelContainer
 @onready var lbl_bundle: Label
 
+const RARITY_COMMON    = preload("res://Resources/Rarity/common.tres")
+const RARITY_UNCOMMON  = preload("res://Resources/Rarity/uncommon.tres")
+const RARITY_RARE      = preload("res://Resources/Rarity/rare.tres")
+const RARITY_LEGENDARY = preload("res://Resources/Rarity/legendary.tres")
+const RARITY_MYSTIC    = preload("res://Resources/Rarity/mystic.tres")
+const RARITY_GOLDEN    = preload("res://Resources/Rarity/golden.tres")
+const RARITY_DIAMOND   = preload("res://Resources/Rarity/diamond.tres")
+const RARITY_CRAFTED   = preload("res://Resources/Rarity/crafted.tres")
+
 var gamecolors: GameColors
 var is_from_compendium: bool = false
 
@@ -49,7 +58,7 @@ var current_item: Item = null
 var current_entity = null  # player or enemy (for upgrade displaying on weapons)
 
 var stat_item = preload("res://Scenes/Elements/stat_item.tscn")
-var category_item = preload("res://Scenes/Elements/category_label.tscn")
+var category_item = preload("res://Scenes/Card/category_label.tscn")
 var definition_box_scene = preload("res://Scenes/Elements/definition_box.tscn")
 var set_ingredient_item = preload("res://Scenes/Elements/set_bonus_display.tscn")
 
@@ -506,42 +515,33 @@ func set_rarity_color() -> Color:
 		return Color.WHITE
 
 func set_rarity():
-	var rarity_common: Texture2D = load("res://Resources/Rarity/common.tres")
-	var rarity_uncommon: Texture2D = load("res://Resources/Rarity/uncommon.tres")
-	var rarity_rare: Texture2D = load("res://Resources/Rarity/rare.tres")
-	var rarity_legendary: Texture2D = load("res://Resources/Rarity/legendary.tres")
-	var rarity_mystic: Texture2D = load("res://Resources/Rarity/mystic.tres")
-	var rarity_golden: Texture2D = load("res://Resources/Rarity/golden.tres")
-	var rarity_diamond: Texture2D = load("res://Resources/Rarity/diamond.tres")
-	var rarity_crafted: Texture2D = load("res://Resources/Rarity/crafted.tres")
-
 	if current_item.rarity == Enums.Rarity.COMMON:
 		box_rarity.modulate = gamecolors.rarity.common
-		pic_rarity.texture = rarity_common
+		pic_rarity.texture = RARITY_COMMON
 		lbl_rarity.text = " Common  -"
 	elif current_item.rarity == Enums.Rarity.UNCOMMON:
 		box_rarity.modulate =  gamecolors.rarity.uncommon
-		pic_rarity.texture = rarity_uncommon
+		pic_rarity.texture = RARITY_UNCOMMON
 		lbl_rarity.text = " Uncommon  -"
 	elif current_item.rarity == Enums.Rarity.RARE:
 		box_rarity.modulate =  gamecolors.rarity.rare
-		pic_rarity.texture = rarity_rare
+		pic_rarity.texture = RARITY_RARE
 		lbl_rarity.text = " Rare  -"
 	elif current_item.rarity == Enums.Rarity.LEGENDARY:
 		box_rarity.modulate =  gamecolors.rarity.legendary
-		pic_rarity.texture = rarity_legendary
+		pic_rarity.texture = RARITY_LEGENDARY
 		lbl_rarity.text = " Legendary  -"
 	elif current_item.rarity == Enums.Rarity.GOLDEN:
 		box_rarity.modulate =  gamecolors.rarity.golden
-		pic_rarity.texture = rarity_golden
+		pic_rarity.texture = RARITY_GOLDEN
 		lbl_rarity.text = " Golden  -"
 	elif current_item.rarity == Enums.Rarity.DIAMOND:
 		box_rarity.modulate =  gamecolors.rarity.diamond
-		pic_rarity.texture = rarity_diamond
+		pic_rarity.texture = RARITY_DIAMOND
 		lbl_rarity.text = " Diamond  -"
 	elif current_item.rarity == Enums.Rarity.CRAFTED:
 		box_rarity.modulate =  gamecolors.rarity.crafted
-		pic_rarity.texture = rarity_crafted
+		pic_rarity.texture = RARITY_CRAFTED
 		lbl_rarity.text = " Crafted  -"
 	else:
 		box_rarity.modulate =  Color.GRAY

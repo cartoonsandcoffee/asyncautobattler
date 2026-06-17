@@ -28,6 +28,8 @@ signal need_item_replace(Item)
 @export var category_string: String = ""
 ## Shop will be saved and must be manually rerolled
 @export var persistent: bool = false 
+## Shop will weight items based on categories and keywords of player
+@export var use_keyword_weighting: bool = true
 
 var item_choice_scene = preload("res://Scenes/item_choice.tscn")
 var empty_item = preload("res://Scenes/Elements/empty_choice.tscn")
@@ -40,9 +42,6 @@ func _ready() -> void:
 	refresh_panel.visible = allow_refresh
 	add_to_group("item_selection_events") 
 	setup_labels()
-
-	if not persistent:
-		generate_item_choices()
 
 func setup_labels():
 	name_label.text = box_name
@@ -64,7 +63,7 @@ func generate_item_choices():
 		else:
 			offered_items = ItemsManager.get_random_items_by_categry_and_rarity(items_offered, item_rarity, include_extra_rare, category_string)
 	else:
-		offered_items = ItemsManager.get_random_items(items_offered, item_rarity, include_extra_rare, true)
+		offered_items = ItemsManager.get_random_items(items_offered, item_rarity, include_extra_rare, true, false, use_keyword_weighting)
 	
 	# Create choice buttons for each item
 	for item in offered_items:
@@ -85,6 +84,9 @@ func _on_btn_cancel_pressed() -> void:
 
 
 func show_store():
+	if not persistent:
+		generate_item_choices()
+
 	if persistent:
 		for child in item_choice_container.get_children():
 			item_choice_container.remove_child(child)

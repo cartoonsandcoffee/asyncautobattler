@@ -2,20 +2,19 @@ class_name HallwayEvent_Chest
 extends RoomEvent
 
 @onready var anim_event: AnimationPlayer = $animEvent
-@onready var anim_labels: AnimationPlayer = $animLabel
-@onready var anim_items: AnimationPlayer = $animItems
-@onready var button: Button = $picEvent/btnEvent
-@onready var items_offering: ItemOffering = $FreeItemOffering
+@onready var anim_hover: AnimationPlayer = $animHover
+@onready var button: Button = $eventControl/PanelContainer/picEvent/btnEvent
+@onready var popup_chest: DisplayItemChoicesFree = $DisplayItemChoicesFree
 
-@onready var particles: CPUParticles2D = $picEvent/particles
+@onready var particles: CPUParticles2D = $eventControl/PanelContainer/picEvent/particles
 
 func _ready():
 	super._ready()  # Call parent's _ready
 
 func initialize_event():
-	items_offering.item_selected.connect(_on_item_selected)
-	items_offering.item_skipped.connect(_on_item_skipped)
-	items_offering.need_item_replace.connect(_on_need_item_replace)
+	popup_chest.item_selected.connect(_on_item_selected)
+	popup_chest.item_skipped.connect(_on_item_skipped)
+	popup_chest.need_item_replace.connect(_on_need_item_replace)
 	show_event()
 
 func show_event():
@@ -24,7 +23,6 @@ func show_event():
 
 func disable_button():
 	button.disabled = true
-
 
 func _on_item_selected(item: Item):
 	complete_hallway()
@@ -37,9 +35,7 @@ func _on_need_item_replace(item: Item):
 
 func complete_hallway():
 	disable_button()
-	AudioManager.play_ui_sound("popup_close")
-	anim_items.play("hide_items")
-	await anim_items.animation_finished
+	popup_chest.hide_popup()
 
 	anim_event.play("hide_event")
 	await anim_event.animation_finished
@@ -49,19 +45,19 @@ func complete_hallway():
 func _on_btn_event_pressed() -> void:
 	disable_button()
 	particles.emitting = false
+	AudioManager.play_ui_sound("chest_open")
+	anim_event.play("open")
+	await anim_event.animation_finished
 	CursorManager.reset_cursor()
-	AudioManager.play_event_sound("coins_fall")
-	anim_labels.play("hide_label")
-	anim_items.play("show_items")
-	items_offering.show_popup()
+	popup_chest.show_popup()
 
 func _on_btn_event_mouse_exited() -> void:
-	if items_offering.visible == false:
+	if popup_chest.visible == false:
+		anim_hover.play("un_hover")
 		CursorManager.reset_cursor()
-		anim_labels.play("hide_label")
 
 func _on_btn_event_mouse_entered() -> void:
-	if items_offering.visible == false && !button.disabled:	
-		AudioManager.play_ui_sound("woosh")
+	if popup_chest.visible == false && !button.disabled:	
+		AudioManager.play_ui_sound("chest_hover")
+		anim_hover.play("hover")
 		CursorManager.set_interact_cursor()
-		anim_labels.play("show_label")
