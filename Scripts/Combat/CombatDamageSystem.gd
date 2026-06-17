@@ -7,6 +7,14 @@ extends Node
 signal damage_dealt(target, amount, source)
 signal healing_applied(target, amount)
 
+const ICON_POISON   	= preload("res://Resources/StatIcons/StatusIcons/status_poison.tres")
+const ICON_BURN     	= preload("res://Resources/StatIcons/StatusIcons/status_burn.tres")
+const ICON_ACID     	= preload("res://Resources/StatIcons/StatusIcons/status_acid.tres")
+const ICON_THORNS    	= preload("res://Resources/StatIcons/StatusIcons/status_thorns.tres")
+const ICON_REGEN     	= preload("res://Resources/StatIcons/StatusIcons/status_regen.tres")
+const ICON_BLESSING   	= preload("res://Resources/StatIcons/StatusIcons/status_blessing.tres")
+const ICON_HEALTH    	= preload("res://Resources/StatIcons/icon_health.tres")
+
 var combat_manager
 var stat_handler: CombatStatHandler
 var status_handler: CombatStatusHandler
@@ -131,32 +139,32 @@ func _get_visual_info_for_damage_type(damage_type: String, source) -> Dictionary
 					info.source_name = "Attack"
 		
 		"poison":
-			info.icon = load("res://Resources/StatIcons/StatusIcons/status_poison.tres")
+			info.icon = ICON_POISON
 			info.color = game_colors.stats.poison
 			info.source_name = "Poison"
 		
 		"burn":
-			info.icon = load("res://Resources/StatIcons/StatusIcons/status_burn.tres")
+			info.icon = ICON_BURN
 			info.color = game_colors.stats.burn
 			info.source_name = "Burn"
 		
 		"acid":
-			info.icon = load("res://Resources/StatIcons/StatusIcons/status_acid.tres")
+			info.icon = ICON_ACID
 			info.color = game_colors.stats.acid
 			info.source_name = "Acid"
 		
 		"thorns":
-			info.icon = load("res://Resources/StatIcons/StatusIcons/status_thorns.tres")
+			info.icon = ICON_THORNS
 			info.color = game_colors.stats.thorns
 			info.source_name = "Thorns"
 		
 		"regeneration":
-			info.icon = load("res://Resources/StatIcons/StatusIcons/status_regen.tres")
+			info.icon = ICON_REGEN
 			info.color = game_colors.stats.regeneration
 			info.source_name = "Regeneration"
 
 		"blessing":
-			info.icon = load("res://Resources/StatIcons/StatusIcons/status_blessing.tres")
+			info.icon = ICON_BLESSING
 			info.color = game_colors.stats.blessing
 			info.source_name = "Blessing"
 
@@ -168,7 +176,7 @@ func _get_visual_info_for_damage_type(damage_type: String, source) -> Dictionary
 				info.source_name = source.item_name
 		
 		"heal":
-			info.icon = load("res://Resources/StatIcons/icon_health.tres")
+			info.icon = ICON_HEALTH
 			info.color = game_colors.stats.regeneration
 			info.source_name = "Heal"
 	

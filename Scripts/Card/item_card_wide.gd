@@ -8,10 +8,14 @@ extends Control
 @onready var stats_grid: HBoxContainer 
 @onready var category_grid: GridContainer
 @onready var txt_upgrades: RichTextLabel
+@onready var panel_desc: PanelContainer
+@onready var extra_margin: MarginContainer
 
 @onready var lbl_rarity: Label
 @onready var pic_rarity: TextureRect
 @onready var box_rarity: HBoxContainer
+
+@onready var pic_item: TextureRect
 
 @onready var box_bundle: HBoxContainer
 @onready var panel_bundle: PanelContainer
@@ -28,8 +32,11 @@ var gamecolors: GameColors
 var is_from_compendium: bool = false
 var _is_mobile := OS.has_feature("mobile")
 var _details_visible := false
+var _refs_set: bool = false
 
 var KEYWORDS: Dictionary = {}
+var _trigger_regexes: Dictionary = {}
+var _keyword_regexes: Dictionary = {}
 
 # Trigger keywords (for special formatting)
 const TRIGGER_KEYWORDS = {
@@ -52,6 +59,15 @@ const TRIGGER_KEYWORDS = {
 	"burn damage": "#ff6600"
 }
 
+const RARITY_COMMON    = preload("res://Resources/Rarity/common.tres")
+const RARITY_UNCOMMON  = preload("res://Resources/Rarity/uncommon.tres")
+const RARITY_RARE      = preload("res://Resources/Rarity/rare.tres")
+const RARITY_LEGENDARY = preload("res://Resources/Rarity/legendary.tres")
+const RARITY_MYSTIC    = preload("res://Resources/Rarity/mystic.tres")
+const RARITY_GOLDEN    = preload("res://Resources/Rarity/golden.tres")
+const RARITY_DIAMOND   = preload("res://Resources/Rarity/diamond.tres")
+const RARITY_CRAFTED   = preload("res://Resources/Rarity/crafted.tres")
+
 var current_item: Item = null
 var current_entity = null  # player or enemy (for upgrade displaying on weapons)
 
@@ -63,6 +79,8 @@ var set_bonus_box_scene = preload("res://Scenes/Card/set_bonus_box.tscn")
 var pending_set_bonus: SetBonus = null
 var stats_to_add: Dictionary = {}
 var definition_boxes: Array[Control] = []
+var _cached_categories: Array[String] = []
+var _cached_stats: Dictionary = {}
 var found_keywords = []
 var pending_ingredients: Array[Item] = []
 var placement_side: String = "above"
@@ -116,7 +134,7 @@ func _init_keywords():
 		},
 		"blind": {
 			"color": GameColors.stats.blind,
-			"description": "Your attack is halved as long as you have blind stacks. Remove 1 stack at turn end.",
+			"description": "Your attack is halved (15+ stacks it is thirded). Remove 1 stack at turn end.",
 			"icon": CombatLog.ICON_BLIND
 		},
 		"blessing": {
@@ -146,8 +164,15 @@ func _init_keywords():
 		}	
 	}
 
+	for keyword in KEYWORDS:
+		var rx = RegEx.new()
+		rx.compile("(?i)\\b" + keyword + "\\b")
+		_keyword_regexes[keyword] = rx
+
 func _unhandled_input(event: InputEvent) -> void:
 	if is_from_compendium or _is_mobile:
+		return
+	if not is_visible_in_tree():
 		return
 	if event is InputEventKey and event.keycode == KEY_SHIFT:
 		if event.pressed and not _details_visible:
@@ -156,28 +181,36 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif not event.pressed and _details_visible:
 			_details_visible = false
 			_hide_definitions()
-
+			
 func set_references():
+	if _refs_set:
+		return
+	_refs_set = true
+	
 	panel_container = $Panel/Control/PanelContainer
 	panel = $Panel
 
-	lbl_name = $Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart/lblName
+	lbl_name = $Panel/Control/PanelContainer/MarginContainer/VBoxContainer/NameRarityArea/NameAndBundle/lblName
 
-	lbl_rarity = $Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart/rarityContainer/lblRarity
-	pic_rarity = $Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart/rarityContainer/picRarity
-	box_rarity = $Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart/rarityContainer
+	lbl_rarity = $Panel/Control/PanelContainer/MarginContainer/VBoxContainer/NameRarityArea/rarityContainer/lblRarity
+	pic_rarity = $Panel/Control/PanelContainer/MarginContainer/VBoxContainer/NameRarityArea/rarityContainer/picRarity
+	box_rarity = $Panel/Control/PanelContainer/MarginContainer/VBoxContainer/NameRarityArea/rarityContainer
 
-	lbl_desc = $Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/textMargin/VBoxContainer/txtDesc
-	stats_grid = $Panel/Control/PanelContainer/MarginContainer/VBoxContainer/TopPart/statContainer
-	category_grid = $Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/categoryGrid
-	txt_upgrades = $Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/textMargin/VBoxContainer/txtUpgrades
+	pic_item = $Panel/Control/PanelContainer/MarginContainer/VBoxContainer/ImageStatsArea/PanelContainer/picBorderItem/picItem
+	stats_grid = $Panel/Control/PanelContainer/MarginContainer/VBoxContainer/ImageStatsArea/VBoxContainer/statContainer
 
-	lbl_bundle = $Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/boxBundle/panelBundle/lblBundle
-	panel_bundle = $Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/boxBundle/panelBundle
-	box_bundle = $Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/boxBundle
+	lbl_desc = $Panel/Control/PanelContainer/MarginContainer/VBoxContainer/ImageStatsArea/VBoxContainer/panelDesc/MarginContainer/VBoxContainer/txtDesc
+	category_grid = $Panel/Control/PanelContainer/MarginContainer/VBoxContainer/BottomPart/MarginContainer2/categoryGrid
+	txt_upgrades = $Panel/Control/PanelContainer/MarginContainer/VBoxContainer/ImageStatsArea/VBoxContainer/panelDesc/MarginContainer/VBoxContainer/txtUpgrades
+	panel_desc = $Panel/Control/PanelContainer/MarginContainer/VBoxContainer/ImageStatsArea/VBoxContainer/panelDesc
+	extra_margin = $Panel/Control/PanelContainer/MarginContainer/VBoxContainer/ImageStatsArea/VBoxContainer/marginExtra
+
+	lbl_bundle = $Panel/Control/PanelContainer/MarginContainer/VBoxContainer/NameRarityArea/NameAndBundle/boxBundle/panelBundle/lblBundle
+	panel_bundle = $Panel/Control/PanelContainer/MarginContainer/VBoxContainer/NameRarityArea/NameAndBundle/boxBundle/panelBundle
+	box_bundle = $Panel/Control/PanelContainer/MarginContainer/VBoxContainer/NameRarityArea/NameAndBundle/boxBundle
 
 	anim_player = $AnimationPlayer
-	pic_card = $Panel/Control/PanelContainer/TextureRect
+	pic_card = $Panel/Control/PanelContainer/cardBack
 
 	panel_additional_info = $Panel/Control/panelAdditional
 	panel_desktop = panel_additional_info.get_node("panelDesktop")
@@ -187,6 +220,12 @@ func set_references():
 	if KEYWORDS.is_empty():
 		_init_keywords()
 
+	for trigger in TRIGGER_KEYWORDS:
+		var rx = RegEx.new()
+		rx.compile("(?i)\\b" + trigger + "\\b")
+		_trigger_regexes[trigger] = rx
+
+
 func set_item(this_item: Item, create_definitions: bool = true, entity = null):
 	set_references()
 	clear_definition_boxes()
@@ -195,6 +234,8 @@ func set_item(this_item: Item, create_definitions: bool = true, entity = null):
 	current_entity = entity
 
 	lbl_name.text = this_item.item_name
+	pic_item.texture = this_item.item_icon
+	pic_item.modulate = this_item.item_color
 
 	if entity:
 		if entity.current_weapon_rule_upgrade && this_item.item_type == Item.ItemType.WEAPON:
@@ -203,9 +244,8 @@ func set_item(this_item: Item, create_definitions: bool = true, entity = null):
 	set_rarity()
 	get_stat_bonuses()
 
-	set_upgrades()
-
 	show_description(this_item, create_definitions, entity)
+	set_upgrades()
 	show_stats()
 	show_categories(this_item.categories)
 	set_bundle()
@@ -239,6 +279,7 @@ func set_bundle():
 		box_bundle.visible = false
 
 func set_upgrades():
+	txt_upgrades.visible = false
 	var str_upgrades: String = ""
 	
 	var entity_to_check = current_entity if current_entity != null else Player
@@ -264,6 +305,8 @@ func set_upgrades():
 					str_upgrades += "[color=#ffdd44][b] sweat[/b][/color]"
 			
 	if str_upgrades != "":
+		panel_desc.show()
+		show_extra_margin()
 		txt_upgrades.visible = true
 		txt_upgrades.text = "It's covered in" + str_upgrades + ".\n"
 
@@ -321,6 +364,7 @@ func get_stat_bonuses():
 		stats_grid.hide()
 	else:
 		stats_grid.show()
+	show_extra_margin()
 
 func show_description(this_item: Item, create_definitions: bool = true, entity = null):
 	var desc: String = this_item.get_description()
@@ -336,54 +380,105 @@ func show_description(this_item: Item, create_definitions: bool = true, entity =
 		if create_definitions:
 			create_stacked_definitions()
 		lbl_desc.show()
+		panel_desc.visible = true
+		show_extra_margin()
 	else:
 		lbl_desc.hide()
+		panel_desc.visible = false
+		show_extra_margin()
+
+func show_extra_margin():
+	var showing_cnt: int = 0
+
+	if stats_grid.visible:
+		showing_cnt += 1
+	if panel_desc.visible:
+		showing_cnt += 1
+
+	if showing_cnt == 1:
+		extra_margin.visible = true
+	else:
+		extra_margin.visible = false
 
 func show_stats():
 	if stats_to_add.size() == 0:
+		if stats_grid.get_child_count() > 0:
+			for child in stats_grid.get_children():
+				child.queue_free()
+			_cached_stats.clear()
 		stats_grid.hide()
 		return
 
+	if stats_to_add == _cached_stats:
+		stats_grid.show()
+		return
+	_cached_stats = stats_to_add.duplicate()
+
 	stats_grid.show()
 
-	for child in stats_grid.get_children():
-		stats_grid.remove_child(child)
-		child.queue_free()
+	var existing := stats_grid.get_children()
+	var existing_count := existing.size()
+	var keys := stats_to_add.keys()
+	var new_count := keys.size()
 
-	for key in stats_to_add:
-		var stat = stat_item.instantiate()
-		stat.update_stat(stats_to_add[key].name, stats_to_add[key].value)
-		stat.custom_minimum_size = Vector2(80, 60)
-		stats_grid.add_child(stat)
+	for i in range(new_count):
+		var key = keys[i]
+		if i < existing_count:
+			existing[i].update_stat(stats_to_add[key].name, int(stats_to_add[key].value))
+		else:
+			var stat = stat_item.instantiate()
+			stat.update_stat(stats_to_add[key].name, int(stats_to_add[key].value))
+			stat.custom_minimum_size = Vector2(54, 78)
+			stats_grid.add_child(stat)
+
+	for i in range(new_count, existing_count):
+		existing[i].queue_free()
 
 func show_categories(categories: Array[String]):
-	for child in category_grid.get_children():
-		category_grid.remove_child(child)
-		child.queue_free()
-	if categories.size() > 0:
-		category_grid.columns = 3 #categories.size() 
-		for category in categories:
-			var cat_container = category_item.instantiate()
-			#cat_container.get_node("PanelContainer/MarginContainer/lblCategory").text = category
-			#cat_container.custom_minimum_size = Vector2(140,36)
-			var lbl = cat_container.get_node("MarginContainer/lblCategory")
-			lbl.text = category
+	if categories == _cached_categories:
+		category_grid.visible = categories.size() > 0
+		return
+	_cached_categories = categories.duplicate()
 
-			# Measure actual text width and add margin padding
-			var font = lbl.get_theme_font("font")
-			var font_size = lbl.get_theme_font_size("font_size")
-			var text_width = font.get_string_size(category, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size).x
-			cat_container.custom_minimum_size = Vector2(text_width + 60, 36)  # +24 for MarginContainer padding
+	var existing := category_grid.get_children()
+	var existing_count := existing.size()
+	var new_count := categories.size()
 
-			
-			if category == "Unique":
-				cat_container.get_node("MarginContainer/Button").tooltip_text = "Can only equip one of this item."
-			if category == "Singularity":
-				cat_container.get_node("MarginContainer/Button").tooltip_text = "Only one Singularity item equippable at a time."
-			category_grid.add_child(cat_container)
-		category_grid.show()
-	else:
+	if new_count == 0:
+		for child in existing:
+			child.queue_free()
 		category_grid.hide()
+		return
+
+	category_grid.columns = 4
+
+	for i in range(new_count):
+		var category := categories[i]
+		var cat_container: Control
+		if i < existing_count:
+			cat_container = existing[i]
+		else:
+			cat_container = category_item.instantiate()
+			category_grid.add_child(cat_container)
+
+		var lbl: Label = cat_container.get_node("MarginContainer/lblCategory")
+		lbl.text = category
+		var font := lbl.get_theme_font("font")
+		var font_size := lbl.get_theme_font_size("font_size")
+		var text_width := font.get_string_size(category, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size).x
+		cat_container.custom_minimum_size = Vector2(text_width + 60, 25)
+
+		var btn = cat_container.get_node("MarginContainer/Button")
+		btn.tooltip_text = ""
+		if category == "Unique":
+			btn.tooltip_text = "Can only equip one of this item."
+		elif category == "Singularity":
+			btn.tooltip_text = "Only one Singularity item equippable at a time."
+
+	for i in range(new_count, existing_count):
+		existing[i].queue_free()
+
+	category_grid.show()
 
 func _hide_definitions() -> void:
 	for box in definition_boxes:
@@ -399,8 +494,7 @@ func process_description(text: String) -> String:
 	for trigger in TRIGGER_KEYWORDS:
 		var color = TRIGGER_KEYWORDS[trigger]
 		# Case-insensitive replacement
-		var regex = RegEx.new()
-		regex.compile("(?i)\\b" + trigger + "\\b")
+		var regex = _trigger_regexes[trigger]
 		var matches = regex.search_all(processed_text)
 		
 		# Process matches in reverse to maintain string positions
@@ -412,8 +506,7 @@ func process_description(text: String) -> String:
  
 	# find the keywords so we can define them later
 	for keyword in KEYWORDS:
-		var regex = RegEx.new()
-		regex.compile("(?i)\\b" + keyword + "\\b")
+		var regex = _keyword_regexes[keyword]
 		if regex.search(text):
 			keywords_in_text.append(keyword)
 	
@@ -428,8 +521,7 @@ func process_description(text: String) -> String:
 		var color = data.color
 		
 		# Case-insensitive search
-		var regex = RegEx.new()
-		regex.compile("(?i)\\b" + keyword + "\\b")
+		var regex = _keyword_regexes[keyword]
 		var matches = regex.search_all(processed_text)
 		
 		# Process matches in reverse
@@ -456,8 +548,9 @@ func create_stacked_definitions():
 		panel_additional_info.visible = false
 
 	## -- KEYWORD LOOP
-	for i in range(found_keywords.size()):
-		var keyword = found_keywords[i]
+	var keywords_snapshot: Array = found_keywords.duplicate()
+	for i in range(keywords_snapshot.size()):
+		var keyword = keywords_snapshot[i]
 		if keyword not in KEYWORDS:
 			continue
 		
@@ -517,14 +610,14 @@ func create_stacked_definitions():
 		def_box.show_def()
 
 		# Stack upward for next box (negative y since Panel is bottom-anchored)
-		if i < found_keywords.size() - 1:  # If not the last one
+		if i < keywords_snapshot.size() - 1:  # If not the last one
 			y_offset -= (def_box_height + extra_spacing)
 
 	## -- INGREDIENT LOOP
 	var ingredient_box_width: float = 250.0
 
 	# Offset past the last keyword box before stacking ingredients
-	if found_keywords.size() > 0:
+	if keywords_snapshot.size() > 0:
 		y_offset -= (def_box_height + extra_spacing)
 
 	for i in range(pending_ingredients.size() - 1, -1, -1):
@@ -659,49 +752,42 @@ func set_rarity_color() -> Color:
 		return Color.WHITE
 
 func set_rarity():
-	var rarity_common: Texture2D = load("res://Resources/Rarity/common.tres")
-	var rarity_uncommon: Texture2D = load("res://Resources/Rarity/uncommon.tres")
-	var rarity_rare: Texture2D = load("res://Resources/Rarity/rare.tres")
-	var rarity_legendary: Texture2D = load("res://Resources/Rarity/legendary.tres")
-	var rarity_mystic: Texture2D = load("res://Resources/Rarity/mystic.tres")
-	var rarity_golden: Texture2D = load("res://Resources/Rarity/golden.tres")
-	var rarity_diamond: Texture2D = load("res://Resources/Rarity/diamond.tres")
-	var rarity_crafted: Texture2D = load("res://Resources/Rarity/crafted.tres")
 	var rarity_color: Color = Color.WHITE
 
 	if current_item.rarity == Enums.Rarity.COMMON:
 		rarity_color = gamecolors.rarity.common
-		pic_rarity.texture = rarity_common
+		pic_rarity.texture = RARITY_COMMON
 		lbl_rarity.text = " Common"
 	elif current_item.rarity == Enums.Rarity.UNCOMMON:
 		rarity_color =  gamecolors.rarity.uncommon
-		pic_rarity.texture = rarity_uncommon
+		pic_rarity.texture = RARITY_UNCOMMON
 		lbl_rarity.text = " Uncommon"
 	elif current_item.rarity == Enums.Rarity.RARE:
 		rarity_color =  gamecolors.rarity.rare
-		pic_rarity.texture = rarity_rare
+		pic_rarity.texture = RARITY_RARE
 		lbl_rarity.text = " Rare"
 	elif current_item.rarity == Enums.Rarity.LEGENDARY:
 		rarity_color =  gamecolors.rarity.legendary
-		pic_rarity.texture = rarity_legendary
+		pic_rarity.texture = RARITY_LEGENDARY
 		lbl_rarity.text = " Legendary"
 	elif current_item.rarity == Enums.Rarity.GOLDEN:
 		rarity_color =  gamecolors.rarity.golden
-		pic_rarity.texture = rarity_golden
+		pic_rarity.texture = RARITY_GOLDEN
 		lbl_rarity.text = " Golden"
 	elif current_item.rarity == Enums.Rarity.DIAMOND:
 		rarity_color=  gamecolors.rarity.diamond
-		pic_rarity.texture = rarity_diamond
+		pic_rarity.texture = RARITY_DIAMOND
 		lbl_rarity.text = " Diamond"
 	elif current_item.rarity == Enums.Rarity.CRAFTED:
 		rarity_color =  gamecolors.rarity.crafted
-		pic_rarity.texture = rarity_crafted
+		pic_rarity.texture = RARITY_CRAFTED
 		lbl_rarity.text = " Crafted"
 	else:
 		rarity_color =  Color.GRAY
 		lbl_rarity.text = " Unknown"
 		pic_rarity.visible = false
 
+	lbl_rarity.text += " " + set_item_type_desc()
 	box_rarity.modulate = rarity_color
 	set_outline_color(rarity_color)
 
@@ -729,3 +815,30 @@ func _setup_details_hint():
 	if has_definitions:
 		panel_desktop.visible = !_is_mobile
 		panel_mobile.visible = _is_mobile
+
+func set_item_type_desc() -> String:
+	if current_item:
+		match current_item.item_type:
+			Item.ItemType.BODY_ARMOR:
+				return "Armor"
+			Item.ItemType.BOOTS:
+				return "Boots"
+			Item.ItemType.GLOVES:
+				return "Gloves"
+			Item.ItemType.HELMET:
+				return "Helmet"
+			Item.ItemType.BELT:
+				return "Belt"
+			Item.ItemType.SHIELD:
+				return "Shield"
+			Item.ItemType.POTION:
+				return "Potion"
+			Item.ItemType.JEWELRY:
+				return "Jewelry"
+			Item.ItemType.WEAPON:
+				return "Weapon"
+			Item.ItemType.BUG:
+				return "Bug"
+			_:
+				return "Tool"
+	return ""

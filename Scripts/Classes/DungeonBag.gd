@@ -75,6 +75,13 @@ func exhaust_room(room_name: String) -> void:
 	_active_bag = _active_bag.filter(func(rd): return rd.room_name != room_name)
 	_temp_skipped = _temp_skipped.filter(func(rd): return rd.room_name != room_name)
 
+func is_available(room_def: RoomDefinition) -> bool:
+	## Check if a room is valid for targeted navigation (e.g. map maker).
+	## Checks exhaustion and player-state filters. Skips adjacency rules intentionally.
+	if _exhausted_ids.has(room_def.room_name):
+		return false
+	return _passes_filters(room_def)
+
 func draw() -> RoomDefinition:
 	"""Draw next valid room. Returns null only if truly nothing is available."""
 	var attempts = 0

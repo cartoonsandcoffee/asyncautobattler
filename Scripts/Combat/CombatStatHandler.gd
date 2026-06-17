@@ -15,6 +15,8 @@ signal death_triggered(entity)
 
 var combat_manager
 
+var is_blind_inverted_bonus: bool = false
+
 func _init(manager):
 	combat_manager = manager
 
@@ -185,14 +187,18 @@ func recalculate_damage(entity):
 	# Apply persistent conditional effects (only to output stats)
 	_apply_persistent_to_output_stats(entity)
 	
-	if entity.status_effects and entity.status_effects.blind > 0:
-		entity.stats.damage_current = int(ceil(float(entity.stats.damage_current) / 2.0))
+	if !is_blind_inverted_bonus:
+		if entity.status_effects and entity.status_effects.blind >= 15:
+			entity.stats.damage_current = int(ceil(float(entity.stats.damage_current) / 3.0))
+		elif entity.status_effects and entity.status_effects.blind > 0:
+			entity.stats.damage_current = int(ceil(float(entity.stats.damage_current) / 2.0))
 
 	entity.stats.stats_updated.emit()
 
 func _apply_persistent_to_output_stats(entity):
 	# Apply persistent rules to damage/strikes current values only.
-	
+	is_blind_inverted_bonus = false
+
 	var all_items = combat_manager.get_all_entity_items(entity)
 
 	var opponent = combat_manager.enemy_entity if entity == combat_manager.player_entity else combat_manager.player_entity	
@@ -224,6 +230,9 @@ func _apply_persistent_effect_to_output(entity, rule: ItemRule):
 				entity.stats.damage_current *= 2
 			"halve_damage", "half_damage":
 				entity.stats.damage_current = int(entity.stats.damage_current * 0.5)
+			"invert_blind":
+				entity.stats.damage_current = int(ceil(float(entity.stats.damage_current) * 1.5))
+				is_blind_inverted_bonus = true
 			"exposed_can_trigger_twice": 
 				if _get_entity_name(entity) == "Player":
 					combat_manager.player_can_exposed_twice = true

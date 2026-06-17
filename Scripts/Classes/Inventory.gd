@@ -73,16 +73,12 @@ func add_item_at_slot(new_item: Item, slot_index: int) -> bool:
 	
 	return false
 
-func has_unique_item(item_id: String) -> bool:
-	# Check if this specific unique item is already equipped.
+func has_item_by_id(item_id: String) -> bool:
 	for item in item_slots:
 		if item and item.item_id == item_id:
 			return true
-	
-	# Also check weapon slot
 	if weapon_slot and weapon_slot.item_id == item_id:
 		return true
-	
 	return false
 
 func has_any_singularity_item() -> bool:
@@ -110,7 +106,7 @@ func can_add_item(new_item: Item) -> bool:
 
 	# Check UNIQUE restriction
 	if new_item.has_category("Unique"):
-		if has_unique_item(new_item.item_id):
+		if has_item_by_id(new_item.item_id):
 			return false
 
 	# Check SINGULARITY restriction

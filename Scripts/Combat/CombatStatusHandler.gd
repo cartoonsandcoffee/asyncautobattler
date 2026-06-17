@@ -97,7 +97,8 @@ func get_status_value(entity, status: Enums.StatusEffects) -> int:
 			return entity.status_effects.blessing
 		Enums.StatusEffects.STUN:
 			return entity.status_effects.stun
-	
+		Enums.StatusEffects.BLEED:
+			return entity.status_effects.bleed
 	return 0
 
 # ===== TURN START PROCESSING =====
@@ -108,11 +109,14 @@ func has_any(entity) -> bool:
 		entity.status_effects.acid > 0 or
 		entity.status_effects.regeneration > 0 or
 		entity.status_effects.blind > 0 or
+		entity.status_effects.bleed > 0 or
 		entity.status_effects.thorns > 0 or
 		entity.status_effects.blessing > 0)
+		## Stun ignored because it procs on HIT
 
 func has_any_turn_start(entity) -> bool:
 	return (entity.status_effects.poison > 0 or
+		entity.status_effects.bleed > 0 or
 		entity.status_effects.acid > 0)
 
 func has_any_turn_end(entity) -> bool:
@@ -120,6 +124,7 @@ func has_any_turn_end(entity) -> bool:
 		entity.status_effects.regeneration > 0 or
 		entity.status_effects.blind > 0 or
 		entity.status_effects.thorns > 0)
+		## Stun ignored because it procs on HIT
 
 func process_turn_start_status_effects(entity):
 	# Process all status effects at the start of an entity's turn.
