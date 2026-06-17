@@ -41,8 +41,7 @@ func disable_button():
 
 func _on_item_selected(item: Item):
 	AudioManager.play_ui_sound("popup_close")
-	anim_box.play("hide_items")
-	await anim_box.animation_finished
+	items_offering.hide_popup()
 	anim_event.play("hide_event")
 	await anim_event.animation_finished
 	complete_event()
@@ -57,8 +56,7 @@ func _on_item_skipped():
 
 func _on_need_item_replace(item: Item):
 	AudioManager.play_ui_sound("popup_close")
-	anim_box.play("hide_items")
-	await anim_box.animation_finished
+	items_offering.hide_popup()
 	anim_event.play("hide_event")
 	await anim_event.animation_finished
 	complete_event()
@@ -83,4 +81,4 @@ func _on_button_pressed() -> void:
 	anim_label.play("hide_label")
 	CursorManager.reset_cursor()
 	AudioManager.play_ui_sound("popup_open")
-	anim_box.play("show_items")
+	items_offering.show_popup()

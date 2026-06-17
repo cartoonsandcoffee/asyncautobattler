@@ -63,6 +63,10 @@ func set_buttons():
 	btn_leaderboard.mouse_exited.connect(button_exit)
 	btn_current_champs.mouse_exited.connect(button_exit)
 
+func load_default_tab():
+	visible = true
+	_switch_tab("active_champions")
+
 func _switch_tab(tab: String) -> void:
 	if _current_tab == tab:
 		return
@@ -277,7 +281,8 @@ func _build_hall_rows(data: Array, show_player: bool) -> void:
 		else:
 			record.set_fields_hall_of_fame(date1,date2)
 
-		record.mouse_entered.connect(_show_build_details.bind(build))
+		record.record_mouse_entered.connect(_show_build_details.bind(build))
+		record.record_clicked.connect(_show_build_details.bind(build))
 		record.mouse_filter = Control.MOUSE_FILTER_STOP
 		list_container.add_child(record)
 

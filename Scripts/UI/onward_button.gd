@@ -27,6 +27,7 @@ func _on_btn_camp_pressed() -> void:
 	anim_popup.play("hide_popup")
 	await anim_popup.animation_finished
 	CursorManager.reset_cursor()
+	Player.times_returned_to_town_this_rank += 1 
 	chose_camp.emit()
 
 func _on_btn_onward_pressed() -> void:

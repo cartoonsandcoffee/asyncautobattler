@@ -64,15 +64,17 @@ var main_game: MainGameController
 # State management
 var current_state: PanelState = PanelState.HIDDEN
 
-var item_proc = preload("res://Scenes/Elements/combat_item_proc.tscn")
-var turn_sign = preload("res://Scenes/Elements/combat_turn_sign.tscn")
-var status_box = preload("res://Scenes/Elements/status_box.tscn")
+const ITEM_SLOT_SCENE = preload("res://Scenes/item.tscn")
+const item_proc = preload("res://Scenes/Elements/combat_item_proc.tscn")
+const turn_sign = preload("res://Scenes/Elements/combat_turn_sign.tscn")
+const status_box = preload("res://Scenes/Elements/status_box.tscn")
 
 # Combat state
 var is_visible: bool = false
 var current_player_entity
 var current_enemy_entity: Enemy
 var highlighted_item_slot: ItemSlot = null
+var _enemy_stats_dirty: bool = false
 
 # References to inventory slots for highlighting
 var inventory_item_slots: Array[ItemSlot] = []
@@ -124,12 +126,6 @@ func setup_for_combat(enemy_entity, inventory_slots: Array[ItemSlot], weapon_slo
 	_update_enemy_stats()
 	clear_statuses()
 	
-	_populate_enemy_inventory(current_enemy_entity)
-
-	# Check and display set bonuses for enemy
-	SetBonusManager.check_set_bonuses(current_enemy_entity)  # Calculate bonuses
-	_populate_enemy_set_bonuses(current_enemy_entity)        # Display them
-
 	_set_state(PanelState.PRE_COMBAT)
 
 	# Reset turn counter
@@ -145,6 +141,7 @@ func setup_for_combat(enemy_entity, inventory_slots: Array[ItemSlot], weapon_slo
 		# Boss fight - cannot run
 		can_run = false
 		enemy_inventory.visible = true
+		call_deferred("_populate_boss_display", current_enemy_entity)
 	else:
 		# Normal fight - can run if fast enough
 		enemy_inventory.visible = false
@@ -167,14 +164,12 @@ func _populate_enemy_set_bonuses(enemy: Enemy):
 	
 	enemy_set_container.visible = true
 	
-	var item_slot_scene = preload("res://Scenes/item.tscn")
-	
 	for bonus_item in bonus_items:
-		var item_container = item_slot_scene.instantiate()
+		var item_container = ITEM_SLOT_SCENE.instantiate()
 		item_container.owner_entity = enemy  # Set entity reference for tooltips
 		item_container.set_item(bonus_item)
 		item_container.slot_index = -3  # Special index for set bonuses
-		item_container.custom_minimum_size = Vector2(50, 50)
+		item_container.custom_minimum_size = Vector2(100, 50)
 		item_container.set_bonus()  # Apply set bonus styling
 		enemy_set_container.add_child(item_container)
 	
@@ -385,11 +380,16 @@ func _on_healing_applied(target, amount):
 		_update_enemy_stats()
 
 func _on_stat_changed(entity, stat: Enums.Stats, old_value: int, new_value: int):
-	"""Handle stat changes"""
 	if entity == current_enemy_entity:
-		_update_enemy_stats()
-	#else:
-	#	Player.stats.stats_updated.emit()  # NOTE: Player stat updates should happen in combatmanager.stat_changed
+		if not _enemy_stats_dirty:
+			_enemy_stats_dirty = true
+			call_deferred("_flush_enemy_stats")
+	
+	# NOTE: Player stat updates should happen in combatmanager.stat_changed
+
+func _flush_enemy_stats():
+	_enemy_stats_dirty = false
+	_update_enemy_stats()
 
 func _on_item_rule_triggered(item: Item, rule: ItemRule, entity):
 	pass
@@ -610,6 +610,13 @@ func _on_btn_instant_pressed() -> void:
 	CombatSpeed.set_speed(CombatSpeed.CombatSpeedMode.INSTANT)
 	_update_speed_label(CombatSpeed.CombatSpeedMode.INSTANT)
 
+func _populate_boss_display(enemy: Enemy):
+	# Get boss inventory
+	_populate_enemy_inventory(enemy)
+	# Check for set bonuses
+	SetBonusManager.check_set_bonuses(enemy)
+	# Display them
+	_populate_enemy_set_bonuses(enemy)
 
 func _populate_enemy_inventory(enemy: Enemy):
 	enemy_item_grid.columns = enemy.inventory.item_slots.size()
@@ -622,27 +629,22 @@ func _populate_enemy_inventory(enemy: Enemy):
 		print("[CombatPanel] Enemy has no inventory")
 		return
 	
-	var item_slot_scene = preload("res://Scenes/item.tscn")
-	
 	# Add weapon first
 	if enemy.inventory.weapon_slot:
 		enemy_weapon_slot.owner_entity = enemy
 		enemy_weapon_slot.set_item(enemy.inventory.weapon_slot)
-		print("[CombatPanel] Added enemy weapon: %s" % enemy.inventory.weapon_slot.item_name)
 	
 	# Add inventory items
 	for i in range(enemy.inventory.item_slots.size()):
 		var item = enemy.inventory.item_slots[i]
 		if item:
-			var item_slot = item_slot_scene.instantiate()
+			var item_slot = ITEM_SLOT_SCENE.instantiate()
 			item_slot.owner_entity = enemy
 			item_slot.set_item(item)
 			item_slot.custom_minimum_size = Vector2(110, 115)
 			item_slot.slot_index = i + 1
 			item_slot.set_order(i + 1)
 			enemy_item_grid.add_child(item_slot)
-			print("[CombatPanel] Added enemy item %d: %s" % [i, item.item_name])
-
 
 func _on_btn_quit_pressed() -> void:
 	hide_death_panel()
@@ -671,34 +673,53 @@ func _on_btn_new_run_mouse_entered() -> void:
 	AudioManager.play_ui_sound("new_run_hover")
 
 func _update_defeat_stats():
-	"""Update player stats after defeat and record champion victory if applicable."""
+	# - Update player stats after defeat. Save losing build for boss fights.
 	var player_id = Player.load_or_generate_uuid()
 	var current_rank = DungeonManager.current_rank
-	
-	print("[CombatPanel] Player defeated at rank %d - updating stats..." % current_rank)
-	
-	# 1. Update player's death stats
+	var is_boss_fight = current_enemy_entity != null and \
+		current_enemy_entity.enemy_type == Enemy.EnemyType.BOSS_PLAYER
+
+	print("[CombatPanel] Player defeated at rank %d (boss: %s)" % [current_rank, is_boss_fight])
+
+	# 1. Save losing build for all boss fights (ranks 1-6)
+	if is_boss_fight:
+		var build_data = Player.to_boss_data()
+		build_data["player_won"] = false
+		var result = await SupabaseManager.save_boss_build(build_data)
+
+		if result and result.status == 201:
+			var losing_build_id = result.data[0].get("id", "")
+			print("[CombatPanel] Losing build saved (id: %s)" % losing_build_id)
+
+			if current_rank < 6:
+				await SupabaseManager.cleanup_old_builds_at_rank(current_rank)
+			elif current_rank == 6:
+				var champion_id = DungeonManager.current_boss_data.get("id", "")
+				if not losing_build_id.is_empty() and not champion_id.is_empty():
+					await SupabaseManager.record_rank6_battle(
+						player_id, losing_build_id, champion_id, false
+					)
+		else:
+			push_warning("[CombatPanel] Failed to save losing build")
+
+	# 2. Update player death stats
 	await SupabaseManager.update_player_after_death(player_id, current_rank)
-	
-	# 2. Check if boss was a champion (rank 6 only)
+
+	# 3. Record champion victory if applicable (rank 6 only)
 	if current_rank == 6:
 		var boss_data = DungeonManager.current_boss_data
 		var boss_id = boss_data.get("id", "")
 		var is_shadow = boss_data.get("is_shadow", false)
-		
+
 		if not boss_id.is_empty() and not is_shadow:
-			# Real champion defeated player - record their victory
-			print("[CombatPanel] Champion %s defeated player - recording victory..." % boss_data.get("username"))
+			print("[CombatPanel] Champion %s defeated player - recording victory" % boss_data.get("username"))
 			await SupabaseManager.record_champion_victory(boss_id)
-			print("[CombatPanel] Champion victory recorded (owner earns +1 ear)")
-		elif is_shadow:
-			print("[CombatPanel] Shadow champion defeated player - no stats updated")
-	
-	# 3. Reload profile to sync updated stats
+
+	# 4. Sync profile
 	var profile = await SupabaseManager.get_player_profile(player_id)
 	if not profile.is_empty():
 		Player.load_profile_from_supabase(profile)
-	
+
 	print("[CombatPanel] Defeat stats updated")
 
 func hide_death_panel():

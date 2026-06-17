@@ -14,7 +14,6 @@ signal replacement_done()
 
 @onready var onward_button: OnwardButton = $OnwardButton
 @onready var fight_or_flee: FightOrFlee = $FightFlee
-@onready var pet_interface: Control = $PetItemInterface
 @onready var pet_button: Control = $BottomPanelHolder/stackedBarContainer/rowStatsStatusCets/boxDinglemeyer/PetButton
 
 @onready var stat_health: Control = $BottomPanelHolder/stackedBarContainer/rowStatsStatusCets/mainStatContainer/PanelContainer/VBoxContainer/HboxStats2/statHealth
@@ -34,8 +33,8 @@ signal replacement_done()
 @onready var status_grid: GridContainer = $BottomPanelHolder/stackedBarContainer/rowStatsStatusCets/StatusAndSets/statusBox
 
 @onready var discard_zone: PanelContainer = $DiscardZoneHolder/panelDiscard
-@onready var replacement_panel: Panel = $ReplaceItemPanel
-@onready var replacement_item: ItemSlot = $ReplaceItemPanel/controlReplace/PanelContainer/MarginContainer/mainContent/HBoxContainer/picHolder/MarginContainer/itemBox/ItemReplace
+@onready var replacement_panel: Panel = $ReplacePanel/ReplaceItemPanel
+@onready var replacement_item: ItemSlot = $ReplacePanel/ReplaceItemPanel/controlReplace/PanelContainer/MarginContainer/mainContent/HBoxContainer/picHolder/MarginContainer/itemBox/ItemReplace
 @onready var drop_panel: Panel = $DropItemPanel
 @onready var drop_item: ItemSlot = $DropItemPanel/panelBlack/MarginContainer/panelBorder/VBoxContainer/itemBox/ItemDrop
 
@@ -52,16 +51,17 @@ signal replacement_done()
 @onready var box_dinglemeyer: MarginContainer = $BottomPanelHolder/stackedBarContainer/rowStatsStatusCets/boxDinglemeyer
 
 ## -- Version Popup
-@onready var version_popup: Control = $versionPopup
-@onready var version_label: RichTextLabel = $versionPopup/PanelContainer/panelBlack/panelBorder/VBoxContainer/txtVersionMsg
+@onready var version_popup: Control = $PausePopups/versionPopup
+@onready var version_label: RichTextLabel = $PausePopups/versionPopup/PanelContainer/panelBlack/panelBorder/VBoxContainer/txtVersionMsg
 
 @onready var crt_shader: CanvasLayer = $CRT_Shader
 @onready var fog_shader: ColorRect = $Fog_Shader
 
-@onready var check_boss_panel: MapZoomPanel = $CheckBossPanel
-@onready var pause_menu: Control = $PauseMenu
-@onready var settings_menu: Control = $SettingsPanel
-@onready var compendium: Control = $Compendium
+@onready var pet_interface: Control = $PetPanel/PetItemInterface
+@onready var check_boss_panel: MapZoomPanel = $BossPanel/CheckBossPanel
+@onready var pause_menu: Control = $PausePopups/PauseMenu
+@onready var settings_menu: Control = $PausePopups/SettingsPanel
+@onready var compendium: Control = $PausePopups/Compendium
 
 var current_event
 
@@ -76,9 +76,11 @@ var dragging_instance_id: int = -1
 var dragging_from_slot: int = -1
 var dragging_slot: ItemSlot = null
 var drag_preview: Control = null
+var drag_layer: CanvasLayer = null
 var is_dragging: bool = false
 var is_hovering_discard_zone: bool = false
 var hovered_slot_during_drag: ItemSlot = null
+var _player_stats_dirty: bool = false
 
 # for combat
 var awaiting_combat_result: bool = false
@@ -166,11 +168,13 @@ func _ready():
 		create_test_player()
 		await _ensure_player_profile()
 		show_bottom_panel(true)
+		await DungeonManager.preload_remaining_bosses()
 		load_room(DungeonManager.get_town_room())
 	else:
 		DungeonManager.reset()
 		create_test_player()
 		await _ensure_player_profile()
+		await DungeonManager.preload_remaining_bosses()
 		load_starting_room()
 		
 	load_player_skin()
@@ -283,7 +287,6 @@ func create_test_player():
 
 
 func load_starting_room():
-	# Initialize rank 1
 	await DungeonManager.initialize_rank()
 
 	# Load starter room
@@ -302,6 +305,8 @@ func load_room(room_data: RoomData):
 	# Clear previous event
 	clear_current_event()
 	
+	anim_fade.play("fade_in")
+
 	# Load new event
 	load_room_event(room_data)
 	current_room_data = room_data
@@ -315,7 +320,7 @@ func load_room(room_data: RoomData):
 		pet_button.is_enabled(false)
 
 	# Fade transition
-	anim_fade.play("fade_in")
+
 	await anim_fade.animation_finished
 
 	if get_tree().has_group("item_selection_events"):
@@ -338,12 +343,11 @@ func load_player_skin():
 	color_hex = Player.skin_color.to_html()
 	
 	# Load sprite
-	var sprite_path = "res://Assets/Art/Player/Player_Skin_%d.png" % skin_id
-	if ResourceLoader.exists(sprite_path):
-		pic_player.modulate = Color(color_hex)
-		pic_player.texture = load(sprite_path)
+	var player_pov_sprite:Texture2D = SkinManager.get_sprite_texture_pov(skin_id)
+	if player_pov_sprite != null:
+		pic_player.texture = player_pov_sprite
 	else:
-		push_warning("[MainGame] Player skin sprite not found: %s" % sprite_path)	
+		push_warning("[MainGame] Player POV skin sprite not found for ID: %d" % skin_id)	
 
 func show_inventory_replacement_mode(new_item: Item):
 	pending_reward_item = new_item
@@ -407,6 +411,11 @@ func _handle_boss_victory():
 	DungeonManager.advance_rank()
 	Player.complete_rank_boss()
 
+	# --- UNLOCK THE CORRUPTED PATH: First Time Rank 5+ ---
+	if Player.current_rank == 5:
+		PathUnlockManager.unlock_path(2)
+	# ----------------
+
 	# 3. Load town for new rank
 	var town_room = DungeonManager.get_town_room()
 	if town_room:
@@ -465,6 +474,11 @@ func _handle_champion_victory():
 	
 	# Show champion victory screen
 	await _show_champion_victory_screen()
+
+	# --- UNLOCK CUSTOM PATH: First time clearing Rank 6 ---
+	PathUnlockManager.unlock_path(3)
+	# ----------------
+	
 	SaveManager.delete_saved_run()
 
 	# Return to main menu
@@ -591,6 +605,45 @@ func _on_inventory_size_changed(_new_size: int):
 	setup_inventory()
 
 func setup_inventory():
+	var needs_rebuild = item_slots.size() != Player.inventory.TOTAL_SLOTS
+
+	item_slots.resize(Player.inventory.TOTAL_SLOTS)
+	item_grid.columns = Player.inventory.TOTAL_SLOTS
+	setup_weapon()
+
+	if needs_rebuild:
+		for child in item_grid.get_children():
+			item_grid.remove_child(child)
+			child.queue_free()
+
+		for i in range(Player.inventory.TOTAL_SLOTS):
+			var item_container = item_slot.instantiate()
+			item_container.owner_entity = Player
+			item_container.custom_minimum_size = Vector2(110, 115)
+			item_container.slot_index = i
+			item_container.set_order(i + 1)
+			item_container.drag_started.connect(_on_drag_started)
+			item_container.drag_ended.connect(_on_drag_ended)
+			item_container.slot_dropped_on.connect(_on_slot_dropped_on)
+			item_slots[i] = item_container
+			item_grid.add_child(item_container)
+
+	# Always update contents and lock state
+	for i in range(Player.inventory.TOTAL_SLOTS):
+		if item_slots[i]:
+			_remove_crafting_slot_dims(item_slots[i])
+			item_slots[i].set_order(i + 1)
+			item_slots[i].set_item(Player.inventory.item_slots[i])
+			item_slots[i].set_locked(i >= Player.inventory.unlocked_slots)
+
+	_remove_crafting_slot_dims(weapon_slot)
+	SetBonusManager.check_set_bonuses(Player)
+	_reapply_crafting_slot_dims()
+
+func setup_inventory_OLD():
+	## Replacing this function but keeping the old version since it's completely functional and only being updated
+	## to try to improve the speed. After testing of the other function, this can be removed.
+
 	item_slots.clear()
 	item_slots.resize(Player.inventory.TOTAL_SLOTS)
 	item_grid.columns = Player.inventory.TOTAL_SLOTS
@@ -645,7 +698,7 @@ func setup_bonuses(entity):
 func show_item_replacement_overlay():
 	anim_tools.play("show_replace_item")
 	inventory_replacement_mode = true
-	replacement_panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	#replacement_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 
 func hide_item_replacement_overlay():
 	pending_weapon_replace = false
@@ -653,7 +706,7 @@ func hide_item_replacement_overlay():
 	anim_tools.play("hide_replace_item")
 	inventory_replacement_mode = false
 	replacement_done.emit()
-	replacement_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	#replacement_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 func show_item_drop_overlay():
 	anim_tools.play("show_drop_item")
@@ -690,9 +743,14 @@ func setup_weapon():
 	if not weapon_slot.drag_ended.is_connected(_on_weapon_drag_ended):
 		weapon_slot.drag_ended.connect(_on_weapon_drag_ended)	
 		
+func _flush_player_stats():
+	_player_stats_dirty = false
+	set_player_stats()
 
 func _on_stats_updated():
-	set_player_stats()
+	if not _player_stats_dirty:
+		_player_stats_dirty = true
+		call_deferred("_flush_player_stats")
 
 func _on_inventory_updated(item: Item, slot: int):
 	setup_inventory()
@@ -725,7 +783,8 @@ func _on_drag_ended(slot: ItemSlot):
 		setup_inventory()
 		Player.update_stats_from_items()
 		clear_dragging_vars()
-		slot.modulate.a = 1.0
+		if not slot.is_in_crafting_slot:
+			slot.modulate.a = 1.0
 		return
 
 	## -- DROPPING INTO AN ITEM COMBINER
@@ -795,9 +854,12 @@ func _on_drag_ended(slot: ItemSlot):
 	if _target_slot and _target_slot != slot:
 		# Perform the swap or move
 		perform_item_move(slot, _target_slot)
-
+	else:
+		if not slot.is_in_crafting_slot:
+			slot.modulate.a = 1.0
+	
 	clear_dragging_vars()
-	slot.modulate.a = 1.0
+
 	
 ## -- DRAGGING FROM PET SLOT TO INVENTORY
 func _on_pet_slot_drag_ended(slot: ItemSlot):
@@ -851,7 +913,8 @@ func _on_weapon_drag_ended(slot: ItemSlot):
 	
 	# If not over combiner, do nothing (weapon stays in weapon slot)
 	clear_dragging_vars()
-	slot.modulate.a = 1.0
+	if not slot.is_in_crafting_slot:
+		slot.modulate.a = 1.0
 
 func clear_dragging_vars():
 	if discard_zone.visible:
@@ -935,6 +998,11 @@ func get_current_item_combiner() -> ItemCombiner:
 				return node
 	return null	
 
+func _remove_crafting_slot_dims(_slot: ItemSlot):
+	_slot.modulate.a = 1.0
+	_slot.button.disabled = false
+	_slot.is_in_crafting_slot = false
+
 func _reapply_crafting_slot_dims():
 	var combiner = get_current_item_combiner()
 	if not combiner:
@@ -986,6 +1054,9 @@ func create_drag_preview(item: Item):
 	if drag_preview:
 		drag_preview.queue_free()
 	
+	if drag_layer:
+		drag_layer.queue_free()
+
 	drag_preview = Control.new()
 	drag_preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	drag_preview.size = Vector2(100, 100)
@@ -1001,7 +1072,12 @@ func create_drag_preview(item: Item):
 	icon.modulate.a = 0.8
 	
 	drag_preview.add_child(icon)
-	get_tree().root.add_child(drag_preview)
+
+	drag_layer = CanvasLayer.new()
+	drag_layer.layer = 11 #above the loot chests/store, but under the boss panel
+	drag_layer.add_child(drag_preview)
+
+	get_tree().root.add_child(drag_layer)
 
 func _show_panels():
 	pass
@@ -1260,10 +1336,12 @@ func _on_btn_cancel_replace_mouse_entered() -> void:
 
 func _on_btn_town_pressed() -> void:
 	fade_out()
+	Player.times_returned_to_town_this_rank += 1
 	_go_back_to_camp()
 
 func _go_back_to_camp() -> void:
 	onward_button.reset_anims()
+
 	var town_room = DungeonManager.get_town_room()
 	if town_room:
 		load_room(town_room)

@@ -98,11 +98,8 @@ func _initialize_systems():
 	await get_tree().process_frame
 	lbl.text += "."
 
-	SupabaseManager.initialize()
-	AudioManager.initialize()
-	CursorManager.initialize()
 	GameSettings.initialize()
-	await get_tree().process_frame
+	await GameSettings.fetch_remote_config()
 	lbl.text += "."
 	
 	_load_game()
@@ -113,7 +110,7 @@ func _load_game():
 	
 	# Now load your actual main scene
 	AudioManager.play_main_theme()
-	await anim_planet.animation_finished
+
 	control_menu.visible = true
 	load_menu_screen()
 	
@@ -240,7 +237,7 @@ func _on_btn_quit_pressed() -> void:
 	get_tree().quit()
 
 func _on_btn_hall_pressed() -> void:
-	champion_panel.visible = true
+	champion_panel.load_default_tab()
 
 func _on_btn_play_pressed() -> void:
 	anim_fader.play("fade_out")

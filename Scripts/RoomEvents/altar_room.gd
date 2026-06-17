@@ -51,13 +51,14 @@ func _on_button_pressed() -> void:
 	CursorManager.reset_cursor()
 	AudioManager.play_event_sound("corpse")
 	text_anim.play("altar_hide_text")
-	box_anim.play("altar_open_box")
+	#box_anim.play("altar_open_box")
 	item_combiner.show_popup()
 
 
 func close_box():
-	box_anim.play("altar_close_box")
-	await box_anim.animation_finished
+	#box_anim.play("altar_close_box")
+	#await box_anim.animation_finished
+	item_combiner.hide_popup()
 	enable_button()
 
 func _on_button_mouse_exited() -> void:
@@ -72,8 +73,7 @@ func _on_button_mouse_entered() -> void:
 		text_anim.play("altar_show_text")
 
 func _on_item_skipped():
-	box_anim.play("altar_close_box")
-	await box_anim.animation_finished
+	item_combiner.hide_popup()
 
 	anim_player.play("hide_event")
 	var anim_length = anim_player.get_animation("hide_event").length

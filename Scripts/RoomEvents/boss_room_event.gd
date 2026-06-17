@@ -121,61 +121,40 @@ func _handle_victory():
 
 	print("[BossRoom] Victory sequence complete, waiting for player to continue")
 
-func _save_player_build():
-	"""Save player's build to Supabase after boss victory."""
+func _save_player_build(player_won: bool = true) -> String:
+	## -- Save player's build to Supabase. Returns saved build ID or empty string.
 	if not has_node("/root/SupabaseManager"):
 		print("[BossRoom] SupabaseManager not available - skipping save")
-		return
+		return ""
 	
-	print("[BossRoom] Saving player build to Supabase...")
+	print("[BossRoom] Saving player build (won: %s) to Supabase..." % player_won)
 	
 	var build_data = Player.to_boss_data()
-
-	# DEBUG: Print what we're sending
-	print("[BossRoom] Build data to save:")
-	print("  - Username: %s" % build_data.get("username"))
-	print("  - Rank: %d" % build_data.get("rank"))
-	print("  - HP: %d/%d" % [build_data.get("curr_hp"), build_data.get("max_hp")])
-	print("  - Damage: %d" % build_data.get("base_damage"))
-	print("  - Weapon: %s" % build_data.get("weapon"))
-	var inventory_data = build_data.get("inventory", [])
-	var inventory_count = 0
-	if inventory_data is Array:
-		inventory_count = inventory_data.size()
-	elif inventory_data is String:
-		var parsed = JSON.parse_string(inventory_data)
-		inventory_count = parsed.size() if parsed else 0
-	print("  - Inventory size: %d items" % inventory_count)
-		
+	build_data["player_won"] = player_won
+	
 	var result = await SupabaseManager.save_boss_build(build_data)
-
-	# DEBUG: Print full response
-	print("[BossRoom] Supabase response:")
-	print("  - Status: %s" % (result.status if result else "null"))
-	print("  - Data: %s" % (result.data if result else "null"))
-
+	
 	if result and result.status == 201:
-		print("[BossRoom] ! Build saved to rank %d opponent pool!" % DungeonManager.current_rank)
-
-		# Cleanup old builds (keep only 50 per rank) - except for champions
+		var build_id = result.data[0].get("id", "")
+		print("[BossRoom] Build saved to rank %d pool (id: %s)" % [DungeonManager.current_rank, build_id])
+		
 		if DungeonManager.current_rank < 6:
 			await SupabaseManager.cleanup_old_builds_at_rank(DungeonManager.current_rank)
 		
-		# If it was rank 6, promote to champion
-		if DungeonManager.current_rank == 6:
-			var build_id = result.data[0].get("id")
-			if build_id:
-				await SupabaseManager.promote_to_champion(build_id)
-				print("[BossRoom] - Promoted to Champion!")
+		if DungeonManager.current_rank == 6 and player_won:
+			await SupabaseManager.promote_to_champion(build_id)
+			print("[BossRoom] Promoted to Champion!")
+		
+		return build_id
 	else:
-		var status = result.status if result else "null"
-		push_warning("[BossRoom] Failed to save build (status: %s)" % status)
+		push_warning("[BossRoom] Failed to save build (status: %s)" % (result.status if result else "null"))
+		return ""
 
 func _handle_defeat():
-	"""Handle player defeat - game over or retry."""
-	print("[BossRoom] Defeat. Game over.")
-	
-	## Supabase logging happening in the Combat_Panel.gd for the on_click events of the defeat menu.
+	# Defeat flow for boss battles is handled entirely in CombatPanel._update_defeat_stats()
+	# combat_completed signal is never emitted on defeat, so this function is unreachable
+	# from the boss battle path. Kept for structural clarity only.
+	pass
 
 ### =========================================================================
 ### POPUP STUFF
@@ -245,20 +224,22 @@ func _on_btn_final_victory_pressed() -> void:
 	var defeated_champion_id = DungeonManager.current_boss_data.get("id", "")
 	if not defeated_champion_id.is_empty():
 		await SupabaseManager.record_champion_defeat(defeated_champion_id)
-		print("[BossRoom] Recorded champion defeat")
 	
-	await _save_player_build()
-
-	# 4. Increment player's champion kill count
 	var player_id = Player.load_or_generate_uuid()
+	var attacker_build_id = await _save_player_build(true)  # promote_to_champion fires inside
+	
+	# Record in battle_history
+	if not attacker_build_id.is_empty() and not defeated_champion_id.is_empty():
+		await SupabaseManager.record_rank6_battle(player_id, attacker_build_id, defeated_champion_id, true)
+	
 	await SupabaseManager.award_ears_simple(player_id, 1, "First Champion Beat")
 	await SupabaseManager.increment_champions_killed(player_id)
-
-	# 4. Reload profile to sync local stats
+	
 	var profile = await SupabaseManager.get_player_profile(player_id)
 	if not profile.is_empty():
 		Player.load_profile_from_supabase(profile)
-
+	
 	Player.popup_open = false
-	print("[BossRoom] Player is now a champion!")	
+	print("[BossRoom] Player is now a champion!")
 	main_game_ref.boss_room_completed("final")
+

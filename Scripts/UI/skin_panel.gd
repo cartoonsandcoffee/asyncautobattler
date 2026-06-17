@@ -2,17 +2,24 @@ extends Control
 
 signal refresh_skin()
 
-@onready var lbl_feedback: Label = $PanelContainer/VBoxContainer/lblSkins
-@onready var skin_grid: GridContainer = $PanelContainer/VBoxContainer/ScrollContainer/skinGrid
-@onready var skin_card: SkinCard = $SkinCard
+@onready var skin_grid: GridContainer = $skinsBox/skinGrid
+@onready var skins_box_area: HBoxContainer = $skinsBox
+@onready var skin_card: SkinCard
+@onready var lbl_feedback: Label 
 
 const SKIN_BUTTON = preload("res://Scenes/Elements/skin_button.tscn")
 
 func _ready() -> void:
 	#print("[SkinPanel] Loading skin panel.")
-	_refresh()
 	SkinManager.skin_selected.connect(_on_skin_selected)
 	SkinManager.skin_unlocked.connect(_on_skin_unlocked)
+
+func assign_skin_card(card: SkinCard):
+	skin_card = card
+
+func assign_label(lbl: Label):
+	lbl_feedback = lbl
+	_refresh()
 
 func _refresh() -> void:
 	lbl_feedback.text = "Skins"
@@ -24,13 +31,14 @@ func _build_skin_cards() -> void:
 		child.queue_free()
 	
 	for skin in SkinManager.all_skins:
-		var card = SKIN_BUTTON.instantiate()
-		skin_grid.add_child(card)
-		card.setup(skin)
-		card.buy_pressed.connect(_on_buy_pressed.bind(skin))
-		card.select_pressed.connect(_on_select_pressed.bind(skin))
-		card.hover_on.connect(_show_hover_card.bind(skin))
-		card.hover_out.connect(_hide_hover_card)
+		if !skin.is_hidden:
+			var card = SKIN_BUTTON.instantiate()
+			skin_grid.add_child(card)
+			card.setup(skin)
+			card.buy_pressed.connect(_on_buy_pressed.bind(skin))
+			card.select_pressed.connect(_on_select_pressed.bind(skin))
+			card.hover_on.connect(_show_hover_card.bind(skin))
+			card.hover_out.connect(_hide_hover_card)
 	
 func _hide_hover_card():
 	skin_card.visible = false
@@ -79,6 +87,7 @@ func _refresh_card_states() -> void:
 func _show_feedback(msg: String, success: bool) -> void:
 	lbl_feedback.text = msg
 	lbl_feedback.modulate = Color.GREEN if success else Color.RED
+
 
 func _on_skin_selected(_skin_id: int) -> void:
 	if visible:

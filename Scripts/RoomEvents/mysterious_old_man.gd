@@ -2,7 +2,7 @@ class_name MysteriousOldManEvent
 extends RoomEvent
 
 
-@onready var item_choice_container: GridContainer = $panelOffer/PanelContainer/MarginContainer/VBoxContainer/itemContainer
+@onready var item_choice_container: GridContainer = $panelOffer/PanelContainer/MarginContainer/VBoxContainer/PanelContainer/itemContainer
 @onready var name_label: Label = $panelOffer/PanelContainer/MarginContainer/VBoxContainer/lblName
 @onready var dialogue_label: RichTextLabel = $panelOffer/PanelContainer/MarginContainer/VBoxContainer/lblDialog
 @onready var btn_event: Button = $eventHolder1/picEvent/btnEvent

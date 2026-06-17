@@ -48,16 +48,14 @@ func _on_item_selected(item: Item):
 
 func _on_item_skipped():
 	AudioManager.play_ui_sound("popup_close")
-	anim_box.play("hide_box")
-	await anim_box.animation_finished
+	items_offering.hide_popup()
 	anim_event.play("hide_event")
 	await anim_event.animation_finished
 	complete_event()
 
 func _on_need_item_replace(item: Item):
 	AudioManager.play_ui_sound("popup_close")
-	anim_box.play("hide_box")
-	await anim_box.animation_finished
+	items_offering.hide_popup()
 	anim_event.play("hide_event")
 	await anim_event.animation_finished
 	complete_event()
@@ -71,7 +69,7 @@ func _on_btn_event_pressed() -> void:
 	anim_label.play("hide_label")
 	CursorManager.reset_cursor()
 	AudioManager.play_ui_sound("popup_open")
-	anim_box.play("show_box")
+	items_offering.show_popup()
 
 func _on_btn_event_mouse_entered() -> void:
 	if items_offering.visible == false:	

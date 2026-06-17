@@ -1,13 +1,13 @@
 class_name TreasureJarRoomEvent
 extends RoomEvent
 
-@onready var anim_box: AnimationPlayer = $animBox
-@onready var anim_jars: AnimationPlayer = $animJars
-@onready var anim_open: AnimationPlayer = $animOpen
-@onready var button: Button = $picTreasure/Button
-@onready var items_offering: ItemOffering = $FreeItemOffering
+@onready var anim_event: AnimationPlayer = $animEvent
+@onready var anim_hover: AnimationPlayer = $animHover
 
-@onready var particles: CPUParticles2D = $picTreasure/particleBlood
+@onready var button: Button = $controlEvent/eventContainer/picTreasure/Button
+@onready var items_offering: DisplayItemChoicesFree = $DisplayItemChoicesFree
+
+@onready var particles: CPUParticles2D = $controlEvent/eventContainer/picTreasure/particleBlood
 
 
 func _ready():
@@ -17,9 +17,6 @@ func _ready():
 
 func initialize_event():
 	print("treasure_room_event -> initialize_event")
-	items_offering.item_selected.connect(_on_item_selected)
-	items_offering.item_skipped.connect(_on_item_skipped)
-	items_offering.need_item_replace.connect(_on_need_item_replace)
 
 func _run_room_event():
 	print("treasure_room_event -> _run_room_event (post-combat)")
@@ -27,21 +24,19 @@ func _run_room_event():
 	items_offering.item_skipped.connect(_on_item_skipped)
 	items_offering.need_item_replace.connect(_on_need_item_replace)
 	button.disabled = false
-	show_jars()
+	show_event()
 
-func show_jars():
-	anim_jars.play("show_jars")
-	await anim_jars.animation_finished
+func show_event():
+	anim_event.play("show_event")
+	await anim_event.animation_finished
 
-func jar_bounce():
-	anim_jars.play("jars_bounce")
+func complete_room():
+	items_offering.hide_popup()
 
-func hide_jars():
-	anim_jars.play("jars_done")
-	await anim_jars.animation_finished
+	anim_event.play("hide_event")
+	await anim_event.animation_finished
 
-func hover_text():
-	anim_open.play("text_hover")
+	complete_event()
 
 func enable_button():
 	button.disabled = false
@@ -52,38 +47,28 @@ func disable_button():
 func _on_button_pressed() -> void:
 	disable_button()
 	particles.emitting = false
-	anim_open.play("hide_text")
-	anim_box.play("openBox")
 	CursorManager.reset_cursor()
 	AudioManager.play_event_sound("corpse")
+	anim_event.play("open")
+	await anim_event.animation_finished	
 	items_offering.show_popup()
-
-func close_box():
-	anim_box.play("closeBox")
-	await anim_box.animation_finished
 
 func _on_button_mouse_exited() -> void:
 	if items_offering.visible == false:
-		anim_open.play("hide_text")
 		CursorManager.reset_cursor()
+		anim_hover.play("un_hover")
 
 func _on_button_mouse_entered() -> void:
 	if items_offering.visible == false:	
-		anim_open.play("show_text")
 		CursorManager.set_interact_cursor()
-		AudioManager.play_ui_sound("woosh")
+		AudioManager.play_event_sound("corpse")
+		anim_hover.play("hover")
 
 func _on_item_selected(item: Item):
-	close_box()
-	hide_jars()
-	complete_event()
+	complete_room()
 
 func _on_item_skipped():
-	close_box()
-	hide_jars()
-	complete_event()
+	complete_room()
 
 func _on_need_item_replace(item: Item):
-	close_box()
-	hide_jars()
-	complete_event()
+	complete_room()

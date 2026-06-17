@@ -12,7 +12,8 @@ extends Control
 @onready var lbl_filters: Label = $Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/MarginContainer2/lblFilters
 
 @onready var category_chips_container: HFlowContainer = $Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer/boxCategories
-@onready var keyword_chips_container: HFlowContainer = $Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer/boxKeywords
+@onready var keyword_chips_container: HFlowContainer = $Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/keywordBox/boxKeywords
+@onready var description_search: LineEdit = $Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/keywordBox/txtDescSearch
 
 @onready var bundle_general: Button = $Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer/boxBundles/bunGeneral
 @onready var bundle_revenge: Button = $Panel/pnlBlackBack/MarginContainer/pnlBorder/VBoxContainer/panelFilters/VBoxContainer/VBoxContainer/HBoxContainer/boxBundles/bunRevenge
@@ -26,6 +27,7 @@ extends Control
 
 var selected_keywords: Array[String] = []
 var keyword_buttons: Dictionary = {}
+var description_search_text: String = ""
 
 var selected_categories: Array[String] = []
 var category_buttons: Dictionary = {}
@@ -221,6 +223,14 @@ func apply_filters() -> void:
 				if keyword not in item.keywords:
 					is_visible = false
 					break
+
+		# Description search filter
+		if is_visible and description_search_text != "":
+			var matched = item.item_desc.to_lower().contains(description_search_text) \
+				or item.item_name.to_lower().contains(description_search_text) \
+				or item.mechanics.any(func(m: String) -> bool: return m.to_lower().contains(description_search_text))
+			if not matched:
+				is_visible = false
 		
 		node.visible = is_visible
 		if is_visible:
@@ -387,12 +397,14 @@ func _on_keyword_chip_toggled(keyword: String) -> void:
 	
 	apply_filters()
 
-
 func _on_btn_sets_pressed() -> void:
 	set_panel.visible = true
 	item_panel.visible = false
 
-
 func _on_btn_items_pressed() -> void:
 	set_panel.visible = false
 	item_panel.visible = true
+
+func _on_description_search_text_changed(new_text: String) -> void:
+	description_search_text = new_text.strip_edges().to_lower()
+	apply_filters()

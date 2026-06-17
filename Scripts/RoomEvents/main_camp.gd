@@ -4,11 +4,18 @@ extends RoomEvent
 @onready var shrine_popup: ItemCombiner = $shrine_popup
 @onready var forge_popup: ItemCombiner = $forge_popup
 @onready var crafting_popup: ItemCombiner = $crafting_popup
-@onready var merchant_popup: ItemTownStore = $merchant_popup
+@onready var merchant_popup: PopupTownStore = $PopupStore
+@onready var mapmaker_popup: PopupMapMaker = $PopupMapMaker
 @onready var banish_popup: ItemCombiner = $banish_popup
+@onready var boss_warning_popup: Control = $BossWarningPopup
+
+@onready var camp_map_button: Control = $FullScreenBlack/CampMap
+
 @onready var anim_upgrade: AnimationPlayer = $animUpgrade
 @onready var lbl_tip: Label = $FullScreenBlack/LabelContainer/lblTip
 
+@onready var btn_champion: Control = $FullScreenBlack/CenterButtons/CampChampion
+@onready var btn_shrine: Control = $FullScreenBlack/CenterButtons/CampShrine
 
 func _ready():
 	print("main_camp -> ready")
@@ -18,7 +25,26 @@ func _ready():
 	shrine_popup.combiner_closed.connect(_check_forge_indicator)
 	crafting_popup.combiner_closed.connect(_check_forge_indicator)
 	merchant_popup.store_closed.connect(_check_forge_indicator)
+	mapmaker_popup.destination_selected.connect(_on_map_maker_destination_selected)
 
+	set_champion_available()
+	set_shrine_available()
+
+func set_champion_available():
+	var is_avail: bool = true
+
+	if Player.rooms_cleared_this_run < 5:
+		is_avail = false
+
+	btn_champion.set_available(is_avail)
+
+func set_shrine_available():
+	var is_avail: bool = true
+
+	if Player.shrine_uses_left_this_rank <= 0:
+		is_avail = false 
+
+	btn_shrine.set_available(is_avail)
 
 func initialize_event():
 	print("main_camp -> initialize_event")
@@ -30,6 +56,7 @@ func _run_room_event():
 	heal_player()
 	Player.is_in_town = true
 	_check_forge_indicator()
+	_show_map_maker()
 
 func heal_player():
 	Player.stats.hit_points_current = Player.stats.hit_points
@@ -53,6 +80,31 @@ func _check_forge_indicator():
 				anim_upgrade.play("RESET")
 			return
 	anim_upgrade.play("RESET")
+	set_shrine_available()
+
+func _check_map_maker() -> bool:
+	if Player.map_makers_left_this_rank > 0:
+		if Player.times_returned_to_town_this_rank > 0:
+			if randf() <= 0.5:  ## - Should be 0.35 for a 35% chance to get the map maker
+				return true
+
+	return false
+
+func _show_map_maker():
+	camp_map_button.visible = _check_map_maker()
+	if camp_map_button.visible:
+		mapmaker_popup.roll_destinations()
+		camp_map_button.play_detail_anim()
+
+func _on_map_maker_destination_selected(room_id: String) -> void:
+	var _room_data: RoomData = DungeonManager.get_room_data_by_id(room_id)
+	if not _room_data:
+		return
+	Player.map_makers_left_this_rank -= 1
+	Player.add_rooms(1)
+	Player.is_in_town = false
+	main_game_ref.fade_out()
+	main_game_ref.load_room(_room_data)
 
 ## ---------------- BUTTON FUNCTIONS ---------------
 func generic_hover():
@@ -69,11 +121,13 @@ func _on_camp_shrine_button_exited() -> void:
 	generic_unhover()
 
 func _on_camp_shrine_button_entered() -> void:
-	generic_hover()
-	if Player.shrine_uses_left_this_rank <= 0:
-		lbl_tip.text = "You can only visit the shrine once per rank."
+	#generic_hover()
+	if btn_shrine.check_available():
+		lbl_tip.text = "A Shrine. Make an offering at the Shrine?"
+		AudioManager.play_ui_sound("shrine")
 	else:
-		lbl_tip.text = "Make an offering at the Shrine."
+		lbl_tip.text = "Someone is praying at the shrine now, maybe later."
+		AudioManager.play_random_voice_no()
 
 func _on_camp_shrine_button_clicked() -> void:
 	if Player.shrine_uses_left_this_rank <= 0:
@@ -83,23 +137,31 @@ func _on_camp_shrine_button_clicked() -> void:
 		CursorManager.reset_cursor()
 		AudioManager.play_ui_sound("popup_open")
 		shrine_popup.show_popup()
+		set_shrine_available()
 
 func _on_camp_champion_button_exited() -> void:
 	generic_unhover()
 
 func _on_camp_champion_button_entered() -> void:
-	lbl_tip.text = "Challenge the next Champion to advance your Rank."
+	if btn_champion.check_available():
+		lbl_tip.text = "Challenge the next Champion to advance your Rank."
+		AudioManager.play_ui_sound("cheer_short")
+	else:
+		lbl_tip.text = "The Champion's arena... You're not quite ready."
+		AudioManager.play_ui_sound("chains")
 
 func _on_camp_champion_button_clicked() -> void:
-	main_game_ref.check_boss_panel.show_panel()
-
+	if btn_champion.check_available():
+		main_game_ref.check_boss_panel.show_panel()
+	else:
+		boss_warning_popup.show_popup()
 
 func _on_camp_banish_button_exited() -> void:
 	generic_unhover()
 
 func _on_camp_banish_button_entered() -> void:
 	if Player.banishes_left_this_rank <= 0:
-		lbl_tip.text = "You can only banish " + str(Player.total_banishes_per_rank) + " items per rank."
+		lbl_tip.text = "You can only banish " + str(GameSettings.total_banishes_per_rank) + " items per rank."
 	else:
 		lbl_tip.text = "Banish an item into the abyss."
 
@@ -111,6 +173,18 @@ func _on_camp_banish_button_clicked() -> void:
 		CursorManager.reset_cursor()
 		AudioManager.play_ui_sound("popup_open")
 		banish_popup.show_popup()
+
+func _on_camp_map_button_exited() -> void:
+	generic_unhover()
+
+func _on_camp_map_button_entered() -> void:
+	generic_hover()
+	lbl_tip.text = "A wandering map maker."
+
+func _on_camp_map_button_clicked() -> void:
+	if Player.popup_open == false:
+		CursorManager.reset_cursor()
+		mapmaker_popup.show_popup()
 
 
 func _on_camp_combiner_button_exited() -> void:

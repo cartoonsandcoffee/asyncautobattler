@@ -58,14 +58,13 @@ func _on_button_pressed() -> void:
 	CursorManager.reset_cursor()
 	AudioManager.play_event_sound("corpse")
 	anim_text.play("hide_text")
-	anim_box.play("show_box")
+	item_combiner.show_popup()
 
 func _need_item_replace(item: Item):
 	_on_item_skipped()
 
 func _on_item_skipped():
-	anim_box.play("hide_box")
-	await anim_box.animation_finished
+	item_combiner.hide_popup()
 	anim_event.play("hide_animation")
 	await anim_event.animation_finished
 
