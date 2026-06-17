@@ -3,7 +3,7 @@ extends Node
 signal skin_selected(skin_id: int)
 signal skin_unlocked(skin_id: int)
 
-const SAVE_PATH = "user://skin_data.json"
+const SAVE_PATH = "user://skin_data_upd.json"
 
 # All skins defined here — add new skins to this list
 var all_skins: Array[SkinData] = []
@@ -59,7 +59,7 @@ func get_all_files_from_directory(path : String, file_ext:= "", files := []):
 
 func _load_local_data() -> void:
 	if not FileAccess.file_exists(SAVE_PATH):
-		unlocked_skin_ids = [0]  # Default always unlocked
+		unlocked_skin_ids = [0,1,2,3]  # Default always unlocked
 		selected_skin_id = 0
 		_save_local_data()
 		return
@@ -74,7 +74,7 @@ func _load_local_data() -> void:
 	
 	if not parsed or typeof(parsed) != TYPE_DICTIONARY:
 		push_warning("[SkinManager] Corrupt skin_data.json, resetting")
-		unlocked_skin_ids = [0]
+		unlocked_skin_ids = [0,1,2,3]
 		selected_skin_id = 0
 		_save_local_data()
 		return
@@ -137,9 +137,22 @@ func get_selected_skin() -> SkinData:
 
 func get_sprite_texture(skin_id: int) -> Texture2D:
 	var s := get_skin(skin_id)
-	if s and ResourceLoader.exists(s.sprite_path):
-		return load(s.sprite_path)
+	if s:
+		return s.sprite
 	return null
+
+func get_skin_preview(skin_id: int) -> Texture2D:
+	var s := get_skin(skin_id)
+	if s:
+		return s.skin_icon
+	return null
+
+func get_sprite_texture_pov(skin_id: int) -> Texture2D:
+	var s := get_skin(skin_id)
+	if s:
+		return s.player_pov_pic
+	return null
+
 
 func apply_selected_skin_to_player() -> void:
 	"""Call this after Player autoload is ready to sync skin_id."""

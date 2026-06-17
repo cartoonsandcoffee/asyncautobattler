@@ -8,8 +8,14 @@ var golden_item_registry: Dictionary = {}  # [common_item_name: String] -> golde
 var diamond_item_registry: Dictionary = {}  # [golden_item_name: String] -> diamond_item_name: String
 
 var banished_items_this_run: Array[String] = []  # Array of item_ids
+var _cached_all_items: Array[Item] = []
+var _all_items_dirty: bool = true
 
 var _initialized: bool = false
+
+## - The range variables for keyword weighting
+const KW_BOOST: float = 1.0  	## - The weight boost for each keyword
+const MAX_BOOST: float = 4.0  	## - cap at one keyword's worth regardless of matches
 
 func _ready():
 	pass
@@ -27,107 +33,12 @@ func initialize():
 	setup_items()
 	setup_crafting_recipes()
 
-
 func setup_crafting_recipes():
 	get_all_crafting_recipes_from_directory("res://Resources/CraftingRecipes/", ".tres")
 
 func setup_items():
 	get_all_files_from_directory("res://Resources/Items/", ".tres")
 	get_all_weapon_bonuses_from_directory("res://Resources/WeaponBonuses/", ".tres")
-
-
-func can_craft_items(item1: Item, item2: Item) -> bool:
-	"""Check if two items can be crafted together"""
-	if not item1 or not item2:
-		return false
-	
-	for recipe in crafting_recipes:
-		if recipe.validate_ingredients(item1, item2):
-			return true
-		
-	return false
-
-func can_craft_potion(item1: Item) -> bool:
-	"""Check if two items can be crafted together"""
-	if not item1:
-		return false
-	
-	for recipe in crafting_recipes:
-		if recipe.validate_single_upgrade(item1):
-			return true
-		
-	return false
-
-func can_combine_items(item1: Item, item2: Item) -> bool:
-	"""Check if two items can be crafted together"""
-	if not item1 or not item2:
-		return false
-	
-	if item1.item_name == item2.item_name:
-		if item1.rarity == item2.rarity:
-			if item1.rarity == Enums.Rarity.COMMON || item1.rarity == Enums.Rarity.GOLDEN:
-				return true
-
-	return false
-
-func craft_items(item1: Item, item2: Item) -> Item:
-	# Craft two items together and return the result (doesn't modify inventory)
-	if not can_craft_items(item1, item2):
-		push_error("Cannot craft these items together: " + item1.item_name + " + " + item2.item_name)
-		return null
-	
-	for recipe in crafting_recipes:
-		if recipe.validate_ingredients(item1, item2):
-			return recipe.get_result_item()
-	
-	return null
-
-func craft_potion(item1: Item) -> Item:
-	# Craft two items together and return the result (doesn't modify inventory)
-	if not can_craft_potion(item1):
-		push_error("Cannot upgrade this single item: " + item1.item_name)
-		return null
-	
-	for recipe in crafting_recipes:
-		if recipe.validate_single_upgrade(item1):
-			return recipe.get_result_item()
-	
-	return null
-
-
-func combine_items(item1: Item, item2: Item) -> Item:
-	# Combine two items together and return the result (doesn't modify inventory)
-	if not can_combine_items(item1, item2):
-		push_error("Cannot combine these items together: " + item1.item_name + " + " + item2.item_name)
-		return null
-	
-	if item1.rarity == Enums.Rarity.COMMON:
-		if get_item("golden_" + item1.item_id):
-			return get_item("golden_" + item1.item_id)
-	
-	if item1.rarity == Enums.Rarity.GOLDEN:
-		if get_item("diamond_" + item1.get_base_id()):
-			return get_item("diamond_" + item1.get_base_id())
-	
-	return null
-
-func get_all_craftable_items() -> Array[Item]:
-	"""Get all items that can be used in crafting"""
-	var craftable: Array[Item] = []
-	for item in available_items.values():
-		if item.rarity == Enums.Rarity.DIAMOND or item.rarity == Enums.Rarity.GOLDEN or item.rarity == Enums.Rarity.CRAFTED:
-			if item.unlocked:
-				craftable.append(item)
-	return craftable
-
-func get_all_weapon_upgrades() -> Array[Item]:
-	var upgrades: Array[Item] = []
-	for item in available_upgrades.values():
-		if item.item_type == Item.ItemType.UPGRADE:
-			if item.unlocked:
-				upgrades.append(item)
-	return upgrades
-
 
 func get_available_bundles() -> Array[Enums.ItemBundles]:
 	var bundles: Array[Enums.ItemBundles] = [Enums.ItemBundles.GENERAL]
@@ -152,62 +63,31 @@ func get_item_picture(item_name: String) -> Texture2D:
 		push_warning("[ItemsManager] Item picture not found: ", item_name)
 		return null
 
-func get_random_upgrades(count: int) -> Array[Item]:
-	var subset_upgrades: Array[Item] = []
-	var all_upgrades = get_all_weapon_upgrades()
-
-	# Filter for common rarity only
-	for upgrade in all_upgrades:
-
-		## Don't offer the current upgrade if there is one.
-		if Player.current_weapon_rule_upgrade:
-			if upgrade.item_name == Player.current_weapon_rule_upgrade.item_name:
-				continue
-
-		subset_upgrades.append(upgrade)
-
-	# Pick random items (without duplicates)
-	var selected: Array[Item] = []
-	var attempts: int = 0
-	var max_attempts: int = count * 10  # Safety limit
-
-	while selected.size() < count and subset_upgrades.size() > 0 and attempts < max_attempts:
-		attempts += 1
-		var random_item = subset_upgrades.pick_random()
-
-		selected.append(random_item)
-		subset_upgrades.erase(random_item)  # Remove to avoid duplicates
-
-	return selected
-
 func get_all_items(_filter_by_bundle: bool = true) -> Array[Item]:
-	# Get all available items (useful for shop UI)
-	var items: Array[Item] = []
-
 	if _filter_by_bundle:
+		if not _all_items_dirty and not _cached_all_items.is_empty():
+			return _cached_all_items
+
 		var allowed_bundles = get_available_bundles()
+		var items: Array[Item] = []
 		for item in available_items.values():
-			# ignore banished items
 			if is_item_banished(item.item_id):
 				continue
-				
-			#ignore locked items
 			if !item.unlocked:
 				continue
-
-			# Only include items from allowed bundles
 			if item.item_bundle in allowed_bundles:
 				items.append(item)
+		items.sort_custom(func(a, b): return a.rarity < b.rarity)
+		_cached_all_items = items
+		_all_items_dirty = false
+		return items
 	else:
-		# Return all items (for compendium)
+		var items: Array[Item] = []
 		for item in available_items.values():
 			items.append(item)
+		return items
 
-	# sort by rarity
-	items.sort_custom(func(a, b): return a.rarity < b.rarity)
-	return items
-
-func get_random_items(count: int, rarity: Enums.Rarity, include_bonus: bool = false, include_weapons: bool = false, max_1_weapon: bool = false) -> Array[Item]:
+func get_random_items(count: int, rarity: Enums.Rarity, include_bonus: bool = false, include_weapons: bool = false, max_1_weapon: bool = false, use_keyword_weighting: bool = true) -> Array[Item]:
 	var subset_items: Array[Item] = []
 	var all_items = get_all_items()
 	var wep_count: int = 0
@@ -216,9 +96,11 @@ func get_random_items(count: int, rarity: Enums.Rarity, include_bonus: bool = fa
 	for item in all_items:
 		if Player.inventory.weapon_slot and item.item_name == Player.inventory.weapon_slot.item_name:  # Don't offer player weapon they already have.
 			continue
-		if item.has_category("Unique") && Player.inventory.has_unique_item(item.item_id): # Don't offer player multiple copies of unique items
+		if item.has_category("Unique") && Player.inventory.has_item_by_id(item.item_id): # Don't offer player multiple copies of unique items
 			continue
 		if item.has_category("Singularity") && Player.inventory.has_any_singularity_item(): # Don't offer player singularity items if they have one
+			continue
+		if GameSettings.scarcity_mode and item.rarity in [Enums.Rarity.UNCOMMON, Enums.Rarity.RARE, Enums.Rarity.LEGENDARY] and Player.inventory.has_item_by_id(item.item_id):
 			continue
 
 		if item.rarity == rarity:
@@ -232,13 +114,17 @@ func get_random_items(count: int, rarity: Enums.Rarity, include_bonus: bool = fa
 					subset_items.append(item)
 	
 	# Pick random items (without duplicates)
+	var player_kws: Array[String] = []
+	if use_keyword_weighting:
+		player_kws = _get_player_inventory_keywords()
+
 	var selected: Array[Item] = []
 	var attempts: int = 0
 	var max_attempts: int = count * 10  # Safety limit
 
 	while selected.size() < count and subset_items.size() > 0 and attempts < max_attempts:
 		attempts += 1
-		var random_item = subset_items.pick_random()
+		var random_item = _pick_weighted(subset_items, player_kws) ## - OLD (pre-weighted): subset_items.pick_random()
 
 		# If limiting weapons, check if we already have one
 		if max_1_weapon and random_item.item_type == Item.ItemType.WEAPON:
@@ -257,7 +143,6 @@ func get_random_items(count: int, rarity: Enums.Rarity, include_bonus: bool = fa
 		selected.append(get_item_of_higher_tier(rarity))
 	return selected
 
-
 func get_items_by_item_type(count: int, _item_type: Item.ItemType, _limit_rarity: bool = false, _rarity: Enums.Rarity = Enums.Rarity.COMMON):
 	var subset_items: Array[Item] = []
 	var all_items = get_all_items()
@@ -266,7 +151,7 @@ func get_items_by_item_type(count: int, _item_type: Item.ItemType, _limit_rarity
 	for item in all_items:
 		if item.item_type == _item_type:
 
-			if item.has_category("Unique") && Player.inventory.has_unique_item(item.item_id): # Don't offer player multiple copies of unique items
+			if item.has_category("Unique") && Player.inventory.has_item_by_id(item.item_id): # Don't offer player multiple copies of unique items
 				continue
 			if item.has_category("Singularity") && Player.inventory.has_any_singularity_item(): # Don't offer player singularity items if they have one
 				continue
@@ -274,6 +159,8 @@ func get_items_by_item_type(count: int, _item_type: Item.ItemType, _limit_rarity
 				continue
 			if item.item_name == Player.inventory.weapon_slot.item_name:  # Don't offer player weapon they already have.
 				continue	
+			if GameSettings.scarcity_mode and item.rarity in [Enums.Rarity.UNCOMMON, Enums.Rarity.RARE, Enums.Rarity.LEGENDARY] and Player.inventory.has_item_by_id(item.item_id):
+				continue
 
 			if _limit_rarity and item.rarity == _rarity:
 				subset_items.append(item)
@@ -300,9 +187,11 @@ func get_items_by_category(count: int, _category: String):
 		for cat in item.categories:
 			if cat == _category:
 				if item.rarity in [Enums.Rarity.COMMON, Enums.Rarity.UNCOMMON, Enums.Rarity.RARE]:
-					if item.has_category("Unique") && Player.inventory.has_unique_item(item.item_id): # Don't offer player multiple copies of unique items
+					if item.has_category("Unique") && Player.inventory.has_item_by_id(item.item_id): # Don't offer player multiple copies of unique items
 						continue
 					if item.has_category("Singularity") && Player.inventory.has_any_singularity_item(): # Don't offer player singularity items if they have one
+						continue
+					if GameSettings.scarcity_mode and item.rarity in [Enums.Rarity.UNCOMMON, Enums.Rarity.RARE, Enums.Rarity.LEGENDARY] and Player.inventory.has_item_by_id(item.item_id):
 						continue
 					if item.unlocked:
 						subset_items.append(item)
@@ -361,9 +250,11 @@ func get_random_items_by_categry_and_rarity(count: int, rarity: Enums.Rarity, in
 				if item.rarity == rarity and item.unlocked:
 					if item.item_name == Player.inventory.weapon_slot.item_name:  # Don't offer player weapon they already have.
 						continue
-					if item.has_category("Unique") && Player.inventory.has_unique_item(item.item_id): # Don't offer player multiple copies of unique items
+					if item.has_category("Unique") && Player.inventory.has_item_by_id(item.item_id): # Don't offer player multiple copies of unique items
 						continue
 					if item.has_category("Singularity") && Player.inventory.has_any_singularity_item(): # Don't offer player singularity items if they have one
+						continue
+					if GameSettings.scarcity_mode and item.rarity in [Enums.Rarity.UNCOMMON, Enums.Rarity.RARE, Enums.Rarity.LEGENDARY] and Player.inventory.has_item_by_id(item.item_id):
 						continue
 					subset_items.append(item)
 	
@@ -394,9 +285,11 @@ func get_random_weapons_by_rarity(count: int, rarity: Enums.Rarity, include_bonu
 			if item.rarity == rarity and item.unlocked:
 				if item.item_name == Player.inventory.weapon_slot.item_name:  # Don't offer player weapon they already have.
 					continue
-				if item.has_category("Unique") && Player.inventory.has_unique_item(item.item_id): # Don't offer player multiple copies of unique items
+				if item.has_category("Unique") && Player.inventory.has_item_by_id(item.item_id): # Don't offer player multiple copies of unique items
 					continue
 				if item.has_category("Singularity") && Player.inventory.has_any_singularity_item(): # Don't offer player singularity items if they have one
+					continue
+				if GameSettings.scarcity_mode and item.rarity in [Enums.Rarity.UNCOMMON, Enums.Rarity.RARE, Enums.Rarity.LEGENDARY] and Player.inventory.has_item_by_id(item.item_id):
 					continue
 				subset_items.append(item)
 
@@ -476,47 +369,6 @@ func get_random_common_items(count: int) -> Array[Item]:
 	
 	return selected
 
-
-func reset_items():
-	available_items.clear()
-	available_upgrades.clear()
-
-	setup_items()
-
-func to_dict() -> Dictionary:
-	return get_save_data()
-
-func from_dict(d: Dictionary):
-	load_from_save(d)
-
-func get_save_data() -> Dictionary:
-	var item_data := {}
-	for item_name in available_items:
-		var item: Item = available_items[item_name]
-		var entry := {
-			"path": item.resource_path,
-			"unlocked": item.unlocked
-		}
-		item_data[item_name] = entry
-	return {
-		"available_items": item_data
-	}
-
-func load_from_save(save_data: Dictionary) -> void:
-	if not save_data.has("available_items"):
-		return
-	available_items.clear()
-	for item_name in save_data["available_items"].keys():
-		var item_entry = save_data["available_items"][item_name]
-		var path : String = item_entry.get("path", "")
-		var unlocked : bool = item_entry.get("unlocked", false)
-		var item: Item = load(path)
-		if item:
-			item.unlocked = unlocked
-			available_items[item_name] = item
-		else:
-			push_warning("Failed to load item at path: " + path)
-
 func get_item_by_id(item_id: String) -> Item:
 	for item_name in available_items:
 		var item = available_items[item_name]
@@ -525,6 +377,119 @@ func get_item_by_id(item_id: String) -> Item:
 	if available_items.has(item_id):
 		return available_items[item_id]
 	return null
+
+func player_has_duplicate(item: Item, item_is_in_inventory: bool = false) -> bool:
+	if (item.rarity != Enums.Rarity.COMMON && item.rarity != Enums.Rarity.GOLDEN):
+		return false
+	var count = 0
+	for inv_item in Player.inventory.item_slots:
+		if inv_item and inv_item.item_id == item.item_id:
+			count += 1
+	var threshold = 2 if item_is_in_inventory else 1
+
+	return count >= threshold
+
+func reset_items():
+	available_items.clear()
+	available_upgrades.clear()
+	_all_items_dirty = true
+	setup_items()
+
+## ====================================================================
+## Keyword weighting functions
+## ====================================================================
+
+func _get_player_inventory_keywords() -> Array[String]:
+	var kws: Array[String] = []
+	if Player.inventory.weapon_slot:
+		for kw in Player.inventory.weapon_slot.keywords:
+			if kw not in kws:
+				kws.append(kw)
+		for kw in Player.inventory.weapon_slot.categories:
+			if kw not in kws:
+				kws.append(kw)
+		for kw in Player.inventory.weapon_slot.mechanics:
+			if kw not in kws:
+				kws.append(kw)
+	for item in Player.inventory.item_slots:
+		if item:
+			for kw in item.keywords:
+				if kw not in kws:
+					kws.append(kw)
+			for kw in item.categories:
+				if kw not in kws:
+					kws.append(kw)
+			for kw in item.mechanics:
+				if kw not in kws:
+					kws.append(kw)
+
+	return kws
+
+func _pick_weighted(pool: Array[Item], player_kws: Array[String]) -> Item:
+	var weights: Array[float] = []
+	var total: float = 0.0
+	for item in pool:
+		var w: float = max(item.rng_weight, 0.1)
+		var boost: float = 0.0
+		for kw in item.keywords:
+			if kw in player_kws:
+				boost += KW_BOOST
+		for kw in item.categories:
+			if kw in player_kws:
+				boost += KW_BOOST
+		for kw in item.mechanics:
+			if kw in player_kws:
+				boost += KW_BOOST
+		w += min(boost, MAX_BOOST)
+		weights.append(w)
+		total += w
+	var roll: float = randf() * total
+	var cum: float = 0.0
+	for i in range(weights.size()):
+		cum += weights[i]
+		if roll <= cum:
+			return pool[i]
+	return pool[pool.size() - 1]  # fallback
+
+## ====================================================================
+## Upgrading functions
+## ====================================================================
+
+func get_all_weapon_upgrades() -> Array[Item]:
+	var upgrades: Array[Item] = []
+	for item in available_upgrades.values():
+		if item.item_type == Item.ItemType.UPGRADE:
+			if item.unlocked:
+				upgrades.append(item)
+	return upgrades
+
+func get_random_upgrades(count: int) -> Array[Item]:
+	var subset_upgrades: Array[Item] = []
+	var all_upgrades = get_all_weapon_upgrades()
+
+	# Filter for common rarity only
+	for upgrade in all_upgrades:
+
+		## Don't offer the current upgrade if there is one.
+		if Player.current_weapon_rule_upgrade:
+			if upgrade.item_name == Player.current_weapon_rule_upgrade.item_name:
+				continue
+
+		subset_upgrades.append(upgrade)
+
+	# Pick random items (without duplicates)
+	var selected: Array[Item] = []
+	var attempts: int = 0
+	var max_attempts: int = count * 10  # Safety limit
+
+	while selected.size() < count and subset_upgrades.size() > 0 and attempts < max_attempts:
+		attempts += 1
+		var random_item = subset_upgrades.pick_random()
+
+		selected.append(random_item)
+		subset_upgrades.erase(random_item)  # Remove to avoid duplicates
+
+	return selected
 
 func get_upgrade_by_id(item_id: String) -> Item:
 	for item_name in available_upgrades:
@@ -535,6 +500,125 @@ func get_upgrade_by_id(item_id: String) -> Item:
 		return available_upgrades[item_id]
 	return null
 
+
+
+## ====================================================================
+## Crafting and Combining functions
+## ====================================================================
+
+func get_recipe_for_item(item: Item) -> CraftingRecipe:
+	for recipe in crafting_recipes:
+		if recipe.result_item and recipe.result_item.item_id == item.item_id:
+			return recipe
+	return null
+
+func can_craft_items(item1: Item, item2: Item) -> bool:
+	"""Check if two items can be crafted together"""
+	if not item1 or not item2:
+		return false
+	
+	for recipe in crafting_recipes:
+		if recipe.validate_ingredients(item1, item2):
+			return true
+		
+	return false
+
+func can_craft_potion(item1: Item) -> bool:
+	"""Check if two items can be crafted together"""
+	if not item1:
+		return false
+	
+	for recipe in crafting_recipes:
+		if recipe.validate_single_upgrade(item1):
+			return true
+		
+	return false
+
+func can_combine_items(item1: Item, item2: Item) -> bool:
+	"""Check if two items can be crafted together"""
+	if not item1 or not item2:
+		return false
+	
+	if item1.item_name == item2.item_name:
+		if item1.rarity == item2.rarity:
+			if item1.rarity == Enums.Rarity.COMMON || item1.rarity == Enums.Rarity.GOLDEN:
+				return true
+
+	return false
+
+func craft_items(item1: Item, item2: Item) -> Item:
+	# Craft two items together and return the result (doesn't modify inventory)
+	if not can_craft_items(item1, item2):
+		push_error("Cannot craft these items together: " + item1.item_name + " + " + item2.item_name)
+		return null
+	
+	for recipe in crafting_recipes:
+		if recipe.validate_ingredients(item1, item2):
+			return recipe.get_result_item()
+	
+	return null
+
+func craft_potion(item1: Item) -> Item:
+	# Craft two items together and return the result (doesn't modify inventory)
+	if not can_craft_potion(item1):
+		push_error("Cannot upgrade this single item: " + item1.item_name)
+		return null
+	
+	for recipe in crafting_recipes:
+		if recipe.validate_single_upgrade(item1):
+			return recipe.get_result_item()
+	
+	return null
+
+func combine_items(item1: Item, item2: Item) -> Item:
+	# Combine two items together and return the result (doesn't modify inventory)
+	if not can_combine_items(item1, item2):
+		push_error("Cannot combine these items together: " + item1.item_name + " + " + item2.item_name)
+		return null
+	
+	if item1.rarity == Enums.Rarity.COMMON:
+		if get_item("golden_" + item1.item_id):
+			return get_item("golden_" + item1.item_id)
+	
+	if item1.rarity == Enums.Rarity.GOLDEN:
+		if get_item("diamond_" + item1.get_base_id()):
+			return get_item("diamond_" + item1.get_base_id())
+	
+	return null
+
+func get_all_craftable_items() -> Array[Item]:
+	"""Get all items that can be used in crafting"""
+	var craftable: Array[Item] = []
+	for item in available_items.values():
+		if item.rarity == Enums.Rarity.DIAMOND or item.rarity == Enums.Rarity.GOLDEN or item.rarity == Enums.Rarity.CRAFTED:
+			if item.unlocked:
+				craftable.append(item)
+	return craftable
+
+## ====================================================================
+## Banishing functions
+## ====================================================================
+
+func banish_item(item_id: String) -> void:
+	"""Banish an item for the rest of the current run"""
+	if item_id not in banished_items_this_run:
+		banished_items_this_run.append(item_id)
+		_all_items_dirty = true
+		print("[ItemsManager] Banished item: ", item_id)
+
+func is_item_banished(item_id: String) -> bool:
+	"""Check if an item is banished this run"""
+	return item_id in banished_items_this_run
+
+func clear_banished_items() -> void:
+	"""Reset banished items (call at start of new run)"""
+	banished_items_this_run.clear()
+	_all_items_dirty = true
+	print("[ItemsManager] Cleared banished items")
+
+## =================================================
+## Loading resources for items and recipes from directories
+## =================================================
 
 func get_all_files_from_directory(path : String, file_ext:= "", files := []):
 	var resources = ResourceLoader.list_directory(path)
@@ -593,34 +677,45 @@ func get_all_crafting_recipes_from_directory(path : String, file_ext:= "", files
 				push_warning("[ItemsManager] Failed to load crafting recipe: " + res)	
 	return files
 
-func banish_item(item_id: String) -> void:
-	"""Banish an item for the rest of the current run"""
-	if item_id not in banished_items_this_run:
-		banished_items_this_run.append(item_id)
-		print("[ItemsManager] Banished item: ", item_id)
+## =================================================
+## Dictionary helpers for Save/Load
+## =================================================
 
-func is_item_banished(item_id: String) -> bool:
-	"""Check if an item is banished this run"""
-	return item_id in banished_items_this_run
+func to_dict() -> Dictionary:
+	return get_save_data()
 
-func clear_banished_items() -> void:
-	"""Reset banished items (call at start of new run)"""
-	banished_items_this_run.clear()
-	print("[ItemsManager] Cleared banished items")
+func from_dict(d: Dictionary):
+	load_from_save(d)
 
-func player_has_duplicate(item: Item, item_is_in_inventory: bool = false) -> bool:
-	if (item.rarity != Enums.Rarity.COMMON && item.rarity != Enums.Rarity.GOLDEN):
-		return false
-	var count = 0
-	for inv_item in Player.inventory.item_slots:
-		if inv_item and inv_item.item_id == item.item_id:
-			count += 1
-	var threshold = 2 if item_is_in_inventory else 1
+func get_save_data() -> Dictionary:
+	var item_data := {}
+	for item_name in available_items:
+		var item: Item = available_items[item_name]
+		var entry := {
+			"path": item.resource_path,
+			"unlocked": item.unlocked
+		}
+		item_data[item_name] = entry
+	return {
+		"available_items": item_data
+	}
 
-	return count >= threshold
+func load_from_save(save_data: Dictionary) -> void:
+	if not save_data.has("available_items"):
+		return
+	available_items.clear()
+	_all_items_dirty = true
+	for item_name in save_data["available_items"].keys():
+		var item_entry = save_data["available_items"][item_name]
+		var path : String = item_entry.get("path", "")
+		var unlocked : bool = item_entry.get("unlocked", false)
+		var item: Item = load(path)
+		if item:
+			item.unlocked = unlocked
+			available_items[item_name] = item
+		else:
+			push_warning("Failed to load item at path: " + path)
 
-func get_recipe_for_item(item: Item) -> CraftingRecipe:
-	for recipe in crafting_recipes:
-		if recipe.result_item and recipe.result_item.item_id == item.item_id:
-			return recipe
-	return null
+func invalidate_cache() -> void:
+	_all_items_dirty = true
+	

@@ -63,6 +63,9 @@ func _get_entity_items(entity) -> Array[Item]:
 		if entity.inventory.weapon_slot:
 			items.append(entity.inventory.weapon_slot)
 		
+		if entity.current_weapon_rule_upgrade:
+			items.append(entity.current_weapon_rule_upgrade)
+
 		for item in entity.inventory.item_slots:
 			if item:
 				items.append(item)
@@ -105,3 +108,11 @@ func get_set_bonuses_for_item_array(items: Array[Item]) -> Array[Item]:
 			active_set_items.append(set_bonus.setbonus_item)
 	
 	return active_set_items
+
+func get_set_bonus_for_item(item: Item) -> SetBonus:
+	for sb in all_set_bonuses:
+		for req in sb.required_items:
+			if req.get_base_id() == item.get_base_id():
+				return sb
+	return null
+

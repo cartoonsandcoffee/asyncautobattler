@@ -19,10 +19,23 @@ var skip_opening: bool = false
 var fog_enabled: bool = true
 
 # Gameplay Settings (for future use)
-var combat_speed: int = 1  # 0=slow, 1=normal, 2=fast
+var combat_speed: int = 1  # 0=slow, 1=normal, 2=fast, 4 = instant
 var show_damage_numbers: bool = true
 var show_combat_log: bool = true
 var item_bundles: Array[int] = []
+var selected_path: int = 0
+var custom_skin_id: int = 3
+
+## =============================================================================
+## REMOTE CONFIG (fetched from Supabase at startup, falls back to defaults)
+## =============================================================================
+var max_bundles: int = 3
+var scarcity_mode: bool = true
+var total_rooms_per_rank: int = 10
+var total_campfires_per_rank: int = 1
+var total_shrine_uses_per_rank: int = 1
+var total_banishes_per_rank: int = 3
+var total_map_maker_uses_per_rank: int = 2
 
 # Save file path
 const SETTINGS_FILE = "user://game_settings.cfg"
@@ -175,6 +188,8 @@ func save_settings():
 	config.set_value("gameplay", "show_damage_numbers", show_damage_numbers)
 	config.set_value("gameplay", "show_combat_log", show_combat_log)
 	config.set_value("gameplay", "item_bundles", Player.item_bundles)
+	config.set_value("gameplay", "selected_path", Player.selected_path_index)
+	config.set_value("gameplay", "custom_skin_id", custom_skin_id)
 
 	var error = config.save(SETTINGS_FILE)
 	
@@ -209,9 +224,11 @@ func load_settings():
 
 
 	# Gameplay settings
-	combat_speed = config.get_value("gameplay", "combat_speed", 1)
+	combat_speed = int(config.get_value("gameplay", "combat_speed", 1))
 	show_damage_numbers = config.get_value("gameplay", "show_damage_numbers", true)
 	show_combat_log = config.get_value("gameplay", "show_combat_log", true)
+	selected_path = config.get_value("gameplay", "selected_path", 0)
+	custom_skin_id  = config.get_value("gameplay", "custom_skin_id", 3)
 	var raw = config.get_value("gameplay", "item_bundles", [])
 	item_bundles.assign(raw)
 
@@ -275,3 +292,16 @@ func set_volume_from_percent(bus_type: String, percent: int):
 			set_music_volume(volume)
 		"Ambience":
 			set_ambience_volume(volume)
+
+func fetch_remote_config() -> void:
+	var settings = await SupabaseManager.fetch_game_settings()
+	if settings.is_empty():
+		push_warning("[GameSettings] Remote config unavailable, using defaults")
+		return
+	max_bundles = settings.get("max_bundles", max_bundles)
+	scarcity_mode = settings.get("scarcity_mode", scarcity_mode)
+	total_rooms_per_rank = settings.get("total_rooms_per_rank", total_rooms_per_rank)
+	total_campfires_per_rank = settings.get("total_campfires_per_rank", total_campfires_per_rank)
+	total_shrine_uses_per_rank = settings.get("total_shrine_uses_per_rank", total_shrine_uses_per_rank)
+	total_banishes_per_rank = settings.get("total_banishes_per_rank", total_banishes_per_rank)
+	total_map_maker_uses_per_rank = settings.get("total_map_maker_uses_per_rank", total_map_maker_uses_per_rank)

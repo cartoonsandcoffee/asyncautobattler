@@ -75,6 +75,20 @@ const UI_SOUND_NAMES = {
 	"pappas": "res://Assets/Audio/SFX/UI/uwin.mp3",	
 	"vine_hover": "res://Assets/Audio/SFX/UI/vine_hover.ogg",
 	"vine_drop": "res://Assets/Audio/SFX/UI/rope_drop.ogg",
+	"cheer_long": "res://Assets/Audio/SFX/EVENT/cheer_longer.ogg",
+	"cheer_short": "res://Assets/Audio/SFX/EVENT/cheering.ogg",
+	"chains": "res://Assets/Audio/SFX/UI/chains.ogg",
+	"shrine": "res://Assets/Audio/SFX/UI/shrine.ogg",
+	"computer_01": "res://Assets/Audio/SFX/EVENT/computer_01.ogg",
+	"computer_02": "res://Assets/Audio/SFX/EVENT/computer_02.ogg",
+	"chest_open": "res://Assets/Audio/SFX/EVENT/chest_open_fast.ogg",
+	"chest_hover": "res://Assets/Audio/SFX/EVENT/chest_hover.ogg",
+	"chest_slow": "res://Assets/Audio/SFX/EVENT/chest_open.ogg",
+	"chest_close": "res://Assets/Audio/SFX/EVENT/chest_close.ogg",
+	"banish": "res://Assets/Audio/SFX/EVENT/banish.ogg",
+	"take": "res://Assets/Audio/SFX/EVENT/take_item.ogg",
+	"paper_drop": "res://Assets/Audio/SFX/EVENT/paper_drop.ogg",
+	"paper_hover": "res://Assets/Audio/SFX/EVENT/paper_hover.ogg",
 }
 
 const COMBAT_SOUND_NAMES = {
@@ -89,6 +103,7 @@ const EVENT_SOUND_NAMES = {
 	"campfire": "res://Assets/Audio/SFX/COMBAT/campfire.ogg",
 	"altar": "res://Assets/Audio/SFX/EVENT/altar2.ogg",
 	"dig_grave": "res://Assets/Audio/SFX/EVENT/dig_grave.ogg",
+	"fill_grave": "res://Assets/Audio/SFX/EVENT/fill_grave.ogg",
 	"corpse": "res://Assets/Audio/SFX/EVENT/corpse_pile.ogg",
 	"pipe": "res://Assets/Audio/SFX/EVENT/pipe.ogg",
 	"mmm": "res://Assets/Audio/SFX/EVENT/Mmm.ogg",

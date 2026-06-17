@@ -56,11 +56,22 @@ func test_connection() -> bool:
 	var result = await _supabase_get("/rest/v1/player_profiles?limit=1")
 	
 	if result.status == 200:
-		print("✓ Supabase connection successful!")
+		print("!! Supabase connection successful!")
 		return true
 	else:
-		push_error("✗ Supabase connection failed! Status: %d" % result.status)
+		push_error("X Supabase connection failed! Status: %d" % result.status)
 		return false
+
+
+# ============================================
+# GAME SETTINGS OPERATIONS
+# ============================================
+
+func fetch_game_settings() -> Dictionary:
+	var result = await _supabase_get("/rest/v1/game_settings?is_active=eq.true&select=*&limit=1")
+	if result.status == 200 and result.data is Array and not result.data.is_empty():
+		return result.data[0]
+	return {}
 
 # ============================================
 # PLAYER PROFILE OPERATIONS
@@ -240,7 +251,7 @@ func fetch_opponent_for_rank(rank: int, player_id: String) -> Dictionary:
 		return await fetch_champion_opponent(player_id)
 	
 	# For ranks 1-5, we just want any build at that rank
-	var query = "?rank=eq.%d&select=*&order=created_at.desc&limit=20" % rank
+	var query = "?rank=eq.%d&select=*&order=created_at.desc&limit=50" % rank
 	
 	print("DEBUG: Fetching opponents for rank %d" % rank)
 	print("DEBUG: Full query: ", query)
@@ -253,30 +264,18 @@ func fetch_opponent_for_rank(rank: int, player_id: String) -> Dictionary:
 		print("DEBUG: Error response: ", JSON.stringify(result.data, "\t"))
 	
 	if result.status != 200:
-		push_warning("Failed to fetch opponents: %d" % result.status)
+		push_warning("[SupabaseManager] Failed to fetch opponents: %d" % result.status)
 		return {}
 	
 	var builds = result.data
 	if builds.is_empty():
-		print("No opponents found for rank %d" % rank)
+		print("[SupabaseManager] No opponents found for rank %d" % rank)
 		return {}
 	
 	print("DEBUG: Found %d opponents" % builds.size())
 	
-	# Pick random from the most recent 20
-	var random_index = randi() % builds.size()
-	return builds[random_index]
+	return builds.pick_random()
 
-func get_boss_preview(build_id: String) -> Dictionary:
-	"""Get detailed boss info for preview screen."""
-	var query = "?id=eq.%s&select=username,rank,max_hp,curr_hp,base_damage,shield,agility,strikes,burn_damage,inventory,weapon" % build_id
-	
-	var result = await _supabase_get("/rest/v1/boss_builds" + query)
-	
-	if result.status == 200 and not result.data.is_empty():
-		return result.data[0]
-	else:
-		return {}
 
 func has_build_for_rank(player_id: String, rank: int) -> bool:
 	"""Check if player has already saved a build for this rank."""
@@ -290,7 +289,27 @@ func has_build_for_rank(player_id: String, rank: int) -> bool:
 # ============================================
 
 func fetch_champion_opponent(player_id: String) -> Dictionary:
-	"""Fetch a random champion opponent. If pool < 10, fill with shadows."""
+	"""Fetch champion opponent via SQL RPC (handles pool size, self-fight fallback, shadow logic server-side)."""
+	print("[SupabaseManager] Fetching champion opponent via RPC...")
+	
+	var result = await _supabase_rpc("fetch_champion_opponent", {"p_player_id": player_id})
+	
+	if result.status != 200:
+		push_error("[SupabaseManager] fetch_champion_opponent RPC failed: %d" % result.status)
+		return {}
+	
+	var data = result.data
+	if data is Array and not data.is_empty():
+		print("[SupabaseManager] Champion selected: %s" % data[0].get("username", "Unknown"))
+		return data[0]
+	
+	# Empty array = pool < 10, DungeonManager will spawn Wandering Spirit
+	print("[SupabaseManager] Champion pool insufficient, returning empty")
+	return {}
+	
+func fetch_champion_opponent_OLD_UNUSED(player_id: String) -> Dictionary:
+	## JDM: Keeping this function for when we revert back to the SHADOW functionality after testing
+	## --- Fetch a random champion opponent. If pool < 10, fill with shadows.
 	print("[SupabaseManager] Fetching champion opponent...")
 	
 	# Get all active champions (excluding player's own)
@@ -396,6 +415,21 @@ func record_champion_defeat(build_id: String):
 	"""Record defeat for champion (retires if soft cap allows)."""
 	print("[SupabaseManager] Recording champion defeat for build: %s" % build_id)
 	return await _supabase_rpc("record_champion_defeat", {"p_build_id": build_id})
+
+func record_rank6_battle(attacker_id: String, attacker_build_id: String, defender_build_id: String, attacker_won: bool):
+	"""Record a rank 6 champion battle for replay history."""
+	var data = {
+		"attacker_id": attacker_id,
+		"attacker_build_id": attacker_build_id,
+		"defender_build_id": defender_build_id,
+		"rank": 6,
+		"attacker_won": attacker_won
+	}
+	var result = await _supabase_post("/rest/v1/battle_history", data)
+	if result.status == 201:
+		print("[SupabaseManager] Rank 6 battle recorded")
+	else:
+		push_warning("[SupabaseManager] Failed to record battle: %d" % result.status)
 
 func get_player_champions(player_id: String) -> Dictionary:
 	"""Get player's champions organized by status."""
@@ -861,7 +895,8 @@ func increment_champions_killed(player_id: String):
 # BUILD CLEANUP (50 per rank limit)
 # ============================================
 
-func cleanup_old_builds_at_rank(rank: int):
+func cleanup_old_builds_at_rank_DEPRECATED(rank: int):
+	## -- JDM: THIS FUNCTION IS NO LONGER USED AND CAN BE REMOVED AFTER THE NEW ONE TESTS SUCCESSFULLY
 	"""Delete oldest builds if more than 50 exist at this rank."""
 	# Count builds at this rank
 	var count_query = "?rank=eq.%d&select=id" % rank
@@ -889,6 +924,11 @@ func cleanup_old_builds_at_rank(rank: int):
 	
 	print("[SupabaseManager] Cleaned up %d old builds at rank %d" % [excess, rank])
 
+func cleanup_old_builds_at_rank(rank: int):
+	## -- Trim rank pool to 50 if over 100 records. Atomic server-side.
+	await _supabase_rpc("cleanup_rank_builds", {"p_rank": rank})
+	print("[SupabaseManager] Cleanup RPC called for rank %d" % rank)
+
 # ============================================
 # HELPER: DELETE REQUEST
 # ============================================
@@ -914,4 +954,98 @@ func _supabase_delete(endpoint: String) -> Dictionary:
 	return {
 		"status": response[1],
 		"data": {}
+	}
+
+
+# ============================================
+# PARALLEL PRELOAD SUPPORT
+# ============================================
+
+func fetch_all_bosses_parallel(start_rank: int, player_id: String) -> Dictionary:
+	"""Fetch all rank bosses and champion concurrently. Returns dict keyed by rank int."""
+	var results: Dictionary = {}
+	var ranks = Array(range(start_rank, 6))  # [1..5] at rank 1
+	var total: int = ranks.size() + 1        # +1 for champion
+	var completed := [0]                     # Array wrapper — mutable from closures
+
+	var on_done := func():
+		completed[0] += 1
+
+	for rank in ranks:
+		_parallel_fetch_rank(rank, player_id, results, on_done)
+	_parallel_fetch_champion(player_id, results, on_done)
+
+	while completed[0] < total:
+		await get_tree().process_frame
+
+	return results
+
+
+func _parallel_fetch_rank(rank: int, player_id: String, out: Dictionary, done: Callable):
+	var query = "/rest/v1/boss_builds?rank=eq.%d&select=*&order=created_at.desc&limit=50" % rank
+	var result = await _supabase_get_oneshot(query)
+	if result.status == 200 and result.data is Array and not result.data.is_empty():
+		out[rank] = result.data.pick_random()
+	else:
+		out[rank] = {}
+	done.call()
+
+
+func _parallel_fetch_champion(player_id: String, out: Dictionary, done: Callable):
+	var result = await _supabase_rpc_oneshot("fetch_champion_opponent", {"p_player_id": player_id})
+	if result.status == 200 and result.data is Array and not result.data.is_empty():
+		out[6] = result.data[0]
+	else:
+		out[6] = {}
+	done.call()
+
+
+func _supabase_get_oneshot(endpoint: String) -> Dictionary:
+	"""GET on a fresh temporary node — for parallel calls only."""
+	var node := HTTPRequest.new()
+	node.use_threads = true
+	node.timeout = 30.0
+	add_child(node)
+	var url = SUPABASE_URL + endpoint
+	var headers = [
+		"apikey: %s" % SUPABASE_ANON_KEY,
+		"Authorization: Bearer %s" % SUPABASE_ANON_KEY,
+		"Content-Type: application/json"
+	]
+	var error = node.request(url, headers, HTTPClient.METHOD_GET)
+	if error != OK:
+		node.queue_free()
+		return {"status": 0, "data": null}
+	var response = await node.request_completed
+	node.queue_free()
+	var body = response[3].get_string_from_utf8()
+	return {
+		"status": response[1],
+		"data": JSON.parse_string(body) if body else []
+	}
+
+
+func _supabase_rpc_oneshot(function_name: String, params: Dictionary = {}) -> Dictionary:
+	"""RPC on a fresh temporary node — for parallel calls only."""
+	var node := HTTPRequest.new()
+	node.use_threads = true
+	node.timeout = 30.0
+	add_child(node)
+	var url = SUPABASE_URL + "/rest/v1/rpc/" + function_name
+	var headers = [
+		"apikey: " + SUPABASE_ANON_KEY,
+		"Authorization: Bearer " + SUPABASE_ANON_KEY,
+		"Content-Type: application/json"
+	]
+	var error = node.request(url, headers, HTTPClient.METHOD_POST, JSON.stringify(params))
+	if error != OK:
+		node.queue_free()
+		return {"status": 0, "data": {}}
+	var response = await node.request_completed
+	node.queue_free()
+	var body = response[3].get_string_from_utf8()
+	var parsed = JSON.parse_string(body) if body else {}
+	return {
+		"status": response[1],
+		"data": parsed if parsed != null else {}
 	}

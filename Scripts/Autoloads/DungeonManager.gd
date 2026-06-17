@@ -23,6 +23,8 @@ var all_visited_rooms: Array[RoomData] = []
 var _last_random_room: RoomData = null
 
 # Boss data (fetched from Supabase via existing BossHandler)
+var preloaded_bosses: Dictionary = {}  # Keyed by rank int 1-6
+var beaten_bosses: Dictionary = {}
 var current_boss_data: Dictionary = {}
 var current_boss_enemy: Enemy = null
 
@@ -77,7 +79,9 @@ func reset():
 	_bag.reset_for_new_run()
 
 	current_boss_data = {}
-	current_boss_enemy = null	
+	current_boss_enemy = null
+	preloaded_bosses.clear()
+	beaten_bosses.clear()
 # ============================================================================
 # RANK INITIALIZATION
 # ============================================================================
@@ -122,62 +126,6 @@ func get_random_dungeon_room() -> RoomData:
 	var room_data = room_generator._create_room_data(room_def)
 	room_generator._assign_combat_to_room(room_data)
 	print("[DungeonManager] Generated room: %s (Rank %d)" % [room_def.room_name, current_rank])
-	return room_data
-
-func get_random_dungeon_room_OLD() -> RoomData:	#JDM: If new DungeonBag functionality works delete this whole function otherwise use to revert other func
-	# Get available rooms for current rank
-	var available_rooms = RoomRegistry.get_available_rooms_for_rank(current_rank)
-	if available_rooms.is_empty():
-		push_error("[DungeonManager] No rooms available for rank %d!" % current_rank)
-		return _get_fallback_room()
-	
-	# Filter out same-type/same-rarity repeats for UTILITY and MERCHANT
-	var filtered_rooms = available_rooms
-	if _last_random_room != null:
-		var last_def = _last_random_room.room_definition
-		var restricted_types = [Enums.RoomType.UTILITY, Enums.RoomType.MERCHANT]
-
-		## Make sure they don't encounter two of the same merchants or utilities in a row
-		if last_def.room_type in restricted_types:
-			filtered_rooms = available_rooms.filter(func(rd):
-				return not (rd.room_type == last_def.room_type and rd.rarity == last_def.rarity)
-			)
-	
-		## Don't show the merchants if they can't afford to buy anything.
-		if Player.stats.gold < 3:
-			filtered_rooms = available_rooms.filter(func(rd):
-				return not (rd.room_type == Enums.RoomType.MERCHANT)
-			)
-
-		## Don't show the upgrade room if you already have all upgrades.
-		if Player.all_weapon_upgrades_maxed():
-			filtered_rooms = available_rooms.filter(func(rd):
-				return not (rd.room_name == "Weapon Upgrade")
-			)
-
-		## Don't show super upgrades if player already used it
-		if Player.super_upgrades_left <= 0:
-			filtered_rooms = available_rooms.filter(func(rd):
-				return not (rd.room_name == "Ancient Hall")
-			)
-
-		## Don't show scorpion encounter if player already used it
-		if Player.scorpion_encounters_left <= 0:
-			filtered_rooms = available_rooms.filter(func(rd):
-				return not (rd.room_name == "An Insect Nest")
-			)
-
-		# Only use filter if it leaves valid options
-		if filtered_rooms.is_empty():
-			filtered_rooms = available_rooms
-
-	var room_def = room_generator._pick_weighted_room(filtered_rooms)
-	var room_data = room_generator._create_room_data(room_def)
-	room_generator._assign_combat_to_room(room_data)
-	
-	_last_random_room = room_data
-	
-	print("[DungeonManager] Generated random room: %s (Rank %d)" % [room_def.room_name, current_rank])
 	return room_data
 
 func get_boss_room() -> RoomData:
@@ -268,54 +216,83 @@ func exhaust_room(room_name: String):
 # BOSS HANDLING
 # ============================================================================
 
-func _fetch_and_create_boss():
-	"""Fetch opponent from Supabase and create boss enemy for this rank"""
-	print("[DungeonManager] Fetching boss for rank %d..." % current_rank)
+func preload_remaining_bosses():
+	print("[DungeonManager] Preloading bosses in parallel from rank %d..." % current_rank)
+	var player_id = Player.load_or_generate_uuid()
 	
-	# Check if SupabaseManager exists
+	var all_results = await SupabaseManager.fetch_all_bosses_parallel(current_rank, player_id)
+	
+	for rank in all_results:
+		preloaded_bosses[rank] = all_results[rank]
+		print("[DungeonManager] Preloaded rank %d boss: %s" % [
+			rank, all_results[rank].get("username", "fallback")
+		])
+	
+	print("[DungeonManager] All bosses preloaded")
+
+func preload_remaining_bosses_OLD():
+	## JDM: changing to a new version that loads bosses in parallel, this can be deleted once the other is successfully tested.
+
+	## -- Fetch all 6 rank bosses sequentially at run start and cache them.
+	## -- So player has access to view the upcoming battles.
+
+	print("[DungeonManager] Preloading bosses from rank %d..." % current_rank)
+	var player_id = Player.load_or_generate_uuid()
+	
+	for rank in range(current_rank, 6):
+		var boss_data = await SupabaseManager.fetch_opponent_for_rank(rank, player_id)
+		preloaded_bosses[rank] = boss_data
+		print("[DungeonManager] Preloaded rank %d boss: %s" % [
+			rank, boss_data.get("username", "fallback")
+		])
+	
+	# Rank 6: champion pool
+	var champion_data = await SupabaseManager.fetch_champion_opponent(player_id)
+	preloaded_bosses[6] = champion_data
+	print("[DungeonManager] Preloaded rank 6 champion: %s" % champion_data.get("username", "fallback"))
+	
+	print("[DungeonManager] All bosses preloaded")
+
+func _fetch_and_create_boss():
+	print("[DungeonManager] Setting up boss for rank %d..." % current_rank)
+	
 	if not has_node("/root/SupabaseManager"):
 		push_warning("[DungeonManager] SupabaseManager not found, using fallback boss")
 		current_boss_enemy = BossHandler.get_fallback_boss(current_rank)
 		boss_loaded.emit(current_boss_enemy)
 		return
 	
-	# Fetch opponent data
-	var player_id = Player.load_or_generate_uuid()
-	current_boss_data = await SupabaseManager.fetch_opponent_for_rank(current_rank, player_id)
+	# Use preloaded cache if available
+	if preloaded_bosses.has(current_rank) and not preloaded_bosses[current_rank].is_empty():
+		current_boss_data = preloaded_bosses[current_rank]
+		preloaded_bosses.erase(current_rank)
+		print("[DungeonManager] Using preloaded boss for rank %d" % current_rank)
+	else:
+		# Fallback: live fetch (save load or cache miss)
+		var player_id = Player.load_or_generate_uuid()
+		current_boss_data = await SupabaseManager.fetch_opponent_for_rank(current_rank, player_id)
 	
-	# VERSION CHECK: Only on rank 1, first boss of the run
+	# Version check on rank 1
 	if current_rank == 1 and not current_boss_data.is_empty():
 		var boss_version = current_boss_data.get("game_version", "0.0.0")
 		if Player.is_version_outdated(Player.GAME_VERSION, boss_version):
-			print("[DungeonManager] X Client outdated! Current: %s, Boss: %s" % [Player.GAME_VERSION, boss_version])
 			version_outdated.emit(boss_version)
-			# Still load the boss, just warn the player
-		else:
-			print("[DungeonManager] OK! Version check passed: %s >= %s" % [Player.GAME_VERSION, boss_version])
-
-
-	# Create boss enemy using existing BossHandler autoload
+	
 	if current_boss_data.is_empty():
 		print("[DungeonManager] No opponents found, using fallback boss")
 		current_boss_enemy = BossHandler.get_fallback_boss(current_rank)
 	else:
-		print("[DungeonManager] Boss data fetched: %s" % current_boss_data.get("username", "Unknown"))
+		print("[DungeonManager] Boss data: %s" % current_boss_data.get("username", "Unknown"))
 		current_boss_enemy = BossHandler.create_boss_enemy(current_boss_data)
 	
 	if not current_boss_enemy:
 		push_error("[DungeonManager] Boss creation failed!")
 		return
 	
-	print("[DungeonManager] Boss ready: %s (HP: %d)" % [
-		current_boss_enemy.enemy_name,
-		current_boss_enemy.stats.hit_points
-	])
-	
 	boss_loaded.emit(current_boss_enemy)
 
 func _fetch_champion_opponent():
-	"""Fetch a champion from the active_champions table."""
-	print("[DungeonManager] Fetching champion opponent...")
+	print("[DungeonManager] Setting up champion opponent...")
 	
 	if not has_node("/root/SupabaseManager"):
 		push_warning("[DungeonManager] SupabaseManager not found, using fallback boss")
@@ -323,38 +300,30 @@ func _fetch_champion_opponent():
 		boss_loaded.emit(current_boss_enemy)
 		return
 	
-	# Fetch champion opponent (excluding player's own champions)
-	var player_id = Player.load_or_generate_uuid()
-	current_boss_data = await SupabaseManager.fetch_champion_opponent(player_id)
+	if preloaded_bosses.has(6) and not preloaded_bosses[6].is_empty():
+		current_boss_data = preloaded_bosses[6]
+		preloaded_bosses.erase(6)
+		print("[DungeonManager] Using preloaded champion")
+	else:
+		var player_id = Player.load_or_generate_uuid()
+		current_boss_data = await SupabaseManager.fetch_champion_opponent(player_id)
 	
-	# Create boss enemy
 	if current_boss_data.is_empty():
 		print("[DungeonManager] No champions found, using fallback boss")
 		current_boss_enemy = BossHandler.get_fallback_boss(6)
 	else:
-		print("[DungeonManager] Champion fetched: %s (Victories: %d)" % [
+		print("[DungeonManager] Champion: %s (Victories: %d)" % [
 			current_boss_data.get("username", "Unknown"),
 			current_boss_data.get("champion_victories", 0)
 		])
-
 		current_boss_enemy = BossHandler.create_boss_enemy(current_boss_data)
-
 		if current_boss_data.get("is_shadow", false):
-			print("Fighting a shadow of %s" % current_boss_data.username)
 			current_boss_enemy.enemy_name += " (Shadow)"
-			
-
+	
 	if not current_boss_enemy:
-		push_error("[DungeonManager] Champion creation failed! Boss will be null.")
+		push_error("[DungeonManager] Champion creation failed!")
 		return
 	
-	print("[DungeonManager] Champion ready: %s (HP: %d, Items: %d)" % [
-		current_boss_enemy.enemy_name,
-		current_boss_enemy.stats.hit_points,
-		current_boss_enemy.inventory.get_item_count()
-	])
-	
-	# Emit signal for map zoom panel to update
 	boss_loaded.emit(current_boss_enemy)
 
 # ============================================================================
@@ -375,6 +344,8 @@ func advance_rank():
 			Player.inventory.unlocked_slots
 		])
 	
+	# log beaten boss
+	beaten_bosses[current_rank - 1] = current_boss_data
 	# Clear old boss data
 	current_boss_data = {}
 	current_boss_enemy = null
@@ -406,6 +377,24 @@ func get_room_type_icon(room_data: RoomData) -> Texture2D:
 	if room_data and room_data.room_definition:
 		return room_data.room_definition.room_icon
 	return null
+
+func is_room_available_for_map_maker(room_id: String) -> bool:
+	"""Returns true if a room is valid to offer as a map maker destination."""
+	var room_def = RoomRegistry.get_room_definition(room_id)
+	if room_def == null:
+		return false
+	return _bag.is_available(room_def)
+
+func get_room_data_by_id(room_id: String) -> RoomData:
+	"""Build a RoomData for a specific room by registry ID. Used by map maker to bypass bag draw."""
+	var room_def = RoomRegistry.get_room_definition(room_id)
+	if room_def == null:
+		push_error("[DungeonManager] Map maker: room '%s' not found in registry." % room_id)
+		return null
+	var room_data = room_generator._create_room_data(room_def)
+	room_generator._assign_combat_to_room(room_data)
+	print("[DungeonManager] Map maker loaded room: %s" % room_def.room_name)
+	return room_data
 
 # ============================================================================
 # DEBUG TOOLS

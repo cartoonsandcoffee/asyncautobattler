@@ -5,7 +5,7 @@ signal inventory_updated(item: Item, slot_index: int)
 signal profile_loaded()
 signal ears_changed(new_balance: int)
 
-const GAME_VERSION = "0.1.04" 
+const GAME_VERSION = "0.1.05" 
 
 # ============================================
 # PERSISTENT PROFILE DATA (Synced with Supabase)
@@ -48,6 +48,7 @@ var inventory: Inventory:
 var skin_id: int = 0
 var skin_color: Color = Color.WHITE
 var item_bundles: Array[Enums.ItemBundles] = [Enums.ItemBundles.REVENGE, Enums.ItemBundles.HONOR, Enums.ItemBundles.DUTY]
+var selected_path_index: int = 0
 
 # Applied to current weapon (resets on weapon swap)
 var current_weapon_stat_upgrades: Dictionary = {
@@ -87,13 +88,11 @@ var town_shop_inventory: Array[String] = [] # item IDs, "" = purchased/empty slo
 
 # town usage variables
 var rooms_left_this_rank: int = 0
-var total_rooms_per_rank: int = 10 ## - Should be 15, lowered for testing.
 var shrine_uses_left_this_rank: int = 0
-var total_shrine_uses_per_rank: int = 1
+var map_makers_left_this_rank: int = 0
 var banishes_left_this_rank: int = 0
-var total_banishes_per_rank: int = 3
 var campfires_left_this_rank: int = 0
-var total_campfires_per_rank: int = 1
+var times_returned_to_town_this_rank: int = 0
 
 var is_in_town: bool = false
 var popup_open: bool = false
@@ -103,6 +102,7 @@ func new_run(nm: String):
 	player_name = nm
 	SkinManager.apply_selected_skin_to_player()
 	ItemsManager.clear_banished_items()
+	ItemsManager.invalidate_cache()
 
 	stats = GameStats.new()
 	inventory = Inventory.new()
@@ -129,6 +129,7 @@ func new_run(nm: String):
 	if inventory:
 		set_test_inventory()
 
+	CombatSpeed.set_speed(GameSettings.combat_speed)
 	current_rank = 1
 	current_room = 1
 	rooms_cleared_this_run = 0
@@ -152,12 +153,16 @@ func new_run(nm: String):
 	items_found_this_run = 0
 	stats.shop_upgrades = 0
 	stats.refresh_cost = 1
+	stats.upgrade_cost = 10
 
-	rooms_left_this_rank = total_rooms_per_rank + 2  # JDM: Adding 1 to offset the first time town is loaded
-	banishes_left_this_rank = total_banishes_per_rank
-	shrine_uses_left_this_rank = total_shrine_uses_per_rank
-	campfires_left_this_rank = total_campfires_per_rank
+	rooms_left_this_rank = GameSettings.total_rooms_per_rank + 2  # JDM: Adding 2 to offset starter room and first town
+	banishes_left_this_rank = GameSettings.total_banishes_per_rank
+	shrine_uses_left_this_rank = GameSettings.total_shrine_uses_per_rank
+	map_makers_left_this_rank = GameSettings.total_map_maker_uses_per_rank
+	campfires_left_this_rank = GameSettings.total_campfires_per_rank
+	times_returned_to_town_this_rank = 0
 
+	shrine_uses_left_this_rank = 0 ## - JDM: No shrine use in the first rank.
 
 func set_test_inventory():
 	if !inventory:
@@ -168,6 +173,9 @@ func set_test_inventory():
 	# -- for testing basic rules
 
 	inventory.add_item(ItemsManager.available_items["weapon_fists"])
+
+	#inventory.add_item(ItemsManager.available_items["helmet_of_the_old_gods"])
+	#inventory.add_item(ItemsManager.available_items["helmet_of_the_old_gods"])
 
 	#inventory.add_item(ItemsManager.available_items["purifying_talon"])
 	#inventory.add_item(ItemsManager.available_items["golden_helmet_of_the_old_gods"])
@@ -698,7 +706,7 @@ func to_boss_data() -> Dictionary:
 		"skin_id": skin_id,
 		"rank": DungeonManager.current_rank,
 		"max_hp": stats.hit_points,
-		"curr_hp": stats.hit_points_current,
+		"curr_hp": stats.hit_points, 
 		"base_damage": stats.damage,
 		"shield": stats.shield,
 		"agility": stats.agility,
@@ -709,7 +717,6 @@ func to_boss_data() -> Dictionary:
 		"weapon": _serialize_weapon(),
 		"weapon_stat_upgrades": current_weapon_stat_upgrades,
 		"weapon_enchantment": _serialize_weapon_enchantment(),
-		"skin_color": skin_color.to_html(),
 		"item_bundles": item_bundles,
 		"game_version": GAME_VERSION 
 	}
@@ -747,7 +754,7 @@ func use_room():
 	if rooms_left_this_rank > 0:
 		rooms_left_this_rank -= 1
 		stats.stats_updated.emit()
-		#rooms_used_this_rank += 1
+		rooms_cleared_this_run += 1
 		#rooms_changed.emit(rooms_remaining)
 		print("[Player] Room completed. Rooms remaining: %d" % rooms_left_this_rank)
 	else:
@@ -762,7 +769,7 @@ func add_rooms(amount: int):
 
 func refill_rooms_for_new_rank():
 	"""Called when advancing to new rank - reset to 10 rooms"""
-	rooms_left_this_rank += total_rooms_per_rank
+	rooms_left_this_rank += GameSettings.total_rooms_per_rank
 	stats.stats_updated.emit()
 	#rooms_used_this_rank = 0
 	#rooms_changed.emit(rooms_remaining)
@@ -773,9 +780,11 @@ func complete_rank_boss():
 	current_rank += 1
 	town_shop_inventory = [] # refresh the merchant's inventory after you beat a boss
 
-	shrine_uses_left_this_rank = total_shrine_uses_per_rank
-	banishes_left_this_rank = total_banishes_per_rank
-	campfires_left_this_rank = total_campfires_per_rank
+	shrine_uses_left_this_rank = GameSettings.total_shrine_uses_per_rank
+	map_makers_left_this_rank = GameSettings.total_map_maker_uses_per_rank
+	banishes_left_this_rank = GameSettings.total_banishes_per_rank
+	campfires_left_this_rank = GameSettings.total_campfires_per_rank
+	times_returned_to_town_this_rank = 0
 
 	# Refill rooms for new rank
 	refill_rooms_for_new_rank()
@@ -795,8 +804,8 @@ func to_dict() -> Dictionary:
 		"player_uuid": player_uuid,
 		"player_name": player_name,
 		"skin_id": skin_id,
-		"skin_color": skin_color.to_html(),
 		"item_bundles": item_bundles,
+		"selected_path_index": selected_path_index,
 		#"scarcity_mode": scarcity_mode,
 		
 		# Run state
@@ -817,8 +826,10 @@ func to_dict() -> Dictionary:
 		
 		# Per-rank counters
 		"shrine_uses_left_this_rank": shrine_uses_left_this_rank,
+		"map_makers_left_this_rank" : map_makers_left_this_rank,
 		"banishes_left_this_rank": banishes_left_this_rank,
 		"campfires_left_this_rank": campfires_left_this_rank,
+		"times_returned_to_town_this_rank": times_returned_to_town_this_rank,
 		
 		# Stats
 		"stats": {
@@ -831,6 +842,8 @@ func to_dict() -> Dictionary:
 			"burn_damage": stats.burn_damage,
 			"gold": stats.gold,
 			"shop_upgrades": stats.shop_upgrades,
+			"refresh_cost": stats.refresh_cost,
+			"upgrade_cost": stats.upgrade_cost,
 		},
 		
 		# Inventory
@@ -869,13 +882,12 @@ func from_dict(data: Dictionary):
 	player_uuid = data.get("player_uuid", "")
 	player_name = data.get("player_name", "Player")
 	skin_id = data.get("skin_id", 0)
-	var color_hex: String = data.get("skin_color", "#FFFFFF")
-	skin_color = Color(color_hex)
+	selected_path_index = data.get("selected_path_index", 0)
 	#scarcity_mode = data.get("scarcity_mode", false)
 
 	var raw_bundles: Array = data.get("item_bundles", [])
 	if raw_bundles.is_empty():
-		item_bundles = [Enums.ItemBundles.REVENGE, Enums.ItemBundles.HONOR, Enums.ItemBundles.DUTY]
+		item_bundles = [Enums.ItemBundles.REVENGE, Enums.ItemBundles.CHAOS, Enums.ItemBundles.SHAME]
 	else:
 		item_bundles.clear()
 		for b in raw_bundles:
@@ -885,7 +897,7 @@ func from_dict(data: Dictionary):
 	current_rank = data.get("current_rank", 1)
 	current_room = data.get("current_room", 1)
 	rooms_cleared_this_run = data.get("rooms_cleared", 0)
-	rooms_left_this_rank = data.get("rooms_left_this_rank", total_rooms_per_rank)
+	rooms_left_this_rank = data.get("rooms_left_this_rank", GameSettings.total_rooms_per_rank)
 
 	var raw_shop: Array = data.get("town_shop_inventory", [])
 	town_shop_inventory.clear()
@@ -902,9 +914,11 @@ func from_dict(data: Dictionary):
 	crystal_events_left = data.get("crystal_events_left", 1)
 	
 	# Per-rank counters
-	shrine_uses_left_this_rank = data.get("shrine_uses_left_this_rank", total_shrine_uses_per_rank)
-	banishes_left_this_rank = data.get("banishes_left_this_rank", total_banishes_per_rank)
-	campfires_left_this_rank = data.get("campfires_left_this_rank", total_campfires_per_rank)
+	shrine_uses_left_this_rank = data.get("shrine_uses_left_this_rank", GameSettings.total_shrine_uses_per_rank)
+	map_makers_left_this_rank = data.get("map_makers_left_this_rank", GameSettings.total_map_maker_uses_per_rank)
+	banishes_left_this_rank = data.get("banishes_left_this_rank", GameSettings.total_banishes_per_rank)
+	campfires_left_this_rank = data.get("campfires_left_this_rank", GameSettings.total_campfires_per_rank)
+	times_returned_to_town_this_rank = data.get("times_returned_to_town_this_rank", 0)
 	
 	# Stats
 	var stats_data = data.get("stats", {})
@@ -918,12 +932,18 @@ func from_dict(data: Dictionary):
 		stats.burn_damage = stats_data.get("burn_damage", 0)
 		stats.gold = stats_data.get("gold", 0)
 		stats.shop_upgrades = stats_data.get("shop_upgrades", 0)
+		stats.refresh_cost = stats_data.get("refresh_cost", 1)
+		stats.upgrade_cost = stats_data.get("upgrade_cost", 10)
 	
 	# Inventory
 	var inv_data = data.get("inventory", {})
 	if inventory and not inv_data.is_empty():
 		inventory.load_from_save_data(inv_data)
-	
+
+	inventory.owner_entity = self
+	if not inventory.item_added.is_connected(_on_inventory_item_added):
+		inventory.item_added.connect(_on_inventory_item_added)
+		
 	# Weapon upgrades
 	current_weapon_stat_upgrades = data.get("weapon_stat_upgrades", {
 		"damage": 0, "shield": 0, "agility": 0

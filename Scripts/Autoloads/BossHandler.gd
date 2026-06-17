@@ -18,9 +18,9 @@ func create_boss_enemy(opponent_data: Dictionary) -> Enemy:
 	boss.skin_color = Color(color_hex)
 
 	# Load sprite
-	var sprite_path = "res://Assets/Art/Player/PVP/Player_Skin_%d.png" % boss.skin_id 
-	if ResourceLoader.exists(sprite_path):
-		boss.sprite = load(sprite_path)
+	var boss_sprite: Texture2D = SkinManager.get_sprite_texture(boss.skin_id)
+	if boss_sprite != null:
+		boss.sprite = boss_sprite
 	else:
 		# Fallback to default or enemy sprite if boss skin doesn't exist
 		if boss.sprite:
@@ -29,7 +29,7 @@ func create_boss_enemy(opponent_data: Dictionary) -> Enemy:
 			boss.sprite_attack = boss.sprite
 			boss.sprite_hit = boss.sprite
 		else:
-			push_warning("[MapZoomPanel] Boss sprite not found: %s" % sprite_path)
+			push_warning("[MapZoomPanel] Boss sprite not found for ID: %d" % boss.skin_id)
 
 	# Initialize stats from opponent data
 	boss.stats = GameStats.new()
