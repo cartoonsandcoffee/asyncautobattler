@@ -1,55 +1,39 @@
-[gd_scene load_steps=11 format=3 uid="uid://c3h585v8mippc"]
+[gd_scene format=3 uid="uid://c3h585v8mippc"]
 
-[ext_resource type="Texture2D" uid="uid://vtf7yfl2710m" path="res://Assets/UI/panel-border-030.png" id="1_4llnu"]
 [ext_resource type="Script" uid="uid://mba17fr2no4g" path="res://Scripts/Components/free_item_offering.gd" id="1_bbqyr"]
 [ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="2_bbqyr"]
+[ext_resource type="Texture2D" uid="uid://cfci441ywkwkh" path="res://Assets/UI/rank_boss_border.png" id="2_k1i5n"]
+[ext_resource type="Texture2D" uid="uid://bnnq12liax8kc" path="res://Assets/UI/DefinitionTest.png" id="4_1c0i7"]
+[ext_resource type="Theme" uid="uid://bo603ra16ac63" path="res://Themes/stone_button_01.tres" id="6_8saln"]
+[ext_resource type="Theme" uid="uid://wsf7lticxc8g" path="res://Themes/stone_button_03.tres" id="7_8iwt0"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ihe0s"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qfudq"]
-bg_color = Color(0, 0, 0, 1)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_4llnu"]
-atlas = ExtResource("1_4llnu")
-
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1c0i7"]
-texture = SubResource("AtlasTexture_4llnu")
-texture_margin_left = 32.0
-texture_margin_top = 32.0
-texture_margin_right = 32.0
-texture_margin_bottom = 32.0
+texture = ExtResource("2_k1i5n")
+texture_margin_left = 40.0
+texture_margin_top = 40.0
+texture_margin_right = 40.0
+texture_margin_bottom = 40.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1m5kk"]
+texture = ExtResource("4_1c0i7")
+texture_margin_left = 15.0
+texture_margin_top = 20.0
+texture_margin_right = 15.0
+texture_margin_bottom = 15.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
 
 [sub_resource type="Animation" id="Animation_bbqyr"]
 length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Panel/panelBlack:scale")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 1)]
-}
 
 [sub_resource type="Animation" id="Animation_4llnu"]
 resource_name = "reroll"
 length = 0.4
 step = 0.025
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Panel/panelBlack:scale")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector2(1, 1), Vector2(1.1, 1.1), Vector2(1, 1)]
-}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ihe0s"]
 _data = {
@@ -57,16 +41,148 @@ _data = {
 &"reroll": SubResource("Animation_4llnu")
 }
 
-[node name="FreeItemOffering" type="Control"]
+[sub_resource type="Animation" id="Animation_qfudq"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.5, 0.5)]
+}
+
+[sub_resource type="Animation" id="Animation_k1i5n"]
+resource_name = "hide_box"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:scale")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.1, 1.1), Vector2(0.5, 0.5)]
+}
+
+[sub_resource type="Animation" id="Animation_1c0i7"]
+resource_name = "show_box"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:scale")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.5, 0.5), Vector2(1.1, 1.1), Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_6ll82"]
+_data = {
+&"RESET": SubResource("Animation_qfudq"),
+&"hide_box": SubResource("Animation_k1i5n"),
+&"show_box": SubResource("Animation_1c0i7")
+}
+
+[node name="FreeItemOffering" type="Control" unique_id=15131559]
+visible = false
+modulate = Color(1, 1, 1, 0)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+pivot_offset_ratio = Vector2(0.5, 0.5)
 script = ExtResource("1_bbqyr")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Panel" type="Panel" parent="." unique_id=1077080138]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -74,82 +190,91 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -275.0
-offset_top = -113.0
+offset_top = -218.0
 offset_right = 275.0
-offset_bottom = 113.0
+offset_bottom = 218.0
 grow_horizontal = 2
 grow_vertical = 2
-pivot_offset = Vector2(275, 132)
+pivot_offset = Vector2(275, 218)
 theme_override_styles/panel = SubResource("StyleBoxEmpty_ihe0s")
 
-[node name="panelBlack" type="PanelContainer" parent="Panel"]
+[node name="PanelContainer" type="PanelContainer" parent="Panel" unique_id=578527672]
 z_index = 10
-custom_minimum_size = Vector2(300, 100)
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_bottom = -18.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -275.0
+offset_top = -218.0
+offset_right = 275.0
+offset_bottom = 218.0
 grow_horizontal = 2
 grow_vertical = 2
-pivot_offset = Vector2(275, 173)
-theme_override_styles/panel = SubResource("StyleBoxFlat_qfudq")
-
-[node name="PanelContainer" type="PanelContainer" parent="Panel/panelBlack"]
-layout_mode = 2
+pivot_offset = Vector2(275, 218)
 theme_override_styles/panel = SubResource("StyleBoxTexture_1c0i7")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/panelBlack/PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/PanelContainer" unique_id=1473860328]
 layout_mode = 2
-theme = ExtResource("2_bbqyr")
 theme_override_constants/separation = 10
 
-[node name="lblName" type="Label" parent="Panel/panelBlack/PanelContainer/VBoxContainer"]
+[node name="lblName" type="Label" parent="Panel/PanelContainer/VBoxContainer" unique_id=978316122]
 layout_mode = 2
+theme = ExtResource("2_bbqyr")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="marginDesc" type="MarginContainer" parent="Panel/panelBlack/PanelContainer/VBoxContainer"]
+[node name="marginDesc" type="MarginContainer" parent="Panel/PanelContainer/VBoxContainer" unique_id=1043437799]
 visible = false
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
+theme = ExtResource("2_bbqyr")
 
-[node name="txtDesc" type="RichTextLabel" parent="Panel/panelBlack/PanelContainer/VBoxContainer/marginDesc"]
+[node name="txtDesc" type="RichTextLabel" parent="Panel/PanelContainer/VBoxContainer/marginDesc" unique_id=1618473985]
 layout_mode = 2
 bbcode_enabled = true
 fit_content = true
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="itemsContainer" type="GridContainer" parent="Panel/panelBlack/PanelContainer/VBoxContainer"]
+[node name="itemArea" type="PanelContainer" parent="Panel/PanelContainer/VBoxContainer" unique_id=2061050385]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_1m5kk")
+
+[node name="itemsContainer" type="GridContainer" parent="Panel/PanelContainer/VBoxContainer/itemArea" unique_id=1794910193]
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_constants/h_separation = 10
 columns = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/panelBlack/PanelContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/PanelContainer/VBoxContainer" unique_id=1464355692]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="btnSkip" type="Button" parent="Panel/panelBlack/PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="btnSkip" type="Button" parent="Panel/PanelContainer/VBoxContainer/HBoxContainer" unique_id=2135906650]
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 size_flags_horizontal = 3
+theme = ExtResource("6_8saln")
 text = "Skip"
 
-[node name="btnReroll" type="Button" parent="Panel/panelBlack/PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="btnReroll" type="Button" parent="Panel/PanelContainer/VBoxContainer/HBoxContainer" unique_id=286607975]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
+theme = ExtResource("7_8iwt0")
 text = "Reroll"
 
-[node name="animReroll" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_ihe0s")
-}
+[node name="animReroll" type="AnimationPlayer" parent="." unique_id=734073468]
+libraries/ = SubResource("AnimationLibrary_ihe0s")
 
-[connection signal="mouse_entered" from="Panel/panelBlack/PanelContainer/VBoxContainer/HBoxContainer/btnSkip" to="." method="_on_btn_skip_mouse_entered"]
-[connection signal="mouse_exited" from="Panel/panelBlack/PanelContainer/VBoxContainer/HBoxContainer/btnSkip" to="." method="_on_btn_skip_mouse_exited"]
-[connection signal="pressed" from="Panel/panelBlack/PanelContainer/VBoxContainer/HBoxContainer/btnSkip" to="." method="_on_btn_skip_pressed"]
-[connection signal="mouse_entered" from="Panel/panelBlack/PanelContainer/VBoxContainer/HBoxContainer/btnReroll" to="." method="_on_btn_reroll_mouse_entered"]
-[connection signal="mouse_exited" from="Panel/panelBlack/PanelContainer/VBoxContainer/HBoxContainer/btnReroll" to="." method="_on_btn_reroll_mouse_exited"]
-[connection signal="pressed" from="Panel/panelBlack/PanelContainer/VBoxContainer/HBoxContainer/btnReroll" to="." method="_on_btn_reroll_pressed"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1112436489]
+libraries/ = SubResource("AnimationLibrary_6ll82")
+
+[connection signal="mouse_entered" from="Panel/PanelContainer/VBoxContainer/HBoxContainer/btnSkip" to="." method="_on_btn_skip_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/PanelContainer/VBoxContainer/HBoxContainer/btnSkip" to="." method="_on_btn_skip_mouse_exited"]
+[connection signal="pressed" from="Panel/PanelContainer/VBoxContainer/HBoxContainer/btnSkip" to="." method="_on_btn_skip_pressed"]
+[connection signal="mouse_entered" from="Panel/PanelContainer/VBoxContainer/HBoxContainer/btnReroll" to="." method="_on_btn_reroll_mouse_entered"]
+[connection signal="mouse_exited" from="Panel/PanelContainer/VBoxContainer/HBoxContainer/btnReroll" to="." method="_on_btn_reroll_mouse_exited"]
+[connection signal="pressed" from="Panel/PanelContainer/VBoxContainer/HBoxContainer/btnReroll" to="." method="_on_btn_reroll_pressed"]

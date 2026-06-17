@@ -2,38 +2,40 @@
 
 [ext_resource type="Script" uid="uid://clput60plqjjq" path="res://Scripts/Components/skin_button.gd" id="1_qdtk2"]
 [ext_resource type="Texture2D" uid="uid://dt06ij8760m2k" path="res://Assets/UI/Locked.png" id="2_8bwac"]
-[ext_resource type="Theme" uid="uid://dgbknxqcoromh" path="res://Themes/skin_button.tres" id="3_8bwac"]
+[ext_resource type="Theme" uid="uid://budqg0v0xejxy" path="res://Themes/parchment_button.tres" id="3_8bwac"]
 
 [node name="skinButton" type="Control"]
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(80, 80)
 layout_mode = 3
-anchor_right = 0.033
-anchor_bottom = 0.058
-offset_right = -0.688007
-offset_bottom = -0.112007
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 0
+offset_right = 80.0
+offset_bottom = 80.0
 script = ExtResource("1_qdtk2")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(80, 80)
 layout_mode = 1
-offset_right = 50.0
-offset_bottom = 50.0
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 
 [node name="picButton" type="TextureRect" parent="MarginContainer"]
+self_modulate = Color(0.5307, 0.71166, 0.87, 1)
 layout_mode = 2
 texture = ExtResource("2_8bwac")
 expand_mode = 1
 
 [node name="Button" type="Button" parent="."]
+show_behind_parent = true
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 1
-anchors_preset = -1
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2

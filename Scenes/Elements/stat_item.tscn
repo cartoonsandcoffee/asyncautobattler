@@ -24,6 +24,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_r0lyc")
 
 [node name="Panel" type="Panel" parent="."]
@@ -31,6 +32,7 @@ custom_minimum_size = Vector2(70, 0)
 layout_mode = 0
 offset_right = 69.0
 offset_bottom = 44.0
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_n0s73")
 
 [node name="BorderPanel" type="PanelContainer" parent="Panel"]
@@ -40,6 +42,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_llt2p")
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel/BorderPanel"]
@@ -51,6 +54,7 @@ theme_override_constants/margin_bottom = 2
 
 [node name="FillerPanel" type="PanelContainer" parent="Panel/BorderPanel/MarginContainer"]
 layout_mode = 2
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_oynv4")
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel/BorderPanel/MarginContainer/FillerPanel"]

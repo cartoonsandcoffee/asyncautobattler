@@ -1,0 +1,157 @@
+[gd_scene format=3 uid="uid://cwbr81rsawe8p"]
+
+[ext_resource type="Script" uid="uid://bg6ah0ip0n7wt" path="res://Scripts/Components/instant_combat_toggle.gd" id="1_7nm4t"]
+[ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="3_efptg"]
+[ext_resource type="Texture2D" uid="uid://babe5ewoj45u8" path="res://Assets/UI/instant_combat_empty.png" id="3_ek5cv"]
+[ext_resource type="Texture2D" uid="uid://dohqvs3onegum" path="res://Assets/UI/Border/panel-border-000.png" id="4_c77et"]
+[ext_resource type="Texture2D" uid="uid://dpy2x8oq4atni" path="res://Assets/UI/instant_combat_full.png" id="4_efptg"]
+[ext_resource type="Theme" uid="uid://od14ccps1daj" path="res://Themes/descriptive_label.tres" id="5_p0ak5"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sjmw8"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_07xdu"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xrn5g"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_p0ak5"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c77et"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xrn5g"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_07xdu"]
+texture = ExtResource("4_c77et")
+texture_margin_left = 24.0
+texture_margin_top = 24.0
+texture_margin_right = 24.0
+texture_margin_bottom = 24.0
+
+[sub_resource type="Animation" id="Animation_40qxn"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Button:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_yx0wv"]
+resource_name = "button_hover"
+length = 0.5
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Button:rotation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 6.26573]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ksw6t"]
+_data = {
+&"RESET": SubResource("Animation_40qxn"),
+&"button_hover": SubResource("Animation_yx0wv")
+}
+
+[node name="instant_combat_toggle" type="Control" unique_id=124024999]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_7nm4t")
+
+[node name="Button" type="Button" parent="." unique_id=1049424665]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_efptg")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_sjmw8")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_07xdu")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_xrn5g")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_p0ak5")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_c77et")
+toggle_mode = true
+
+[node name="picButton" type="TextureRect" parent="Button" unique_id=837442748]
+modulate = Color(0.53, 0.53, 0.53, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("3_ek5cv")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="picSelected" type="TextureRect" parent="Button" unique_id=1036547792]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("4_efptg")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="panelTooltip" type="PanelContainer" parent="." unique_id=223777444]
+visible = false
+custom_minimum_size = Vector2(400, 50)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -306.5
+offset_top = -117.0
+offset_right = 306.5
+offset_bottom = -6.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_xrn5g")
+
+[node name="PanelContainer" type="PanelContainer" parent="panelTooltip" unique_id=1026839330]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_07xdu")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="panelTooltip/PanelContainer" unique_id=1163443650]
+layout_mode = 2
+
+[node name="lblToggle" type="Label" parent="panelTooltip/PanelContainer/VBoxContainer" unique_id=541391920]
+layout_mode = 2
+theme = ExtResource("3_efptg")
+text = "Instant NPC Fights  (OFF)"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="panelTooltip/PanelContainer/VBoxContainer" unique_id=1356226933]
+layout_mode = 2
+theme = ExtResource("5_p0ak5")
+text = "Instantly resolve fights against NPCs while exploring the dungeon."
+
+[node name="animButton" type="AnimationPlayer" parent="." unique_id=1192168556]
+libraries/ = SubResource("AnimationLibrary_ksw6t")
+
+[connection signal="mouse_entered" from="Button" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Button" to="." method="_on_button_mouse_exited"]
+[connection signal="toggled" from="Button" to="." method="_on_button_toggled"]

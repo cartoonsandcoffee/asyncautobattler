@@ -1,0 +1,657 @@
+[gd_scene format=3 uid="uid://bx4e84ca4u645"]
+
+[ext_resource type="Script" uid="uid://50bfgf02croc" path="res://Scripts/Components/display_item_choices_free.gd" id="1_ts1r3"]
+[ext_resource type="PackedScene" uid="uid://cuf5lmhc01pn" path="res://Scenes/Card/item_card_wide.tscn" id="2_hh7g0"]
+[ext_resource type="Theme" uid="uid://bu1aww61707ak" path="res://Themes/stone_button_02_short.tres" id="3_ts1r3"]
+[ext_resource type="Theme" uid="uid://ccalt51vmvh0g" path="res://Themes/stone_button_01_short.tres" id="4_ufb1x"]
+[ext_resource type="Texture2D" uid="uid://rwpp1fa2bw7h" path="res://Assets/UI/Buttons/banner_longer.png" id="5_au3rg"]
+[ext_resource type="Theme" uid="uid://od14ccps1daj" path="res://Themes/descriptive_label.tres" id="6_iqmj2"]
+[ext_resource type="Theme" uid="uid://bw761c8prcwxd" path="res://Themes/banner_left_button_01.tres" id="7_0n4sg"]
+[ext_resource type="Theme" uid="uid://c6gyljc43ovju" path="res://Themes/banner_right_button_03.tres" id="8_q0fuf"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ej48y"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_f3ulp"]
+texture = ExtResource("5_au3rg")
+texture_margin_left = 145.0
+texture_margin_right = 158.0
+texture_margin_bottom = 15.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f3ulp"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8v4vk"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_05i8p"]
+
+[sub_resource type="Animation" id="Animation_bbqyr"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("fullWidgetContainer/centerPoint:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_4llnu"]
+resource_name = "reroll"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("fullWidgetContainer/centerPoint:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.05, 1.05), Vector2(0.9, 0.9), Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ihe0s"]
+_data = {
+&"RESET": SubResource("Animation_bbqyr"),
+&"reroll": SubResource("Animation_4llnu")
+}
+
+[sub_resource type="Animation" id="Animation_qfudq"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("fullWidgetContainer/buttonHolder/PanelContainer/VBoxContainer/labelRow:offset_transform_enabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("fullWidgetContainer/buttonHolder/PanelContainer/VBoxContainer/labelRow:offset_transform_position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("fullWidgetContainer/buttonHolder/PanelContainer/VBoxContainer/buttonRow:offset_transform_enabled")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("fullWidgetContainer/buttonHolder/PanelContainer/VBoxContainer/buttonRow:offset_transform_position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_0n4sg"]
+resource_name = "hide_box"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.1, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("fullWidgetContainer/buttonHolder/PanelContainer/VBoxContainer/labelRow:offset_transform_enabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("fullWidgetContainer/buttonHolder/PanelContainer/VBoxContainer/labelRow:offset_transform_position")
+tracks/3/interp = 2
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 50), Vector2(0, -200)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("fullWidgetContainer/buttonHolder/PanelContainer/VBoxContainer/buttonRow:offset_transform_enabled")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("fullWidgetContainer/buttonHolder/PanelContainer/VBoxContainer/buttonRow:offset_transform_position")
+tracks/5/interp = 2
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.099999994, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 30), Vector2(0, -200)]
+}
+
+[sub_resource type="Animation" id="Animation_1c0i7"]
+resource_name = "show_box"
+length = 0.5
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("fullWidgetContainer/buttonHolder/PanelContainer/VBoxContainer/labelRow:offset_transform_enabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("fullWidgetContainer/buttonHolder/PanelContainer/VBoxContainer/labelRow:offset_transform_position")
+tracks/3/interp = 2
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, -210), Vector2(0, 50), Vector2(0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("fullWidgetContainer/buttonHolder/PanelContainer/VBoxContainer/buttonRow:offset_transform_enabled")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("fullWidgetContainer/buttonHolder/PanelContainer/VBoxContainer/buttonRow:offset_transform_position")
+tracks/5/interp = 2
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.1, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, -300), Vector2(0, 30), Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_6ll82"]
+_data = {
+&"RESET": SubResource("Animation_qfudq"),
+&"hide_box": SubResource("Animation_0n4sg"),
+&"show_box": SubResource("Animation_1c0i7")
+}
+
+[sub_resource type="Animation" id="Animation_ufb1x"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("fullWidgetContainer/DetailCardArea:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("fullWidgetContainer/DetailCardArea:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("fullWidgetContainer/DetailCardArea:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_au3rg"]
+resource_name = "hide_card"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("fullWidgetContainer/DetailCardArea:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.6, 0.6)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("fullWidgetContainer/DetailCardArea:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("fullWidgetContainer/DetailCardArea:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_iqmj2"]
+resource_name = "show_card"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("fullWidgetContainer/DetailCardArea:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.6, 0.6), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("fullWidgetContainer/DetailCardArea:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("fullWidgetContainer/DetailCardArea:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_0n4sg"]
+_data = {
+&"RESET": SubResource("Animation_ufb1x"),
+&"hide_card": SubResource("Animation_au3rg"),
+&"show_card": SubResource("Animation_iqmj2")
+}
+
+[node name="DisplayItemChoicesFree" type="Control" unique_id=15131559]
+visible = false
+modulate = Color(1, 1, 1, 0)
+z_index = 10
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
+script = ExtResource("1_ts1r3")
+
+[node name="fullWidgetContainer" type="Control" parent="." unique_id=1870030056]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
+
+[node name="buttonHolder" type="Control" parent="fullWidgetContainer" unique_id=1783751288]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 295.0
+grow_horizontal = 2
+mouse_filter = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="fullWidgetContainer/buttonHolder" unique_id=1263040833]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_ej48y")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="fullWidgetContainer/buttonHolder/PanelContainer" unique_id=1004865007]
+layout_mode = 2
+
+[node name="rankSpacer" type="MarginContainer" parent="fullWidgetContainer/buttonHolder/PanelContainer/VBoxContainer" unique_id=600309302]
+custom_minimum_size = Vector2(0, 90)
+layout_mode = 2
+
+[node name="labelRow" type="HBoxContainer" parent="fullWidgetContainer/buttonHolder/PanelContainer/VBoxContainer" unique_id=349596968]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="fullWidgetContainer/buttonHolder/PanelContainer/VBoxContainer/labelRow" unique_id=1140223591]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="labelHolder" type="PanelContainer" parent="fullWidgetContainer/buttonHolder/PanelContainer/VBoxContainer/labelRow" unique_id=441791987]
+self_modulate = Color(0.57, 0.497895, 0.38189998, 1)
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxTexture_f3ulp")
+
+[node name="MarginContainer" type="MarginContainer" parent="fullWidgetContainer/buttonHolder/PanelContainer/VBoxContainer/labelRow/labelHolder" unique_id=1482263466]
+layout_mode = 2
+
+[node name="txtHeader" type="RichTextLabel" parent="fullWidgetContainer/buttonHolder/PanelContainer/VBoxContainer/labelRow/labelHolder" unique_id=758368827]
+layout_mode = 2
+theme = ExtResource("6_iqmj2")
+bbcode_enabled = true
+fit_content = true
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer2" type="MarginContainer" parent="fullWidgetContainer/buttonHolder/PanelContainer/VBoxContainer/labelRow" unique_id=1328411711]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="buttonRow" type="HBoxContainer" parent="fullWidgetContainer/buttonHolder/PanelContainer/VBoxContainer" unique_id=454004129]
+custom_minimum_size = Vector2(0, 75)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 20
+
+[node name="spacer1" type="MarginContainer" parent="fullWidgetContainer/buttonHolder/PanelContainer/VBoxContainer/buttonRow" unique_id=1450024718]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="btnSkip" type="Button" parent="fullWidgetContainer/buttonHolder/PanelContainer/VBoxContainer/buttonRow" unique_id=1739376257]
+custom_minimum_size = Vector2(215, 0)
+custom_maximum_size = Vector2(400, -1)
+layout_mode = 2
+theme = ExtResource("7_0n4sg")
+text = "Skip"
+
+[node name="spacer3" type="MarginContainer" parent="fullWidgetContainer/buttonHolder/PanelContainer/VBoxContainer/buttonRow" unique_id=1040153352]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="btnRoll" type="Button" parent="fullWidgetContainer/buttonHolder/PanelContainer/VBoxContainer/buttonRow" unique_id=655285939]
+visible = false
+custom_minimum_size = Vector2(215, 0)
+custom_maximum_size = Vector2(400, -1)
+layout_mode = 2
+theme = ExtResource("8_q0fuf")
+text = "  Keep Digging  "
+
+[node name="spacer2" type="MarginContainer" parent="fullWidgetContainer/buttonHolder/PanelContainer/VBoxContainer/buttonRow" unique_id=2096520011]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="centerPoint" type="Control" parent="fullWidgetContainer" unique_id=695715409]
+custom_minimum_size = Vector2(350, 175)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -175.0
+offset_top = -180.0
+offset_right = 175.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
+
+[node name="pnlItems" type="Panel" parent="fullWidgetContainer/centerPoint" unique_id=1232615808]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_f3ulp")
+
+[node name="itemContainer" type="PanelContainer" parent="fullWidgetContainer/centerPoint/pnlItems" unique_id=2054797228]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_8v4vk")
+
+[node name="itemGrid" type="GridContainer" parent="fullWidgetContainer/centerPoint/pnlItems/itemContainer" unique_id=1781743852]
+layout_mode = 2
+size_flags_vertical = 4
+columns = 3
+
+[node name="DetailCardArea" type="Control" parent="fullWidgetContainer" unique_id=1936899333]
+visible = false
+custom_minimum_size = Vector2(500, 300)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -29.0
+offset_right = 250.0
+offset_bottom = 271.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
+mouse_filter = 2
+
+[node name="pnlCard" type="Panel" parent="fullWidgetContainer/DetailCardArea" unique_id=458907510]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -13.0
+offset_bottom = 87.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_05i8p")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="fullWidgetContainer/DetailCardArea/pnlCard" unique_id=2014331943]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="boxButtons" type="HBoxContainer" parent="fullWidgetContainer/DetailCardArea/pnlCard/VBoxContainer" unique_id=401990388]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 20
+
+[node name="btnTake" type="Button" parent="fullWidgetContainer/DetailCardArea/pnlCard/VBoxContainer/boxButtons" unique_id=639458602]
+custom_minimum_size = Vector2(200, 0)
+custom_maximum_size = Vector2(250, -1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("3_ts1r3")
+text = "Take It"
+
+[node name="btnBanish" type="Button" parent="fullWidgetContainer/DetailCardArea/pnlCard/VBoxContainer/boxButtons" unique_id=1672562614]
+custom_minimum_size = Vector2(200, 0)
+custom_maximum_size = Vector2(250, -1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("4_ufb1x")
+text = "Banish (2)"
+
+[node name="ItemCardWide" parent="fullWidgetContainer/DetailCardArea/pnlCard/VBoxContainer" unique_id=853120903 instance=ExtResource("2_hh7g0")]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="animReroll" type="AnimationPlayer" parent="." unique_id=734073468]
+libraries/ = SubResource("AnimationLibrary_ihe0s")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1112436489]
+libraries/ = SubResource("AnimationLibrary_6ll82")
+
+[node name="animCard" type="AnimationPlayer" parent="." unique_id=1109192077]
+libraries/ = SubResource("AnimationLibrary_0n4sg")
+
+[connection signal="mouse_entered" from="fullWidgetContainer/buttonHolder/PanelContainer/VBoxContainer/buttonRow/btnSkip" to="." method="_on_btn_skip_mouse_entered"]
+[connection signal="pressed" from="fullWidgetContainer/buttonHolder/PanelContainer/VBoxContainer/buttonRow/btnSkip" to="." method="_on_btn_skip_pressed"]
+[connection signal="mouse_entered" from="fullWidgetContainer/buttonHolder/PanelContainer/VBoxContainer/buttonRow/btnRoll" to="." method="_on_btn_reroll_mouse_entered"]
+[connection signal="pressed" from="fullWidgetContainer/buttonHolder/PanelContainer/VBoxContainer/buttonRow/btnRoll" to="." method="_on_btn_reroll_pressed"]

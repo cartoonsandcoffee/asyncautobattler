@@ -1,0 +1,237 @@
+[gd_scene format=3 uid="uid://biqdjtdf8p38s"]
+
+[ext_resource type="Script" uid="uid://dlhoegbbdruvw" path="res://Scripts/Components/rank_boss_selector.gd" id="1_qwbyo"]
+[ext_resource type="Texture2D" uid="uid://i41yufvsfh70" path="res://Assets/UI/pic_parchment.png" id="2_mwc5t"]
+[ext_resource type="Texture2D" uid="uid://bnnq12liax8kc" path="res://Assets/UI/DefinitionTest.png" id="2_qwbyo"]
+[ext_resource type="Texture2D" uid="uid://c1iy4jgco7kjg" path="res://Assets/Art/Player/PVP/Player_Skin_1.png" id="3_qwbyo"]
+[ext_resource type="Texture2D" uid="uid://ccbcslnsifj3o" path="res://Assets/UI/divider-fade-002.png" id="4_qvi7s"]
+[ext_resource type="Theme" uid="uid://cpqqj8uayl3pq" path="res://Themes/Label.tres" id="5_y8g7s"]
+[ext_resource type="Theme" uid="uid://p8sbf2usmdfn" path="res://Themes/invis_buttons.tres" id="8_qvi7s"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rey1g"]
+texture = ExtResource("2_qwbyo")
+texture_margin_left = 15.0
+texture_margin_top = 15.0
+texture_margin_right = 15.0
+texture_margin_bottom = 15.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+region_rect = Rect2(0, 0, 100, 75)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_mcw7k"]
+texture = ExtResource("2_mwc5t")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_54p7f"]
+atlas = ExtResource("3_qwbyo")
+region = Rect2(390, 80, 160, 160)
+
+[sub_resource type="Animation" id="Animation_pacp1"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PanelContainer:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_rey1g"]
+resource_name = "hover_off"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(0.65, 0.65, 0.65, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PanelContainer:scale")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1.05, 1.05), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_y8g7s"]
+resource_name = "hover_on"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.65, 0.65, 0.65, 1), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PanelContainer:scale")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.05, 1.05)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_mcw7k"]
+_data = {
+&"RESET": SubResource("Animation_pacp1"),
+&"hover_off": SubResource("Animation_rey1g"),
+&"hover_on": SubResource("Animation_y8g7s")
+}
+
+[node name="RankBossSelector" type="Control" unique_id=1612125560]
+custom_minimum_size = Vector2(530, 0)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 530.0
+offset_bottom = 115.0
+pivot_offset_ratio = Vector2(0.5, 0.5)
+mouse_filter = 2
+script = ExtResource("1_qwbyo")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1049461160]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
+theme_override_styles/panel = SubResource("StyleBoxTexture_rey1g")
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=1596865508]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer" unique_id=508288726]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="picContainer" type="PanelContainer" parent="PanelContainer/MarginContainer/HBoxContainer" unique_id=1239138686]
+custom_minimum_size = Vector2(85, 85)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_mcw7k")
+
+[node name="picIcon" type="TextureRect" parent="PanelContainer/MarginContainer/HBoxContainer/picContainer" unique_id=1378759659]
+custom_minimum_size = Vector2(75, 75)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = SubResource("AtlasTexture_54p7f")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="boxInfo" type="VBoxContainer" parent="PanelContainer/MarginContainer/HBoxContainer" unique_id=1116746524]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="boxRank" type="HBoxContainer" parent="PanelContainer/MarginContainer/HBoxContainer/boxInfo" unique_id=675101411]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer3" type="MarginContainer" parent="PanelContainer/MarginContainer/HBoxContainer/boxInfo/boxRank" unique_id=80673492]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect2" type="TextureRect" parent="PanelContainer/MarginContainer/HBoxContainer/boxInfo/boxRank" unique_id=444419534]
+custom_minimum_size = Vector2(96, 10)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("4_qvi7s")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="lblRank" type="Label" parent="PanelContainer/MarginContainer/HBoxContainer/boxInfo/boxRank" unique_id=2008370469]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("5_y8g7s")
+theme_override_font_sizes/font_size = 24
+text = "Rank 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="PanelContainer/MarginContainer/HBoxContainer/boxInfo/boxRank" unique_id=156703012]
+custom_minimum_size = Vector2(96, 10)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("4_qvi7s")
+expand_mode = 1
+stretch_mode = 5
+flip_h = true
+
+[node name="MarginContainer2" type="MarginContainer" parent="PanelContainer/MarginContainer/HBoxContainer/boxInfo/boxRank" unique_id=691729270]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="lblName" type="Label" parent="PanelContainer/MarginContainer/HBoxContainer/boxInfo" unique_id=821362809]
+layout_mode = 2
+theme = ExtResource("5_y8g7s")
+theme_override_colors/font_color = Color(1, 0.933333, 0, 1)
+theme_override_colors/font_outline_color = Color(0.81, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 26
+text = "CartoonsAndCoffeeGhostOfJ"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="boxMoreInfo" type="VBoxContainer" parent="PanelContainer/MarginContainer/HBoxContainer/boxInfo" unique_id=689709945]
+layout_mode = 2
+
+[node name="txtInfo" type="RichTextLabel" parent="PanelContainer/MarginContainer/HBoxContainer/boxInfo/boxMoreInfo" unique_id=1394367696]
+layout_mode = 2
+theme = ExtResource("5_y8g7s")
+theme_override_font_sizes/normal_font_size = 16
+theme_override_font_sizes/bold_font_size = 16
+theme_override_font_sizes/bold_italics_font_size = 16
+theme_override_font_sizes/italics_font_size = 16
+theme_override_font_sizes/mono_font_size = 16
+bbcode_enabled = true
+text = "A glorious opponent, reigning  for 43 days."
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+
+[node name="btnBoss" type="Button" parent="PanelContainer/MarginContainer" unique_id=88748779]
+layout_mode = 2
+theme = ExtResource("8_qvi7s")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1704891007]
+libraries/ = SubResource("AnimationLibrary_mcw7k")

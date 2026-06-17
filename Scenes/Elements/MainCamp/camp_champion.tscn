@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://dmholyo4ckhkg"]
+[gd_scene load_steps=11 format=3 uid="uid://dmholyo4ckhkg"]
 
 [ext_resource type="Script" uid="uid://bgts6074854ev" path="res://Scripts/Components/MainCamp/camp_store.gd" id="1_xnswf"]
 [ext_resource type="Texture2D" uid="uid://cs8cwwngwet46" path="res://Assets/Art/Events/Town/MainCamp_Back.png" id="2_583qf"]
 [ext_resource type="Texture2D" uid="uid://bvrsbb6qi3juo" path="res://Assets/Art/Events/Town/Camp_Champion.png" id="3_xnswf"]
 [ext_resource type="Theme" uid="uid://p8sbf2usmdfn" path="res://Themes/invis_buttons.tres" id="4_dvufj"]
+[ext_resource type="Texture2D" uid="uid://ebnc16da52s2" path="res://Assets/Art/Events/Town/Camp_ChampionChains.png" id="5_583qf"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5dsgb"]
 
@@ -168,6 +169,14 @@ offset_right = -28.313
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("4_dvufj")
+
+[node name="picUnavail" type="TextureRect" parent="controlMain/PanelContainer"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("5_583qf")
+expand_mode = 3
+stretch_mode = 5
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

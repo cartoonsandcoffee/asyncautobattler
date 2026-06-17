@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://d08r3wuotxaf8"]
+[gd_scene format=3 uid="uid://d08r3wuotxaf8"]
 
 [ext_resource type="Texture2D" uid="uid://bnj3ygyotq5wv" path="res://Assets/UI/button_Fight_White.png" id="1_6qyws"]
 [ext_resource type="Script" uid="uid://b610ovfn73oyt" path="res://Scripts/Components/fight_flee.gd" id="1_cdsbu"]
@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://dhofxa5bgmljn" path="res://Assets/UI/button_Run_White.png" id="4_kclqi"]
 [ext_resource type="Texture2D" uid="uid://bwaut4kwcmrs0" path="res://Assets/UI/button_Run_Color.png" id="5_2yw06"]
 [ext_resource type="Texture2D" uid="uid://bhantmwmqo0jc" path="res://Assets/UI/button_CantRun_Color.png" id="7_5xp4v"]
-[ext_resource type="PackedScene" uid="uid://cwbr81rsawe8p" path="res://Scenes/Elements/instant_combat_toggle.tscn" id="8_kclqi"]
+[ext_resource type="PackedScene" uid="uid://cwbr81rsawe8p" path="res://Scenes/Elements/Buttons/instant_combat_toggle.tscn" id="8_kclqi"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m2wva"]
 

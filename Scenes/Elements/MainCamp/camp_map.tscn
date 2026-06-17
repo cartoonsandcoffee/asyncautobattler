@@ -1,0 +1,257 @@
+[gd_scene format=3 uid="uid://kgljujr7n80l"]
+
+[ext_resource type="Script" uid="uid://bgts6074854ev" path="res://Scripts/Components/MainCamp/camp_store.gd" id="1_lq3os"]
+[ext_resource type="Texture2D" uid="uid://cs8cwwngwet46" path="res://Assets/Art/Events/Town/MainCamp_Back.png" id="2_w5g1x"]
+[ext_resource type="Texture2D" uid="uid://deexdj5tb1xsv" path="res://Assets/Art/Events/Town/Camp_MapMaker.png" id="3_lq3os"]
+[ext_resource type="Texture2D" uid="uid://b1xbdan673ynx" path="res://Assets/Art/Events/Rope.png" id="3_w5g1x"]
+[ext_resource type="Theme" uid="uid://p8sbf2usmdfn" path="res://Themes/invis_buttons.tres" id="4_8je5u"]
+[ext_resource type="AudioStream" uid="uid://dxylrtsfasfdp" path="res://Assets/Audio/SFX/UI/vine_hover.ogg" id="6_he2ha"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5dsgb"]
+
+[sub_resource type="Animation" id="Animation_liyj2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("controlMain:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("controlMain:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.7, 0.7, 0.7, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_e7qjw"]
+resource_name = "mouse_exit"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("controlMain:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1.05, 1.05), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("controlMain:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(0.7, 0.7, 0.7, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_qju78"]
+resource_name = "mouse_over"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("controlMain:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.05, 1.05)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("controlMain:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.7, 0.7, 0.7, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_u62wv"]
+_data = {
+&"RESET": SubResource("Animation_liyj2"),
+&"mouse_exit": SubResource("Animation_e7qjw"),
+&"mouse_over": SubResource("Animation_qju78")
+}
+
+[sub_resource type="Animation" id="Animation_he2ha"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("controlDetail/picDetail:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_8je5u"]
+resource_name = "play_detail"
+length = 3.0000000000000004
+loop_mode = 2
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("controlDetail/picDetail:rotation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [-0.03490658503988659, 0.03490658503988659]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 3),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"load_sound"
+}, {
+"args": [],
+"method": &"load_sound"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_7b1yk"]
+_data = {
+&"RESET": SubResource("Animation_he2ha"),
+&"play_detail": SubResource("Animation_8je5u")
+}
+
+[node name="CampMap" type="Control" unique_id=1312350141]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("1_lq3os")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=964695725]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_w5g1x")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="controlDetail" type="Control" parent="." unique_id=623803238]
+anchors_preset = 0
+offset_right = 124.0
+offset_bottom = 451.0
+
+[node name="picDetail" type="TextureRect" parent="controlDetail" unique_id=255414724]
+modulate = Color(0.30588236, 0.23137255, 0.20784314, 1)
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -117.5
+offset_right = -7.5
+offset_bottom = 840.2086
+grow_horizontal = 0
+scale = Vector2(0.5, 0.5)
+pivot_offset_ratio = Vector2(0.5, 0)
+texture = ExtResource("3_w5g1x")
+expand_mode = 5
+stretch_mode = 5
+
+[node name="controlMain" type="Control" parent="." unique_id=1278525534]
+modulate = Color(0.7, 0.7, 0.7, 1)
+custom_minimum_size = Vector2(210, 200)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -40.0
+offset_right = 210.0
+offset_bottom = 160.0
+grow_vertical = 2
+pivot_offset = Vector2(105, 100)
+
+[node name="PanelContainer" type="PanelContainer" parent="controlMain" unique_id=1526970786]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_5dsgb")
+
+[node name="picMain" type="TextureRect" parent="controlMain/PanelContainer" unique_id=1912678717]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+texture = ExtResource("3_lq3os")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="Button" type="Button" parent="controlMain/PanelContainer/picMain" unique_id=460566869]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = 17.0
+offset_right = -41.3034
+offset_bottom = -30.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("4_8je5u")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1022370182]
+libraries/ = SubResource("AnimationLibrary_u62wv")
+
+[node name="animDetail" type="AnimationPlayer" parent="." unique_id=1583654116]
+libraries/ = SubResource("AnimationLibrary_7b1yk")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=601440148]
+stream = ExtResource("6_he2ha")

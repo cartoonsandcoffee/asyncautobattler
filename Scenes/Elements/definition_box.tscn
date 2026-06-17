@@ -1,19 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://l0o14aof4ys6"]
+[gd_scene format=3 uid="uid://l0o14aof4ys6"]
 
 [ext_resource type="FontFile" uid="uid://d236qu1nwukxr" path="res://Assets/UI/Fonts/Imperator Bold.ttf" id="1_aet7y"]
 [ext_resource type="Script" uid="uid://bg0ehb4h0xatv" path="res://Scripts/Components/definition_box.gd" id="1_oswnd"]
 [ext_resource type="FontFile" uid="uid://dbt53hulxegh2" path="res://Assets/UI/Fonts/Imperator.ttf" id="2_oswnd"]
-[ext_resource type="Texture2D" uid="uid://bnnq12liax8kc" path="res://Assets/UI/DefinitionTest.png" id="2_qk71c"]
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5tcsi"]
-content_margin_left = 15.0
-texture = ExtResource("2_qk71c")
-texture_margin_left = 15.0
-texture_margin_top = 15.0
-texture_margin_right = 15.0
-texture_margin_bottom = 15.0
-axis_stretch_horizontal = 2
-axis_stretch_vertical = 2
+[ext_resource type="StyleBox" uid="uid://b4vwn6s3aefoi" path="res://Themes/definition_style_box_texture.tres" id="2_qk71c"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nhh4t"]
 
@@ -79,63 +69,58 @@ _data = {
 &"tooltip_show": SubResource("Animation_oswnd")
 }
 
-[node name="DefinitionBox" type="Control"]
+[node name="DefinitionBox" type="Control" unique_id=1593978709]
 layout_mode = 3
 anchors_preset = 0
 grow_vertical = 0
 mouse_filter = 2
 script = ExtResource("1_oswnd")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1195093294]
 modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(250, 80)
 layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -28.0
-offset_right = 220.0
-offset_bottom = 80.0
-grow_vertical = 0
+offset_right = 250.0
+offset_bottom = 108.0
 scale = Vector2(0.75, 0.75)
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_5tcsi")
+theme_override_styles/panel = ExtResource("2_qk71c")
 
-[node name="MarginContainer2" type="MarginContainer" parent="PanelContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="PanelContainer" unique_id=390738810]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="PanelContainer" type="PanelContainer" parent="PanelContainer/MarginContainer2"]
+[node name="PanelContainer" type="PanelContainer" parent="PanelContainer/MarginContainer2" unique_id=761067971]
 layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_nhh4t")
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/MarginContainer2/PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/MarginContainer2/PanelContainer" unique_id=975574625]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer2/PanelContainer/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer2/PanelContainer/MarginContainer" unique_id=368712270]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="picIcon" type="TextureRect" parent="PanelContainer/MarginContainer2/PanelContainer/MarginContainer/HBoxContainer"]
+[node name="picIcon" type="TextureRect" parent="PanelContainer/MarginContainer2/PanelContainer/MarginContainer/HBoxContainer" unique_id=227740917]
 custom_minimum_size = Vector2(42, 42)
 layout_mode = 2
 size_flags_vertical = 4
 expand_mode = 3
 stretch_mode = 5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer2/PanelContainer/MarginContainer/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer2/PanelContainer/MarginContainer/HBoxContainer" unique_id=1542172589]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="lblKeyword" type="Label" parent="PanelContainer/MarginContainer2/PanelContainer/MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="lblKeyword" type="Label" parent="PanelContainer/MarginContainer2/PanelContainer/MarginContainer/HBoxContainer/VBoxContainer" unique_id=205367272]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.925353, 0.925353, 0.925353, 1)
 theme_override_fonts/font = ExtResource("1_aet7y")
@@ -143,7 +128,7 @@ theme_override_font_sizes/font_size = 18
 text = "key"
 vertical_alignment = 1
 
-[node name="lblDefinition" type="Label" parent="PanelContainer/MarginContainer2/PanelContainer/MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="lblDefinition" type="Label" parent="PanelContainer/MarginContainer2/PanelContainer/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1359178676]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.666569, 0.666569, 0.666569, 1)
 theme_override_fonts/font = ExtResource("2_oswnd")
@@ -152,8 +137,6 @@ text = "this is a test"
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1934082053]
 process_mode = 3
-libraries = {
-&"": SubResource("AnimationLibrary_5tcsi")
-}
+libraries/ = SubResource("AnimationLibrary_5tcsi")

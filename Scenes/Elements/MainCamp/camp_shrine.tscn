@@ -152,17 +152,10 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_5dsgb")
 
-[node name="picMainUnused" type="TextureRect" parent="controlMain/PanelContainer"]
-visible = false
-layout_mode = 2
-texture = ExtResource("3_mdfvd")
-expand_mode = 3
-stretch_mode = 5
-
 [node name="picMain" type="TextureRect" parent="controlMain/PanelContainer"]
-custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
-texture = ExtResource("4_1abpw")
+mouse_filter = 2
+texture = ExtResource("3_mdfvd")
 expand_mode = 3
 stretch_mode = 5
 
@@ -178,6 +171,15 @@ offset_bottom = -35.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("4_dnmgs")
+
+[node name="picUnavail" type="TextureRect" parent="controlMain/PanelContainer"]
+visible = false
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("4_1abpw")
+expand_mode = 3
+stretch_mode = 5
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

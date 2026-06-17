@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://ct6jer1f0brbb"]
+[gd_scene format=3 uid="uid://ct6jer1f0brbb"]
 
 [ext_resource type="Script" uid="uid://rblvleb51v0e" path="res://Scripts/Components/stat_box.gd" id="1_ro5bv"]
 [ext_resource type="Texture2D" uid="uid://bf5l3mn4r31le" path="res://Assets/UI/Item_Border_Small_Test.png" id="2_p1sst"]
@@ -45,13 +45,13 @@ corner_radius_bottom_left = 3
 atlas = ExtResource("3_8hxma")
 region = Rect2(0, 0, 150, 150)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jgaej"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xyjii"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8ja2n"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lw8oi"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8ja2n"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xyjii"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jgaej"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jgaej"]
 bg_color = Color(0, 0, 0, 1)
@@ -142,7 +142,7 @@ _data = {
 &"show_wounded": SubResource("Animation_jgaej")
 }
 
-[node name="StatBox" type="Control"]
+[node name="StatBox" type="Control" unique_id=1930829706]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -151,7 +151,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ro5bv")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Panel" type="Panel" parent="." unique_id=1978568265]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -160,7 +160,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_rtndc")
 
-[node name="panel_hurt" type="PanelContainer" parent="Panel"]
+[node name="panel_hurt" type="PanelContainer" parent="Panel" unique_id=1727072170]
 visible = false
 self_modulate = Color(1, 0, 0, 1)
 layout_mode = 1
@@ -172,7 +172,7 @@ grow_vertical = 2
 pivot_offset = Vector2(65, 21)
 theme_override_styles/panel = SubResource("StyleBoxTexture_8ja2n")
 
-[node name="ProgressBar" type="ProgressBar" parent="Panel"]
+[node name="ProgressBar" type="ProgressBar" parent="Panel" unique_id=1000916719]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -186,7 +186,7 @@ theme_override_styles/background = SubResource("StyleBoxFlat_ro5bv")
 theme_override_styles/fill = SubResource("StyleBoxFlat_p1sst")
 show_percentage = false
 
-[node name="statContainer" type="PanelContainer" parent="Panel"]
+[node name="statContainer" type="PanelContainer" parent="Panel" unique_id=1656446767]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -195,11 +195,11 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_ro5bv")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/statContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/statContainer" unique_id=1217445948]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="icon" type="TextureRect" parent="Panel/statContainer/HBoxContainer"]
+[node name="icon" type="TextureRect" parent="Panel/statContainer/HBoxContainer" unique_id=687238980]
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -208,7 +208,7 @@ texture = SubResource("AtlasTexture_lw8oi")
 expand_mode = 3
 stretch_mode = 5
 
-[node name="lbl_stat" type="Label" parent="Panel/statContainer/HBoxContainer"]
+[node name="lbl_stat" type="Label" parent="Panel/statContainer/HBoxContainer" unique_id=1556292926]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("4_midrc")
@@ -219,14 +219,14 @@ theme_override_font_sizes/font_size = 38
 text = "155/155"
 vertical_alignment = 1
 
-[node name="Button" type="Button" parent="Panel/statContainer"]
+[node name="Button" type="Button" parent="Panel/statContainer" unique_id=1100214026]
 layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_jgaej")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_xyjii")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_lw8oi")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_8ja2n")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_lw8oi")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_xyjii")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_jgaej")
 
-[node name="stat_holder" type="NinePatchRect" parent="Panel"]
+[node name="stat_holder" type="NinePatchRect" parent="Panel" unique_id=393898091]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -240,7 +240,7 @@ patch_margin_top = 20
 patch_margin_right = 25
 patch_margin_bottom = 25
 
-[node name="Tooltip" type="Panel" parent="."]
+[node name="Tooltip" type="Panel" parent="." unique_id=1411842654]
 visible = false
 z_index = 100
 layout_mode = 1
@@ -253,7 +253,7 @@ offset_bottom = -47.0
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_jgaej")
 
-[node name="NinePatchRect" type="NinePatchRect" parent="Tooltip"]
+[node name="NinePatchRect" type="NinePatchRect" parent="Tooltip" unique_id=315182996]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -266,7 +266,7 @@ patch_margin_top = 20
 patch_margin_right = 18
 patch_margin_bottom = 18
 
-[node name="MarginContainer" type="MarginContainer" parent="Tooltip/NinePatchRect"]
+[node name="MarginContainer" type="MarginContainer" parent="Tooltip/NinePatchRect" unique_id=418055295]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -278,10 +278,10 @@ theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Tooltip/NinePatchRect/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Tooltip/NinePatchRect/MarginContainer" unique_id=2135951601]
 layout_mode = 2
 
-[node name="lbl_name" type="Label" parent="Tooltip/NinePatchRect/MarginContainer/VBoxContainer"]
+[node name="lbl_name" type="Label" parent="Tooltip/NinePatchRect/MarginContainer/VBoxContainer" unique_id=1380870559]
 layout_mode = 2
 theme = ExtResource("4_midrc")
 theme_override_font_sizes/font_size = 28
@@ -289,7 +289,7 @@ text = "- Name -"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="lbl_tooltip" type="RichTextLabel" parent="Tooltip/NinePatchRect/MarginContainer/VBoxContainer"]
+[node name="lbl_tooltip" type="RichTextLabel" parent="Tooltip/NinePatchRect/MarginContainer/VBoxContainer" unique_id=955353196]
 layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("4_midrc")
@@ -297,10 +297,8 @@ theme_override_font_sizes/normal_font_size = 16
 text = "Tooltip description goes here. fasdfasdsdfasffasfsdfsdff fsdfsd sfsdf sdf sdf "
 fit_content = true
 
-[node name="animWounded" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_rtndc")
-}
+[node name="animWounded" type="AnimationPlayer" parent="." unique_id=2053443097]
+libraries/ = SubResource("AnimationLibrary_rtndc")
 
 [connection signal="mouse_entered" from="Panel/statContainer/Button" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="Panel/statContainer/Button" to="." method="_on_button_mouse_exited"]

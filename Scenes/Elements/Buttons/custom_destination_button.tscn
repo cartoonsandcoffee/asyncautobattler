@@ -1,0 +1,170 @@
+[gd_scene format=3 uid="uid://7m5kooaaov50"]
+
+[ext_resource type="Script" uid="uid://dscrnjofe8cdi" path="res://Scripts/Components/Buttons/custom_destination_button.gd" id="1_yabwr"]
+[ext_resource type="Texture2D" uid="uid://l34vnbw6e87" path="res://Assets/UI/shop_selector.png" id="2_66i3g"]
+[ext_resource type="Theme" uid="uid://p8sbf2usmdfn" path="res://Themes/invis_buttons.tres" id="3_874mq"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_08dvi"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ph7om"]
+atlas = ExtResource("2_66i3g")
+region = Rect2(0, 0, 250, 250)
+
+[sub_resource type="Animation" id="Animation_wrs1b"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PanelHolder:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_txlr1"]
+resource_name = "hover"
+loop_mode = 2
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PanelHolder:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.1, 1.1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_akkdb"]
+_data = {
+&"RESET": SubResource("Animation_wrs1b"),
+&"hover": SubResource("Animation_txlr1")
+}
+
+[sub_resource type="Animation" id="Animation_dyjcl"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.7, 0.7)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_j2dfy"]
+resource_name = "appear"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.7, 0.7), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_08dvi"]
+_data = {
+&"RESET": SubResource("Animation_dyjcl"),
+&"appear": SubResource("Animation_j2dfy")
+}
+
+[node name="CustomDestinationButton" type="Control" unique_id=1307855100]
+visible = false
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 3
+anchors_preset = 0
+scale = Vector2(0.7, 0.7)
+pivot_offset = Vector2(100, 100)
+script = ExtResource("1_yabwr")
+
+[node name="PanelHolder" type="PanelContainer" parent="." unique_id=2135144197]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(100, 100)
+theme_override_styles/panel = SubResource("StyleBoxEmpty_08dvi")
+
+[node name="picCutton" type="TextureRect" parent="PanelHolder" unique_id=1566591524]
+layout_mode = 2
+texture = SubResource("AtlasTexture_ph7om")
+expand_mode = 3
+
+[node name="Button" type="Button" parent="PanelHolder" unique_id=260882189]
+layout_mode = 2
+theme = ExtResource("3_874mq")
+
+[node name="animHover" type="AnimationPlayer" parent="." unique_id=1333798939]
+libraries/ = SubResource("AnimationLibrary_akkdb")
+
+[node name="animMain" type="AnimationPlayer" parent="." unique_id=415150404]
+libraries/ = SubResource("AnimationLibrary_08dvi")
