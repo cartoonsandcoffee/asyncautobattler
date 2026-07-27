@@ -20,7 +20,7 @@ const ICON_REGEN     	= preload("res://Resources/StatIcons/StatusIcons/status_re
 const ICON_BLESSING   	= preload("res://Resources/StatIcons/StatusIcons/status_blessing.tres")
 const ICON_BLIND   		= preload("res://Resources/StatIcons/StatusIcons/status_blind.tres")
 const ICON_STUN   		= preload("res://Resources/StatIcons/StatusIcons/status_stun.tres")
-const ICON_BLEED   		= preload("res://Resources/StatIcons/StatusIcons/status_poison.tres")
+const ICON_BLEED   		= preload("res://Resources/StatIcons/StatusIcons/status_bleed.tres")
 
 func set_references():
 	if _refs_set:
@@ -75,7 +75,7 @@ func set_status(_stat: Enums.StatusEffects, amount: int):
 			stat_color = gamecolors.stats.blessing
 			pic_status.texture = ICON_BLESSING
 		Enums.StatusEffects.BLEED:
-			stat_color = gamecolors.stats.damage
+			stat_color = gamecolors.stats.bleed
 			pic_status.texture = ICON_BLEED
 		_:
 			pass
