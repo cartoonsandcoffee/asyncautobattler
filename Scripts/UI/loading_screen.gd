@@ -35,10 +35,12 @@ signal username_confirmed(username: String)
 
 var good_name: bool = false
 var uuid: String = ""
+var _panel_name_origin_y: float = 0.0
 
 func _ready():
 	# Defer actual game loading to next frame so UI renders
 	anim_planet.play("planet_idle")
+	txt_name.gui_input.connect(_on_txt_name_gui_input)
 	call_deferred("_initialize_systems")
 
 func _process(delta: float) -> void:
@@ -54,6 +56,16 @@ func _process(delta: float) -> void:
 			txt_error.text = ""
 			
 		btn_name.disabled = !good_name
+
+		var kb_height = DisplayServer.virtual_keyboard_get_height()
+		if kb_height > 0:
+			var screen_height = get_viewport().get_visible_rect().size.y
+			var panel_bottom = panel_name.position.y + panel_name.size.y
+			var overlap = panel_bottom - (screen_height - kb_height)
+			if overlap > 0:
+				panel_name.position.y = _panel_name_origin_y - overlap - 16.0
+		else:
+			panel_name.position.y = _panel_name_origin_y
 
 func _initialize_systems():
 	await get_tree().process_frame
@@ -246,6 +258,7 @@ func _on_btn_play_pressed() -> void:
 
 
 func enter_new_player():
+	_panel_name_origin_y = panel_name.position.y
 	animation_player.play("namebox_flyin")
 
 func btn_play_hover():
@@ -268,3 +281,10 @@ func btn_hall_unhover():
 
 func play_sound_drop():
 	AudioManager.play_ui_sound("vine_drop")
+
+func _on_txt_name_gui_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed:
+		if event.keycode == KEY_ENTER or event.keycode == KEY_KP_ENTER:
+			if good_name:
+				get_viewport().set_input_as_handled()
+				_on_btn_name_pressed()

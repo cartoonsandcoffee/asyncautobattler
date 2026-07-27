@@ -2,13 +2,7 @@ class_name RareCampRoom
 extends RoomEvent
 
 
-@onready var shrine_popup: ItemCombiner = $shrine_popup
-@onready var forge_popup: ItemCombiner = $forge_popup
-@onready var crafting_popup: ItemCombiner = $crafting_popup
-@onready var merchant_popup: ItemTownStore = $merchant_popup
-@onready var banish_popup: ItemCombiner = $banish_popup
-
-@onready var lbl_tip: Label = $PanelContainer/lblTip
+@onready var lbl_tip: Label = $VBoxContainer/PanelContainer/lblTip
 
 @onready var store_fancy: ItemStore = $store_fancy
 @onready var store_bug: ItemStore = $store_bug
