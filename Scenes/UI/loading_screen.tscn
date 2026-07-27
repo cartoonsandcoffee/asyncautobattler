@@ -1,4 +1,4 @@
-[gd_scene load_steps=64 format=3 uid="uid://fa7f7054nthl"]
+[gd_scene format=3 uid="uid://fa7f7054nthl"]
 
 [ext_resource type="Script" uid="uid://d2xx5u5gtfb8l" path="res://Scripts/UI/loading_screen.gd" id="1_63kij"]
 [ext_resource type="Texture2D" uid="uid://5a5v7w7gi8so" path="res://Assets/Art/StarField.png" id="2_12h0r"]
@@ -40,25 +40,25 @@ region = Rect2(150, 0, 150, 150)
 atlas = ExtResource("10_wb71o")
 region = Rect2(300, 0, 150, 150)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_snpke"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u5t30"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qa0xh"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c4e84"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_24gq6"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c4e84"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qa0xh"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ujr70"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u5t30"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_46wup"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_snpke"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2d47g"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u2gw2"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_agpcf"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u2gw2"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2d47g"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_46wup"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ujr70"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1ku0f"]
 bg_color = Color(0, 0, 0, 0)
@@ -116,31 +116,31 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("panelName/panelBox:position")
+tracks/2/path = NodePath("panelName/panelBox:scale")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(465, 275.5)]
+"values": [Vector2(0.5, 0.5)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("panelName/panelBox:pivot_offset")
+tracks/3/path = NodePath("panelName/panelBox:modulate")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 0)]
+"values": [Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_opfnp"]
 resource_name = "namebox_flyin"
-length = 0.5
+length = 0.39999999999999997
 step = 0.025
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -161,7 +161,7 @@ tracks/1/path = NodePath("panelName:theme_override_styles/panel:bg_color")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.4),
+"times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(0, 0, 0, 0), Color(0, 0, 0, 1)]
@@ -169,31 +169,31 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("panelName/panelBox:position")
+tracks/2/path = NodePath("panelName/panelBox:scale")
 tracks/2/interp = 2
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.42, 0.5),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Vector2(465, -500), Vector2(465, 320), Vector2(465, 250), Vector2(465, 275.5)]
+"values": [Vector2(0.5, 0.5), Vector2(1.1, 1.1), Vector2(1, 1)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("panelName/panelBox:pivot_offset")
+tracks/3/path = NodePath("panelName/panelBox:modulate")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(303, 65)]
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_jl8es"]
 resource_name = "namebox_flyout"
-length = 0.5
+length = 0.39999999999999997
 step = 0.025
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -202,7 +202,7 @@ tracks/0/path = NodePath("panelName:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
+"times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
@@ -214,7 +214,7 @@ tracks/1/path = NodePath("panelName:theme_override_styles/panel:bg_color")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0.2, 0.5),
+"times": PackedFloat32Array(0.2, 0.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(0, 0, 0, 1), Color(0, 0, 0, 0)]
@@ -222,26 +222,26 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("panelName/panelBox:position")
+tracks/2/path = NodePath("panelName/panelBox:scale")
 tracks/2/interp = 2
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.35),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.1, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Vector2(465, 275.5), Vector2(465, 250), Vector2(465, 320), Vector2(465, -500)]
+"values": [Vector2(1, 1), Vector2(1.1, 1.1), Vector2(0.5, 0.5)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("panelName/panelBox:pivot_offset")
+tracks/3/path = NodePath("panelName/panelBox:modulate")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(303, 65)]
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_yhxw7"]
@@ -629,7 +629,7 @@ _data = {
 &"fade_out": SubResource("Animation_gg4iq")
 }
 
-[node name="LoadingScreen" type="Control"]
+[node name="LoadingScreen" type="Control" unique_id=1808985377]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -638,7 +638,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_63kij")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=72462132]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -647,7 +647,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="controlLoading" type="Control" parent="."]
+[node name="controlLoading" type="Control" parent="." unique_id=2061925756]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -655,7 +655,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="picStars" type="TextureRect" parent="controlLoading"]
+[node name="picStars" type="TextureRect" parent="controlLoading" unique_id=1949370475]
 modulate = Color(0.47, 0.47, 0.47, 1)
 layout_mode = 1
 anchors_preset = 15
@@ -666,7 +666,7 @@ grow_vertical = 2
 texture = ExtResource("2_12h0r")
 expand_mode = 3
 
-[node name="picPlanet" type="TextureRect" parent="controlLoading"]
+[node name="picPlanet" type="TextureRect" parent="controlLoading" unique_id=1386961417]
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 1
 anchors_preset = 8
@@ -684,7 +684,7 @@ pivot_offset = Vector2(250, 250)
 texture = ExtResource("3_p1qlt")
 expand_mode = 3
 
-[node name="controlMainMenu" type="Control" parent="."]
+[node name="controlMainMenu" type="Control" parent="." unique_id=1101103340]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -694,7 +694,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("2_63kij")
 
-[node name="picMenu" type="TextureRect" parent="controlMainMenu"]
+[node name="picMenu" type="TextureRect" parent="controlMainMenu" unique_id=1940217539]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -704,7 +704,7 @@ grow_vertical = 2
 texture = ExtResource("5_ge5rm")
 expand_mode = 3
 
-[node name="lblShip" type="Label" parent="controlMainMenu"]
+[node name="lblShip" type="Label" parent="controlMainMenu" unique_id=1514028604]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -725,7 +725,7 @@ text = "Test the Name of the Ship"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="smoke" type="CPUParticles2D" parent="controlMainMenu"]
+[node name="smoke" type="CPUParticles2D" parent="controlMainMenu" unique_id=1228383630]
 position = Vector2(405, 576)
 emitting = false
 amount = 10
@@ -746,7 +746,7 @@ scale_amount_curve = SubResource("Curve_ge5rm")
 color = Color(0.637843, 0.637843, 0.637843, 1)
 color_ramp = SubResource("Gradient_gg4iq")
 
-[node name="smallButtonHolder" type="PanelContainer" parent="controlMainMenu"]
+[node name="smallButtonHolder" type="PanelContainer" parent="controlMainMenu" unique_id=650555902]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 1
 anchors_preset = 12
@@ -758,17 +758,17 @@ grow_vertical = 0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_ohckc")
 
-[node name="MarginContainer" type="MarginContainer" parent="controlMainMenu/smallButtonHolder"]
+[node name="MarginContainer" type="MarginContainer" parent="controlMainMenu/smallButtonHolder" unique_id=29308356]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="controlMainMenu/smallButtonHolder/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="controlMainMenu/smallButtonHolder/MarginContainer" unique_id=363861086]
 layout_mode = 2
 
-[node name="lblTitle" type="Label" parent="controlMainMenu/smallButtonHolder/MarginContainer/VBoxContainer"]
+[node name="lblTitle" type="Label" parent="controlMainMenu/smallButtonHolder/MarginContainer/VBoxContainer" unique_id=2058450759]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.976667, 0.3, 1)
 theme_override_colors/font_shadow_color = Color(1, 0.72, 0.72, 0.227451)
@@ -780,19 +780,19 @@ text = "Title Goes Here!"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="controlMainMenu/smallButtonHolder/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="controlMainMenu/smallButtonHolder/MarginContainer/VBoxContainer" unique_id=243351695]
 layout_mode = 2
 size_flags_horizontal = 8
 theme = ExtResource("9_gg4iq")
 theme_override_constants/separation = 20
 
-[node name="lblMenu" type="Label" parent="controlMainMenu/smallButtonHolder/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="lblMenu" type="Label" parent="controlMainMenu/smallButtonHolder/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1572923321]
 layout_mode = 2
 theme = ExtResource("2_63kij")
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="btnInfo" type="Button" parent="controlMainMenu/smallButtonHolder/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="btnInfo" type="Button" parent="controlMainMenu/smallButtonHolder/MarginContainer/VBoxContainer/HBoxContainer" unique_id=998702955]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 tooltip_text = "Game Info"
@@ -800,7 +800,7 @@ icon = SubResource("AtlasTexture_ujr70")
 icon_alignment = 1
 expand_icon = true
 
-[node name="btnSettings" type="Button" parent="controlMainMenu/smallButtonHolder/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="btnSettings" type="Button" parent="controlMainMenu/smallButtonHolder/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1868177564]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 tooltip_text = "Settings & Options"
@@ -808,7 +808,7 @@ icon = SubResource("AtlasTexture_snpke")
 icon_alignment = 1
 expand_icon = true
 
-[node name="btnQuit" type="Button" parent="controlMainMenu/smallButtonHolder/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="btnQuit" type="Button" parent="controlMainMenu/smallButtonHolder/MarginContainer/VBoxContainer/HBoxContainer" unique_id=784891935]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 tooltip_text = "Quit"
@@ -816,10 +816,10 @@ icon = SubResource("AtlasTexture_u5t30")
 icon_alignment = 1
 expand_icon = true
 
-[node name="MarginContainer" type="MarginContainer" parent="controlMainMenu/smallButtonHolder/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="controlMainMenu/smallButtonHolder/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1972015601]
 layout_mode = 2
 
-[node name="controlPlay" type="Control" parent="controlMainMenu"]
+[node name="controlPlay" type="Control" parent="controlMainMenu" unique_id=626276806]
 custom_minimum_size = Vector2(477, 540)
 anchors_preset = 0
 offset_top = -450.0
@@ -828,7 +828,7 @@ offset_bottom = 90.0
 rotation = -0.0523599
 pivot_offset = Vector2(238, 0)
 
-[node name="picPlay" type="TextureRect" parent="controlMainMenu/controlPlay"]
+[node name="picPlay" type="TextureRect" parent="controlMainMenu/controlPlay" unique_id=284800977]
 layout_mode = 0
 offset_left = 45.0
 offset_right = 522.0
@@ -838,7 +838,7 @@ texture = ExtResource("11_ohckc")
 expand_mode = 5
 stretch_mode = 5
 
-[node name="btnPlay" type="Button" parent="controlMainMenu/controlPlay/picPlay"]
+[node name="btnPlay" type="Button" parent="controlMainMenu/controlPlay/picPlay" unique_id=595940421]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -849,14 +849,14 @@ offset_right = -130.0
 offset_bottom = -105.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_snpke")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_u5t30")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_qa0xh")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_24gq6")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_c4e84")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_24gq6")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_qa0xh")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_u5t30")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_snpke")
 disabled = true
 
-[node name="controlHall" type="Control" parent="controlMainMenu"]
+[node name="controlHall" type="Control" parent="controlMainMenu" unique_id=276156140]
 custom_minimum_size = Vector2(446, 495)
 layout_mode = 1
 anchors_preset = 5
@@ -870,7 +870,7 @@ grow_horizontal = 2
 rotation = 0.0523599
 pivot_offset = Vector2(223, 0)
 
-[node name="picHall" type="TextureRect" parent="controlMainMenu/controlHall"]
+[node name="picHall" type="TextureRect" parent="controlMainMenu/controlHall" unique_id=333598260]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -884,7 +884,7 @@ texture = ExtResource("12_ujr70")
 expand_mode = 5
 stretch_mode = 5
 
-[node name="btnHall" type="Button" parent="controlMainMenu/controlHall/picHall"]
+[node name="btnHall" type="Button" parent="controlMainMenu/controlHall/picHall" unique_id=72829725]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -895,14 +895,14 @@ offset_right = -143.0
 offset_bottom = -96.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_ujr70")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_46wup")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_2d47g")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_agpcf")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_u2gw2")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_agpcf")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_2d47g")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_46wup")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ujr70")
 disabled = true
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="." unique_id=1762310861]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -923,21 +923,18 @@ text = "Loading"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="panelName" type="Panel" parent="."]
+[node name="panelName" type="Panel" parent="." unique_id=1804744689]
 visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 22.0
-offset_top = 14.0
-offset_right = 22.0
-offset_bottom = 14.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
 theme_override_styles/panel = SubResource("StyleBoxFlat_1ku0f")
 
-[node name="panelBox" type="Panel" parent="panelName"]
+[node name="panelBox" type="Panel" parent="panelName" unique_id=923488887]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -947,11 +944,13 @@ anchor_bottom = 0.5
 offset_left = -303.0
 offset_top = -156.5
 offset_right = 303.0
-offset_bottom = 156.5
+offset_bottom = 156.50012
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+pivot_offset_ratio = Vector2(0.5, 0.5)
 
-[node name="ColorRect" type="ColorRect" parent="panelName/panelBox"]
+[node name="ColorRect" type="ColorRect" parent="panelName/panelBox" unique_id=1687633350]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -960,7 +959,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="NinePatchRect" type="NinePatchRect" parent="panelName/panelBox"]
+[node name="NinePatchRect" type="NinePatchRect" parent="panelName/panelBox" unique_id=1614731305]
 self_modulate = Color(0.65, 0.0585, 0.0585, 1)
 layout_mode = 1
 anchors_preset = 15
@@ -974,7 +973,7 @@ patch_margin_top = 16
 patch_margin_right = 16
 patch_margin_bottom = 16
 
-[node name="PanelContainer" type="PanelContainer" parent="panelName/panelBox"]
+[node name="PanelContainer" type="PanelContainer" parent="panelName/panelBox" unique_id=1020035728]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -983,28 +982,28 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_ffnnp")
 
-[node name="MarginContainer" type="MarginContainer" parent="panelName/panelBox/PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="panelName/panelBox/PanelContainer" unique_id=2099981438]
 layout_mode = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="VBoxContainer" type="VBoxContainer" parent="panelName/panelBox/PanelContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="panelName/panelBox/PanelContainer/MarginContainer" unique_id=133910590]
 layout_mode = 2
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer" unique_id=394413659]
 modulate = Color(0.65098, 0.0588235, 0.0588235, 1)
 layout_mode = 2
 
-[node name="TextureRect2" type="TextureRect" parent="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="TextureRect2" type="TextureRect" parent="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1548952870]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("4_46ur2")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Label" type="Label" parent="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="Label" type="Label" parent="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=755364411]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("2_63kij")
@@ -1013,7 +1012,7 @@ text = "Enter  Name"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="TextureRect" type="TextureRect" parent="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1017633499]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("4_46ur2")
@@ -1021,12 +1020,12 @@ expand_mode = 1
 stretch_mode = 5
 flip_h = true
 
-[node name="MarginContainer" type="MarginContainer" parent="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer" unique_id=1413832916]
 layout_mode = 2
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="txtName" type="TextEdit" parent="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="txtName" type="TextEdit" parent="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer" unique_id=924244609]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -1038,13 +1037,13 @@ placeholder_text = "Enter your name, Hero..."
 emoji_menu_enabled = false
 drag_and_drop_selection_enabled = false
 
-[node name="MarginContainer2" type="MarginContainer" parent="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer" unique_id=342482992]
 layout_mode = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="txtError" type="Label" parent="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/MarginContainer2"]
+[node name="txtError" type="Label" parent="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/MarginContainer2" unique_id=284863565]
 layout_mode = 2
 size_flags_vertical = 1
 theme_override_colors/font_color = Color(0.44, 0.44, 0.44, 1)
@@ -1052,21 +1051,21 @@ theme_override_fonts/font = ExtResource("5_v7pnk")
 theme_override_font_sizes/font_size = 15
 text = " "
 
-[node name="HBoxContainer" type="HBoxContainer" parent="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer" unique_id=107842683]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=249148050]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="btnName" type="Button" parent="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="btnName" type="Button" parent="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1827553411]
 custom_minimum_size = Vector2(250, 75)
 layout_mode = 2
 theme = ExtResource("2_63kij")
 action_mode = 0
 text = "Done"
 
-[node name="Fader" type="ColorRect" parent="."]
+[node name="Fader" type="ColorRect" parent="." unique_id=2125532330]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 15
@@ -1077,52 +1076,38 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
-[node name="GameInfo" parent="." instance=ExtResource("8_1ku0f")]
+[node name="GameInfo" parent="." unique_id=674303408 instance=ExtResource("8_1ku0f")]
 visible = false
 layout_mode = 1
 
-[node name="HallofChampions" parent="." instance=ExtResource("15_wb71o")]
+[node name="HallofChampions" parent="." unique_id=233749405 instance=ExtResource("15_wb71o")]
 visible = false
 layout_mode = 1
 
-[node name="SettingsPanel" parent="." instance=ExtResource("16_ohckc")]
+[node name="SettingsPanel" parent="." unique_id=858403153 instance=ExtResource("16_ohckc")]
 visible = false
 layout_mode = 1
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_yhxw7")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1478239450]
+libraries/ = SubResource("AnimationLibrary_yhxw7")
 
-[node name="animPlanet" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_ujr70")
-}
+[node name="animPlanet" type="AnimationPlayer" parent="." unique_id=894037056]
+libraries/ = SubResource("AnimationLibrary_ujr70")
 
-[node name="animPlay" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_a4cgd")
-}
+[node name="animPlay" type="AnimationPlayer" parent="." unique_id=1220070156]
+libraries/ = SubResource("AnimationLibrary_a4cgd")
 
-[node name="animHall" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_oh422")
-}
+[node name="animHall" type="AnimationPlayer" parent="." unique_id=371733847]
+libraries/ = SubResource("AnimationLibrary_oh422")
 
-[node name="animPlayIdle" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_u5t30")
-}
+[node name="animPlayIdle" type="AnimationPlayer" parent="." unique_id=1438183626]
+libraries/ = SubResource("AnimationLibrary_u5t30")
 
-[node name="animHallIdle" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_c4e84")
-}
+[node name="animHallIdle" type="AnimationPlayer" parent="." unique_id=1674994114]
+libraries/ = SubResource("AnimationLibrary_c4e84")
 
-[node name="animFade" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_qa0xh")
-}
+[node name="animFade" type="AnimationPlayer" parent="." unique_id=2130726876]
+libraries/ = SubResource("AnimationLibrary_qa0xh")
 
 [connection signal="text_changed" from="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/txtName" to="." method="_on_txt_name_text_changed"]
 [connection signal="pressed" from="panelName/panelBox/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/btnName" to="." method="_on_btn_name_pressed"]

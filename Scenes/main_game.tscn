@@ -2371,19 +2371,19 @@ tracks/13/keys = {
 tracks/14/type = "value"
 tracks/14/imported = false
 tracks/14/enabled = true
-tracks/14/path = NodePath("BottomPanelHolder:position")
+tracks/14/path = NodePath("BottomPanelHolder/stackedBarContainer/rowStatsStatusCets:modulate")
 tracks/14/interp = 1
 tracks/14/loop_wrap = true
 tracks/14/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 700)]
+"values": [Color(1, 1, 1, 0)]
 }
 tracks/15/type = "value"
 tracks/15/imported = false
 tracks/15/enabled = true
-tracks/15/path = NodePath("BottomPanelHolder/stackedBarContainer/rowStatsStatusCets:modulate")
+tracks/15/path = NodePath("BottomPanelHolder/stackedBarContainer/rowTertiary:modulate")
 tracks/15/interp = 1
 tracks/15/loop_wrap = true
 tracks/15/keys = {
@@ -2395,7 +2395,7 @@ tracks/15/keys = {
 tracks/16/type = "value"
 tracks/16/imported = false
 tracks/16/enabled = true
-tracks/16/path = NodePath("BottomPanelHolder/stackedBarContainer/rowTertiary:modulate")
+tracks/16/path = NodePath("BottomPanelHolder/stackedBarContainer/rowInventory:modulate")
 tracks/16/interp = 1
 tracks/16/loop_wrap = true
 tracks/16/keys = {
@@ -2407,14 +2407,14 @@ tracks/16/keys = {
 tracks/17/type = "value"
 tracks/17/imported = false
 tracks/17/enabled = true
-tracks/17/path = NodePath("BottomPanelHolder/stackedBarContainer/rowInventory:modulate")
+tracks/17/path = NodePath("BottomPanelHolder:anchors_preset")
 tracks/17/interp = 1
 tracks/17/loop_wrap = true
 tracks/17/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
+"update": 1,
+"values": [12]
 }
 
 [sub_resource type="Animation" id="Animation_4rx7b"]
@@ -2723,19 +2723,19 @@ step = 0.025
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("BottomPanelHolder:position")
-tracks/0/interp = 2
+tracks/0/path = NodePath("BottomPanelHolder/stackedBarContainer/rowStatsStatusCets:modulate")
+tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1),
+"times": PackedFloat32Array(0.4, 0.8),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(0, 700), Vector2(0, 450), Vector2(0, 499)]
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("BottomPanelHolder/stackedBarContainer/rowStatsStatusCets:modulate")
+tracks/1/path = NodePath("BottomPanelHolder/stackedBarContainer/rowTertiary:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -2747,22 +2747,10 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("BottomPanelHolder/stackedBarContainer/rowTertiary:modulate")
+tracks/2/path = NodePath("BottomPanelHolder/stackedBarContainer/rowInventory:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0.4, 0.8),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("BottomPanelHolder/stackedBarContainer/rowInventory:modulate")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
 "times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
@@ -2776,19 +2764,19 @@ step = 0.025
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("BottomPanelHolder:position")
-tracks/0/interp = 2
+tracks/0/path = NodePath("BottomPanelHolder/stackedBarContainer/rowStatsStatusCets:modulate")
+tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 499)]
+"values": [Color(1, 1, 1, 1)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("BottomPanelHolder/stackedBarContainer/rowStatsStatusCets:modulate")
+tracks/1/path = NodePath("BottomPanelHolder/stackedBarContainer/rowTertiary:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -2800,7 +2788,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("BottomPanelHolder/stackedBarContainer/rowTertiary:modulate")
+tracks/2/path = NodePath("BottomPanelHolder/stackedBarContainer/rowInventory:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -2812,14 +2800,14 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("BottomPanelHolder/stackedBarContainer/rowInventory:modulate")
+tracks/3/path = NodePath("BottomPanelHolder:anchors_preset")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
+"update": 1,
+"values": [12]
 }
 
 [sub_resource type="Animation" id="Animation_bgujj"]
@@ -4132,8 +4120,6 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -164.0
-offset_bottom = 201.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
@@ -4625,9 +4611,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -321.0
-offset_top = -231.5
+offset_top = -206.5
 offset_right = 321.0
-offset_bottom = 231.5
+offset_bottom = 206.5
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -4643,6 +4629,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="imageLine" type="HBoxContainer" parent="ReplacePanel/ReplaceItemPanel/controlReplace/PanelContainer/MarginContainer/mainContent" unique_id=1729648965]
+visible = false
 layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="ReplacePanel/ReplaceItemPanel/controlReplace/PanelContainer/MarginContainer/mainContent/imageLine" unique_id=1400514999]

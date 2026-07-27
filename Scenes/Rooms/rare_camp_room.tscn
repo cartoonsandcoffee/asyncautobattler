@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://cn4372wtxolqu"]
+[gd_scene format=3 uid="uid://cn4372wtxolqu"]
 
 [ext_resource type="Texture2D" uid="uid://c1b8ns4ggyjst" path="res://Assets/Art/Events/Town/Town_Placeholder_2.png" id="1_18n7k"]
 [ext_resource type="Script" uid="uid://bjgnp46hy47f5" path="res://Scripts/RoomEvents/rare_camp_room.gd" id="1_77ref"]
@@ -8,7 +8,7 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_77ref"]
 
-[node name="RareCampRoom" type="Control"]
+[node name="RareCampRoom" type="Control" unique_id=1181305014]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -17,7 +17,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_77ref")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1952209424]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -26,7 +26,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="picBack" type="TextureRect" parent="."]
+[node name="picBack" type="TextureRect" parent="." unique_id=1580145515]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -36,15 +36,21 @@ grow_vertical = 2
 texture = ExtResource("1_18n7k")
 expand_mode = 3
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1819000923]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 117.0
 grow_horizontal = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=1805538715]
+custom_minimum_size = Vector2(0, 95)
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer" unique_id=1137619730]
+layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_77ref")
 
-[node name="lblTip" type="Label" parent="PanelContainer"]
+[node name="lblTip" type="Label" parent="VBoxContainer/PanelContainer" unique_id=975412193]
 layout_mode = 2
 size_flags_vertical = 1
 theme_override_colors/font_color = Color(0.92, 0.87768, 0.2852, 1)
@@ -56,42 +62,42 @@ text = "An Improvised Encampment"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="btnStore" parent="." instance=ExtResource("4_ox6dg")]
+[node name="btnStore" parent="." unique_id=210476646 instance=ExtResource("4_ox6dg")]
 layout_mode = 1
 offset_left = 121.0
 offset_top = 340.0
 offset_right = -1154.0
 offset_bottom = -183.0
 
-[node name="btnBugs" parent="." instance=ExtResource("4_ox6dg")]
+[node name="btnBugs" parent="." unique_id=1092152053 instance=ExtResource("4_ox6dg")]
 layout_mode = 1
 offset_left = 1108.0
 offset_top = 323.0
 offset_right = -142.0
 offset_bottom = -227.0
 
-[node name="btnPotions" parent="." instance=ExtResource("4_ox6dg")]
+[node name="btnPotions" parent="." unique_id=1114668037 instance=ExtResource("4_ox6dg")]
 layout_mode = 1
 offset_left = 442.0
 offset_top = 350.0
 offset_right = -903.0
 offset_bottom = -263.0
 
-[node name="btnWell" parent="." instance=ExtResource("4_ox6dg")]
+[node name="btnWell" parent="." unique_id=719234846 instance=ExtResource("4_ox6dg")]
 layout_mode = 1
 offset_left = 872.0
 offset_top = 399.0
 offset_right = -554.0
 offset_bottom = -310.0
 
-[node name="btnVenture" parent="." instance=ExtResource("4_ox6dg")]
+[node name="btnVenture" parent="." unique_id=1002806749 instance=ExtResource("4_ox6dg")]
 layout_mode = 1
 offset_left = 657.0
 offset_top = 110.0
 offset_right = -662.0
 offset_bottom = -398.0
 
-[node name="potion_store" parent="." instance=ExtResource("4_1aoui")]
+[node name="potion_store" parent="." unique_id=900650060 instance=ExtResource("4_1aoui")]
 layout_mode = 1
 item_rarity = 8
 items_offered = 1
@@ -100,8 +106,10 @@ box_name = "The Potion Dealer"
 box_desc = "\"I've got a rare one today!\""
 allow_refresh = false
 category_string = "Elixir"
+session_persistent = true
+use_keyword_weighting = false
 
-[node name="store_fancy" parent="." instance=ExtResource("4_1aoui")]
+[node name="store_fancy" parent="." unique_id=1666715313 instance=ExtResource("4_1aoui")]
 layout_mode = 1
 item_rarity = 6
 items_offered = 3
@@ -109,8 +117,10 @@ item_columns = 4
 box_name = "A Purveyor of Fine Goods"
 include_extra_rare = true
 allow_refresh = false
+session_persistent = true
+use_keyword_weighting = false
 
-[node name="store_bug" parent="." instance=ExtResource("4_1aoui")]
+[node name="store_bug" parent="." unique_id=418012577 instance=ExtResource("4_1aoui")]
 layout_mode = 1
 item_rarity = 8
 items_offered = 1
@@ -119,6 +129,8 @@ box_name = "Collector of Rare Bugs"
 box_desc = "This is the prize of my collection, but I [b]could[/b] part with it."
 allow_refresh = false
 category_string = "Bug"
+session_persistent = true
+use_keyword_weighting = false
 
 [connection signal="button_clicked" from="btnStore" to="." method="_on_btn_store_button_clicked"]
 [connection signal="button_entered" from="btnStore" to="." method="_on_btn_store_button_entered"]
