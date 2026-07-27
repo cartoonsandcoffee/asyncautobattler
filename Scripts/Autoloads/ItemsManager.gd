@@ -87,20 +87,46 @@ func get_all_items(_filter_by_bundle: bool = true) -> Array[Item]:
 			items.append(item)
 		return items
 
+## Draws up to `count` items from `pool` without replacement.
+## Enforces max 1 Singularity per draw.
+## Pass a `picker` Callable(pool) -> Item to override pick_random.
+## Pass `limit_1_weapon = true` to cap weapons at one per draw.
+func _select_from_pool(pool: Array[Item], count: int, picker: Callable = Callable(), limit_1_weapon: bool = false) -> Array[Item]:
+	var selected: Array[Item] = []
+	var singularity_count: int = 0
+	var wep_count: int = 0
+	var attempts: int = 0
+	var max_attempts: int = count * 10
+	while selected.size() < count and pool.size() > 0 and attempts < max_attempts:
+		attempts += 1
+		var random_item: Item = picker.call(pool) if picker.is_valid() else pool.pick_random()
+		if limit_1_weapon and random_item.item_type == Item.ItemType.WEAPON:
+			if wep_count >= 1:
+				pool.erase(random_item)
+				continue
+			wep_count += 1
+		if random_item.has_category("Singularity"):
+			if singularity_count >= 1:
+				pool.erase(random_item)
+				continue
+			singularity_count += 1
+		selected.append(random_item)
+		pool.erase(random_item)
+	return selected
+
 func get_random_items(count: int, rarity: Enums.Rarity, include_bonus: bool = false, include_weapons: bool = false, max_1_weapon: bool = false, use_keyword_weighting: bool = true) -> Array[Item]:
 	var subset_items: Array[Item] = []
 	var all_items = get_all_items()
-	var wep_count: int = 0
 
 	# Filter for common rarity only
 	for item in all_items:
 		if Player.inventory.weapon_slot and item.item_name == Player.inventory.weapon_slot.item_name:  # Don't offer player weapon they already have.
 			continue
-		if item.has_category("Unique") && Player.inventory.has_item_by_id(item.item_id): # Don't offer player multiple copies of unique items
+		if item.has_category("Unique") && Player.has_item_anywhere(item.item_id): # Don't offer player multiple copies of unique items
 			continue
-		if item.has_category("Singularity") && Player.inventory.has_any_singularity_item(): # Don't offer player singularity items if they have one
+		if item.has_category("Singularity") && Player.has_any_singularity_item_anywhere(): # Don't offer player singularity items if they have one
 			continue
-		if GameSettings.scarcity_mode and item.rarity in [Enums.Rarity.UNCOMMON, Enums.Rarity.RARE, Enums.Rarity.LEGENDARY] and Player.inventory.has_item_by_id(item.item_id):
+		if GameSettings.scarcity_mode and item.rarity in [Enums.Rarity.UNCOMMON, Enums.Rarity.RARE, Enums.Rarity.LEGENDARY, Enums.Rarity.CRAFTED] and Player.has_item_anywhere(item.item_id):
 			continue
 
 		if item.rarity == rarity:
@@ -118,25 +144,7 @@ func get_random_items(count: int, rarity: Enums.Rarity, include_bonus: bool = fa
 	if use_keyword_weighting:
 		player_kws = _get_player_inventory_keywords()
 
-	var selected: Array[Item] = []
-	var attempts: int = 0
-	var max_attempts: int = count * 10  # Safety limit
-
-	while selected.size() < count and subset_items.size() > 0 and attempts < max_attempts:
-		attempts += 1
-		var random_item = _pick_weighted(subset_items, player_kws) ## - OLD (pre-weighted): subset_items.pick_random()
-
-		# If limiting weapons, check if we already have one
-		if max_1_weapon and random_item.item_type == Item.ItemType.WEAPON:
-			if wep_count >= 1:
-				# Skip this weapon, try again
-				subset_items.erase(random_item)
-				continue
-			else:
-				wep_count += 1
-
-		selected.append(random_item)
-		subset_items.erase(random_item)  # Remove to avoid duplicates
+	var selected: Array[Item] = _select_from_pool(subset_items, count, func(pool): return _pick_weighted(pool, player_kws), max_1_weapon)
 
 	# include bonus item of higher rarity
 	if include_bonus && count > 1:
@@ -151,15 +159,15 @@ func get_items_by_item_type(count: int, _item_type: Item.ItemType, _limit_rarity
 	for item in all_items:
 		if item.item_type == _item_type:
 
-			if item.has_category("Unique") && Player.inventory.has_item_by_id(item.item_id): # Don't offer player multiple copies of unique items
+			if item.has_category("Unique") && Player.has_item_anywhere(item.item_id): # Don't offer player multiple copies of unique items
 				continue
-			if item.has_category("Singularity") && Player.inventory.has_any_singularity_item(): # Don't offer player singularity items if they have one
+			if item.has_category("Singularity") && Player.has_any_singularity_item_anywhere(): # Don't offer player singularity items if they have one
 				continue
 			if item.item_name == "Bare Fists":
 				continue
 			if item.item_name == Player.inventory.weapon_slot.item_name:  # Don't offer player weapon they already have.
 				continue	
-			if GameSettings.scarcity_mode and item.rarity in [Enums.Rarity.UNCOMMON, Enums.Rarity.RARE, Enums.Rarity.LEGENDARY] and Player.inventory.has_item_by_id(item.item_id):
+			if GameSettings.scarcity_mode and item.rarity in [Enums.Rarity.UNCOMMON, Enums.Rarity.RARE, Enums.Rarity.LEGENDARY, Enums.Rarity.CRAFTED] and Player.has_item_anywhere(item.item_id):
 				continue
 
 			if _limit_rarity and item.rarity == _rarity:
@@ -169,12 +177,7 @@ func get_items_by_item_type(count: int, _item_type: Item.ItemType, _limit_rarity
 					subset_items.append(item)
 
 	# Pick random items (without duplicates)
-	var selected: Array[Item] = []
-	for i in count:
-		if subset_items.size() > 0:
-			var random_item = subset_items.pick_random()
-			selected.append(random_item)
-			subset_items.erase(random_item)  # Remove to avoid duplicates
+	var selected: Array[Item] = _select_from_pool(subset_items, count)
 
 	return selected
 
@@ -187,22 +190,17 @@ func get_items_by_category(count: int, _category: String):
 		for cat in item.categories:
 			if cat == _category:
 				if item.rarity in [Enums.Rarity.COMMON, Enums.Rarity.UNCOMMON, Enums.Rarity.RARE]:
-					if item.has_category("Unique") && Player.inventory.has_item_by_id(item.item_id): # Don't offer player multiple copies of unique items
+					if item.has_category("Unique") && Player.has_item_anywhere(item.item_id): # Don't offer player multiple copies of unique items
 						continue
-					if item.has_category("Singularity") && Player.inventory.has_any_singularity_item(): # Don't offer player singularity items if they have one
+					if item.has_category("Singularity") && Player.has_any_singularity_item_anywhere(): # Don't offer player singularity items if they have one
 						continue
-					if GameSettings.scarcity_mode and item.rarity in [Enums.Rarity.UNCOMMON, Enums.Rarity.RARE, Enums.Rarity.LEGENDARY] and Player.inventory.has_item_by_id(item.item_id):
+					if GameSettings.scarcity_mode and item.rarity in [Enums.Rarity.UNCOMMON, Enums.Rarity.RARE, Enums.Rarity.LEGENDARY, Enums.Rarity.CRAFTED] and Player.has_item_anywhere(item.item_id):
 						continue
 					if item.unlocked:
 						subset_items.append(item)
 
 	# Pick random items (without duplicates)
-	var selected: Array[Item] = []
-	for i in count:
-		if subset_items.size() > 0:
-			var random_item = subset_items.pick_random()
-			selected.append(random_item)
-			subset_items.erase(random_item)  # Remove to avoid duplicates
+	var selected: Array[Item] = _select_from_pool(subset_items, count)
 
 	return selected
 
@@ -250,24 +248,16 @@ func get_random_items_by_categry_and_rarity(count: int, rarity: Enums.Rarity, in
 				if item.rarity == rarity and item.unlocked:
 					if item.item_name == Player.inventory.weapon_slot.item_name:  # Don't offer player weapon they already have.
 						continue
-					if item.has_category("Unique") && Player.inventory.has_item_by_id(item.item_id): # Don't offer player multiple copies of unique items
+					if item.has_category("Unique") && Player.has_item_anywhere(item.item_id): # Don't offer player multiple copies of unique items
 						continue
-					if item.has_category("Singularity") && Player.inventory.has_any_singularity_item(): # Don't offer player singularity items if they have one
+					if item.has_category("Singularity") && Player.has_any_singularity_item_anywhere(): # Don't offer player singularity items if they have one
 						continue
-					if GameSettings.scarcity_mode and item.rarity in [Enums.Rarity.UNCOMMON, Enums.Rarity.RARE, Enums.Rarity.LEGENDARY] and Player.inventory.has_item_by_id(item.item_id):
+					if GameSettings.scarcity_mode and item.rarity in [Enums.Rarity.UNCOMMON, Enums.Rarity.RARE, Enums.Rarity.LEGENDARY, Enums.Rarity.CRAFTED] and Player.has_item_anywhere(item.item_id):
 						continue
 					subset_items.append(item)
 	
 	# Pick random items (without duplicates)
-	var selected: Array[Item] = []
-	var attempts: int = 0
-	var max_attempts: int = count * 10  # Safety limit
-
-	while selected.size() < count and subset_items.size() > 0 and attempts < max_attempts:
-		attempts += 1
-		var random_item = subset_items.pick_random()
-		selected.append(random_item)
-		subset_items.erase(random_item)  # Remove to avoid duplicates
+	var selected: Array[Item] = _select_from_pool(subset_items, count)
 
 	# include bonus item of higher rarity
 	if include_bonus && count > 1:
@@ -285,24 +275,16 @@ func get_random_weapons_by_rarity(count: int, rarity: Enums.Rarity, include_bonu
 			if item.rarity == rarity and item.unlocked:
 				if item.item_name == Player.inventory.weapon_slot.item_name:  # Don't offer player weapon they already have.
 					continue
-				if item.has_category("Unique") && Player.inventory.has_item_by_id(item.item_id): # Don't offer player multiple copies of unique items
+				if item.has_category("Unique") && Player.has_item_anywhere(item.item_id): # Don't offer player multiple copies of unique items
 					continue
-				if item.has_category("Singularity") && Player.inventory.has_any_singularity_item(): # Don't offer player singularity items if they have one
+				if item.has_category("Singularity") && Player.has_any_singularity_item_anywhere(): # Don't offer player singularity items if they have one
 					continue
-				if GameSettings.scarcity_mode and item.rarity in [Enums.Rarity.UNCOMMON, Enums.Rarity.RARE, Enums.Rarity.LEGENDARY] and Player.inventory.has_item_by_id(item.item_id):
+				if GameSettings.scarcity_mode and item.rarity in [Enums.Rarity.UNCOMMON, Enums.Rarity.RARE, Enums.Rarity.LEGENDARY, Enums.Rarity.CRAFTED] and Player.has_item_anywhere(item.item_id):
 					continue
 				subset_items.append(item)
 
 	# Pick random items (without duplicates)
-	var selected: Array[Item] = []
-	var attempts: int = 0
-	var max_attempts: int = count * 10  # Safety limit
-
-	while selected.size() < count and subset_items.size() > 0 and attempts < max_attempts:
-		attempts += 1
-		var random_item = subset_items.pick_random()
-		selected.append(random_item)
-		subset_items.erase(random_item)  # Remove to avoid duplicates
+	var selected: Array[Item] = _select_from_pool(subset_items, count)
 
 	# include bonus item of higher rarity
 	if include_bonus && count > 1:

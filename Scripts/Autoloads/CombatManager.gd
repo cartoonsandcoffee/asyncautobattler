@@ -46,7 +46,7 @@ var enemy_can_exposed_twice: bool = false
 var player_has_exposed_twice: bool = false
 var enemy_has_exposed_twice: bool = false
 
-const MAX_COMBAT_TURNS: int = 25  # Failsafe to prevent infinite combat
+const MAX_COMBAT_TURNS: int = 30  # Failsafe to prevent infinite combat
 
 # === SUB-SYSTEMS ===
 var event_queue: CombatEventQueue
@@ -277,11 +277,18 @@ func execute_attack_sequence(attacker):
 	# Notify display of upcoming strike count
 	stat_changed.emit(attacker, Enums.Stats.STRIKES, attacker.stats.strikes_left, attacker.stats.strikes_left)
 	
-	event_queue.enqueue(CombatEvent.log(CombatLog.bold("%s ATTACKS with %s (for %s per)" % [
-			color_entity(get_entity_name(attacker)),
-			color_text(str(attacker.stats.strikes_left), Color.WHITE) + " " + CombatLog.color_stat(Enums.Stats.STRIKES),
-			color_text(str(attacker.stats.damage_current), Color.WHITE) + " " + CombatLog.color_stat(Enums.Stats.DAMAGE)
-		])))
+	var _weapon_slot = attacker.inventory.weapon_slot if attacker.inventory else null
+	if _weapon_slot and _weapon_slot.cant_attack:
+		event_queue.enqueue(CombatEvent.log(CombatLog.bold("%s's %s cannot strike." % [
+				color_entity(get_entity_name(attacker)),
+				CombatLog.color_item(_weapon_slot.item_name, _weapon_slot)
+			])))
+	else:
+		event_queue.enqueue(CombatEvent.log(CombatLog.bold("%s ATTACKS with %s (for %s per)" % [
+				color_entity(get_entity_name(attacker)),
+				color_text(str(attacker.stats.strikes_left), Color.WHITE) + " " + CombatLog.color_stat(Enums.Stats.STRIKES),
+				color_text(str(attacker.stats.damage_current), Color.WHITE) + " " + CombatLog.color_stat(Enums.Stats.DAMAGE)
+			])))
 
 	if attacker.stats.strikes_left <= 0:
 		event_queue.enqueue(CombatEvent.turn_end_phase(attacker))
@@ -485,14 +492,14 @@ func pass_enemy_stats(stat: Enums.Stats, stat_type: Enums.StatType) -> int:
 		_:
 			return 0
 
-func _on_enemy_status_gained_triggered(entity, status: Enums.StatusEffects, stacks: int):
-	enqueue_items_for_trigger_with_status(entity, Enums.TriggerType.ON_ENEMY_STATUS_GAIN, status, stacks, null, true)
+func _on_enemy_status_gained_triggered(entity, status: Enums.StatusEffects, stacks: int, source_item: Item = null, reaction_chain: Array = []):
+	enqueue_items_for_trigger_with_status(entity, Enums.TriggerType.ON_ENEMY_STATUS_GAIN, status, stacks, source_item, true, reaction_chain)
 
 func _on_enemy_status_removed_triggered(entity, status: Enums.StatusEffects, stacks: int):
 	enqueue_items_for_trigger_with_status(entity, Enums.TriggerType.ON_ENEMY_STATUS_PROC, status, stacks, null, true)
 
-func _on_status_gained_triggered(entity, status: Enums.StatusEffects, stacks: int, source_item: Item = null):
-	enqueue_items_for_trigger_with_status(entity, Enums.TriggerType.ON_STATUS_GAINED, status, stacks, source_item, true)
+func _on_status_gained_triggered(entity, status: Enums.StatusEffects, stacks: int, source_item: Item = null, reaction_chain: Array = []):
+	enqueue_items_for_trigger_with_status(entity, Enums.TriggerType.ON_STATUS_GAINED, status, stacks, source_item, true, reaction_chain)
 
 func _on_overheal_triggered(entity, stacks: int):
 	enqueue_items_for_trigger(entity, Enums.TriggerType.OVERHEAL, Enums.Stats.NONE, null, stacks, true)
@@ -535,7 +542,7 @@ func enqueue_items_for_trigger(entity, trigger_type: Enums.TriggerType, trigger_
 	else:
 		event_queue.enqueue_batch(events)
 
-func enqueue_items_for_trigger_with_status(entity, trigger_type: Enums.TriggerType, trigger_status: Enums.StatusEffects, stacks: int, source_item: Item = null, immediate: bool = false):
+func enqueue_items_for_trigger_with_status(entity, trigger_type: Enums.TriggerType, trigger_status: Enums.StatusEffects, stacks: int, source_item: Item = null, immediate: bool = false, reaction_chain: Array = []):
 	if combat_ending:
 		return
 	if not combat_active:
@@ -546,18 +553,25 @@ func enqueue_items_for_trigger_with_status(entity, trigger_type: Enums.TriggerTy
 	if source_item:
 		triggered_items = triggered_items.filter(func(d): return d.item != source_item)
 
+	if not reaction_chain.is_empty():
+		triggered_items = triggered_items.filter(func(d): return d.item not in reaction_chain)
+
 	if triggered_items.is_empty():
 		return
 
 	var events: Array[CombatEvent] = []
 	events.append(CombatEvent.log("    %s (%s) items triggered (%d):" % [Enums.get_trigger_type_string(trigger_type), Enums.get_status_string(trigger_status), triggered_items.size()]))
 	for item_data in triggered_items:
+		var outgoing_chain = reaction_chain.duplicate()
+		outgoing_chain.append(item_data.item)
 		events.append(CombatEvent.execute_rule(
 			item_data.item,
 			item_data.rule,
 			entity,
 			trigger_type,
-			stacks
+			stacks,
+			Enums.StatusEffects.NONE,
+			outgoing_chain
 		))
 
 	if immediate:

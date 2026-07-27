@@ -5,7 +5,7 @@ signal inventory_updated(item: Item, slot_index: int)
 signal profile_loaded()
 signal ears_changed(new_balance: int)
 
-const GAME_VERSION = "0.1.05" 
+const GAME_VERSION = "0.1.051" 
 
 # ============================================
 # PERSISTENT PROFILE DATA (Synced with Supabase)
@@ -182,7 +182,10 @@ func set_test_inventory():
 	#inventory.add_item(ItemsManager.available_items["calming_relic"])
 	#inventory.add_item(ItemsManager.available_items["golden_dew_fly"])
 
-	#inventory.add_item(ItemsManager.available_items["spiked_mace"])
+	#inventory.add_item(ItemsManager.available_items["monster_sword"])
+	#inventory.add_item(ItemsManager.available_items["thorn_bug"])
+	#inventory.add_item(ItemsManager.available_items["blessed_talisman"])
+
 	#inventory.add_item(ItemsManager.available_items["purple_skin_vest"])
 	#inventory.add_item(ItemsManager.available_items["purple_skin_gloves"])
 	#inventory.add_item(ItemsManager.available_items["leather_boots"])
@@ -612,6 +615,22 @@ func subtract_gold(value: int):
 func all_weapon_upgrades_maxed() -> bool:
 	var u = current_weapon_stat_upgrades
 	return u["damage"] >= 1 and u["shield"] >= 1 and u["agility"] >= 1
+
+func has_item_anywhere(item_id: String) -> bool:
+	## Checks inventory slots AND the pet's carried item.
+	## Use this for all scarcity-mode duplicate guards.
+	if inventory.has_item_by_id(item_id):
+		return true
+	if pet_carrying_item and pet_carrying_item.item_id == item_id:
+		return true
+	return false
+
+func has_any_singularity_item_anywhere() -> bool:
+	if inventory.has_any_singularity_item():
+		return true
+	if pet_carrying_item and pet_carrying_item.has_category("Singularity"):
+		return true
+	return false
 
 # ============================================
 # PERSISTENT UUID & PROFILE MANAGEMENT

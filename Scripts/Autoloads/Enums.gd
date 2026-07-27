@@ -117,7 +117,7 @@ enum StatusEffects {
 	BLIND,			# halves damage
 	BLESSING,		# on remove: heal 3 and gain 1 damage
 	BURN,			# deal BURN_BASE damage for each stack
-	BLEED,			# prefer this be 'damages health not shield' instead of poison
+	BLEED,			# damages health below shield
 	RANDOM,			# Randomizes Status
 	NONE,
 	ANY,			# Any status
@@ -279,6 +279,8 @@ func get_status_string(_status: Enums.StatusEffects) -> String:
 			return "regeneration"
 		Enums.StatusEffects.STUN:
 			return "stun"
+		Enums.StatusEffects.BLEED:
+			return "bleed"
 		Enums.StatusEffects.RANDOM:
 			return "random status effect"
 		Enums.StatusEffects.ANY:
