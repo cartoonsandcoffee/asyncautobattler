@@ -1,0 +1,26 @@
+File Name	Name	Component Items	Bundles	Item Description	HP Bonus	Damage Bonus	Shield Bonus	Agility Bonus	Strikes Bonus	Burn Bonus	Keywords	Rules
+agathas_revenge_recipe	Agatha's Revenge Recipe	Blood From Below, Paralysis Poison	Duty	The first time the enemy gains poison, give them 5 acid.	0	0	0	0	0	0		When Enemy gains Status poison: Apply 5 acid to your Enemy
+ancient_prophecy_recipe	Ancient Prophecy	Ancient Armor, Ancient Sword	Greed, Duty	Exposed & Wounded: Gain 1 attack damage.	0	0	0	0	0	0		Exposed: Gain 1 attack | Wounded: Gain 1 attack
+angered_reprisal_recipe	Angered Reprisal Recipe	Darkwood Greaves, Bronze Barbed Helm	Greed, Revenge	Whenever you lose shield, gain 1 thorns.	0	0	0	0	0	0		On Stat Loss shield: Apply 1 thorns to yourself
+best_defense_recipe	The Best Defense	Thorn Shield, Parrying Blade	Greed	Turn Start: If you have less than 10 thorns, double your thorns.	0	0	0	0	0	0		Turn Start: If you have less than 10  thorns; Apply thorns to yourself  equal to your thorns stacks
+blinding_faith_recipe	Blinding Faith	Radiant Shield, Glowing Gauntlets, Blinding Flash, Shimmering Greaves	Greed	After 8 Turns: Trigger all your 'Battle Start' items.	0	0	0	0	0	0		Turn Start: Trigger all your Battle Start items.
+bugffet_recipe	Bugffet	Corpsehopper, Dew Fly, Firefly	Shame, Duty	Battle Start: Gain shield equal to double your agility.	0	0	0	0	0	0		Battle Start: Gain  shield equal to your current agility
+collectors_obsession_recipe	Collector's Obsession	Collector's Armor, Collector's Sword, Collector's Item	Duty, Chaos		0	3	0	6	0	0		
+corrosive_mask_recipe	Corrosive Mask	Dripping Carapace, Dripping Sword	Chaos	Battle Start: Give the enemy 20 shield.	0	0	0	0	0	0		Battle Start: Give enemy 20 shield
+covert_cache_recipe	Covert Cache	Covert Shield, Covert Armor	Chaos		10	0	0	0	0	0		
+dire_straits_recipe	Dire Straits Recipe	Direstone Dagger, Nimble Gloves	Honor	Wounded: Restore hitpoints equal to damage done by strikes on your next turn.	0	0	0	0	0	0		On Hit: If your hitpoints is your missing hitpoints or less; Heal yourself for an amount  equal to your current attack.
+draycool_wedding_recipe	Draycool's Wedding	Scabby Ring, Draycool's Axe	Shame	Whenever you gain 5 or more hitpoints in a single instance, gain 2 attack.	0	0	0	0	0	0		On Stat Gain hitpoints: Gain 2 attack
+fabrizios_delight_recipe	Fabrizio's Delight	Stinky Shield, Cleansing Axe	Shame	Battle Start: Give your enemy 2 stun.	0	0	0	0	0	0		Battle Start: Apply 2 stun to your Enemy
+heroic_sunglasses_recipe	Heroic Sunglasses Recipe	Inconveniently Radiant Blade, Radiant Shield	Greed	While you have 15 more more blind, blind increases your attack damage by 50% instead of reducing it.	0	0	0	0	0	0		Persistent: If you have 15  or more blind; Gain 0 attack
+midas_envy_recipe	Midas' Envy Recipe	Loot Finder, Old King's Helm	Greed, Honor	Battle Start: If you have more gold than your enemy, gain 3 attack damage and 10 shield.	0	0	0	0	0	0		Battle Start: If your gold is more than your Enemy's current gold; Gain 3 attack | Battle Start: Gain 10 shield
+pilfered_plate_recipe	Pilfered Plate	Rebounding Club, Rebounding Gloves	Chaos, Shame	Turn Start: Steal 2 shield from the enemy.	0	0	0	0	0	0		Turn Start: Convert 2 your enemy's shield to shield
+pitching_tentacles_recipe	Pitching Tentacles	Hardened Tentacle, Tentacle Crown	Chaos	Battle Start: Double your attack damage, shield, and agility.	0	0	0	0	0	0		Battle Start: Gain  attack equal to your current attack | Battle Start: Gain  shield equal to your current shield | Battle Start: Gain  agility equal to your current agility
+prickling_rash_recipe	Prickling Skin Rash	Piercing, Darkwood Greaves	General, Greed	Whenever you lose shield, gain 1 thorns.	0	0	0	0	0	0		On Stat Loss shield: Apply 1 thorns to yourself
+purple_nurple_recipe	Purple Nurple	Purpleskin Boots, Purpleskin Gloves, Purpleskin Vest	Honor	Every other turn: gain 1 attack damage.	0	0	0	0	0	0		Turn Start: Gain 1 attack
+relix_felicis_recipe	Felix Felicis	Nimble Cutlass, Peculiar Timepiece	Honor	On Hit: Gain 1 agility.	0	0	0	0	0	0		On Hit: Gain 1 agility
+shafeeks_blessing_recipe	Shafeek's Blessing	Shafeek's Overlarge Boots, Shafeek's Appropriately Sized Shield, Shafeek's Diminutive Poker	General		0	2	2	2	0	0		
+sickening_mask_recipe	Sickening Mask	Poison Sheath, Blood Crystal	Duty, Honor	On Hit: Gain 3 shield. (First turn only)	0	0	0	0	0	0		On Hit: Gain 3 shield
+sorro_masque_recipe	Sorro Masque	Fury Steel, Fury Potion	Duty	Trigger your Exposed items at Battle Start instead.	0	0	0	0	0	0		Battle Start: Trigger all your Exposed items.
+strong_ankles_recipe	Strong Ankles Recipe	Heavy Shield, Heavy Plated Armor	Shame, Revenge		0	3	0	8	0	0		
+testing_bonus	Testing Bonus	Test Relic, Byzantium Boots	General		0	0	0	0	0	0		Battle Start: Apply 10 blessing to yourself
+tree_of_life_recipe	Tree of Life	Living Wood Club, Living Wood Helmet, Living Wood Cloak	Revenge	Wounded: heal to full.	0	0	0	0	0	0		Wounded: Gain  hitpoints equal to your missing hitpoints

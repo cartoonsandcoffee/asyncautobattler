@@ -1,0 +1,54 @@
+[gd_resource type="Theme" format=3 uid="uid://bw761c8prcwxd"]
+
+[ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="1_jn8am"]
+[ext_resource type="Texture2D" uid="uid://yofuy3ot1qmm" path="res://Assets/UI/Buttons/banner_left.png" id="2_x6gvm"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_58fwq"]
+texture = ExtResource("2_x6gvm")
+texture_margin_left = 45.0
+texture_margin_right = 35.0
+texture_margin_bottom = 10.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+modulate_color = Color(0.270222, 0.270222, 0.270222, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ihwhf"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_qip3o"]
+texture = ExtResource("2_x6gvm")
+texture_margin_left = 45.0
+texture_margin_right = 35.0
+texture_margin_bottom = 10.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+modulate_color = Color(0.81, 0.3888, 0.43794, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3ve4w"]
+texture = ExtResource("2_x6gvm")
+texture_margin_left = 45.0
+texture_margin_right = 35.0
+texture_margin_bottom = 10.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+modulate_color = Color(0.560784, 0.211765, 0.254902, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_taf41"]
+texture = ExtResource("2_x6gvm")
+texture_margin_left = 45.0
+texture_margin_right = 35.0
+texture_margin_bottom = 10.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+modulate_color = Color(0.27, 0.0837, 0.105435, 1)
+
+[resource]
+Button/colors/font_hover_color = Color(1, 1, 1, 1)
+Button/colors/font_outline_color = Color(0, 0, 0, 0.705882)
+Button/constants/outline_size = 4
+Button/font_sizes/font_size = 24
+Button/fonts/font = ExtResource("1_jn8am")
+Button/styles/disabled = SubResource("StyleBoxTexture_58fwq")
+Button/styles/focus = SubResource("StyleBoxEmpty_ihwhf")
+Button/styles/hover = SubResource("StyleBoxTexture_qip3o")
+Button/styles/normal = SubResource("StyleBoxTexture_3ve4w")
+Button/styles/pressed = SubResource("StyleBoxTexture_taf41")

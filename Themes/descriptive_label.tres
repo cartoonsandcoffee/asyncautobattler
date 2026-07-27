@@ -1,8 +1,31 @@
-[gd_resource type="Theme" load_steps=2 format=3 uid="uid://od14ccps1daj"]
+[gd_resource type="Theme" format=3 uid="uid://od14ccps1daj"]
 
 [ext_resource type="FontFile" uid="uid://dbt53hulxegh2" path="res://Assets/UI/Fonts/Imperator.ttf" id="1_osimd"]
+[ext_resource type="FontFile" uid="uid://d236qu1nwukxr" path="res://Assets/UI/Fonts/Imperator Bold.ttf" id="2_dn3qc"]
+[ext_resource type="FontFile" uid="uid://dgwg8mvobk57a" path="res://Assets/UI/Fonts/ImperatorSmallCaps Bold.ttf" id="3_j31sm"]
+[ext_resource type="FontFile" uid="uid://egiysmxi43hy" path="res://Assets/UI/Fonts/ImperatorBronze.ttf" id="4_jtk17"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f3ulp"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lne1p"]
 
 [resource]
 Label/colors/font_color = Color(0.703808, 0.703808, 0.703808, 1)
 Label/font_sizes/font_size = 20
 Label/fonts/font = ExtResource("1_osimd")
+RichTextLabel/colors/default_color = Color(0.8862616, 0.88626146, 0.8862615, 1)
+RichTextLabel/colors/font_outline_color = Color(0, 0, 0, 1)
+RichTextLabel/colors/font_shadow_color = Color(0, 0, 0, 0.34901962)
+RichTextLabel/constants/shadow_offset_x = 1
+RichTextLabel/constants/shadow_offset_y = 1
+RichTextLabel/constants/shadow_outline_size = 3
+RichTextLabel/font_sizes/bold_font_size = 36
+RichTextLabel/font_sizes/bold_italics_font_size = 36
+RichTextLabel/font_sizes/italics_font_size = 36
+RichTextLabel/font_sizes/normal_font_size = 36
+RichTextLabel/fonts/bold_font = ExtResource("2_dn3qc")
+RichTextLabel/fonts/bold_italics_font = ExtResource("3_j31sm")
+RichTextLabel/fonts/italics_font = ExtResource("4_jtk17")
+RichTextLabel/fonts/normal_font = ExtResource("1_osimd")
+RichTextLabel/styles/focus = SubResource("StyleBoxEmpty_f3ulp")
+RichTextLabel/styles/normal = SubResource("StyleBoxEmpty_lne1p")

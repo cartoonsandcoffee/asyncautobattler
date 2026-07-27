@@ -1,0 +1,13 @@
+[gd_resource type="StyleBoxTexture" format=3 uid="uid://b4vwn6s3aefoi"]
+
+[ext_resource type="Texture2D" uid="uid://bnnq12liax8kc" path="res://Assets/UI/DefinitionTest.png" id="1_lyioo"]
+
+[resource]
+content_margin_left = 15.0
+texture = ExtResource("1_lyioo")
+texture_margin_left = 15.0
+texture_margin_top = 15.0
+texture_margin_right = 15.0
+texture_margin_bottom = 15.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2

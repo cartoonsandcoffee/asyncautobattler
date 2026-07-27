@@ -78,7 +78,7 @@ void fragment() {
 		vec2 edge = TEXTURE_PIXEL_SIZE * thickness * 2.0;
 		uv = uv + uv * edge;
 		uv += vec2(0.5);
-		
+
 		// Apply outline.
 		vec4 newColor = texture(TEXTURE, uv);
 		if (newColor.a <= tolerance || border(uv)) {

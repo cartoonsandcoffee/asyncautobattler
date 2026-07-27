@@ -4,7 +4,7 @@ Dynamic Shadow Shader for 2D Sprites
 This shader adds a simple shadow effect to 2D sprites, making use of a duplicated `TextureRect` node with an assigned shadow shader.
 The shadow follows the light direction, adjusting its position based on the sprite's location and screen center.
 
-Usage: Duplicate a `TextureRect` node, assign this shader to the new one, and then adjust the `shadow_offset` to position the shadow. 
+Usage: Duplicate a `TextureRect` node, assign this shader to the new one, and then adjust the `shadow_offset` to position the shadow.
 You must set the `screen_center` uniform from script using the viewport size, e.g.:
 `shader_material.set_shader_parameter("screen_center", Vector2(viewport_size.x * 0.5, viewport_size.y * 0.5))`
 

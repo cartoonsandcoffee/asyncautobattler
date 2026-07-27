@@ -1,0 +1,31 @@
+[gd_resource type="Theme" format=3 uid="uid://budqg0v0xejxy"]
+
+[ext_resource type="Texture2D" uid="uid://i41yufvsfh70" path="res://Assets/UI/pic_parchment.png" id="1_0m6u8"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ep12o"]
+texture = ExtResource("1_0m6u8")
+region_rect = Rect2(0, 0, 165, 150)
+modulate_color = Color(0.41, 0.41, 0.41, 0.603922)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3x7e5"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3x7e5"]
+texture = ExtResource("1_0m6u8")
+region_rect = Rect2(0, 0, 165, 150)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_kfg0o"]
+texture = ExtResource("1_0m6u8")
+region_rect = Rect2(0, 0, 165, 150)
+modulate_color = Color(0.6, 0.6, 0.6, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_oajw1"]
+texture = ExtResource("1_0m6u8")
+region_rect = Rect2(0, 0, 165, 150)
+modulate_color = Color(0.4, 0.4, 0.4, 1)
+
+[resource]
+Button/styles/disabled = SubResource("StyleBoxTexture_ep12o")
+Button/styles/focus = SubResource("StyleBoxEmpty_3x7e5")
+Button/styles/hover = SubResource("StyleBoxTexture_3x7e5")
+Button/styles/normal = SubResource("StyleBoxTexture_kfg0o")
+Button/styles/pressed = SubResource("StyleBoxTexture_oajw1")

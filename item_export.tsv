@@ -1,0 +1,404 @@
+File Name	Name	Bundle	Item Description	HP Bonus	Shield Bonus	Damage Bonus	Agility Bonus	Strikes Bonus	Burn Bonus	Cant Strike	Rarity	Item Type	Categories	Keywords	Rules
+bloodmoth	Bloodmoth	Honor	Wounded: Heal 4 hitpoints.	0	0	0	0	0	0	false	Common	Bug	Vampiric, Bug	Wounded	Wounded: Heal yourself for 4 hitpoints.
+corpsehopper	Corpsehopper	Shame	Battle Start: Gain 1 acid.	0	0	0	3	0	0	false	Common	Bug	Bug	Acid, Battle Start	Battle Start: Apply 1 acid to yourself
+dark_crawler	Dark Crawler	Chaos	Battle Start: Deal 1 damage to the enemy. Repeat 2 more times.	0	0	0	0	0	0	false	Common	Bug	Dark, Bug	Battle Start	Battle Start: Deal 1 damage to your Enemy.
+dew_fly	Dew Fly	Shame	Battle Start, Exposed, & Wounded: Decrease a random status effect of yours by 1.	0	0	0	0	0	0	false	Common	Bug	Shimmering, Bug	Battle Start, Exposed, Wounded	Battle Start: Remove 1 random status effect from yourself | Exposed: Remove 1 random status effect from yourself | Wounded: Remove 1 random status effect from yourself
+firefly	Firefly	Duty	Exposed: Give the enemy 1 burn.	0	0	0	0	0	0	false	Common	Bug	Bug	Burn, Exposed	Exposed: Apply 1 burn to your Enemy
+scuttlemite	Scuttlemite	Revenge		5	0	0	0	0	0	false	Common	Bug	Wood, Bug		
+thorn_bug	Thorn Bug	Revenge	Battle Start: Gain 3 thorns.	0	0	0	0	0	0	false	Common	Bug	Bug	Thorns, Battle Start	Battle Start: Apply 3 thorns to yourself
+acrid_potion	Fury Potion	Duty	Exposed: Give the enemy 3 poison.	0	0	0	0	0	0	false	Common	Potion	Potion	Poison, Exposed	Exposed: Apply 3 poison to your Enemy
+essence_of_charcoal	Essence Of Charcoal	Duty	Battle Start: Increase your burn damage by 1.	0	0	0	0	0	0	false	Common	Potion	Potion	Burn, Battle Start	Battle Start: Gain 1 burn damage
+limbering_potion	Limbering Potion	Chaos	Battle Start: Heal 1 hitpoint for each agility you have.	0	0	0	1	0	0	false	Common	Potion	Potion	Battle Start	Battle Start: Heal yourself for an amount  equal to your current agility.
+reprieval_potion	Last Effort Potion	Duty	Wounded: Gain 10 shield and stun yourself for 2. 	0	0	0	0	0	0	false	Common	Potion	Clearmetal, Potion	Stun, Wounded	Wounded: Gain 10 shield | Wounded: Apply 2 stun to yourself
+vicious_potion	Vicious Potion	Duty	Every 3 hits: Increase your attack damage by 1.	0	0	0	0	0	0	false	Common	Potion	Potion		On Hit: Gain 1 attack
+bronze_barbed_helm	Bronze Barbed Helm	Revenge	Battle Start: Gain 1 thorns.	0	2	0	0	0	0	false	Common	Helmet		Thorns, Battle Start	Battle Start: Apply 1 thorns to yourself
+collectors_armor	Collector's Armor	Duty	Upgrading triples shield value instead of doubling it.	0	3	0	0	0	0	false	Common	Body Armor	Collector		
+corroded_armor	Corroded Armor	Shame	Battle Start: Gain 1 acid.	0	5	0	0	0	0	false	Common	Body Armor		Acid, Battle Start	Battle Start: Apply 1 acid to yourself
+corroded_ring	Corroded Ring	Chaos	Battle Start: Give the enemy 1 acid.	0	0	0	0	0	0	false	Common	Jewelry	Ring	Acid, Battle Start	Battle Start: Apply 1 acid to your Enemy
+covert_shield	Covert Shield	Chaos	Battle Start: If your base shield is 0, gain 4 shield.	0	0	0	0	0	0	false	Common	Shield		Battle Start	Battle Start: If your shield is 0 ; Gain 4 shield
+crown_of_caution	Crown of Caution	Greed		-2	5	0	0	0	0	false	Common	Jewelry			
+crown_of_rage	Crown of Rage	Greed		0	0	1	-1	0	0	false	Common	Jewelry			
+dangly_necklace	Dangly Necklace	Greed		8	0	-1	0	0	0	false	Common	Jewelry			
+double_plated_armor	Heavy Plated Armor	Revenge	Exposed: Gain 3 shield.	0	2	0	-2	0	0	false	Common	Body Armor		Exposed	Exposed: Gain 3 shield
+fine_edge	Edge Refiner	Honor	First Turn Only: Temporarily gain 2 attack damage.	0	0	0	0	0	0	false	Common	Tool	Clearmetal		Turn Start: Gain 2 attack | Turn End: Lose -2 attack
+helmet_of_the_old_gods	Helmet of the Old Gods	Shame	Battle Start: Gain 1 blessing.	0	2	0	0	0	0	false	Common	Helmet		Blessing, Battle Start	Battle Start: Apply 1 blessing to yourself
+holy_shield	Heavy Shield	Shame		0	6	-1	-1	0	0	false	Common	Shield			
+lantern	Latern	Duty	Battle Start & Exposed: Give the enemy 1 burn.	0	0	0	0	0	0	false	Common	Tool		Burn, Battle Start, Exposed	Battle Start: Apply 1 burn to your Enemy | Exposed: Apply 1 burn to your Enemy
+liferoot_gauntlets	Hearty Gauntlets	Revenge	Battle Start: Gain 1 regeneration.	3	0	0	0	0	0	false	Common	Gloves	Wood	Regeneration, Battle Start	Battle Start: Apply 1 regeneration to yourself
+living_wood_cloak	Living Wood Cloak	Revenge	Battle Start: If your hitpoints are not full, heal for 2 hitpoints.	2	0	0	0	0	0	false	Common	Body Armor	Wood	Battle Start	Battle Start: If your hitpoints is less than your base hitpoints; Heal yourself for 2 hitpoints.
+living_wood_helmet	Living Wood Helmet	Revenge	Exposed: Heal for 3 hitpoints.	1	1	0	0	0	0	false	Common	Helmet	Wood	Exposed	Exposed: Heal yourself for 3 hitpoints.
+loot_finder	Loot Finder	Greed	If you have under 10 gold, gain 1 gold on Turn Start.	0	0	0	0	0	0	false	Common	Tool			Turn Start: If your gold is less than 10 ; Gain 1 gold
+nimble_hood	Nimble Hood	Honor	Battle Start: Take 3 damage and gain 1 additional strike on your first turn.	0	0	0	0	0	0	false	Common	Helmet		Strikes, Battle Start	Battle Start: Deal 3 damage to yourself. | Battle Start: Gain 1 strikes
+poison_sheath	Poison Sheath	Duty	On Hit: Give the enemy 2 poison. (First turn only)	0	0	0	0	0	0	false	Common	Tool		Poison	On Hit: Apply 2 poison to your Enemy
+purple_skin_gloves	Purpleskin Gloves	Honor		3	0	0	1	0	0	false	Common	Gloves			
+purple_skin_vest	Purpleskin Vest	Honor		0	2	0	1	0	0	false	Common	Body Armor			
+purpleskin_belt	Purpleskin Belt	Chaos	If you have 0 base shield, double this item's max hitpoints.	3	0	0	0	0	0	false	Common	Belt			Persistent: If your shield is =; Gain 3 Max hitpoints
+radiant_shield	Radiant Shield	Greed	Battle Start: Gain 2 blind.	0	8	0	0	0	0	false	Common	Shield	Shimmering	Blind, Battle Start	Battle Start: Apply 2 blind to yourself
+ring_of_life	Ring of Life	Greed	Battle Start: Heal for 3 hitpoints.	0	0	0	0	0	0	false	Common	Jewelry	Ring	Battle Start	Battle Start: Heal yourself for 3 hitpoints.
+ring_of_power	Ring of Power	Greed	Battle Start: Gain 2 attack and take 3 damage.	0	0	0	0	0	0	false	Common	Jewelry	Ring	Battle Start	Battle Start: Gain 2 attack | Battle Start: Deal 3 damage to yourself.
+ring_of_theft	Ring of Theft	Greed	Battle Start: Steal 2 shield from the enemy.	0	0	0	0	0	0	false	Common	Jewelry	Ring	Battle Start	Battle Start: Convert 2 your enemy's shield to shield
+rubber_glue	Rubber Glue	Shame	Battle Start: Remove 1 random status effect from yourself, and apply 1 random status effect on your enemy.	0	0	0	0	0	0	false	Common	Tool	Shimmering	Battle Start	Battle Start: Remove 1 random status effect from yourself | Battle Start: Apply 1 random status effect to your Enemy
+shafeek_boots	Shafeek's Overlarge Boots	General		0	0	0	2	0	0	false	Common	Boots			
+shafeek_shield	Shafeek's Appropriately Sized Shield	General		0	3	0	0	0	0	false	Common	Shield			
+shimmering_gauntlet	Glowing Gauntlets	Greed	Battle Start: Give the enemy 1 blind.	0	0	0	0	0	0	false	Common	Gloves	Shimmering	Blind, Battle Start	Battle Start: Apply 1 blind to your Enemy
+shimmering_jawtrap	Conspicuous Jawtrap	Greed	Wounded: Give the enemy 3 blind.	0	0	0	0	0	0	false	Common	Tool	Shimmering	Blind, Wounded	Wounded: Apply 3 blind to your Enemy
+thirsty_helmet	Thirsty Helmet	Honor	On Hit. Heal yourself for 1 hitpoint. (First turn only)	0	0	0	0	0	0	false	Common	Helmet	Vampiric		On Hit: Heal yourself for 1 hitpoints.
+Darkmite	Darkmite	General	Battle Start: Deal 1 damage to the enemy. Repeat 2 additional times.	6	0	0	0	0	0	false	Crafted	Bug	Dark, Bug	Battle Start	Battle Start: Deal 1 damage to your Enemy.
+agressive_insecurity	Aggressive Insecurity	General	Exposed: Stun the enemy equal to your agility.	0	0	0	4	0	0	false	Crafted	Potion	Elixir, Unique	Stun, Exposed	Exposed: Apply stun to your Enemy  equal to your current agility
+liquid_clearmetal	Liquid Clearmetal	General	Battle Start: Gain 20 max hitpoints and gain shield equal to your missing hitpoints.	0	0	0	0	0	0	false	Crafted	Potion	Clearmetal, Elixir	Battle Start	Battle Start: Gain 20 Max hitpoints | Battle Start: Gain  shield equal to your missing hitpoints
+mountain_dew_red	Mountain Dew Code Red	General	Battle Start: Lose 5 shield and gain 5 blessing.	0	0	0	0	0	0	false	Crafted	Potion	Unique, Elixir	Blessing, Battle Start	Battle Start: Lose -5 shield | Battle Start: Apply 5 blessing to yourself
+stimuplus	Stimuplus	General	Battle Start: Give yourself 2 stun.	0	0	3	4	0	0	false	Crafted	Potion	Unique, Elixir	Stun, Battle Start	Battle Start: Apply 2 stun to yourself
+super_blood_from_below	Super Blood From Below	General	The first time the enemy gains poison, give them 9 additional poison.	0	0	0	0	0	0	false	Crafted	Potion	Unique, Elixir	Poison	When Enemy gains Status poison: Apply 9 poison to your Enemy
+super_paralysis_poison	Super Paralysis Poison	General	The first time the enemy gains poison, give them 3 stun.	0	0	0	0	0	0	false	Crafted	Potion	Unique, Elixir	Poison, Stun	When Enemy gains Status poison: Apply 3 stun to your Enemy
+tighten_up	Tighten Up	General	Wounded: Gain shield equal to max hitpoints, and gain 5 acid.	0	0	0	0	0	0	false	Crafted	Potion	Elixir, Unique	Wounded	Wounded: Gain  shield equal to your base hitpoints | Wounded: Apply 5 acid to yourself
+well_mixed_potion	Well Mixed Potion	General	Battle Start: Give the enemy 4 blind, 4 acid, and 4 poison.	0	0	0	0	0	0	false	Crafted	Potion	Unique, Elixir	Acid, Blind, Poison, Battle Start	Battle Start: Apply 4 poison to your Enemy | Battle Start: Apply 4 acid to your Enemy | Battle Start: Apply 4 blind to your Enemy
+Firemoth	Firemoth	General	Wounded: Give the enemy 1 burn. Whenever burn triggers, restore 3 hitpoints.	0	0	0	0	0	0	false	Crafted	Bug	Bug	Burn, Wounded	Wounded: Apply 1 burn to your Enemy | On Status Removed burn: Heal yourself for 3 hitpoints. | When status triggers on Enemy burn: Heal yourself for 3 hitpoints.
+armored_crawler	Armored Crawler	General	Battle Start: If your hitpoints are full, gain 2 armor and deal 2 damage; repeat 2 times.	0	0	0	0	0	0	false	Crafted	Bug	Clearmetal, Dark, Bug	Battle Start	Battle Start: If your hitpoints is your base hitpoints; Gain 2 shield | Battle Start: Deal 2 damage to your Enemy.
+armored_fire_beetle	Armored Firefly	General	Exposed: Give the enemy 2 burn and gain 3 shield for each burn the enemy has.	0	0	0	0	0	0	false	Crafted	Bug	Bug, Clearmetal	Burn, Exposed	Exposed: Apply 2 burn to your Enemy | Exposed: Gain  shield equal to your Enemy's burn stacks
+armored_termite	Armored Termite	General	Battle Start: If your hitpoints are full, gain 5 shield and 5 max hitpoints.	6	6	0	0	0	0	false	Crafted	Bug	Clearmetal, Bug	Battle Start	Battle Start: If your hitpoints is your base hitpoints; Gain 5 shield | Battle Start: Gain 5 Max hitpoints
+blood_scorpion	Blood Scorpion	General	Wounded: Restore 30 hitpoints.	0	0	0	0	0	0	false	Crafted	Bug	Vampiric, Unique, Bug	Wounded	Wounded: Gain 30 hitpoints
+bloody_spikewing	Bloody Spikewing	General	Wounded: Restore 5 hitpoints and gain 5 thorns.	0	0	0	0	0	0	false	Crafted	Bug	Bug	Thorns, Wounded	Wounded: Heal yourself for 5 hitpoints. | Wounded: Apply 5 thorns to yourself
+boiling_illipillar	Boiling Illipillar	General	Battle Start: Gain 3 poison and give the enemy burn equal to your poison.	0	0	2	0	0	0	false	Crafted	Bug	Bug	Poison, Burn, Battle Start	Battle Start: Apply 3 poison to yourself | Battle Start: Apply burn to your Enemy  equal to your poison stacks
+burning_scorpion	Burning Scorpion	General	Exposed: Give the enemy 10 burn.	0	0	0	0	0	0	false	Crafted	Bug	Bug	Burn, Exposed	Exposed: Apply 10 burn to your Enemy
+centepede_bow	Centipede Bow	General	Battle Start: Gain 3 poison. Turn Start: If you have poison, gain 1 additional strike.	0	0	4	0	0	0	false	Crafted	Weapon		Poison, Strikes, Battle Start	Battle Start: Apply 3 poison to yourself | Turn Start: If you have more than 0  poison; Gain 1 strikes
+cheerful_deathfly	Cheerful Deathwing	General	Exposed and Wounded: Heal for 3 hitpoints.	0	2	0	0	0	0	false	Crafted	Bug	Bug	Exposed, Wounded	Exposed: Heal yourself for 3 hitpoints. | Wounded: Heal yourself for 3 hitpoints.
+chelicerae	Chelicarea	General	Battle Start and Exposed: Deal 4 damage to the enemy.	0	0	3	0	0	0	false	Crafted	Weapon	Dark	Battle Start, Exposed	Battle Start: Deal 4 damage to your Enemy. | Exposed: Deal 4 damage to your Enemy.
+cleansing_firewing	Cleansing Firewing	General	Battle Start, Exposed, and Wounded: Decrease 1 random status effect, and give the enemy 1 burn.	0	0	0	0	0	0	false	Crafted	Bug	Bug, Shimmering	Burn, Battle Start, Exposed, Wounded	Battle Start: Convert 1 random status effect to your enemy's burn | Exposed: Convert 1 random status effect to your enemy's burn | Wounded: Convert 1 random status effect to your enemy's burn
+corpse_fly	Corpse Fly	General	Battle Start, Exposed, and Wounded: Remove all your acid.	0	0	0	3	0	0	false	Crafted	Bug	Bug, Shimmering	Acid, Battle Start, Exposed, Wounded	Battle Start: Remove acid from yourself  equal to your acid stacks | Exposed: Remove acid from yourself  equal to your acid stacks | Wounded: Remove acid from yourself  equal to your acid stacks
+corpse_mite	Corpse Mite	General	Battle Start: Gain 2 acid.	5	0	0	5	0	0	false	Crafted	Bug	Wood, Bug	Acid, Battle Start	Battle Start: Apply 2 acid to yourself
+corpse_scorpion	Corpse Scorpion	General	Battle Start: Double your agility.	0	0	0	3	0	0	false	Crafted	Bug	Bug	Battle Start	Battle Start: Gain  agility equal to your current agility
+crickets_leg	Cricket's Leg	General	On Hit: Spend 2 agility and gain 1 additional strike on your next turn.	0	0	2	4	0	0	false	Crafted	Weapon		Strikes	On Hit: Convert 2 agility to 0.5x strikes
+daddy_lottalegs	Daddy Lottalegs	General	Turn Start: Gain 1 poison and deal 1 damage to the enemy.	0	0	3	0	0	0	false	Crafted	Bug	Bug, Dark	Poison	Turn Start: Apply 1 poison to yourself | Turn Start: Deal 1 damage to your Enemy.
+darkfly	Darkfly	General	Battle Start, Exposed, and Wounded: Decrease a random status effect by 1. Whenever a status effect is decreased, deal 1 damage to the enemy.	0	0	0	0	0	0	false	Crafted	Bug	Shimmering, Dark, Bug	Battle Start, Exposed, Wounded	Battle Start: Remove 1 random status effect from yourself | Exposed: Remove 1 random status effect from yourself | Wounded: Remove 1 random status effect from yourself | On Status Removed any status: Deal 1 damage to your Enemy.
+darkhopper	Darkhopper	General	Turn Start: Spend 1 agility to deal 2 damage to the enemy.	0	0	0	3	0	0	false	Crafted	Bug	Bug, Dark		Turn Start: If your agility is more than 0 ; Deal 2 damage to your Enemy. | Turn Start: Lose -1 agility
+darkmoth	Darkmoth	General	Battle Start and Wounded: Deal 3 damage to the enemy, and heal yourself for 3 hitpoints.	0	0	0	0	0	0	false	Crafted	Bug	Bug, Dark, Vampiric	Battle Start, Wounded	Battle Start: Deal 3 damage to your Enemy. | Battle Start: Heal yourself for 3 hitpoints. | Wounded: Deal 3 damage to your Enemy. | Wounded: Heal yourself for 3 hitpoints.
+dew_mite	Dew Mite	General	Battle Start, Exposed, and Wounded: Decrease a random status effect by 2.	5	0	0	0	0	0	false	Crafted	Bug	Shimmering, Wood, Bug	Battle Start, Exposed, Wounded	Battle Start: Remove 2 random status effect from yourself | Exposed: Remove 2 random status effect from yourself | Wounded: Remove 2 random status effect from yourself
+dew_moth	Dew Moth	General	Battle Start: Decrease a random status effect by 1. Whenever a status effect is removed, gain 1 hitpoint.	0	0	0	0	0	0	false	Crafted	Bug	Vampiric, Shimmering, Bug	Battle Start	Battle Start: Remove 1 random status effect from yourself | On Status Removed any status: Heal yourself for 1 hitpoints.
+firebug	Firebug	General	Battle Start: Give the enemy 1 burn. Whenever burn triggers, gain 3 thorns.	0	0	0	0	0	0	false	Crafted	Bug	Bug	Burn, Thorns, Battle Start	Battle Start: Apply 1 burn to your Enemy | On Status Removed burn: Apply 3 thorns to yourself | When status triggers on Enemy burn: Apply 3 thorns to yourself
+firefly_wing	Firefly Wing	General	Battle Start: Gain 1 additional strike. First Turn: Give the enemy 1 burn on hit.	0	0	2	0	0	0	false	Crafted	Weapon		Burn, Strikes, Battle Start	Battle Start: Gain 1 strikes | On Hit: Apply 1 burn to your Enemy
+firemite	Firemite	General	Exposed: Give the enemy 2 burn.	5	0	0	0	0	0	false	Crafted	Bug	Bug, Wood	Burn, Exposed	Exposed: Apply 2 burn to your Enemy
+flame_crawler	Flame Crawler	General	Battle Start: Give the enemy 2 burn. Whenever burn triggers, deal 1 damage to the enemy 2 times.	0	0	0	0	0	0	false	Crafted	Bug	Dark, Bug	Burn, Battle Start	On Status Removed burn: Deal 1 damage to your Enemy. | Battle Start: Apply 1 burn to your Enemy | When status triggers on Enemy burn: Deal 1 damage to your Enemy.
+flamehopper	Flamehopper	General	Battle Start: Gain 1 acid. Exposed: Give the enemy burn equal to your acid. 	0	0	0	3	0	0	false	Crafted	Bug	Bug	Acid, Burn, Battle Start	Battle Start: Apply 1 acid to yourself | Exposed: Apply burn to your Enemy  equal to your acid stacks
+flaming_pillbug	Flaming Pillbug	General	Exposed: Give the enemy 1 burn and gain max hitpoints equal to your enemy's burn.	0	4	0	0	0	0	false	Crafted	Bug	Bug	Burn, Exposed	Exposed: Apply 1 burn to your Enemy | Exposed: Gain  Max hitpoints equal to your Enemy's burn stacks
+full_plated_scorpion	Full-Plated Pit Scorpion	General	Battle Start: Gain 15 shield. If your hitpoints are full, gain 15 additional shield.	0	0	0	0	0	0	false	Crafted	Bug	Bug, Clearmetal	Battle Start	Battle Start: Gain 15 shield | Battle Start: If your hitpoints is your base hitpoints; Gain 15 shield
+hearty_woodmoth	Hearty Woodmoth	General	Wounded: Restore 1 hitpoint. Repeat 4 more times.	5	0	0	0	0	0	false	Crafted	Bug	Wood, Bug	Wounded	Wounded: Heal yourself for 1 hitpoints.
+illimite	Illimite	General		-5	0	5	0	0	0	false	Crafted	Bug	Bug		
+infested_club	Infested Club	General	Battle Start: Gain 2 additional strikes.	5	0	3	0	0	0	false	Crafted	Weapon	Wood, Bug	Strikes, Battle Start	Battle Start: Gain 2 strikes
+jaunty_corpsebug	Jaunty Corpsebug	General	Battle Start: Gain 1 acid. Whenever you lose shield, gain 1 agility.	0	2	0	3	0	0	false	Crafted	Bug	Bug	Acid, Battle Start	Battle Start: Apply 1 acid to yourself | On Stat Loss shield: Gain 1 agility
+jaunty_mite	Jaunty Mite	General	Exposed: Gain 5 max hitpoints.	5	4	0	0	0	0	false	Crafted	Bug	Bug	Exposed	Exposed: Gain 5 Max hitpoints
+jaunty_scorpion	Jaunty Scorpion	General	Your base shield is doubled.	0	0	0	0	0	0	false	Crafted	Bug	Bug		Persistent: Gain  Max shield equal to your base shield
+jumping_wretch	Jumping Wretch	General	Battle Start: Gain 1 acid and 5 poison.	0	0	3	4	0	0	false	Crafted	Bug	Bug	Acid, Poison, Battle Start	Battle Start: Apply 1 acid to yourself | Battle Start: Apply 5 poison to yourself
+metallimoth	Metallimoth	General	Wounded: Heal for 10 hitpoints and gain 5 shield.	0	0	0	0	0	0	false	Crafted	Bug	Vampiric, Clearmetal, Bug	Wounded	Wounded: Heal yourself for 10 hitpoints. | Wounded: Gain 5 shield
+midnight_roller	Midnight Roller	General	Battle Start: Deal 4 damage to yourself and the enemy. Repeat 1 additional time.	0	2	0	0	0	0	false	Crafted	Bug	Bug, Dark	Battle Start	Battle Start: Deal 4 damage to yourself. | Battle Start: Deal 4 damage to your Enemy.
+mite_scorpion	Mite Scorpion	General	Double your max hitpoints.	0	0	0	0	0	0	false	Crafted	Bug	Bug		Persistent: Gain  Max hitpoints equal to your base hitpoints
+mosquito	Mosquito	General	Battle Start, Exposed and Wounded: Decrease a random status effect by 1. Whenever a status effect is removed, heal 1 hitpoint.	0	0	0	0	0	0	false	Crafted	Bug	Shimmering	Battle Start, Exposed, Wounded	Battle Start: Remove 1 random status effect from yourself | Exposed: Remove 1 random status effect from yourself | Wounded: Remove 1 random status effect from yourself | On Status Removed any status: Heal yourself for 1 hitpoints.
+moth_eater	Moth Eater	General	Wounded: Gain 1 strike and heal 2 hitpoints. Repeat for every 'Vampiric' item.	0	0	2	0	0	0	false	Crafted	Weapon		Strikes, Wounded	Wounded: Gain 1 strikes | Wounded: Heal yourself for 2 hitpoints.
+plague_moth	Plague Moth	General	Turn Start: Gain 1 poison and restore 2 hitpoints.	0	0	2	0	0	0	false	Crafted	Bug	Bug, Vampiric	Poison	Turn Start: Apply 1 poison to yourself | Turn Start: Heal yourself for 2 hitpoints.
+plated_millipede	Plated Millipede	General	Battle Start: Gain 3 poison.	0	6	4	0	0	0	false	Crafted	Bug	Bug, Clearmetal	Poison, Battle Start	Battle Start: Apply 3 poison to yourself
+poisonous_scorpion	Poisonous Scorpion	General	Turn Start: Give the enemy 2 poison.	0	0	4	0	0	0	false	Crafted	Bug	Bug, Unique	Poison	Turn Start: Apply 2 poison to your Enemy
+prickling_beetle	Prickling Beetle	General	Battle Start: If your hitpoints are full, gain 6 thorns and 6 shield.	0	0	0	0	0	0	false	Crafted	Bug	Bug, Clearmetal	Thorns, Battle Start	Battle Start: If your hitpoints is your base hitpoints; Apply 6 thorns to yourself | Battle Start: Gain 6 shield
+prickly_thorax	Prickly Thorax	General	Turn Start: Gain thorns equal to your attack. (Can't strike)	0	0	4	0	0	0	true	Crafted	Weapon	Bug	Thorns	Turn Start: Apply thorns to yourself  equal to your current attack
+puke_fly	Puke Fly	General	Turn Start: Convert 1 stack of a random status effect to poison.	0	0	3	0	0	0	false	Crafted	Bug	Bug	Poison	Turn Start: Convert 1 random status effect to poison
+pulsing_arachnid	Pulsing Arachnid	General	Turn start: Deal 1 damage to the enemy. Repeat 2 additional times.	0	0	0	0	0	0	false	Crafted	Bug	Dark, Unique, Bug		Turn Start: Deal 1 damage to your Enemy.
+purifying_talon	Purifying Talon	General	Battle Start: Gain 1 additional strike. On Hit: Decrease a random status effect.	0	0	3	0	0	0	false	Crafted	Weapon	Shimmering	Battle Start	Battle Start: Gain 1 strikes | On Hit: Remove 1 random status effect from yourself
+reinforced_leaper	Reinforced Leaper	General	Battle Start: Gain 10 shield. If your hitpoints are not full, gain 2 acid.	0	0	0	3	0	0	false	Crafted	Bug	Bug, Clearmetal	Acid, Battle Start	Battle Start: Gain 10 shield | Battle Start: If your hitpoints is less than your base hitpoints; Apply 2 acid to yourself
+reinforced_pillbug	Reinforced Pillbug	General	Exposed: Gain 5 shield.	0	10	0	0	0	0	false	Crafted	Bug	Bug	Exposed	Exposed: Gain 5 shield
+rolling_barb_bug	Rolling Barb Bug	General	Exposed: Gain 5 shield and 5 thorns.	0	2	0	0	0	0	false	Crafted	Bug	Bug	Thorns, Exposed	Exposed: Gain 5 shield | Exposed: Apply 5 thorns to yourself
+rotting_moth	Rotting Moth	General	Battle Start: Gain 3 acid. Wounded: Convert all your acid to regeneration.	0	0	0	4	0	0	false	Crafted	Bug	Bug, Vampiric	Acid, Regeneration, Battle Start, Wounded	Battle Start: Apply 3 acid to yourself | Wounded: Convert all acid to regeneration
+sharpened_tibia	Sharpened Tibia	General	Turn Start: If your hitpoints are full, gain 1 additional strike.	0	6	2	0	0	0	false	Crafted	Weapon		Strikes	Turn Start: If your hitpoints is your base hitpoints; Gain 1 strikes
+shimmering_scorpion	Shimmering Scorpion	General	Battle Start: Give all your status effects to your enemy.	0	0	0	0	0	0	false	Crafted	Bug	Shimmering, Bug	Battle Start	Battle Start: Convert all poison to your enemy's poison | Battle Start: Convert all acid to your enemy's acid | Battle Start: Convert all thorns to your enemy's thorns | Battle Start: Convert all regeneration to your enemy's regeneration | Battle Start: Convert all stun to your enemy's stun | Battle Start: Convert all blind to your enemy's blind | Battle Start: Convert all blessing to your enemy's blessing | Battle Start: Convert all burn to your enemy's burn
+shiny_beetle	Shiny Beetle	General	Battle Start: Decrease all your status effects by 1 and gain 3 shield for each status removed.	0	0	0	0	0	0	false	Crafted	Bug	Shimmering	Battle Start	Battle Start: Convert 1 poison to 3.0x shield | Battle Start: Convert 1 acid to 3.0x shield | Battle Start: Convert 1 thorns to 3.0x shield | Battle Start: Convert 1 regeneration to 3.0x shield | Battle Start: Convert 1 stun to 3.0x shield | Battle Start: Convert 1 blind to 3.0x shield | Battle Start: Convert 1 blessing to 3.0x shield | Battle Start: Convert 1 burn to 3.0x shield
+spiked_crawler	Spiked Crawler	General	Battle Start: Deal 1 damage and gain 1 thorns. Repeat 2 times.	0	0	0	0	0	0	false	Crafted	Bug	Bug, Dark	Thorns, Battle Start	Battle Start: Deal 1 damage to your Enemy. | Battle Start: Apply 1 thorns to yourself
+spinepede	Spinepede	General	Turn Start: Gain 1 poison and 1 thorns.	0	0	3	0	0	0	false	Crafted	Bug	Bug	Thorns, Poison	Turn Start: Apply 1 poison to yourself | Turn Start: Apply 1 thorns to yourself
+spiny_wetwalker	Spiny Wetwalker	General	Battle Start, Exposed, and Wounded: Remove 1 random status effect and gain 1 thorns. Twice.	0	0	0	0	0	0	false	Crafted	Bug	Bug	Thorns, Battle Start, Exposed, Wounded	Battle Start: Remove 1 random status effect from yourself | Battle Start: Apply 1 thorns to yourself | Exposed: Remove 1 random status effect from yourself | Exposed: Apply 1 thorns to yourself | Wounded: Remove 1 random status effect from yourself | Wounded: Apply 1 thorns to yourself
+stink_bug	Stink Bug	General	Turn Start: Gain 1 shield and 2 poison.	0	3	3	0	0	0	false	Crafted	Bug	Bug	Poison	Turn Start: Gain 1 shield | Turn Start: Apply 2 poison to yourself
+subaquatic_pillbug	Subaquatic Pillbug	General	Battle Start: Spend 1 shield to decrease a random status effect by 3.	0	3	0	0	0	0	false	Crafted	Bug	Shimmering, Bug	Battle Start	Battle Start: If your shield is more than 0 ; Lose -1 shield | Battle Start: Remove 3 random status effect from yourself
+the_stinger	The Stinger	General	On Hit: Give the enemy 4 poison, 3 acid, and 2 stun. (First turn only)	0	0	3	0	0	0	false	Crafted	Weapon		Poison, Acid, Stun	On Hit: Apply 3 acid to your Enemy | On Hit: Apply 4 poison to yourself | On Hit: Apply 2 stun to your Enemy
+thorn_hopper	Thornhopper	General	Battle Start: Gain 2 acid and gain thorns equal to your acid.	0	0	0	3	0	0	false	Crafted	Bug	Bug	Thorns, Acid, Battle Start	Battle Start: Apply 2 acid to yourself | Battle Start: Apply thorns to yourself  equal to your acid stacks
+thorn_mite	Thornmite	General	Battle Start: Gain 4 thorns.	5	0	0	0	0	0	false	Crafted	Bug	Bug, Wood	Thorns, Battle Start	Battle Start: Apply 4 thorns to yourself
+venomed_prickbug	Venomed Prickbug	General	Thorns do double damage.	0	0	0	0	0	0	false	Crafted	Bug	Bug, Unique	Thorns	Persistent: Gain 0 <unknown stat>
+diamond_bloodmoth	Diamond Bloodmoth	General		0	0	0	0	0	0	false	Diamond	Bug	Vampiric, Bug		Wounded: Heal yourself for 16 hitpoints.
+diamond_corpsehopper	Diamond Corpsehopper	General		0	0	0	12	0	0	false	Diamond	Bug			Battle Start: Apply 4 acid to yourself
+diamond_dark_crawler	Diamond Dark Crawler	General	Battle Start: Deal 4 damage 2 times.	0	0	0	0	0	0	false	Diamond	Bug	Dark, Bug		Battle Start: Deal 4 damage to your Enemy.
+diamond_dew_fly	Diamond Dew Fly	General	Battle Start, Exposed, & Wounded: Decrease a random status effect by 4.	0	0	0	0	0	0	false	Diamond	Bug	Shimmering, Bug		Battle Start: Remove 4 random status effect from yourself | Exposed: Remove 4 random status effect from yourself | Wounded: Remove 4 random status effect from yourself
+diamond_firefly	Diamond Firefly	General		0	0	0	0	0	0	false	Diamond	Bug	Bug		Exposed: Apply 4 burn to your Enemy
+diamond_scuttlemite	Diamond Scuttlemite	General		20	0	0	0	0	0	false	Diamond	Bug	Wood, Bug		
+diamond_thorn_bug	Diamond Thorn Bug	General		0	0	0	0	0	0	false	Diamond	Bug	Bug		Battle Start: Apply 12 thorns to yourself
+diamond_acrid_potion	Diamond Fury Potion	General		0	0	0	0	0	0	false	Diamond	Potion	Potion		Exposed: Apply 12 poison to your Enemy
+diamond_essence_of_charcoal	Diamond Essence Of Charcoal	General		0	0	0	0	0	0	false	Diamond	Potion	Potion		Battle Start: Gain 4 burn damage
+diamond_limbering_potion	Diamond Limbering Potion	General	Battle Start: Heal 4 hitpoints for every agility you have.	0	0	0	4	0	0	false	Diamond	Potion	Potion		Battle Start: Heal yourself for an amount  equal to your current agility.
+diamond_reprieval_potion	Diamond Last Effort Potion	General		0	0	0	0	0	0	false	Diamond	Potion	Clearmetal, Potion	Stun	Wounded: Gain 40 shield | Wounded: Apply 8 stun to yourself
+diamond_vicious_potion	Diamond Vicious Potion	General		0	0	0	0	0	0	false	Diamond	Potion	Potion		On Hit: Gain 4 attack
+diamond_bronze_barbed_helm	Diamond Bronze Barbed Helm	General		0	8	0	0	0	0	false	Diamond	Helmet		Thorns	Battle Start: Apply 4 thorns to yourself
+diamond_collectors_armor	Diamond Collector's Armor	General	Every collector's dream.	0	27	0	0	0	0	false	Diamond	Body Armor	Collector		
+diamond_corroded_armor	Diamond Corroded Armor	General		0	20	0	0	0	0	false	Diamond	Body Armor		Acid	Battle Start: Apply 4 acid to yourself
+diamond_corroded_ring	Diamond Corroded Ring	General		0	0	0	0	0	0	false	Diamond	Jewelry	Ring	Acid	Battle Start: Apply 4 acid to your Enemy
+diamond_covert_shield	Diamond Covert Shield	General	Battle Start: If your base shield is 0, gain 16 shield.	0	0	0	0	0	0	false	Diamond	Shield			Battle Start: If your shield is 0 ; Gain 16 shield
+diamond_crown_of_caution	Diamond Crown of Caution	Greed		-8	20	0	0	0	0	false	Diamond	Jewelry			
+diamond_crown_of_rage	Diamond Crown of Rage	Greed		0	0	4	-4	0	0	false	Diamond	Jewelry			
+diamond_dangly_necklace	Diamond Dangly Necklace	Greed		32	0	-4	0	0	0	false	Diamond	Jewelry			
+diamond_double_plated_armor	Diamond Heavy Plated Armor	General		0	8	0	-8	0	0	false	Diamond	Body Armor			Exposed: Gain 12 shield
+diamond_fine_edge	Diamond Edge Refiner	General	First Turn Only: Temporarily gain 8 attack damage.	0	0	0	0	0	0	false	Diamond	Tool	Clearmetal		Turn Start: Gain 8 attack | Turn End: Lose -8 attack
+diamond_helmet_of_the_old_gods	Diamond Helmet of the Old Gods	General		0	8	0	0	0	0	false	Diamond	Helmet	Shimmering	Blessing	Battle Start: Apply 4 blessing to yourself
+diamond_holy_shield	Diamond Heavy Shield	General		0	24	-4	-4	0	0	false	Diamond	Shield			
+diamond_lantern	Diamond Latern	General	Battle Start & Exposed: Give the enemy 4 burn.	0	0	0	0	0	0	false	Diamond	Tool		Burn	Battle Start: Apply 4 burn to your Enemy | Exposed: Apply 4 burn to your Enemy
+diamond_liferoot_gauntlets	Diamond Hearty Gauntlets	General		12	0	0	0	0	0	false	Diamond	Gloves	Wood	Regeneration	Battle Start: Apply 4 regeneration to yourself
+diamond_living_wood_cloak	Diamond Living Wood Cloak	General	Battle Start: If your hitpoints are not full, heal 8 hitpoints.	8	0	0	0	0	0	false	Diamond	Body Armor	Wood		Battle Start: If your hitpoints is less than your base hitpoints; Heal yourself for 8 hitpoints.
+diamond_living_wood_helmet	Diamond Living Wood Helmet	General	Exposed: Heal for 12 hitpoints.	4	4	0	0	0	0	false	Diamond	Helmet	Wood		Exposed: Heal yourself for 12 hitpoints.
+diamond_loot_finder	Diamond Loot Finder	General	If you have under 30 gold, gain 3 gold at Turn Start.	0	0	0	0	0	0	false	Diamond	Tool			Turn Start: If your gold is less than 30 ; Gain 3 gold
+diamond_nimble_hood	Diamond Nimble Hood	General	Battle Start: Take 12 damage and gain 4 additional strikes.	0	0	0	0	0	0	false	Diamond	Helmet			Battle Start: Deal 12 damage to yourself. | Battle Start: Gain 4 strikes
+diamond_peculiar_timepiece	Diamond Peculiar Timepiece	General	Turn Start: Convert 4 agility to restore 8 health.	0	0	0	4	0	0	false	Diamond	Tool	Inscribed		Turn Start: Convert 4 agility to 2.0x hitpoints
+diamond_poison_sheath	Diamond Poison Sheath	General	On Hit: Give the enemy 8 poison. (First turn only)	0	0	0	0	0	0	false	Diamond	Tool		Poison	On Hit: Apply 8 poison to your Enemy
+diamond_purple_skin_gloves	Diamond Purpleskin Gloves	General		12	0	0	4	0	0	false	Diamond	Gloves			
+diamond_purple_skin_vest	Diamond Purpleskin Vest	General		0	8	0	4	0	0	false	Diamond	Body Armor			
+diamond_purpleskin_belt	Diamond Purpleskin Belt	General	If you have 0 base shield, double this item's max hitpoints.	12	0	0	0	0	0	false	Diamond	Belt			Persistent: If your shield is =; Gain 12 Max hitpoints
+diamond_radiant_shield	Diamond Radiant Shield	General		0	32	0	0	0	0	false	Diamond	Shield	Shimmering	Blind	Battle Start: Apply 8 blind to yourself
+diamond_ring_of_life	Diamond Ring of Life	Greed		0	0	0	0	0	0	false	Diamond	Jewelry	Ring		Battle Start: Heal yourself for 12 hitpoints.
+diamond_ring_of_power	Diamond Ring of Power	Greed	Battle Start: Gain 8 attack and take 12 damage.	0	0	0	0	0	0	false	Diamond	Jewelry	Ring		Battle Start: Gain 8 attack | Battle Start: Deal 12 damage to yourself.
+diamond_ring_of_theft	Diamond Ring of Theft	Greed	Battle Start: Steal 8 shield from the enemy.	0	0	0	0	0	0	false	Diamond	Jewelry	Ring		Battle Start: Convert 8 your enemy's shield to shield
+diamond_rubber_glue	Diamond Rubber Glue	General		0	0	0	0	0	0	false	Diamond	Tool	Shimmering		Battle Start: Remove 4 random status effect from yourself | Battle Start: Apply 4 random status effect to your Enemy
+diamond_shafeek_boots	Diamond Shafeek's Overlarge Boots	General		0	0	0	8	0	0	false	Diamond	Boots			
+diamond_shafeek_shield	Diamond Shafeek's Appropriately Sized Shield	General		0	12	0	0	0	0	false	Diamond	Shield			
+diamond_shimmering_gauntlet	Diamond Glowing Gauntlets	General		0	0	0	0	0	0	false	Diamond	Gloves	Shimmering	Blind	Battle Start: Apply 4 blind to your Enemy
+diamond_shimmering_jawtrap	Diamond Conspicuous Jawtrap	General		0	0	0	0	0	0	false	Diamond	Tool	Shimmering	Blind	Wounded: Apply 12 blind to your Enemy
+diamond_thirsty_helmet	Diamond Thirsty Helmet	General	On Hit: Restore 4 hitpoints. (First turn only)	0	0	0	0	0	0	false	Diamond	Helmet	Vampiric		On Hit: Heal yourself for 4 hitpoints.
+golden_bloodmoth	Golden Bloodmoth	General		0	0	0	0	0	0	false	Golden	Pet	Vampiric, Bug		Wounded: Heal yourself for 8 hitpoints.
+golden_corpsehopper	Golden Corpsehopper	General		0	0	0	6	0	0	false	Golden	Bug	Bug		Battle Start: Apply 2 acid to yourself
+golden_dark_crawler	Golden Dark Crawler	General	Battle Start: Deal 2 damage to the enemy. Repeat 2 additional times.	0	0	0	0	0	0	false	Golden	Pet	Dark, Bug		Battle Start: Deal 2 damage to your Enemy.
+golden_dew_fly	Golden Dew Fly	General	Battle Start, Exposed, & Wounded: Decrease a random status effect by 2.	0	0	0	0	0	0	false	Golden	Pet	Shimmering, Bug		Battle Start: Remove 2 random status effect from yourself | Exposed: Remove 2 random status effect from yourself | Wounded: Remove 2 random status effect from yourself
+golden_firefly	Golden Firefly	General		0	0	0	0	0	0	false	Golden	Bug	Bug		Exposed: Apply 2 burn to your Enemy
+golden_scuttlemite	Golden Scuttlemite	General		10	0	0	0	0	0	false	Golden	Bug	Wood, Bug		
+golden_thorn_bug	Golden Thorn Bug	General		0	0	0	0	0	0	false	Golden	Bug	Bug		Battle Start: Apply 6 thorns to yourself
+golden_acrid_potion	Golden Fury Potion	General		0	0	0	0	0	0	false	Golden	Food	Potion		Exposed: Apply 6 poison to your Enemy
+golden_essence_of_charcoal	Golden Essence Of Charcoal	General		0	0	0	0	0	0	false	Golden	Food	Potion		Battle Start: Gain 2 burn damage
+golden_limbering_potion	Golden Limbering Potion	General	Battle Start: Heal for 2 hitponts for each agility you have.	0	0	0	2	0	0	false	Golden	Food	Potion		Battle Start: Heal yourself for an amount  equal to your current agility.
+golden_reprieval_potion	Golden Last Effort Potion	General		0	0	0	0	0	0	false	Golden	Potion	Clearmetal, Potion	Stun	Wounded: Gain 20 shield | Wounded: Apply 4 stun to yourself
+golden_vicious_potion	Golden Vicious Potion	General		0	0	0	0	0	0	false	Golden	Food	Potion		On Hit: Gain 2 attack
+golden_bronze_barbed_helm	Golden Bronze Barbed Helm	General		0	4	0	0	0	0	false	Golden	Helmet		Thorns	Battle Start: Apply 2 thorns to yourself
+golden_collectors_armor	Golden Collector's Armor	General	Upgrading triples shield value instead of doubling it.	0	9	0	0	0	0	false	Golden	Body Armor	Collector		
+golden_corroded_armor	Golden Corroded Armor	General		0	10	0	0	0	0	false	Golden	Body Armor		Acid	Battle Start: Apply 2 acid to yourself
+golden_corroded_ring	Golden Corroded Ring	General		0	0	0	0	0	0	false	Golden	Jewelry	Ring	Acid	Battle Start: Apply 2 acid to your Enemy
+golden_covert_shield	Golden Covert Shield	General	Battle Start: If your base shield is 0, gain 8 shield.	0	0	0	0	0	0	false	Golden	Shield			Battle Start: If your shield is 0 ; Gain 8 shield
+golden_crown_of_caution	Golden Crown of Caution	Greed		-4	10	0	0	0	0	false	Golden	Jewelry			
+golden_crown_of_rage	Golden Crown of Rage	Greed		0	0	2	-2	0	0	false	Golden	Jewelry			
+golden_dangly_necklace	Golden Dangly Necklace	Greed		16	0	-2	0	0	0	false	Golden	Jewelry			
+golden_double_plated_armor	Golden Heavy Plated Armor	General		0	4	0	-4	0	0	false	Golden	Body Armor			Exposed: Gain 6 shield
+golden_fine_edge	Golden Edge Refiner	General	First Turn Only: Temporarily gain 4 attack damage.	0	0	0	0	0	0	false	Golden	Tool	Clearmetal		Turn Start: Gain 4 attack | Turn End: Lose -4 attack
+golden_helmet_of_the_old_gods	Golden Helmet of the Old Gods	General		0	4	0	0	0	0	false	Golden	Helmet	Shimmering	Blessing	Battle Start: Apply 2 blessing to yourself
+golden_holy_shield	Golden Heavy Shield	General		0	12	-2	-2	0	0	false	Golden	Shield			
+golden_lantern	Golden Latern	General	Battle Start & Exposed: Give the enemy 2 burn.	0	0	0	0	0	0	false	Golden	Tool		Burn	Battle Start: Apply 2 burn to your Enemy | Exposed: Apply 2 burn to your Enemy
+golden_liferoot_gauntlets	Golden Hearty Gauntlets	General		6	0	0	0	0	0	false	Golden	Gloves	Wood	Regeneration	Battle Start: Apply 2 regeneration to yourself
+golden_living_wood_cloak	Golden Living Wood Cloak	General		4	0	0	0	0	0	false	Golden	Body Armor	Wood		Battle Start: If your hitpoints is less than your base hitpoints; Heal yourself for 4 hitpoints.
+golden_living_wood_helmet	Golden Living Wood Helmet	General		2	2	0	0	0	0	false	Golden	Helmet	Wood		Exposed: Heal yourself for 6 hitpoints.
+golden_loot_finder	Golden Loot Finder	General	If you have under 20 gold, gain 2 at Turn Start.	0	0	0	0	0	0	false	Golden	Tool			Turn Start: If your gold is less than 20 ; Gain 2 gold
+golden_nimble_hood	Golden Nimble Hood	General		0	0	0	0	0	0	false	Golden	Helmet			Battle Start: Deal 6 damage to yourself. | Battle Start: Gain 2 strikes
+golden_peculiar_timepiece	Golden Peculiar Timepiece	General	Turn Start: Convert 2 agility to restore 4 health.	0	0	0	2	0	0	false	Golden	Tool	Inscribed		Turn Start: Convert 2 agility to 2.0x hitpoints
+golden_poison_sheath	Golden Poison Sheath	General		0	0	0	0	0	0	false	Golden	Tool		Poison	On Hit: Apply 4 poison to your Enemy
+golden_purple_skin_gloves	Golden Purpleskin Gloves	General		6	0	0	2	0	0	false	Golden	Gloves			
+golden_purple_skin_vest	Golden Purpleskin Vest	General		0	4	0	2	0	0	false	Golden	Body Armor			
+golden_purpleskin_belt	Golden Purpleskin Belt	General	If you have 0 base shield, double this item's max hitpoints.	6	0	0	0	0	0	false	Golden	Belt			Persistent: If your shield is =; Gain 6 Max hitpoints
+golden_radiant_shield	Golden Radiant Shield	General		0	16	0	0	0	0	false	Golden	Shield	Shimmering	Blind	Battle Start: Apply 4 blind to yourself
+golden_ring_of_life	Golden Ring of Life	Greed		0	0	0	0	0	0	false	Golden	Jewelry	Ring		Battle Start: Heal yourself for 6 hitpoints.
+golden_ring_of_power	Golden Ring of Power	Greed	Battle Start: Gain 4 attack and take 6 damage.	0	0	0	0	0	0	false	Golden	Jewelry	Ring		Battle Start: Gain 4 attack | Battle Start: Deal 6 damage to yourself.
+golden_ring_of_theft	Golden Ring of Theft	Greed	Battle Start: Steal 4 shield from the enemy.	0	0	0	0	0	0	false	Golden	Jewelry	Ring		Battle Start: Convert 4 your enemy's shield to shield
+golden_rubber_glue	Golden Rubber Glue	General		0	0	0	0	0	0	false	Golden	Tool	Shimmering		Battle Start: Remove 2 random status effect from yourself | Battle Start: Apply 2 random status effect to your Enemy
+golden_shafeek_boots	Golden Shafeek's Overlarge Boots	General		0	0	0	4	0	0	false	Golden	Boots			
+golden_shafeek_shield	Golden Shafeek's Appropriately Sized Shield	General		0	6	0	0	0	0	false	Golden	Shield			
+golden_shimmering_gauntlet	Golden Glowing Gauntlets	General		0	0	0	0	0	0	false	Golden	Gloves	Shimmering	Blind	Battle Start: Apply 2 blind to your Enemy
+golden_shimmering_jawtrap	Golden Conspicuous Jawtrap	General		0	0	0	0	0	0	false	Golden	Tool	Shimmering	Blind	Wounded: Apply 6 blind to your Enemy
+golden_thirsty_helmet	Golden Thirsty Helmet	General		0	0	0	0	0	0	false	Golden	Helmet	Vampiric		On Hit: Heal yourself for 2 hitpoints.
+c_citrine	Citrine	General	Battle Start: Convert 5 gold into 10 agility.	0	0	0	0	0	0	false	Legendary	Jewelry	Crystal	Battle Start	Battle Start: Convert 5 gold to 2.0x agility
+c_emerald	Emerald	General	Battle Start: Convert 5 gold into 10 max hitpoints.	0	0	0	0	0	0	false	Legendary	Jewelry	Crystal	Battle Start	Battle Start: If your gold is 5  or more; Lose -5 gold | Battle Start: Gain 10 Max hitpoints
+c_garnet	Garnet	General	Battle Start: Convert 5 gold into 5 attack damage.	0	0	0	0	0	0	false	Legendary	Jewelry	Crystal	Battle Start	Battle Start: Convert 5 gold to attack
+c_lapiz	Sapphire	General	Battle Start: Convert 5 gold into 20 shield.	0	0	0	0	0	0	false	Legendary	Jewelry	Crystal	Battle Start	Battle Start: Convert 5 gold to 4.0x shield
+dark_magic_tome	Dark Magic Tome	General	Your Dark type items trigger 1 additional time.	0	0	0	0	0	0	false	Legendary	Tome	Unique		Persistent: Add repeats for category: Dark
+moran_sword	Moran Sword	General	While your hitpoints are not full, your attack damage is doubled.	0	0	6	0	0	0	false	Legendary	Weapon			Persistent: If your hitpoints is less than your base hitpoints; Gain 0 attack
+t_apparatus	Apparatus	General	Wounded: Re-trigger your last triggered non-Mechanical Wounded item.	0	0	0	0	0	0	false	Legendary	Tool	Mechanical	Wounded	Wounded: Trigger all your Wounded items.
+t_contraption	Contraption	General	Wounded: Re-trigger a random Battle Start item of yours.	0	0	0	0	0	0	false	Legendary	Tool	Mechanical	Wounded	Wounded: Trigger all your Battle Start items.
+t_gizmo	Gizmo	General	Wounded: Re-trigger your first exposed item.	0	0	0	0	0	0	false	Legendary	Tool	Mechanical	Wounded	Wounded: Trigger all your Exposed items.
+t_mechanism	Mechanism	General	Overheal: Increase your attack damage by 1.	0	0	0	0	0	0	false	Legendary	Tool	Mechanical		Overheal: Gain 1 attack
+pit_scorpion	Pit Scorpion	General		0	0	0	0	0	0	false	Legendary	Pet	Bug		
+Clearmetal_Horn	Clearmetal Battle Horn	Revenge	Battle Start: Gain shield equal to your enemy's shield.	0	0	0	0	0	0	false	Rare	Tool	Clearmetal, Unique	Battle Start	Battle Start: Gain  shield equal to your Enemy's current shield
+Metalliglass_Timepiece	Metalliglass Timepiece	Chaos	Battle Start: Give the enemy 1 stun for each equipped Clearmetal item.	0	0	0	-2	0	0	false	Rare	Tool	Clearmetal	Stun, Battle Start	Battle Start: Apply 1 stun to your Enemy
+Metalliglass_Totem	Metalliglass Totem	Chaos	Turn Start: Restore 1 health, if your health is full gain 2 shield instead.	0	0	0	0	0	0	false	Rare	Relic	Clearmetal		Turn Start: Heal yourself for 1 hitpoints. | Turn Start: If your hitpoints is your base hitpoints; Gain 2 shield
+liquid_metal	Liquid Metal	Revenge	Battle Start: Gain shield equal to missing hitpoints.	0	0	0	0	0	0	false	Rare	Potion	Unique, Potion	Battle Start	Battle Start: Gain  shield equal to your missing hitpoints
+acid_spray	Acid Splash	Chaos	Battle Start: Give the enemy acid equal to half your agility.	0	0	0	0	0	0	false	Rare	Tool	Unique	Acid, Battle Start	Battle Start: Apply acid to your Enemy  equal to your current agility
+ancient_armor	Ancient Armor	Greed	Wounded: Regain your base shield.	0	0	0	0	0	0	false	Rare	Body Armor		Wounded	Wounded: Gain  shield equal to your base shield
+carved_fork	Carved Fork	Duty	Turn Start: If you don't have any regeneration, gain 3 regeneration.	0	0	0	0	0	0	false	Rare	Tool	Wood	Regeneration	Turn Start: If you have 0  regeneration; Apply 3 regeneration to yourself
+collectors_item	Collector's Item	Chaos	While you have at least 3 'Collector' items, gain 2 attack.	0	0	0	0	0	0	false	Rare	Tool	Collector, Clearmetal		Persistent: If ; Gain 2 attack
+comforting_book	Comforting Book	Shame	Turn Start: Gain 1 shield and decrease a random status effect by 1.	0	0	0	0	0	0	false	Rare	Tome	Shimmering, Unique	Blessing	Turn Start: Gain 1 shield | Turn Start: Remove 1 random status effect from yourself
+covert_armor	Covert Armor	Chaos	Battle Start: If you have 0 base shield, gain shield equal to your current hitpoints.	0	0	-2	0	0	0	false	Rare	Body Armor	Unique	Battle Start	Battle Start: If your shield is 0 ; Gain  shield equal to your current hitpoints
+cup_of_de	Cup of Dew	Shame	Every other turn: Gain 1 blessing.	0	0	0	0	0	0	false	Rare	Tool	Shimmering	Blessing	Turn Start: Apply 1 blessing to yourself
+dads_shield	Someone's Dad's Shield	Chaos	The first time you gain shield, double it.	0	0	0	-1	0	0	false	Uncommon	Shield	Unique		On Stat Gain shield: Gain  shield
+darkwood_greaves	Darkwood Greaves	Greed	Whenever you lose shield, deal 1 damage to the enemy.	0	0	0	0	0	0	false	Rare	Boots	Dark, Unique		On Stat Loss shield: Deal 1 damage to your Enemy.
+darkwood_necklace	Darkwood Necklace	Chaos	Whenever you deal non-weapon or non-burn damage to the enemy, deal 1 additional damage.	0	0	0	0	0	0	false	Rare	Jewelry	Dark, Unique		On Dealing Non-Weapon Damage: Deal 1 damage to your Enemy.
+defensive_necklace	Defensive Necklace	Honor	Whenever you gain shield, gain 1 additional shield.	0	0	0	0	0	0	false	Rare	Jewelry	Clearmetal		On Stat Gain shield: Gain 1 shield
+dissolving_strength	Dissolving Strength	Shame	While you have acid, temporarily gain attack equal to your acid.	0	0	0	0	0	0	false	Rare	Scroll	Unique	Acid	Persistent: If you have more than 0  acid; Gain  attack equal to your acid stacks
+dracools_headstone	Draycool's Headstone	Shame	When your attack is skipped: Restore 3 hitpoints.	0	0	0	0	0	0	false	Rare	Tool	Vampiric, Unique		On Status Removed stun: Heal yourself for 3 hitpoints.
+draycools_diary	Draycool's Diary	Shame	Every 4th turn: Give yourself 1 stun and gain 3 regeneration	0	0	0	0	0	0	false	Rare	Tome	Vampiric	Stun, Regeneration	Turn Start: Apply 1 stun to yourself | Turn Start: Apply 3 regeneration to yourself
+gauntlets_of_fire	Gauntlets of Fire	Duty	Every other turn: Give the enemy 1 burn.	0	0	0	0	0	0	false	Rare	Gloves		Burn	Turn Start: Apply 1 burn to your Enemy
+gore_armor	Gore Plate	Honor	Battle Start: Convert 50% of your current hitpoints to that amount of shield.	0	0	0	0	0	0	false	Rare	Body Armor	Vampiric	Battle Start	Battle Start: Convert half of hitpoints to shield
+injury_harkened	Injury Harkened	Chaos	Battle Start: Lose all your hitpoints except 1, and give the enemy 2 stun.	0	0	0	0	0	0	false	Rare	Tool	Unique	Stun, Battle Start	Battle Start: Gain  hitpoints equal to your base hitpoints | Battle Start: Apply 2 stun to your Enemy
+jewelry_box	Ornate Jewlery Box	Greed	If you have 3 or more Ring items, they trigger 1 additional time.	0	0	0	0	0	0	false	Rare	Tool	Unique		Persistent: If ; Add repeats for category: Ring
+monster_armor	Monster Armor	Revenge	Whenever you lose shield, gain 2 thorns.	0	0	-1	0	0	0	false	Rare	Body Armor	Unique	Thorns	On Stat Loss shield: Apply 2 thorns to yourself
+monster_pauldrons	Monster Pauldrons	Revenge	Wounded: Gain thorns equal to the enemy's attack damage.	0	3	0	0	0	0	false	Rare	Body Armor		Thorns, Wounded	Wounded: Apply thorns to yourself  equal to your Enemy's current attack
+nimble_cloak	Nimble Cloak	Honor	Battle Start: Gain 1 additional strike.	0	0	0	2	0	0	false	Rare	Body Armor		Strikes, Battle Start	Battle Start: Gain 1 strikes
+nimble_gloves	Nimble Gloves	Honor	Wounded: Gain 2 additional strikes.	0	0	0	0	0	0	false	Rare	Gloves		Strikes, Wounded	Wounded: Gain 2 strikes
+oil_flask	Oil Flask	Chaos	Whenever you miss a strike by being stunned, give the enemy 1 burn.	0	0	0	0	0	0	false	Uncommon	Tool		Burn	On Status Removed stun: Apply 1 burn to your Enemy
+poorly_constructed_armor	Poorly Constructed Armor	Revenge	Whenever you lose hitpoints, take 1 additional damage.	15	0	0	0	0	0	false	Rare	Body Armor	Wood		On Stat Loss hitpoints: Deal 1 damage to yourself.
+red_shirt	Red Shirt	Honor	Whenever you lose hitpoints, heal for 1 hitpoint.	0	0	0	0	0	0	false	Rare	Body Armor	Vampiric, Unique		On Stat Loss hitpoints: Heal yourself for 1 hitpoints.
+replenishing_shield	Replenishing Shield	Revenge	Turn Start: If you are below half hitpoints, gain 2 shield.	0	0	0	0	0	0	false	Rare	Shield			Turn Start: If your hitpoints is less than your missing hitpoints; Gain 2 shield
+rusted_plate	Dripping Carapace	Chaos	Whenever the enemy loses shield to acid, gain that shield.	0	0	0	0	0	0	false	Uncommon	Body Armor		Acid	When Acid removes Enemy shield: Gain  shield
+scabby_ring	Scabby Ring	Shame	Battle Start: Gain 5 max hitpoints, restore 5 hitpoints.	0	0	0	0	0	0	false	Rare	Jewelry	Vampiric, Ring	Battle Start	Battle Start: Gain 5 Max hitpoints | Battle Start: Heal yourself for 5 hitpoints.
+shimmering_greaves	Shimmering Greaves	Greed	Battle Start: Give the enemy blind equal to half your speed.	0	0	0	2	0	0	false	Rare	Boots	Shimmering	Blind, Battle Start	Battle Start: Apply blind to your Enemy  equal to your current agility
+slapping_gloves	Slapping Gloves	Revenge	On Hit: Deal 1 damage to the enemy.	0	0	0	0	0	0	false	Rare	Gloves			On Hit: Deal 1 damage to your Enemy.
+stunning_spaulder	Stunning Spaulder	Chaos	Exposed: Give the enemy 1 stun, repeat for each Ring item you have.	0	0	0	0	0	0	false	Rare	Body Armor		Stun, Exposed	Exposed: Gain 0 <unknown stat>
+tentacle_crown	Tentacle Crown	Chaos		0	1	1	1	0	0	false	Rare	Helmet			
+thorny_mask	Thorny Mask	Revenge	If the enemy has no shield, thorns deal double damage.	0	0	0	0	0	0	false	Rare	Tool	Unique	Thorns	Persistent: If your enemy's shield is 0 ; Gain 0 <unknown stat>
+vampiric_romance_novel	Vampire Romance	Honor	Turn Start: Heal yourself for 1 hitpoint and deal 1 damage to the enemy.	0	0	0	0	0	0	false	Rare	Tome	Vampiric		Turn Start: Heal yourself for 1 hitpoints. | Turn Start: Deal 1 damage to your Enemy.
+venomous_pauldrons	Venomous Pauldrons	Duty	Battle Start: Give the enemy poison equal to your attack damage.	0	0	1	0	0	0	false	Rare	Body Armor		Poison, Battle Start	Battle Start: Apply poison to your Enemy  equal to your current attack
+very_stinky_shield	Very Stinky Shield	Duty	Turn Start: Both you and the enemy gain 1 poison.	0	6	0	0	0	0	false	Rare	Shield		Poison	Turn Start: Apply 1 poison to yourself | Turn Start: Apply 1 poison to your Enemy
+test_relic	Test Relic	General		3	0	0	3	0	0	false	Common	Relic	Testing		Turn Start: Apply 2 regeneration to yourself
+testing_boots	Byzantium Boots	General		0	0	0	1	0	0	false	Common	Boots	Testing		Battle Start: Gain 1 strikes
+testing_robes	Testing Robes	General		0	0	0	0	0	0	false	Uncommon	Body Armor	Testing		Turn Start: Gain 2 strikes
+testing_shield	Testing Shield	General	Doubles your Hitpoints.	0	3	0	0	0	0	false	Legendary	Shield	Testing, Unique		Persistent: Gain 0 <unknown stat>
+armored_beetle	Armored Beetle	Greed	Battle Start: If your hitpoints are full, gain 5 shield.	0	0	0	0	0	0	false	Uncommon	Bug	Clearmetal, Bug	Battle Start	Battle Start: If your hitpoints is =; Gain 5 shield
+illipede	Illipede	Shame		0	0	2	0	0	0	false	Uncommon	Pet	Bug		Turn Start: Apply 1 poison to yourself
+jaunty_pillbug	Jaunty Pillbug	General	Exposed: Gain 2 shield.	0	0	0	0	0	0	false	Uncommon	Bug	Bug	Exposed	Exposed: Gain 2 shield
+Chainmail_Shirt	Chainmail Shirt	Chaos	Turn Start: If you have shield, restore 2 health	0	2	0	0	0	0	false	Uncommon	Body Armor			Turn Start: If your shield is more than 0 ; Heal yourself for 2 hitpoints.
+Clearmetal_Crown	Clearmetal Crown	Chaos	Battle Start: Gain max hitpoints equal to your base shield	0	0	0	0	0	0	false	Uncommon	Helmet	Clearmetal, Unique	Battle Start	Battle Start: Gain  Max hitpoints equal to your base shield
+Indecent_Exposure	Indecent Exposure	Revenge	Exposed can trigger 1 additional time.	0	0	0	0	0	0	false	Uncommon	Tool	Unique		Persistent: Gain 0 <unknown stat>
+blood_from_below	Blood From Below	Duty	The first time the enemy gains poison, give them 4 additional poison.	0	0	0	0	0	0	false	Uncommon	Potion	Potion	Poison	When Enemy gains Status poison: Apply 4 poison to your Enemy
+mountain_dew	Mountain Dew	Shame	Battle Start: Remove all your shield and gain 3 blessing.	0	0	0	0	0	0	false	Uncommon	Potion	Shimmering, Potion, Unique	Blessing, Battle Start	Battle Start: Gain  shield equal to your current shield | Battle Start: Apply 3 blessing to yourself
+paralysis_poison	Paralysis Poison	Duty	The first time the enemy gains poison, give the enemy 1 stun.	0	0	0	0	0	0	false	Uncommon	Potion	Potion	Poison, Stun	When Enemy gains Status poison: Apply 1 stun to your Enemy
+potion_insecurity	Potion of Insecurity	Greed	Exposed: Give the enemy 1 stun.	0	0	0	2	0	0	false	Uncommon	Potion	Potion	Stun, Exposed	Exposed: Apply 1 stun to your Enemy
+potion_of_mixing	Potion of Mixing	General	Useless by itself...	0	0	0	0	0	0	false	Uncommon	Potion	Potion		
+second_chance_potion	Toughen Up	Shame	Wounded: Gain shield equal to missing hitpoints, and gain 5 acid.	0	0	0	0	0	0	false	Uncommon	Potion	Potion, Unique	Acid, Wounded	Wounded: Gain  shield equal to your missing hitpoints | Wounded: Apply 5 acid to yourself
+stimutax	Stimutax	Chaos	Battle Start: Stun yourself for 1.	0	0	1	2	0	0	false	Uncommon	Potion	Potion	Stun, Battle Start	Battle Start: Apply 1 stun to yourself
+antacid_tablets	Antacid Tablet	Shame	Wounded: Remove all your acid and restore 2 hitpoints for each acid removed.	0	0	0	0	0	0	false	Uncommon	Tool		Acid, Wounded	Wounded: Convert all acid to 2.0x hitpoints
+black_powder	Black Powder	Duty	Burn can activate 1 additional time per turn.	0	0	0	0	0	0	false	Uncommon	Tool	Unique	Burn	Persistent: Gain 0 <unknown stat>
+blessed_talisman	Mask of Abundance	Shame	Whenever you gain a status effect, gain 1 additional stack.	0	0	0	0	0	0	false	Uncommon	Tool	Shimmering	Blessing	On Status Gained poison: Apply 1 poison to yourself | On Status Gained acid: Apply 1 acid to yourself | On Status Gained thorns: Apply 1 thorns to yourself | On Status Gained regeneration: Apply 1 regeneration to yourself | On Status Gained stun: Apply 1 stun to yourself | On Status Gained blind: Apply 1 blind to yourself | On Status Gained blessing: Apply 1 blessing to yourself | On Status Gained burn: Apply 1 burn to yourself
+blinding_flash	Blinding Flash	Greed	Battle Start: Give yourself and the enemy 5 blind.	0	0	0	0	0	0	false	Uncommon	Scroll		Blind, Battle Start	Battle Start: Apply 5 blind to yourself | Battle Start: Apply 5 blind to your Enemy
+blood_boiler	Blood Curse	Greed	Whenever you gain 3 or more hitpoints, deal 3 damage to the enemy.	0	0	0	0	0	0	false	Uncommon	Relic	Vampiric, Dark		On Stat Gain hitpoints: Deal 3 damage to your Enemy.
+bramble_belt	Thorny Belt	Revenge	Battle Start: Gain 1 thorns and give the enemy 1 additional strike	0	0	0	0	0	0	false	Uncommon	Belt		Thorns, Strikes, Battle Start	Battle Start: Apply 2 thorns to yourself | Battle Start: Give enemy 1 strikes
+burred_ring	Burred Ring	Revenge	Battle Start: take 5 damage and gain 10 thorns.	0	0	0	0	0	0	false	Uncommon	Jewelry	Ring	Thorns, Battle Start	Battle Start: Deal 5 damage to yourself. | Battle Start: Apply 10 thorns to yourself
+calming_relic	Calming Relic	Shame	Exposed: Gain 1 blessing, repeat for each equipped 'Shimmering' item.	0	0	0	0	0	0	false	Uncommon	Relic	Unique	Blessing, Exposed	Exposed: Apply 1 blessing to yourself
+chitinous_plate	Chitinous Plate	Shame	Battle Start: Gain 6 shield and 4 poison.	0	0	0	0	0	0	false	Uncommon	Body Armor		Poison, Battle Start	Battle Start: Gain 6 shield | Battle Start: Apply 4 poison to yourself
+choaking_fumes	Choaking Fumes	Duty	The first time burn triggers on your enemy, give them 5 poison.	0	0	0	0	0	0	false	Uncommon	Tool		Poison, Burn	When status triggers on Enemy burn: Apply 5 poison to your Enemy
+clearmetal_boots	Clearmetal Boots	Honor	While you have shield, gain 2 attack damage.	0	0	0	-1	0	0	false	Uncommon	Boots	Clearmetal		Persistent: If your shield is more than 0 ; Gain 2 attack
+clearmetal_shoulder_plate	Clearmetal Shoulder Plate	Honor	Battle Start: Gain3 shield. Repeat for each equipped 'Clearmetal' item.	0	0	0	0	0	0	false	Uncommon	Body Armor	Clearmetal	Battle Start	Battle Start: Gain 3 shield
+corroded_pauldrons	Corroded Pauldrons	Shame	Battle Start: Convert 1 acid into 2 attack damage.	0	0	0	0	0	0	false	Uncommon	Body Armor		Acid, Battle Start	Battle Start: Convert 1 acid to 2.0x attack
+crude_shield	Crude Shield	Revenge	Exposed: Gain 7 shield.	0	0	0	0	0	0	false	Uncommon	Shield	Clearmetal	Exposed	Exposed: Gain 7 shield
+dark_invokation	Dark Invocation	Greed	Exposed: Deal 7 damage to the enemy.	0	0	0	0	0	0	false	Uncommon	Tome	Dark	Exposed	Exposed: Deal 7 damage to your Enemy.
+dark_stories	Dark Short Stories	Greed	If you have exactly 1 'Dark' item, it triggers an additional time.	0	0	0	0	0	0	false	Uncommon	Tool			Persistent: If ; Add repeats for category: Dark
+darkmetal_armor	Darkwood Armor	Revenge	Exposed: Take 5 damage.	0	10	0	0	0	0	false	Uncommon	Body Armor	Dark	Exposed	Exposed: Deal 5 damage to yourself.
+darkstone_belt	Darkstone Belt	Greed	Exposed: Deal 1 damage to the enemy, repeat 4 times.	0	0	0	0	0	0	false	Uncommon	Belt	Dark	Exposed	Exposed: Deal 1 damage to your Enemy.
+darkwood_trap	Darkwood Trap	Duty	Turn Start: If the enemy doesn't have shield, deal 2 damage.	0	0	0	0	0	0	false	Uncommon	Tool	Dark		Turn Start: If your enemy's shield is 0 ; Deal 2 damage to your Enemy.
+dewdrop_armor	Dewdrop Armor	Shame	Exposed: Remove 1 blessing to gain 5 shield and 2 blessing.	0	0	0	0	0	0	false	Uncommon	Body Armor	Shimmering	Blessing, Exposed	Exposed: If you have more than 0  blessing; Convert 1 blessing to 5.0x shield | Exposed: Apply 2 blessing to yourself
+ember_pauldrons	Ember Pauldrons	Duty	Whenever you lose agility, give the enemy 1 burn.	0	0	0	-1	0	0	false	Uncommon	Body Armor		Burn	On Stat Loss agility: Apply 1 burn to your Enemy
+engagement_ring	Engagement Ring	Duty	Battle Start: Decrease the enemy's attack damage by 2.	0	0	-2	0	0	0	false	Uncommon	Jewelry	Ring	Battle Start	Battle Start: Remove from enemy -2 attack
+feelgood_shoulders	Feelgood Shoulders	Duty	Turn Start: If you are below 50% hitpoints, gain 1 regeneration.	0	0	0	0	0	0	false	Uncommon	Body Armor	Unique	Regeneration	Turn Start: If your hitpoints is less than your missing hitpoints; Apply 1 regeneration to yourself
+finesse_gloves	Rebounding Gloves	Shame	Battle Start: Give the enemy 6 shield.	0	0	2	0	0	0	false	Uncommon	Gloves		Battle Start	Battle Start: Give enemy 6 shield
+fire_treaders	Fire Treaders	Duty	Battle Start: If you have more agility than the enemy, give them 3 burn.	0	0	0	0	0	0	false	Uncommon	Boots		Burn, Battle Start	Battle Start: If your agility is more than your Enemy's current agility; Apply 3 burn to your Enemy
+flame_broiled_armor	Flame Broiled Armor	Duty	Whenever burn triggers, gain 2 shield.	0	0	0	0	0	0	false	Uncommon	Body Armor		Burn	When status triggers on Enemy burn: Gain 2 shield | On Status Removed burn: Gain 2 shield
+flaming_crown	Flaming Crown	Shame	Battle Start: Gain 1 burn.	8	0	0	0	0	0	false	Uncommon	Helmet		Burn, Battle Start	Battle Start: Apply 1 burn to yourself
+ghastly_spirit	Ghastly Spirit	Shame	Exposed: Deal 5 damage to yourself and gain 15 shield.	0	0	0	0	0	0	false	Uncommon	Tool		Exposed	Exposed: Deal 5 damage to yourself. | Exposed: Gain 15 shield
+glaring_spiked_pads	Glaring Spiked Shoulder Pads	Greed	Turn Start: If you have blind, gain 5 thorns.	0	0	0	0	0	0	false	Uncommon	Body Armor	Shimmering	Blind, Thorns	Turn Start: If you have more than 0  blind; Apply 5 thorns to yourself
+glistening_armor	Glistening Armor	Greed	Turn Start: If you have no shield, gain 3 shield and 1 blind.	0	2	0	0	0	0	false	Uncommon	Body Armor	Shimmering	Blind	Turn Start: If your shield is 0 ; Apply 1 blind to yourself | Turn Start: If your shield is 0 ; Gain 3 shield
+hardwood_belt	Hardwood Belt	Revenge	Gain 3 max hitpoints for each equipped 'Wood' item.	0	0	0	0	0	0	false	Uncommon	Body Armor	Wood		Persistent: Gain 3 Max hitpoints
+hardwood_pauldrons	Hardwood Pauldrons	Revenge	Battle Start: Gain 15 max hitpoints.	0	0	0	0	0	0	false	Uncommon	Body Armor	Wood	Battle Start	Battle Start: Gain 15 Max hitpoints
+jarring_launch	Jarring Launch	Chaos	Wounded: Stun the enemy for 3 turns.	0	0	-1	0	0	0	false	Rare	Jewelry	Ring	Stun, Wounded	Wounded: Apply 3 stun to your Enemy
+jarring_notion	Jarring Notion	Chaos	Battle Start: Give the enemy and yourself 2 stun.	0	0	0	0	0	0	false	Uncommon	Jewelry	Ring	Stun, Battle Start	Battle Start: Apply 2 stun to yourself | Battle Start: Apply 2 stun to your Enemy
+leather_boots	Purpleskin Boots	Honor	Battle Start: If you have more agility than the enemy, gain 2 attack	0	0	0	1	0	0	false	Uncommon	Boots		Battle Start	Battle Start: If your agility is more than your Enemy's current agility; Gain 2 attack
+miasmic_hook	Miasmic Hook	Chaos	Battle Start: Convert half the enemy's hitpoints to their shield.	0	0	0	0	0	0	false	Uncommon	Tool		Battle Start	Battle Start: Convert half of your enemy's hitpoints to your enemy's shield
+nimble_boots	Nimble Boots	Honor	Battle Start: Lose 4 shield.	0	0	1	3	0	0	false	Uncommon	Boots		Battle Start	Battle Start: Lose -4 shield
+nimble_jerkin	Nimble Jerkin	Honor	Battle Start, Exposed, and Wounded: Convert 1 agility to 5 shield.	0	0	0	0	0	0	false	Uncommon	Body Armor		Battle Start, Exposed, Wounded	Battle Start: Convert 1 agility to 5.0x shield | Exposed: Convert 1 agility to 5.0x shield | Wounded: Convert 1 agility to 5.0x shield
+nimble_ring	Nimble Ring	Greed	Battle Start and Wounded: Convert 4 agility to 2 additional strikes	0	0	0	0	0	0	false	Rare	Jewelry	Ring	Strikes, Battle Start, Wounded	Battle Start: Convert 4 agility to 0.5x strikes | Wounded: Convert 4 agility to 0.5x strikes
+old_kings_helm	Old King's Helm	Honor	Exposed: If you have more than 20 gold, gain 10 shield.	0	0	0	0	0	0	false	Uncommon	Helmet		Exposed	Exposed: If your gold is more than 20 ; Gain 10 shield
+peculiar_timepiece	Peculiar Timepiece	Honor	Turn Start: If your hitpoints are not full, convert 1 agility to restore 2 health.	0	0	0	1	0	0	false	Uncommon	Tool	Inscribed		Turn Start: If your hitpoints is less than your base hitpoints; Convert 1 agility to 2.0x hitpoints
+radiant_tome	Radiant Tome	Greed	While the enemy has blind, temporarily gain 3 attack damage.	0	0	0	0	0	0	false	Uncommon	Tome	Shimmering	Blind	Persistent: If your enemy has more than 0  blind; Gain 3 attack
+reinforced_gauntlet	Reinforced Gauntlet	Revenge	Turn Start: If you have shield, gain 1 additional shield	0	0	0	0	0	0	false	Uncommon	Gloves			Turn Start: If your shield is more than 0 ; Gain 1 shield
+shards_of_darkness	Shards of Darkness	Greed	Battle Start: Deal 3 damage to the enemy, if they don't have armor deal 6 more damage.	0	0	0	0	0	0	false	Uncommon	Tool	Dark	Battle Start	Battle Start: Deal 3 damage to your Enemy. | Battle Start: If your enemy's shield is 0  or less; Deal 6 damage to your Enemy.
+singularity_acid	Acid Singularity	Chaos	Whenever you gain hitpoints, give the enemy 1 acid. Singularity.	0	0	0	0	0	0	false	Uncommon	Tool	Singularity	Acid	On Stat Gain hitpoints: Apply 1 acid to your Enemy
+singularity_clearmetal	Clearmetal Singularity	Revenge	Whenever you restore hitpoints, gain 1 shield. Singularity.	0	0	0	0	0	0	false	Uncommon	Tool	Singularity		On Stat Gain hitpoints: Gain 1 shield
+singularity_holy	Blessed Singularity	Shame	Whenever you restore hitpoints, decrease a random status effect by 1. (Can only equip 1 singularity)	0	0	0	0	0	0	false	Uncommon	Tool	Shimmering, Singularity		On Stat Gain hitpoints: Remove 1 random status effect from yourself
+singularity_poison	Poison Singularity	Duty	Whenever you gain hitpoints, give the enemy 1 poison. Singularity.	0	0	0	0	0	0	false	Uncommon	Tool	Singularity	Poison	On Stat Gain hitpoints: Apply 1 poison to your Enemy
+singularity_thorns	Thorny Singularity	Revenge	Whenever you restore hitpoints, gain 2 thorns.	0	0	0	0	0	0	false	Uncommon	Tool	Singularity	Thorns	On Stat Gain hitpoints: Apply 2 thorns to yourself
+singularity_vamp	Sanguine Singularity	Honor	Whenever you gain hitpoints, gain 1 additional hitpoint.	0	0	0	0	0	0	false	Uncommon	Relic	Vampiric, Singularity		On Stat Gain hitpoints: Gain 1 hitpoints
+slow_and_steady	Slow and Steady	Honor	Battle Start: If you have less agility than the enemy, gain attack damage equal to your agility.	0	0	0	2	0	0	false	Uncommon	Scroll		Battle Start	Battle Start: If your agility is less than your Enemy's current agility; Gain  attack equal to your current agility
+slow_burning_candle	Slow Burning Candle	Duty	Battle Start: Give the enemy 2 burn.	0	0	-1	0	0	0	false	Uncommon	Tool		Burn, Battle Start	Battle Start: Apply 2 burn to your Enemy
+splatterback_shield	Splatterback Shield	Shame	Exposed: Give the enemy acid equal to your current attack damage.	0	3	0	0	0	0	false	Uncommon	Shield		Acid, Exposed	Exposed: Apply acid to your Enemy  equal to your current attack
+stinky_shield	Stinky Shield	Shame	Battle Start: Gain 6 shield and 6 poison.	0	0	0	0	0	0	false	Uncommon	Shield		Poison, Battle Start	Battle Start: Gain 6 shield | Battle Start: Apply 6 poison to yourself
+stunning_armor	Stunning Armor	Chaos	Battle Start: If you have more agility than shield, give the enemy 2 stun.	0	4	0	0	0	0	false	Uncommon	Body Armor		Stun, Battle Start	Battle Start: If your agility is more than your current shield; Apply 2 stun to your Enemy
+syphoning_tether	Syphoning Tether	Honor	The first time the enemy becomes wounded: Trigger all your wounded items.	0	0	0	0	0	0	false	Uncommon	Tool	Vampiric, Unique	Wounded	When the Enemy is Wounded: Trigger all your Wounded items.
+tempered_bloodthirst	Tempered Bloodthirst	Honor	If you have exactly 1 Vampiric item, it triggers 1 additional time.	0	0	0	0	0	0	false	Uncommon	Tome	Unique		Persistent: If ; Add repeats for category: Vampiric
+thorn_shield	Thorn Shield	Greed	Turn Start: Convert 1 shield to 2 thorns	0	2	0	0	0	0	false	Uncommon	Shield	Jagged	Thorns	Turn Start: Convert 1 shield to 2.0x thorns
+thorn_talisman	Thorn Talisman	Revenge	Whenever you gain thorns, gain 1 shield.	0	0	0	0	0	0	false	Uncommon	Relic	Unique	Thorns	On Status Gained thorns: Gain 1 shield
+thorny_vest	Thorny Vest	Revenge	The first time each turn you gain thorns, restore that much health.	0	0	0	0	0	0	false	Uncommon	Body Armor		Thorns	On Status Gained thorns: Heal yourself for an amount .
+toxic_buckler	Toxic Buckler	General	While you have poison, enemy strikes deal 1 less damage.	0	3	0	0	0	0	false	Uncommon	Shield		Poison	Persistent: If you have more than 0  poison; Remove from enemy -1 attack
+toxic_plate	Toxic Plate	Shame	Exposed: Remove all your poison and gain 3 shield for each poison removed.	0	0	0	0	0	0	false	Uncommon	Body Armor		Poison, Exposed	Exposed: Convert all poison to 3.0x shield
+truth_crystal	Blood Crystal	Honor	Battle Start: If your hitpoints are full, take 5 damage and gain 2 strikes.	0	0	0	0	0	0	false	Uncommon	Tool	Vampiric	Strikes, Battle Start	Battle Start: If your hitpoints is =; Deal 5 damage to yourself. | Battle Start: Gain 2 strikes
+unholy_mirror	Unholy Mirror	Shame	Wounded: Remove all your blessing.	0	0	0	0	0	0	false	Uncommon	Tool	Unique	Blessing, Wounded	Wounded: Remove blessing from yourself  equal to your blessing stacks
+virtuous_reprieve	Virtuous Reprieve	Duty	Exposed: Gain 1 regeneration, repeat for each equipped wood item.	0	0	0	0	0	0	false	Uncommon	Tool	Wood	Regeneration, Exposed	Exposed: Apply 1 regeneration to yourself
+wardens_gloves	Warden's Gauntlets	Honor		0	0	0	3	0	0	false	Uncommon	Gloves			
+wardens_greaves	Warden's Boots	General	Whenever you lose agility, heal yourself for 1 hitpoint.	0	0	0	0	0	0	false	Uncommon	Boots			On Stat Loss agility: Heal yourself for 1 hitpoints.
+warding_necklace	Warding Necklace	Revenge	At the end of your turn: Give yourself and the enemy 2 shield.	0	0	0	0	0	0	false	Uncommon	Jewelry	Clearmetal		Turn End: Gain 2 shield | Turn End: Give enemy 2 shield
+wooden_sheath	Wooden Sheath	Duty	While you have regeneration, temporarily gain 3 attack damage.	0	0	0	0	0	0	false	Uncommon	Tool	Wood	Regeneration	Persistent: If you have more than 0  regeneration; Gain 3 attack
+wooden_toolkit	Woodworkers Tools	Revenge	Battle Start: If you have 0 base armor, restore hitpoints to full.	0	0	0	0	0	0	false	Uncommon	Tool	Wood, Unique	Battle Start	Battle Start: If your shield is 0 ; Heal yourself for an amount  equal to your missing hitpoints.
+burning_dagger	Burning Dagger	Duty	Battle Start: Give the enemy 1 burn.	0	0	2	0	0	0	false	Common	Weapon		Burn, Battle Start	Battle Start: Apply 1 burn to your Enemy
+chitinous_tibia	Sharp Stick Bug	General	Battle Start: Gain 1 additional strike.	0	0	1	0	0	0	false	Common	Weapon	Bug	Strikes, Battle Start	Battle Start: Gain 1 strikes
+clearmetal_spear	Clearmetal Spear	Chaos	While you have shield, gain 2 attack damage.	0	0	2	0	0	0	false	Common	Weapon	Clearmetal		Persistent: If your shield is more than 0 ; Gain 2 attack
+collectors_sword	Collector's Sword	Duty		0	0	2	0	0	0	false	Common	Weapon	Collector		
+crude_blade	Crude Hewn Blade	Greed		0	0	4	-2	0	0	false	Common	Weapon	Clearmetal		
+curroding_cleaver	Corroding Cleaver	Shame	Battle Start: Give the enemy and yourself 3 acid.	0	0	2	0	0	0	false	Common	Weapon		Acid, Battle Start	Battle Start: Apply 3 acid to yourself | Battle Start: Apply 3 acid to your Enemy
+darkwood_staff	Darkwood Staff	Chaos	On Hit: Deal 2 damage to the enemy.	0	0	1	0	0	0	false	Common	Weapon	Dark		On Hit: Deal 2 damage to your Enemy.
+elderwood_bow	Elderwood Bow	Honor	After 3 hits: Lose 2 damage.	0	0	4	0	0	0	false	Common	Weapon			On Hit: Lose -2 attack
+fortifier	Fortifier	Shame		0	0	0	0	0	0	false	Common	Weapon			On Hit: Gain 1 shield | On Hit: Heal yourself for 1 hitpoints.
+fury_steel	Fury Steel	Duty	Exposed: Increase your attack damage by 3.	0	2	1	0	0	0	false	Common	Weapon		Exposed	Exposed: Gain 3 attack
+hardened_tenticle	Hardened Tentacle	Chaos		0	1	1	1	0	0	false	Common	Weapon			
+helpers_hammer	Helper's Hammer	Duty	Wounded: Gain 4 regeneration.	0	0	2	0	0	0	false	Common	Weapon		Regeneration, Wounded	Wounded: Apply 4 regeneration to yourself
+ikur_spear	Ikur's Spear	Chaos	Every 5 Strikes: Give the enemy 2 stun.	0	0	2	0	0	0	false	Common	Weapon		Stun	On Hit: Apply 2 stun to your Enemy
+living_wood_club	Living Wood Club	Revenge		4	0	2	0	0	0	false	Common	Weapon	Wood		
+nimble_cutlass	Nimble Cutlass	Honor		0	0	2	2	0	0	false	Common	Weapon	Inscribed		
+parrying_blade	Parrying Blade	Greed		0	6	1	0	0	0	false	Common	Weapon	Jagged		
+rebounding_club	Rebounding Club	Chaos	On Hit: Give the enemy 2 shield.	0	0	4	0	0	0	false	Common	Weapon			On Hit: Give enemy 2 shield
+shafeek_sword	Shafeek's Diminutive Poker	General		0	0	3	0	0	0	false	Common	Weapon			
+spiked_mace	Bronze Barbed Mace	Greed	On Hit: Gain 2 thorns.	0	0	1	0	0	0	false	Common	Weapon		Thorns	On Hit: Apply 2 thorns to yourself
+sword_of_sickness	Sword of Sickness	Shame	Battle Start: Gain 1 poison.	0	0	3	0	0	0	false	Common	Weapon		Poison, Battle Start	Battle Start: Apply 1 poison to yourself
+thirsty_blade	Thirsty Steel	Honor	On Hit: Heal for 1 hitpoint.	0	0	1	0	0	0	false	Common	Weapon	Vampiric		On Hit: Heal yourself for 1 hitpoints.
+wardens_rapier	Warden's Rapier	Honor	On Hit: Lose 1 agility.	0	0	2	6	0	0	false	Common	Weapon			On Hit: Lose -1 agility
+weapon_fists	Bare Fists	General	"Nothing special here..."	0	0	1	0	0	0	false	Common	Weapon			
+Clearmetal_Dagger	Clearmetal Dagger	Greed	On Hit: Convert 1 shield to 1 damage.	0	0	2	0	0	0	false	Rare	Weapon	Clearmetal		On Hit: If  shield is more than 0 ; Lose -1 shield | On Hit: Gain 1 attack
+CrudeGlowingStaff	Crude Glowing Staff	Shame	Your base shield is doubled.	0	1	2	0	0	0	false	Rare	Weapon	Clearmetal		Persistent: Gain  Max shield equal to your base shield
+ancient_sword	Ancient Sword	Duty	Exposed: Gain shield equal to your base shield.	0	2	2	0	0	0	false	Rare	Weapon		Exposed	Exposed: Gain  shield equal to your base shield
+clearmetal_mace	Clearmetal Flail	Honor	On Hit: Gain 2 shield.	0	0	2	0	0	0	false	Rare	Weapon	Clearmetal		On Hit: Gain 2 shield
+dracools_axe	Draycool's Axe	Shame	Battle Start: Steal 5 hitpoints from the enemy.	0	0	4	0	0	0	false	Rare	Weapon	Vampiric	Battle Start	Battle Start: Convert 5 your enemy's hitpoints to hitpoints
+flaming_sword	Flaming Sword	Duty	On Hit: Give the enemy 1 burn.	0	0	0	0	0	0	false	Rare	Weapon		Burn	On Hit: Apply 1 burn to your Enemy
+giants_fingernail	Giant's Fingernail	Revenge	Every Other Turn: Gain 1 damage and restore 1 health.	0	0	3	0	0	0	false	Rare	Weapon			Turn Start: Gain 1 attack | Turn Start: Heal yourself for 1 hitpoints.
+holy_scepter	Holy Scepter	Shame	Battle Start: Gain 2 blessing. On Hit: Remove 1 blessing.	0	0	1	0	0	0	false	Rare	Weapon	Shimmering	Blessing, Battle Start	Battle Start: Apply 2 blessing to yourself | On Hit: Remove 1 blessing from yourself
+inconvenient_blade	Inconveniently Radiant Blade	Greed	Battle Start: Gain 3 blind.	0	0	6	0	0	0	false	Rare	Weapon	Shimmering	Blind, Battle Start	Battle Start: Apply 3 blind to yourself
+nimble_bow	Nimble Bow	Revenge		0	0	1	0	2	0	false	Rare	Weapon		Strikes	
+poison_dagger	Poison Dagger	Duty	On Hit: Give your enemy 2 poison.	0	0	3	0	0	0	false	Rare	Weapon		Poison	On Hit: Apply 2 poison to your Enemy
+vampiric_blade	Vampiric Blade	Honor	On Hit: If the enemy doesn't have any shield, you restore hitpoints equal to your attack damage.	0	0	1	0	0	0	false	Rare	Weapon	Vampiric		On Hit: If your enemy's shield is 0 ; Heal yourself for an amount  equal to your current attack.
+wounded_blade	Wounded Blade	Chaos	Exposed: Trigger wounded items.	0	0	3	0	0	0	false	Rare	Weapon		Exposed, Wounded	Exposed: Trigger all your Wounded items.
+bombyxmori	Bombyx Mori	Duty	Battle Start: Give the enemy 2 burn for each negative attack you have. (Can't strike)	0	0	-2	0	0	0	true	Uncommon	Weapon		Burn, Battle Start	Battle Start: Apply burn to your Enemy  equal to your missing attack
+cleansing_axe	Cleansing Axe	Shame	On Hit: Remove 2 poison from yourself, and give it to the enemy.	0	0	3	0	0	0	false	Uncommon	Weapon		Poison	On Hit: Convert 2 poison to your enemy's poison
+concussive_bow	Concussive Mace	Chaos	Turn Start: If the enemy is stunned, gain 1 additional strike.	0	0	3	0	0	0	false	Uncommon	Weapon		Stun	Turn Start: If your enemy has more than 0  stun; Gain 1 strikes
+dark_wand	Dark Wand	Greed	Turn Start: Deal 1 damage to the enemy. Repeat for each Dark item you have. (Can't Strike)	0	0	0	0	0	0	true	Uncommon	Weapon	Dark		Turn Start: Deal 1 damage to your Enemy.
+derrimond	Derrind Mori	Chaos	Turn Start: Spend 1 agility to give the enemy 2 acid and 2 poison. (Can't strike)	0	0	0	0	0	0	true	Uncommon	Weapon		Acid, Poison	Turn Start: If your agility is more than 0 ; Lose -1 agility | Turn Start: Apply 2 poison to your Enemy | Turn Start: Apply 2 acid to your Enemy
+direstone_dagger	Direstone Dagger	Honor	Wounded: Gain 5 attack damage, and take 2 damage.	0	0	2	0	0	0	false	Uncommon	Weapon	Vampiric	Wounded	Wounded: Convert 2 hitpoints to 2.5x attack
+direstone_warhammer	Direstone Axe	Honor	On Hit: Take 1 damage.	0	0	5	0	0	0	false	Uncommon	Weapon	Vampiric		On Hit: Deal 1 damage to yourself.
+dripping_sword	Dripping Sword	Chaos	(First Turn Only) On Hit: Give acid equal to your attack. 	0	0	2	0	0	0	false	Uncommon	Weapon		Acid	On Hit: Apply acid to your Enemy  equal to your current attack
+galadanes_axe	Galadane's Axe	Revenge	While the emeny has shield, double your attack damage.	0	0	2	0	0	0	false	Uncommon	Weapon			Persistent: If your enemy's shield is more than 0 ; Gain  attack equal to your current attack
+ironstone_spear	Heavy Crude Mace	Revenge	On Hit: Lose 1 agility. If your agility is 0 or less, only strike every other turn	0	0	6	1	0	0	false	Uncommon	Weapon	Clearmetal		On Hit: Lose -1 agility | On Hit: If your agility is 0  or less; Apply 1 stun to yourself
+monster_sword	Monster Sword	Revenge	Whenever you would gain thorns, gain 1 attack instead.	0	0	2	0	0	0	false	Uncommon	Weapon		Thorns	On Status Gained thorns: Gain 1 attack | On Status Gained thorns: Remove thorns from yourself
+multishot_bow	Multishot Bow	Honor	Whenever you gain additional strikes, gain double the amount.	0	0	2	0	0	0	false	Uncommon	Weapon		Strikes	On Stat Gain strikes: Gain  strikes
+ornate_sword	Ornate Ring Sword	Greed	Battle Start: Gain 2 damage, repeat for each equiped Ring item.	0	0	1	0	0	0	false	Uncommon	Weapon		Battle Start	Battle Start: Gain 2 attack
+radiant_spear	Radiant Spear	Greed	Exposed: Give the enemy 2 blind for each Shimmering item you have.	0	0	3	0	0	0	false	Uncommon	Weapon	Shimmering	Blind, Exposed	Exposed: Apply 2 blind to your Enemy
+scimitar	Scimitar	Chaos	Turn Start: If the enemy is stunned, gain 1 additional stike.	0	0	3	0	0	0	false	Uncommon	Weapon		Stun, Strikes	Turn Start: If your enemy has more than 0  stun; Gain 1 strikes
+shimmering_dagger	Shimmering Dagger	Greed	On Hit: Give the enemy blind equal to your current attack damage. (First turn only)	0	0	2	0	0	0	false	Uncommon	Weapon	Shimmering	Blind	On Hit: Apply blind to your Enemy  equal to your current attack
+swiftstrike_rapier	Bemirian Rapier	Honor	Battle Start: If you have more speed than the enemy, gain 3 additional strikes	0	0	2	0	0	0	false	Uncommon	Weapon		Strikes, Battle Start	Battle Start: If your agility is more than your Enemy's current agility; Gain 3 strikes
+thief_dagger	Thief Dagger	Duty	Battle Start: Steal 1 attack from the enemy.	0	0	1	0	0	0	false	Uncommon	Weapon		Battle Start	Battle Start: Convert 1 your enemy's attack to attack
+vital_warhammer	Vital Warhammer	Duty	Turn Start: If you have regeneration, gain 1 additional strike.	0	0	3	0	0	0	false	Uncommon	Weapon		Regeneration, Strikes	Turn Start: If you have more than 0  regeneration; Gain 1 strikes
+wardancer_spear	Wardancer's Spear	Honor	Whenever you restore 3 or more health gain 1 attack.	0	0	1	0	0	0	false	Uncommon	Weapon	Vampiric		On Stat Gain hitpoints: Gain 1 attack
+weird_axe	Weird Axe	Chaos	On Hit: Lose 2 health, gain 4 shield.	0	0	4	0	0	0	false	Uncommon	Weapon	Clearmetal		On Hit: Convert 2 hitpoints to 2.0x shield

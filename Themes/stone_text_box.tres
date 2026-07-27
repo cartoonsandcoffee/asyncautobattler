@@ -1,0 +1,31 @@
+[gd_resource type="Theme" format=3 uid="uid://e34w5osxxkmw"]
+
+[ext_resource type="FontFile" uid="uid://dqgfi4u7flyld" path="res://Assets/UI/Fonts/Button_Immortal.ttf" id="1_gw4pd"]
+[ext_resource type="Texture2D" uid="uid://bnnq12liax8kc" path="res://Assets/UI/DefinitionTest.png" id="2_54a0w"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ej48y"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_lne1p"]
+texture = ExtResource("2_54a0w")
+texture_margin_left = 15.0
+texture_margin_top = 15.0
+texture_margin_right = 15.0
+texture_margin_bottom = 15.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_05i8p"]
+texture = ExtResource("2_54a0w")
+texture_margin_left = 15.0
+texture_margin_top = 15.0
+texture_margin_right = 15.0
+texture_margin_bottom = 15.0
+modulate_color = Color(0.61, 0.61, 0.61, 0.61960787)
+
+[resource]
+LineEdit/colors/font_color = Color(1, 1, 1, 1)
+LineEdit/font_sizes/font_size = 18
+LineEdit/fonts/font = ExtResource("1_gw4pd")
+LineEdit/styles/focus = SubResource("StyleBoxEmpty_ej48y")
+LineEdit/styles/normal = SubResource("StyleBoxTexture_lne1p")
+LineEdit/styles/read_only = SubResource("StyleBoxTexture_05i8p")

@@ -1,4 +1,4 @@
-[gd_resource type="VisualShader" load_steps=26 format=3 uid="uid://c4e2x1kcm6urs"]
+[gd_resource type="VisualShader" format=3 uid="uid://c4e2x1kcm6urs"]
 
 [sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_owjqh"]
 expanded_output_ports = [0]
@@ -121,101 +121,6 @@ parameter_name = "Texture_3"
 texture_type = 1
 
 [resource]
-code = "shader_type canvas_item;
-render_mode blend_mix, unshaded;
-
-uniform vec2 Scale = vec2(1.000000, 1.000000);
-uniform vec2 Speed;
-uniform sampler2D Texture_1 : source_color, repeat_enable;
-uniform sampler2D Texture_2 : source_color;
-uniform sampler2D Texture_3 : source_color;
-uniform sampler2D Texture_4 : source_color;
-uniform sampler2D Texture_Color_1D : source_color;
-
-
-
-void fragment() {
-// Vector2Parameter:22
-	vec2 n_out22p0 = Scale;
-
-
-// UVFunc:21
-	vec2 n_in21p2 = vec2(0.00000, 0.00000);
-	vec2 n_out21p0 = (UV - n_in21p2) * n_out22p0 + n_in21p2;
-
-
-// Input:18
-	float n_out18p0 = TIME;
-
-
-// Vector2Parameter:19
-	vec2 n_out19p0 = Speed;
-
-
-// VectorOp:20
-	vec2 n_out20p0 = vec2(n_out18p0) * n_out19p0;
-
-
-// UVFunc:17
-	vec2 n_in17p1 = vec2(1.00000, 1.00000);
-	vec2 n_out17p0 = n_out20p0 * n_in17p1 + n_out21p0;
-
-
-	vec4 n_out3p0;
-// Texture2D:3
-	n_out3p0 = texture(Texture_1, n_out17p0);
-	float n_out3p1 = n_out3p0.r;
-
-
-	vec4 n_out6p0;
-// Texture2D:6
-	n_out6p0 = texture(Texture_2, UV);
-	float n_out6p1 = n_out6p0.r;
-
-
-// FloatOp:23
-	float n_out23p0 = n_out3p1 + n_out6p1;
-
-
-	vec4 n_out10p0;
-// Texture2D:10
-	n_out10p0 = texture(Texture_3, UV);
-	float n_out10p1 = n_out10p0.r;
-
-
-// FloatOp:24
-	float n_out24p0 = n_out23p0 * n_out10p1;
-
-
-	vec4 n_out13p0;
-// Texture2D:13
-	n_out13p0 = texture(Texture_4, UV);
-	float n_out13p1 = n_out13p0.r;
-
-
-// FloatOp:25
-	float n_out25p0 = n_out24p0 - n_out13p1;
-
-
-// Clamp:27
-	float n_in27p1 = 0.00000;
-	float n_in27p2 = 1.00000;
-	float n_out27p0 = clamp(n_out25p0, n_in27p1, n_in27p2);
-
-
-	vec4 n_out16p0;
-// Texture2D:16
-	n_out16p0 = texture(Texture_Color_1D, vec2(n_out27p0));
-	float n_out16p4 = n_out16p0.a;
-
-
-// Output:0
-	COLOR.rgb = vec3(n_out16p0.xyz);
-	COLOR.a = n_out16p4;
-
-
-}
-"
 mode = 1
 flags/unshaded = true
 flags/light_only = false
