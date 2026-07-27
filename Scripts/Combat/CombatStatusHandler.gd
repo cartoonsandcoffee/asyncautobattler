@@ -5,12 +5,15 @@ extends Node
 ## Handles application, removal, and turn-start processing of all status effects
 
 # Signals
-signal status_gained_triggered(entity, status: Enums.StatusEffects, stacks: int, item: Item)
-signal status_removed_triggered(entity, status: Enums.StatusEffects, stacks: int)
 signal overheal_triggered(entity, amount: int)
 signal acid_proc_triggered(entity, amount: int)
-signal enemy_status_gained_triggered(entity, status: Enums.StatusEffects, stacks: int)
+
+signal status_removed_triggered(entity, status: Enums.StatusEffects, stacks: int)
 signal enemy_status_removed_triggered(entity, status: Enums.StatusEffects, stacks: int)
+
+signal status_gained_triggered(entity, status: Enums.StatusEffects, stacks: int, item: Item, reaction_chain: Array)
+signal enemy_status_gained_triggered(entity, status: Enums.StatusEffects, stacks: int, source_item: Item, reaction_chain: Array)
+
 
 var combat_manager
 var stat_handler: CombatStatHandler
@@ -24,7 +27,7 @@ func _init(manager, stat_handler_ref: CombatStatHandler):
 	
 # ===== STATUS APPLICATION =====
 
-func apply_status(entity, status: Enums.StatusEffects, stacks: int, source_item: Item = null):
+func apply_status(entity, status: Enums.StatusEffects, stacks: int, source_item: Item = null, reaction_chain: Array = []):
 	# Apply status effect stacks to an entity.
 	# Automatically triggers ON_STATUS_GAINED items.
 
@@ -39,11 +42,10 @@ func apply_status(entity, status: Enums.StatusEffects, stacks: int, source_item:
 	var new_value = get_status_value(entity, status)
 	
 	# Trigger ON_STATUS_GAINED items
-	status_gained_triggered.emit(entity, status, new_value, source_item)
+	status_gained_triggered.emit(entity, status, new_value, source_item, reaction_chain)
 
 	var opponent = combat_manager.enemy_entity if entity == combat_manager.player_entity else combat_manager.player_entity
-	enemy_status_gained_triggered.emit(opponent, status, new_value)
-
+	enemy_status_gained_triggered.emit(opponent, status, new_value, source_item, reaction_chain)
 
 
 func remove_status(entity, status: Enums.StatusEffects, stacks: int):
@@ -140,10 +142,29 @@ func process_turn_start_status_effects(entity):
 
 	# Process each status effect type
 	_process_acid(entity)
+	_process_bleed(entity) 
 	_process_poison(entity)
 
 
 # ===== INDIVIDUAL STATUS PROCESSORS =====
+
+func _process_bleed(entity):
+	# Bleed: Damages HP directly equal to total stacks, bypassing shield.
+	# Removes ALL stacks after firing. Stacks = burst damage, not duration.
+	
+	if entity.status_effects.bleed <= 0:
+		return
+	
+	var damage = entity.status_effects.bleed
+	
+	combat_manager.event_queue.enqueue(CombatEvent.log(CombatLog.fmt_status_proc(Enums.StatusEffects.BLEED, _get_entity_name(entity), damage)))
+	
+	# Direct HP modification — bypasses shield intentionally
+	combat_manager.event_queue.enqueue(CombatEvent.modify_stat(entity, Enums.Stats.HITPOINTS, -damage, Enums.StatType.CURRENT, null, "bleed"))
+	combat_manager.event_queue.enqueue(CombatEvent.status_proc_visual(entity, Enums.StatusEffects.BLEED, Enums.Stats.HITPOINTS, -damage))
+	
+	# Remove ALL stacks — bleed is burst, not drip
+	combat_manager.event_queue.enqueue(CombatEvent.remove_status(entity, Enums.StatusEffects.BLEED, damage))
 
 func _process_poison(entity):
 	# Poison: Damages HP but is BLOCKED by shield.

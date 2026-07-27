@@ -15,6 +15,7 @@ enum EventType {
 @export var log_text: String
 @export var damage_type: String
 
+var reaction_chain: Array = []  # Items that already reacted in this causal branch (loop guard)
 var trigger_type: Enums.TriggerType
 var stat: Enums.Stats
 var stat_type: Enums.StatType
@@ -54,13 +55,14 @@ static func log(text: String) -> CombatEvent:
 	e.log_text = text
 	return e
 
-static func apply_status(_entity, _status: Enums.StatusEffects, stacks: int, _source_item: Item = null) -> CombatEvent:
+static func apply_status(_entity, _status: Enums.StatusEffects, stacks: int, _source_item: Item = null, _reaction_chain: Array = []) -> CombatEvent:
 	var e := CombatEvent.new()
 	e.event_type = EventType.APPLY_STATUS
 	e.entity = _entity
 	e.status = _status
 	e.amount = stacks
 	e.source_item = _source_item
+	e.reaction_chain = _reaction_chain
 	return e
 
 static func remove_status(_entity, _status: Enums.StatusEffects, stacks: int, _source_item: Item = null) -> CombatEvent:
@@ -72,7 +74,7 @@ static func remove_status(_entity, _status: Enums.StatusEffects, stacks: int, _s
 	e.source_item = _source_item
 	return e
 
-static func execute_rule(item_ref, rule_ref, _entity, _trigger_type: Enums.TriggerType, stat_amount: int = 0, _resolved_status: Enums.StatusEffects = Enums.StatusEffects.NONE) -> CombatEvent:
+static func execute_rule(item_ref, rule_ref, _entity, _trigger_type: Enums.TriggerType, stat_amount: int = 0, _resolved_status: Enums.StatusEffects = Enums.StatusEffects.NONE, _reaction_chain: Array = []) -> CombatEvent:
 	var e := CombatEvent.new()
 	e.event_type = EventType.EXECUTE_RULE
 	e.item = item_ref
@@ -81,6 +83,7 @@ static func execute_rule(item_ref, rule_ref, _entity, _trigger_type: Enums.Trigg
 	e.trigger_type = _trigger_type
 	e.amount = stat_amount
 	e.resolved_status = _resolved_status
+	e.reaction_chain = _reaction_chain
 	return e
 
 static func damage_visual(target_entity, amt: int, d_stat: Enums.Stats, v_info: Dictionary) -> CombatEvent:

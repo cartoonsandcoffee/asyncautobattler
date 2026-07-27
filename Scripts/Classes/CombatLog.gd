@@ -36,7 +36,7 @@ const ICON_REGEN     := "res://Resources/StatIcons/StatusIcons/status_regen.tres
 const ICON_STUN      := "res://Resources/StatIcons/StatusIcons/status_stun.tres"
 const ICON_BLIND     := "res://Resources/StatIcons/StatusIcons/status_blind.tres"
 const ICON_BLESSING  := "res://Resources/StatIcons/StatusIcons/status_blessing.tres"
-
+const ICON_BLEED     := "res://Resources/StatIcons/StatusIcons/status_bleed.tres"
 
 # ─────────────────────────────────────────────
 #  PRIMITIVE HELPERS
@@ -140,6 +140,7 @@ static func icon_status(status: Enums.StatusEffects) -> String:
 		Enums.StatusEffects.STUN:         return img(ICON_STUN)
 		Enums.StatusEffects.BLIND:        return img(ICON_BLIND)
 		Enums.StatusEffects.BLESSING:     return img(ICON_BLESSING)
+		Enums.StatusEffects.BLEED:        return img(ICON_BLEED)
 	return ""
 
 static func _status_color(status: Enums.StatusEffects) -> Color:
@@ -153,6 +154,7 @@ static func _status_color(status: Enums.StatusEffects) -> Color:
 		Enums.StatusEffects.STUN:         return gc.stats.stun
 		Enums.StatusEffects.BLIND:        return gc.stats.strikes  # matches combat_item_proc
 		Enums.StatusEffects.BLESSING:     return gc.stats.shield
+		Enums.StatusEffects.BLEED	:     return gc.stats.bleed
 	return Color.GRAY
 
 static func color_status(status: Enums.StatusEffects) -> String:
@@ -172,6 +174,7 @@ static func color_status_str(status_name: String) -> String:
 	if "stun"         in lower: return color_status(Enums.StatusEffects.STUN)
 	if "blind"        in lower: return color_status(Enums.StatusEffects.BLIND)
 	if "blessing"     in lower: return color_status(Enums.StatusEffects.BLESSING)
+	if "bleed"        in lower: return color_status(Enums.StatusEffects.BLEED)
 	return status_name
 
 static func color_item(item_name: String, item_obj = null) -> String:

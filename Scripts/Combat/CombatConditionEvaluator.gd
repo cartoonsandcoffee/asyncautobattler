@@ -41,7 +41,8 @@ func evaluate_condition(rule: ItemRule, source_entity, target_entity) -> bool:
 		return _evaluate_status_condition(rule, check_entity)
 	elif rule.condition_type == ItemRule.StatOrStatus.ITEM_CATEGORY:
 		return _evaluate_item_category(rule, check_entity)
-
+	elif rule.condition_type == ItemRule.StatOrStatus.ITEM_MECHANIC:
+		return _evaluate_item_mechanic(rule, check_entity)
 	return false
 
 # ===== STAT CONDITIONS =====
@@ -81,7 +82,7 @@ func _evaluate_status_condition(rule: ItemRule, entity) -> bool:
 	# Perform the comparison
 	return _compare_values(status_value, compare_value, rule.condition_comparison)
 
-# ===== INVENTORY CATEGORY CONDITION
+# ===== INVENTORY CATEGORY or MECHANIC CONDITION
 func _evaluate_item_category(rule: ItemRule, entity) -> bool:
 	# Evaluate the number of items that match a particular category string
 
@@ -92,6 +93,17 @@ func _evaluate_item_category(rule: ItemRule, entity) -> bool:
 	var compare_value = _get_comparison_value(rule, entity)
 	
 	# Perform the comparison
+	return _compare_values(item_count, compare_value, rule.condition_comparison)
+
+func _evaluate_item_mechanic(rule: ItemRule, entity) -> bool:
+	var item_count: int = 0
+	if entity.inventory:
+		if entity.inventory.weapon_slot and rule.condition_item_mechanic in entity.inventory.weapon_slot.mechanics:
+			item_count += 1
+		for item in entity.inventory.item_slots:
+			if item and rule.condition_item_mechanic in item.mechanics:
+				item_count += 1
+	var compare_value = _get_comparison_value(rule, entity)
 	return _compare_values(item_count, compare_value, rule.condition_comparison)
 
 # ===== COMPARISON VALUE RESOLUTION =====

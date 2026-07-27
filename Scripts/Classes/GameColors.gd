@@ -20,6 +20,7 @@ class Stats:
 	const wounded = Color("#af4545")           # Light yellow
 	const exposed = Color("#96b6c9")           # Light yellow
 	const singularity = Color("#f0f1eb")           # Light yellow
+	const bleed = Color("#b01c2e")
 
 class Rarity:
 	const common = Color("#49AFD1")         # Gray

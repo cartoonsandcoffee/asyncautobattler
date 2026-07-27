@@ -14,6 +14,7 @@ const ICON_THORNS    	= preload("res://Resources/StatIcons/StatusIcons/status_th
 const ICON_REGEN     	= preload("res://Resources/StatIcons/StatusIcons/status_regen.tres")
 const ICON_BLESSING   	= preload("res://Resources/StatIcons/StatusIcons/status_blessing.tres")
 const ICON_HEALTH    	= preload("res://Resources/StatIcons/icon_health.tres")
+const ICON_BLEED       	= preload("res://Resources/StatIcons/StatusIcons/status_bleed.tres")
 
 var combat_manager
 var stat_handler: CombatStatHandler
@@ -167,6 +168,11 @@ func _get_visual_info_for_damage_type(damage_type: String, source) -> Dictionary
 			info.icon = ICON_BLESSING
 			info.color = game_colors.stats.blessing
 			info.source_name = "Blessing"
+
+		"bleed":
+			info.icon = ICON_BLEED
+			info.color = game_colors.stats.bleed
+			info.source_name = "Bleed"
 
 		"item":
 			# For item damage, source should be the item

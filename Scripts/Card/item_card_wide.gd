@@ -134,9 +134,14 @@ func _init_keywords():
 		},
 		"blind": {
 			"color": GameColors.stats.blind,
-			"description": "Your attack is halved (15+ stacks it is thirded). Remove 1 stack at turn end.",
+			"description": "Your attack damage is reduced by 50%. Remove 1 stack at turn end.",
 			"icon": CombatLog.ICON_BLIND
 		},
+		"bleed": {
+			"color": GameColors.stats.bleed,
+			"description": "Deal damage equal to stacks under shield at turn start, then remove all stacks.",
+			"icon": CombatLog.ICON_BLEED
+		},		
 		"blessing": {
 			"color": GameColors.stats.blessing,
 			"description": "Gain 1 attack and heal 3 hitpoints per stack removed. Only removable via items.",
@@ -620,8 +625,9 @@ func create_stacked_definitions():
 	if keywords_snapshot.size() > 0:
 		y_offset -= (def_box_height + extra_spacing)
 
-	for i in range(pending_ingredients.size() - 1, -1, -1):
-		var ingredient = pending_ingredients[i]
+	var ingredient_snapshot: Array = pending_ingredients.duplicate()
+	for i in range(ingredient_snapshot.size() - 1, -1, -1):
+		var ingredient = ingredient_snapshot[i]
 		
 		var def_box = definition_box_scene.instantiate()
 		def_box.custom_minimum_size = Vector2(ingredient_box_width, 0)

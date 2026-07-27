@@ -20,7 +20,7 @@ func _init(manager, stat_handler_ref: CombatStatHandler, status_handler_ref: Com
 
 # ===== MAIN ENTRY POINT =====
 
-func execute_item_rule(item: Item, rule: ItemRule, source_entity, target_entity, _amount: int = 0, resolved_status: Enums.StatusEffects = Enums.StatusEffects.NONE, override_execution_count: int = -1):
+func execute_item_rule(item: Item, rule: ItemRule, source_entity, target_entity, _amount: int = 0, resolved_status: Enums.StatusEffects = Enums.StatusEffects.NONE, override_execution_count: int = -1, reaction_chain: Array = []):
 	# Execute a single ItemRule's effect.
 	
 	# IMPORTANT: This function is called for EACH rule in an item's rule list.
@@ -60,7 +60,7 @@ func execute_item_rule(item: Item, rule: ItemRule, source_entity, target_entity,
 			return true
 
 		# -- EXECUTE THE EFFECT!
-		_execute_effect_once(item, rule, source_entity, target_entity, _amount, resolved_status)
+		_execute_effect_once(item, rule, source_entity, target_entity, _amount, resolved_status, reaction_chain)
 
 		# check to see if that one execute killed enemy
 		if not combat_manager.combat_active:
@@ -119,8 +119,10 @@ func _check_persistent_repeat_modifiers(entity, source_item):
 				if not condition_evaluator.evaluate_condition(rule, entity, opponent):
 					continue
 			
-			# make sure the source item's category matches
-			if !source_item.has_category(rule.target_item_category):
+			# make sure the source item's category or mechanic matches
+			var category_match = rule.target_item_category != "" and source_item.has_category(rule.target_item_category)
+			var mechanic_match = rule.target_item_mechanic != "" and source_item.has_mechanic(rule.target_item_mechanic)
+			if not category_match and not mechanic_match:
 				continue
 
 			# Apply effect
@@ -130,7 +132,7 @@ func _check_persistent_repeat_modifiers(entity, source_item):
 
 # ===== EFFECT EXECUTION =====
 
-func _execute_effect_once(item: Item, rule: ItemRule, source_entity, target_entity, _trigger_amount: int = 0, resolved_status: Enums.StatusEffects = Enums.StatusEffects.NONE):
+func _execute_effect_once(item: Item, rule: ItemRule, source_entity, target_entity, _trigger_amount: int = 0, resolved_status: Enums.StatusEffects = Enums.StatusEffects.NONE, reaction_chain: Array = []):
 	# Execute a single instance of the effect.
 	var item_name = item.item_name if item else "Unknown Item"
 
@@ -143,7 +145,7 @@ func _execute_effect_once(item: Item, rule: ItemRule, source_entity, target_enti
 			_execute_modify_stat(rule, source_entity, actual_target, item, _trigger_amount)
 		
 		Enums.EffectType.APPLY_STATUS:
-			_execute_apply_status(rule, source_entity, actual_target, item, _trigger_amount, resolved_status)
+			_execute_apply_status(rule, source_entity, actual_target, item, _trigger_amount, resolved_status, reaction_chain)
 		
 		Enums.EffectType.REMOVE_STATUS:
 			_execute_remove_status(rule, source_entity, actual_target, item, _trigger_amount, resolved_status)
@@ -196,9 +198,9 @@ func _execute_modify_stat(rule: ItemRule, source_entity, target_entity, item: It
 				old_value, new_value
 			]))
 
-func _execute_apply_status(rule: ItemRule, source_entity, target_entity, item: Item, _trigger_amount:int = 0, resolved_status: Enums.StatusEffects = Enums.StatusEffects.NONE):
+func _execute_apply_status(rule: ItemRule, source_entity, target_entity, item: Item, _trigger_amount:int = 0, resolved_status: Enums.StatusEffects = Enums.StatusEffects.NONE, reaction_chain: Array = []):
 	var amount = _calculate_effect_amount(rule, source_entity, target_entity, _trigger_amount)
-	combat_manager.event_queue.enqueue_next(CombatEvent.apply_status(target_entity, resolved_status, amount, item))
+	combat_manager.event_queue.enqueue_next(CombatEvent.apply_status(target_entity, resolved_status, amount, item, reaction_chain))
 
 func _execute_remove_status(rule: ItemRule, source_entity, target_entity, item: Item, _trigger_amount: int = 0, resolved_status: Enums.StatusEffects = Enums.StatusEffects.NONE):
 	var amount = _calculate_effect_amount(rule, source_entity, target_entity, _trigger_amount)

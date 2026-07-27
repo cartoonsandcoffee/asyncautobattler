@@ -16,6 +16,7 @@ signal death_triggered(entity)
 var combat_manager
 
 var is_blind_inverted_bonus: bool = false
+var is_blind_enhanced: bool = false 
 
 func _init(manager):
 	combat_manager = manager
@@ -187,17 +188,24 @@ func recalculate_damage(entity):
 	# Apply persistent conditional effects (only to output stats)
 	_apply_persistent_to_output_stats(entity)
 	
-	if !is_blind_inverted_bonus:
-		if entity.status_effects and entity.status_effects.blind >= 15:
-			entity.stats.damage_current = int(ceil(float(entity.stats.damage_current) / 3.0))
-		elif entity.status_effects and entity.status_effects.blind > 0:
-			entity.stats.damage_current = int(ceil(float(entity.stats.damage_current) / 2.0))
+	## Handle the blind effect and potential bonuses
+	if entity.status_effects and entity.status_effects.blind > 0:
+		if not is_blind_enhanced:
+			var opponent = combat_manager.enemy_entity if entity == combat_manager.player_entity else combat_manager.player_entity
+			is_blind_enhanced = _check_opponent_blind_enhancement(opponent)
+		if is_blind_inverted_bonus:
+			var bonus = 0.75 if is_blind_enhanced else 0.5
+			entity.stats.damage_current = int(ceil(float(entity.stats.damage_current) * (1.0 + bonus)))
+		else:
+			var divisor = 4.0 if is_blind_enhanced else 2.0
+			entity.stats.damage_current = int(ceil(float(entity.stats.damage_current) / divisor))
 
 	entity.stats.stats_updated.emit()
 
 func _apply_persistent_to_output_stats(entity):
 	# Apply persistent rules to damage/strikes current values only.
 	is_blind_inverted_bonus = false
+	is_blind_enhanced = false
 
 	var all_items = combat_manager.get_all_entity_items(entity)
 
@@ -231,8 +239,10 @@ func _apply_persistent_effect_to_output(entity, rule: ItemRule):
 			"halve_damage", "half_damage":
 				entity.stats.damage_current = int(entity.stats.damage_current * 0.5)
 			"invert_blind":
-				entity.stats.damage_current = int(ceil(float(entity.stats.damage_current) * 1.5))
+				#entity.stats.damage_current = int(ceil(float(entity.stats.damage_current) * 1.5))
 				is_blind_inverted_bonus = true
+			"blind_75_percent":
+				is_blind_enhanced = true
 			"exposed_can_trigger_twice": 
 				if _get_entity_name(entity) == "Player":
 					combat_manager.player_can_exposed_twice = true
@@ -261,6 +271,21 @@ func _get_entity_name(entity) -> String:
 			return entity.enemy_name
 		return "Enemy"
 	return "Unknown"
+
+func _check_opponent_blind_enhancement(opponent) -> bool:
+	var all_items = combat_manager.get_all_entity_items(opponent)
+	for item in all_items:
+		for rule in item.rules:
+			if rule.trigger_type != Enums.TriggerType.PERSISTENT:
+				continue
+			if rule.special_string != "blind_75_percent":
+				continue
+			if rule.has_condition:
+				var self_entity = combat_manager.enemy_entity if opponent == combat_manager.player_entity else combat_manager.player_entity
+				if not combat_manager.condition_evaluator.evaluate_condition(rule, opponent, self_entity):
+					continue
+			return true
+	return false
 
 # ===== EXPOSED/WOUNDED TRACKING =====
 

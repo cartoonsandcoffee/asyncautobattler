@@ -77,8 +77,10 @@ func has_item_by_id(item_id: String) -> bool:
 	for item in item_slots:
 		if item and item.item_id == item_id:
 			return true
+
 	if weapon_slot and weapon_slot.item_id == item_id:
 		return true
+
 	return false
 
 func has_any_singularity_item() -> bool:
@@ -90,7 +92,7 @@ func has_any_singularity_item() -> bool:
 	# Also check weapon slot
 	if weapon_slot and weapon_slot.has_category("Singularity"):
 		return true
-	
+
 	return false
 
 func has_this_singularity_item(item_id: String) -> bool:

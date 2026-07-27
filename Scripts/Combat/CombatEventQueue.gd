@@ -143,8 +143,7 @@ func _process_event(event: CombatEvent) -> void:
 		CombatEvent.EventType.APPLY_STATUS:
 			if not combat_manager.combat_active and not combat_manager.combat_ending:
 				return
-			combat_manager.status_handler.apply_status(
-				event.entity, event.status, event.amount, event.source_item)
+			combat_manager.status_handler.apply_status(event.entity, event.status, event.amount, event.source_item, event.reaction_chain)
 			var new_val = combat_manager.status_handler.get_status_value(event.entity, event.status)
 			if not CombatSpeed.is_instant_mode():
 				indicator_layer._handle_status_box_update_immediate(event.entity, event.status, new_val)
@@ -160,8 +159,7 @@ func _process_event(event: CombatEvent) -> void:
 			var old_val = combat_manager.status_handler.get_status_value(event.entity, event.status)
 			if old_val <= 0:
 				return
-			combat_manager.status_handler.remove_status(
-				event.entity, event.status, event.amount)
+			combat_manager.status_handler.remove_status(event.entity, event.status, event.amount)
 			var new_val = combat_manager.status_handler.get_status_value(event.entity, event.status)
 			if not CombatSpeed.is_instant_mode():
 				indicator_layer._handle_status_box_update_immediate(event.entity, event.status, new_val)
@@ -240,7 +238,7 @@ func _process_event(event: CombatEvent) -> void:
 							await CombatSpeed.create_timer(CombatSpeed.get_duration("item_proc"))
 
 			# Execute — returns false if condition failed
-			var success = await combat_manager.effect_executor.execute_item_rule(event.item, event.rule, event.entity, target, event.amount, event.resolved_status, execution_count)
+			var success = await combat_manager.effect_executor.execute_item_rule(event.item, event.rule, event.entity, target, event.amount, event.resolved_status, execution_count, event.reaction_chain)
 
 			if success:
 				combat_manager.item_rule_triggered.emit(event.item, event.rule, event.entity)
