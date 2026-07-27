@@ -290,7 +290,7 @@ func _restore_persistent_inventory():
 				var is_invalid = item == null \
 					or (item.has_category("Unique") and Player.inventory.has_item_by_id(item_id)) \
 					or (item.has_category("Singularity") and Player.inventory.has_any_singularity_item()) \
-					or (GameSettings.scarcity_mode and item.rarity in [Enums.Rarity.UNCOMMON, Enums.Rarity.RARE, Enums.Rarity.LEGENDARY] and Player.inventory.has_item_by_id(item_id))
+					or (GameSettings.scarcity_mode and item.rarity in [Enums.Rarity.UNCOMMON, Enums.Rarity.RARE, Enums.Rarity.LEGENDARY, Enums.Rarity.CRAFTED] and Player.inventory.has_item_by_id(item_id))
 
 				if is_invalid:
 					var empty_slot = empty_item.instantiate()

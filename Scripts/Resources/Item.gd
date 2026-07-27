@@ -130,6 +130,13 @@ func has_category(_category: String) -> bool:
 	
 	return false
 
+func has_mechanic(_mechanic: String) -> bool:
+	for this_mechanic in mechanics:
+		if this_mechanic == _mechanic:
+			return true 
+	
+	return false
+
 func get_base_id() -> String:
 	# Get the base item ID for set bonus checking.
 	var base_id: String = ""

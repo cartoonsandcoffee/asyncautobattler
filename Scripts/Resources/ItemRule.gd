@@ -12,7 +12,8 @@ enum ConditionValueType {
 enum StatOrStatus {
 	STAT,
 	STATUS,
-	ITEM_CATEGORY
+	ITEM_CATEGORY,
+	ITEM_MECHANIC
 }
 
 enum ConversionAmountType {
@@ -54,6 +55,7 @@ enum ConversionAmountType {
 		notify_property_list_changed()
 @export var condition_status: Enums.StatusEffects = Enums.StatusEffects.NONE  # "poison", "acid", "thorns", etc.
 @export var condition_item_category: String = ""
+@export var condition_item_mechanic: String = ""
 @export var condition_comparison: String = ">"  # ">", "<", ">=", "<=", "=="
 @export var compare_to: ConditionValueType = ConditionValueType.VALUE:
 	set(value):
@@ -87,6 +89,7 @@ enum ConversionAmountType {
 @export var target_type: Enums.TargetType = Enums.TargetType.SELF
 @export var target_stat_type: Enums.StatType = Enums.StatType.CURRENT
 @export var target_item_category: String = ""
+@export var target_item_mechanic: String = ""
 @export var target_stat: Enums.Stats = Enums.Stats.NONE
 @export var target_status: Enums.StatusEffects = Enums.StatusEffects.NONE
 @export var effect_of: ConditionValueType = ConditionValueType.VALUE:
@@ -178,7 +181,7 @@ func _validate_property(property: Dictionary) -> void:
 	
 	# === CONDITIONS GROUP ===
 	# Hide all condition properties if has_condition is false
-	if prop_name in ["condition_type", "condition_of", "condition_stat", "condition_status", "condition_comparison", "compare_to", "condition_value", "condition_to_party", "condition_stat_type", "condition_party_stat", "condition_party_status", "condition_item_category", "condition_party_stat_type"]:
+	if prop_name in ["condition_type", "condition_of", "condition_stat", "condition_status", "condition_comparison", "compare_to", "condition_value", "condition_to_party", "condition_stat_type", "condition_party_stat", "condition_party_status", "condition_item_category", "condition_item_mechanic", "condition_party_stat_type"]:
 		if not has_condition:
 			property.usage = PROPERTY_USAGE_NO_EDITOR
 			return
@@ -197,9 +200,14 @@ func _validate_property(property: Dictionary) -> void:
 		if has_condition and condition_type != StatOrStatus.STATUS:
 			property.usage = PROPERTY_USAGE_NO_EDITOR
 	
-	# Show condition_status only for STATUS condition type
+	# Show category only for category condition type
 	if prop_name == "condition_item_category":
 		if has_condition and condition_type != StatOrStatus.ITEM_CATEGORY:
+			property.usage = PROPERTY_USAGE_NO_EDITOR
+
+	# Show mechanic only for mechanic condition type
+	if prop_name == "condition_item_mechanic":
+		if has_condition and condition_type != StatOrStatus.ITEM_MECHANIC:
 			property.usage = PROPERTY_USAGE_NO_EDITOR
 
 	# Show condition_value only when comparing to VALUE

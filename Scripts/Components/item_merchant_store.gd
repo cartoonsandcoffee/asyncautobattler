@@ -28,6 +28,8 @@ signal need_item_replace(Item)
 @export var category_string: String = ""
 ## Shop will be saved and must be manually rerolled
 @export var persistent: bool = false 
+## Inventory persists between open/close this session only (no save to disk)
+@export var session_persistent: bool = false
 ## Shop will weight items based on categories and keywords of player
 @export var use_keyword_weighting: bool = true
 
@@ -36,6 +38,7 @@ var empty_item = preload("res://Scenes/Elements/empty_choice.tscn")
 
 var offered_items: Array[Item] = []
 var is_store_open: bool = false
+var _session_cache: Array[String] = []
 
 func _ready() -> void:
 	item_choice_container.columns = item_columns
@@ -84,10 +87,16 @@ func _on_btn_cancel_pressed() -> void:
 
 
 func show_store():
-	if not persistent:
-		generate_item_choices()
-
-	if persistent:
+	if session_persistent:
+		for child in item_choice_container.get_children():
+			item_choice_container.remove_child(child)
+			child.free()
+		if _session_cache.is_empty():
+			generate_item_choices()
+			_save_to_session_cache()
+		else:
+			_restore_from_session_cache()
+	elif persistent:
 		for child in item_choice_container.get_children():
 			item_choice_container.remove_child(child)
 			child.free()
@@ -95,7 +104,9 @@ func show_store():
 			generate_item_choices()
 			_save_persistent_inventory()
 		else:
-			_restore_persistent_inventory()	
+			_restore_persistent_inventory()
+	else:
+		generate_item_choices()
 
 	check_affordability()
 	anim_player.play("show_store")
@@ -138,6 +149,8 @@ func replace_item_with_empty(target_item: Item):
 
 	if persistent:
 		_save_persistent_inventory()
+	elif session_persistent:
+		_save_to_session_cache()
 
 func check_affordability():
 	var children = item_choice_container.get_children()
@@ -189,6 +202,8 @@ func refresh_store_display():
 		
 		if persistent:
 			_save_persistent_inventory()
+		elif session_persistent:
+			_save_to_session_cache()
 
 		check_affordability()
 
@@ -241,13 +256,22 @@ func _restore_persistent_inventory():
 		else:
 			var item = ItemsManager.get_item_by_id(item_id)
 			if item:
-				offered_items.append(item)
-				var choice_button = item_choice_scene.instantiate()
-				choice_button.custom_minimum_size = Vector2(110, 140)
-				item_choice_container.add_child(choice_button)
-				choice_button.set_item(item)
-				choice_button.setup_for_store(on_sale)
-				choice_button.item_purchased.connect(_on_item_selected)
+				var is_invalid = ItemsManager.is_item_banished(item_id) \
+					or (item.has_category("Unique") and Player.has_item_anywhere(item_id)) \
+					or (item.has_category("Singularity") and Player.has_any_singularity_item_anywhere()) \
+					or (GameSettings.scarcity_mode and item.rarity in [Enums.Rarity.UNCOMMON, Enums.Rarity.RARE, Enums.Rarity.LEGENDARY, Enums.Rarity.CRAFTED] and Player.has_item_anywhere(item_id))
+				if is_invalid:
+					var empty_slot = empty_item.instantiate()
+					empty_slot.custom_minimum_size = Vector2(110, 140)
+					item_choice_container.add_child(empty_slot)
+				else:
+					offered_items.append(item)
+					var choice_button = item_choice_scene.instantiate()
+					choice_button.custom_minimum_size = Vector2(110, 140)
+					item_choice_container.add_child(choice_button)
+					choice_button.set_item(item)
+					choice_button.setup_for_store(on_sale)
+					choice_button.item_purchased.connect(_on_item_selected)
 	
 	check_affordability()
 
@@ -283,3 +307,41 @@ func _clear_inventory_duplicate_indicators():
 			inv_slot.show_upgrade_anim()
 		else:
 			inv_slot.stop_upgrade_anim()
+
+func _save_to_session_cache() -> void:
+	_session_cache.clear()
+	for child in item_choice_container.get_children():
+		if not child.is_inside_tree():
+			continue
+		if child.has_method("get_current_item") and child.get_current_item() != null:
+			_session_cache.append(child.get_current_item().item_id)
+		else:
+			_session_cache.append("")  # purchased/empty slot
+
+func _restore_from_session_cache() -> void:
+	offered_items.clear()
+	for item_id in _session_cache:
+		if item_id == "":
+			var empty_slot = empty_item.instantiate()
+			empty_slot.custom_minimum_size = Vector2(110, 140)
+			item_choice_container.add_child(empty_slot)
+		else:
+			var item = ItemsManager.get_item_by_id(item_id)
+			if item:
+				var is_invalid = ItemsManager.is_item_banished(item_id) \
+					or (item.has_category("Unique") and Player.has_item_anywhere(item_id)) \
+					or (item.has_category("Singularity") and Player.has_any_singularity_item_anywhere()) \
+					or (GameSettings.scarcity_mode and item.rarity in [Enums.Rarity.UNCOMMON, Enums.Rarity.RARE, Enums.Rarity.LEGENDARY, Enums.Rarity.CRAFTED] and Player.has_item_anywhere(item_id))
+				if is_invalid:
+					var empty_slot = empty_item.instantiate()
+					empty_slot.custom_minimum_size = Vector2(110, 140)
+					item_choice_container.add_child(empty_slot)
+				else:
+					offered_items.append(item)
+					var choice_button = item_choice_scene.instantiate()
+					choice_button.custom_minimum_size = Vector2(110, 140)
+					item_choice_container.add_child(choice_button)
+					choice_button.set_item(item)
+					choice_button.setup_for_store(on_sale)
+					choice_button.item_purchased.connect(_on_item_selected)
+	check_affordability()

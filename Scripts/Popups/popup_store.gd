@@ -6,23 +6,25 @@ signal item_selected(Item)
 signal store_closed()
 signal need_item_replace(Item)
 
-@onready var item_choice_container: GridContainer = $CanvasLayer/Control/centerArea/PanelContainer/MarginContainer/GridContainer
-@onready var btn_cancel: Button = $CanvasLayer/Control/panelButtons/VBoxContainer/HBoxContainer/btnSkip
+@onready var item_choice_container: GridContainer = $CanvasLayer/fullScreen/fullContainer/VBoxContainer/mainContent/Control/VBoxContainer/itemArea/GridContainer
+@onready var btn_cancel: Button = $CanvasLayer/fullScreen/fullContainer/VBoxContainer/mainContent/Control/VBoxContainer/panelButtons/VBoxContainer/HBoxContainer/btnSkip
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
-@onready var stat_gold: StatBoxDisplay = $CanvasLayer/Control/pnlGold/PanelContainer/MarginContainer/statGold
+@onready var stat_gold: StatBoxDisplay = $CanvasLayer/fullScreen/fullContainer/VBoxContainer/mainContent/Control/VBoxContainer/goldArea/pnlGold/PanelContainer/MarginContainer/statGold
 
-@onready var refresh_cost: Label = $CanvasLayer/Control/panelButtons/VBoxContainer/HBoxContainer/btnReroll/HBoxContainer2/lblRerollCost
-@onready var btn_refresh: Button = $CanvasLayer/Control/panelButtons/VBoxContainer/HBoxContainer/btnReroll
+@onready var refresh_cost: Label = $CanvasLayer/fullScreen/fullContainer/VBoxContainer/mainContent/Control/VBoxContainer/panelButtons/VBoxContainer/HBoxContainer/btnReroll/HBoxContainer2/lblRerollCost
+@onready var btn_refresh: Button = $CanvasLayer/fullScreen/fullContainer/VBoxContainer/mainContent/Control/VBoxContainer/panelButtons/VBoxContainer/HBoxContainer/btnReroll
 
-@onready var upgrade_cost: Label = $CanvasLayer/Control/panelButtons/VBoxContainer/HBoxContainer/btnUpgrade/HBoxContainer2/lblUpgradeCost
-@onready var btn_upgrade: Button = $CanvasLayer/Control/panelButtons/VBoxContainer/HBoxContainer/btnUpgrade
+@onready var upgrade_cost: Label = $CanvasLayer/fullScreen/fullContainer/VBoxContainer/mainContent/Control/VBoxContainer/panelButtons/VBoxContainer/HBoxContainer/btnUpgrade/HBoxContainer2/lblUpgradeCost
+@onready var btn_upgrade: Button = $CanvasLayer/fullScreen/fullContainer/VBoxContainer/mainContent/Control/VBoxContainer/panelButtons/VBoxContainer/HBoxContainer/btnUpgrade
 
-@onready var purchase_cost: Label = $CanvasLayer/Control/panelButtons/VBoxContainer/boxSelected/btnBuy/HBoxContainer2/lblBuyCost
-@onready var btn_purchse: Button = $CanvasLayer/Control/panelButtons/VBoxContainer/boxSelected/btnBuy
-@onready var btn_banish: Button = $CanvasLayer/Control/panelButtons/VBoxContainer/boxSelected/btnBanish
-@onready var box_selected: HBoxContainer = $CanvasLayer/Control/panelButtons/VBoxContainer/boxSelected ## - Box with buttons when item is selected
+@onready var purchase_cost: Label = $CanvasLayer/fullScreen/fullContainer/VBoxContainer/mainContent/Control/VBoxContainer/panelButtons/VBoxContainer/boxSelected/btnBuy/HBoxContainer2/lblBuyCost
+@onready var btn_purchse: Button = $CanvasLayer/fullScreen/fullContainer/VBoxContainer/mainContent/Control/VBoxContainer/panelButtons/VBoxContainer/boxSelected/btnBuy
+@onready var btn_banish: Button = $CanvasLayer/fullScreen/fullContainer/VBoxContainer/mainContent/Control/VBoxContainer/panelButtons/VBoxContainer/boxSelected/btnBanish
+@onready var box_selected: HBoxContainer = $CanvasLayer/fullScreen/fullContainer/VBoxContainer/mainContent/Control/VBoxContainer/panelButtons/VBoxContainer/boxSelected ## - Box with buttons when item is selected
 
 @export var use_keyword_weighting: bool = true
+
+const BUTTON_SIZE: Vector2 = Vector2(150, 150)
 
 var item_choice_scene = preload("res://Scenes/item_selection.tscn")
 var empty_item = preload("res://Scenes/Elements/empty_choice.tscn")
@@ -81,7 +83,7 @@ func generate_item_choices():
 		itm_count += 1
 
 		var choice_button = item_choice_scene.instantiate()
-		choice_button.custom_minimum_size = Vector2(200, 200)
+		choice_button.custom_minimum_size = BUTTON_SIZE
 		item_choice_container.add_child(choice_button)
 		if itm_count > (base_items_offered + Player.stats.shop_upgrades):
 			choice_button.visible = false
@@ -283,7 +285,7 @@ func _restore_persistent_inventory():
 
 		if item_id == "":
 			var empty_slot = empty_item.instantiate()
-			empty_slot.custom_minimum_size = Vector2(200, 200)
+			empty_slot.custom_minimum_size = BUTTON_SIZE
 			if itm_count > (base_items_offered + Player.stats.shop_upgrades):
 				empty_slot.visible = false
 			else:
@@ -295,20 +297,20 @@ func _restore_persistent_inventory():
 				# Silently replace with empty slot if item is now invalid for player
 				var is_invalid = item == null \
 					or ItemsManager.is_item_banished(item_id) \
-					or (item.has_category("Unique") and Player.inventory.has_item_by_id(item_id)) \
-					or (item.has_category("Singularity") and Player.inventory.has_any_singularity_item()) \
-					or (GameSettings.scarcity_mode and item.rarity in [Enums.Rarity.UNCOMMON, Enums.Rarity.RARE, Enums.Rarity.LEGENDARY] and Player.inventory.has_item_by_id(item_id))
+					or (item.has_category("Unique") and Player.has_item_anywhere(item_id)) \
+					or (item.has_category("Singularity") and Player.has_any_singularity_item_anywhere()) \
+					or (GameSettings.scarcity_mode and item.rarity in [Enums.Rarity.UNCOMMON, Enums.Rarity.RARE, Enums.Rarity.LEGENDARY, Enums.Rarity.CRAFTED] and Player.has_item_anywhere(item_id))
 
 				if is_invalid:
 					var empty_slot = empty_item.instantiate()
-					empty_slot.custom_minimum_size = Vector2(200, 200)
+					empty_slot.custom_minimum_size = BUTTON_SIZE
 					if itm_count > (base_items_offered + Player.stats.shop_upgrades):
 						empty_slot.visible = false
 					item_choice_container.add_child(empty_slot)
 				else:
 					offered_items.append(item)
 					var choice_button = item_choice_scene.instantiate()
-					choice_button.custom_minimum_size = Vector2(200, 200)
+					choice_button.custom_minimum_size = BUTTON_SIZE
 					if itm_count > (base_items_offered + Player.stats.shop_upgrades):
 						choice_button.visible = false
 					else:

@@ -20,7 +20,7 @@ const ICON_REGEN     	= preload("res://Resources/StatIcons/StatusIcons/status_re
 const ICON_BLESSING   	= preload("res://Resources/StatIcons/StatusIcons/status_blessing.tres")
 const ICON_BLIND   		= preload("res://Resources/StatIcons/StatusIcons/status_blind.tres")
 const ICON_STUN   		= preload("res://Resources/StatIcons/StatusIcons/status_stun.tres")
-const ICON_BLEED   		= preload("res://Resources/StatIcons/StatusIcons/status_poison.tres")
+const ICON_BLEED   		= preload("res://Resources/StatIcons/StatusIcons/status_bleed.tres")
 
 const ICON_ATTACK     = preload("res://Resources/StatIcons/icon_attack.tres")
 const ICON_HEALTH     = preload("res://Resources/StatIcons/icon_health.tres")

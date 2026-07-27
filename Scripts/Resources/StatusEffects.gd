@@ -64,7 +64,7 @@ func decrement_status(_status: Enums.StatusEffects, amount: int = 1):
 				regeneration -= amount
 
 			if regeneration < 0:
-				regeneration = 0				
+				regeneration = 0
 		Enums.StatusEffects.STUN:
 			if stun > 0:
 				stun -= amount
@@ -82,13 +82,19 @@ func decrement_status(_status: Enums.StatusEffects, amount: int = 1):
 				blessing -= amount
 
 			if blessing < 0:
-				blessing = 0			
+				blessing = 0
 		Enums.StatusEffects.BLIND:
 			if blind > 0:
 				blind -= amount
 
 			if blind < 0:
-				blind = 0				
+				blind = 0
+		Enums.StatusEffects.BLEED:
+			if bleed > 0:
+				bleed -= amount
+
+			if bleed < 0:
+				bleed = 0
 	#status_updated.emit()
 
 func remove_status(_status: Enums.StatusEffects):
@@ -109,6 +115,8 @@ func remove_status(_status: Enums.StatusEffects):
 			blessing = 0
 		Enums.StatusEffects.BLIND:
 			blind = 0
+		Enums.StatusEffects.BLEED:
+			bleed = 0
 	#status_updated.emit()	
 
 func increment_status(_status: Enums.StatusEffects, amount: int = 1):
@@ -129,6 +137,8 @@ func increment_status(_status: Enums.StatusEffects, amount: int = 1):
 			blessing += amount
 		Enums.StatusEffects.BLIND:
 			blind += amount
+		Enums.StatusEffects.BLEED:
+			bleed += amount
 	#status_updated.emit()
 
 func get_status_value(status: Enums.StatusEffects) -> int:
@@ -142,4 +152,5 @@ func get_status_value(status: Enums.StatusEffects) -> int:
 		Enums.StatusEffects.BLESSING: return blessing
 		Enums.StatusEffects.STUN: return stun
 		Enums.StatusEffects.BLIND: return blind
+		Enums.StatusEffects.BLEED: return bleed
 		_: return 0
